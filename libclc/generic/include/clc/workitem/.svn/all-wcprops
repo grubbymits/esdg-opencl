@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/workitem
+END
+get_local_size.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/workitem/get_local_size.h
+END
+get_local_id.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/workitem/get_local_id.h
+END
+get_group_id.h
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/workitem/get_group_id.h
+END
+get_global_size.h
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/workitem/get_global_size.h
+END
+get_global_id.h
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/workitem/get_global_id.h
+END
+get_num_groups.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/workitem/get_num_groups.h
+END

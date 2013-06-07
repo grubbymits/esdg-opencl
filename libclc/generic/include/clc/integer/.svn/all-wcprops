@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/llvm-project/!svn/ver/161312/libclc/trunk/generic/include/clc/integer
+END
+add_sat.inc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/integer/add_sat.inc
+END
+sub_sat.inc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/llvm-project/!svn/ver/161312/libclc/trunk/generic/include/clc/integer/sub_sat.inc
+END
+abs.h
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/integer/abs.h
+END
+abs.inc
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/integer/abs.inc
+END
+abs_diff.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/integer/abs_diff.h
+END
+gentype.inc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/integer/gentype.inc
+END
+abs_diff.inc
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/integer/abs_diff.inc
+END
+add_sat.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/integer/add_sat.h
+END
+sub_sat.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/161312/libclc/trunk/generic/include/clc/integer/sub_sat.h
+END

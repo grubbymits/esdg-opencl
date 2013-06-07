@@ -1,0 +1,8 @@
+Breadth-First Search  : Rodinia, SHOC, Parboil
+B+Tree                : Rodinia
+nw                    : Rodinia
+pathfinder            : Rodinia
+floydWarshallPass     : AMD
+bitonicSort           : AMD
+RadixSort             : AMD, SHOC
+

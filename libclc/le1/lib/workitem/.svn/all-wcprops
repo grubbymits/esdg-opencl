@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/ptx-nvidiacl/lib/workitem
+END
+get_num_groups.cl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/ptx-nvidiacl/lib/workitem/get_num_groups.cl
+END
+get_local_size.cl
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/ptx-nvidiacl/lib/workitem/get_local_size.cl
+END
+get_local_id.cl
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/ptx-nvidiacl/lib/workitem/get_local_id.cl
+END
+get_group_id.cl
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/ptx-nvidiacl/lib/workitem/get_group_id.cl
+END

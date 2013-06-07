@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/llvm-project/!svn/ver/157821/libclc/trunk/build
+END
+ninja_syntax.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/build/ninja_syntax.py
+END
+metabuild.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/llvm-project/!svn/ver/157821/libclc/trunk/build/metabuild.py
+END

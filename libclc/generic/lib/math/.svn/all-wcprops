@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/llvm-project/!svn/ver/157617/libclc/trunk/generic/lib/math
+END
+mad.cl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/llvm-project/!svn/ver/157617/libclc/trunk/generic/lib/math/mad.cl
+END
+hypot.cl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/llvm-project/!svn/ver/157613/libclc/trunk/generic/lib/math/hypot.cl
+END
+mad.inc
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/llvm-project/!svn/ver/157599/libclc/trunk/generic/lib/math/mad.inc
+END
+hypot.inc
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/llvm-project/!svn/ver/157613/libclc/trunk/generic/lib/math/hypot.inc
+END

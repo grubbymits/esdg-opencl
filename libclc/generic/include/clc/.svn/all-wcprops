@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/llvm-project/!svn/ver/165386/libclc/trunk/generic/include/clc
+END
+clc.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/llvm-project/!svn/ver/165386/libclc/trunk/generic/include/clc/clc.h
+END
+clcmacro.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/clcmacro.h
+END
+as_type.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/as_type.h
+END
+clctypes.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/clctypes.h
+END
+clcfunc.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/clcfunc.h
+END
+gentype.inc
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/gentype.inc
+END
+convert.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/llvm-project/!svn/ver/157597/libclc/trunk/generic/include/clc/convert.h
+END

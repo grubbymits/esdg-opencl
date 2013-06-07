@@ -1,0 +1,74 @@
+For loop distribution we need to enter the kernel function, and insert the loop
+header:
+
+__kernel void array_mult(
+   __global int* input1,
+   __global int* input2,
+   __global int* output)
+{
+  int i = get_global_id(0);
+  output[i] = input1[i] * input2[i];
+  barrier(CLK_GLOBAL_MEM_FENCE);
+  if (i > 0)
+    output[i-1] = output[i] + output[i-1];
+}
+
+kernel() {
+  int x, y, z;
+
+  for (z)
+    for (y)
+      for (x) {
+
+And then find any calls to get_global_id and add the loop index to it. any
+calls to get_local_id will need to be replaced with the loop index. We then
+need to transverse the AST until we come across a CallExpr for 'barrier', or an
+exit statement such as continue, and close the nested loop.
+
+      for(x) {
+        int i = get_global_id(0) + x;
+        output[i] = input1[i] * input2[i];
+      }
+
+Another nested loop then needs to begin and we repeat the process:
+
+  for(z)
+    for(y)
+      for(x) {
+        if ( i > 0)
+          output[i-1] = output[i] + output[i-1];
+
+We repeat the process until the end of the kernel. An LLVM pass can be used to
+later unroll the generated loops.
+
+// these indices represent the local_id
+__kernel_indices[2];
+
+__kernel_indices[2] = 0;
+while (__kernel_indices[2] < get_local_size(2) {
+  __kernel_indices[2] = 0;
+
+  while (__kernel_indices[1] < get_local_size(1) {
+    __kernel_indices[1] = 0;
+
+    while (__kernel_indices[0] < get_local_size(0) {
+      int i = get_global_id(0);
+      output[i] = input1[i] + input2[i];
+      __kernel_indices[0] = le1_incr_local_id(0);
+    }
+
+  __kernel_indices[1] = le1_incr_local_id(1);
+  }
+
+  __kernel_indices[2] = le1_incr_local_id(2);
+}
+
+
+
+
+
+
+
+
+
+

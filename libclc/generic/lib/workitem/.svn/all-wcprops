@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/lib/workitem
+END
+get_global_size.cl
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/lib/workitem/get_global_size.cl
+END
+get_global_id.cl
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/lib/workitem/get_global_id.cl
+END

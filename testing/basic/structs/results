@@ -1,0 +1,17 @@
+2e37ab81 * 26e74a5d + 243922ba * 79f762c4
+results[0] = -105614058, and expected = -810327483
+23f336bf * 7ca217be + 3b09d040 * 5f974813
+results[1] = 1134032080, and expected = 1800945538
+6a288d45 * 23bc2d65 + 3425938e * 668b29c8
+results[2] = 308558500, and expected = -1533550039
+27b72b77 * 34ed67a8 + 1cad7acc * 45eb2789
+results[3] = -1541052672, and expected = -1481887164
+4e9ed1f2 * 7b27e5 + 7b2a1314 * 17e75e6d
+results[4] = -405844352, and expected = 1279992574
+5cf28e94 * 1ff49e74 + 2902bef6 * 4e71f412
+results[5] = -1458304016, and expected = 1640093788
+7d3bc2b5 * 4bdc0bbe + c1eb4f5 * 5b55abfd
+results[6] = 1236577296, and expected = -2016033161
+5ecb7094 * 7f3e586c + 1f760d2a * d031c16
+results[7] = -158637181, and expected = -2089674740
+

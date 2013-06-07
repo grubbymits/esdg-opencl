@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/llvm-project/!svn/ver/165385/libclc/trunk/generic/include/clc/math
+END
+binary_intrin.inc
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/llvm-project/!svn/ver/157629/libclc/trunk/generic/include/clc/math/binary_intrin.inc
+END
+sin.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/sin.h
+END
+sqrt.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/sqrt.h
+END
+ternary_intrin.inc
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/llvm-project/!svn/ver/157613/libclc/trunk/generic/include/clc/math/ternary_intrin.inc
+END
+native_cos.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/native_cos.h
+END
+exp.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/exp.h
+END
+gentype.inc
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/llvm-project/!svn/ver/157599/libclc/trunk/generic/include/clc/math/gentype.inc
+END
+native_powr.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/llvm-project/!svn/ver/165385/libclc/trunk/generic/include/clc/math/native_powr.h
+END
+native_sin.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/native_sin.h
+END
+native_sqrt.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/native_sqrt.h
+END
+mad.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/157599/libclc/trunk/generic/include/clc/math/mad.h
+END
+native_exp.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/native_exp.h
+END
+log2.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/log2.h
+END
+hypot.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/llvm-project/!svn/ver/157613/libclc/trunk/generic/include/clc/math/hypot.h
+END
+fma.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/157613/libclc/trunk/generic/include/clc/math/fma.h
+END
+unary_intrin.inc
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/unary_intrin.inc
+END
+pow.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/157629/libclc/trunk/generic/include/clc/math/pow.h
+END
+unary_decl.inc
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/unary_decl.inc
+END
+native_log2.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/native_log2.h
+END
+native_divide.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/native_divide.h
+END
+fabs.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/llvm-project/!svn/ver/157595/libclc/trunk/generic/include/clc/math/fabs.h
+END
+rsqrt.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/llvm-project/!svn/ver/162274/libclc/trunk/generic/include/clc/math/rsqrt.h
+END
+exp2.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/exp2.h
+END
+log.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/log.h
+END
+floor.h
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/llvm-project/!svn/ver/162273/libclc/trunk/generic/include/clc/math/floor.h
+END
+mad.inc
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/llvm-project/!svn/ver/157599/libclc/trunk/generic/include/clc/math/mad.inc
+END
+cos.h
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/math/cos.h
+END
+native_exp2.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/native_exp2.h
+END
+hypot.inc
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/llvm-project/!svn/ver/157613/libclc/trunk/generic/include/clc/math/hypot.inc
+END
+native_log.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/157598/libclc/trunk/generic/include/clc/math/native_log.h
+END

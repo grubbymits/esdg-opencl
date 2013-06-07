@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/llvm-project/!svn/ver/157617/libclc/trunk/generic/lib/geometric
+END
+dot.cl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/llvm-project/!svn/ver/157615/libclc/trunk/generic/lib/geometric/dot.cl
+END
+cross.cl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/lib/geometric/cross.cl
+END
+normalize.inc
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/lib/geometric/normalize.inc
+END
+length.inc
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/llvm-project/!svn/ver/157617/libclc/trunk/generic/lib/geometric/length.inc
+END
+normalize.cl
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/llvm-project/!svn/ver/157617/libclc/trunk/generic/lib/geometric/normalize.cl
+END
+length.cl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/llvm-project/!svn/ver/157617/libclc/trunk/generic/lib/geometric/length.cl
+END

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/llvm-project/!svn/ver/162274/libclc/trunk/test
+END
+cross.cl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/test/cross.cl
+END
+fabs.cl
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/llvm-project/!svn/ver/157595/libclc/trunk/test/fabs.cl
+END
+rsqrt.cl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/llvm-project/!svn/ver/162274/libclc/trunk/test/rsqrt.cl
+END
+add_sat.cl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/llvm-project/!svn/ver/157591/libclc/trunk/test/add_sat.cl
+END
+convert.cl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/llvm-project/!svn/ver/157590/libclc/trunk/test/convert.cl
+END
+subsat.cl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/llvm-project/!svn/ver/161312/libclc/trunk/test/subsat.cl
+END
+as_type.cl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/llvm-project/!svn/ver/157591/libclc/trunk/test/as_type.cl
+END
+cos.cl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/test/cos.cl
+END
+get_group_id.cl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/test/get_group_id.cl
+END
