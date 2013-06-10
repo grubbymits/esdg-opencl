@@ -463,7 +463,6 @@ void LE1Simulator::readIntData(unsigned int addr,
 #endif
     insizzleAPIRdOneDramLocation(addr, &word);
     data[i] = word;
-    std::cout << word << std::endl;
 #ifdef DEBUGCL
   //  std::cerr << "word = " << std::hex << word << std::endl;
 #endif

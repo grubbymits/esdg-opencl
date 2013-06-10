@@ -175,7 +175,7 @@ bool Compiler::compile(std::string &triple, std::string &name,
       "cl_clang_storage_class_specifiers");
 
     p_compiler.getCodeGenOpts().LinkBitcodeFile = "/opt/esdg-opencl/lib/builtins.bc";
-    p_compiler.getCodeGenOpts().OptimizationLevel = 3;
+    p_compiler.getCodeGenOpts().OptimizationLevel = 2;
     p_compiler.getCodeGenOpts().setInlining(
       clang::CodeGenOptions::OnlyAlwaysInlining);
 

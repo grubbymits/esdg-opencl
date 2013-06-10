@@ -54,7 +54,7 @@ $BB1_1:                                 # %while.body6
                                         #     Child Loop BB1_5 Depth 2
 	add.0  r0.13, r0.2, r0.12
 	;;
-	cmpge.0  b0.0, r0.13, r0.9
+	cmpge.0  b0.0, r0.13, r0.9      # if (tid < no_of_nodes)
 	;;
 	br.0  b0.0, ($BB1_8)
 	;;
@@ -66,7 +66,7 @@ $BB1_2:                                 # %land.lhs.true
 	;;
 	ldbu.0  r0.14, r0.15[0x0]
 	;;
-	cmpeq.0  b0.0, r0.14, r0.0
+	cmpeq.0  b0.0, r0.14, r0.0      # if (g_graph_mask[tid])
 	;;
 	br.0  b0.0, ($BB1_8)
 	;;
@@ -75,7 +75,7 @@ $BB1_2:                                 # %land.lhs.true
 $BB1_3:                                 # %if.then
                                         #   in Loop: Header=BB1_1 Depth=1
 	sh3add.0  r0.14, r0.13, r0.3
-	stb.0  r0.15[0x0], r0.10
+	stb.0  r0.15[0x0], r0.10        # g_graph_mask[tid] = r0.10
 	;;
 	ldw.0  r0.16, r0.14[0x4]
 	;;
@@ -100,9 +100,9 @@ $BB1_5:                                 # %for.body
 	;;
 	add.0  r0.19, r0.7, r0.18
 	;;
-	ldbu.0  r0.19, r0.19[0x0]
+	ldbu.0  r0.19, r0.19[0x0]     # r0.19 = g_graph_visited[id]
 	;;
-	cmpne.0  b0.0, r0.19, r0.0
+	cmpne.0  b0.0, r0.19, r0.0    # if (!g_graph_visited[id])
 	;;
 	br.0  b0.0, ($BB1_7)
 	;;
@@ -110,18 +110,18 @@ $BB1_5:                                 # %for.body
 	;;
 $BB1_6:                                 # %if.then21
                                         #   in Loop: Header=BB1_5 Depth=2
-	sh2add.0  r0.16, r0.13, r0.8
+	sh2add.0  r0.16, r0.13, r0.8    # r0.8 = g_cost
 	;;
-	ldw.0  r0.16, r0.16[0x0]
+	ldw.0  r0.16, r0.16[0x0]        # r0.16 = g_cost[tid]
 	;;
 	add.0  r0.16, r0.16, 0x1
 	sh2add.0  r0.17, r0.18, r0.8
 	;;
-	stw.0  r0.17[0x0], r0.16
+	stw.0  r0.17[0x0], r0.16        # r0.17 = g_cost[id]
 	add.0  r0.16, r0.6, r0.18
 	;;
-	stb.0  r0.16[0x0], r0.11
-	ldw.0  r0.17, r0.14[0x0]
+	stb.0  r0.16[0x0], r0.11        # g_updating_graph_mask[id] = true;
+	ldw.0  r0.17, r0.14[0x0]        # r0.14 = g_graph_nodes[tid]
 	;;
 	ldw.0  r0.16, r0.14[0x4]
 	;;
@@ -130,7 +130,8 @@ $BB1_7:                                 # %for.inc
 	add.0  r0.15, r0.15, 0x1
 	add.0  r0.18, r0.17, r0.16
 	;;
-	cmplt.0  b0.0, r0.15, r0.18
+	cmplt.0  b0.0, r0.15, r0.18     # if (i < g_graph_nodes[tid].no_of_edges
+                                        # + g_graph_nodes
 	;;
 	br.0  b0.0, ($BB1_5)
 	;;
