@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/synchronization
+END
+barrier.h
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/llvm-project/!svn/ver/161313/libclc/trunk/generic/include/clc/synchronization/barrier.h
+END
+cl_mem_fence_flags.h
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/synchronization/cl_mem_fence_flags.h
+END

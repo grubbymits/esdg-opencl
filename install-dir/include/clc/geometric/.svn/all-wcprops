@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/llvm-project/!svn/ver/157615/libclc/trunk/generic/include/clc/geometric
+END
+length.inc
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/geometric/length.inc
+END
+floatn.inc
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/llvm-project/!svn/ver/157614/libclc/trunk/generic/include/clc/geometric/floatn.inc
+END
+dot.h
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/geometric/dot.h
+END
+dot.inc
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/157615/libclc/trunk/generic/include/clc/geometric/dot.inc
+END
+cross.h
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/geometric/cross.h
+END
+distance.h
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/geometric/distance.h
+END
+normalize.h
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/geometric/normalize.h
+END
+length.h
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/geometric/length.h
+END
+normalize.inc
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/llvm-project/!svn/ver/147756/libclc/trunk/generic/include/clc/geometric/normalize.inc
+END
