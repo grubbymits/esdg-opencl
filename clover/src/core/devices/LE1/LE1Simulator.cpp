@@ -73,9 +73,9 @@ bool LE1Simulator::Initialise(const char *machine) {
     unsigned char hc = 0;
     unsigned char cl = 0;
 
-    systemConfig *SYS = (systemConfig *)((size_t)SYSTEM +
+    SYS = (systemConfig *)((size_t)SYSTEM +
                                          (s * sizeof(systemConfig)));
-    systemT *system = (systemT *)((size_t)galaxyT + (s * sizeof(systemT)));
+    system = (systemT *)((size_t)galaxyT + (s * sizeof(systemT)));
 
     /* This is a value defined in the xml config file */
     // FIXME This needs to come from the device
@@ -119,6 +119,43 @@ bool LE1Simulator::Initialise(const char *machine) {
   return true;
 }
 
+void LE1Simulator::ClearRAM(void) {
+#ifdef DEBUGCL
+  std::cerr << "ClearRAM\n";
+#endif
+
+  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
+    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
+    exit(EXIT_FAILURE);
+  }
+
+  for (unsigned i = 0; (i < GALAXY_CONFIG & 0xFF); ++i) {
+
+    SYS = (systemConfig *)((size_t)SYSTEM + (i * sizeof(systemConfig)));
+    system = (systemT *)((size_t)galaxyT + (i * sizeof(systemT)));
+    contextConfig *CNT
+      = (contextConfig *)((size_t)SYS->CONTEXT + (0 * sizeof(contextConfig)));
+    contextT* context =
+      (contextT *)((size_t)system->context + (0 * sizeof(contextT)));
+
+    for(unsigned k=0;k<((CNT->CONTEXT_CONFIG >> 4) & 0xf);k++) {
+      hyperContextConfig *HCNT = (hyperContextConfig *)((size_t)CNT->HCONTEXT
+                                    + (k * sizeof(hyperContextConfig)));
+      hyperContextT *hypercontext =
+        (hyperContextT *)((size_t)context->hypercontext
+                          + (k * sizeof(hyperContextT)));
+      memset(hypercontext->S_GPR, 0,
+             (hypercontext->sGPRCount * sizeof(unsigned)));
+      hypercontext->programCounter = 0;
+    }
+  }
+
+  pthread_mutex_unlock(&p_simulator_mutex);
+#ifdef DEBUGCL
+  std::cerr << "Leaving ClearRAM\n";
+#endif
+}
+
 
 /* Loop through available hypercontexts checking VT_CTRL register */
 int LE1Simulator::checkStatus(void) {
@@ -128,7 +165,7 @@ int LE1Simulator::checkStatus(void) {
   unsigned char hc = 0;
   unsigned char cl = 0;
 
-  systemConfig *SYS = (systemConfig *)((size_t)SYSTEM + (s * sizeof(systemConfig)));
+  //systemConfig *SYS = (systemConfig *)((size_t)SYSTEM + (s * sizeof(systemConfig)));
 
   /* loop through all contexts and hypercontexts */
   for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff);  ++c){
@@ -159,6 +196,7 @@ bool LE1Simulator::run(char* iram,
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
   }
+
   /* turn printout on */
   PRINT_OUT = 0;
 
@@ -167,7 +205,6 @@ bool LE1Simulator::run(char* iram,
 #ifdef DEBUGCL
       std::cerr << "Loading IRAM\n";
 #endif
-      unsigned int fileSize = 0;
       char *i_data = NULL;
 
       FILE *inst = fopen(iram, "rb");
@@ -177,18 +214,18 @@ bool LE1Simulator::run(char* iram,
         return false;
       }
       fseek(inst, 0L, SEEK_END);
-      fileSize = ftell(inst);
+      IRAMFileSize = ftell(inst);
       //printf("Filesize = %d\n", fileSize);
       fseek(inst, 0L, SEEK_SET);
 
       /* Create local data and copy content of file into it */
-      i_data = (char *)calloc(sizeof(char), fileSize);
+      i_data = (char *)calloc(sizeof(char), IRAMFileSize);
       if(i_data == NULL) {
         fprintf(stderr, "!!! ERROR Could not allocate memory (i_data) !!!\n");
         pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
-      fread(i_data, sizeof(char), fileSize, inst);
+      fread(i_data, sizeof(char), IRAMFileSize, inst);
 #ifdef DEBUGCL
       std::cerr << "Read in IRAM file\n";
 #endif
@@ -201,8 +238,8 @@ bool LE1Simulator::run(char* iram,
         unsigned char hc = 0;
         unsigned char cl = 0;
 
-        systemConfig *SYS = (systemConfig *)((size_t)SYSTEM
-                                             + (s * sizeof(systemConfig)));
+        //systemConfig *SYS = (systemConfig *)((size_t)SYSTEM
+          //                                   + (s * sizeof(systemConfig)));
 #ifdef DEBUGCL
         std::cerr << "Got System Config\n";
 #endif
@@ -222,13 +259,13 @@ bool LE1Simulator::run(char* iram,
             /* Set current hypercontext to interact with */
             insizzleAPISetCurrent(s, c, hc, cl); /* (system, context, hypercontext, cluster) */
             /* Load Iram into current hypercontext */
-            insizzleAPILdIRAM(i_data, fileSize);
+            insizzleAPILdIRAM(i_data, IRAMFileSize);
 
             {
             /* Check correct */
             unsigned int i;
             unsigned int word;
-            for (i=0; i<fileSize; i+=4) {
+            for (i=0; i<IRAMFileSize; i+=4) {
               insizzleAPIRdOneIramLocation(i, &word);
               /* Need to perform an endian flip */
               if(MSB2LSBDW(word) != (unsigned int)*(unsigned int *)(i_data + i)) {
@@ -255,7 +292,7 @@ bool LE1Simulator::run(char* iram,
 #ifdef DEBUGCL
     std::cerr << "Loading DRAM\n";
 #endif
-    unsigned int fileSize = 0;
+    unsigned int DRAMFileSize = 0;
     char *d_data = NULL;
 
     FILE *data = fopen(dram, "rb");
@@ -265,13 +302,12 @@ bool LE1Simulator::run(char* iram,
       return false;
     }
     fseek(data, 0L, SEEK_END);
-    fileSize = ftell(data);
+    DRAMFileSize = ftell(data);
     fseek(data, 0L, SEEK_SET);
 
-    if(fileSize > dram_size) {
-      // FIXME This isn't safe
+    if(DRAMFileSize > dram_size) {
       fprintf(stderr, "!!! ERROR DRAM is larger than the size specified !!!\n");
-      fprintf(stderr, "DRAM = %d and fileSize = %d\n", dram_size, fileSize);
+      fprintf(stderr, "DRAM = %d and fileSize = %d\n", dram_size, DRAMFileSize);
       pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -283,7 +319,7 @@ bool LE1Simulator::run(char* iram,
       pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
-    fread(d_data, sizeof(char), fileSize, data);
+    fread(d_data, sizeof(char), DRAMFileSize, data);
 
     /* Input into dram */
     /* Send size dram  to allocate */
@@ -325,7 +361,7 @@ bool LE1Simulator::run(char* iram,
     unsigned char hc = 0;
     unsigned char cl = 0;
 
-    systemConfig *SYS = (systemConfig *)((size_t)SYSTEM + (s * sizeof(systemConfig)));
+    //systemConfig *SYS = (systemConfig *)((size_t)SYSTEM + (s * sizeof(systemConfig)));
 
     /* loop through all contexts and hypercontexts */
     for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff); ++c){
@@ -352,8 +388,8 @@ bool LE1Simulator::run(char* iram,
     unsigned char hc = 0;
     unsigned char cl = 0;
 
-    systemConfig *SYS = (systemConfig *)((size_t)SYSTEM
-                                         + (s * sizeof(systemConfig)));
+    //systemConfig *SYS = (systemConfig *)((size_t)SYSTEM
+      //                                   + (s * sizeof(systemConfig)));
 
     /* loop through all contexts and hypercontexts */
     for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff); ++c) {
@@ -396,6 +432,14 @@ bool LE1Simulator::run(char* iram,
     }
   }
 
+  //systemConfig *SYS =
+    //(systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
+  if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
+                system->dram) == -1) {
+    pthread_mutex_unlock(&p_simulator_mutex);
+    return false;
+  }
+
   pthread_mutex_unlock(&p_simulator_mutex);
 
 #ifdef DEBUGCL
@@ -421,7 +465,7 @@ void LE1Simulator::readCharData(unsigned int addr,
   unsigned bytes = 0;
   if (numBytes < 4) {
     insizzleAPIRdOneDramLocation(addr, &bytes);
-    std::cout << "bytes = " << bytes << std::endl;
+    //std::cout << "bytes = " << bytes << std::endl;
     for (unsigned i = 0; i < numBytes; ++i)
       data[i] = (unsigned char) (bytes >> (8 * (3-i)));
   }
@@ -433,6 +477,7 @@ void LE1Simulator::readCharData(unsigned int addr,
       data[i+2] = (unsigned ) 0xFF & (bytes >> 16);
       data[i+1] = (unsigned ) 0xFF & (bytes >> 8);
       data[i] = (unsigned ) 0xFF & (bytes >> 0);
+      /*
       if (bytes != 0) {
         std::cout << std::hex << "bytes = " << bytes << " at address "
           << addr << std::endl;
@@ -440,7 +485,7 @@ void LE1Simulator::readCharData(unsigned int addr,
         std::cout << "data[" << addr << " + 2] = " << (unsigned) data[i+2] << std::endl;
         std::cout << "data[" << addr << " + 1] = " << (unsigned) data[i+1] << std::endl;
         std::cout << "data[" << addr << " + 0] = " << (unsigned) data[i+0] << std::endl;
-      }
+      }*/
     }
   }
 

@@ -3,6 +3,8 @@
 #define __CL_ENABLE_EXCEPTIONS
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <iomanip>
 #include <string>
 #include <cstring>
@@ -33,38 +35,56 @@ struct Node
 void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
 		int *h_graph_edges, char *h_graph_mask, char *h_updating_graph_mask, \
 		char *h_graph_visited, int *h_cost_ref){
-	char stop;
-	int k = 0;
-	do{
-		//if no thread changes this value then the loop stops
-		stop=false;
-		for(int tid = 0; tid < no_of_nodes; tid++ )
-		{
-			if (h_graph_mask[tid] == true){ 
-				h_graph_mask[tid]=false;
-				for(int i=h_graph_nodes[tid].starting; i<(h_graph_nodes[tid].no_of_edges + h_graph_nodes[tid].starting); i++){
-					int id = h_graph_edges[i];	//--cambine: node id is connected with node tid
-					if(!h_graph_visited[id]){	//--cambine: if node id has not been visited, enter the body below
-						h_cost_ref[id]=h_cost_ref[tid]+1;
-						h_updating_graph_mask[id]=true;
-					}
-				}
-			}		
-		}
+  std::ofstream CPUResults;
+  CPUResults.open("cpu_results");
+  std::ostringstream DataLine(std::ostringstream::out);
 
-  		for(int tid=0; tid< no_of_nodes ; tid++ )
-		{
-			if (h_updating_graph_mask[tid] == true){
-			h_graph_mask[tid]=true;
-			h_graph_visited[tid]=true;
-			stop=true;
-			h_updating_graph_mask[tid]=false;
-			}
-		}
-		k++;
-	}
-	while(stop);
+  char stop;
+  int k = 0;
+  do{
+    //if no thread changes this value then the loop stops
+    stop=false;
+    for(int tid = 0; tid < no_of_nodes; tid++ )
+    {
+      DataLine << "Kernel 1, tid = " << tid << ":" << std::endl;
+      if (h_graph_mask[tid] == true){
+        h_graph_mask[tid]=false;
+        for(int i=h_graph_nodes[tid].starting;
+            i<(h_graph_nodes[tid].no_of_edges + h_graph_nodes[tid].starting);
+            i++){
+          int id = h_graph_edges[i];	//--cambine: node id is connected with node tid
+	  if(!h_graph_visited[id]){
+            //--cambine: if node id has not been visited, enter the body below
+	    h_cost_ref[id]=h_cost_ref[tid]+1;
+	    h_updating_graph_mask[id]=true;
+            DataLine << "Id = " << id << ":\nh_cost_ref = " << h_cost_ref[id]
+              << std::endl;
+          }
+        }
+      }
+    }
+    DataLine << std::endl;
+
+    for(int tid=0; tid< no_of_nodes ; tid++ )
+    {
+      DataLine << "Kernel 2, tid = " << tid << ":" << std::endl;
+      if (h_updating_graph_mask[tid] == true){
+        h_graph_mask[tid]=true;
+        h_graph_visited[tid]=true;
+        stop=true;
+        h_updating_graph_mask[tid]=false;
+        DataLine << "h_updating_graph_mask == true\n";
+      }
+    }
+    DataLine << std::endl;
+    k++;
+  }
+  while(stop);
+  DataLine << "Number of iterations = " << k << std::endl;
+  CPUResults << DataLine.str();
+  CPUResults.close();
 }
+
 //----------------------------------------------------------
 //--breadth first search on GPUs
 //----------------------------------------------------------

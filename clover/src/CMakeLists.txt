@@ -9,7 +9,7 @@ include_directories (${Coal_SOURCE_DIR}/include
                     )
 
 #set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-set(CMAKE_CXX_FLAGS " -fno-rtti -D_XOPEN_SOURCE -DINSIZZLEAPI -DDEBUGCL")
+set(CMAKE_CXX_FLAGS " -fno-rtti -D_XOPEN_SOURCE -DINSIZZLEAPI ")
 
 configure_file(core/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/config.h)
 

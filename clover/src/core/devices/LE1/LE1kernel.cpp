@@ -1195,6 +1195,7 @@ bool LE1KernelEvent::run() {
       unsigned TotalSize = (*(MemObject**)Arg.data())->size();
 
       if (Arg.type()->isIntegerTy(8)) {
+        /*
         std::cout << "Arg " << i << ", at address " << buffer->addr()
           << ". Buffer data before :\n";
         for (unsigned j = 0; j < TotalSize; ++j) {
@@ -1205,10 +1206,11 @@ bool LE1KernelEvent::run() {
             std::cout << std::endl;
             std::cout << std::hex << (buffer->addr() + (j+1)) << "  ";
           }
-        }
+        }*/
 
         p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
                                                (unsigned char*)buffer->data());
+        /*
         unsigned char* NewData = (unsigned char*)buffer->data();
         std::cout << "Arg " << i << ", at address " << buffer->addr()
           << ". Buffer data after :\n";
@@ -1217,7 +1219,7 @@ bool LE1KernelEvent::run() {
             << (unsigned) NewData[j+0] << " " << (unsigned) NewData[j+1] << " "
             << (unsigned) NewData[j+2] << " " << (unsigned) NewData[j+3]
             << std::endl;
-        }
+        }*/
       }
       else if (Arg.type()->isIntegerTy(32)) {
         p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
@@ -1235,6 +1237,8 @@ bool LE1KernelEvent::run() {
       }
     }
   }
+
+  p_device->getSimulator()->ClearRAM();
 
   // Release event
   pthread_mutex_unlock(&p_mutex);
