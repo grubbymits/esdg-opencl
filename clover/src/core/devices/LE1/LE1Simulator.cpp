@@ -421,16 +421,26 @@ void LE1Simulator::readCharData(unsigned int addr,
   unsigned bytes = 0;
   if (numBytes < 4) {
     insizzleAPIRdOneDramLocation(addr, &bytes);
+    std::cout << "bytes = " << bytes << std::endl;
     for (unsigned i = 0; i < numBytes; ++i)
-      data[i] = (unsigned char) (bytes >> (8 * i));
+      data[i] = (unsigned char) (bytes >> (8 * (3-i)));
   }
   else if ((numBytes % 4) == 0) {
-    insizzleAPIRdOneDramLocation(addr, &bytes);
-    for(unsigned i = 0; i < (numBytes >> 2); addr = (addr + 4), ++i) {
-      data[i+3] = (unsigned char) (0xF & bytes);
-      data[i+2] = (unsigned char) (0xF & (bytes >> 8));
-      data[i+1] = (unsigned char) (0xF & (bytes >> 16));
-      data[i] = (unsigned char) (0xF & (bytes >> 24));
+    for(unsigned i = 0; i < (numBytes >> 2); addr = (addr + 4), i += 4) {
+      bytes = 0;
+      insizzleAPIRdOneDramLocation(addr, &bytes);
+      data[i+3] = (unsigned ) 0xFF & (bytes >> 24);
+      data[i+2] = (unsigned ) 0xFF & (bytes >> 16);
+      data[i+1] = (unsigned ) 0xFF & (bytes >> 8);
+      data[i] = (unsigned ) 0xFF & (bytes >> 0);
+      if (bytes != 0) {
+        std::cout << std::hex << "bytes = " << bytes << " at address "
+          << addr << std::endl;
+        std::cout << "data[" << addr << " + 3] = " << (unsigned) data[i+3] << std::endl;
+        std::cout << "data[" << addr << " + 2] = " << (unsigned) data[i+2] << std::endl;
+        std::cout << "data[" << addr << " + 1] = " << (unsigned) data[i+1] << std::endl;
+        std::cout << "data[" << addr << " + 0] = " << (unsigned) data[i+0] << std::endl;
+      }
     }
   }
 

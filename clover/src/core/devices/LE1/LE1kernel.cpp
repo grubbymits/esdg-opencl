@@ -101,7 +101,7 @@ size_t LE1Kernel::preferredWorkGroupSizeMultiple() const
     return 0; // TODO set preferredWorkGroupSizeMultiple after ILP analysis
 }
 
-static std::string convert_to_binary(int value) {
+static std::string ConvertToBinary(unsigned int value) {
   std::string binary_string;
     unsigned mask = 0x80000000;
     while(mask > 0x00) {
@@ -558,50 +558,50 @@ bool LE1KernelEvent::WriteDataArea() {
 #ifdef DEBUGCL
   std::cerr << "Entering LE1KernelEvent::WriteDataArea\n";
 #endif
-  std::ofstream final_source;
-  final_source.open(filename, std::ios_base::app);
-  std::ostringstream output (std::ostringstream::out);
+  std::ofstream FinalSource;
+  FinalSource.open(filename, std::ios_base::app);
+  std::ostringstream Output (std::ostringstream::out);
 
   // Size taken by kernel attributes before the argument data
   // FIXME is this size right?
-  unsigned data_size = 52;
+  unsigned DataSize = 52;
 
   // Reset the static addr
   addr = 0x4;
 
-  Kernel* kernel = p_event->kernel();
+  Kernel* TheKernel = p_event->kernel();
 
   // FIXME Is this calculating the size properly?
-  for(unsigned i = 0; i < kernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = kernel->arg(i);
+  for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
+    const Kernel::Arg& Arg = TheKernel->arg(i);
     // TODO This will need to handle images as well
-    if (arg.kind() == Kernel::Arg::Buffer) {
+    if (Arg.kind() == Kernel::Arg::Buffer) {
       // Local Buffers need to be copied for each workgroup (core).
-      if (arg.file() == Kernel::Arg::Local)
-        data_size += (*(MemObject**)arg.data())->size() * p_device->numLE1s();
+      if (Arg.file() == Kernel::Arg::Local)
+        DataSize += (*(MemObject**)Arg.data())->size() * p_device->numLE1s();
       else
-        data_size += (*(MemObject**)arg.data())->size();
+        DataSize += (*(MemObject**)Arg.data())->size();
     }
   }
 
-  output << "##Data Labels" << std::endl;
-  output << "00000 - work_dim" << std::endl;
-  output << "00004 - global_size" << std::endl;
-  output << "00010 - local_size" << std::endl;
-  output << "0001c - num_groups" << std::endl;
-  output << "00028 - global_offset" << std::endl << std::endl;
+  Output << "##Data Labels" << std::endl;
+  Output << "00000 - work_dim" << std::endl;
+  Output << "00004 - global_size" << std::endl;
+  Output << "00010 - local_size" << std::endl;
+  Output << "0001c - num_groups" << std::endl;
+  Output << "00028 - global_offset" << std::endl << std::endl;
 
-  output << "##Data Section - " << data_size << " - Data_align=32" << std::endl;
-  output << "00000 - " << std::hex << std::setw(8) << std::setfill('0')
+  Output << "##Data Section - " << DataSize << " - Data_align=32" << std::endl;
+  Output << "00000 - " << std::hex << std::setw(8) << std::setfill('0')
     << p_event->work_dim() << " - "
-    << convert_to_binary(p_event->work_dim())
+    << ConvertToBinary(p_event->work_dim())
     << std::endl;
 
   for(unsigned i = 0; i < 3; ++i) {
-    output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_event->global_work_size(i) << " - "
-      << convert_to_binary(p_event->global_work_size(i)) << std::endl;
+      << ConvertToBinary(p_event->global_work_size(i)) << std::endl;
     addr += 4;
   }
 #ifdef DEBUGCL
@@ -609,10 +609,10 @@ bool LE1KernelEvent::WriteDataArea() {
 #endif
 
   for (unsigned i = 0; i < 3; ++i) {
-    output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_event->local_work_size(i) << " - "
-      << convert_to_binary(p_event->local_work_size(i)) << std::endl;
+      << ConvertToBinary(p_event->local_work_size(i)) << std::endl;
     addr += 4;
   }
 #ifdef DEBUGCL
@@ -620,10 +620,10 @@ bool LE1KernelEvent::WriteDataArea() {
 #endif
 
   // FIXME Printing num_groups?
-  output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_device->numLE1s() << " - "
-      << convert_to_binary(p_device->numLE1s()) << std::endl;
+      << ConvertToBinary(p_device->numLE1s()) << std::endl;
     addr += 4;
 
 #ifdef DEBUGCL
@@ -631,47 +631,47 @@ bool LE1KernelEvent::WriteDataArea() {
 #endif
 
   for(unsigned i = 0; i < 3; ++i) {
-    output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_event->global_work_offset(i) << " - "
-      << convert_to_binary(p_event->global_work_offset(i)) << std::endl;
+      << ConvertToBinary(p_event->global_work_offset(i)) << std::endl;
     addr += 4;
   }
 #ifdef DEBUGCL
   std::cerr << "Written global work offset\n";
 #endif
 
-  final_source << output.str();
-  final_source.close();
+  FinalSource << Output.str();
+  FinalSource.close();
 
 #ifdef DEBUGCL
-  std::cerr << output.str();
+  std::cerr << Output.str();
 #endif
 
   // First, write the global data first
-  for(unsigned i = 0; i < kernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = kernel->arg(i);
+  for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
+    const Kernel::Arg& Arg = TheKernel->arg(i);
 
     // TODO This will need to check for images too
-    if (arg.kind() != Kernel::Arg::Buffer)
+    if (Arg.kind() != Kernel::Arg::Buffer)
       continue;
 
-    if (arg.kind() != Kernel::Arg::Local)
-      if (!HandleBufferArg(arg))
+    if (Arg.file() != Kernel::Arg::Local)
+      if (!HandleBufferArg(Arg))
         return false;
   }
 
   // Then write the local area for each core
-  for(unsigned i = 0; i < kernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = kernel->arg(i);
+  for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
+    const Kernel::Arg& Arg = TheKernel->arg(i);
 
     // TODO This will need to check for images too
-    if (arg.kind() != Kernel::Arg::Buffer)
+    if (Arg.kind() != Kernel::Arg::Buffer)
       continue;
 
-    if (arg.kind() == Kernel::Arg::Local)
+    if (Arg.file() == Kernel::Arg::Local)
       for (unsigned i = 0; i < p_device->numLE1s(); ++i)
-        if(!HandleBufferArg(arg))
+        if(!HandleBufferArg(Arg))
           return false;
   }
 
@@ -1090,7 +1090,6 @@ void LE1KernelEvent::PrintData(const void* data,
     }
     case sizeof(int): {
       const unsigned* word = static_cast<const unsigned*>(data) + offset;
-      std::cout << "word = " << word[0] << std::endl;
       index = i;
       //word = &word[index];
       ConvertToBinary(&binary_string, &word[index], sizeof(int));
@@ -1185,27 +1184,54 @@ bool LE1KernelEvent::run() {
   }
 
   // If the simulator executes successfully, update the buffers.
-  Kernel* kernel = p_event->kernel();
-  for (unsigned i = 0; i < kernel->numArgs(); ++i) {
+  Kernel* TheKernel = p_event->kernel();
+  for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
 
-    const Kernel::Arg& arg = kernel->arg(i);
-    if (arg.kind() == Kernel::Arg::Buffer) {
+    const Kernel::Arg& Arg =TheKernel->arg(i);
+    if (Arg.kind() == Kernel::Arg::Buffer) {
 
       LE1Buffer* buffer =
-        static_cast<LE1Buffer*>((*(MemObject**)arg.data())->deviceBuffer(p_device));
-      unsigned TotalSize = (*(MemObject**)arg.data())->size();
+        static_cast<LE1Buffer*>((*(MemObject**)Arg.data())->deviceBuffer(p_device));
+      unsigned TotalSize = (*(MemObject**)Arg.data())->size();
 
-      if (arg.type()->isIntegerTy(8))
+      if (Arg.type()->isIntegerTy(8)) {
+        std::cout << "Arg " << i << ", at address " << buffer->addr()
+          << ". Buffer data before :\n";
+        for (unsigned j = 0; j < TotalSize; ++j) {
+          std::cout << std::hex
+            << (unsigned) *(((unsigned char*)buffer->data()) + j)
+            << " ";
+          if ((j+1) % 4 == 0) {
+            std::cout << std::endl;
+            std::cout << std::hex << (buffer->addr() + (j+1)) << "  ";
+          }
+        }
+
         p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
                                                (unsigned char*)buffer->data());
-      else if (arg.type()->isIntegerTy(32)) {
+        unsigned char* NewData = (unsigned char*)buffer->data();
+        std::cout << "Arg " << i << ", at address " << buffer->addr()
+          << ". Buffer data after :\n";
+        for (unsigned j = 0; j < TotalSize >> 2; j = j+4) {
+          std::cout << std::hex << (buffer->addr() + j) << "  "
+            << (unsigned) NewData[j+0] << " " << (unsigned) NewData[j+1] << " "
+            << (unsigned) NewData[j+2] << " " << (unsigned) NewData[j+3]
+            << std::endl;
+        }
+      }
+      else if (Arg.type()->isIntegerTy(32)) {
         p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
                                               (unsigned*)buffer->data());
       }
-      // FIXME This only handles even structures!
-      else if (arg.type()->isStructTy()) {
+      // FIXME This only handles aligned structures!
+      else if (Arg.type()->isStructTy()) {
         p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
                                               (unsigned*)buffer->data());
+      }
+      else {
+        std::cerr << " !!! ERROR - unhandled buffer type!!\n";
+        wasSuccess = false;
+        break;
       }
     }
   }
@@ -1380,7 +1406,7 @@ void *LE1KernelWorkGroup::callArgs(std::vector<void *> &locals_to_free)
     rs = std::malloc(args_size);
 
     if (!rs)
-        return false;
+        return NULL;
 
     size_t arg_offset = 0;
 
