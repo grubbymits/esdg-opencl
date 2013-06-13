@@ -37,10 +37,12 @@ LE1Simulator::~LE1Simulator() {
 
 bool LE1Simulator::Initialise(const char *machine) {
 
+  LockAccess();
+  /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
-  }
+  }*/
   /* Setup global struct */
   /* readConf reads xml file and sets up global SYSTEM variable
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
@@ -115,7 +117,8 @@ bool LE1Simulator::Initialise(const char *machine) {
     }
   }
 
-  pthread_mutex_unlock(&p_simulator_mutex);
+  //pthread_mutex_unlock(&p_simulator_mutex);
+  UnlockAccess();
   return true;
 }
 
@@ -124,10 +127,11 @@ void LE1Simulator::ClearRAM(void) {
   std::cerr << "ClearRAM\n";
 #endif
 
+  /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
-  }
+  }*/
 
   for (unsigned i = 0; (i < GALAXY_CONFIG & 0xFF); ++i) {
 
@@ -150,10 +154,21 @@ void LE1Simulator::ClearRAM(void) {
     }
   }
 
-  pthread_mutex_unlock(&p_simulator_mutex);
+  //pthread_mutex_unlock(&p_simulator_mutex);
 #ifdef DEBUGCL
   std::cerr << "Leaving ClearRAM\n";
 #endif
+}
+
+void LE1Simulator::LockAccess(void) {
+  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
+    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
+    exit(EXIT_FAILURE);
+  }
+}
+
+void LE1Simulator::UnlockAccess(void) {
+  pthread_mutex_unlock(&p_simulator_mutex);
 }
 
 
@@ -192,10 +207,11 @@ bool LE1Simulator::run(char* iram,
 #ifdef DEBUGCL
   std::cerr << "Entered LE1Simulator::run\n";
 #endif
+  /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
-  }
+  }*/
 
   /* turn printout on */
   PRINT_OUT = 0;
@@ -452,10 +468,11 @@ bool LE1Simulator::run(char* iram,
 void LE1Simulator::readCharData(unsigned int addr,
                                 unsigned int numBytes,
                                 unsigned char *data) {
+  /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
-  }
+  }*/
 #ifdef DEBUGCL
   std::cerr << "Entering LE1Simulator::readCharData\n"
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
@@ -489,7 +506,7 @@ void LE1Simulator::readCharData(unsigned int addr,
     }
   }
 
-  pthread_mutex_unlock(&p_simulator_mutex);
+  //pthread_mutex_unlock(&p_simulator_mutex);
 }
 /*
 short* LE1Simulator::readShortData(unsigned addr, unsigned numBytes) {
@@ -506,10 +523,11 @@ void LE1Simulator::readIntData(unsigned int addr,
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
     << " bytes.\n";
 #endif
+  /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
-  }
+  }*/
   unsigned int num = numBytes >> 2;
   unsigned int word = 0;
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
@@ -523,7 +541,7 @@ void LE1Simulator::readIntData(unsigned int addr,
 #endif
   }
 
-  pthread_mutex_unlock(&p_simulator_mutex);
+  //pthread_mutex_unlock(&p_simulator_mutex);
 #ifdef DEBUGCL
   std::cerr << "Leaving LE1Simulator::readIntData\n";
 #endif

@@ -17,6 +17,8 @@ namespace Coal {
     int checkStatus(void);
     bool run(char* iram,
              char* dram);
+    void LockAccess();
+    void UnlockAccess();
     void readCharData(unsigned int addr,
                       unsigned int numBytes,
                       unsigned char *data);

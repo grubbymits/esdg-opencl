@@ -46,7 +46,6 @@ void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
     stop=false;
     for(int tid = 0; tid < no_of_nodes; tid++ )
     {
-      DataLine << "Kernel 1, tid = " << tid << ":" << std::endl;
       if (h_graph_mask[tid] == true){
         h_graph_mask[tid]=false;
         for(int i=h_graph_nodes[tid].starting;
@@ -57,6 +56,7 @@ void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
             //--cambine: if node id has not been visited, enter the body below
 	    h_cost_ref[id]=h_cost_ref[tid]+1;
 	    h_updating_graph_mask[id]=true;
+            DataLine << "Kernel 1, tid = " << tid << ":" << std::endl;
             DataLine << "Id = " << id << ":\nh_cost_ref = " << h_cost_ref[id]
               << std::endl;
           }
@@ -67,12 +67,12 @@ void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
 
     for(int tid=0; tid< no_of_nodes ; tid++ )
     {
-      DataLine << "Kernel 2, tid = " << tid << ":" << std::endl;
       if (h_updating_graph_mask[tid] == true){
         h_graph_mask[tid]=true;
         h_graph_visited[tid]=true;
         stop=true;
         h_updating_graph_mask[tid]=false;
+        DataLine << "Kernel 2, tid = " << tid << ":" << std::endl;
         DataLine << "h_updating_graph_mask == true\n";
       }
     }
@@ -124,9 +124,14 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
 		kernel_timer.reset();
 		kernel_timer.start();
 #endif
+                unsigned k = 0;
+                std::ofstream GPUResults;
+                GPUResults.open("gpu_results");
+                std::ostringstream DataLine(std::ostringstream::out);
 		do{
 			h_over = false;
 			_clMemcpyH2D(d_over, sizeof(char), &h_over);
+                        std::cout << "---------- SET KERNEL 1 ------------\n";
 			//--kernel 0
 			int kernel_id = 0;
 			int kernel_idx = 0;
@@ -137,13 +142,38 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
 			_clSetArgs(kernel_id, kernel_idx++, d_graph_visited);
 			_clSetArgs(kernel_id, kernel_idx++, d_cost);
 			_clSetArgs(kernel_id, kernel_idx++, &no_of_nodes, sizeof(int));
-			
+
 			int work_items = no_of_nodes;
+                        std::cout << "---------- INVOKE KERNEL 1 ------------\n";
 			_clInvokeKernel(kernel_id, no_of_nodes, work_group_size);
-			
+
+                        /*
+                        _clMemcpyD2H(d_updating_graph_mask,
+                                     no_of_nodes * sizeof(char),
+                                     &h_updating_graph_mask);*/
+
+                        std::cout << "----------- READ DATA ------------------\n";
+                        _clMemcpyD2H(d_graph_visited,
+                                     no_of_nodes * sizeof(char),
+                                     &h_graph_visited);
+
+                        _clMemcpyD2H(d_cost,
+                                     no_of_nodes * sizeof(int),
+                                     &h_cost);
+
+                        DataLine << "Kernel 1\n";
+                        for (unsigned i = 0; i < no_of_nodes; ++i) {
+                          if (!h_graph_visited[i])
+                            DataLine << "Id = " << i << ":\nh_cost_ref = "
+                              << h_cost[i] << std::endl;
+                        }
+
+                        DataLine << std::endl;
+
 			//--kernel 1
 			kernel_id = 1;
-			kernel_idx = 0;			
+			kernel_idx = 0;
+                        std::cout << "---------- SET KERNEL 2 ------------\n";
 			_clSetArgs(kernel_id, kernel_idx++, d_graph_mask);
 			_clSetArgs(kernel_id, kernel_idx++, d_updating_graph_mask);
 			_clSetArgs(kernel_id, kernel_idx++, d_graph_visited);
@@ -151,12 +181,18 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
 			_clSetArgs(kernel_id, kernel_idx++, &no_of_nodes, sizeof(int));
 			
 			work_items = no_of_nodes;
+                        std::cout << "---------- INVOKE KERNEL 2 ------------\n";
 			_clInvokeKernel(kernel_id, no_of_nodes, work_group_size);			
 			
+                        std::cout << "----------- READ DATA ------------------\n";
 			_clMemcpyD2H(d_over,sizeof(char), &h_over);
-                        std::cout << "h_over = " << std::hex << std::setw(1)
-                          << (unsigned int)h_over << std::endl;
+                        ++k;
+
 			}while(h_over);
+                std::cout << "----------- FINISHED LOOP ------------------\n";
+  DataLine << "Number of iterations = " << k << std::endl;
+  GPUResults << DataLine.str();
+  GPUResults.close();
 			
 		_clFinish();
 #ifdef	PROFILING

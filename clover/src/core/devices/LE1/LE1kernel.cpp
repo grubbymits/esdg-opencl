@@ -1176,6 +1176,7 @@ bool LE1KernelEvent::run() {
  // instead of hard coded parameters
   bool wasSuccess = false;
   char* device_name = const_cast<char*>(p_device->model());
+  p_device->getSimulator()->LockAccess();
   wasSuccess = p_device->getSimulator()->run("binaries/iram0.bin",
                                 "binaries/dram.bin");
   if (!wasSuccess) {
@@ -1187,7 +1188,7 @@ bool LE1KernelEvent::run() {
   Kernel* TheKernel = p_event->kernel();
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
 
-    const Kernel::Arg& Arg =TheKernel->arg(i);
+    const Kernel::Arg& Arg = TheKernel->arg(i);
     if (Arg.kind() == Kernel::Arg::Buffer) {
 
       LE1Buffer* buffer =
@@ -1239,6 +1240,7 @@ bool LE1KernelEvent::run() {
   }
 
   p_device->getSimulator()->ClearRAM();
+  p_device->getSimulator()->UnlockAccess();
 
   // Release event
   pthread_mutex_unlock(&p_mutex);

@@ -106,7 +106,9 @@ thread " << pthread_self() << std::endl;
                 //data += e->offset();
 
                 if (t == Event::ReadBuffer) {
+                  device->getSimulator()->LockAccess();
                   std::memcpy(e->ptr(), buf->data(), e->cb());
+                  device->getSimulator()->UnlockAccess();
                 }
                     /*
                   if (e->cb() == 1) {
@@ -123,8 +125,10 @@ thread " << pthread_self() << std::endl;
                   }
                 }*/
                 else {
+                  device->getSimulator()->LockAccess();
                   char *data = (char *)buf->data();
-                    std::memcpy(data, e->ptr(), e->cb());
+                  std::memcpy(data, e->ptr(), e->cb());
+                  device->getSimulator()->UnlockAccess();
                 }
                 break;
             }
