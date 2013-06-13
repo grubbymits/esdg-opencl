@@ -155,16 +155,20 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
                         std::cout << "----------- READ DATA ------------------\n";
                         _clMemcpyD2H(d_graph_visited,
                                      no_of_nodes * sizeof(char),
-                                     &h_graph_visited);
+                                     h_graph_visited);
+
+                        _clMemcpyD2H(d_updating_graph_mask,
+                                     no_of_nodes * sizeof(char),
+                                     h_updating_graph_mask);
 
                         _clMemcpyD2H(d_cost,
                                      no_of_nodes * sizeof(int),
-                                     &h_cost);
+                                     h_cost);
 
                         DataLine << "Kernel 1\n";
                         for (unsigned i = 0; i < no_of_nodes; ++i) {
-                          if (!h_graph_visited[i])
-                            DataLine << "Id = " << i << ":\nh_cost_ref = "
+                          if (h_updating_graph_mask[i])
+                            DataLine << std::dec << "Id = " << i << ":\nh_cost_ref = "
                               << h_cost[i] << std::endl;
                         }
 

@@ -106,6 +106,9 @@ thread " << pthread_self() << std::endl;
                 //data += e->offset();
 
                 if (t == Event::ReadBuffer) {
+#ifdef DEBUGCL
+                  std::cerr << "ReadBuffer\n";
+#endif
                   device->getSimulator()->LockAccess();
                   std::memcpy(e->ptr(), buf->data(), e->cb());
                   device->getSimulator()->UnlockAccess();
@@ -125,6 +128,9 @@ thread " << pthread_self() << std::endl;
                   }
                 }*/
                 else {
+#ifdef DEBUGCL
+                  std::cerr << "WriteBuffer\n";
+#endif
                   device->getSimulator()->LockAccess();
                   char *data = (char *)buf->data();
                   std::memcpy(data, e->ptr(), e->cb());

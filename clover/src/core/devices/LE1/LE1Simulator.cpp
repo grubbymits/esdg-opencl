@@ -161,13 +161,22 @@ void LE1Simulator::ClearRAM(void) {
 }
 
 void LE1Simulator::LockAccess(void) {
+#ifdef DEBUGCL
+  std::cerr << "Trying to lock access to simulator\n";
+#endif
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
   }
+#ifdef DEBUGCL
+  std::cerr << "Successfully locked access to simulator\n";
+#endif
 }
 
 void LE1Simulator::UnlockAccess(void) {
+#ifdef DEBUGCL
+  std::cerr << "Unlocking access to simulator\n";
+#endif
   pthread_mutex_unlock(&p_simulator_mutex);
 }
 
@@ -490,10 +499,10 @@ void LE1Simulator::readCharData(unsigned int addr,
     for(unsigned i = 0; i < (numBytes >> 2); addr = (addr + 4), i += 4) {
       bytes = 0;
       insizzleAPIRdOneDramLocation(addr, &bytes);
-      data[i+3] = (unsigned ) 0xFF & (bytes >> 24);
-      data[i+2] = (unsigned ) 0xFF & (bytes >> 16);
-      data[i+1] = (unsigned ) 0xFF & (bytes >> 8);
-      data[i] = (unsigned ) 0xFF & (bytes >> 0);
+      data[i+3] = (unsigned ) 0xFF & (bytes >> 0);
+      data[i+2] = (unsigned ) 0xFF & (bytes >> 8);
+      data[i+1] = (unsigned ) 0xFF & (bytes >> 16);
+      data[i] = (unsigned ) 0xFF & (bytes >> 24);
       /*
       if (bytes != 0) {
         std::cout << std::hex << "bytes = " << bytes << " at address "
