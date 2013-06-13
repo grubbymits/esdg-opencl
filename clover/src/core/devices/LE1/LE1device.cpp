@@ -218,8 +218,8 @@ cl_int LE1Device::initEventDeviceData(Event *event)
              information needed to run passes and compile the code. */
             // Instantiate the JIT for the LE1 program
             KernelEvent *kernelEvent = (KernelEvent *)event;
-            Program *p = (Program *)kernelEvent->kernel()->parent();
-            LE1Program *prog = (LE1Program *)p->deviceDependentProgram(this);
+            //Program *p = (Program *)kernelEvent->kernel()->parent();
+            //LE1Program *prog = (LE1Program *)p->deviceDependentProgram(this);
 
             //if (!prog->initJIT())
               //  return CL_INVALID_PROGRAM_EXECUTABLE;

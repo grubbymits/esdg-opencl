@@ -466,7 +466,7 @@ bool LE1KernelEvent::CompileSource(const char* input,
       ++num_global_args;
   }
 
-  unsigned arg_addrs[num_global_args];
+  unsigned *arg_addrs = new unsigned[num_global_args];
 
   for(unsigned i = 0; i < num_global_args; ++i) {
     arg_addrs[i] = global_addr;

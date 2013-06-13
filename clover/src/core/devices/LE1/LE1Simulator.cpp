@@ -465,7 +465,7 @@ void LE1Simulator::readIntData(unsigned int addr,
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
   }
-  int num = numBytes >> 2;
+  unsigned int num = numBytes >> 2;
   unsigned int word = 0;
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
 #ifdef DEBUGCL

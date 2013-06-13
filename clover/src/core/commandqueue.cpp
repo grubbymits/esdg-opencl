@@ -534,6 +534,7 @@ Event::Event(CommandQueue *parent,
 #ifdef DEBUGCL
   std::cerr << "Event::Event in thread " << pthread_self() << std::endl;
 #endif
+  p_state_mutex = PTHREAD_MUTEX_INITIALIZER;
     // Initialize the locking machinery
     if (pthread_cond_init(&p_state_change_cond, 0) != 0) {
       std::cerr << "p_state_change_cond init failed!\n";

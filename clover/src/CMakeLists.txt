@@ -50,7 +50,7 @@ set(COAL_SRC_FILES
     core/devices/LE1/LE1device.cpp
     core/devices/LE1/LE1kernel.cpp
     core/devices/LE1/LE1program.cpp
-    core/devices/LE1/LE1sampler.cpp
+    #core/devices/LE1/LE1sampler.cpp
     core/devices/LE1/LE1worker.cpp
     core/devices/LE1/LE1Simulator.cpp
     core/devices/LE1/LE1WorkitemCoarsen.cpp

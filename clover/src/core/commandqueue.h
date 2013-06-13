@@ -395,7 +395,7 @@ class Event : public Object
         const Event **p_event_wait_list;
 
         pthread_cond_t p_state_change_cond;
-        pthread_mutex_t p_state_mutex = PTHREAD_MUTEX_INITIALIZER;
+        pthread_mutex_t p_state_mutex;
 
         Status p_status;
         void *p_device_data;

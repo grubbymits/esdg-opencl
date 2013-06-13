@@ -547,6 +547,9 @@ Kernel::Arg::Arg(unsigned short vec_dim, File file, Kind kind, llvm::Type* type)
     break;
   }
   switch(type->getTypeID()) {
+  default:
+    std::cerr << "!!! Error - unhandled type!!!\n";
+    break;
   case llvm::Type::IntegerTyID:
     std::cerr << "IntegerTyID = ";
     if(type->isIntegerTy(8))
