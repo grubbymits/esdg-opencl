@@ -67,6 +67,15 @@ Compiler::~Compiler()
 #endif
 }
 
+bool Compiler::AlreadyCompiled(std::string &name) {
+  for (std::vector<std::string>>::iterator NI = PreviousKernels.begin(),
+       NE = PreviousKernels.end(); NI != NE; ++NI) {
+    if (*NI.compare(name) == 0)
+      return true;
+  }
+  return false;
+}
+
 bool Compiler::produceAsm(const char* input,
                           const char* output) {
   /*
@@ -200,6 +209,7 @@ bool Compiler::compile(std::string &triple, std::string &name,
     }
     p_module = act.takeModule();
 
+    PrevKernels.push_back(name);
 #ifdef DEBUGCL
   std::cerr << "Leaving Compiler::compile\n";
 #endif

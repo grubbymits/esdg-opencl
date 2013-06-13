@@ -483,14 +483,11 @@ bool LE1KernelEvent::CompileSource(const char* input,
   std::stringstream launcher;
   launcher << "int main(void) {\n"
   << kernel_name << "(";
-  /*
-  for(unsigned i = 0; i < num_global_args; ++i) {
-    launcher << arg_addrs[i];
-    if(i != (num_global_args -1))
-      launcher << ", ";
-    else
-      launcher << ");\n return 0;\n};";
-  }*/
+
+  // TODO Instead of writing a main file, passing immediates and having to
+  // compile every time, we can write the addresses to memory and pass them
+  // in variable names. This only then requires the few variables to be
+  // rewritten instead of compiling and linking everything each time.
 
   for (unsigned i = 0, j = 0; i < kernel->numArgs(); ++i) {
     const Kernel::Arg& arg = kernel->arg(i);

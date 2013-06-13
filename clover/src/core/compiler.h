@@ -70,6 +70,8 @@ class Compiler
         Compiler(DeviceInterface *device);
         ~Compiler();
 
+        bool AreadyCompiled(std::string &name);
+
         bool produceAsm(const char* input,
                         const char* output);
         /**
@@ -126,6 +128,7 @@ class Compiler
         clang::CompilerInstance p_compiler;
         llvm::Module *p_module;
         bool p_optimize;
+        std::vector<std::string>PreviousKernels;
 
         std::string p_log, p_options;
         llvm::raw_string_ostream p_log_stream;
