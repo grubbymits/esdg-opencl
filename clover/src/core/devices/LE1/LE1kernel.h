@@ -293,6 +293,7 @@ class LE1KernelWorkGroup
  */
 
 class LE1Buffer;
+class LE1Program;
 
 class LE1KernelEvent
 {
@@ -306,11 +307,14 @@ class LE1KernelEvent
         LE1KernelEvent(LE1Device *device, KernelEvent *event);
         ~LE1KernelEvent();
 
-        bool createFinalSource();
-        bool CompileSource(const char* input,
-                           const char* output);
+        bool createFinalSource(LE1Program *prog);
+        bool CompileSource(void);
+        void CalculateBufferAddrs(void);
         bool WriteDataArea();
         bool HandleBufferArg(const Kernel::Arg &arg);
+        void PrintLine(unsigned Address,
+                       std::ostringstream &HexString,
+                       std::string &BinaryString);
         void PrintData(const void *Data, size_t offset, size_t size,
                        size_t total_bytes);
         void PrintSingleElement(const void *Data, unsigned *Offset,
@@ -346,7 +350,16 @@ class LE1KernelEvent
         pthread_mutex_t p_mutex;
         void *p_kernel_args;
         static unsigned int addr;
-        const char *filename;
+        std::vector<unsigned> ArgAddrs;
+        std::string OriginalSource;
+        std::string OriginalSourceName;
+        std::string KernelName;
+        std::string CoarsenedSourceName;
+        std::string CoarsenedBCName;
+        std::string TempAsmName;
+        std::string FinalBCName;
+        std::string FinalAsmName;
+        std::string CompleteFilename;
 };
 
 }

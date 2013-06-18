@@ -67,6 +67,7 @@ LE1Device::LE1Device()
 : DeviceInterface(), p_cores(0), p_num_events(0), p_workers(0), p_stop(false),
   p_initialized(false)
 {
+  Triple = "le1";
   Simulator = new LE1Simulator();
 #ifdef DEBUGCL
   std::cerr << "LE1Device::LE1Device\n";
@@ -218,15 +219,15 @@ cl_int LE1Device::initEventDeviceData(Event *event)
              information needed to run passes and compile the code. */
             // Instantiate the JIT for the LE1 program
             KernelEvent *kernelEvent = (KernelEvent *)event;
-            //Program *p = (Program *)kernelEvent->kernel()->parent();
-            //LE1Program *prog = (LE1Program *)p->deviceDependentProgram(this);
 
             //if (!prog->initJIT())
               //  return CL_INVALID_PROGRAM_EXECUTABLE;
 
             // Set device-specific data
             LE1KernelEvent *le1_e = new LE1KernelEvent(this, kernelEvent);
-            if(!le1_e->createFinalSource())
+            Program *p = (Program *)kernelEvent->kernel()->parent();
+            LE1Program *prog = (LE1Program *)p->deviceDependentProgram(this);
+            if(!le1_e->createFinalSource(prog))
               return CL_BUILD_PROGRAM_FAILURE;
             kernelEvent->setDeviceData((void *)le1_e);
 

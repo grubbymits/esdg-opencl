@@ -60,6 +60,7 @@ Kernel::Kernel(Program *program)
     null_dep.kernel = 0;
     null_dep.function = 0;
     null_dep.module = 0;
+    Built = false;
 #ifdef DEBUGCL
   std::cerr << "Leaving Kernel::Kernel\n";
 #endif

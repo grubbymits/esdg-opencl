@@ -32,13 +32,13 @@ typedef std::vector<DeclRefExpr*> DeclRefSet;
 typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 
-bool WorkitemCoarsen::CreateWorkgroup(const char *filename) {
+bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
 #ifdef DEBUGCL
   std::cerr << "CreateWorkgroup\n";
 #endif
   OpenCLCompiler<KernelInitialiser> InitCompiler(LocalX, LocalY, LocalZ);
-  OrigFilename = filename;
-  InitCompiler.setFile(filename);
+  OrigFilename = Filename;
+  InitCompiler.setFile(OrigFilename);
   InitCompiler.Parse();
 
   // At this point the rewriter's buffer should be full with the rewritten

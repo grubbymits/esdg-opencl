@@ -33,7 +33,7 @@ class WorkitemCoarsen {
 public:
   WorkitemCoarsen(unsigned x, unsigned y, unsigned z) :
     LocalX(x), LocalY(y), LocalZ(z) { }
-  bool CreateWorkgroup(const char *filename);
+  bool CreateWorkgroup(std::string &Filename);
   bool HandleBarriers();
   bool Compile(std::string &filename, std::string &source);
   std::string &getInitialisedKernel() { return InitKernelSource; }
@@ -45,7 +45,7 @@ private:
   unsigned LocalX, LocalY, LocalZ;
   clang::CompilerInstance TheCompiler;
   llvm::Module *Module;
-  const char *OrigFilename;
+  std::string OrigFilename;
   std::string InitKernelSource;
   std::string InitKernelFilename;
   std::string FinalKernel;

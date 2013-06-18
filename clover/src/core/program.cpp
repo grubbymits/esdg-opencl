@@ -392,11 +392,6 @@ cl_int Program::build(const char *options,
 
             // Write file
             // Debug
-            std::ofstream source;
-            // FIXME Change this the kernel specific name
-            source.open("program.cl");
-            source << p_source << std::endl;
-            source.close();
 
             llvm::MemoryBuffer *buffer = llvm::MemoryBuffer::getMemBuffer(s_data,
                                                                         s_name);
@@ -405,7 +400,7 @@ cl_int Program::build(const char *options,
             // compile(std::string source, std::string name, std::string triple,
             //        std::string opts)
             // compile(p_source, triple, options ? options : std::string())
-            std::string triple = "le1";
+            std::string triple = dep.device->getTriple();
             std::string name = "program.cl";
             //if (!dep.compiler->compile(options ? options : std::string(), buffer))
             if (!dep.compiler->compile(triple, name, p_source))
@@ -416,6 +411,10 @@ cl_int Program::build(const char *options,
                 return CL_BUILD_PROGRAM_FAILURE;
             }
 
+            // TODO Return here, the code only needs to be checked here.
+            dep.program->SetSource(p_source);
+            // TODO Get a list of kernel function names...?
+
             // Get module and its bitcode
             dep.linked_module = dep.compiler->module();
 
@@ -424,7 +423,9 @@ cl_int Program::build(const char *options,
             ostream.flush();
         }
 
+        // FIXME Need to link to an LE1 library!
         // Link p_linked_module with the stdlib if the device needs that
+        /*
         if (dep.program->linkStdLib())
         {
             // Load the stdlib bitcode
@@ -502,7 +503,7 @@ cl_int Program::build(const char *options,
                 pfn_notify((cl_program)this, user_data);
 
             return CL_BUILD_PROGRAM_FAILURE;
-        }
+        }*/
     }
 
     // TODO: Asynchronous compile

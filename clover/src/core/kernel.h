@@ -299,9 +299,13 @@ class Kernel : public Object
                              void *param_value,
                              size_t *param_value_size_ret) const;
 
+        bool isBuilt() { return Built; }
+        void SetBuilt() { Built = true; }
+
     private:
         std::string p_name;
         bool p_has_locals;
+        bool Built;
 
         struct DeviceDependent
         {

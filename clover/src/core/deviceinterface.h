@@ -161,6 +161,11 @@ class DeviceInterface : public Object
          * \param event the event that will be destroyed
          */
         virtual void freeEventDeviceData(Event *event) = 0;
+
+        virtual std::string &getTriple() { return Triple; }
+
+    protected:
+        std::string Triple;
 };
 
 /**
@@ -268,6 +273,12 @@ class DeviceProgram
          * \return true in case of success, false otherwise
          */
         virtual bool build(llvm::Module *module) = 0;
+
+        void SetSource(std::string &s) { Source = s; }
+        std::string &getSource() { return Source; }
+
+    protected:
+        std::string Source;
 };
 
 /**

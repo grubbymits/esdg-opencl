@@ -66,7 +66,7 @@ Compiler::~Compiler()
   std::cerr << "Destructing Compiler::Compiler\n";
 #endif
 }
-
+/*
 bool Compiler::AlreadyCompiled(std::string &name) {
   for (std::vector<std::string>>::iterator NI = PreviousKernels.begin(),
        NE = PreviousKernels.end(); NI != NE; ++NI) {
@@ -74,7 +74,7 @@ bool Compiler::AlreadyCompiled(std::string &name) {
       return true;
   }
   return false;
-}
+}*/
 
 bool Compiler::produceAsm(const char* input,
                           const char* output) {
@@ -158,6 +158,7 @@ bool Compiler::compile(std::string &triple, std::string &name,
 #endif
     /* Set options */
     //p_options = options;
+  std::string OutputFile = name + ".tmp.bc";
 
     clang::EmitBCAction act(&llvm::getGlobalContext());
     std::string log;
@@ -166,7 +167,7 @@ bool Compiler::compile(std::string &triple, std::string &name,
     p_compiler.getFrontendOpts().Inputs.push_back(
       clang::FrontendInputFile(name, clang::IK_OpenCL));
     p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitBC;
-    p_compiler.getFrontendOpts().OutputFile = "program.bc";
+    p_compiler.getFrontendOpts().OutputFile = OutputFile;
     p_compiler.getHeaderSearchOpts().UseBuiltinIncludes = true;
     p_compiler.getHeaderSearchOpts().UseStandardSystemIncludes = false;
     p_compiler.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
@@ -209,7 +210,7 @@ bool Compiler::compile(std::string &triple, std::string &name,
     }
     p_module = act.takeModule();
 
-    PrevKernels.push_back(name);
+    //PrevKernels.push_back(name);
 #ifdef DEBUGCL
   std::cerr << "Leaving Compiler::compile\n";
 #endif

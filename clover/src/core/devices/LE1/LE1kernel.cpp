@@ -389,46 +389,84 @@ LE1KernelEvent::~LE1KernelEvent()
 
     if (p_kernel_args)
         std::free(p_kernel_args);
+
 #ifdef DEBUGCL
   std::cerr << "Leaving LE1KernelEvent::~LE1KernelEvent\n";
 #endif
 }
 
-bool LE1KernelEvent::createFinalSource() {
+bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   // TODO Create a proper .s file:
-  std::string filestring = "kernel_";
-  filestring.append(p_event->kernel()->function(p_device)->getName());
-  filestring.append(".s");
-  filename = filestring.c_str();
+#ifdef DEBUGCL
+  std::cerr << "Entering createFinalSource\n";
+#endif
 
-  // FIXME Change this to the kernel specific name
-  if(!CompileSource("program.bc", filename))
-    return false;
+  KernelName = p_event->kernel()->function(p_device)->getName();
+  OriginalSource = prog->getSource();
+  OriginalSourceName = KernelName + ".cl";
+  CoarsenedSourceName = "workgroup_" + KernelName  + ".cl";
+  CoarsenedBCName = "workgroup_" + KernelName + ".bc";
+  FinalBCName = KernelName + ".bc";
+  TempAsmName = "temp_" + KernelName + ".s";
+  FinalAsmName = "kernel_" + KernelName + ".s";
+  CompleteFilename = "final_" + KernelName + ".s";
+
+  CalculateBufferAddrs();
+
+  // Only compile a kernel once
+  if (!p_event->kernel()->isBuilt()) {
+    // FIXME Change this to the kernel specific name
+    //if(!CompileSource("program.bc", filename))
+    if(!CompileSource())
+      return false;
+  }
+  else {
+#ifdef DEBUGCL
+    std::cerr << "Program has already been compiled\n";
+#endif
+  }
 
   if (!WriteDataArea())
     return false;
-  //Assemble(filename);
+
   std::string assemble = "perl " + LE1Device::scriptsDir + "secondpass.pl ";
-  assemble.append(filename);
-  // TODO Move this file into the system folder
+  assemble.append(CompleteFilename);
   assemble.append(" -OPC=").append(LE1Device::incDir + "opcodes.txt");
 
   if (system(assemble.c_str()) != 0)
     return false;
-  else
+  else {
+    p_event->kernel()->SetBuilt();
+    // delete the intermediate files
+    std::string clean = "rm " + OriginalSourceName + " " + CoarsenedSourceName
+      + " " + CoarsenedBCName + " " + TempAsmName;
+    system(clean.c_str());
     return true;
+  }
 }
 
-bool LE1KernelEvent::CompileSource(const char* input,
-                                   const char* output) {
+void LE1KernelEvent::CalculateBufferAddrs() {
+  // FIXME should the global_addr be defined like this?
+  unsigned global_addr = 0x2C;
+
+  // FIXME surely we could calculate this number during kernel creation?
+  // Not all arguments will be buffers, and so not all will require having data
+  // written to global memory
+  Kernel *TheKernel = p_event->kernel();
+
+  for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
+    const Kernel::Arg& arg = TheKernel->arg(i);
+    if (arg.kind() == Kernel::Arg::Buffer) {
+      ArgAddrs.push_back(global_addr);
+      global_addr += (*(MemObject**)arg.data())->size();
+    }
+  }
+}
+
+bool LE1KernelEvent::CompileSource() {
 #ifdef DEBUGCL
   std::cerr << "Entering LE1KernelEvent::CompileSource\n";
 #endif
-  //Compiler compiler(p_device);
-  std::string kernel_name = p_event->kernel()->function(p_device)->getName();
-  std::string merged_bc = "merged_" + kernel_name + ".bc";
-  std::string final_bc = kernel_name + ".bc";
-  std::string temp_asm = kernel_name + ".temp.s";
 
   // TODO This part needs to calculate how many cores to instantiate
   // Impose an upper limit of 12 cores?
@@ -438,12 +476,19 @@ bool LE1KernelEvent::CompileSource(const char* input,
     merge_dims[i] = p_event->global_work_size(i) / cores;
   }
 
+  // First, write the source string to a file
+  std::ofstream SourceFile;
+  SourceFile.open(OriginalSourceName.c_str());
+  SourceFile << OriginalSource << std::endl;
+  SourceFile.close();
+
+  // Then pass the file name to workitem coarsener
   WorkitemCoarsen Coarsener(merge_dims[0], merge_dims[1], merge_dims[2]);
-  if (!Coarsener.CreateWorkgroup("program.cl"))
+  if (!Coarsener.CreateWorkgroup(OriginalSourceName))
     return false;
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();
-  if (!Coarsener.Compile(merged_bc, WorkgroupSource))
+  if (!Coarsener.Compile(CoarsenedBCName, WorkgroupSource))
     return false;
 
 #ifdef DEBUGCL
@@ -453,47 +498,31 @@ bool LE1KernelEvent::CompileSource(const char* input,
   // Calculate the addresses in global memory where the arguments will be stored
   Kernel* kernel = p_event->kernel();
 
-  // FIXME should the global_addr be defined like this?
-  unsigned global_addr = 0x2C;
 
-  // FIXME surely we could calculate this number during kernel creation?
-  // Not all arguments will be buffers, and so not all will require having data
-  // written to global memory
-  unsigned num_global_args = 0;
-  for (unsigned i = 0; i < kernel->numArgs(); ++i) {
+  std::stringstream launcher;
+  for(unsigned i = 0, j = 0; i < kernel->numArgs(); ++i) {
     const Kernel::Arg& arg = kernel->arg(i);
-    if (arg.kind() == Kernel::Arg::Buffer)
-      ++num_global_args;
+    if (arg.kind() == Kernel::Arg::Buffer) {
+      launcher << "extern int BufferArg_" << j << ";" << std::endl;
+      ++j;
+    }
   }
-
-  unsigned *arg_addrs = new unsigned[num_global_args];
-
-  for(unsigned i = 0; i < num_global_args; ++i) {
-    arg_addrs[i] = global_addr;
-    const Kernel::Arg& arg = kernel->arg(i);
-    if (arg.kind() == Kernel::Arg::Buffer)
-      global_addr += (*(MemObject**)arg.data())->size();
-  }
-#ifdef DEBUGCL
-  std::cerr << "Num of Arguments to get addresses for = " << num_global_args
-    << std::endl;
-#endif
 
   // Create a main function to the launcher for the kernel
-  std::stringstream launcher;
   launcher << "int main(void) {\n"
-  << kernel_name << "(";
+  << KernelName << "(";
 
   // TODO Instead of writing a main file, passing immediates and having to
   // compile every time, we can write the addresses to memory and pass them
   // in variable names. This only then requires the few variables to be
   // rewritten instead of compiling and linking everything each time.
 
-  for (unsigned i = 0, j = 0; i < kernel->numArgs(); ++i) {
+  for (unsigned i = 0; i < kernel->numArgs(); ++i) {
     const Kernel::Arg& arg = kernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
-      launcher << arg_addrs[j];
-      ++j;
+      //launcher << arg_addrs[j];
+      //++j;
+      launcher << "&BufferArg_" << i;
     }
     else {
       void *ArgData = const_cast<void*>(arg.data());
@@ -519,7 +548,7 @@ bool LE1KernelEvent::CompileSource(const char* input,
   // kernel
   system("clang -target le1 -emit-llvm -c main.c");
   std::stringstream link;
-  link << "llvm-link main.o " << merged_bc << " -o " << final_bc;
+  link << "llvm-link main.o " << CoarsenedBCName << " -o " << FinalBCName;
   if(system(link.str().c_str()) != 0)
     return false;
 
@@ -527,7 +556,7 @@ bool LE1KernelEvent::CompileSource(const char* input,
   // Compile the merged kernel to assembly
   std::stringstream compile_command;
   compile_command << "llc -march=le1 -mcpu="<< p_device->target() << " " 
-    << final_bc << " -o " << temp_asm;
+    << FinalBCName << " -o " << TempAsmName;
   if(system(compile_command.str().c_str()) != 0)
     return false;
 
@@ -535,9 +564,10 @@ bool LE1KernelEvent::CompileSource(const char* input,
 
   std::stringstream pre_asm_command;
   // TODO Include the script as a char array
-  pre_asm_command << "perl " << LE1Device::scriptsDir << "llvmTransform.pl " << temp_asm
+  pre_asm_command << "perl " << LE1Device::scriptsDir << "llvmTransform.pl "
+    << TempAsmName
     //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
-    << " > " << output;
+    << " > " << FinalAsmName;
   // FIXME return false?
   system(pre_asm_command.str().c_str());
 
@@ -555,8 +585,12 @@ bool LE1KernelEvent::WriteDataArea() {
 #ifdef DEBUGCL
   std::cerr << "Entering LE1KernelEvent::WriteDataArea\n";
 #endif
+  std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
+  std::cout << CopyCommand << std::endl;
+  system(CopyCommand.c_str());
+
   std::ofstream FinalSource;
-  FinalSource.open(filename, std::ios_base::app);
+  FinalSource.open(CompleteFilename.c_str(), std::ios_base::app);
   std::ostringstream Output (std::ostringstream::out);
 
   // Size taken by kernel attributes before the argument data
@@ -586,8 +620,18 @@ bool LE1KernelEvent::WriteDataArea() {
   Output << "00004 - global_size" << std::endl;
   Output << "00010 - local_size" << std::endl;
   Output << "0001c - num_groups" << std::endl;
-  Output << "00028 - global_offset" << std::endl << std::endl;
+  Output << "00028 - global_offset" << std::endl;
 
+  for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
+    const Kernel::Arg& arg = TheKernel->arg(i);
+    if (arg.kind() == Kernel::Arg::Buffer) {
+      Output << std::hex << std::setw(5) << std::setfill('0') << ArgAddrs[j]
+        << " - BufferArg_" << j << std::endl;
+      ++j;
+    }
+  }
+
+  Output << std::endl;
   Output << "##Data Section - " << DataSize << " - Data_align=32" << std::endl;
   Output << "00000 - " << std::hex << std::setw(8) << std::setfill('0')
     << p_event->work_dim() << " - "
@@ -641,10 +685,6 @@ bool LE1KernelEvent::WriteDataArea() {
   FinalSource << Output.str();
   FinalSource.close();
 
-#ifdef DEBUGCL
-  std::cerr << Output.str();
-#endif
-
   // First, write the global data first
   for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& Arg = TheKernel->arg(i);
@@ -671,6 +711,9 @@ bool LE1KernelEvent::WriteDataArea() {
         if(!HandleBufferArg(Arg))
           return false;
   }
+#ifdef DEBUGCL
+  std::cerr << "Leaving createFinalSource\n";
+#endif
 
   return true;
 }
@@ -884,15 +927,14 @@ static void ConvertToBinary(std::string *binary_string,
   }
 }
 
-static inline void PrintLine(const char *Filename,
-                             unsigned Address,
-                             std::ostringstream &HexString,
-                             std::string &BinaryString) {
+inline void LE1KernelEvent::PrintLine(unsigned Address,
+                                      std::ostringstream &HexString,
+                                      std::string &BinaryString) {
 #ifdef DEBUGCL
   //std::cerr << "PrintLine\n";
 #endif
   std::ofstream asm_out;
-  asm_out.open(Filename, std::ios_base::app);
+  asm_out.open(CompleteFilename.c_str(), std::ios_base::app);
   std::ostringstream DataLine(std::ostringstream::out);
 
   // Write the address
@@ -970,7 +1012,7 @@ void LE1KernelEvent::PrintSingleElement(const void *Data,
       BinaryString.append(PadString);
       HexString << std::setw(2) << std::setfill('0') << 0;
       // Write the pad finished line
-      PrintLine(filename, (addr + *Offset), HexString, BinaryString);
+      PrintLine((addr + *Offset), HexString, BinaryString);
 
       // Start a new line
       ++(*Offset);
@@ -1000,7 +1042,7 @@ void LE1KernelEvent::PrintSingleElement(const void *Data,
         ++(*Offset);
       }
       // Need to write the line that just got pad finished
-      PrintLine(filename, (addr + *Offset), HexString, BinaryString);
+      PrintLine((addr + *Offset), HexString, BinaryString);
 
       // Then create the new line
       const int *Word = static_cast<const int*>(Data) + (*Offset >> 2);
@@ -1018,7 +1060,7 @@ void LE1KernelEvent::PrintSingleElement(const void *Data,
   // If ByteCount is 0, it means we need to write the data line to the file,
   // and start a new line.
   if (ByteCount == 0) {
-    PrintLine(filename, (addr + *Offset), HexString, BinaryString);
+    PrintLine((addr + *Offset), HexString, BinaryString);
   }
 }
 
@@ -1037,7 +1079,7 @@ void LE1KernelEvent::PrintData(const void* data,
   //unsigned device_mem_ptr = start_addr;
   unsigned device_mem_ptr = addr;
   std::ofstream asm_out;
-  asm_out.open(filename, std::ios_base::app);
+  asm_out.open(CompleteFilename.c_str(), std::ios_base::app);
 
   // Divide the number by 4 to get the number of full 32-bit data lines
   // index is used to calculate the jump with elements since we're outputting

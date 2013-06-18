@@ -52,7 +52,7 @@
 using namespace Coal;
 
 LE1Program::LE1Program(LE1Device *device, Program *program)
-: DeviceProgram(), p_device(device), p_program(program)
+: DeviceProgram(), p_device(device), p_program(program) 
 {
 #ifdef DEBUGCL
   std::cerr << "Constructing LE1Program::LE1Program\n";
