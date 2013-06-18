@@ -44,6 +44,7 @@ void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
   do{
     //if no thread changes this value then the loop stops
     stop=false;
+    DataLine << "Kernel 1\n";
     for(int tid = 0; tid < no_of_nodes; tid++ )
     {
       if (h_graph_mask[tid] == true){
@@ -56,14 +57,14 @@ void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
             //--cambine: if node id has not been visited, enter the body below
 	    h_cost_ref[id]=h_cost_ref[tid]+1;
 	    h_updating_graph_mask[id]=true;
-            DataLine << "Kernel 1, tid = " << tid << ":" << std::endl;
             DataLine << "Id = " << id << ":\nh_cost_ref = " << h_cost_ref[id]
               << std::endl;
+            //DataLine << "tid = " << tid << ":" << std::endl;
           }
         }
       }
     }
-    DataLine << std::endl;
+    DataLine << std::endl << "Kernel 2\n";
 
     for(int tid=0; tid< no_of_nodes ; tid++ )
     {
@@ -72,8 +73,8 @@ void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
         h_graph_visited[tid]=true;
         stop=true;
         h_updating_graph_mask[tid]=false;
-        DataLine << "Kernel 2, tid = " << tid << ":" << std::endl;
         DataLine << "h_updating_graph_mask == true\n";
+        DataLine << "tid = " << tid << ":" << std::endl;
       }
     }
     DataLine << std::endl;
@@ -188,6 +189,17 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
                         std::cout << "---------- INVOKE KERNEL 2 ------------\n";
 			_clInvokeKernel(kernel_id, no_of_nodes, work_group_size);			
 			
+                        _clMemcpyD2H(d_updating_graph_mask,
+                                     no_of_nodes * sizeof(char),
+                                     h_updating_graph_mask);
+
+                        DataLine << "Kernel 2\n";
+                        for (unsigned i = 0; i < no_of_nodes; ++i) {
+                          if (h_updating_graph_mask[i])
+                            DataLine << "h_updating_graph_mask == true\ntid = "
+                              << i << std::endl;
+                        }
+
                         std::cout << "----------- READ DATA ------------------\n";
 			_clMemcpyD2H(d_over,sizeof(char), &h_over);
                         ++k;
