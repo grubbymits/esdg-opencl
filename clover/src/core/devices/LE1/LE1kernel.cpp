@@ -1261,6 +1261,8 @@ bool LE1KernelEvent::run() {
             << std::endl;
         }*/
       }
+      // FIXME Shorts aren't handled!
+
       else if (Arg.type()->isIntegerTy(32)) {
         p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
                                               (unsigned*)buffer->data());

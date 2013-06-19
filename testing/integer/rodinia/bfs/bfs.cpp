@@ -73,8 +73,8 @@ void run_bfs_cpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
         h_graph_visited[tid]=true;
         stop=true;
         h_updating_graph_mask[tid]=false;
-        DataLine << "h_updating_graph_mask == true\n";
-        DataLine << "tid = " << tid << ":" << std::endl;
+        DataLine << "h_graph_mask[ " << tid << " ] = true" << std::endl;
+        DataLine << "h_graph_visited[ " << tid << " ] = true" << std::endl;
       }
     }
     DataLine << std::endl;
@@ -189,16 +189,23 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
                         std::cout << "---------- INVOKE KERNEL 2 ------------\n";
 			_clInvokeKernel(kernel_id, no_of_nodes, work_group_size);			
 			
-                        _clMemcpyD2H(d_updating_graph_mask,
+                        _clMemcpyD2H(d_graph_mask,
                                      no_of_nodes * sizeof(char),
-                                     h_updating_graph_mask);
+                                     h_graph_mask);
+
+                        _clMemcpyD2H(d_graph_visited,
+                                     no_of_nodes * sizeof(char),
+                                     h_graph_visited);
 
                         DataLine << "Kernel 2\n";
                         for (unsigned i = 0; i < no_of_nodes; ++i) {
-                          if (h_updating_graph_mask[i])
-                            DataLine << "h_updating_graph_mask == true\ntid = "
-                              << i << std::endl;
+                          if (h_graph_mask[i])
+                            DataLine << "h_graph_mask[ " << i << " ] = true" << std::endl;
+                          if (h_graph_visited[i])
+                            DataLine << "h_graph_visited[ " << i << " ] = true" << std::endl;
                         }
+
+                        DataLine << std::endl;
 
                         std::cout << "----------- READ DATA ------------------\n";
 			_clMemcpyD2H(d_over,sizeof(char), &h_over);

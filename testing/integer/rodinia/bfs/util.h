@@ -54,8 +54,8 @@ void compare_results(const datatype *cpu_results, const datatype *gpu_results, c
 //#pragma omp parallel for
     for (int i=0; i<size; i++){
       if (cpu_results[i]!=gpu_results[i]){
-        //std::cout << "cpu_result[" << i << "] = " << cpu_results[i]
-          //<< ", but gpu_results = " << gpu_results[i] << std::endl;
+        std::cout << "cpu_result[" << i << "] = " << cpu_results[i]
+          << ", but gpu_results = " << gpu_results[i] << std::endl;
          passed = false; 
       }
     }

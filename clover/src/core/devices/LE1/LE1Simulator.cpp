@@ -443,8 +443,9 @@ bool LE1Simulator::run(char* iram,
       galaxyConfigT *g = NULL;
       gTracePacketT gTracePacket;
       memset((void *)&gTracePacket, 0, sizeof(gTracePacket)); /* clear gTracePacket memory */
-      //printf("-------------------------------------------- end of cycle %lld\n",
-        //     cycleCount);
+      if (PRINT_OUT)
+        printf("-------------------------------------------- end of cycle %lld\n",
+          cycleCount);
       insizzleAPIClock(g, gTracePacket);
 
       /* Check here for control flow changes */
@@ -459,12 +460,13 @@ bool LE1Simulator::run(char* iram,
 
   //systemConfig *SYS =
     //(systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
-  /*
-  if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
-                system->dram) == -1) {
-    pthread_mutex_unlock(&p_simulator_mutex);
-    return false;
-  }*/
+  if (PRINT_OUT) { 
+    if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
+                  system->dram) == -1) {
+      pthread_mutex_unlock(&p_simulator_mutex);
+      return false;
+    }
+  }
 
   pthread_mutex_unlock(&p_simulator_mutex);
 
@@ -497,7 +499,7 @@ void LE1Simulator::readCharData(unsigned int addr,
       data[i] = (unsigned char) (bytes >> (8 * (3-i)));
   }
   else if ((numBytes % 4) == 0) {
-    for(unsigned i = 0; i < (numBytes >> 2); addr = (addr + 4), i += 4) {
+    for(unsigned i = 0; i < numBytes; addr = (addr + 4), i += 4) {
       bytes = 0;
       insizzleAPIRdOneDramLocation(addr, &bytes);
       data[i+3] = (unsigned ) 0xFF & (bytes >> 0);
