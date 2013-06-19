@@ -6,7 +6,7 @@ class LE1_Intrinsic<string GCCIntSuffix, list<LLVMType> ret_types,
     Intrinsic<ret_types, param_types, properties>;
 
 class LE1ReadCtrlReg_Intrinsic<string GCCIntSuffix>
-  : LE1_Intrinsic<GCCIntSuffix, [llvm_i32_ty], [], []>;
+  : LE1_Intrinsic<GCCIntSuffix, [llvm_i32_ty], [], [IntrNoMem]>;
 
 class LE1ReadCLReg_Intrinsic<string GCCIntSuffix>
   : LE1_Intrinsic<GCCIntSuffix, [llvm_i32_ty], [], [IntrNoMem]>;
@@ -16,11 +16,13 @@ class LE1WriteCLReg_Intrinsic<string GCCIntSuffix>
                   [IntrReadWriteArgMem]>;
 
 class LE1ReadKernelAttr_Intrinsic<string GCCIntSuffix>
-  : LE1_Intrinsic<GCCIntSuffix, [llvm_i32_ty], [], []>;
+  : LE1_Intrinsic<GCCIntSuffix, [llvm_i32_ty], [], [IntrNoMem]>;
 
 def int_le1_read_cpuid  : LE1ReadCtrlReg_Intrinsic<"le1_read_cpuid">;
 
 def int_le1_read_work_dim : LE1ReadKernelAttr_Intrinsic<"le1_read_work_dim">;
+
+def int_le1_num_cores     : LE1ReadKernelAttr_Intrinsic<"le1_num_cores">;
 
 def int_le1_read_local_idx :
   LE1ReadCLReg_Intrinsic<"le1_read_local_idx">;
@@ -42,6 +44,13 @@ def int_le1_read_local_size_1 :
     LE1ReadKernelAttr_Intrinsic<"le1_read_local_size_1">;
 def int_le1_read_local_size_2 :
     LE1ReadKernelAttr_Intrinsic<"le1_read_local_size_2">;
+
+def int_le1_read_group_id_0 :
+  LE1ReadKernelAttr_Intrinsic<"le1_read_group_id_0">;
+def int_le1_read_group_id_1 :
+  LE1ReadKernelAttr_Intrinsic<"le1_read_group_id_1">;
+def int_le1_read_group_id_2 :
+  LE1ReadKernelAttr_Intrinsic<"le1_read_group_id_2">;
 
 def int_le1_read_num_groups_0 :
     LE1ReadKernelAttr_Intrinsic<"le1_read_num_groups_0">;

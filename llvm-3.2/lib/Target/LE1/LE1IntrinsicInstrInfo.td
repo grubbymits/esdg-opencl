@@ -76,12 +76,15 @@ class LE1_READ_CTRL_REG<string opcode, Intrinsic IntID>
 class LE1_READ_KERNEL_ATTR<string addr, Intrinsic IntID>
   : LE1Inst<(outs CPURegs:$dst), (ins),
             !strconcat("ldw.0 $dst, r0.0[(", addr, ")]"),
-            [/*(set CPURegs:$dst, (IntID))*/], IILoadStore>;
+            [(set CPURegs:$dst, (IntID))], IILoadStore>;
 
 def LE1_READ_CPUID : LE1_READ_CTRL_REG<"cpuid.0", int_le1_read_cpuid>;
 
 def LE1_READ_WORK_DIM : LE1_READ_KERNEL_ATTR<"work_dim+0",
                                              int_le1_read_work_dim>;
+
+def LE1_NUM_CORES : LE1_READ_KERNEL_ATTR<"num_cores+0",
+                                         int_le1_num_cores>;
 
 def LE1_READ_GLOBAL_SIZE_0 : LE1_READ_KERNEL_ATTR<"global_size+0",
                                                   int_le1_read_global_size_0>;
@@ -98,6 +101,13 @@ def LE1_READ_LOCAL_SIZE_1 : LE1_READ_KERNEL_ATTR<"local_size+4",
                                                   int_le1_read_local_size_1>;
 def LE1_READ_LOCAL_SIZE_2 : LE1_READ_KERNEL_ATTR<"local_size+8",
                                                   int_le1_read_local_size_2>;
+
+def LE1_READ_GROUP_ID_0   : LE1_READ_KERNEL_ATTR<"group_id+0",
+                                                 int_le1_read_group_id_0>;
+def LE1_READ_GROUP_ID_1   : LE1_READ_KERNEL_ATTR<"group_id+4",
+                                                 int_le1_read_group_id_1>;
+def LE1_READ_GROUP_ID_2   : LE1_READ_KERNEL_ATTR<"group_id+8",
+                                                 int_le1_read_group_id_2>;
 
 def LE1_READ_NUM_GROUPS_0 : LE1_READ_KERNEL_ATTR<"num_groups+0",
                                                   int_le1_read_num_groups_0>;
@@ -122,17 +132,4 @@ def : Pat<(le1_read_local_size (i32 2)),
 
 def : Pat<(le1_cpuid),
           (LE1_READ_CPUID)>;
-/*
-def : Pat<(le1_read_global_id (i32 0)),
-          (ADD (MULLU
-                  (ADD (MULLU (LE1_READ_LOCAL_SIZE_0), (LE1_READ_CPUID)),
-                       (MULHS (LE1_READ_LOCAL_SIZE_0), (LE1_READ_CPUID))), IdX),
-               (MULHS
-                  (ADD (MULLU (LE1_READ_LOCAL_SIZE_0), (LE1_READ_CPUID)),
-                       (MULHS (LE1_READ_LOCAL_SIZE_0), (LE1_READ_CPUID))), IdX))>;*/
 
-//def le1_mul : PatFrag<(ops node:$src0, node:$src1),
-  //(add (le1_mullu node:$src0, node:$src1), (le1_mulhs node:$src0, node:$src1))>;
-   
-//def : Pat<(mul CPURegs:$src0, (int_le1_read_local_idx)),
-  //        (ADD (MULLU CPURegs:$src0, IdX), (MULHS CPURegs:$src0, IdX))>;

@@ -16,7 +16,7 @@
 #include "CLHelper.h"
 #include "util.h"
 
-#define MAX_THREADS_PER_BLOCK 4096
+#define MAX_THREADS_PER_BLOCK 256
 
 //Structure to hold a node information
 struct Node

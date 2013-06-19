@@ -894,6 +894,12 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
   unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(0))->getZExtValue();
 
   switch(IntNo) {
+  case Intrinsic::le1_read_cpuid: {
+    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
+    return DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
+                       DAG.getTargetConstant(8, MVT::i32));
+  }
+    /*
   case Intrinsic::le1_read_global_idx: {
 
     SDValue GroupId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
@@ -907,12 +913,13 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
                                     DAG.getTargetConstant(0, MVT::i32));
     return DAG.getNode(ISD::MUL, dl, MVT::i32, GroupId, LocalSize);
   }
+
   case Intrinsic::le1_read_local_idx:
     return DAG.getRegister(LE1::IdX, MVT::i32);
   case Intrinsic::le1_read_local_idy:
     return DAG.getRegister(LE1::IdY, MVT::i32);
   case Intrinsic::le1_read_local_idz:
-    return DAG.getRegister(LE1::IdZ, MVT::i32);
+    return DAG.getRegister(LE1::IdZ, MVT::i32);*/
   default:
     return SDValue();
   }
@@ -922,6 +929,8 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
 SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
                                                  SelectionDAG &DAG) const {
   std::cout << "Lowering Intrinsic\n";
+  llvm_unreachable("LE1 doesn't have any intrinsic with a chain!");
+
   unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(1))->getZExtValue();
   SDValue Chain = Op.getOperand(0);
   //std::cout << "NumOperands = " << Op.getNumOperands() << std::endl;

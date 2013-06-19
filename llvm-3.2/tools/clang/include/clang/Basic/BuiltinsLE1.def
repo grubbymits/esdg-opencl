@@ -10,6 +10,8 @@ BUILTIN(__builtin_le1_read_barrier, "ii", "nc")
 
 BUILTIN(__builtin_le1_read_work_dim, "i", "nc")
 
+BUILTIN(__builtin_le1_num_cores, "i", "nc")
+
 BUILTIN(__builtin_le1_read_local_idx, "i", "nc")
 BUILTIN(__builtin_le1_read_local_idy, "i", "nc")
 BUILTIN(__builtin_le1_read_local_idz, "i", "nc")
@@ -21,6 +23,10 @@ BUILTIN(__builtin_le1_read_global_size_2, "i", "nc")
 BUILTIN(__builtin_le1_read_local_size_0, "i", "nc")
 BUILTIN(__builtin_le1_read_local_size_1, "i", "nc")
 BUILTIN(__builtin_le1_read_local_size_2, "i", "nc")
+
+BUILTIN(__builtin_le1_read_group_id_0, "i", "nc")
+BUILTIN(__builtin_le1_read_group_id_1, "i", "nc")
+BUILTIN(__builtin_le1_read_group_id_2, "i", "nc")
 
 BUILTIN(__builtin_le1_read_num_groups_0, "i", "nc")
 BUILTIN(__builtin_le1_read_num_groups_1, "i", "nc")

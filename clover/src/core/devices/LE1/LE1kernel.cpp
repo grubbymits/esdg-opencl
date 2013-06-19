@@ -471,9 +471,19 @@ bool LE1KernelEvent::CompileSource() {
   // TODO This part needs to calculate how many cores to instantiate
   // Impose an upper limit of 12 cores?
   unsigned cores = p_device->numLE1s();
-  unsigned merge_dims[3] = {0, 0, 0};
+  unsigned merge_dims[3] = {1, 1, 1};
+  unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
+
+  // Local size may have been set by user, especially in the presence of
+  // barriers, so we need to take that into consideration. If the user didn't
+  // set a local size, we set it just by global_work_size / num_of_cores. We
+  // can adjust the launcher to work with several workgroups in this case.
   for(unsigned i = 0; i < p_event->work_dim(); ++i) {
     merge_dims[i] = p_event->global_work_size(i) / cores;
+    if (p_event->local_work_size(i) != merge_dims[i]) {
+      WorkgroupsPerCore[i] = merge_dims[i] / p_event->local_work_size(i);
+      merge_dims[i] = p_event->local_work_size(i);
+    }
   }
 
   // First, write the source string to a file
@@ -508,9 +518,17 @@ bool LE1KernelEvent::CompileSource() {
     }
   }
 
+  // FIXME Really not sure if this works!
   // Create a main function to the launcher for the kernel
+  launcher << "extern unsigned group_id[3];\n" << std::endl;
   launcher << "int main(void) {\n"
-  << KernelName << "(";
+    << "for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
+    <<    "group_id[2] = z;\n"
+    << "  for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
+    << "    group_id[1] = y;\n"
+    << "    for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
+    << "      group_id[0] = x;\n"
+    << "      " << KernelName << "(";
 
   // TODO Instead of writing a main file, passing immediates and having to
   // compile every time, we can write the addresses to memory and pass them
@@ -531,7 +549,7 @@ bool LE1KernelEvent::CompileSource() {
     if (i < (kernel->numArgs()-1))
       launcher << ", ";
     else
-      launcher << ");\n return 0;\n};";
+      launcher << ");\n}\n}\n}\nreturn 0;\n};";
   }
 
   std::ofstream main;
@@ -621,6 +639,7 @@ bool LE1KernelEvent::WriteDataArea() {
   Output << "00010 - local_size" << std::endl;
   Output << "0001c - num_groups" << std::endl;
   Output << "00028 - global_offset" << std::endl;
+  Output << "0002c - group_id" << std::endl;
 
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
@@ -681,6 +700,11 @@ bool LE1KernelEvent::WriteDataArea() {
 #ifdef DEBUGCL
   std::cerr << "Written global work offset\n";
 #endif
+
+  // Zero initialise group_id
+  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+    << "00000000 - 000000000000000000000000000000000" << std::endl;
+  addr += 12;
 
   FinalSource << Output.str();
   FinalSource.close();
