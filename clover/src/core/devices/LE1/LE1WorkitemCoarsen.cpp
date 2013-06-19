@@ -93,8 +93,6 @@ bool WorkitemCoarsen::HandleBarriers() {
   return true;
 }
 
-#define CLANG_RESOURCE_DIR  "/usr/local/lib/clang/3.2/"
-#define LIBCLC_INCLUDEDIR   "/opt/esdg-opencl/include"
 bool WorkitemCoarsen::Compile(std::string &filename, std::string &source) {
                               //std::string &triple) {
   if (!ProduceBytecode(filename, source))
@@ -120,7 +118,10 @@ bool WorkitemCoarsen::ProduceBytecode(std::string &filename,
   TheCompiler.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
 
   // Add libclc search path
-  TheCompiler.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDEDIR,
+  TheCompiler.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
+                                             clang::frontend::Angled,
+                                             false, false, false);
+  TheCompiler.getHeaderSearchOpts().AddPath(CLANG_INCLUDE_DIR,
                                              clang::frontend::Angled,
                                              false, false, false);
 
@@ -724,13 +725,13 @@ WorkitemCoarsen::OpenCLCompiler<T>::OpenCLCompiler(unsigned x,
   TheCompInst.setTarget(TI);
 
   // Set the compiler up to handle OpenCL
-  TheCompInst.getHeaderSearchOpts().AddPath("/opt/esdg-opencl/include",
+  TheCompInst.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
                                             clang::frontend::Angled,
                                             false, false, false);
   TheCompInst.getHeaderSearchOpts().AddPath(
-    "/usr/local/lib/clang/3.2/include", clang::frontend::Angled,
+    CLANG_INCLUDE_DIR, clang::frontend::Angled,
     false, false, false);
-  TheCompInst.getHeaderSearchOpts().ResourceDir = "/usr/local/lib/clang/3.2/";
+  TheCompInst.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
   TheCompInst.getHeaderSearchOpts().UseBuiltinIncludes = true;
   TheCompInst.getHeaderSearchOpts().UseStandardSystemIncludes = false;
 

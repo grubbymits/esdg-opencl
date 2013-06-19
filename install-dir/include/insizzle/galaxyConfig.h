@@ -43,7 +43,7 @@ typedef struct {
 } contextConfig;
 
 
-typedef struct {
+typedef struct systemConfig {
   unsigned SYSTEM_CONFIG;
   unsigned PERIPH_WRAP_CONFIG;
   unsigned DRAM_SHARED_CONFIG;

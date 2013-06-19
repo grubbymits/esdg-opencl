@@ -146,7 +146,7 @@ bool Compiler::produceAsm(const char* input,
 // intermediate format will now be .ast instead of .bc and this should mean
 // that source code changes will be minimal.
 
-#define CLANG_RESOURCE_DIR  "/usr/local/lib/clang/3.2/"
+#define CLANG_RESOURCE_DIR  "/opt/esdg-opencl/lib/clang/3.2/"
 #define LIBCLC_INCLUDEDIR   "/opt/esdg-opencl/include"
 //bool Compiler::compile(const std::string &options,
                                 //llvm::MemoryBuffer *src)
@@ -174,6 +174,9 @@ bool Compiler::compile(std::string &triple, std::string &name,
 
     // Add libclc search path
     p_compiler.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDEDIR,
+                                             clang::frontend::Angled,
+                                             false, false, false);
+    p_compiler.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR,
                                              clang::frontend::Angled,
                                              false, false, false);
 

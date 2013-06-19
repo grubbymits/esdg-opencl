@@ -83,7 +83,7 @@ typedef struct {
 } contextT;
 
 /* per system */
-typedef struct {
+typedef struct systemT {
 
   contextT *context;
   unsigned *dram;

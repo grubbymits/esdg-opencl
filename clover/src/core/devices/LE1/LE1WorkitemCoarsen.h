@@ -10,6 +10,10 @@
 #include <string>
 #include <sstream>
 
+#define CLANG_RESOURCE_DIR  "/opt/esdg-opencl/lib/clang/3.2/"
+#define CLANG_INCLUDE_DIR   "/opt/esdg-opencl/lib/clang/3.2/include"
+#define LIBCLC_INCLUDE_DIR  "/opt/esdg-opencl/include"
+
 namespace llvm {
   class Module;
 }
