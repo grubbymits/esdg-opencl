@@ -523,11 +523,11 @@ bool LE1KernelEvent::CompileSource() {
   launcher << "extern unsigned group_id[3];\n" << std::endl;
   launcher << "int main(void) {\n"
     << "for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
-    <<    "group_id[2] = z;\n"
+    <<    "group_id[(__builtin_le1_read_cpuid() + 2)] = z;\n"
     << "  for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
-    << "    group_id[1] = y;\n"
+    << "    group_id[(__builtin_le1_read_cpuid() + 1)] = y;\n"
     << "    for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
-    << "      group_id[0] = x;\n"
+    << "      group_id[(__builtin_le1_read_cpuid() + 0)] = x;\n"
     << "      " << KernelName << "(";
 
   // TODO Instead of writing a main file, passing immediates and having to
@@ -639,7 +639,16 @@ bool LE1KernelEvent::WriteDataArea() {
   Output << "00010 - local_size" << std::endl;
   Output << "0001c - num_groups" << std::endl;
   Output << "00028 - global_offset" << std::endl;
-  Output << "0002c - group_id" << std::endl;
+  Output << "00034 - num_cores" << std::endl;
+  // Each core has a word allocated to it to store group id data, we use one
+  // byte per dimension and so waste a byte. The cores can access their group_id
+  // using their cpuid: group_id[((cpuid >> 8) + dim)]
+
+  Output << "00038 - group_id" << std::endl;
+  unsigned GroupIdEnd = 0x3c;
+  unsigned NumCores = p_device->numLE1s();
+  for (unsigned i = 0; i < NumCores > 2; ++i)
+    GroupIdEnd += 4;
 
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
@@ -701,10 +710,22 @@ bool LE1KernelEvent::WriteDataArea() {
   std::cerr << "Written global work offset\n";
 #endif
 
-  // Zero initialise group_id
+  // Set num_cores
   Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-    << "00000000 - 000000000000000000000000000000000" << std::endl;
-  addr += 12;
+    << std::hex << std::setw(8) << std::setfill('0')
+    << NumCores << " - "
+    << ConvertToBinary(addr) << std::endl;
+  addr += 4;
+
+  // Zero initalise all the group ids
+  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+    << "00000000 - 00000000000000000000000000000000\n";
+  addr += 4;
+  for (unsigned i = 0; i < (NumCores > 2); ++i) {
+    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+      << "00000000 - 00000000000000000000000000000000\n";
+    addr += 4;
+  }
 
   FinalSource << Output.str();
   FinalSource.close();

@@ -899,6 +899,25 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
     return DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
                        DAG.getTargetConstant(8, MVT::i32));
   }
+  case Intrinsic::le1_read_group_id_0: {
+    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
+    return DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
+                       DAG.getTargetConstant(8, MVT::i32));
+  }
+  case Intrinsic::le1_read_group_id_1: {
+    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
+    Id = DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
+                     DAG.getTargetConstant(8, MVT::i32));
+    return DAG.getNode(ISD::ADD, dl, MVT::i32, Id,
+                       DAG.getTargetConstant(1, MVT::i32));
+  }
+  case Intrinsic::le1_read_group_id_2: {
+    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
+    Id = DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
+                     DAG.getTargetConstant(8, MVT::i32));
+    return DAG.getNode(ISD::ADD, dl, MVT::i32, Id,
+                       DAG.getTargetConstant(2, MVT::i32));
+  }
     /*
   case Intrinsic::le1_read_global_idx: {
 

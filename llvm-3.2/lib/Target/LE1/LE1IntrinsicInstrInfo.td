@@ -101,14 +101,14 @@ def LE1_READ_LOCAL_SIZE_1 : LE1_READ_KERNEL_ATTR<"local_size+4",
                                                   int_le1_read_local_size_1>;
 def LE1_READ_LOCAL_SIZE_2 : LE1_READ_KERNEL_ATTR<"local_size+8",
                                                   int_le1_read_local_size_2>;
-
+/*
 def LE1_READ_GROUP_ID_0   : LE1_READ_KERNEL_ATTR<"group_id+0",
                                                  int_le1_read_group_id_0>;
 def LE1_READ_GROUP_ID_1   : LE1_READ_KERNEL_ATTR<"group_id+4",
                                                  int_le1_read_group_id_1>;
 def LE1_READ_GROUP_ID_2   : LE1_READ_KERNEL_ATTR<"group_id+8",
                                                  int_le1_read_group_id_2>;
-
+*/
 def LE1_READ_NUM_GROUPS_0 : LE1_READ_KERNEL_ATTR<"num_groups+0",
                                                   int_le1_read_num_groups_0>;
 def LE1_READ_NUM_GROUPS_1 : LE1_READ_KERNEL_ATTR<"num_groups+4",

@@ -6,11 +6,11 @@ extern unsigned group_id[3];
 
 int main(void) {
 for (unsigned z = 0; z < 1; ++z) {
-group_id[2] = z;
+group_id[(__builtin_le1_read_cpuid() + 2)] = z;
   for (unsigned y = 0; y < 0; ++y) {
-    group_id[1] = y;
+    group_id[(__builtin_le1_read_cpuid() + 1)] = y;
     for (unsigned x = 0; x < 8; ++x) {
-      group_id[0] = x;
+      group_id[(__builtin_le1_read_cpuid() + 0)] = x;
       BFS_2(&BufferArg_0, &BufferArg_1, &BufferArg_2, &BufferArg_3, 4096);
 }
 }
