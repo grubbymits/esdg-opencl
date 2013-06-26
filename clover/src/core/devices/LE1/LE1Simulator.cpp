@@ -458,15 +458,13 @@ bool LE1Simulator::run(char* iram,
     }
   }
 
-  //systemConfig *SYS =
-    //(systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
-  if (PRINT_OUT) { 
+  //if (PRINT_OUT) { 
     if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
                   system->dram) == -1) {
       pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
-  }
+  //}
 
   pthread_mutex_unlock(&p_simulator_mutex);
 

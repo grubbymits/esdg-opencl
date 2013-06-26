@@ -361,6 +361,22 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     return CurDAG->getMachineNode(LE1::ORC, dl, MVT::i32, LHS, RHS);
     break;
   }
+  case LE1ISD::READ_GROUP_ID: {
+    SDValue Dim = Node->getOperand(0);
+    SDNode *CPUId = CurDAG->getMachineNode(LE1::LE1_READ_CPUID, dl, MVT::i32);
+    SDValue Index = CurDAG->getNode(ISD::SRL, dl, MVT::i32, SDValue(CPUId, 0),
+                                    CurDAG->getTargetConstant(8, MVT::i32));
+    Index = CurDAG->getNode(ISD::MUL, dl, MVT::i32, Index,
+                        CurDAG->getTargetConstant(4, MVT::i32));
+    SDNode *FinalIndex = CurDAG->getMachineNode(LE1::ADDi, dl, MVT::i32, Index,
+                                                Dim);
+    SDNode *Addr = CurDAG->getMachineNode(LE1::GroupIdAddr, dl, MVT::i32);
+    SDValue FinalAddr =
+      CurDAG->getNode(LE1::ADD, dl, MVT::i32, SDValue(Addr, 0),
+                      SDValue(FinalIndex, 0));
+    return CurDAG->getMachineNode(LE1::LoadGroupId, dl, MVT::i32, FinalAddr);
+    break;
+  }
     /*
   case LE1ISD::IncrLocalID: {
     std::cout << "Lowering IncrLocalID\n";

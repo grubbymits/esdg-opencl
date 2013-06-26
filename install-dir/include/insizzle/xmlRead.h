@@ -1,3 +1,6 @@
+#ifndef _XMLREAD_H_
+#define _XMLREAD_H_
+
 #include <libxml/xmlreader.h>
 
 #include <stdio.h>
@@ -16,7 +19,9 @@ typedef struct {
 int readConf(char *);
 void processNode(xmlTextReaderPtr, xmlReturn *);
 
-#ifdef API
+#ifdef INSIZZLEAPI
 #include "vtapi.h"
 int readConfStatic(char *, galaxyConfigT *);
+#endif
+
 #endif

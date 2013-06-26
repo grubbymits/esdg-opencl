@@ -115,6 +115,9 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::CPUID:         return "LE1ISD::CPUID";
   case LE1ISD::LocalSize:     return "LE1ISD::LocalSize";
   case LE1ISD::GlobalId:      return "LE1ISD::GlobalId";
+  case LE1ISD::READ_GROUP_ID: return "LE1ISD::READ_GROUP_ID";
+  case LE1ISD::GROUP_ID_ADDR: return "LE1ISD::GROUP_ID_ADDR";
+  case LE1ISD::LOAD_GROUP_ID: return "LE1ISD::LOAD_GROUP_ID";
 
   default:                         return NULL;
   }
@@ -893,31 +896,25 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
   DebugLoc dl = Op.getDebugLoc();
   unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(0))->getZExtValue();
 
+  // Create a GlobalAddressSDNode with a GlobalValue
+  // Then get the address:
+  // DAG.getTargetGlobalAddress(GV, dl, getPointerTy(), G->getOffset(), Flags);
+  // Then create a load from that address.
   switch(IntNo) {
   case Intrinsic::le1_read_cpuid: {
     SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
     return DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
                        DAG.getTargetConstant(8, MVT::i32));
   }
-  case Intrinsic::le1_read_group_id_0: {
-    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
-    return DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
-                       DAG.getTargetConstant(8, MVT::i32));
-  }
-  case Intrinsic::le1_read_group_id_1: {
-    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
-    Id = DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
-                     DAG.getTargetConstant(8, MVT::i32));
-    return DAG.getNode(ISD::ADD, dl, MVT::i32, Id,
-                       DAG.getTargetConstant(1, MVT::i32));
-  }
-  case Intrinsic::le1_read_group_id_2: {
-    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
-    Id = DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
-                     DAG.getTargetConstant(8, MVT::i32));
-    return DAG.getNode(ISD::ADD, dl, MVT::i32, Id,
-                       DAG.getTargetConstant(2, MVT::i32));
-  }
+  case Intrinsic::le1_read_group_id_0:
+    return DAG.getNode(LE1ISD::READ_GROUP_ID, dl, MVT::i32,
+                       DAG.getConstant(0, MVT::i32));
+  case Intrinsic::le1_read_group_id_1:
+    return DAG.getNode(LE1ISD::READ_GROUP_ID, dl, MVT::i32,
+                       DAG.getConstant(1, MVT::i32));
+  case Intrinsic::le1_read_group_id_2:
+    return DAG.getNode(LE1ISD::READ_GROUP_ID, dl, MVT::i32,
+                       DAG.getConstant(2, MVT::i32));
     /*
   case Intrinsic::le1_read_global_idx: {
 

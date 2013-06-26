@@ -71,7 +71,7 @@ add_library(OpenCL SHARED ${COAL_SRC_FILES})
 add_library(InsizzleAPI SHARED IMPORTED)
 #add_library(WorkitemCoarsen SHARED IMPORTED)
 
-#add_library(pcre SHARED IMPORTED)
+#add_library(xml2 STATIC IMPORTED)
 #add_library(m SHARED IMPORTED)
 
 set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.h.embed.h
@@ -111,13 +111,13 @@ set_source_files_properties(${COAL_SRC_FILES}
         PROPERTIES COMPILE_FLAGS ${LLVM_COMPILE_FLAGS})
 
 set_target_properties(OpenCL PROPERTIES
-  LINK_FLAGS "${LLVM_LDFLAGS} -L/usr/lib -L/opt/esdg-opencl/lib -lInsizzleAPI"
+  LINK_FLAGS "${LLVM_LDFLAGS} -shared -L/opt/esdg-opencl/lib -lInsizzleAPI"
   LINK_INTERFACE_LIBRARIES "")
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 SET_TARGET_PROPERTIES(InsizzleAPI PROPERTIES
-  IMPORTED_LOCATION /opt/esdg-opencl/lib/libInsizzleAPI.dylib
-  LINK_FLAGS "-L/usr/lib -lm `xml2-config --libs` -lpcre")
+  IMPORTED_LOCATION /opt/esdg-opencl/lib/libInsizzleAPI.dylib)
+  #LINK_FLAGS "-static lxml2 -lpcre -lm -z -llzma")
 
 TARGET_LINK_LIBRARIES(OpenCL
         ${CLANG_LIBS}
@@ -130,15 +130,22 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 SET_TARGET_PROPERTIES(InsizzleAPI PROPERTIES
-  IMPORTED_LOCATION /opt/esdg-opencl/lib/libInsizzleAPI.so
-  LINK_FLAGS "-L/usr/lib -lm `xml2-config --libs` -lpcre")
+  IMPORTED_LOCATION /opt/esdg-opencl/lib/libInsizzleAPI.so)
+  #LINK_FLAGS "--whole-archive libInsizzleAPI.a -W1, --no-whole-archive")
+
 TARGET_LINK_LIBRARIES(OpenCL
         ${CLANG_LIBS}
         ${LLVM_LIBS_CORE}
         ${LLVM_LIBS_JIT}
         pthread
         rt
+        dl
         InsizzleAPI
+        xml2
+        pcre
+        m
+        lz
+        lzma
 )
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 

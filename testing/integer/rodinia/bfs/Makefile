@@ -2,8 +2,7 @@
 CC = clang++
 
 SRC = bfs.cpp timer.cc
-LIBS = -lm `xml2-config --libs` -lpcre -L/opt/esdg-opencl/lib -lInsizzleAPI \
--lOpenCL -lclangFrontendTool -lclangFrontend -lclangDriver -lclangEdit -lpthread
+LIBS = -L/opt/esdg-opencl/lib -lOpenCL
 INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
 CC_FLAGS = -g -DERRMSG
 

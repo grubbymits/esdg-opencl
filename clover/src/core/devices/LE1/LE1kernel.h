@@ -39,6 +39,7 @@
 //#include <llvm/ExecutionEngine/GenericValue.h>
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include <ucontext.h>
 #include <pthread.h>
@@ -309,8 +310,9 @@ class LE1KernelEvent
 
         bool createFinalSource(LE1Program *prog);
         bool CompileSource(void);
-        void CalculateBufferAddrs(void);
+        void CalculateBufferAddrs(unsigned Addr);
         bool WriteDataArea();
+        void WriteKernelAttr(std::ostringstream &Output, size_t Attr);
         bool HandleBufferArg(const Kernel::Arg &arg);
         void PrintLine(unsigned Address,
                        std::ostringstream &HexString,

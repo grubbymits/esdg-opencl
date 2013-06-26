@@ -411,7 +411,7 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   FinalAsmName = "kernel_" + KernelName + ".s";
   CompleteFilename = "final_" + KernelName + ".s";
 
-  CalculateBufferAddrs();
+  //CalculateBufferAddrs();
 
   // Only compile a kernel once
   if (!p_event->kernel()->isBuilt()) {
@@ -445,9 +445,8 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   }
 }
 
-void LE1KernelEvent::CalculateBufferAddrs() {
+void LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
   // FIXME should the global_addr be defined like this?
-  unsigned global_addr = 0x2C;
 
   // FIXME surely we could calculate this number during kernel creation?
   // Not all arguments will be buffers, and so not all will require having data
@@ -457,8 +456,8 @@ void LE1KernelEvent::CalculateBufferAddrs() {
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
-      ArgAddrs.push_back(global_addr);
-      global_addr += (*(MemObject**)arg.data())->size();
+      ArgAddrs.push_back(Addr);
+      Addr += (*(MemObject**)arg.data())->size();
     }
   }
 }
@@ -520,15 +519,26 @@ bool LE1KernelEvent::CompileSource() {
 
   // FIXME Really not sure if this works!
   // Create a main function to the launcher for the kernel
-  launcher << "extern unsigned group_id[3];\n" << std::endl;
-  launcher << "int main(void) {\n"
-    << "for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
-    <<    "group_id[(__builtin_le1_read_cpuid() + 2)] = z;\n"
-    << "  for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
-    << "    group_id[(__builtin_le1_read_cpuid() + 1)] = y;\n"
-    << "    for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
-    << "      group_id[(__builtin_le1_read_cpuid() + 0)] = x;\n"
-    << "      " << KernelName << "(";
+  launcher << "extern unsigned char group_id[" << (4 * cores) << "];\n"
+    << std::endl;
+  launcher << "int main(void) {\n";
+  unsigned NestedLoops = 0;
+  if (WorkgroupsPerCore[2] != 0) {
+    launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
+    <<      "group_id[((__builtin_le1_read_cpuid()*4) + 2)] = z;\n";
+    ++NestedLoops;
+  }
+  if (WorkgroupsPerCore[1] != 0) {
+    launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
+    << "      group_id[((__builtin_le1_read_cpuid()*4) + 1)] = y;\n";
+    ++NestedLoops;
+  }
+  if (WorkgroupsPerCore[0] != 0) {
+    launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
+    << "        group_id[((__builtin_le1_read_cpuid()*4) + 0)] = x;\n";
+    ++NestedLoops;
+  }
+  launcher<< "        " << KernelName << "(";
 
   // TODO Instead of writing a main file, passing immediates and having to
   // compile every time, we can write the addresses to memory and pass them
@@ -548,8 +558,12 @@ bool LE1KernelEvent::CompileSource() {
     }
     if (i < (kernel->numArgs()-1))
       launcher << ", ";
-    else
-      launcher << ");\n}\n}\n}\nreturn 0;\n};";
+    else {
+      launcher << ");\n";
+      for (unsigned i = 0; i < NestedLoops; ++i)
+        launcher << "}\n";
+      launcher << "return 0;\n}";
+    }
   }
 
   std::ofstream main;
@@ -573,7 +587,7 @@ bool LE1KernelEvent::CompileSource() {
   // Run the transformation pass to prepare it for the assembler
   // Compile the merged kernel to assembly
   std::stringstream compile_command;
-  compile_command << "llc -march=le1 -mcpu="<< p_device->target() << " " 
+  compile_command << "llc -debug -march=le1 -mcpu="<< p_device->target() << " " 
     << FinalBCName << " -o " << TempAsmName;
   if(system(compile_command.str().c_str()) != 0)
     return false;
@@ -597,6 +611,14 @@ bool LE1KernelEvent::CompileSource() {
   //return system(clean.str().c_str());
 
   return true;
+}
+
+void LE1KernelEvent::WriteKernelAttr(std::ostringstream &Output, size_t attr) {
+  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+      << std::hex << std::setw(8) << std::setfill('0')
+      << attr << " - "
+      << ConvertToBinary(attr) << std::endl;
+    addr += 4;
 }
 
 bool LE1KernelEvent::WriteDataArea() {
@@ -647,8 +669,10 @@ bool LE1KernelEvent::WriteDataArea() {
   Output << "00038 - group_id" << std::endl;
   unsigned GroupIdEnd = 0x3c;
   unsigned NumCores = p_device->numLE1s();
-  for (unsigned i = 0; i < NumCores > 2; ++i)
+  for (unsigned i = 0; i < (NumCores / 4); ++i)
     GroupIdEnd += 4;
+
+  CalculateBufferAddrs(GroupIdEnd);
 
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
@@ -666,66 +690,89 @@ bool LE1KernelEvent::WriteDataArea() {
     << ConvertToBinary(p_event->work_dim())
     << std::endl;
 
-  for(unsigned i = 0; i < 3; ++i) {
+  for(unsigned i = 0; i < 3; ++i)
+    WriteKernelAttr(Output, p_event->global_work_size(i));
+  /*
     Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_event->global_work_size(i) << " - "
       << ConvertToBinary(p_event->global_work_size(i)) << std::endl;
     addr += 4;
-  }
+  }*/
 #ifdef DEBUGCL
   std::cerr << "Written global work size\n";
 #endif
 
-  for (unsigned i = 0; i < 3; ++i) {
+  for (unsigned i = 0; i < 3; ++i)
+    WriteKernelAttr(Output, p_event->local_work_size(i));
+    /*
     Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_event->local_work_size(i) << " - "
       << ConvertToBinary(p_event->local_work_size(i)) << std::endl;
     addr += 4;
-  }
+  }*/
 #ifdef DEBUGCL
   std::cerr << "Written local work size\n";
 #endif
 
   // FIXME Printing num_groups?
+  for (unsigned i = 0; i < 3; ++i) {
+    if ((p_event->global_work_size(i) == 0) ||
+        (p_event->local_work_size(i) == 0))
+      WriteKernelAttr(Output, 0);
+    else {
+      unsigned NumGroups =
+        p_event->global_work_size(i) / p_event->local_work_size(i);
+      WriteKernelAttr(Output, NumGroups);
+    }
+  }
+    /*
   Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_device->numLE1s() << " - "
       << ConvertToBinary(p_device->numLE1s()) << std::endl;
-    addr += 4;
+    addr += 4;*/
 
 #ifdef DEBUGCL
   std::cerr << "Written work groups (cores)\n";
 #endif
 
-  for(unsigned i = 0; i < 3; ++i) {
+  for(unsigned i = 0; i < 3; ++i)
+    WriteKernelAttr(Output, p_event->global_work_offset(i));
+    /*
     Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << p_event->global_work_offset(i) << " - "
       << ConvertToBinary(p_event->global_work_offset(i)) << std::endl;
     addr += 4;
-  }
+  }*/
 #ifdef DEBUGCL
   std::cerr << "Written global work offset\n";
 #endif
 
   // Set num_cores
+  WriteKernelAttr(Output, NumCores);
+  /*
   Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
     << std::hex << std::setw(8) << std::setfill('0')
     << NumCores << " - "
-    << ConvertToBinary(addr) << std::endl;
-  addr += 4;
+    << ConvertToBinary(NumCores) << std::endl;
+  addr += 4;*/
 
   // Zero initalise all the group ids
+  WriteKernelAttr(Output, 0);
+  /*
   Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
     << "00000000 - 00000000000000000000000000000000\n";
-  addr += 4;
-  for (unsigned i = 0; i < (NumCores > 2); ++i) {
+  addr += 4;*/
+  for (unsigned i = 0; i < (NumCores > 2); ++i)
+    WriteKernelAttr(Output, 0);
+    /*
     Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
       << "00000000 - 00000000000000000000000000000000\n";
     addr += 4;
-  }
+  }*/
 
   FinalSource << Output.str();
   FinalSource.close();

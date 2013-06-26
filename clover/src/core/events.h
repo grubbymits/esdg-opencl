@@ -601,14 +601,27 @@ class KernelEvent : public Event
                     cl_int *errcode_ret);
         ~KernelEvent();
 
-        cl_uint work_dim() const;                     /*!< \brief Number of working dimensions */
-        size_t global_work_offset(cl_uint dim) const; /*!< \brief Global work offset for the \p dim dimension */
-        size_t global_work_size(cl_uint dim) const;   /*!< \brief Global work size for the \p dim dimension */
-        size_t local_work_size(cl_uint dim) const;    /*!< \brief Number of work-items per work-group for the \p dim dimension */
-        Kernel *kernel() const;                       /*!< \brief \c Coal::Kernel object to run */
-        DeviceKernel *deviceKernel() const;           /*!< \brief \c Coal::DeviceKernel for the kernel and device of this event */
+        /*!< \brief Number of working dimensions */
+        cl_uint work_dim() const;
 
-        virtual Type type() const;                    /*!< \brief Say the event is a \c Coal::Event::NDRangeKernel one */
+        /*!< \brief Global work offset for the \p dim dimension */
+        size_t global_work_offset(cl_uint dim) const;
+
+        /*!< \brief Global work size for the \p dim dimension */
+        size_t global_work_size(cl_uint dim) const;
+
+        /*!< \brief Number of work-items per work-group for the \p dim
+          dimension */
+        size_t local_work_size(cl_uint dim) const;
+
+        /*!< \brief \c Coal::Kernel object to run */
+        Kernel *kernel() const;
+        /*!< \brief \c Coal::DeviceKernel for the kernel and device of this
+          event */
+        DeviceKernel *deviceKernel() const;
+
+        /*!< \brief Say the event is a \c Coal::Event::NDRangeKernel one */
+        virtual Type type() const;
 
     private:
         cl_uint p_work_dim;

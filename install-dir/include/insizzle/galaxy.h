@@ -7,7 +7,7 @@
 #define MEMORY_STALL 2
 
 /* per cluster */
-typedef struct {
+typedef struct clusterT {
   /* pointers to registers on a per cluster level */
   unsigned *S_GPR;
   unsigned *S_FPR;
@@ -22,7 +22,7 @@ typedef struct {
   } clusterT;
 
 /* per hyperContext */
-typedef struct {
+typedef struct hyperContextT {
   unsigned initialStackPointer; /* initial stack pointer */
 
   unsigned *S_GPR; /* general purpose */
@@ -68,12 +68,12 @@ typedef struct {
   unsigned numClusters;
   unsigned joinWaiting;
 
-  clusterT *registers;
+  struct clusterT *registers;
 
 } hyperContextT;
 
 /* per context */
-typedef struct {
+typedef struct ContextT {
 
   unsigned *iram;
   hyperContextT *hypercontext;
@@ -98,7 +98,7 @@ typedef struct systemT {
   unsigned numContext;
 } systemT;
 
-systemT *galaxyT;
+extern systemT *galaxyT;
 
 typedef struct {
   unsigned parent_cpu;
@@ -118,7 +118,7 @@ typedef struct tcu_t {
   unsigned status;
 } tcu_t;
 
-tcu_t ThreadControlUnit;
+extern tcu_t ThreadControlUnit;
 
 /* Mutex */
 #define MUTEX_LOCK 1

@@ -54,7 +54,7 @@ typedef struct systemConfig {
   contextConfig *CONTEXT;
 } systemConfig;
 
-unsigned GALAXY_CONFIG;
-systemConfig *SYSTEM;
+extern unsigned GALAXY_CONFIG;
+extern systemConfig *SYSTEM;
 
 #endif

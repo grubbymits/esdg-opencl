@@ -1,5 +1,5 @@
-#ifndef _FUNCTIONS
-#define FUNCTIONS
+#ifndef _FUNCTIONS_H
+#define _FUNCTIONS_H
 
 #include <time.h>
 
@@ -30,15 +30,15 @@
 #define MAX_CLUSTERS          16 /* per context */
 
 
-unsigned char llvm;
-unsigned memAlign;
-time_t start, end;
-unsigned char similarIRAM, suppressOOB;
-unsigned long long cycleCount;
-unsigned int STACK_SIZE; /* stack size per hypercontext in KB */
-unsigned int PRINT_OUT; /* switch to output cycle information */
-unsigned int SINGLE_STEP;
-unsigned int STAGGER; /* In multicore cpuid mode start context staggered */
+extern unsigned char isLLVM;
+extern unsigned memAlign;
+extern time_t start, end;
+extern unsigned char similarIRAM, suppressOOB;
+extern unsigned long long cycleCount;
+extern unsigned int STACK_SIZE; /* stack size per hypercontext in KB */
+extern unsigned int PRINT_OUT; /* switch to output cycle information */
+extern unsigned int SINGLE_STEP;
+extern unsigned int STAGGER; /* In multicore cpuid mode start context staggered */
 
 /* list of calls with names, pcs and registers required */
 typedef struct callsList_t{
@@ -48,7 +48,7 @@ typedef struct callsList_t{
   struct callsList_t *next;
 } callsList_t;
 
-callsList_t *callsList;
+extern callsList_t *callsList;
 /* TODO: remember to free all the memory */
 int setupCallsList(char *);
 
@@ -163,7 +163,7 @@ struct newThreadT {
   struct newThreadT *next;
 };
 
-struct mutexT {
+typedef struct mutexT {
   unsigned data;
   unsigned status;
   struct mutexT *next;
@@ -245,12 +245,12 @@ int insizzleAPIRdPC(unsigned *);
 
 int insizzleAPIoutputCounts(void);
 
-systemT *globalS;
-contextT *globalC;
-hyperContextT *globalHC;
-clusterT *globalCL;
+extern systemT *globalS;
+extern contextT *globalC;
+extern hyperContextT *globalHC;
+extern clusterT *globalCL;
 
-unsigned globalSid, globalCid, globalHCid, globalCLid;
+extern unsigned globalSid, globalCid, globalHCid, globalCLid;
 
 void driver(void);
 

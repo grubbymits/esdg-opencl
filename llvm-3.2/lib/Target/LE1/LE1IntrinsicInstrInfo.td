@@ -7,6 +7,9 @@ def SDTLE1ReadReg         : SDTypeProfile<1, 0, [SDTCisVT<0, i32>]>;
 def le1_cpuid             : SDNode<"LE1ISD::CPUID", SDTLE1ReadReg, []>;
 def le1_read_local_size   : SDNode<"LE1ISD::LocalSize", SDTIntUnaryOp, []>;
 def le1_read_global_id    : SDNode<"LE1ISD::GlobalId", SDTIntUnaryOp, []>;
+def le1_group_id_addr     : SDNode<"LE1ISD::GROUP_ID_ADDR", SDTLE1ReadReg, []>;
+def le1_load_group_id     : SDNode<"LE1ISD::LOAD_GROUP_ID", SDTIntUnaryOp, []>;
+def le1_read_group_id     : SDNode<"LE1ISD::READ_GROUP_ID", SDTIntUnaryOp, []>;
 
 /*
 let Constraints = "$dst = $src", mayLoad = 1, mayStore = 1  in {
@@ -66,7 +69,19 @@ def IncLocalIdZ :
   "add.0  r0.55, r0.55, 1",
   [(int_le1_inc_local_idz)], IIAlu>;
 
+def GroupIdAddr :
+  LE1Inst<
+  (outs CPURegs:$dst),
+  (ins),
+  "mov.0 $dst, group_id",
+  [(set CPURegs:$dst, (le1_group_id_addr))], IIAlu>;
 
+def LoadGroupId :
+  LE1Inst<
+  (outs CPURegs:$dst),
+  (ins CPURegs:$addr),
+  "ldbu.0 $dst, $addr[0x0]",
+  [(set CPURegs:$dst, (le1_load_group_id CPURegs:$addr))], IILoadStore>;
 
 class LE1_READ_CTRL_REG<string opcode, Intrinsic IntID>
   : LE1Inst<(outs CPURegs:$dst), (ins),

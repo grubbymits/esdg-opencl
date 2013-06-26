@@ -145,7 +145,10 @@ namespace llvm {
       IncLocalID,
       CPUID,
       GlobalId,
-      LocalSize
+      LocalSize,
+      READ_GROUP_ID,
+      GROUP_ID_ADDR,
+      LOAD_GROUP_ID
       //GlobalLoadU8,
       //GlobalLoadU16,
       //GlobalLoadS8,
