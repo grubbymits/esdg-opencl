@@ -585,7 +585,7 @@ bool LE1KernelEvent::CompileSource() {
   // Run the transformation pass to prepare it for the assembler
   // Compile the merged kernel to assembly
   std::stringstream compile_command;
-  compile_command << "llc -debug -march=le1 -mcpu="<< p_device->target() << " " 
+  compile_command << "llc -march=le1 -mcpu="<< p_device->target() << " " 
     << FinalBCName << " -o " << TempAsmName;
   if(system(compile_command.str().c_str()) != 0)
     return false;
