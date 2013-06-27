@@ -361,14 +361,26 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     return CurDAG->getMachineNode(LE1::ORC, dl, MVT::i32, LHS, RHS);
     break;
   }
+    /*
   case LE1ISD::READ_GROUP_ID: {
+    std::cout << "Selecting nodes for READ_GROUP_ID\n";
     SDValue Dim = Node->getOperand(0);
     SDNode *CPUId = CurDAG->getMachineNode(LE1::LE1_READ_CPUID, dl, MVT::i32);
-    SDValue Index = CurDAG->getNode(ISD::SRL, dl, MVT::i32, SDValue(CPUId, 0),
-                                    CurDAG->getTargetConstant(8, MVT::i32));
-    Index = CurDAG->getNode(ISD::MUL, dl, MVT::i32, Index,
-                        CurDAG->getTargetConstant(4, MVT::i32));
-    SDNode *FinalIndex = CurDAG->getMachineNode(LE1::ADDi, dl, MVT::i32, Index,
+    SDNode *Index = CurDAG->getMachineNode(LE1::SHRU, dl, MVT::i32,
+                                           SDValue(CPUId, 0),
+                                           CurDAG->getTargetConstant(8, MVT::i32));
+    SDNode *MulluRes
+      = CurDAG->getMachineNode(LE1::MULLU, dl, MVT::i32, SDValue(Index, 0),
+                               CurDAG->getTargetConstant(4, MVT::i32));
+    SDNode *MulhsRes
+      = CurDAG->getMachineNode(LE1::MULHS, dl, MVT::i32, SDValue(Index, 0),
+                               CurDAG->getTargetConstant(4, MVT::i32));
+    SDNode *MulRes
+      = CurDAG->getMachineNode(LE1::ADD, dl, MVT::i32, SDValue(MulluRes, 0),
+                               SDValue(MulhsRes, 0));
+
+    SDNode *FinalIndex = CurDAG->getMachineNode(LE1::ADDi, dl, MVT::i32,
+                                                SDValue(MulRes, 0),
                                                 Dim);
     SDNode *Addr = CurDAG->getMachineNode(LE1::GroupIdAddr, dl, MVT::i32);
     SDValue FinalAddr =
@@ -376,7 +388,7 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
                       SDValue(FinalIndex, 0));
     return CurDAG->getMachineNode(LE1::LoadGroupId, dl, MVT::i32, FinalAddr);
     break;
-  }
+  }*/
     /*
   case LE1ISD::IncrLocalID: {
     std::cout << "Lowering IncrLocalID\n";

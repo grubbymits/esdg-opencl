@@ -907,14 +907,16 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
                        DAG.getTargetConstant(8, MVT::i32));
   }
   case Intrinsic::le1_read_group_id_0:
-    return DAG.getNode(LE1ISD::READ_GROUP_ID, dl, MVT::i32,
-                       DAG.getConstant(0, MVT::i32));
-  case Intrinsic::le1_read_group_id_1:
-    return DAG.getNode(LE1ISD::READ_GROUP_ID, dl, MVT::i32,
-                       DAG.getConstant(1, MVT::i32));
-  case Intrinsic::le1_read_group_id_2:
-    return DAG.getNode(LE1ISD::READ_GROUP_ID, dl, MVT::i32,
-                       DAG.getConstant(2, MVT::i32));
+  case Intrinsic::le1_read_group_id_2: {
+    SDValue CPUId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
+    CPUId = DAG.getNode(ISD::SRL, dl, MVT::i32, CPUId,
+                        DAG.getTargetConstant(8, MVT::i32));
+    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                                DAG.getTargetConstant(4, MVT::i32));
+    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
+  }
     /*
   case Intrinsic::le1_read_global_idx: {
 
