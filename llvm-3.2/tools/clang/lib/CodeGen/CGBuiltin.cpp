@@ -22,6 +22,8 @@
 #include "llvm/Intrinsics.h"
 #include "llvm/DataLayout.h"
 
+#include <iostream>
+
 using namespace clang;
 using namespace CodeGen;
 using namespace llvm;
@@ -2700,6 +2702,16 @@ Value *CodeGenFunction::EmitLE1BuiltinExpr(unsigned BuiltinID,
     break;
   case LE1::BI__builtin_le1_read_group_id_2:
     ID = Intrinsic::le1_read_group_id_2;
+    break;
+  case LE1::BI__builtin_le1_set_group_id_0:
+    ID = Intrinsic::le1_set_group_id_0;
+    break;
+  case LE1::BI__builtin_le1_set_group_id_1:
+    ID = Intrinsic::le1_set_group_id_1;
+    break;
+  case LE1::BI__builtin_le1_set_group_id_2:
+    std::cout << "LE1::BI__builtin_le1_set_group_id_2\n";
+    ID = Intrinsic::le1_set_group_id_2;
     break;
   case LE1::BI__builtin_le1_read_num_groups_0:
     ID = Intrinsic::le1_read_num_groups_0;

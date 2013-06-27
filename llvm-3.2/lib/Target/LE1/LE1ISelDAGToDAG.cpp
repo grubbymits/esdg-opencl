@@ -201,12 +201,16 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
 
   unsigned Opcode = Node->getOpcode();
   DebugLoc dl = Node->getDebugLoc();
+  if (Node->isTargetOpcode())
+    std::cout << "Selecting " << TLI.getTargetNodeName(Node->getOpcode())
+      << std::endl;
 
   // Dump information about the Node being selected
   DEBUG(errs() << "Selecting: "; Node->dump(CurDAG); errs() << "\n");
 
   // If we have a custom node, we already have selected!
   if (Node->isMachineOpcode()) {
+    std::cout << "isMachineOpcode\n";
     DEBUG(errs() << "== "; Node->dump(CurDAG); errs() << "\n");
     return NULL;
   }
@@ -361,64 +365,17 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     return CurDAG->getMachineNode(LE1::ORC, dl, MVT::i32, LHS, RHS);
     break;
   }
-    /*
-  case LE1ISD::READ_GROUP_ID: {
-    std::cout << "Selecting nodes for READ_GROUP_ID\n";
-    SDValue Dim = Node->getOperand(0);
-    SDNode *CPUId = CurDAG->getMachineNode(LE1::LE1_READ_CPUID, dl, MVT::i32);
-    SDNode *Index = CurDAG->getMachineNode(LE1::SHRU, dl, MVT::i32,
-                                           SDValue(CPUId, 0),
-                                           CurDAG->getTargetConstant(8, MVT::i32));
-    SDNode *MulluRes
-      = CurDAG->getMachineNode(LE1::MULLU, dl, MVT::i32, SDValue(Index, 0),
-                               CurDAG->getTargetConstant(4, MVT::i32));
-    SDNode *MulhsRes
-      = CurDAG->getMachineNode(LE1::MULHS, dl, MVT::i32, SDValue(Index, 0),
-                               CurDAG->getTargetConstant(4, MVT::i32));
-    SDNode *MulRes
-      = CurDAG->getMachineNode(LE1::ADD, dl, MVT::i32, SDValue(MulluRes, 0),
-                               SDValue(MulhsRes, 0));
-
-    SDNode *FinalIndex = CurDAG->getMachineNode(LE1::ADDi, dl, MVT::i32,
-                                                SDValue(MulRes, 0),
-                                                Dim);
-    SDNode *Addr = CurDAG->getMachineNode(LE1::GroupIdAddr, dl, MVT::i32);
-    SDValue FinalAddr =
-      CurDAG->getNode(LE1::ADD, dl, MVT::i32, SDValue(Addr, 0),
-                      SDValue(FinalIndex, 0));
-    return CurDAG->getMachineNode(LE1::LoadGroupId, dl, MVT::i32, FinalAddr);
-    break;
-  }*/
-    /*
-  case LE1ISD::IncrLocalID: {
-    std::cout << "Lowering IncrLocalID\n";
-    SDValue LHS = Node->getOperand(1);
-    SDValue RHS = Node->getOperand(2);
-    return CurDAG->getMachineNode(LE1::IncrLocalId, dl,
-                                  MVT::i32, LHS, RHS);
+  case LE1ISD::SET_ATTR: {
+    std::cout << "LE1ISD::SET_ATTR\n";
+    SDValue Chain = Node->getOperand(0);
+    SDValue Value = Node->getOperand(1);
+    SDValue Addr = Node->getOperand(2);
+    SDNode *Result = CurDAG->getMachineNode(LE1::SetAttr, dl, MVT::Other,
+                                            Value, Addr, Chain);
+    //ReplaceUses(Node, Result);
+    return Result;
     break;
   }
-  case LE1ISD::ResetLocalID: {
-    std::cout << "Lowering ResetLocalID\n";
-    break;
-  }*/
-    /*
-  case LE1ISD::LocalSize: {
-    unsigned id = dyn_cast<ConstantSDNode>(Node->getOperand(1))->getZExtValue();
-    unsigned opcode = 0;
-    if (id == 0)
-      opcode = LE1::LE1_READ_LOCAL_SIZE_0;
-    else if (id == 1)
-      opcode = LE1::LE1_READ_LOCAL_SIZE_1;
-    else if (id == 2)
-      opcode = LE1::LE1_READ_LOCAL_SIZE_2;
-    else
-      llvm_unreachable("local id needs to be between 0 and 2");
-
-    return CurDAG->getMachineNode(opcode, dl,
-                                  MVT::i32, MVT::Other,
-                                  Node->getOperand(0));
-  }*/
   }
 
   // Select the default instruction

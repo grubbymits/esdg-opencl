@@ -28,6 +28,10 @@ BUILTIN(__builtin_le1_read_group_id_0, "i", "nc")
 BUILTIN(__builtin_le1_read_group_id_1, "i", "nc")
 BUILTIN(__builtin_le1_read_group_id_2, "i", "nc")
 
+BUILTIN(__builtin_le1_set_group_id_0, "vi", "nc")
+BUILTIN(__builtin_le1_set_group_id_1, "vi", "nc")
+BUILTIN(__builtin_le1_set_group_id_2, "vi", "nc")
+
 BUILTIN(__builtin_le1_read_num_groups_0, "i", "nc")
 BUILTIN(__builtin_le1_read_num_groups_1, "i", "nc")
 BUILTIN(__builtin_le1_read_num_groups_2, "i", "nc")

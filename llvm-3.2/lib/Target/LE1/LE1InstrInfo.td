@@ -314,26 +314,24 @@ class ArithLogicR<string instr_asm, SDNode OpNode, bit isComm = 0>:
       let isCommutable = isComm;
 }
 
-let isReMaterializable = 1, neverHasSideEffects = 1 in
 class ArithLogicI<string instr_asm, SDNode OpNode> :
       LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, i32imm:$src2),
       !strconcat(instr_asm, "  $dst, $src1, $src2"),
       [(set CPURegs:$dst, (OpNode CPURegs:$src1, imm:$src2))], IIAlu>;
 
-let isAsCheapAsAMove = 1, isReMaterializable = 1, neverHasSideEffects = 1 in {
+let isAsCheapAsAMove = 1 in
 class MoveR<string instr_asm, SDNode OpNode, RegisterClass OutReg,
            RegisterClass InReg>:
       LE1Inst<(outs OutReg:$dst),(ins InReg:$src),
       !strconcat(instr_asm, "  $dst, $src"),
       [(set OutReg:$dst, (OpNode InReg:$src))], IIAlu>;
 
-let isReMaterializable = 1, isMoveImm =1, neverHasSideEffects = 1 in
+let isMoveImm =1 in
 class MoveI<string instr_asm, SDNode OpNode, RegisterClass OutReg, Operand Opr,
             SDNode I> :
       LE1Inst<(outs OutReg:$dst), (ins Opr:$src),
       !strconcat(instr_asm, "  $dst, $src"),
       [(set OutReg:$dst, (OpNode I:$src))], IIAlu>;
-}
 
 // Shifts
 let isReMaterializable = 1 in

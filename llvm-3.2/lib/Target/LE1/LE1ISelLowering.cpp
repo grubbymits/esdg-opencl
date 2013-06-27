@@ -118,6 +118,8 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::READ_GROUP_ID: return "LE1ISD::READ_GROUP_ID";
   case LE1ISD::GROUP_ID_ADDR: return "LE1ISD::GROUP_ID_ADDR";
   case LE1ISD::LOAD_GROUP_ID: return "LE1ISD::LOAD_GROUP_ID";
+  case LE1ISD::READ_ATTR:     return "LE1ISD::READ_ATTR";
+  case LE1ISD::SET_ATTR:      return "LE1ISD::SET_ATTR";
 
   default:                         return NULL;
   }
@@ -431,7 +433,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setOperationAction(ISD::ZEXTLOAD,   MVT::i8,    Custom);
   //setOperationAction(ISD::ZEXTLOAD,   MVT::i16,   Custom);
 
-  //setOperationAction(ISD::INTRINSIC_VOID, MVT::Other, Custom);
+  setOperationAction(ISD::INTRINSIC_VOID, MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_W_CHAIN, MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
 
@@ -477,7 +479,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
     case ISD::FRAMEADDR:          return LowerFRAMEADDR(Op, DAG);
     //case ISD::MEMBARRIER:         return LowerMEMBARRIER(Op, DAG);
     //case ISD::ATOMIC_FENCE:       return LowerATOMIC_FENCE(Op, DAG);
-    //case ISD::INTRINSIC_VOID:
+    case ISD::INTRINSIC_VOID:
     case ISD::INTRINSIC_W_CHAIN:  return LowerIntrinsicWChain(Op, DAG);
     case ISD::INTRINSIC_WO_CHAIN: return LowerINTRINSIC_WO_CHAIN(Op, DAG);
   }
@@ -892,7 +894,8 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
 
 SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
                                                    SelectionDAG &DAG) const {
-  DEBUG(dbgs() << "LowerINTRINISIC_WO_CHAIN\n");
+  //DEBUG(dbgs() << "LowerINTRINISIC_WO_CHAIN\n");
+  std::cout << "LowerINTRINSIC_WO_CHAIN\n";
   DebugLoc dl = Op.getDebugLoc();
   unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(0))->getZExtValue();
 
@@ -900,149 +903,109 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
   // Then get the address:
   // DAG.getTargetGlobalAddress(GV, dl, getPointerTy(), G->getOffset(), Flags);
   // Then create a load from that address.
+
+  // Most of the intrinsics rely on CPU Id
+  SDValue CPUId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
+  CPUId = DAG.getNode(ISD::SRL, dl, MVT::i32, CPUId,
+                      DAG.getConstant(8, MVT::i32));
+
   switch(IntNo) {
   case Intrinsic::le1_read_cpuid: {
-    SDValue Id = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
-    return DAG.getNode(ISD::SRL, dl, MVT::i32, Id,
-                       DAG.getTargetConstant(8, MVT::i32));
+    return CPUId;
   }
-  case Intrinsic::le1_read_group_id_0:
-  case Intrinsic::le1_read_group_id_2: {
-    SDValue CPUId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
-    CPUId = DAG.getNode(ISD::SRL, dl, MVT::i32, CPUId,
-                        DAG.getTargetConstant(8, MVT::i32));
+  case Intrinsic::le1_read_group_id_0: {
     SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
                                 DAG.getTargetConstant(4, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
     return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
   }
-    /*
-  case Intrinsic::le1_read_global_idx: {
-
-    SDValue GroupId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
-    // CPUID seem to take hypercontexts into consideration.
-    GroupId = DAG.getNode(ISD::SRL, dl, MVT::i32, GroupId,
-                          DAG.getTargetConstant(8, MVT::i32));
-    SDValue LocalSize = DAG.getNode(LE1ISD::LocalSize, dl,
-                                    //DAG.getVTList(MVT::i32, MVT::Other),
-                                    MVT::i32,
-                                    //Chain,
-                                    DAG.getTargetConstant(0, MVT::i32));
-    return DAG.getNode(ISD::MUL, dl, MVT::i32, GroupId, LocalSize);
+  case Intrinsic::le1_read_group_id_1: {
+    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                                DAG.getTargetConstant(4, MVT::i32));
+    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
+                        DAG.getConstant(1, MVT::i32));
+    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
   }
-
-  case Intrinsic::le1_read_local_idx:
-    return DAG.getRegister(LE1::IdX, MVT::i32);
-  case Intrinsic::le1_read_local_idy:
-    return DAG.getRegister(LE1::IdY, MVT::i32);
-  case Intrinsic::le1_read_local_idz:
-    return DAG.getRegister(LE1::IdZ, MVT::i32);*/
+  case Intrinsic::le1_read_group_id_2: {
+    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                                DAG.getConstant(4, MVT::i32));
+    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
+                        DAG.getConstant(2, MVT::i32));
+    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
+  }
   default:
     return SDValue();
+    break;
   }
 
 }
 
 SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
                                                  SelectionDAG &DAG) const {
-  std::cout << "Lowering Intrinsic\n";
-  llvm_unreachable("LE1 doesn't have any intrinsic with a chain!");
-
+  std::cout << "Lowering Intrinsic with chain\n";
+  DebugLoc dl = Op.getDebugLoc();
   unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(1))->getZExtValue();
   SDValue Chain = Op.getOperand(0);
-  //std::cout << "NumOperands = " << Op.getNumOperands() << std::endl;
-  //std::cout << "Got IntNo = " << IntNo << std::endl;
-  DebugLoc dl = Op.getDebugLoc();
+  SDValue CPUId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
+  CPUId = DAG.getNode(ISD::SRL, dl, MVT::i32, CPUId,
+                      DAG.getConstant(8, MVT::i32));
 
-  SDValue Zero = DAG.getRegister(LE1::ZERO, MVT::i32);
-  //SDValue LocalIDx = DAG.getRegister(LE1::IdX, MVT::i32);
-  //SDValue LocalIDy = DAG.getRegister(LE1::IdY, MVT::i32);
-  //SDValue LocalIDz = DAG.getRegister(LE1::IdZ, MVT::i32);
-  //return SDValue();
 
   // get_global_id = group_id * local_size * local_id
   // group_id = cpuid
   // local_size
   // local_id
+  SDValue Result;
 
   switch(IntNo) {
-    
-  case Intrinsic::le1_read_global_idx: {
-    std::cout << "Globald IDX\n";
-    SDValue GroupId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
-    // CPUID seem to take hypercontexts into consideration.
-    GroupId = DAG.getNode(ISD::SRL, dl, MVT::i32, GroupId,
-                          DAG.getTargetConstant(8, MVT::i32));
-    SDValue LocalSize = DAG.getNode(LE1ISD::LocalSize, dl,
-                                    //DAG.getVTList(MVT::i32, MVT::Other),
-                                    MVT::i32,
-                                    //Chain,
-                                    DAG.getTargetConstant(0, MVT::i32));
-    SDValue Mul0 = DAG.getNode(ISD::MUL, dl, MVT::i32, GroupId, LocalSize);
-    //SDValue LocalIdx = DAG.getNode(LE1ISD::LocalIdX, dl, MVT::i32);
-    SDValue LocalIDx = DAG.getCopyFromReg(Chain, dl, LE1::IdX,
-                                          MVT::i32);
-    SDValue Res = DAG.getNode(LE1ISD::ADD_CHAIN, dl,
-                              DAG.getVTList(MVT::i32, MVT::Other),
-                              LocalIDx.getValue(1), Mul0, LocalIDx);
-    DEBUG(dbgs() << "Returing IDX\n");
-    return Res;
-    //return DAG.getNode(ISD::TokenFactor, dl, MVT::Other, Chain,
-      //                 LocalSize.getValue(1));
+  case Intrinsic::le1_set_group_id_0: {
+    SDValue GroupId = Op.getOperand(2);
+    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                                DAG.getTargetConstant(4, MVT::i32));
+    //Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
+      //                  DAG.getConstant(0, MVT::i32));
+    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
+                         GroupId, GroupAddr);
+    break;
   }
-    /*
-  case Intrinsic::le1_inc_local_idx: {
-    SDValue LocalIdx = DAG.getCopyFromReg(Chain, dl, LE1::IdX, MVT::i32);
-    SDValue Add = DAG.getNode(ISD::ADD, dl, MVT::i32, LocalIdx,
-                              DAG.getTargetConstant(1, MVT::i32));
-    return DAG.getCopyToReg(LocalIdx.getValue(1), dl, LE1::IdX, Add);
+  case Intrinsic::le1_set_group_id_1: {
+    SDValue GroupId = Op.getOperand(2);
+    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                                DAG.getTargetConstant(4, MVT::i32));
+    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
+                        DAG.getConstant(1, MVT::i32));
+    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
+                         GroupId, GroupAddr);
+    break;
   }
-  case Intrinsic::le1_inc_local_idx:
-    //std::cout << "le1_inc_local_idx\n";
-    //Op = DAG.getNode(LE1ISD::IncLocalID, dl,
-      //               MVT::Other, Chain, LocalIDx);
-    Op = DAG.getNode(LE1ISD::IncrLocalID, dl,
-                       DAG.getVTList(MVT::Other, MVT::i32),
-                       Chain, LocalIDx, Op.getOperand(2));
+  case Intrinsic::le1_set_group_id_2: {
+    std::cout << "Lowering le1_set_group_id_2\n";
+    SDValue GroupId = Op.getOperand(2);
+    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                                DAG.getTargetConstant(4, MVT::i32));
+    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
+                        DAG.getConstant(2, MVT::i32));
+    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
+                         GroupId, GroupAddr);
     break;
-  case Intrinsic::le1_inc_local_idy:
-   // std::cout << "le1_inc_local_idy\n";
-    Op = DAG.getNode(LE1ISD::IncrLocalID, dl,
-                       DAG.getVTList(MVT::Other, MVT::i32),
-                       Chain, LocalIDy);
-    break;
-  case Intrinsic::le1_inc_local_idz:
-   // std::cout << "le1_inc_local_idz\n";
-    Op = DAG.getNode(LE1ISD::IncrLocalID, dl,
-                       DAG.getVTList(MVT::Other, MVT::i32),
-                       Chain, LocalIDz);
-    break;
-  case Intrinsic::le1_reset_local_idx:
-   // std::cout << "le1_reset_local_idx\n";
-    Op = DAG.getNode(LE1ISD::ResetLocalID, dl,
-                      DAG.getVTList(MVT::Other, MVT::i32),
-                       Chain, LocalIDx);
-    break;
-  case Intrinsic::le1_reset_local_idy:
-    //std::cout << "le1_reset_local_idy\n";
-    Op = DAG.getNode(LE1ISD::ResetLocalID, dl,
-                       DAG.getVTList(MVT::Other, MVT::i32),
-                       Chain, LocalIDz);
-    break;
-  case Intrinsic::le1_reset_local_idz:
-    //std::cout << "le1_reset_local_idz\n";
-    Op = DAG.getNode(LE1ISD::ResetLocalID, dl,
-                       DAG.getVTList(MVT::Other, MVT::i32),
-                       Chain, LocalIDz);
-    break;*/
+  }
   default:
-    return SDValue();
+    llvm_unreachable("unhandled intrinsic with chain!");
+    break;
   }
-
-  //SDValue mv[2] = {Op, Chain};
-  //Op = DAG.getMergeValues(mv, 2, dl);
-  return Op;
+  //DAG.ReplaceAllUsesWith(Op, Result);
+  return Result;
 }
 
 

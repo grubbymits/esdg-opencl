@@ -149,7 +149,8 @@ namespace llvm {
       READ_GROUP_ID,
       GROUP_ID_ADDR,
       LOAD_GROUP_ID,
-      READ_ATTR
+      READ_ATTR,
+      SET_ATTR
       //GlobalLoadU8,
       //GlobalLoadU16,
       //GlobalLoadS8,
