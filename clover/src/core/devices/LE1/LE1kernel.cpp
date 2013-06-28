@@ -690,26 +690,12 @@ bool LE1KernelEvent::WriteDataArea() {
 
   for(unsigned i = 0; i < 3; ++i)
     WriteKernelAttr(Output, p_event->global_work_size(i));
-  /*
-    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-      << std::hex << std::setw(8) << std::setfill('0')
-      << p_event->global_work_size(i) << " - "
-      << ConvertToBinary(p_event->global_work_size(i)) << std::endl;
-    addr += 4;
-  }*/
 #ifdef DEBUGCL
   std::cerr << "Written global work size\n";
 #endif
 
   for (unsigned i = 0; i < 3; ++i)
     WriteKernelAttr(Output, p_event->local_work_size(i));
-    /*
-    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-      << std::hex << std::setw(8) << std::setfill('0')
-      << p_event->local_work_size(i) << " - "
-      << ConvertToBinary(p_event->local_work_size(i)) << std::endl;
-    addr += 4;
-  }*/
 #ifdef DEBUGCL
   std::cerr << "Written local work size\n";
 #endif
@@ -725,12 +711,6 @@ bool LE1KernelEvent::WriteDataArea() {
       WriteKernelAttr(Output, NumGroups);
     }
   }
-    /*
-  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-      << std::hex << std::setw(8) << std::setfill('0')
-      << p_device->numLE1s() << " - "
-      << ConvertToBinary(p_device->numLE1s()) << std::endl;
-    addr += 4;*/
 
 #ifdef DEBUGCL
   std::cerr << "Written work groups (cores)\n";
@@ -738,25 +718,12 @@ bool LE1KernelEvent::WriteDataArea() {
 
   for(unsigned i = 0; i < 3; ++i)
     WriteKernelAttr(Output, p_event->global_work_offset(i));
-    /*
-    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-      << std::hex << std::setw(8) << std::setfill('0')
-      << p_event->global_work_offset(i) << " - "
-      << ConvertToBinary(p_event->global_work_offset(i)) << std::endl;
-    addr += 4;
-  }*/
 #ifdef DEBUGCL
   std::cerr << "Written global work offset\n";
 #endif
 
   // Set num_cores
   WriteKernelAttr(Output, NumCores);
-  /*
-  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-    << std::hex << std::setw(8) << std::setfill('0')
-    << NumCores << " - "
-    << ConvertToBinary(NumCores) << std::endl;
-  addr += 4;*/
 
   // Zero initalise all the group ids
   for (unsigned i = 0; i < NumCores; ++i)
@@ -1296,8 +1263,7 @@ bool LE1KernelEvent::run() {
   bool wasSuccess = false;
   char* device_name = const_cast<char*>(p_device->model());
   //p_device->getSimulator()->LockAccess();
-  wasSuccess = p_device->getSimulator()->run("binaries/iram0.bin",
-                                "binaries/dram.bin");
+  wasSuccess = p_device->getSimulator()->Run();
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
     return false;
@@ -1315,31 +1281,8 @@ bool LE1KernelEvent::run() {
       unsigned TotalSize = (*(MemObject**)Arg.data())->size();
 
       if (Arg.type()->isIntegerTy(8)) {
-        /*
-        std::cout << "Arg " << i << ", at address " << buffer->addr()
-          << ". Buffer data before :\n";
-        for (unsigned j = 0; j < TotalSize; ++j) {
-          std::cout << std::hex
-            << (unsigned) *(((unsigned char*)buffer->data()) + j)
-            << " ";
-          if ((j+1) % 4 == 0) {
-            std::cout << std::endl;
-            std::cout << std::hex << (buffer->addr() + (j+1)) << "  ";
-          }
-        }*/
-
         p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
                                                (unsigned char*)buffer->data());
-        /*
-        unsigned char* NewData = (unsigned char*)buffer->data();
-        std::cout << "Arg " << i << ", at address " << buffer->addr()
-          << ". Buffer data after :\n";
-        for (unsigned j = 0; j < TotalSize >> 2; j = j+4) {
-          std::cout << std::hex << (buffer->addr() + j) << "  "
-            << (unsigned) NewData[j+0] << " " << (unsigned) NewData[j+1] << " "
-            << (unsigned) NewData[j+2] << " " << (unsigned) NewData[j+3]
-            << std::endl;
-        }*/
       }
       // FIXME Shorts aren't handled!
 
@@ -1360,7 +1303,7 @@ bool LE1KernelEvent::run() {
     }
   }
 
-  p_device->getSimulator()->ClearRAM();
+  p_device->SaveStats(KernelName);
   p_device->getSimulator()->UnlockAccess();
 
   // Release event

@@ -110,8 +110,14 @@ bool LE1Device::init()
 
 LE1Device::~LE1Device()
 {
-    if (!p_initialized)
-        return;
+  if (!p_initialized)
+    return;
+
+  delete Simulator;
+
+  StatsMap::iterator MapItr = ExecutionStats.begin();
+  while (MapItr != ExecutionStats.end())
+    ExecutionStats.erase(MapItr++);
 }
 
 DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)
@@ -142,6 +148,19 @@ void LE1Device::incrGlobalBaseAddr(unsigned mem_incr) {
     ++global_base_addr;
   if(global_base_addr & 0x2)
     global_base_addr = global_base_addr + 2;
+}
+
+void LE1Device::SaveStats(std::string &Kernel) {
+  StatsSet *NewStats = Simulator->GetStats();
+
+  if (ExecutionStats.find(Kernel) == ExecutionStats.end())
+    ExecutionStats.insert(std::make_pair(Kernel, NewStats));
+  else {
+    StatsSet *OldSet = ExecutionStats[Kernel];
+    OldSet->insert(OldSet->end(), NewStats->begin(), NewStats->end());
+  }
+
+  Simulator->ClearStats();
 }
 
 DeviceProgram *LE1Device::createDeviceProgram(Program *program)

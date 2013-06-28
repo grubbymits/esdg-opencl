@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <string>
 #include <sstream>
+#include <vector>
 #include <sys/mman.h>
 #include "LE1Simulator.h"
 
@@ -22,6 +23,18 @@ using namespace Coal;
 
 unsigned LE1Simulator::iteration = 0;
 
+SimulationStats::SimulationStats(hyperContextT *HyperContext) {
+  TotalCycles = HyperContext->cycleCount;
+  Stalls = HyperContext->stallCount;
+  NOPs = HyperContext->nopCount;
+  IdleCycles = HyperContext->idleCount;
+  DecodeStalls = HyperContext->decodeStallCount;
+  BranchesTaken = HyperContext->branchTaken;
+  BranchesNotTaken = HyperContext->branchNotTaken;
+  ControlFlowChange = HyperContext->controlFlowChange;
+  MemoryAccessCount = HyperContext->memoryAccessCount;
+}
+
 LE1Simulator::LE1Simulator() {
   pthread_mutex_init(&p_simulator_mutex, 0);
   dram_size = 0;
@@ -33,7 +46,16 @@ LE1Simulator::~LE1Simulator() {
   std::cerr << "! DELETING SIMULATOR !\n";
 #endif
   pthread_mutex_destroy(&p_simulator_mutex);
+
+  /* LE1device ends up owning the pointers
+  for (std::vector<SimulationStats*>::iterator SI = Stats.begin(),
+       SE = Stats.end(); SI != SE; ++SI) {
+    delete *(SI);
+  }
+  */
+
   /* Clean up */
+  // FIXME Probably need to do this after each run
   if(freeMem() == -1) {
     fprintf(stderr, "!!! ERROR freeing memory !!!\n");
     exit(-1);
@@ -127,11 +149,8 @@ bool LE1Simulator::Initialise(const char *machine) {
   return true;
 }
 
-void LE1Simulator::ClearRAM(void) {
-#ifdef DEBUGCL
-  std::cerr << "ClearRAM\n";
-#endif
-
+// Save the execution statistics and resets the device
+void LE1Simulator::SaveStats() {
   // 0 = Single system
   SYS = (systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
   LE1System = (systemT *)((size_t)galaxyT + (0 * sizeof(systemT)));
@@ -150,16 +169,17 @@ void LE1Simulator::ClearRAM(void) {
       hyperContextT *hypercontext =
         (hyperContextT *)((size_t)context->hypercontext
                           + (k * sizeof(hyperContextT)));
+
+      // Save the execution statistics
+      SimulationStats *NewStat = new SimulationStats(hypercontext);
+      Stats.push_back(NewStat);
+
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));
       hypercontext->programCounter = 0;
     }
   }
 
-  //pthread_mutex_unlock(&p_simulator_mutex);
-#ifdef DEBUGCL
-  std::cerr << "Leaving ClearRAM\n";
-#endif
 }
 
 void LE1Simulator::LockAccess(void) {
@@ -213,16 +233,13 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::run(char* iram,
-                       char* dram) {
+bool LE1Simulator::Run() {
 #ifdef DEBUGCL
   std::cerr << "Entered LE1Simulator::run\n";
 #endif
-  /*
-  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
-    exit(EXIT_FAILURE);
-  }*/
+  const char *iram = "binaries/iram0.bin";
+  const char *dram = "binaries/dram.bin";
+
   LockAccess();
   ++KernelNumber;
 
@@ -463,22 +480,25 @@ bool LE1Simulator::run(char* iram,
     }
   }
 
-  //if (PRINT_OUT) { 
+  // Debugging information
+  if (PRINT_OUT) { 
     if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
                   LE1System->dram) == -1) {
       pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
-  //}
-  std::ostringstream CopyDump;
-  CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
-    << "-" << LE1Simulator::iteration<< ".dat";
+    std::ostringstream CopyDump;
+    CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
+      << "-" << LE1Simulator::iteration<< ".dat";
 
-  if (KernelNumber == 2) {
-    KernelNumber = 0;
-    ++LE1Simulator::iteration;
+    if (KernelNumber == 2) {
+      KernelNumber = 0;
+      ++LE1Simulator::iteration;
+    }
+    system(CopyDump.str().c_str());
   }
-  system(CopyDump.str().c_str());
+
+  SaveStats();
 
   pthread_mutex_unlock(&p_simulator_mutex);
 
