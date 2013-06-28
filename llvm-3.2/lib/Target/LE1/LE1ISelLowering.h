@@ -144,6 +144,7 @@ namespace llvm {
       IncrLocalID,
       IncLocalID,
       CPUID,
+      NUM_CORES,
       GlobalId,
       LocalSize,
       READ_GROUP_ID,

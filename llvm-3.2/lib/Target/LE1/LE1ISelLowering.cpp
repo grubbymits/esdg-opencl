@@ -971,8 +971,11 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
       //                  DAG.getConstant(0, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
+    SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
+    Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
-                         GroupId, GroupAddr);
+                         Workgroup, GroupAddr);
     break;
   }
   case Intrinsic::le1_set_group_id_1: {
@@ -983,8 +986,11 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
                         DAG.getConstant(1, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
+    SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
+    Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
-                         GroupId, GroupAddr);
+                         Workgroup, GroupAddr);
     break;
   }
   case Intrinsic::le1_set_group_id_2: {
@@ -996,8 +1002,11 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
                         DAG.getConstant(2, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
+    SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
+    Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
-                         GroupId, GroupAddr);
+                         Workgroup, GroupAddr);
     break;
   }
   default:

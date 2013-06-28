@@ -376,6 +376,8 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     return Result;
     break;
   }
+  case LE1ISD::NUM_CORES:
+    return CurDAG->getMachineNode(LE1::LE1_NUM_CORES, dl, MVT::i32);
   }
 
   // Select the default instruction

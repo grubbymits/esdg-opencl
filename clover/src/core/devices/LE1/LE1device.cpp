@@ -92,10 +92,11 @@ bool LE1Device::init()
   max_global_addr = 0xFFFF * 1024;
 
   // Machine Configs
-  //p_cores = 2;
+  //p_cores = 1;
+  p_cores = 4;
+  //simulatorModel = LE1Device::machinesDir + "2w2a2m2ls1b.xml";
   //simulatorModel = LE1Device::machinesDir + "2Context_2w2a2m2ls1b.xml";
-  p_cores = 1;
-  simulatorModel = LE1Device::machinesDir + "2w2a2m2ls1b.xml";
+  simulatorModel = LE1Device::machinesDir + "4Context_Default.xml";
   compilerTarget = "2w2a2m2ls1b";
   if(!Simulator->Initialise(simulatorModel.c_str()))
     return false;

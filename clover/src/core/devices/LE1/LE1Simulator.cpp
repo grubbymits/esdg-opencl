@@ -1,8 +1,10 @@
 #include <iostream>
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <string>
+#include <sstream>
+#include <sys/mman.h>
 #include "LE1Simulator.h"
 
 #define MSB2LSBDW( x )  (         \
@@ -18,9 +20,12 @@ extern "C" {
 
 using namespace Coal;
 
+unsigned LE1Simulator::iteration = 0;
+
 LE1Simulator::LE1Simulator() {
   pthread_mutex_init(&p_simulator_mutex, 0);
   dram_size = 0;
+  KernelNumber = 0;
 }
 
 LE1Simulator::~LE1Simulator() {
@@ -77,7 +82,7 @@ bool LE1Simulator::Initialise(const char *machine) {
 
     SYS = (systemConfig *)((size_t)SYSTEM +
                                          (s * sizeof(systemConfig)));
-    system = (systemT *)((size_t)galaxyT + (s * sizeof(systemT)));
+    LE1System = (systemT *)((size_t)galaxyT + (s * sizeof(systemT)));
 
     /* This is a value defined in the xml config file */
     // FIXME This needs to come from the device
@@ -93,7 +98,7 @@ bool LE1Simulator::Initialise(const char *machine) {
     for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff);  ++c){
       contextConfig *CNT = (contextConfig *)((size_t)SYS->CONTEXT +
                                              (c * sizeof(contextConfig)));
-      contextT *context = (contextT *)((size_t)system->context
+      contextT *context = (contextT *)((size_t)LE1System->context
                                        + (c * sizeof(contextT)));
 
       for (hc=0; hc<((CNT->CONTEXT_CONFIG >> 4) & 0xf); ++hc) {
@@ -127,22 +132,19 @@ void LE1Simulator::ClearRAM(void) {
   std::cerr << "ClearRAM\n";
 #endif
 
-  /*
-  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
-    exit(EXIT_FAILURE);
-  }*/
+  // 0 = Single system
+  SYS = (systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
+  LE1System = (systemT *)((size_t)galaxyT + (0 * sizeof(systemT)));
 
-  for (unsigned i = 0; (i < GALAXY_CONFIG & 0xFF); ++i) {
-
-    SYS = (systemConfig *)((size_t)SYSTEM + (i * sizeof(systemConfig)));
-    system = (systemT *)((size_t)galaxyT + (i * sizeof(systemT)));
+  for (unsigned c = 0; c < (SYS->SYSTEM_CONFIG & 0xFF); ++c) {
     contextConfig *CNT
-      = (contextConfig *)((size_t)SYS->CONTEXT + (0 * sizeof(contextConfig)));
+      = (contextConfig *)((size_t)SYS->CONTEXT + (c * sizeof(contextConfig)));
     contextT* context =
-      (contextT *)((size_t)system->context + (0 * sizeof(contextT)));
+      (contextT *)((size_t)LE1System->context + (c * sizeof(contextT)));
+
 
     for(unsigned k=0;k<((CNT->CONTEXT_CONFIG >> 4) & 0xf);k++) {
+
       hyperContextConfig *HCNT = (hyperContextConfig *)((size_t)CNT->HCONTEXT
                                     + (k * sizeof(hyperContextConfig)));
       hyperContextT *hypercontext =
@@ -221,6 +223,8 @@ bool LE1Simulator::run(char* iram,
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
   }*/
+  LockAccess();
+  ++KernelNumber;
 
   /* turn printout on */
   PRINT_OUT = 0;
@@ -266,7 +270,8 @@ bool LE1Simulator::run(char* iram,
         //systemConfig *SYS = (systemConfig *)((size_t)SYSTEM
           //                                   + (s * sizeof(systemConfig)));
 #ifdef DEBUGCL
-        std::cerr << "Got System Config\n";
+        std::cerr << "Got System Config, " << (SYS->SYSTEM_CONFIG & 0xff)
+          << " contexts\n";
 #endif
 
         /* loop through all contexts and hypercontexts */
@@ -460,11 +465,20 @@ bool LE1Simulator::run(char* iram,
 
   //if (PRINT_OUT) { 
     if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
-                  system->dram) == -1) {
+                  LE1System->dram) == -1) {
       pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
   //}
+  std::ostringstream CopyDump;
+  CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
+    << "-" << LE1Simulator::iteration<< ".dat";
+
+  if (KernelNumber == 2) {
+    KernelNumber = 0;
+    ++LE1Simulator::iteration;
+  }
+  system(CopyDump.str().c_str());
 
   pthread_mutex_unlock(&p_simulator_mutex);
 

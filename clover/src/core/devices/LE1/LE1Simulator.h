@@ -27,12 +27,14 @@ namespace Coal {
                      unsigned int numBytes,
                      unsigned int* data);
 private:
+    static unsigned iteration;
   pthread_mutex_t p_simulator_mutex;
   unsigned dram_size;
   unsigned IRAMFileSize;
   unsigned DRAMFileSize;
+  unsigned KernelNumber;
   systemConfig *SYS;
-  systemT *system;
+  systemT *LE1System;
   };
 }
 

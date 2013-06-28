@@ -665,9 +665,9 @@ bool LE1KernelEvent::WriteDataArea() {
   // using their cpuid: group_id[((cpuid >> 8) + dim)]
 
   Output << "00038 - group_id" << std::endl;
-  unsigned GroupIdEnd = 0x3c;
+  unsigned GroupIdEnd = 0x38;
   unsigned NumCores = p_device->numLE1s();
-  for (unsigned i = 0; i < (NumCores / 4); ++i)
+  for (unsigned i = 0; i < NumCores; ++i)
     GroupIdEnd += 4;
 
   CalculateBufferAddrs(GroupIdEnd);
@@ -759,18 +759,8 @@ bool LE1KernelEvent::WriteDataArea() {
   addr += 4;*/
 
   // Zero initalise all the group ids
-  WriteKernelAttr(Output, 0);
-  /*
-  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-    << "00000000 - 00000000000000000000000000000000\n";
-  addr += 4;*/
-  for (unsigned i = 0; i < (NumCores > 2); ++i)
+  for (unsigned i = 0; i < NumCores; ++i)
     WriteKernelAttr(Output, 0);
-    /*
-    Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
-      << "00000000 - 00000000000000000000000000000000\n";
-    addr += 4;
-  }*/
 
   FinalSource << Output.str();
   FinalSource.close();
@@ -1305,7 +1295,7 @@ bool LE1KernelEvent::run() {
  // instead of hard coded parameters
   bool wasSuccess = false;
   char* device_name = const_cast<char*>(p_device->model());
-  p_device->getSimulator()->LockAccess();
+  //p_device->getSimulator()->LockAccess();
   wasSuccess = p_device->getSimulator()->run("binaries/iram0.bin",
                                 "binaries/dram.bin");
   if (!wasSuccess) {

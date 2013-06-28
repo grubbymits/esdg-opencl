@@ -4,9 +4,11 @@ def le1_incr_local_id     : SDNode<"LE1ISD::IncrLocalID", SDTIntUnaryOp,
                                   [SDNPMayStore, SDNPMayLoad, SDNPHasChain]>;
 
 def SDTLE1FakeStore       : SDTypeProfile<0, 2, []>;
-
+def SDTLE1LoadAttr        : SDTypeProfile<1, 0, []>;
 def SDTLE1ReadReg         : SDTypeProfile<1, 0, [SDTCisVT<0, i32>]>;
+
 def le1_cpuid             : SDNode<"LE1ISD::CPUID", SDTLE1ReadReg, []>;
+def le1_num_cores         : SDNode<"LE1ISD::NUM_CORES", SDTLE1LoadAttr, []>;
 def le1_read_local_size   : SDNode<"LE1ISD::LocalSize", SDTIntUnaryOp, []>;
 def le1_read_global_id    : SDNode<"LE1ISD::GlobalId", SDTIntUnaryOp, []>;
 def le1_group_id_addr     : SDNode<"LE1ISD::GROUP_ID_ADDR", SDTLE1ReadReg, []>;
