@@ -49,8 +49,8 @@ class Kernel;
 class LE1Simulator;
 class SimulationStats;
 
-typedef std::vector<SimulationStats*> StatsSet;
-typedef std::map<std::string, StatsSet*> StatsMap;
+typedef std::vector<SimulationStats> StatsSet;
+typedef std::map<std::string, StatsSet> StatsMap;
 
 /**
  * \brief LE1 device

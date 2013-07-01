@@ -35,6 +35,18 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext) {
   MemoryAccessCount = HyperContext->memoryAccessCount;
 }
 
+SimulationStats::SimulationStats(const SimulationStats &Stats) {
+  TotalCycles = Stats.TotalCycles;
+  Stalls = Stats.Stalls;
+  NOPs = Stats.NOPs;
+  IdleCycles = Stats.IdleCycles;
+  DecodeStalls = Stats.DecodeStalls;
+  BranchesTaken = Stats.BranchesTaken;
+  BranchesNotTaken = Stats.BranchesNotTaken;
+  ControlFlowChange = Stats.ControlFlowChange;
+  MemoryAccessCount = Stats.MemoryAccessCount;
+}
+
 LE1Simulator::LE1Simulator() {
   pthread_mutex_init(&p_simulator_mutex, 0);
   dram_size = 0;
@@ -171,8 +183,9 @@ void LE1Simulator::SaveStats() {
                           + (k * sizeof(hyperContextT)));
 
       // Save the execution statistics
-      SimulationStats *NewStat = new SimulationStats(hypercontext);
+      SimulationStats NewStat(hypercontext);
       Stats.push_back(NewStat);
+      std::cout << "Pushing back NewStats\n";
 
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));

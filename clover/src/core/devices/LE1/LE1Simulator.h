@@ -11,6 +11,7 @@ namespace Coal {
 
   struct SimulationStats {
     SimulationStats(hyperContextT *HyperContext);
+    SimulationStats(const SimulationStats &Stats);
     unsigned long TotalCycles;
     unsigned long Stalls;
     unsigned long NOPs;
@@ -29,7 +30,7 @@ namespace Coal {
     ~LE1Simulator();
     bool Initialise(const char *machine);
     void SaveStats(void);
-    std::vector<SimulationStats*> *GetStats() { return &Stats; }
+    std::vector<SimulationStats> *GetStats() { return &Stats; }
     void ClearStats() { Stats.clear(); }
     int checkStatus(void);
     bool Run();
@@ -51,7 +52,7 @@ private:
   unsigned KernelNumber;
   systemConfig *SYS;
   systemT *LE1System;
-  std::vector<SimulationStats*> Stats;
+  std::vector<SimulationStats> Stats;
   };
 }
 

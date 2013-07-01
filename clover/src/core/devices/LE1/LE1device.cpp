@@ -126,6 +126,49 @@ LE1Device::~LE1Device()
   pthread_mutex_destroy(&p_events_mutex);
   pthread_cond_destroy(&p_events_cond);
 
+  std::cout << "\n ---- Kernel Completion Report ----" << std::endl;
+  std::cout << "Machine Configuration: " << simulatorModel << std::endl;
+  std::cout << "Number of cores: " << p_cores << std::endl;
+
+  for (StatsMap::iterator SMI = ExecutionStats.begin(),
+       SME = ExecutionStats.end(); SMI != SME; ++SMI) {
+
+    std::cout << "Kernel Stats for " << SMI->first << std::endl;
+
+    unsigned AverageCycles = 0;
+    unsigned AverageStalls = 0;
+    unsigned AverageIdle = 0;
+    unsigned AverageDecodeStalls = 0;
+    for (StatsSet::iterator SI = SMI->second.begin(),
+         SE = SMI->second.end(); SI != SE; ++SI) {
+      SimulationStats Stats = *SI;
+      AverageCycles += Stats.TotalCycles;
+      AverageStalls += Stats.Stalls;
+      AverageIdle += Stats.IdleCycles;
+      AverageDecodeStalls += Stats.DecodeStalls;
+      //std::cout << "Total Cycles = " << Stats.TotalCycles << std::endl;
+      //std::cout << "Stalls = " << Stats.Stalls << std::endl;
+      //std::cout << "NOPs = " << Stats.NOPs << std::endl;
+      //std::cout << "Idle = " << Stats.IdleCycles << std::endl;
+      //std::cout << "DecodeStalls = " << Stats.DecodeStalls << std::endl;
+      //std::cout << "BranchesTaken = " << Stats.BranchesTaken << std::endl;
+      //std::cout << "ControlFlowChange = " << Stats.ControlFlowChange
+        //<< std::endl;
+      //std::cout << "MemoryAccessCount = " << Stats.MemoryAccessCount
+        //<< std::endl << std::endl;
+    }
+    AverageCycles /= p_cores;
+    AverageIdle /= p_cores;
+    AverageDecodeStalls /= p_cores;
+    AverageStalls /= p_cores;
+
+    std::cout << "Average Cycles: " << AverageCycles << std::endl;
+    std::cout << "  of which stalls: "
+      << AverageStalls << "\n   including " << AverageDecodeStalls
+      << " decode stalls." << std::endl;
+    std::cout << "Idle Cycles = " << AverageIdle << std::endl << std::endl;
+  }
+
   delete Simulator;
 
   StatsMap::iterator MapItr = ExecutionStats.begin();
@@ -164,13 +207,19 @@ void LE1Device::incrGlobalBaseAddr(unsigned mem_incr) {
 }
 
 void LE1Device::SaveStats(std::string &Kernel) {
+  std::cout << "SaveStats\n";
   StatsSet *NewStats = Simulator->GetStats();
+  std::cout << "Size of NewStats = " << NewStats->size() << std::endl;
 
-  if (ExecutionStats.find(Kernel) == ExecutionStats.end())
-    ExecutionStats.insert(std::make_pair(Kernel, NewStats));
+  if (ExecutionStats.find(Kernel) == ExecutionStats.end()) {
+    std::cout << "Making a new pair\n";
+    ExecutionStats.insert(std::make_pair(Kernel, *NewStats));
+  }
   else {
-    StatsSet *OldSet = ExecutionStats[Kernel];
-    OldSet->insert(OldSet->end(), NewStats->begin(), NewStats->end());
+    StatsSet OldSet = ExecutionStats[Kernel];
+    std::cout << "Adding to old pair. Size of old pair = " << OldSet.size()
+      << std::endl;
+    OldSet.insert(OldSet.end(), NewStats->begin(), NewStats->end());
   }
 
   Simulator->ClearStats();
