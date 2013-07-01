@@ -185,7 +185,6 @@ void LE1Simulator::SaveStats() {
       // Save the execution statistics
       SimulationStats NewStat(hypercontext);
       Stats.push_back(NewStat);
-      std::cout << "Pushing back NewStats\n";
 
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));

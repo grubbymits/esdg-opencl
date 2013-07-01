@@ -429,14 +429,13 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   if (!WriteDataArea())
     return false;
 
-  std::string assemble = "perl " + LE1Device::scriptsDir + "secondpass.pl ";
+  std::string assemble = "perl " + LE1Device::ScriptsDir + "secondpass.pl ";
   assemble.append(CompleteFilename);
-  assemble.append(" -OPC=").append(LE1Device::incDir + "opcodes.txt");
+  assemble.append(" -OPC=").append(LE1Device::IncDir + "opcodes.txt");
 
   if (system(assemble.c_str()) != 0)
     return false;
   else {
-    p_event->kernel()->SetBuilt();
     // delete the intermediate files
     std::string clean = "rm " + OriginalSourceName + " " + CoarsenedSourceName
       + " " + CoarsenedBCName + " " + TempAsmName;
@@ -523,17 +522,17 @@ bool LE1KernelEvent::CompileSource() {
   unsigned NestedLoops = 0;
   if (WorkgroupsPerCore[2] != 0) {
     launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
-    <<      "__builtin_le1_set_group_id_2(z);\n"; //group_id[((__builtin_le1_read_cpuid()*4) + 2)] = z;\n";
+    <<      "__builtin_le1_set_group_id_2(z);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[1] != 0) {
     launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
-    << "      __builtin_le1_set_group_id_1(y);\n"; //group_id[((__builtin_le1_read_cpuid()*4) + 1)] = y;\n";
+    << "      __builtin_le1_set_group_id_1(y);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[0] != 0) {
     launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
-    << "        __builtin_le1_set_group_id_0(x);\n"; //group_id[((__builtin_le1_read_cpuid()*4) + 0)] = x;\n";
+    << "        __builtin_le1_set_group_id_0(x);\n";
     ++NestedLoops;
   }
   launcher<< "        " << KernelName << "(";
@@ -594,7 +593,7 @@ bool LE1KernelEvent::CompileSource() {
 
   std::stringstream pre_asm_command;
   // TODO Include the script as a char array
-  pre_asm_command << "perl " << LE1Device::scriptsDir << "llvmTransform.pl "
+  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl "
     << TempAsmName
     //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
     << " > " << FinalAsmName;
@@ -608,6 +607,8 @@ bool LE1KernelEvent::CompileSource() {
 #endif
   //return system(clean.str().c_str());
 
+
+  p_event->kernel()->SetBuilt();
   return true;
 }
 

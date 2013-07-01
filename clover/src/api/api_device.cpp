@@ -34,9 +34,10 @@
 #include "CL/cl.h"
 //#include <core/cpu/device.h>
 #include <core/devices/LE1/LE1device.h>
+#include <core/devices/LE1/LE1ScalarDevice.h>
 
 // TODO Add a LE1Device to this and replace the the cpu code
-static Coal::LE1Device le1device;
+static Coal::LE1ScalarDevice le1device;
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,

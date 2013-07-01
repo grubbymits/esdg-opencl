@@ -77,7 +77,7 @@ class LE1Device : public DeviceInterface
          * This function creates the worker threads and get information about
          * the host system for the \c numLE1s() and \c cpuMhz functions.
          */
-        bool init();
+        virtual bool init();
 
         cl_int info(cl_device_info param_name,
                     size_t param_value_size,
@@ -99,19 +99,19 @@ class LE1Device : public DeviceInterface
         LE1Simulator* getSimulator() { return Simulator; }
 
         unsigned int numLE1s() const;   /*!< \brief Number of logical LE1 cores on the system */
-        const char* model() { return simulatorModel.c_str(); }
-        const char* target() { return compilerTarget.c_str(); }
+        const char* model() { return SimulatorModel.c_str(); }
+        const char* target() { return CompilerTarget.c_str(); }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
-        static std::string sysDir;
-        static std::string libDir;
-        static std::string incDir;
-        static std::string machinesDir;
-        static std::string scriptsDir;
+        static std::string SysDir;
+        static std::string LibDir;
+        static std::string IncDir;
+        static std::string MachinesDir;
+        static std::string ScriptsDir;
 
-    private:
-        unsigned int p_cores, p_num_events;
-        std::string simulatorModel;
-        std::string compilerTarget;
+    protected:
+        unsigned int NumCores, p_num_events;
+        std::string SimulatorModel;
+        std::string CompilerTarget;
         float p_cpu_mhz;
         pthread_t *p_workers;
         LE1Simulator* Simulator;
@@ -129,7 +129,7 @@ class LE1Device : public DeviceInterface
         //static const unsigned global_offset_addr = 36;
         // Variables to hold the address of where a new data item can begin.
         unsigned global_base_addr;
-        unsigned max_global_addr;
+        unsigned MaxGlobalAddr;
         unsigned current_local_addr;
 };
 
