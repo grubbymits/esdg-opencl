@@ -34,6 +34,7 @@
 #define __REFCOUNTED_H__
 
 #include <list>
+#include <pthread.h>
 
 namespace Coal
 {
@@ -125,6 +126,7 @@ class Object
         Object *p_parent;
         Type p_type;
         std::list<Object *>::iterator p_it;
+        static pthread_mutex_t KnownObjectsMutex;
         bool p_release_parent;
 };
 

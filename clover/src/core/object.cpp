@@ -34,6 +34,8 @@
 
 using namespace Coal;
 
+pthread_mutex_t Object::KnownObjectsMutex = PTHREAD_MUTEX_INITIALIZER;
+
 static std::list<Object *>& getKnownObjects()
 {
     static std::list<Object *> known_objects;
@@ -48,8 +50,10 @@ Object::Object(Type type, Object *parent)
         parent->reference();
 
     // Add object in the list of known objects
+    pthread_mutex_lock(&Object::KnownObjectsMutex);
     getKnownObjects().push_front(this);
     p_it = getKnownObjects().begin();
+    pthread_mutex_unlock(&Object::KnownObjectsMutex);
 }
 
 Object::~Object()
@@ -57,8 +61,10 @@ Object::~Object()
     if (p_parent && p_parent->dereference() && p_release_parent)
         delete p_parent;
 
+    pthread_mutex_lock(&Object::KnownObjectsMutex);
     // Remove object from the list of known objects
     getKnownObjects().erase(p_it);
+    pthread_mutex_unlock(&Object::KnownObjectsMutex);
 }
 
 void Object::reference()
@@ -98,16 +104,20 @@ bool Object::isA(Object::Type type) const
     if (this == 0)
         return false;
 
+    pthread_mutex_lock(&Object::KnownObjectsMutex);
     // Check that the value isn't garbage or freed pointer
     std::list<Object *>::const_iterator it = getKnownObjects().begin(),
                                         e = getKnownObjects().end();
     while (it != e)
     {
-        if (*it == this)
+        if (*it == this) {
+            pthread_mutex_unlock(&Object::KnownObjectsMutex);
             return this->type() == type;
+        }
 
         ++it;
     }
+    pthread_mutex_unlock(&Object::KnownObjectsMutex);
 
     return false;
 }

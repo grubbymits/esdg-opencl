@@ -281,6 +281,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
     std::cerr << "arg_size = " << arg_size << std::endl;
 #endif
 
+    /*
     // Special case for samplers (pointers in C++, uint32 in OpenCL).
     if (size == sizeof(cl_sampler) && arg_size == 4 &&
         (*(Object **)value)->isA(T_Sampler))
@@ -298,7 +299,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
 #endif
 
         return CL_SUCCESS;
-    }
+    }*/
 
     if (size != arg_size)
         return CL_INVALID_ARG_SIZE;
