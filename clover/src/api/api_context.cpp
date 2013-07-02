@@ -82,6 +82,10 @@ clCreateContextFromType(const cl_context_properties   *properties,
                         void *                  user_data,
                         cl_int *                errcode_ret)
 {
+#ifdef DEBUGCL
+  std::cerr << "clCreateContextFromType\n";
+#endif
+
     cl_device_id device;
 
     *errcode_ret = clGetDeviceIDs(0, device_type, 1, &device, 0);

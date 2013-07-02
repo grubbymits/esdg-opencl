@@ -35,6 +35,8 @@
 #include <core/deviceinterface.h>
 #include <core/context.h>
 
+#include <core/devices/LE1/LE1device.h>
+
 #include <CL/cl.h>
 
 // Command Queue APIs
@@ -52,6 +54,11 @@ clCreateCommandQueue(cl_context                     context,
     // No errcode_ret ?
     if (!errcode_ret)
         errcode_ret = &default_errcode_ret;
+
+    if (((Coal::LE1Device*)(device))->init()) {
+      *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
+      return 0;
+    }
 
     if (!device->isA(Coal::Object::T_Device))
     {

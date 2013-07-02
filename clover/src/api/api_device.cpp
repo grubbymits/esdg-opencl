@@ -32,12 +32,17 @@
 #include <iostream>
 
 #include "CL/cl.h"
-//#include <core/cpu/device.h>
-#include <core/devices/LE1/LE1device.h>
 #include <core/devices/LE1/LE1ScalarDevice.h>
+#include <core/devices/LE1/LE1DualDevice.h>
+#include <core/devices/LE1/LE1TriDevice.h>
+#include <core/devices/LE1/LE1QuadDevice.h>
 
-// TODO Add a LE1Device to this and replace the the cpu code
-static Coal::LE1ScalarDevice le1device;
+static Coal::LE1ScalarDevice LE1Scalar;
+static Coal::LE1DualDevice LE1Dual;
+static Coal::LE1TriDevice LE1Tri;
+static Coal::LE1QuadDevice LE1Quad;
+static Coal::LE1Device LE1Devices[] = { LE1Scalar, LE1Dual, LE1Tri, LE1Quad
+                                       };
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,
@@ -67,14 +72,14 @@ clGetDeviceIDs(cl_platform_id   platform,
     // We currently implement only CPU-based acceleration
     if (device_type & (CL_DEVICE_TYPE_DEFAULT | CL_DEVICE_TYPE_ACCELERATOR))
     {
-        if(!le1device.init())
-          return CL_DEVICE_NOT_AVAILABLE;
+        //if(!le1device.init())
+          //return CL_DEVICE_NOT_AVAILABLE;
         
         if (devices)
-            devices[0] = (cl_device_id)(&le1device);
+            devices = (cl_device_id*)LE1Devices;
 
         if (num_devices)
-            *num_devices = 1;
+            *num_devices = 4;
     }
     else {
       std::cerr << "DEVICE_NOT_FOUND\n";
