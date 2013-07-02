@@ -32,17 +32,17 @@
 #include <iostream>
 
 #include "CL/cl.h"
+#include <core/deviceinterface.h>
+#include <core/devices/LE1/LE1device.h>
 #include <core/devices/LE1/LE1ScalarDevice.h>
 #include <core/devices/LE1/LE1DualDevice.h>
 #include <core/devices/LE1/LE1TriDevice.h>
 #include <core/devices/LE1/LE1QuadDevice.h>
 
-static Coal::LE1ScalarDevice LE1Scalar;
-static Coal::LE1DualDevice LE1Dual;
-static Coal::LE1TriDevice LE1Tri;
-static Coal::LE1QuadDevice LE1Quad;
-static Coal::LE1Device LE1Devices[] = { LE1Scalar, LE1Dual, LE1Tri, LE1Quad
-                                       };
+Coal::LE1Device LE1Devices[] = { Coal::LE1ScalarDevice(),
+                                 Coal::LE1DualDevice(),
+                                 Coal::LE1TriDevice(),
+                                 Coal::LE1QuadDevice() };
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,
@@ -75,11 +75,16 @@ clGetDeviceIDs(cl_platform_id   platform,
         //if(!le1device.init())
           //return CL_DEVICE_NOT_AVAILABLE;
         
-        if (devices)
-            devices = (cl_device_id*)LE1Devices;
+        if (devices) {
+          *devices = (cl_device_id)LE1Devices;
+        }
 
-        if (num_devices)
-            *num_devices = 4;
+        if (num_devices) {
+#ifdef DEBUGCL
+          std::cerr << "Four devices\n";
+#endif
+          *num_devices = 4;
+        }
     }
     else {
       std::cerr << "DEVICE_NOT_FOUND\n";

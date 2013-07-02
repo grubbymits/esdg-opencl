@@ -55,11 +55,21 @@ clCreateCommandQueue(cl_context                     context,
     if (!errcode_ret)
         errcode_ret = &default_errcode_ret;
 
-    if (((Coal::LE1Device*)(device))->init()) {
+    /*
+#ifdef DEBUGCL
+    std::cerr << "Attempt to initialise device\n";
+#endif
+    if (!device->init()) {
+#ifdef DEBUGCL
+      std::cerr << "!ERROR! Device initialisation failed!\n";
+#endif
       *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
       return 0;
-    }
+    }*/
 
+#ifdef DEBUGCL
+    std::cerr << "Check if the device is an object\n";
+#endif
     if (!device->isA(Coal::Object::T_Device))
     {
       std::cerr << "INVALID_DEVICE\n";

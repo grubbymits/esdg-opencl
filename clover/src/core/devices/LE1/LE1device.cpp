@@ -76,6 +76,7 @@ LE1Device::LE1Device()
 
 }
 
+/*
 // TODO Don't know where I should initialise the number of cores. For now, here.
 bool LE1Device::init()
 {
@@ -107,7 +108,7 @@ bool LE1Device::init()
   std::cerr << "Leaving LE1Device::init\n";
 #endif
   return true;
-}
+}*/
 
 LE1Device::~LE1Device()
 {

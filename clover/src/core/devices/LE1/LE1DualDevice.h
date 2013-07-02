@@ -1,5 +1,5 @@
-#ifndef __LE1_SCALAR_DEVICE_H__
-#define __LE1_SCALAR_DEVICE_H__
+#ifndef __LE1_DUAL_DEVICE_H__
+#define __LE1_DUAL_DEVICE_H__
 
 #include "LE1device.h"
 #include "LE1Simulator.h"
@@ -9,9 +9,9 @@
 #include <pthread.h>
 
 namespace Coal {
-  class LE1ScalarDevice : public LE1Device {
+  class LE1DualDevice : public LE1Device {
   public:
-    LE1ScalarDevice() : LE1Device() { IssueWidth = LE1Device::T_Scalar; }
+    LE1DualDevice() : LE1Device() {}
     bool init() {
       if (p_initialized)
         return true;
@@ -22,7 +22,7 @@ namespace Coal {
       pthread_create(&p_workers[0], 0, &worker, this);
       NumCores = 4;
       SimulatorModel = LE1Device::MachinesDir + "4Context_Default.xml";
-      CompilerTarget = "scalar";
+      CompilerTarget = "2w2a2m2ls1b";
       if (!Simulator->Initialise(SimulatorModel.c_str()))
         return false;
 
@@ -33,3 +33,4 @@ namespace Coal {
 }
 
 #endif
+

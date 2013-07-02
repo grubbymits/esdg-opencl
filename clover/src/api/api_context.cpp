@@ -34,6 +34,10 @@
 #include <CL/cl.h>
 #include <core/context.h>
 
+#include <core/deviceinterface.h>
+#include <core/devices/LE1/LE1device.h>
+#include <core/devices/LE1/LE1ScalarDevice.h>
+
 // Context APIs
 
 cl_context
@@ -87,6 +91,8 @@ clCreateContextFromType(const cl_context_properties   *properties,
 #endif
 
     cl_device_id device;
+    std::cout << "Created device ptr, address = " << std::hex << device
+      << std::endl;
 
     *errcode_ret = clGetDeviceIDs(0, device_type, 1, &device, 0);
 

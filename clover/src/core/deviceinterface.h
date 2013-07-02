@@ -57,6 +57,7 @@ class Program;
 class Kernel;
 //class llvm::Type;
 
+
 /**
  * \brief Abstraction layer between core Clover objects and the devices
  *
@@ -68,6 +69,8 @@ class DeviceInterface : public Object
     public:
         DeviceInterface() : Object(Object::T_Device, 0) {}
         virtual ~DeviceInterface() {}
+
+        virtual bool init() = 0;
 
         /**
          * \brief Retrieve information about the device
@@ -340,5 +343,6 @@ class DeviceKernel
 
 struct _cl_device_id : public Coal::DeviceInterface
 {};
+
 
 #endif

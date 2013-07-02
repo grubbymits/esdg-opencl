@@ -32,6 +32,11 @@
 
 #include "context.h"
 #include "deviceinterface.h"
+#include "devices/LE1/LE1device.h"
+#include "devices/LE1/LE1ScalarDevice.h"
+#include "devices/LE1/LE1DualDevice.h"
+#include "devices/LE1/LE1TriDevice.h"
+#include "devices/LE1/LE1QuadDevice.h"
 #include "propertylist.h"
 
 #include <cstring>
@@ -65,8 +70,9 @@ Context::Context(const cl_context_properties *properties,
         p_pfn_notify = &default_pfn_notify;
 
     // Intialize LLVM, this can be done more than one time per program
-    llvm::InitializeNativeTarget();
-    llvm::InitializeNativeTargetAsmPrinter();
+    // FIXME Maybe we need to do this?
+    //llvm::InitializeNativeTarget();
+    //llvm::InitializeNativeTargetAsmPrinter();
 
     // Explore the properties
     if (properties)
@@ -117,6 +123,9 @@ Context::Context(const cl_context_properties *properties,
     if (p_platform != 0)
     {
         *errcode_ret = CL_INVALID_PLATFORM;
+#ifdef DEBUGCL
+        std::cerr << "ERROR! CL_INVALID_PLATFORM\n";
+#endif
         return;
     }
 
@@ -126,8 +135,16 @@ Context::Context(const cl_context_properties *properties,
 
     if (!p_devices)
     {
+#ifdef DEBUGCL
+      std::cerr << "ERROR! No devices!\n";
+#endif
         *errcode_ret = CL_OUT_OF_HOST_MEMORY;
         return;
+    }
+
+    if (devices == 0) {
+      *errcode_ret = CL_INVALID_DEVICE;
+      return;
     }
 
     for (cl_uint i=0; i<num_devices; ++i)
@@ -136,12 +153,62 @@ Context::Context(const cl_context_properties *properties,
 
         if (device == 0)
         {
+#ifdef DEBUGCL
+          std::cerr << "ERROR! No device!\n";
+#endif
             *errcode_ret = CL_INVALID_DEVICE;
             return;
         }
 
+        switch((unsigned)((LE1Device*)(device))->GetWidth()) {
+        case LE1Device::T_Scalar:
+#ifdef DEBUGCL
+          std::cerr << "is scalar\n";
+#endif
+          if (!((LE1ScalarDevice*)(device))->init()) {
+            std::cerr << "init failed!\n";
+            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
+            return;
+          }
+          break;
+        case LE1Device::T_Dual:
+#ifdef DEBUGCL
+          std::cerr << "is dual\n";
+#endif
+          if (!((LE1DualDevice*)(device))->init()) {
+            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
+            return;
+          }
+          break;
+        case LE1Device::T_Tri:
+#ifdef DEBUGCL
+          std::cerr << "is tri\n";
+#endif
+          if (!((LE1TriDevice*)(device))->init()) {
+            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
+            return;
+          }
+          break;
+        case LE1Device::T_Quad:
+#ifdef DEBUGCL
+          std::cerr << "is quad\n";
+#endif
+          if (!((LE1QuadDevice*)(device))->init()) {
+            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
+            return;
+          }
+          break;
+        default:
+          *errcode_ret = CL_INVALID_DEVICE;
+          return;
+        }
+
         // Verify that the device is available
         cl_bool device_available;
+#ifdef DEBUGCL
+        std::cerr << "Verifying whether the device is available: " << i
+          << " out of " << num_devices << std::endl;
+#endif
 
         *errcode_ret = device->info(CL_DEVICE_AVAILABLE,
                                     sizeof(device_available),
