@@ -35,8 +35,6 @@
 #include <core/deviceinterface.h>
 #include <core/context.h>
 
-#include <core/devices/LE1/LE1device.h>
-
 #include <CL/cl.h>
 
 // Command Queue APIs
@@ -55,17 +53,7 @@ clCreateCommandQueue(cl_context                     context,
     if (!errcode_ret)
         errcode_ret = &default_errcode_ret;
 
-    /*
-#ifdef DEBUGCL
-    std::cerr << "Attempt to initialise device\n";
-#endif
-    if (!device->init()) {
-#ifdef DEBUGCL
-      std::cerr << "!ERROR! Device initialisation failed!\n";
-#endif
-      *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
-      return 0;
-    }*/
+
 
 #ifdef DEBUGCL
     std::cerr << "Check if the device is an object\n";
@@ -82,6 +70,16 @@ clCreateCommandQueue(cl_context                     context,
       std::cerr << "INVALID_CONTEXT\n";
         *errcode_ret = CL_INVALID_CONTEXT;
         return 0;
+    }
+#ifdef DEBUGCL
+    std::cerr << "Attempt to initialise device\n";
+#endif
+    if (!device->init()) {
+#ifdef DEBUGCL
+      std::cerr << "!ERROR! Device initialisation failed!\n";
+#endif
+      *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
+      return 0;
     }
 
     *errcode_ret = CL_SUCCESS;

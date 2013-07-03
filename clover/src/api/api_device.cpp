@@ -72,7 +72,6 @@ clGetDeviceIDs(cl_platform_id   platform,
     {
         //if(!le1device.init())
           //return CL_DEVICE_NOT_AVAILABLE;
-        
         if (devices) {
           for (unsigned i = 0; i < TotalDevices; ++i)
             devices[i] = (cl_device_id)&LE1Devices[i];

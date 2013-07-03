@@ -79,29 +79,13 @@ LE1Device::LE1Device(const std::string &Compiler, const std::string &SimModel,
   Simulator = new LE1Simulator();
 }
 
-
-// TODO Don't know where I should initialise the number of cores. For now, here.
-bool LE1Device::init()
-{
-#ifdef DEBUGCL
-  std::cerr << "Entering LE1Device::init " << SimulatorModel << std::endl;
-#endif
-  if (p_initialized)
-    return true;
-  pthread_cond_init(&p_events_cond, 0);
-  pthread_mutex_init(&p_events_mutex, 0);
-
-  p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
-  pthread_create(&p_workers[0], 0, &worker, this);
-
-  if(!Simulator->Initialise(SimulatorModel))
-    return false;
-
-  p_initialized = true;
-#ifdef DEBUGCL
-  std::cerr << "Leaving LE1Device::init\n";
-#endif
-  return true;
+LE1Device::LE1Device(const LE1Device &Device) {
+  Triple = "le1";
+  MaxGlobalAddr = 0xFFFF * 1024;
+  NumCores = Device.numLE1s();
+  SimulatorModel = Device.model();
+  CompilerTarget = Device.target();
+  Simulator = Device.getSimulator();
 }
 
 LE1Device::~LE1Device()
@@ -174,6 +158,30 @@ LE1Device::~LE1Device()
   StatsMap::iterator MapItr = ExecutionStats.begin();
   while (MapItr != ExecutionStats.end())
     ExecutionStats.erase(MapItr++);
+}
+
+// TODO Don't know where I should initialise the number of cores. For now, here.
+bool LE1Device::init()
+{
+#ifdef DEBUGCL
+  std::cerr << "Entering LE1Device::init " << SimulatorModel << std::endl;
+#endif
+  if (p_initialized)
+    return true;
+  pthread_cond_init(&p_events_cond, 0);
+  pthread_mutex_init(&p_events_mutex, 0);
+
+  p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
+  pthread_create(&p_workers[0], 0, &worker, this);
+
+  if(!Simulator->Initialise(SimulatorModel))
+    return false;
+
+  p_initialized = true;
+#ifdef DEBUGCL
+  std::cerr << "Leaving LE1Device::init\n";
+#endif
+  return true;
 }
 
 DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)

@@ -36,6 +36,7 @@
 #include "../../deviceinterface.h"
 #include "LE1Simulator.h"
 
+#include <iostream>
 #include <pthread.h>
 #include <list>
 //#include <map>
@@ -66,11 +67,14 @@ class Kernel;
  *
  * \see \ref events
  */
+class LE1Device;
+
 class LE1Device : public DeviceInterface
 {
     public:
         LE1Device(const std::string &Compiler, const std::string &SimModel,
                   unsigned Cores);
+        LE1Device(const LE1Device &Device);
         ~LE1Device();
 
         /*
@@ -106,11 +110,11 @@ class LE1Device : public DeviceInterface
 
         void pushEvent(Event *event);
         Event *getEvent(bool &stop);
-        LE1Simulator* getSimulator() { return Simulator; }
+        LE1Simulator* getSimulator() const { return Simulator; }
 
         unsigned int numLE1s() const;   /*!< \brief Number of logical LE1 cores on the system */
-        std::string &model() { return SimulatorModel; }
-        const char* target() { return CompilerTarget.c_str(); }
+        const std::string &model() const { return SimulatorModel; }
+        const std::string &target() const { return CompilerTarget; }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
         static std::string SysDir;
         static std::string LibDir;

@@ -42,7 +42,10 @@ cl_context
 clCreateContext(const cl_context_properties  *properties,
                 cl_uint                       num_devices,
                 const cl_device_id *          devices,
-                void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *),
+                void (CL_CALLBACK *pfn_notify)(const char *,
+                                               const void *,
+                                               size_t,
+                                               void *),
                 void *                        user_data,
                 cl_int *                      errcode_ret)
 {
@@ -66,6 +69,9 @@ clCreateContext(const cl_context_properties  *properties,
     *errcode_ret = CL_SUCCESS;
     Coal::Context *ctx = new Coal::Context(properties, num_devices, devices,
                                            pfn_notify, user_data, errcode_ret);
+#ifdef DEBUGCL
+    std::cerr << "Got Context\n";
+#endif
 
     if (*errcode_ret != CL_SUCCESS)
     {
