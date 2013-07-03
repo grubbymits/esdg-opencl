@@ -34,10 +34,11 @@
 #define __LE1_DEVICE_H__
 
 #include "../../deviceinterface.h"
+#include "LE1Simulator.h"
 
 #include <pthread.h>
 #include <list>
-#include <map>
+//#include <map>
 
 namespace Coal
 {
@@ -46,11 +47,11 @@ class MemObject;
 class Event;
 class Program;
 class Kernel;
-class LE1Simulator;
-class SimulationStats;
+//class LE1Simulator;
+//class SimulationStats;
 
-typedef std::vector<SimulationStats> StatsSet;
-typedef std::map<std::string, StatsSet> StatsMap;
+//typedef std::vector<SimulationStats> StatsSet;
+//typedef std::map<std::string, StatsSet> StatsMap;
 
 /**
  * \brief LE1 device
@@ -68,15 +69,16 @@ typedef std::map<std::string, StatsSet> StatsMap;
 class LE1Device : public DeviceInterface
 {
     public:
-        LE1Device();
+        LE1Device(const char *Compiler, const char *SimModel, unsigned Cores);
         ~LE1Device();
 
+        /*
         enum IssueType {
           T_Scalar,
           T_Dual,
           T_Tri,
           T_Quad
-        };
+        };*/
 
         /**
          * \brief Initialize the LE1 device
@@ -84,7 +86,7 @@ class LE1Device : public DeviceInterface
          * This function creates the worker threads and get information about
          * the host system for the \c numLE1s() and \c cpuMhz functions.
          */
-        virtual bool init() { return false; }
+        bool init();
 
         cl_int info(cl_device_info param_name,
                     size_t param_value_size,
@@ -106,7 +108,6 @@ class LE1Device : public DeviceInterface
         LE1Simulator* getSimulator() { return Simulator; }
 
         unsigned int numLE1s() const;   /*!< \brief Number of logical LE1 cores on the system */
-        unsigned GetWidth() { return IssueWidth; }
         const char* model() { return SimulatorModel.c_str(); }
         const char* target() { return CompilerTarget.c_str(); }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
@@ -139,7 +140,6 @@ class LE1Device : public DeviceInterface
         unsigned global_base_addr;
         unsigned MaxGlobalAddr;
         unsigned current_local_addr;
-        IssueType IssueWidth;
 };
 
 }

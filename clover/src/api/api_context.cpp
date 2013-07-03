@@ -35,8 +35,6 @@
 #include <core/context.h>
 
 #include <core/deviceinterface.h>
-#include <core/devices/LE1/LE1device.h>
-#include <core/devices/LE1/LE1ScalarDevice.h>
 
 // Context APIs
 

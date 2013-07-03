@@ -34,15 +34,12 @@
 #include "CL/cl.h"
 #include <core/deviceinterface.h>
 #include <core/devices/LE1/LE1device.h>
-#include <core/devices/LE1/LE1ScalarDevice.h>
-#include <core/devices/LE1/LE1DualDevice.h>
-#include <core/devices/LE1/LE1TriDevice.h>
-#include <core/devices/LE1/LE1QuadDevice.h>
 
-Coal::LE1Device LE1Devices[] = { Coal::LE1ScalarDevice(),
-                                 Coal::LE1DualDevice(),
-                                 Coal::LE1TriDevice(),
-                                 Coal::LE1QuadDevice() };
+Coal::LE1Device LE1Devices[4] = {
+  Coal::LE1Device("scalar", "4Context_Default.xml", 4),
+  Coal::LE1Device("2w2a2m2ls1b", "4Context_Default.xml", 4),
+  Coal::LE1Device("3w3a3m3ls1b", "4Context_Default.xml", 4),
+  Coal::LE1Device("4w4a4m4ls1b", "4Context_Default.xml", 4) };
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,

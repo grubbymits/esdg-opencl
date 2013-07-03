@@ -1,6 +1,7 @@
 #ifndef _LE1Simulator_H
 #define _LE1Simulator_H
 
+#include <map>
 #include <pthread.h>
 
 extern "C" { typedef struct systemConfig; }
@@ -54,6 +55,9 @@ private:
   systemT *LE1System;
   std::vector<SimulationStats> Stats;
   };
+
+  typedef std::vector<SimulationStats> StatsSet;
+  typedef std::map<std::string, StatsSet> StatsMap;
 }
 
 #endif

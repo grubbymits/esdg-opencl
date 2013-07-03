@@ -32,11 +32,7 @@
 
 #include "context.h"
 #include "deviceinterface.h"
-#include "devices/LE1/LE1device.h"
-#include "devices/LE1/LE1ScalarDevice.h"
-#include "devices/LE1/LE1DualDevice.h"
-#include "devices/LE1/LE1TriDevice.h"
-#include "devices/LE1/LE1QuadDevice.h"
+//#include "devices/LE1/LE1device.h"
 #include "propertylist.h"
 
 #include <cstring>
@@ -160,6 +156,7 @@ Context::Context(const cl_context_properties *properties,
             return;
         }
 
+        /*
         switch((unsigned)((LE1Device*)(device))->GetWidth()) {
         case LE1Device::T_Scalar:
 #ifdef DEBUGCL
@@ -200,6 +197,11 @@ Context::Context(const cl_context_properties *properties,
           break;
         default:
           *errcode_ret = CL_INVALID_DEVICE;
+          return;
+        }*/
+
+        if (!device->init()) {
+          *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
           return;
         }
 
