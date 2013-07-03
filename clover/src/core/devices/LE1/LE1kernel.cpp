@@ -1262,9 +1262,12 @@ bool LE1KernelEvent::run() {
  // TODO Use either simulator or hardware? And use variables
  // instead of hard coded parameters
   bool wasSuccess = false;
-  char* device_name = const_cast<char*>(p_device->model());
-  //p_device->getSimulator()->LockAccess();
-  wasSuccess = p_device->getSimulator()->Run();
+  LE1Simulator *Simulator = p_device->getSimulator();
+  //std::string SimulatorModel = p_device->model();
+
+  //if(!Simulator->Initialise(SimulatorModel))
+    //return false;
+  wasSuccess = Simulator->Run();
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
     return false;

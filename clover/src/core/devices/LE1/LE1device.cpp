@@ -63,20 +63,20 @@ std::string LE1Device::IncDir = LE1Device::SysDir + "include/";
 std::string LE1Device::MachinesDir = LE1Device::SysDir + "machines/";
 std::string LE1Device::ScriptsDir = LE1Device::SysDir + "scripts/";
 
-LE1Device::LE1Device(const char *Compiler, const char *SimModel,
+LE1Device::LE1Device(const std::string &Compiler, const std::string &SimModel,
                      unsigned Cores)
 : DeviceInterface(), NumCores(Cores), p_num_events(0), p_workers(0),
   p_stop(false), p_initialized(false)
 {
+#ifdef DEBUGCL
+  std::cerr << "LE1Device::LE1Device at address " << std::hex << this
+    << std::endl;
+#endif
   Triple = "le1";
   MaxGlobalAddr = 0xFFFF * 1024;
-  SimulatorModel = LE1Device::MachinesDir + std::string(SimModel);
-  CompilerTarget = std::string(Compiler);
+  SimulatorModel = SimModel;
+  CompilerTarget = Compiler;
   Simulator = new LE1Simulator();
-#ifdef DEBUGCL
-  std::cerr << "LE1Device::LE1Device\n";
-#endif
-
 }
 
 
@@ -84,7 +84,7 @@ LE1Device::LE1Device(const char *Compiler, const char *SimModel,
 bool LE1Device::init()
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering LE1Device::init\n";
+  std::cerr << "Entering LE1Device::init " << SimulatorModel << std::endl;
 #endif
   if (p_initialized)
     return true;
@@ -94,7 +94,7 @@ bool LE1Device::init()
   p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
   pthread_create(&p_workers[0], 0, &worker, this);
 
-  if(!Simulator->Initialise(SimulatorModel.c_str()))
+  if(!Simulator->Initialise(SimulatorModel))
     return false;
 
   p_initialized = true;

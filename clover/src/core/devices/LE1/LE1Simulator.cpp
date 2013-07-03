@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 #include <sys/mman.h>
+#include "LE1device.h"
 #include "LE1Simulator.h"
 
 #define MSB2LSBDW( x )  (         \
@@ -74,7 +75,7 @@ LE1Simulator::~LE1Simulator() {
   }
 }
 
-bool LE1Simulator::Initialise(const char *machine) {
+bool LE1Simulator::Initialise(std::string &Machine) {
 
   LockAccess();
   /*
@@ -87,7 +88,9 @@ bool LE1Simulator::Initialise(const char *machine) {
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
      This sets up the internal registers of the LE1 as defined in the VTPRM
   */
-  if(readConf(const_cast<char*>(machine)) == -1) {
+  std::string FullPath(LE1Device::MachinesDir);
+  FullPath.append(Machine);
+  if(readConf(const_cast<char*>(FullPath.c_str())) == -1) {
     fprintf(stderr, "!!! ERROR reading machine model file !!!\n");
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;

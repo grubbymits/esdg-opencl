@@ -4,9 +4,9 @@
 #include <map>
 #include <pthread.h>
 
-extern "C" { typedef struct systemConfig; }
-extern "C" { typedef struct systemT; }
-extern "C" { typedef struct hyperContextT; }
+extern "C" { struct systemConfig; }
+extern "C" { struct systemT; }
+extern "C" { struct hyperContextT; }
 
 namespace Coal {
 
@@ -29,7 +29,7 @@ namespace Coal {
   public:
     LE1Simulator();
     ~LE1Simulator();
-    bool Initialise(const char *machine);
+    bool Initialise(std::string &Machine);
     void SaveStats(void);
     std::vector<SimulationStats> *GetStats() { return &Stats; }
     void ClearStats() { Stats.clear(); }

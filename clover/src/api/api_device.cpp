@@ -35,7 +35,8 @@
 #include <core/deviceinterface.h>
 #include <core/devices/LE1/LE1device.h>
 
-Coal::LE1Device LE1Devices[4] = {
+unsigned TotalDevices = 4;
+Coal::LE1Device LE1Devices[] = {
   Coal::LE1Device("scalar", "4Context_Default.xml", 4),
   Coal::LE1Device("2w2a2m2ls1b", "4Context_Default.xml", 4),
   Coal::LE1Device("3w3a3m3ls1b", "4Context_Default.xml", 4),
@@ -73,7 +74,8 @@ clGetDeviceIDs(cl_platform_id   platform,
           //return CL_DEVICE_NOT_AVAILABLE;
         
         if (devices) {
-          *devices = (cl_device_id)LE1Devices;
+          for (unsigned i = 0; i < TotalDevices; ++i)
+            devices[i] = (cl_device_id)&LE1Devices[i];
         }
 
         if (num_devices) {

@@ -69,7 +69,8 @@ class Kernel;
 class LE1Device : public DeviceInterface
 {
     public:
-        LE1Device(const char *Compiler, const char *SimModel, unsigned Cores);
+        LE1Device(const std::string &Compiler, const std::string &SimModel,
+                  unsigned Cores);
         ~LE1Device();
 
         /*
@@ -108,7 +109,7 @@ class LE1Device : public DeviceInterface
         LE1Simulator* getSimulator() { return Simulator; }
 
         unsigned int numLE1s() const;   /*!< \brief Number of logical LE1 cores on the system */
-        const char* model() { return SimulatorModel.c_str(); }
+        std::string &model() { return SimulatorModel; }
         const char* target() { return CompilerTarget.c_str(); }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
         static std::string SysDir;
@@ -117,7 +118,7 @@ class LE1Device : public DeviceInterface
         static std::string MachinesDir;
         static std::string ScriptsDir;
 
-    protected:
+    private:
         unsigned int NumCores, p_num_events;
         std::string SimulatorModel;
         std::string CompilerTarget;

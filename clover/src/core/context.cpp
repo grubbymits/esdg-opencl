@@ -60,7 +60,7 @@ Context::Context(const cl_context_properties *properties,
   p_platform(0)
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering Context::Context\n";
+  std::cerr << "Creating Context with " << num_devices << " devices\n";
 #endif
     if (!p_pfn_notify)
         p_pfn_notify = &default_pfn_notify;
@@ -145,6 +145,11 @@ Context::Context(const cl_context_properties *properties,
 
     for (cl_uint i=0; i<num_devices; ++i)
     {
+#ifdef DEBUGCL
+        std::cerr << "Verifying whether the device is available: " << i
+          << " out of " << num_devices << ". Device is at " << std::hex
+          << devices[i] << std::endl;
+#endif
         cl_device_id device = devices[i];
 
         if (device == 0)
@@ -157,60 +162,13 @@ Context::Context(const cl_context_properties *properties,
         }
 
         /*
-        switch((unsigned)((LE1Device*)(device))->GetWidth()) {
-        case LE1Device::T_Scalar:
-#ifdef DEBUGCL
-          std::cerr << "is scalar\n";
-#endif
-          if (!((LE1ScalarDevice*)(device))->init()) {
-            std::cerr << "init failed!\n";
-            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
-            return;
-          }
-          break;
-        case LE1Device::T_Dual:
-#ifdef DEBUGCL
-          std::cerr << "is dual\n";
-#endif
-          if (!((LE1DualDevice*)(device))->init()) {
-            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
-            return;
-          }
-          break;
-        case LE1Device::T_Tri:
-#ifdef DEBUGCL
-          std::cerr << "is tri\n";
-#endif
-          if (!((LE1TriDevice*)(device))->init()) {
-            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
-            return;
-          }
-          break;
-        case LE1Device::T_Quad:
-#ifdef DEBUGCL
-          std::cerr << "is quad\n";
-#endif
-          if (!((LE1QuadDevice*)(device))->init()) {
-            *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
-            return;
-          }
-          break;
-        default:
-          *errcode_ret = CL_INVALID_DEVICE;
-          return;
-        }*/
-
         if (!device->init()) {
           *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
           return;
-        }
+        }*/
 
         // Verify that the device is available
         cl_bool device_available;
-#ifdef DEBUGCL
-        std::cerr << "Verifying whether the device is available: " << i
-          << " out of " << num_devices << std::endl;
-#endif
 
         *errcode_ret = device->info(CL_DEVICE_AVAILABLE,
                                     sizeof(device_available),
@@ -228,6 +186,9 @@ Context::Context(const cl_context_properties *properties,
 
         // Add the device to the list
         p_devices[i] = (DeviceInterface *)device;
+#ifdef DEBUGCL
+        std::cerr << "Added device to Context p_devices\n";
+#endif
     }
 #ifdef DEBUGCL
   std::cerr << "Leaving Context::Context\n";
@@ -269,6 +230,9 @@ cl_int Context::info(cl_context_info param_name,
             break;
 
         case CL_CONTEXT_DEVICES:
+#ifdef DEBUGCL
+            std::cerr << "CL_CONTEXT_DEVICES\n";
+#endif
             MEM_ASSIGN(p_num_devices * sizeof(DeviceInterface *), p_devices);
             break;
 
@@ -280,8 +244,12 @@ cl_int Context::info(cl_context_info param_name,
             return CL_INVALID_VALUE;
     }
 
-    if (param_value && param_value_size < value_length)
+    if (param_value && param_value_size < value_length) {
+#ifdef DEBUGCL
+      std::cerr << "!! param_value && param_value_size < value_length !!\n";
+#endif
         return CL_INVALID_VALUE;
+    }
 
     if (param_value_size_ret)
         *param_value_size_ret = value_length;

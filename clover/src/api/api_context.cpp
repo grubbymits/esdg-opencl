@@ -47,7 +47,7 @@ clCreateContext(const cl_context_properties  *properties,
                 cl_int *                      errcode_ret)
 {
 #ifdef DEBUGCL
-  std::cerr << "clCreateContext\n";
+  std::cerr << "clCreateContext for " << num_devices << " devices\n";
 #endif
     cl_int default_errcode_ret;
 
@@ -74,13 +74,20 @@ clCreateContext(const cl_context_properties  *properties,
         return 0;
     }
 
+#ifdef DEBUGCL
+    std::cerr << "Leaving clCreateContext\n";
+#endif
+
     return (_cl_context *)ctx;
 }
 
 cl_context
 clCreateContextFromType(const cl_context_properties   *properties,
                         cl_device_type          device_type,
-                        void (CL_CALLBACK *pfn_notify)(const char *, const void *, size_t, void *),
+                        void (CL_CALLBACK *pfn_notify)(const char *,
+                                                       const void *,
+                                                       size_t,
+                                                       void *),
                         void *                  user_data,
                         cl_int *                errcode_ret)
 {
@@ -88,17 +95,19 @@ clCreateContextFromType(const cl_context_properties   *properties,
   std::cerr << "clCreateContextFromType\n";
 #endif
 
-    cl_device_id device;
-    std::cout << "Created device ptr, address = " << std::hex << device
-      << std::endl;
+  // struct _cl_device_id : public Coal::DeviceInterface
+  // typedef struct _cl_device_id*  cl_device_id
 
-    *errcode_ret = clGetDeviceIDs(0, device_type, 1, &device, 0);
+    cl_device_id devices;
+    cl_uint num_devices;
+
+    *errcode_ret = clGetDeviceIDs(0, device_type, 1, &devices, &num_devices);
 
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
-    return clCreateContext(properties, 1, &device, pfn_notify, user_data,
-                           errcode_ret);
+    return clCreateContext(properties, num_devices, &devices, pfn_notify,
+                           user_data, errcode_ret);
 }
 
 cl_int

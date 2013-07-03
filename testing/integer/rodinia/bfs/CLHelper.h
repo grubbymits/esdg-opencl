@@ -193,6 +193,7 @@ void _clInit()
   //-----------------------------------------------
   //--cambine-3: detect OpenCL devices	
   /* First, get the size of device list */
+  std::cout << "detect OpenCL devices\n";
   oclHandles.cl_status = clGetDeviceIDs(targetPlatform,
                                          CL_DEVICE_TYPE_ACCELERATOR,
                                          0, NULL, &deviceListSize);

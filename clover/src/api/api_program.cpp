@@ -212,7 +212,8 @@ clBuildProgram(cl_program           program,
                void *               user_data)
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering clBuildProgram\n";
+  std::cerr << "Entering clBuildProgram. Building for " << num_devices
+    << " devices\n";
 #endif
   
     if (!program->isA(Coal::Object::T_Program)) {
@@ -235,6 +236,9 @@ clBuildProgram(cl_program           program,
         return CL_INVALID_VALUE;
     }
 
+#ifdef DEBUGCL
+    std::cerr << "Checking " << num_devices << " devices\n";
+#endif
     // Check the devices for compliance
     if (num_devices)
     {
@@ -256,25 +260,43 @@ clBuildProgram(cl_program           program,
                                      context_num_devices * sizeof(cl_device_id),
                                      context_devices, 0);
 
-        if (result != CL_SUCCESS)
+        if (result != CL_SUCCESS) {
+#ifdef DEBUGCL
+          std::cerr << "context->info != CL_SUCCESS\n";
+#endif
             return result;
+        }
+#ifdef DEBUGCL
+        std::cerr << "Checking " << context_num_devices << " context devices\n";
+#endif
 
         for (cl_uint i=0; i<num_devices; ++i)
         {
             bool found = false;
+#ifdef DEBUGCL
+            std::cerr << "device_list[" << i << "] addr = "
+              << device_list[i] << std::endl;
+#endif
 
             for (cl_uint j=0; j<context_num_devices; ++j)
             {
+#ifdef DEBUGCL
+              std::cerr << "context_device [" << j << "] addr = "
+                << context_devices[j] << std::endl;
+#endif
                 if (device_list[i] == context_devices[j])
                 {
                     found = true;
+#ifdef DEBUGCL
+                    std::cerr << "Found device, break out\n";
+#endif
                     break;
                 }
             }
 
             if (!found) {
               std::cerr << "INVALID_DEVICE\n";
-                return CL_INVALID_DEVICE;
+              return CL_INVALID_DEVICE;
             }
         }
     }
@@ -283,12 +305,12 @@ clBuildProgram(cl_program           program,
     if (program->state() != Coal::Program::Loaded)
         return CL_INVALID_OPERATION;
 
+#ifdef DEBUCL
+    std::cerr << "Leaving clBuildProgram after program->build\n";
+#endif
     // Build program
     return program->build(options, pfn_notify, user_data, num_devices,
                           (Coal::DeviceInterface * const*)device_list);
-#ifdef DEBUCL
-    std::cerr << "Leaving clBuildProgram\n";
-#endif
 }
 
 cl_int
