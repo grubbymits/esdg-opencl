@@ -80,6 +80,9 @@ LE1Device::LE1Device(const std::string &Compiler, const std::string &SimModel,
 }
 
 LE1Device::LE1Device(const LE1Device &Device) {
+#ifdef DEBUGCL
+  std::cerr << "LE1Device Copy Constructor\n";
+#endif
   Triple = "le1";
   MaxGlobalAddr = 0xFFFF * 1024;
   NumCores = Device.numLE1s();
@@ -90,8 +93,12 @@ LE1Device::LE1Device(const LE1Device &Device) {
 
 LE1Device::~LE1Device()
 {
-  if (!p_initialized)
+
+  if (!p_initialized) {
+    if (Simulator)
+      delete Simulator;
     return;
+  }
 
   pthread_mutex_lock(&p_events_mutex);
   p_stop = true;
@@ -153,7 +160,8 @@ LE1Device::~LE1Device()
     std::cout << "Idle Cycles: " << AverageIdle << std::endl << std::endl;
   }
 
-  delete Simulator;
+  if(Simulator)
+    delete Simulator;
 
   StatsMap::iterator MapItr = ExecutionStats.begin();
   while (MapItr != ExecutionStats.end())
@@ -168,6 +176,7 @@ bool LE1Device::init()
 #endif
   if (p_initialized)
     return true;
+
   pthread_cond_init(&p_events_cond, 0);
   pthread_mutex_init(&p_events_mutex, 0);
 

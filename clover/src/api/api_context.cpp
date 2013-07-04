@@ -112,8 +112,13 @@ clCreateContextFromType(const cl_context_properties   *properties,
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
-    return clCreateContext(properties, num_devices, &devices, pfn_notify,
+    cl_context ret_val =
+      clCreateContext(properties, num_devices, &devices, pfn_notify,
                            user_data, errcode_ret);
+#ifdef DEBUGCL
+    std::cerr << "returned from clCreateContext\n";
+#endif
+    return ret_val;
 }
 
 cl_int

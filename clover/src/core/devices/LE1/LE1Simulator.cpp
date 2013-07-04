@@ -78,11 +78,6 @@ LE1Simulator::~LE1Simulator() {
 bool LE1Simulator::Initialise(std::string &Machine) {
 
   LockAccess();
-  /*
-  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
-    exit(EXIT_FAILURE);
-  }*/
   /* Setup global struct */
   /* readConf reads xml file and sets up global SYSTEM variable
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
@@ -159,7 +154,6 @@ bool LE1Simulator::Initialise(std::string &Machine) {
     }
   }
 
-  //pthread_mutex_unlock(&p_simulator_mutex);
   UnlockAccess();
   return true;
 }
@@ -167,9 +161,15 @@ bool LE1Simulator::Initialise(std::string &Machine) {
 // Save the execution statistics and resets the device
 void LE1Simulator::SaveStats() {
   // 0 = Single system
+    /* system, context, hypercontext, cluster */
+    unsigned char s = 0;
+    unsigned char c = 0;
+    unsigned char hc = 0;
+    unsigned char cl = 0;
   SYS = (systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
   LE1System = (systemT *)((size_t)galaxyT + (0 * sizeof(systemT)));
 
+  unsigned int totalHC = 0;
   for (unsigned c = 0; c < (SYS->SYSTEM_CONFIG & 0xFF); ++c) {
     contextConfig *CNT
       = (contextConfig *)((size_t)SYS->CONTEXT + (c * sizeof(contextConfig)));
@@ -179,8 +179,8 @@ void LE1Simulator::SaveStats() {
 
     for(unsigned k=0;k<((CNT->CONTEXT_CONFIG >> 4) & 0xf);k++) {
 
-      hyperContextConfig *HCNT = (hyperContextConfig *)((size_t)CNT->HCONTEXT
-                                    + (k * sizeof(hyperContextConfig)));
+  //    hyperContextConfig *HCNT = (hyperContextConfig *)((size_t)CNT->HCONTEXT
+    //                                + (k * sizeof(hyperContextConfig)));
       hyperContextT *hypercontext =
         (hyperContextT *)((size_t)context->hypercontext
                           + (k * sizeof(hyperContextT)));
@@ -189,11 +189,27 @@ void LE1Simulator::SaveStats() {
       SimulationStats NewStat(hypercontext);
       Stats.push_back(NewStat);
 
+      /*
+        // Set current hypercontext to interact with
+        insizzleAPISetCurrent(s, c, hc, cl); // (system, context, hypercontext, cluster)
+        // Write stack pointer (SGPR 1)
+        insizzleAPIWrOneSGpr(1, (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC));
+        // Set original stack pointer and stack size for Insizzle to perform stack check
+        hypercontext->initialStackPointer
+          = (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC);
+
+        // Write Program Counter
+        insizzleAPIWrPC(0x0);
+
+        ++totalHC;*/
+
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));
       hypercontext->programCounter = 0;
     }
   }
+
+  UnlockAccess();
 
 }
 

@@ -182,11 +182,14 @@ void _clInit()
   cl_context_properties cprops[3] = { CL_CONTEXT_PLATFORM,
                                       (cl_context_properties)targetPlatform, 0
                                     };
-  oclHandles.context = clCreateContextFromType(cprops, 
+  cl_context temp = clCreateContextFromType(cprops, 
                                                 CL_DEVICE_TYPE_ACCELERATOR, 
                                                 NULL, 
                                                 NULL, 
                                                 &resultCL);
+
+  std::cout << "bfs: got context\n";
+  oclHandles.context = temp;
 
   if ((resultCL != CL_SUCCESS) || (oclHandles.context == NULL))
     throw (string("InitCL()::Error: Creating Context (clCreateContextFromType)"));

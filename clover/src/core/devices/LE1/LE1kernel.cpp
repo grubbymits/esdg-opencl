@@ -1308,7 +1308,7 @@ bool LE1KernelEvent::run() {
   }
 
   p_device->SaveStats(KernelName);
-  p_device->getSimulator()->UnlockAccess();
+  //p_device->getSimulator()->UnlockAccess();
 
   // Release event
   pthread_mutex_unlock(&p_mutex);

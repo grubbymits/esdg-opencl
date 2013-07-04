@@ -35,12 +35,12 @@
 #include <core/deviceinterface.h>
 #include <core/devices/LE1/LE1device.h>
 
-unsigned TotalDevices = 4;
+unsigned TotalDevices = 1;
 Coal::LE1Device LE1Devices[] = {
-  Coal::LE1Device("scalar", "4Context_Default.xml", 4),
-  Coal::LE1Device("2w2a2m2ls1b", "4Context_Default.xml", 4),
-  Coal::LE1Device("3w3a3m3ls1b", "4Context_Default.xml", 4),
-  Coal::LE1Device("4w4a4m4ls1b", "4Context_Default.xml", 4) };
+  //Coal::LE1Device("scalar", "4Context_Default.xml", 4),
+  Coal::LE1Device("2w2a2m2ls1b", "4Context_2w2a2m2ls1b.xml", 4) } ;
+  ///Coal::LE1Device("3w3a3m3ls1b", "4Context_Default.xml", 4),
+ // Coal::LE1Device("4w4a4m4ls1b", "4Context_Default.xml", 4) };
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,
@@ -78,10 +78,7 @@ clGetDeviceIDs(cl_platform_id   platform,
         }
 
         if (num_devices) {
-#ifdef DEBUGCL
-          std::cerr << "Four devices\n";
-#endif
-          *num_devices = 4;
+          *num_devices = TotalDevices;
         }
     }
     else {
