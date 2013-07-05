@@ -69,6 +69,8 @@ class DeviceInterface : public Object
         DeviceInterface() : Object(Object::T_Device, 0) {}
         virtual ~DeviceInterface() {}
 
+        virtual bool init() = 0;
+
         /**
          * \brief Retrieve information about the device
          *

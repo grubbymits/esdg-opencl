@@ -429,9 +429,9 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   if (!WriteDataArea())
     return false;
 
-  std::string assemble = "perl " + LE1Device::scriptsDir + "secondpass.pl ";
+  std::string assemble = "perl " + LE1Device::ScriptsDir + "secondpass.pl ";
   assemble.append(CompleteFilename);
-  assemble.append(" -OPC=").append(LE1Device::incDir + "opcodes.txt");
+  assemble.append(" -OPC=").append(LE1Device::IncDir + "opcodes.txt");
 
   if (system(assemble.c_str()) != 0)
     return false;
@@ -594,7 +594,7 @@ bool LE1KernelEvent::CompileSource() {
 
   std::stringstream pre_asm_command;
   // TODO Include the script as a char array
-  pre_asm_command << "perl " << LE1Device::scriptsDir << "llvmTransform.pl "
+  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl "
     << TempAsmName
     //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
     << " > " << FinalAsmName;
@@ -1261,7 +1261,7 @@ bool LE1KernelEvent::run() {
  // TODO Use either simulator or hardware? And use variables
  // instead of hard coded parameters
   bool wasSuccess = false;
-  char* device_name = const_cast<char*>(p_device->model());
+  //char* device_name = const_cast<char*>(p_device->model());
   //p_device->getSimulator()->LockAccess();
   wasSuccess = p_device->getSimulator()->Run();
   if (!wasSuccess) {
@@ -1283,6 +1283,9 @@ bool LE1KernelEvent::run() {
       if (Arg.type()->isIntegerTy(8)) {
         p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
                                                (unsigned char*)buffer->data());
+        if (TotalSize == 1)
+          std::cerr << "Read back 1 byte: " << (unsigned) *((unsigned char*)(buffer->data()))
+            << std::endl;
       }
       // FIXME Shorts aren't handled!
 

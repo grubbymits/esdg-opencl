@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 #include <sys/mman.h>
+#include "LE1device.h"
 #include "LE1Simulator.h"
 
 #define MSB2LSBDW( x )  (         \
@@ -22,6 +23,7 @@ extern "C" {
 using namespace Coal;
 
 unsigned LE1Simulator::iteration = 0;
+bool LE1Simulator::isInitialised = false;
 
 SimulationStats::SimulationStats(hyperContextT *HyperContext) {
   TotalCycles = HyperContext->cycleCount;
@@ -74,9 +76,12 @@ LE1Simulator::~LE1Simulator() {
   }
 }
 
-bool LE1Simulator::Initialise(const char *machine) {
+bool LE1Simulator::Initialise(const std::string &Machine) {
 
   LockAccess();
+
+  if (LE1Simulator::isInitialised)
+    return false;
   /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
@@ -87,7 +92,9 @@ bool LE1Simulator::Initialise(const char *machine) {
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
      This sets up the internal registers of the LE1 as defined in the VTPRM
   */
-  if(readConf(const_cast<char*>(machine)) == -1) {
+  std::string FullPath = LE1Device::MachinesDir;
+  FullPath.append(Machine);
+  if(readConf(const_cast<char*>(FullPath.c_str())) == -1) {
     fprintf(stderr, "!!! ERROR reading machine model file !!!\n");
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;
@@ -155,6 +162,8 @@ bool LE1Simulator::Initialise(const char *machine) {
       }
     }
   }
+
+  LE1Simulator::isInitialised = true;
 
   //pthread_mutex_unlock(&p_simulator_mutex);
   UnlockAccess();
@@ -509,6 +518,11 @@ bool LE1Simulator::Run() {
       ++LE1Simulator::iteration;
     }
     system(CopyDump.str().c_str());
+  }
+
+  if (KernelNumber == 2) {
+    KernelNumber = 0;
+    ++LE1Simulator::iteration;
   }
 
   SaveStats();

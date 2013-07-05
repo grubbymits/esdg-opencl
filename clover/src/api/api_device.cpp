@@ -36,7 +36,11 @@
 #include <core/devices/LE1/LE1device.h>
 
 // TODO Add a LE1Device to this and replace the the cpu code
-static Coal::LE1Device le1device;
+const unsigned TotalDevices = 2;
+static Coal::LE1Device LE1Devices[TotalDevices] = {
+  Coal::LE1Device("2Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 2),
+  Coal::LE1Device("4Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 4)
+};
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,
@@ -66,14 +70,15 @@ clGetDeviceIDs(cl_platform_id   platform,
     // We currently implement only CPU-based acceleration
     if (device_type & (CL_DEVICE_TYPE_DEFAULT | CL_DEVICE_TYPE_ACCELERATOR))
     {
-        if(!le1device.init())
-          return CL_DEVICE_NOT_AVAILABLE;
-        
-        if (devices)
-            devices[0] = (cl_device_id)(&le1device);
+        //if(!le1device.init())
+          //return CL_DEVICE_NOT_AVAILABLE;
+        if (devices) {
+          for (unsigned i = 0; i < TotalDevices; ++i)
+            devices[i] = (cl_device_id)&LE1Devices[i];
+        }
 
         if (num_devices)
-            *num_devices = 1;
+            *num_devices = TotalDevices;
     }
     else {
       std::cerr << "DEVICE_NOT_FOUND\n";

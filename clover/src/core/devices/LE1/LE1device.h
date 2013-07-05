@@ -34,10 +34,10 @@
 #define __LE1_DEVICE_H__
 
 #include "../../deviceinterface.h"
+#include "LE1Simulator.h"
 
 #include <pthread.h>
 #include <list>
-#include <map>
 
 namespace Coal
 {
@@ -46,12 +46,6 @@ class MemObject;
 class Event;
 class Program;
 class Kernel;
-class LE1Simulator;
-class SimulationStats;
-
-typedef std::vector<SimulationStats> StatsSet;
-typedef std::map<std::string, StatsSet> StatsMap;
-
 /**
  * \brief LE1 device
  *
@@ -68,7 +62,8 @@ typedef std::map<std::string, StatsSet> StatsMap;
 class LE1Device : public DeviceInterface
 {
     public:
-        LE1Device();
+        LE1Device(const std::string &SimModel, const std::string &Target,
+                  unsigned Cores);
         ~LE1Device();
 
         /**
@@ -102,14 +97,16 @@ class LE1Device : public DeviceInterface
         const char* model() { return simulatorModel.c_str(); }
         const char* target() { return compilerTarget.c_str(); }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
-        static std::string sysDir;
-        static std::string libDir;
-        static std::string incDir;
-        static std::string machinesDir;
-        static std::string scriptsDir;
+
+        static std::string SysDir;
+        static std::string LibDir;
+        static std::string IncDir;
+        static std::string MachinesDir;
+        static std::string ScriptsDir;
+        static unsigned MaxGlobalAddr;
 
     private:
-        unsigned int p_cores, p_num_events;
+        unsigned int NumCores, p_num_events;
         std::string simulatorModel;
         std::string compilerTarget;
         float p_cpu_mhz;
@@ -129,7 +126,6 @@ class LE1Device : public DeviceInterface
         //static const unsigned global_offset_addr = 36;
         // Variables to hold the address of where a new data item can begin.
         unsigned global_base_addr;
-        unsigned max_global_addr;
         unsigned current_local_addr;
 };
 

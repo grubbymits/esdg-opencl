@@ -83,13 +83,15 @@ clCreateContextFromType(const cl_context_properties   *properties,
                         cl_int *                errcode_ret)
 {
     cl_device_id device;
+    cl_uint num_devices;
 
-    *errcode_ret = clGetDeviceIDs(0, device_type, 1, &device, 0);
+    *errcode_ret = clGetDeviceIDs(0, device_type, 1, &device, &num_devices);
 
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
-    return clCreateContext(properties, 1, &device, pfn_notify, user_data,
+    return clCreateContext(properties, num_devices, &device, pfn_notify,
+                           user_data,
                            errcode_ret);
 }
 

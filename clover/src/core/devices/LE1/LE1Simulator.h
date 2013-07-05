@@ -1,11 +1,12 @@
 #ifndef _LE1Simulator_H
 #define _LE1Simulator_H
 
+#include <map>
 #include <pthread.h>
 
-extern "C" { typedef struct systemConfig; }
-extern "C" { typedef struct systemT; }
-extern "C" { typedef struct hyperContextT; }
+extern "C" { struct systemConfig; }
+extern "C" { struct systemT; }
+extern "C" { struct hyperContextT; }
 
 namespace Coal {
 
@@ -23,14 +24,18 @@ namespace Coal {
     unsigned long MemoryAccessCount;
   };
 
+  typedef std::vector<SimulationStats> StatsSet;
+  typedef std::map<std::string, StatsSet> StatsMap;
+
   class LE1Simulator {
 
   public:
     LE1Simulator();
     ~LE1Simulator();
-    bool Initialise(const char *machine);
+    bool Initialise(const std::string &Machine);
     void SaveStats(void);
     std::vector<SimulationStats> *GetStats() { return &Stats; }
+    unsigned GetIterations() const { return LE1Simulator::iteration; }
     void ClearStats() { Stats.clear(); }
     int checkStatus(void);
     bool Run();
@@ -45,6 +50,7 @@ namespace Coal {
                      unsigned int* data);
 private:
   static unsigned iteration;
+  static bool isInitialised;
   pthread_mutex_t p_simulator_mutex;
   unsigned dram_size;
   unsigned IRAMFileSize;
@@ -52,7 +58,7 @@ private:
   unsigned KernelNumber;
   systemConfig *SYS;
   systemT *LE1System;
-  std::vector<SimulationStats> Stats;
+  StatsSet Stats;
   };
 }
 

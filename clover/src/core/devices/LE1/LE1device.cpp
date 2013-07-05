@@ -57,22 +57,26 @@
 using namespace Coal;
 
 // File locations
-std::string LE1Device::sysDir = "/opt/esdg-opencl/";
-std::string LE1Device::libDir = LE1Device::sysDir + "lib/";
-std::string LE1Device::incDir = LE1Device::sysDir + "include/";
-std::string LE1Device::machinesDir = LE1Device::sysDir + "machines/";
-std::string LE1Device::scriptsDir = LE1Device::sysDir + "scripts/";
+std::string LE1Device::SysDir = "/opt/esdg-opencl/";
+std::string LE1Device::LibDir = LE1Device::SysDir + "lib/";
+std::string LE1Device::IncDir = LE1Device::SysDir + "include/";
+std::string LE1Device::MachinesDir = LE1Device::SysDir + "machines/";
+std::string LE1Device::ScriptsDir = LE1Device::SysDir + "scripts/";
 
-LE1Device::LE1Device()
-: DeviceInterface(), p_cores(0), p_num_events(0), p_workers(0), p_stop(false),
+unsigned LE1Device::MaxGlobalAddr = 0xFFFF * 1024;
+
+LE1Device::LE1Device(const std::string &SimModel, const std::string &Target,
+                     unsigned Cores)
+: DeviceInterface(), p_num_events(0), p_workers(0), p_stop(false),
   p_initialized(false)
 {
-  Triple = "le1";
-  Simulator = new LE1Simulator();
 #ifdef DEBUGCL
-  std::cerr << "LE1Device::LE1Device\n";
+  std::cerr << "LE1Device::LE1Device at " << std::hex << this << std::endl;
 #endif
-
+  Triple = "le1";
+  simulatorModel = SimModel;
+  compilerTarget = Target;
+  NumCores = Cores;
 }
 
 // TODO Don't know where I should initialise the number of cores. For now, here.
@@ -89,16 +93,9 @@ bool LE1Device::init()
   p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
   pthread_create(&p_workers[0], 0, &worker, this);
 
-  max_global_addr = 0xFFFF * 1024;
+  Simulator = new LE1Simulator();
 
-  // Machine Configs
-  //p_cores = 1;
-  p_cores = 4;
-  //simulatorModel = LE1Device::machinesDir + "2w2a2m2ls1b.xml";
-  //simulatorModel = LE1Device::machinesDir + "2Context_2w2a2m2ls1b.xml";
-  simulatorModel = LE1Device::machinesDir + "4Context_Default.xml";
-  compilerTarget = "2w2a2m2ls1b";
-  if(!Simulator->Initialise(simulatorModel.c_str()))
+  if(!Simulator->Initialise(simulatorModel))
     return false;
 
   p_initialized = true;
@@ -128,7 +125,7 @@ LE1Device::~LE1Device()
 
   std::cout << "\n ---- Kernel Completion Report ----" << std::endl;
   std::cout << "Machine Configuration: " << simulatorModel << std::endl;
-  std::cout << "Number of cores: " << p_cores << std::endl;
+  std::cout << "Number of cores: " << NumCores << std::endl;
 
   for (StatsMap::iterator SMI = ExecutionStats.begin(),
        SME = ExecutionStats.end(); SMI != SME; ++SMI) {
@@ -157,10 +154,10 @@ LE1Device::~LE1Device()
       //std::cout << "MemoryAccessCount = " << Stats.MemoryAccessCount
         //<< std::endl << std::endl;
     }
-    AverageCycles /= p_cores;
-    AverageIdle /= p_cores;
-    AverageDecodeStalls /= p_cores;
-    AverageStalls /= p_cores;
+    AverageCycles /= NumCores;
+    AverageIdle /= NumCores;
+    AverageDecodeStalls /= NumCores;
+    AverageStalls /= NumCores;
 
     std::cout << "Average Cycles: " << AverageCycles << std::endl;
     std::cout << "  of which stalls: "
@@ -181,10 +178,11 @@ DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)
 #ifdef DEBUGCL
   std::cerr << "Entering LE1Device::createDeviceBuffer\n";
 #endif
-  if((global_base_addr + buffer->size()) > max_global_addr) {
+  if((global_base_addr + buffer->size()) > LE1Device::MaxGlobalAddr) {
     std::cerr << "Error: Device doesn't have enough free memory to allocate \
       buffer. global_base = " << global_base_addr << ", buffer size = " <<
-      buffer->size() << " and max_global = " << max_global_addr << std::endl;
+      buffer->size() << " and max_global = " << LE1Device::MaxGlobalAddr
+      << std::endl;
     exit(1);
   }
   else {
@@ -209,7 +207,6 @@ void LE1Device::incrGlobalBaseAddr(unsigned mem_incr) {
 void LE1Device::SaveStats(std::string &Kernel) {
   std::cout << "SaveStats\n";
   StatsSet *NewStats = Simulator->GetStats();
-  std::cout << "Size of NewStats = " << NewStats->size() << std::endl;
 
   if (ExecutionStats.find(Kernel) == ExecutionStats.end()) {
     std::cout << "Making a new pair\n";
@@ -217,8 +214,7 @@ void LE1Device::SaveStats(std::string &Kernel) {
   }
   else {
     StatsSet OldSet = ExecutionStats[Kernel];
-    std::cout << "Adding to old pair. Size of old pair = " << OldSet.size()
-      << std::endl;
+    std::cout << "Adding to old set" << std::endl;
     OldSet.insert(OldSet.end(), NewStats->begin(), NewStats->end());
   }
 
@@ -435,7 +431,7 @@ Event *LE1Device::getEvent(bool &stop)
 
 unsigned int LE1Device::numLE1s() const
 {
-    return p_cores;
+    return NumCores;
 }
 
 float LE1Device::cpuMhz() const
