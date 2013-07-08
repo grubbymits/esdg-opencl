@@ -37,9 +37,9 @@
 
 // TODO Add a LE1Device to this and replace the the cpu code
 const unsigned TotalDevices = 2;
-static Coal::LE1Device LE1Devices[TotalDevices] = {
+static Coal::LE1Device LE1Devices[] = {
   Coal::LE1Device("2Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 2),
-  Coal::LE1Device("4Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 4)
+  Coal::LE1Device("2Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 2)
 };
 
 cl_int

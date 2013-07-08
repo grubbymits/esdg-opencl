@@ -267,6 +267,7 @@ bool LE1Simulator::Run() {
 
   /* turn printout on */
   PRINT_OUT = 0;
+  bool MEM_DUMP = true;
 
     /* Load IRAM */
     {
@@ -503,7 +504,7 @@ bool LE1Simulator::Run() {
   }
 
   // Debugging information
-  if (PRINT_OUT) { 
+  if (MEM_DUMP) { 
     if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
                   LE1System->dram) == -1) {
       pthread_mutex_unlock(&p_simulator_mutex);

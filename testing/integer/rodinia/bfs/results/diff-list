@@ -1,0 +1,91 @@
+------------------------------------ Kernel 1 --------------------------------------
+
+------------------------------------ Kernel 2 --------------------------------------
+
+diff single-device-results/memoryDump_2-0.dat dual-device-results/memoryDump_2-0.dat 
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0x01ffff80
+
+diff single-device-results/memoryDump_2-1.dat dual-device-results/memoryDump_2-1.dat 
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0x01ffff80
+
+diff single-device-results/memoryDump_2-2.dat dual-device-results/memoryDump_2-2.dat 
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0x01ffff80
+
+diff single-device-results/memoryDump_2-3.dat dual-device-results/memoryDump_2-3.dat 
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0x01ffff80
+
+diff single-device-results/memoryDump_2-4.dat dual-device-results/memoryDump_2-4.dat 
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0x01ffff80
+
+diff single-device-results/memoryDump_2-4.dat dual-device-results/memoryDump_2-4.dat 
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0x01ffff80
+
+diff single-device-results/memoryDump_2-5.dat dual-device-results/memoryDump_2-5.dat 
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0x01ffff80
+
+diff single-device-results/memoryDump_2-6.dat dual-device-results/memoryDump_2-6.dat 
+3090c3090
+< Location  0x00003040 (12352)  - 0x01000000
+---
+> Location  0x00003040 (12352)  - 0x01ffff80
+
+diff single-device-results/memoryDump_2-6.dat dual-device-results/memoryDump_2-7.dat 
+604c604
+< Location	0x00000968 (2408)	-	0x00000100
+---
+> Location	0x00000968 (2408)	-	0x00000000
+713c713
+< Location	0x00000b1c (2844)	-	0x01000000
+---
+> Location	0x00000b1c (2844)	-	0x00000000
+3090c3090
+< Location	0x00003040 (12352)	-	0x01000000
+---
+> Location	0x00003040 (12352)	-	0xffffff80
+1046339,1046340c1046339,1046340
+< Location	0x003fdd04 (4185348)	-	0x00000000
+< Location	0x003fdd08 (4185352)	-	0x00000000
+---
+> Location	0x003fdd04 (4185348)	-	0x00000008
+> Location	0x003fdd08 (4185352)	-	0x00000001
+1046355,1046356c1046355,1046356
+< Location	0x003fdd44 (4185412)	-	0x00000008
+< Location	0x003fdd48 (4185416)	-	0x00000001
+---
+> Location	0x003fdd44 (4185412)	-	0x00000000
+> Location	0x003fdd48 (4185416)	-	0x00000000
+1048387,1048388c1048387,1048388
+< Location	0x003ffd04 (4193540)	-	0x00000000
+< Location	0x003ffd08 (4193544)	-	0x00000000
+---
+> Location	0x003ffd04 (4193540)	-	0x00000008
+> Location	0x003ffd08 (4193544)	-	0x00000001
+1048403,1048404c1048403,1048404
+< Location	0x003ffd44 (4193604)	-	0x00000008
+< Location	0x003ffd48 (4193608)	-	0x00000001
+---
+> Location	0x003ffd44 (4193604)	-	0x00000000
+> Location	0x003ffd48 (4193608)	-	0x00000000
+
+
