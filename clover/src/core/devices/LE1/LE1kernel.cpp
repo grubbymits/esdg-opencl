@@ -624,7 +624,6 @@ bool LE1KernelEvent::WriteDataArea() {
   std::cerr << "Entering LE1KernelEvent::WriteDataArea\n";
 #endif
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
-  std::cout << CopyCommand << std::endl;
   system(CopyCommand.c_str());
 
   std::ofstream FinalSource;
@@ -811,6 +810,7 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
 
     Data = buffer->data();
     buffer->setAddr(addr);
+
 #ifdef DEBUGCL
     std::cerr << "Set buffer arg address to " << addr << std::endl;
 #endif
@@ -1205,7 +1205,7 @@ void LE1KernelEvent::PrintData(const void* data,
       case sizeof(char): {
         // Write a zero padded array and integer value to fill a whole line
         const char* remaining_data = static_cast<const char*>(data) + offset;
-        remaining_data = &remaining_data[index+4];
+        //remaining_data = &remaining_data[index+4];
         unsigned padded_data = 0;
         char padded_array[4] = {0};
         for(unsigned i = 0; i < remaining_bytes; ++i) {
@@ -1226,7 +1226,7 @@ void LE1KernelEvent::PrintData(const void* data,
       case sizeof(short): {
         // Write a zero padded array and integer value to fill a whole line
         const short* remaining_data = static_cast<const short*>(data) + offset;
-        remaining_data = &remaining_data[index+4];
+        //remaining_data = &remaining_data[index+4];
         unsigned padded_data = 0;
         short padded_array[2] = {0};
         for(unsigned i = 0; i < (remaining_bytes >> 1); ++i) {

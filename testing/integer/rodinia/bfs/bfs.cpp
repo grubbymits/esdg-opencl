@@ -213,7 +213,7 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
                           << (unsigned) h_over << std::endl;
                         ++k;
 
-			}while(h_over && (k < 8));
+			}while(h_over); //&& (k < 8));
                 std::cout << "----------- FINISHED LOOP ------------------\n";
   DataLine << "Number of iterations = " << k << std::endl;
   GPUResults << DataLine.str();
