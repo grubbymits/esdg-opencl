@@ -36,10 +36,13 @@
 #include <core/devices/LE1/LE1device.h>
 
 // TODO Add a LE1Device to this and replace the the cpu code
-const unsigned TotalDevices = 2;
-static Coal::LE1Device LE1Devices[] = {
+const unsigned TotalDevices = 5;
+static Coal::LE1Device LE1Devices[TotalDevices] = {
+  Coal::LE1Device("2w2a2m2ls1b.xml", "2w2a2m2ls1b", 1),
   Coal::LE1Device("2Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 2),
-  Coal::LE1Device("2Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 2)
+  Coal::LE1Device("4Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 4),
+  Coal::LE1Device("8Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 8),
+  Coal::LE1Device("16Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 16)
 };
 
 cl_int

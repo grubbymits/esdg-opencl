@@ -5,9 +5,12 @@ extern int BufferArg_3;
 int main(void) {
   for (unsigned z = 0; z < 1; ++z) {
 __builtin_le1_set_group_id_2(z);
-      for (unsigned x = 0; x < 8; ++x) {
+    for (unsigned y = 0; y < 1; ++y) {
+      __builtin_le1_set_group_id_1(y);
+      for (unsigned x = 0; x < 16; ++x) {
         __builtin_le1_set_group_id_0(x);
         BFS_2(&BufferArg_0, &BufferArg_1, &BufferArg_2, &BufferArg_3, 4096);
+}
 }
 }
 return 0;

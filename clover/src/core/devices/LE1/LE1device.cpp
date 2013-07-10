@@ -65,7 +65,7 @@ std::string LE1Device::ScriptsDir = LE1Device::SysDir + "scripts/";
 
 unsigned LE1Device::MaxGlobalAddr = 0xFFFF * 1024;
 
-LE1Device::LE1Device(const std::string &SimModel, const std::string &Target,
+LE1Device::LE1Device(const std::string SimModel, const std::string Target,
                      unsigned Cores)
 : DeviceInterface(), p_num_events(0), p_workers(0), p_stop(false),
   p_initialized(false)
