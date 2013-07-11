@@ -87,16 +87,17 @@ bool LE1Device::init()
 #endif
   if (p_initialized)
     return true;
+
   pthread_cond_init(&p_events_cond, 0);
   pthread_mutex_init(&p_events_mutex, 0);
-
-  p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
-  pthread_create(&p_workers[0], 0, &worker, this);
 
   Simulator = new LE1Simulator();
 
   if(!Simulator->Initialise(simulatorModel))
     return false;
+
+  p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
+  pthread_create(&p_workers[0], 0, &worker, this);
 
   p_initialized = true;
 #ifdef DEBUGCL
@@ -111,10 +112,12 @@ LE1Device::~LE1Device()
     return;
 
   pthread_mutex_lock(&p_events_mutex);
+  std::cout << "LOCKED P_EVENTS_MUTEX in ~LE1Device\n";
   p_stop = true;
 
   pthread_cond_broadcast(&p_events_cond);
   pthread_mutex_unlock(&p_events_mutex);
+  std::cout << "UNLOCKED P_EVENTS_MUTEX in ~LE1Device\n";
 
   // for (unsigned int i = 0; i < numLE1s(); ++i)
   //  pthread_join(p_workers[i], 0);
@@ -352,12 +355,16 @@ void LE1Device::freeEventDeviceData(Event *event)
 
 void LE1Device::pushEvent(Event *event)
 {
+  if (!p_initialized) {
+    std::cerr << "ERROR: Trying to pushEvent, but device isn't initalised!!\n";
+  }
 #ifdef DEBUGCL
   std::cerr << "Entering LE1Device::pushEvent in thread " << pthread_self()
     << std::endl;
 #endif
     // Add an event in the list
     pthread_mutex_lock(&p_events_mutex);
+    std::cout << "LOCKED P_EVENTS_MUTEX in pushEvent\n";
 
     p_events.push_back(event);
     p_num_events++;                 // Way faster than STL list::size() !
@@ -367,6 +374,7 @@ void LE1Device::pushEvent(Event *event)
 
     pthread_cond_broadcast(&p_events_cond);
     pthread_mutex_unlock(&p_events_mutex);
+    std::cout << "UNLOCKED P_EVENTS_MUTEX in pushEvent\n";
 #ifdef DEBUGCL
   std::cerr << "Leaving LE1Device::pushEvent\n";
 #endif
@@ -374,16 +382,23 @@ void LE1Device::pushEvent(Event *event)
 
 Event *LE1Device::getEvent(bool &stop)
 {
+  if (!p_initialized) {
+    std::cerr << "ERROR: Trying to getEvent, but device isn't initialised!!\n";
+    return NULL;
+  }
+
 #ifdef DEBUGCL
   std::cerr << "Entering LE1Device::getEvent in thread " << pthread_self()
     << std::endl;
 #endif
     // Return the first event in the list, if any. Remove it if it is a
     // single-shot event.
+
     if (pthread_mutex_lock(&p_events_mutex) != 0) {
       std::cerr << "p_events_mutex lock failed!\n";
       return NULL;
     }
+    std::cout << "LOCKED P_EVENTS_MUTEX in getEvent\n";
 
     while (p_num_events == 0 && !p_stop) {
 #ifdef DEBUGCL
@@ -395,6 +410,7 @@ Event *LE1Device::getEvent(bool &stop)
     if (p_stop)
     {
         pthread_mutex_unlock(&p_events_mutex);
+        std::cout << "UNLOCKED P_EVENTS_MUTEX in getEvent\n";
         stop = true;
         return 0;
     }
@@ -421,6 +437,7 @@ Event *LE1Device::getEvent(bool &stop)
     }
 
     pthread_mutex_unlock(&p_events_mutex);
+    std::cout << "UNLOCKED P_EVENTS_MUTEX in getEvent\n";
 
 #ifdef DEBUGCL
     std::cerr << "Leaving LE1Device::getEvent, returning event at "

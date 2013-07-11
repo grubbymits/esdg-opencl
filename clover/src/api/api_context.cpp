@@ -72,6 +72,9 @@ clCreateContext(const cl_context_properties  *properties,
         return 0;
     }
 
+#ifdef DEBUGCL
+    std::cerr << "Leaving clCreateContext\n";
+#endif
     return (_cl_context *)ctx;
 }
 
@@ -82,6 +85,9 @@ clCreateContextFromType(const cl_context_properties   *properties,
                         void *                  user_data,
                         cl_int *                errcode_ret)
 {
+#ifdef DEBUGCL
+  std::cerr << "Entering clCreateContextFromType\n";
+#endif
     cl_device_id device;
     cl_uint num_devices;
 
@@ -90,9 +96,14 @@ clCreateContextFromType(const cl_context_properties   *properties,
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
-    return clCreateContext(properties, num_devices, &device, pfn_notify,
+    cl_context Context = 
+      clCreateContext(properties, num_devices, &device, pfn_notify,
                            user_data,
                            errcode_ret);
+#ifdef DEBUGCL
+    std::cerr << "Leaving clCreateContextFromType\n";
+#endif
+    return Context;
 }
 
 cl_int

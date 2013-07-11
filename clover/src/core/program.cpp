@@ -303,7 +303,6 @@ cl_int Program::loadSources(cl_uint count, const char **strings,
     p_type = Source;
     p_state = Loaded;
 #ifdef DEBUGCL
-    std::cerr << p_source << std::endl;
   std::cerr << "Leaving Program::loadSources\n";
 #endif
 

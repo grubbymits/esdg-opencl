@@ -54,7 +54,6 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
   InitKernelSource = std::string(RewriteBuf->begin(), RewriteBuf->end());
 #ifdef DEBUGCL
   std::cerr << "Finished initialising workgroup\n";
-  std::cerr << InitKernelSource;
 #endif
 
   std::ofstream init_kernel;
@@ -87,7 +86,7 @@ bool WorkitemCoarsen::HandleBarriers() {
   //final_kernel.close();
 
 #ifdef DEBUGCL
-  std::cerr << "Finalised kernel:\n" << FinalKernel;
+  std::cerr << "Finalised kernel:\n";
 #endif
 
   return true;
