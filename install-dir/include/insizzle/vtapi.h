@@ -204,7 +204,7 @@ typedef enum {
 //=============================================================================
 // Major system parameters (MAX)
 #define MASTERCFG_SYSTEMS_MAX 1
-#define MASTERCFG_CONTEXTS_MAX 0x4
+#define MASTERCFG_CONTEXTS_MAX 0x10
 #define MASTERCFG_CLUST_TEMPL_MAX 0x1
 #define MASTERCFG_HYPERCONTEXTS_MAX 0x1
 

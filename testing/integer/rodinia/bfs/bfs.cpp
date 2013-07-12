@@ -272,6 +272,7 @@ int main(int argc, char * argv[])
 	FILE *fp;
 	Node* h_graph_nodes;
 	char *h_graph_mask, *h_updating_graph_mask, *h_graph_visited;
+        for (unsigned i = 0; i < 5; ++i) {
 	try{
 		char *input_f;
 		if(argc!=2){
@@ -378,6 +379,8 @@ int main(int argc, char * argv[])
 		free(h_updating_graph_mask);
 		free(h_graph_visited);		
 	}
+        ++device_id_inused;
+        }
 		
     return 0;
 }

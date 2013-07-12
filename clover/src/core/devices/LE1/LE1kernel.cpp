@@ -437,10 +437,11 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
     return false;
   else {
     p_event->kernel()->SetBuilt();
+    /*
     // delete the intermediate files
     std::string clean = "rm " + OriginalSourceName + " " + CoarsenedSourceName
       + " " + CoarsenedBCName + " " + TempAsmName;
-    system(clean.c_str());
+    system(clean.c_str());*/
     return true;
   }
 }

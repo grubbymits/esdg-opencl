@@ -50,7 +50,7 @@ namespace Coal {
                      unsigned int* data);
 private:
   static unsigned iteration;
-  static bool isInitialised;
+  bool isInitialised;
   pthread_mutex_t p_simulator_mutex;
   unsigned dram_size;
   unsigned IRAMFileSize;

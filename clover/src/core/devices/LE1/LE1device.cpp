@@ -93,8 +93,10 @@ bool LE1Device::init()
 
   Simulator = new LE1Simulator();
 
-  if(!Simulator->Initialise(simulatorModel))
+  if(!Simulator->Initialise(simulatorModel)) {
+    std::cerr << "ERROR: Failed to initialise simulator!\n";
     return false;
+  }
 
   p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
   pthread_create(&p_workers[0], 0, &worker, this);
@@ -112,12 +114,10 @@ LE1Device::~LE1Device()
     return;
 
   pthread_mutex_lock(&p_events_mutex);
-  std::cout << "LOCKED P_EVENTS_MUTEX in ~LE1Device\n";
   p_stop = true;
 
   pthread_cond_broadcast(&p_events_cond);
   pthread_mutex_unlock(&p_events_mutex);
-  std::cout << "UNLOCKED P_EVENTS_MUTEX in ~LE1Device\n";
 
   // for (unsigned int i = 0; i < numLE1s(); ++i)
   //  pthread_join(p_workers[i], 0);
@@ -208,16 +208,13 @@ void LE1Device::incrGlobalBaseAddr(unsigned mem_incr) {
 }
 
 void LE1Device::SaveStats(std::string &Kernel) {
-  std::cout << "SaveStats\n";
   StatsSet *NewStats = Simulator->GetStats();
 
   if (ExecutionStats.find(Kernel) == ExecutionStats.end()) {
-    std::cout << "Making a new pair\n";
     ExecutionStats.insert(std::make_pair(Kernel, *NewStats));
   }
   else {
     StatsSet OldSet = ExecutionStats[Kernel];
-    std::cout << "Adding to old set" << std::endl;
     OldSet.insert(OldSet.end(), NewStats->begin(), NewStats->end());
   }
 
@@ -364,7 +361,6 @@ void LE1Device::pushEvent(Event *event)
 #endif
     // Add an event in the list
     pthread_mutex_lock(&p_events_mutex);
-    std::cout << "LOCKED P_EVENTS_MUTEX in pushEvent\n";
 
     p_events.push_back(event);
     p_num_events++;                 // Way faster than STL list::size() !
@@ -374,7 +370,6 @@ void LE1Device::pushEvent(Event *event)
 
     pthread_cond_broadcast(&p_events_cond);
     pthread_mutex_unlock(&p_events_mutex);
-    std::cout << "UNLOCKED P_EVENTS_MUTEX in pushEvent\n";
 #ifdef DEBUGCL
   std::cerr << "Leaving LE1Device::pushEvent\n";
 #endif
@@ -398,7 +393,6 @@ Event *LE1Device::getEvent(bool &stop)
       std::cerr << "p_events_mutex lock failed!\n";
       return NULL;
     }
-    std::cout << "LOCKED P_EVENTS_MUTEX in getEvent\n";
 
     while (p_num_events == 0 && !p_stop) {
 #ifdef DEBUGCL
@@ -410,7 +404,6 @@ Event *LE1Device::getEvent(bool &stop)
     if (p_stop)
     {
         pthread_mutex_unlock(&p_events_mutex);
-        std::cout << "UNLOCKED P_EVENTS_MUTEX in getEvent\n";
         stop = true;
         return 0;
     }
@@ -437,7 +430,6 @@ Event *LE1Device::getEvent(bool &stop)
     }
 
     pthread_mutex_unlock(&p_events_mutex);
-    std::cout << "UNLOCKED P_EVENTS_MUTEX in getEvent\n";
 
 #ifdef DEBUGCL
     std::cerr << "Leaving LE1Device::getEvent, returning event at "

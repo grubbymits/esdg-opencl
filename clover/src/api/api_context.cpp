@@ -88,16 +88,18 @@ clCreateContextFromType(const cl_context_properties   *properties,
 #ifdef DEBUGCL
   std::cerr << "Entering clCreateContextFromType\n";
 #endif
-    cl_device_id device;
+  const cl_uint num_entries = 5;
+    cl_device_id device[num_entries];
     cl_uint num_devices;
 
-    *errcode_ret = clGetDeviceIDs(0, device_type, 1, &device, &num_devices);
+    *errcode_ret = clGetDeviceIDs(0, device_type, num_entries, device,
+                                  &num_devices);
 
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
     cl_context Context = 
-      clCreateContext(properties, num_devices, &device, pfn_notify,
+      clCreateContext(properties, num_devices, device, pfn_notify,
                            user_data,
                            errcode_ret);
 #ifdef DEBUGCL

@@ -23,7 +23,6 @@ extern "C" {
 using namespace Coal;
 
 unsigned LE1Simulator::iteration = 0;
-bool LE1Simulator::isInitialised = false;
 
 SimulationStats::SimulationStats(hyperContextT *HyperContext) {
   TotalCycles = HyperContext->cycleCount;
@@ -53,6 +52,7 @@ LE1Simulator::LE1Simulator() {
   pthread_mutex_init(&p_simulator_mutex, 0);
   dram_size = 0;
   KernelNumber = 0;
+  isInitialised = false;
 }
 
 LE1Simulator::~LE1Simulator() {
@@ -80,8 +80,10 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
 
   LockAccess();
 
-  if (LE1Simulator::isInitialised)
+  if (LE1Simulator::isInitialised) {
+    std::cerr << "ERROR: Simulator is already initialised!\n";
     return false;
+  }
   /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
@@ -163,7 +165,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     }
   }
 
-  LE1Simulator::isInitialised = true;
+  isInitialised = true;
 
   //pthread_mutex_unlock(&p_simulator_mutex);
   UnlockAccess();
@@ -194,7 +196,6 @@ void LE1Simulator::SaveStats() {
       // Save the execution statistics
       SimulationStats NewStat(hypercontext);
       Stats.push_back(NewStat);
-      std::cout << "Pushing back NewStats\n";
 
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));
@@ -267,7 +268,7 @@ bool LE1Simulator::Run() {
 
   /* turn printout on */
   PRINT_OUT = 0;
-  bool MEM_DUMP = true;
+  bool MEM_DUMP = false;
 
     /* Load IRAM */
     {

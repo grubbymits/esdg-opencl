@@ -199,7 +199,6 @@ bool Compiler::compile(std::string &triple, std::string &name,
     p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
         s_log, &p_compiler.getDiagnosticOpts()));
 
-    std::cout << source << std::endl;
     p_compiler.getPreprocessorOpts()
       .addRemappedFile(name, llvm::MemoryBuffer::getMemBuffer(source));
 
