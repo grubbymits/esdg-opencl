@@ -127,6 +127,8 @@ class LE1Device : public DeviceInterface
         // Variables to hold the address of where a new data item can begin.
         unsigned global_base_addr;
         unsigned current_local_addr;
+    private:
+        static bool isEnding;
 };
 
 }

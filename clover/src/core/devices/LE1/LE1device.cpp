@@ -64,6 +64,7 @@ std::string LE1Device::MachinesDir = LE1Device::SysDir + "machines/";
 std::string LE1Device::ScriptsDir = LE1Device::SysDir + "scripts/";
 
 unsigned LE1Device::MaxGlobalAddr = 0xFFFF * 1024;
+bool LE1Device::isEnding = false;
 
 LE1Device::LE1Device(const std::string SimModel, const std::string Target,
                      unsigned Cores)
@@ -126,9 +127,10 @@ LE1Device::~LE1Device()
   pthread_mutex_destroy(&p_events_mutex);
   pthread_cond_destroy(&p_events_cond);
 
-  std::cout << "\n ---- Kernel Completion Report ----" << std::endl;
-  std::cout << "Machine Configuration: " << simulatorModel << std::endl;
-  std::cout << "Number of cores: " << NumCores << std::endl;
+  //std::cout << "\n ---- Kernel Completion Report ----" << std::endl;
+  //std::cout << "Machine Configuration: " << simulatorModel << std::endl;
+  //std::cout << "Number of cores: " << NumCores << std::endl;
+
 
   for (StatsMap::iterator SMI = ExecutionStats.begin(),
        SME = ExecutionStats.end(); SMI != SME; ++SMI) {
@@ -139,6 +141,9 @@ LE1Device::~LE1Device()
     unsigned AverageStalls = 0;
     unsigned AverageIdle = 0;
     unsigned AverageDecodeStalls = 0;
+    unsigned AverageBranchesTaken = 0;
+    unsigned AverageBranchesNotTaken = 0;
+    unsigned KernelIterations = 0;
     for (StatsSet::iterator SI = SMI->second.begin(),
          SE = SMI->second.end(); SI != SE; ++SI) {
       SimulationStats Stats = *SI;
@@ -146,27 +151,42 @@ LE1Device::~LE1Device()
       AverageStalls += Stats.Stalls;
       AverageIdle += Stats.IdleCycles;
       AverageDecodeStalls += Stats.DecodeStalls;
-      //std::cout << "Total Cycles = " << Stats.TotalCycles << std::endl;
-      //std::cout << "Stalls = " << Stats.Stalls << std::endl;
-      //std::cout << "NOPs = " << Stats.NOPs << std::endl;
-      //std::cout << "Idle = " << Stats.IdleCycles << std::endl;
-      //std::cout << "DecodeStalls = " << Stats.DecodeStalls << std::endl;
-      //std::cout << "BranchesTaken = " << Stats.BranchesTaken << std::endl;
-      //std::cout << "ControlFlowChange = " << Stats.ControlFlowChange
-        //<< std::endl;
-      //std::cout << "MemoryAccessCount = " << Stats.MemoryAccessCount
-        //<< std::endl << std::endl;
+      AverageBranchesTaken += Stats.BranchesTaken;
+      AverageBranchesNotTaken += Stats.BranchesNotTaken;
+      ++KernelIterations;
     }
-    AverageCycles /= NumCores;
-    AverageIdle /= NumCores;
-    AverageDecodeStalls /= NumCores;
-    AverageStalls /= NumCores;
+    AverageCycles /= KernelIterations;
+    AverageIdle /= KernelIterations;
+    AverageDecodeStalls /= KernelIterations;
+    AverageStalls /= KernelIterations;
+    AverageBranchesTaken /= KernelIterations;
+    AverageBranchesNotTaken /= KernelIterations;
 
-    std::cout << "Average Cycles: " << AverageCycles << std::endl;
-    std::cout << "  of which stalls: "
-      << AverageStalls << "\n   including " << AverageDecodeStalls
-      << " decode stalls." << std::endl;
-    std::cout << "Idle Cycles = " << AverageIdle << std::endl << std::endl;
+    // Write results to a CSV file
+    // NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
+    // If this is the first device to be destructed, add column headers to the
+    // files.
+    std::ostringstream Line;
+    if (!LE1Device::isEnding) {
+      Line << "Contexts, Total Cycles, Total Stalls, Decode Stalls," 
+        << " Branches Taken, Branches not Taken\n";
+    }
+    Line << NumCores << ", " << AverageCycles << ", " << AverageStalls << ", "
+      << AverageDecodeStalls << ", " << AverageBranchesTaken << ", "
+      << AverageBranchesNotTaken << std::endl;
+
+    std::ofstream Results;
+    std::string filename = SMI->first;
+    filename.append(".csv");
+    Results.open(filename.c_str(), std::ios_base::app);
+    Results << Line.str();
+    Results.close();
+
+    //std::cout << "Average Cycles: " << AverageCycles << std::endl;
+    //std::cout << "  of which stalls: "
+      //<< AverageStalls << "\n   including " << AverageDecodeStalls
+      //<< " decode stalls." << std::endl;
+    //std::cout << "Idle Cycles = " << AverageIdle << std::endl << std::endl;
   }
 
   delete Simulator;
@@ -174,6 +194,8 @@ LE1Device::~LE1Device()
   StatsMap::iterator MapItr = ExecutionStats.begin();
   while (MapItr != ExecutionStats.end())
     ExecutionStats.erase(MapItr++);
+
+  LE1Device::isEnding = true;
 }
 
 DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)
