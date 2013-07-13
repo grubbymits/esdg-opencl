@@ -202,15 +202,12 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
   unsigned Opcode = Node->getOpcode();
   DebugLoc dl = Node->getDebugLoc();
   if (Node->isTargetOpcode())
-    std::cout << "Selecting " << TLI.getTargetNodeName(Node->getOpcode())
-      << std::endl;
 
   // Dump information about the Node being selected
   DEBUG(errs() << "Selecting: "; Node->dump(CurDAG); errs() << "\n");
 
   // If we have a custom node, we already have selected!
   if (Node->isMachineOpcode()) {
-    std::cout << "isMachineOpcode\n";
     DEBUG(errs() << "== "; Node->dump(CurDAG); errs() << "\n");
     return NULL;
   }
@@ -366,7 +363,6 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     break;
   }
   case LE1ISD::SET_ATTR: {
-    std::cout << "LE1ISD::SET_ATTR\n";
     SDValue Chain = Node->getOperand(0);
     SDValue Value = Node->getOperand(1);
     SDValue Addr = Node->getOperand(2);

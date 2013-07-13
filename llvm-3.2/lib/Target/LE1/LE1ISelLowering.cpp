@@ -895,7 +895,6 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
 SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
                                                    SelectionDAG &DAG) const {
   //DEBUG(dbgs() << "LowerINTRINISIC_WO_CHAIN\n");
-  std::cout << "LowerINTRINSIC_WO_CHAIN\n";
   DebugLoc dl = Op.getDebugLoc();
   unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(0))->getZExtValue();
 
@@ -947,7 +946,6 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
 
 SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
                                                  SelectionDAG &DAG) const {
-  std::cout << "Lowering Intrinsic with chain\n";
   DebugLoc dl = Op.getDebugLoc();
   unsigned IntNo = cast<ConstantSDNode>(Op.getOperand(1))->getZExtValue();
   SDValue Chain = Op.getOperand(0);
@@ -994,7 +992,6 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
     break;
   }
   case Intrinsic::le1_set_group_id_2: {
-    std::cout << "Lowering le1_set_group_id_2\n";
     SDValue GroupId = Op.getOperand(2);
     SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
                                 DAG.getTargetConstant(4, MVT::i32));
