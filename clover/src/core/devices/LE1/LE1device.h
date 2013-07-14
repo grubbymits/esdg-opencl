@@ -95,7 +95,7 @@ class LE1Device : public DeviceInterface
 
         unsigned int numLE1s() const;   /*!< \brief Number of logical LE1 cores on the system */
         const char* model() { return simulatorModel.c_str(); }
-        const char* target() { return compilerTarget.c_str(); }
+        const char* target() { return CPU.c_str(); }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
 
         static std::string SysDir;
@@ -108,7 +108,6 @@ class LE1Device : public DeviceInterface
     private:
         unsigned int NumCores, p_num_events;
         std::string simulatorModel;
-        std::string compilerTarget;
         float p_cpu_mhz;
         pthread_t *p_workers;
         LE1Simulator* Simulator;
@@ -127,8 +126,6 @@ class LE1Device : public DeviceInterface
         // Variables to hold the address of where a new data item can begin.
         unsigned global_base_addr;
         unsigned current_local_addr;
-    private:
-        static bool isEnding;
 };
 
 }

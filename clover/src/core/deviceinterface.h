@@ -166,8 +166,11 @@ class DeviceInterface : public Object
 
         virtual std::string &getTriple() { return Triple; }
 
+        virtual std::string &getCPU() { return CPU; }
+
     protected:
         std::string Triple;
+        std::string CPU;
 };
 
 /**

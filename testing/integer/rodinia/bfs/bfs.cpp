@@ -272,10 +272,9 @@ int main(int argc, char * argv[])
 	FILE *fp;
 	Node* h_graph_nodes;
 	char *h_graph_mask, *h_updating_graph_mask, *h_graph_visited;
-        for (unsigned i = 0; i < 5; ++i) {
 	try{
 		char *input_f;
-		if(argc!=2){
+		if(argc!=3){
 		  Usage(argc, argv);
 		  exit(0);
 		}
@@ -288,6 +287,13 @@ int main(int argc, char * argv[])
 		  printf("Error Reading graph file\n");
 		  return 0;
 		}
+
+                std::istringstream iss(argv[2]);
+                if (!(iss >> device_id_inused)) {
+                  printf("Error reading device number\n");
+                  return 0;
+                }
+                std::cout << "device id = " << device_id_inused << std::endl;
 
 		int source = 0;
 
@@ -379,8 +385,6 @@ int main(int argc, char * argv[])
 		free(h_updating_graph_mask);
 		free(h_graph_visited);		
 	}
-        ++device_id_inused;
-        }
 		
     return 0;
 }

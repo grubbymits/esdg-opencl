@@ -38,6 +38,9 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <llvm/Support/raw_ostream.h>
 
+#define CLANG_RESOURCE_DIR "/opt/esdg-opencl/lib/clang/3.2/"
+#define LIBCLC_INCLUDE_DIR "/opt/esdg-opencl/include"
+
 namespace llvm
 {
     class MemoryBuffer;
@@ -73,7 +76,12 @@ class Compiler
         bool AreadyCompiled(std::string &name);
 
         bool produceAsm(const char* input,
-                        const char* output);
+                        const char* output,
+                        std::string &cpu);
+
+        llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
+        bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind);
+        bool CompileToAssembly(std::string &Filename, llvm::Module *Code);
         /**
          * \brief Compile \p source to produce a LLVM module
          * \param options options given to the compiler, described in the OpenCL spec
@@ -83,7 +91,7 @@ class Compiler
          * \sa log()
          */
         //bool compile(const std::string &options, llvm::MemoryBuffer *source);
-        bool compile(std::string &triple, std::string &name,
+        bool compile(std::string &name,
                      std::string &source);
 
         /**
@@ -131,6 +139,8 @@ class Compiler
         std::vector<std::string>PreviousKernels;
 
         std::string p_log, p_options;
+        std::string TargetTriple;
+        std::string CPU;
         llvm::raw_string_ostream p_log_stream;
         clang::TextDiagnosticPrinter *p_log_printer;
 };

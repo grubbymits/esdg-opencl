@@ -64,7 +64,6 @@ std::string LE1Device::MachinesDir = LE1Device::SysDir + "machines/";
 std::string LE1Device::ScriptsDir = LE1Device::SysDir + "scripts/";
 
 unsigned LE1Device::MaxGlobalAddr = 0xFFFF * 1024;
-bool LE1Device::isEnding = false;
 
 LE1Device::LE1Device(const std::string SimModel, const std::string Target,
                      unsigned Cores)
@@ -76,7 +75,7 @@ LE1Device::LE1Device(const std::string SimModel, const std::string Target,
 #endif
   Triple = "le1";
   simulatorModel = SimModel;
-  compilerTarget = Target;
+  CPU = Target;
   NumCores = Cores;
 }
 
@@ -167,7 +166,10 @@ LE1Device::~LE1Device()
     // If this is the first device to be destructed, add column headers to the
     // files.
     std::ostringstream Line;
-    if (!LE1Device::isEnding) {
+    std::string filename = SMI->first;
+    filename.append(".csv");
+
+    if(!std::ifstream(filename.c_str())) {
       Line << "Contexts, Total Cycles, Total Stalls, Decode Stalls," 
         << " Branches Taken, Branches not Taken\n";
     }
@@ -176,8 +178,6 @@ LE1Device::~LE1Device()
       << AverageBranchesNotTaken << std::endl;
 
     std::ofstream Results;
-    std::string filename = SMI->first;
-    filename.append(".csv");
     Results.open(filename.c_str(), std::ios_base::app);
     Results << Line.str();
     Results.close();
@@ -195,7 +195,6 @@ LE1Device::~LE1Device()
   while (MapItr != ExecutionStats.end())
     ExecutionStats.erase(MapItr++);
 
-  LE1Device::isEnding = true;
 }
 
 DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)

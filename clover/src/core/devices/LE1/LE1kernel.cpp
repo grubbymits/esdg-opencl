@@ -498,8 +498,13 @@ bool LE1KernelEvent::CompileSource() {
     return false;
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();
-  if (!Coarsener.Compile(CoarsenedBCName, WorkgroupSource))
+  Compiler LE1Compiler(p_device);
+  if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL))
     return false;
+  llvm::Module *WorkgroupModule = LE1Compiler.module();
+
+  //if (!Coarsener.Compile(CoarsenedBCName, WorkgroupSource))
+    //return false;
 
 #ifdef DEBUGCL
   std::cerr << "Merged Kernel\n";
@@ -507,7 +512,6 @@ bool LE1KernelEvent::CompileSource() {
 
   // Calculate the addresses in global memory where the arguments will be stored
   Kernel* kernel = p_event->kernel();
-
 
   std::stringstream launcher;
   for(unsigned i = 0, j = 0; i < kernel->numArgs(); ++i) {
@@ -523,18 +527,21 @@ bool LE1KernelEvent::CompileSource() {
   launcher << "int main(void) {\n";
   unsigned NestedLoops = 0;
   if (WorkgroupsPerCore[2] != 0) {
-    launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
-    <<      "__builtin_le1_set_group_id_2(z);\n"; //group_id[((__builtin_le1_read_cpuid()*4) + 2)] = z;\n";
+    launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2]
+      << "; ++z) {\n"
+    <<      "__builtin_le1_set_group_id_2(z);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[1] != 0) {
-    launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
-    << "      __builtin_le1_set_group_id_1(y);\n"; //group_id[((__builtin_le1_read_cpuid()*4) + 1)] = y;\n";
+    launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1]
+      << "; ++y) {\n"
+    << "      __builtin_le1_set_group_id_1(y);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[0] != 0) {
-    launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
-    << "        __builtin_le1_set_group_id_0(x);\n"; //group_id[((__builtin_le1_read_cpuid()*4) + 0)] = x;\n";
+    launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0]
+      << "; ++x) {\n"
+    << "        __builtin_le1_set_group_id_0(x);\n";
     ++NestedLoops;
   }
   launcher<< "        " << KernelName << "(";
@@ -547,8 +554,6 @@ bool LE1KernelEvent::CompileSource() {
   for (unsigned i = 0; i < kernel->numArgs(); ++i) {
     const Kernel::Arg& arg = kernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
-      //launcher << arg_addrs[j];
-      //++j;
       launcher << "&BufferArg_" << i;
     }
     else {
@@ -565,6 +570,21 @@ bool LE1KernelEvent::CompileSource() {
     }
   }
 
+  std::string LauncherString = launcher.str();
+  if(!LE1Compiler.CompileToBitcode(LauncherString, clang::IK_C))
+    return false;
+  llvm::Module *MainModule = LE1Compiler.module();
+
+  // Link the main module with the coarsened kernel code
+  llvm::Module *CompleteModule =
+    LE1Compiler.LinkModules(MainModule, WorkgroupModule);
+
+  // Output a single assembly file
+  if(!LE1Compiler.CompileToAssembly(TempAsmName,
+                                    CompleteModule));
+    return false;
+
+  /*
   std::ofstream main;
   main.open("main.c", std::ofstream::out);
   main << launcher.str();
@@ -589,7 +609,7 @@ bool LE1KernelEvent::CompileSource() {
   compile_command << "llc -march=le1 -mcpu="<< p_device->target() << " " 
     << FinalBCName << " -o " << TempAsmName;
   if(system(compile_command.str().c_str()) != 0)
-    return false;
+    return false;*/
 
   //return compiler.produceAsm(input, output);
 

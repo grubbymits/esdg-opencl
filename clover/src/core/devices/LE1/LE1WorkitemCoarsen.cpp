@@ -47,6 +47,8 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
   if (RewriteBuf == NULL)
     return false;
 
+  // TODO Don't want to have to write the source string to a file before
+  // passing it to this function.
   //clang_parseTranslationUnit from libclang provides the option to pass source
   // files via memory buffers ("unsaved_files" parameter).
   // You can "follow" its code path to see how this can be done programmatically
