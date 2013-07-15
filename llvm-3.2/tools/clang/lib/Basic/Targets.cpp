@@ -3928,6 +3928,7 @@ namespace {
 
   class LE1TargetInfo : public TargetInfo{
     static const Builtin::Info BuiltinInfo[];
+    std::string CPU;
 
   public:
     LE1TargetInfo(const std::string& triple) : TargetInfo(triple) {
@@ -3971,6 +3972,17 @@ namespace {
                                    unsigned &NumRecords) const {
       Records = BuiltinInfo;
       NumRecords = clang::LE1::LastTSBuiltin-Builtin::FirstTSBuiltin;
+    }
+    virtual bool setCPU(const std::string &Name) {
+      bool CPUKnown = llvm::StringSwitch<bool>(Name)
+        .Case("scalar", true)
+        .Case("2w2a2m2ls1b", true)
+        .Case("3w3a3m3ls1b", true)
+        .Default(false);
+
+      if (CPUKnown)
+        CPU = Name;
+      return CPUKnown;
     }
     virtual bool hasFeature(StringRef Feature) const {
       return Feature == "le1";

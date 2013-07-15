@@ -107,7 +107,7 @@ void Program::setDevices(cl_uint num_devices, DeviceInterface * const*devices)
         dep.device = devices[i];
         dep.program = dep.device->createDeviceProgram(this);
         dep.linked_module = 0;
-        dep.compiler = new Compiler(dep.device);
+        dep.compiler = new Compiler(dep.device, clang::IK_OpenCL);
     }
 #ifdef DEBUGCL
   std::cerr << "Leaving Program::setDevices\n";
@@ -402,7 +402,7 @@ cl_int Program::build(const char *options,
             //std::string triple = dep.device->getTriple();
             //std::string name = "program.cl";
             //if (!dep.compiler->compile(options ? options : std::string(), buffer))
-            if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL))
+            if (!dep.compiler->CompileToBitcode(p_source))
             {
                 if (pfn_notify)
                     pfn_notify((cl_program)this, user_data);

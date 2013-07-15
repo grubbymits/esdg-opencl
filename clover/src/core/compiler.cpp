@@ -37,6 +37,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include <clang/Frontend/CompilerInvocation.h>
 #include <clang/Frontend/FrontendOptions.h>
 #include <clang/Frontend/TextDiagnosticPrinter.h>
@@ -55,7 +56,7 @@
 
 using namespace Coal;
 
-Compiler::Compiler(DeviceInterface *device)
+Compiler::Compiler(DeviceInterface *device, clang::InputKind Kind)
 : p_device(device), p_module(0), p_optimize(true), p_log_stream(p_log),
   p_log_printer(0)
 {
@@ -64,6 +65,7 @@ Compiler::Compiler(DeviceInterface *device)
 #endif
   TargetTriple = device->getTriple();
   CPU = device->getCPU();
+  SourceKind = Kind;
 }
 
 Compiler::~Compiler()
@@ -73,34 +75,17 @@ Compiler::~Compiler()
 #endif
 }
 
-bool Compiler::CompileToBitcode(std::string &Source,
-                                clang::InputKind SourceKind) {
+bool Compiler::CompileToBitcode(std::string &Source) {
 #ifdef DEBUGCL
   std::cerr << "Entering CompileToBitcode\n";
 #endif
-  clang::EmitLLVMAction act(&llvm::getGlobalContext());
+  clang::EmitLLVMOnlyAction act(&llvm::getGlobalContext());
   std::string log;
   llvm::raw_string_ostream s_log(log);
 
   std::string TempFilename;
-  if (SourceKind == clang::IK_OpenCL)
-    TempFilename = "temp.cl";
-  else
-    TempFilename = "temp.c";
-  p_compiler.getFrontendOpts().Inputs.push_back(
-    clang::FrontendInputFile(TempFilename, SourceKind));
-  p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitLLVMOnly;
-  //p_compiler.getFrontendOpts().OutputFile = OutputFile;
-
-  p_compiler.getHeaderSearchOpts().UseBuiltinIncludes = true;
-  p_compiler.getHeaderSearchOpts().UseStandardSystemIncludes = false;
-  p_compiler.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
-
-  p_compiler.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR,
-                                           clang::frontend::Angled,
-                                           false, false, false);
-
   if (SourceKind == clang::IK_OpenCL) {
+    TempFilename = "temp.cl";
     // Add libclc search path
     p_compiler.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
                                              clang::frontend::Angled,
@@ -115,6 +100,21 @@ bool Compiler::CompileToBitcode(std::string &Source,
     p_compiler.getCodeGenOpts().LinkBitcodeFile =
       "/opt/esdg-opencl/lib/builtins.bc";
   }
+  else {
+    TempFilename = "temp.c";
+  }
+  p_compiler.getFrontendOpts().Inputs.push_back(
+    clang::FrontendInputFile(TempFilename, SourceKind));
+  p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitLLVMOnly;
+  //p_compiler.getFrontendOpts().OutputFile = OutputFile;
+
+  p_compiler.getHeaderSearchOpts().UseBuiltinIncludes = true;
+  p_compiler.getHeaderSearchOpts().UseStandardSystemIncludes = false;
+  p_compiler.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
+
+  p_compiler.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR,
+                                           clang::frontend::Angled,
+                                           false, false, false);
 
   p_compiler.getCodeGenOpts().OptimizationLevel = 3;
   p_compiler.getCodeGenOpts().setInlining(
@@ -129,7 +129,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
   //llvm::MemoryBuffer Buffer = llvm::MemoryBuffer::getMemBuffer(Source);
   p_compiler.getPreprocessorOpts()
-    .addRemappedFile(TempFilename, Source);
+    .addRemappedFile(TempFilename, llvm::MemoryBuffer::getMemBuffer(Source));
 
   // Compile the code
   if (!p_compiler.ExecuteAction(act)) {
@@ -164,28 +164,54 @@ llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
   return ld.releaseModule();
 }
 
+// BackendUtil.cpp
+// CodeGenOptions
 bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *Code) {
 #ifdef DEBUGCL
   std::cerr << "Entering CompileToAssembly\n";
 #endif
-  clang::EmitAssemblyAction act(&llvm::getGlobalContext());
+  clang::EmitAssemblyAction act(&llvm::getGlobalContext()); //Module->getContext()?
   std::string log;
   llvm::raw_string_ostream s_log(log);
 
-  std::string SourceString;
-  llvm::raw_string_ostream Source(SourceString);
+  std::string TempSource;
+  llvm::raw_string_ostream Source(TempSource);
+  //llvm::BitstreamWriter(TempSource);
   llvm::WriteBitcodeToFile(Code, Source);
+  //Source.flush();
+  /*
+  std::ofstream TempFile;
+  TempFile.open("temp.bc", std::ios_base::app);
+  TempFile << Source.str();
+  TempFile.close();*/
+  TargetOpts.Triple = TargetTriple;
+  TargetOpts.CPU = CPU;
 
-  p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitAssembly;
+  EmitAssemblyHelper AssemblyEmitter( /*DiagnosticsEngine& */Diags,
+                                      /*const CodeGenOptions& */CGOpts,
+                                      /*clang::TargetOptions& */TOpts,
+                                      /*const LangOptions& */LOpts,
+                                      /*Module* */M);
+  AssemblyEmitter.EmitAssembly(/*BackendAction*/Action, /*raw_ostream* */ OS);
+
+  p_compiler.getFrontendOpts().Inputs.clear();
   p_compiler.getFrontendOpts().Inputs.push_back(
-    clang::FrontendInputFile(llvm::MemoryBuffer::getMemBuffer(Source.str()),
-                             clang::IK_LLVM_IR));
+    clang::FrontendInputFile("temp.bc", clang::IK_LLVM_IR));
+  p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitAssembly;
+  //p_compiler.getFrontendOpts().Inputs.push_back(
+    //clang::FrontendInputFile(llvm::MemoryBuffer::getMemBufferCopy(Source.str()),
+      //                       clang::IK_LLVM_IR));
   p_compiler.getFrontendOpts().OutputFile = Filename;
   p_compiler.getTargetOpts().CPU = CPU;
+  //p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
+    //                                         clang::IK_LLVM_IR);
+  p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+    s_log, &p_compiler.getDiagnosticOpts()));
 
   if (!p_compiler.ExecuteAction(act)) {
 #ifdef DEBUGCL
     std::cerr << "Assembly compilation failed\n";
+    std::cerr << log;
 #endif
     return false;
   }
