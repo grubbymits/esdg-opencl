@@ -43,6 +43,7 @@
 #include <clang/Frontend/TextDiagnosticPrinter.h>
 #include <clang/Frontend/LangStandard.h>
 #include <clang/Basic/Diagnostic.h>
+#include <clang/CodeGen/BackendUtil.h>
 #include <clang/CodeGen/CodeGenAction.h>
 #include <llvm/ADT/SmallVector.h>
 #include <llvm/ADT/StringRef.h>
@@ -174,47 +175,50 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *Code) {
   std::string log;
   llvm::raw_string_ostream s_log(log);
 
-  std::string TempSource;
-  llvm::raw_string_ostream Source(TempSource);
   //llvm::BitstreamWriter(TempSource);
-  llvm::WriteBitcodeToFile(Code, Source);
+  //llvm::WriteBitcodeToFile(Code, Source);
   //Source.flush();
   /*
   std::ofstream TempFile;
   TempFile.open("temp.bc", std::ios_base::app);
   TempFile << Source.str();
   TempFile.close();*/
-  TargetOpts.Triple = TargetTriple;
-  TargetOpts.CPU = CPU;
+  p_compiler.getTargetOpts().CPU = CPU;
 
-  EmitAssemblyHelper AssemblyEmitter( /*DiagnosticsEngine& */Diags,
-                                      /*const CodeGenOptions& */CGOpts,
-                                      /*clang::TargetOptions& */TOpts,
-                                      /*const LangOptions& */LOpts,
-                                      /*Module* */M);
-  AssemblyEmitter.EmitAssembly(/*BackendAction*/Action, /*raw_ostream* */ OS);
+  std::string TempSource;
+  //llvm::raw_string_ostream Source(TempSource);
+  llvm::raw_string_ostream *Source = new llvm::raw_string_ostream(TempSource);
+  EmitBackendOutput ( p_compiler.getDiagnostics(),
+                      p_compiler.getCodeGenOpts(),
+                      p_compiler.getTargetOpts(),
+                      p_compiler.getLangOpts(),
+                      Code,
+                      clang::Backend_EmitAssembly,
+                      Source);
+  std::cerr << Source->str();
 
-  p_compiler.getFrontendOpts().Inputs.clear();
-  p_compiler.getFrontendOpts().Inputs.push_back(
-    clang::FrontendInputFile("temp.bc", clang::IK_LLVM_IR));
-  p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitAssembly;
+  // Look at what llc does instead
+
+  //p_compiler.getFrontendOpts().Inputs.clear();
+  //p_compiler.getFrontendOpts().Inputs.push_back(
+    //clang::FrontendInputFile("temp.bc", clang::IK_LLVM_IR));
+  //p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitAssembly;
   //p_compiler.getFrontendOpts().Inputs.push_back(
     //clang::FrontendInputFile(llvm::MemoryBuffer::getMemBufferCopy(Source.str()),
       //                       clang::IK_LLVM_IR));
-  p_compiler.getFrontendOpts().OutputFile = Filename;
-  p_compiler.getTargetOpts().CPU = CPU;
+  //p_compiler.getFrontendOpts().OutputFile = Filename;
   //p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
     //                                         clang::IK_LLVM_IR);
-  p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
-    s_log, &p_compiler.getDiagnosticOpts()));
+  //p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+    //s_log, &p_compiler.getDiagnosticOpts()));
 
-  if (!p_compiler.ExecuteAction(act)) {
-#ifdef DEBUGCL
-    std::cerr << "Assembly compilation failed\n";
-    std::cerr << log;
-#endif
-    return false;
-  }
+  //if (!p_compiler.ExecuteAction(act)) {
+//#ifdef DEBUGCL
+  //  std::cerr << "Assembly compilation failed\n";
+    //std::cerr << log;
+//#endif
+  //  return false;
+  //}
 
 #ifdef DEBUGCL
   std::cerr << "Leaving CompileToAssembly\n";
