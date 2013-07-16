@@ -62,7 +62,7 @@ class Kernel;
 class LE1Device : public DeviceInterface
 {
     public:
-        LE1Device(const std::string SimModel, const std::string Target,
+        LE1Device(const std::string &SimModel, const std::string &Target,
                   unsigned Cores);
         ~LE1Device();
 

@@ -498,10 +498,10 @@ bool LE1KernelEvent::CompileSource() {
     return false;
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();
-  Compiler LE1OpenCLCompiler(p_device, clang::IK_OpenCL);
-  if (!LE1OpenCLCompiler.CompileToBitcode(WorkgroupSource))
+  Compiler LE1Compiler(p_device);
+  if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL))
     return false;
-  llvm::Module *WorkgroupModule = LE1OpenCLCompiler.module();
+  llvm::Module *WorkgroupModule = LE1Compiler.module();
 
   //if (!Coarsener.Compile(CoarsenedBCName, WorkgroupSource))
     //return false;
@@ -571,17 +571,17 @@ bool LE1KernelEvent::CompileSource() {
   }
 
   std::string LauncherString = launcher.str();
-  Compiler LE1CCompiler(p_device, clang::IK_C);
-  if(!LE1CCompiler.CompileToBitcode(LauncherString))
+  Compiler MainCompiler(p_device);
+  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C))
     return false;
-  llvm::Module *MainModule = LE1CCompiler.module();
+  llvm::Module *MainModule = MainCompiler.module();
 
   // Link the main module with the coarsened kernel code
   llvm::Module *CompleteModule =
-    LE1CCompiler.LinkModules(MainModule, WorkgroupModule);
+    MainCompiler.LinkModules(MainModule, WorkgroupModule);
 
   // Output a single assembly file
-  if(!LE1CCompiler.CompileToAssembly(TempAsmName,
+  if(!MainCompiler.CompileToAssembly(TempAsmName,
                                      CompleteModule))
     return false;
 
@@ -621,7 +621,10 @@ bool LE1KernelEvent::CompileSource() {
     //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
     << " > " << FinalAsmName;
   // FIXME return false?
-  system(pre_asm_command.str().c_str());
+  if (system(pre_asm_command.str().c_str()) != 0) {
+    std::cerr << "LLVM Transform failed\n";
+    return false;
+  }
 
   //std::stringstream clean;
   //clean << "rm " << merged_bc << " " << final_bc << " " << temp_asm << " main.o";

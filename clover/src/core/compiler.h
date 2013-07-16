@@ -70,7 +70,7 @@ class Compiler
          * \brief Constructor
          * \param device \c Coal::DeviceInterface for which code will be compiled
          */
-        Compiler(DeviceInterface *device, clang::InputKind Kind);
+        Compiler(DeviceInterface *device);
         ~Compiler();
 
         bool AreadyCompiled(std::string &name);
@@ -80,7 +80,7 @@ class Compiler
                         std::string &cpu);
 
         llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
-        bool CompileToBitcode(std::string &Source);
+        bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind);
         bool CompileToAssembly(std::string &Filename, llvm::Module *Code);
         /**
          * \brief Compile \p source to produce a LLVM module
@@ -140,10 +140,12 @@ class Compiler
         std::vector<std::string>PreviousKernels;
 
         std::string p_log, p_options;
-        std::string TargetTriple;
+        std::string Triple;
         std::string CPU;
         llvm::raw_string_ostream p_log_stream;
         clang::TextDiagnosticPrinter *p_log_printer;
+        //std::string llvm_log;
+        //llvm::raw_string_ostream *s_log;
 };
 
 }
