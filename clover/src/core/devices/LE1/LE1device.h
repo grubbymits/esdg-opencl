@@ -40,6 +40,7 @@
 #include <pthread.h>
 #include <list>
 
+#define   TotalLE1Devices  8
 namespace Coal
 {
 

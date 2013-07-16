@@ -208,7 +208,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
                                           CPU, FeatureSet, Options,
                                           llvm::Reloc::Static,
                                           llvm::CodeModel::Default,
-                                          llvm::CodeGenOpt::Default));
+                                          llvm::CodeGenOpt::Aggressive));
   llvm::TargetMachine &Target = *target.get();
 
   llvm::PassManager PM;

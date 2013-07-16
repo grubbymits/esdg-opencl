@@ -16,7 +16,7 @@ sub read_xml($);
 sub write_target_desc($%);
 
 # !!! SET LLVM SOURCE ROOT DIRECTORY
-my $source_dir = "/Users/sam/src/le1-clc/llvm-3.2/";
+my $source_dir = "/home/sam/src/esdg-opencl/llvm-3.2/";
 
 my $xml_desc = $ARGV[0];
 my $le1_dir = "${source_dir}lib/Target/LE1/";

@@ -39,13 +39,10 @@ public:
     LocalX(x), LocalY(y), LocalZ(z) { }
   bool CreateWorkgroup(std::string &Filename);
   bool HandleBarriers();
-  bool Compile(std::string &filename, std::string &source);
   std::string &getInitialisedKernel() { return InitKernelSource; }
   std::string &getFinalKernel() { return FinalKernel; }
 
 private:
-  bool ProduceBytecode(std::string &filename, std::string &source);
-  bool ProduceAssembly(std::string &filename);
   unsigned LocalX, LocalY, LocalZ;
   clang::CompilerInstance TheCompiler;
   llvm::Module *Module;

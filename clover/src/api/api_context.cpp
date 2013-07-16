@@ -35,6 +35,7 @@
 #include <core/context.h>
 
 #include <core/deviceinterface.h>
+#include <core/devices/LE1/LE1device.h>
 
 // Context APIs
 
@@ -99,7 +100,7 @@ clCreateContextFromType(const cl_context_properties   *properties,
 #ifdef DEBUGCL
   std::cerr << "Entering clCreateContextFromType\n";
 #endif
-  const cl_uint num_entries = 5;
+  const cl_uint num_entries = TotalLE1Devices;
     cl_device_id device[num_entries];
     cl_uint num_devices;
 

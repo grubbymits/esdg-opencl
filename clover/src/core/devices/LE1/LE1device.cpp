@@ -160,7 +160,7 @@ LE1Device::~LE1Device()
     AverageBranchesNotTaken /= KernelIterations;
 
     // Write results to a CSV file
-    // NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
+    // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
     // If this is the first device to be destructed, add column headers to the
     // files.
     std::ostringstream Line;
@@ -168,23 +168,17 @@ LE1Device::~LE1Device()
     filename.append(".csv");
 
     if(!std::ifstream(filename.c_str())) {
-      Line << "Contexts, Total Cycles, Total Stalls, Decode Stalls," 
+      Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
         << " Branches Taken, Branches not Taken\n";
     }
-    Line << NumCores << ", " << AverageCycles << ", " << AverageStalls << ", "
-      << AverageDecodeStalls << ", " << AverageBranchesTaken << ", "
-      << AverageBranchesNotTaken << std::endl;
+    Line << CPU << ", " << NumCores << ", " << AverageCycles << ", "
+      << AverageStalls << ", " << AverageDecodeStalls << ", "
+      << AverageBranchesTaken << ", " << AverageBranchesNotTaken << std::endl;
 
     std::ofstream Results;
     Results.open(filename.c_str(), std::ios_base::app);
     Results << Line.str();
     Results.close();
-
-    //std::cout << "Average Cycles: " << AverageCycles << std::endl;
-    //std::cout << "  of which stalls: "
-      //<< AverageStalls << "\n   including " << AverageDecodeStalls
-      //<< " decode stalls." << std::endl;
-    //std::cout << "Idle Cycles = " << AverageIdle << std::endl << std::endl;
   }
 
   if(Simulator)
