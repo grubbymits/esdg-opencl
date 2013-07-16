@@ -39,10 +39,6 @@
 #include <iostream>
 #include <pthread.h>
 #include <list>
-<<<<<<< HEAD
-//#include <map>
-=======
->>>>>>> complete-compile
 
 namespace Coal
 {
@@ -51,15 +47,6 @@ class MemObject;
 class Event;
 class Program;
 class Kernel;
-<<<<<<< HEAD
-//class LE1Simulator;
-//class SimulationStats;
-
-//typedef std::vector<SimulationStats> StatsSet;
-//typedef std::map<std::string, StatsSet> StatsMap;
-
-=======
->>>>>>> complete-compile
 /**
  * \brief LE1 device
  *
@@ -78,14 +65,8 @@ class LE1Device;
 class LE1Device : public DeviceInterface
 {
     public:
-<<<<<<< HEAD
-        LE1Device(const std::string &Compiler, const std::string &SimModel,
-                  unsigned Cores);
-        LE1Device(const LE1Device &Device);
-=======
         LE1Device(const std::string &SimModel, const std::string &Target,
                   unsigned Cores);
->>>>>>> complete-compile
         ~LE1Device();
 
         /*
@@ -124,34 +105,20 @@ class LE1Device : public DeviceInterface
         LE1Simulator* getSimulator() const { return Simulator; }
 
         unsigned int numLE1s() const;   /*!< \brief Number of logical LE1 cores on the system */
-<<<<<<< HEAD
-        const std::string &model() const { return SimulatorModel; }
-        const std::string &target() const { return CompilerTarget; }
-        float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
-=======
         const char* model() { return simulatorModel.c_str(); }
         const char* target() { return CPU.c_str(); }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
 
->>>>>>> complete-compile
         static std::string SysDir;
         static std::string LibDir;
         static std::string IncDir;
         static std::string MachinesDir;
         static std::string ScriptsDir;
-<<<<<<< HEAD
-
-    private:
-        unsigned int NumCores, p_num_events;
-        std::string SimulatorModel;
-        std::string CompilerTarget;
-=======
         static unsigned MaxGlobalAddr;
 
     private:
         unsigned int NumCores, p_num_events;
         std::string simulatorModel;
->>>>>>> complete-compile
         float p_cpu_mhz;
         pthread_t *p_workers;
         LE1Simulator* Simulator;
@@ -169,10 +136,6 @@ class LE1Device : public DeviceInterface
         //static const unsigned global_offset_addr = 36;
         // Variables to hold the address of where a new data item can begin.
         unsigned global_base_addr;
-<<<<<<< HEAD
-        unsigned MaxGlobalAddr;
-=======
->>>>>>> complete-compile
         unsigned current_local_addr;
 };
 

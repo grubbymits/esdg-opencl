@@ -63,25 +63,6 @@ std::string LE1Device::IncDir = LE1Device::SysDir + "include/";
 std::string LE1Device::MachinesDir = LE1Device::SysDir + "machines/";
 std::string LE1Device::ScriptsDir = LE1Device::SysDir + "scripts/";
 
-<<<<<<< HEAD
-LE1Device::LE1Device(const std::string &Compiler, const std::string &SimModel,
-                     unsigned Cores)
-: DeviceInterface(), NumCores(Cores), p_num_events(0), p_workers(0),
-  p_stop(false), p_initialized(false)
-{
-#ifdef DEBUGCL
-  std::cerr << "LE1Device::LE1Device at address " << std::hex << this
-    << std::endl;
-#endif
-  Triple = "le1";
-  MaxGlobalAddr = 0xFFFF * 1024;
-  SimulatorModel = SimModel;
-  CompilerTarget = Compiler;
-  Simulator = new LE1Simulator();
-}
-
-LE1Device::LE1Device(const LE1Device &Device) {
-=======
 unsigned LE1Device::MaxGlobalAddr = 0xFFFF * 1024;
 
 LE1Device::LE1Device(const std::string &SimModel, const std::string &Target,
@@ -121,16 +102,7 @@ bool LE1Device::init()
   pthread_create(&p_workers[0], 0, &worker, this);
 
   p_initialized = true;
->>>>>>> complete-compile
-#ifdef DEBUGCL
-  std::cerr << "LE1Device Copy Constructor\n";
-#endif
-  Triple = "le1";
-  MaxGlobalAddr = 0xFFFF * 1024;
-  NumCores = Device.numLE1s();
-  SimulatorModel = Device.model();
-  CompilerTarget = Device.target();
-  Simulator = Device.getSimulator();
+  return true;
 }
 
 LE1Device::~LE1Device()
@@ -155,17 +127,6 @@ LE1Device::~LE1Device()
   pthread_mutex_destroy(&p_events_mutex);
   pthread_cond_destroy(&p_events_cond);
 
-<<<<<<< HEAD
-  std::cout << "\n ---- Kernel Completion Report ----" << std::endl;
-  std::cout << "Machine Configuration: " << SimulatorModel << std::endl;
-  std::cout << "Number of cores: " << NumCores << std::endl;
-=======
-  //std::cout << "\n ---- Kernel Completion Report ----" << std::endl;
-  //std::cout << "Machine Configuration: " << simulatorModel << std::endl;
-  //std::cout << "Number of cores: " << NumCores << std::endl;
-
->>>>>>> complete-compile
-
   for (StatsMap::iterator SMI = ExecutionStats.begin(),
        SME = ExecutionStats.end(); SMI != SME; ++SMI) {
 
@@ -176,11 +137,9 @@ LE1Device::~LE1Device()
     unsigned AverageIdle = 0;
     unsigned AverageDecodeStalls = 0;
     unsigned AverageBranchesTaken = 0;
-<<<<<<< HEAD
-=======
     unsigned AverageBranchesNotTaken = 0;
     unsigned KernelIterations = 0;
->>>>>>> complete-compile
+
     for (StatsSet::iterator SI = SMI->second.begin(),
          SE = SMI->second.end(); SI != SE; ++SI) {
       SimulationStats Stats = *SI;
@@ -189,34 +148,10 @@ LE1Device::~LE1Device()
       AverageIdle += Stats.IdleCycles;
       AverageDecodeStalls += Stats.DecodeStalls;
       AverageBranchesTaken += Stats.BranchesTaken;
-<<<<<<< HEAD
-      //std::cout << "Total Cycles = " << Stats.TotalCycles << std::endl;
-      //std::cout << "Stalls = " << Stats.Stalls << std::endl;
-      //std::cout << "NOPs = " << Stats.NOPs << std::endl;
-      //std::cout << "Idle = " << Stats.IdleCycles << std::endl;
-      //std::cout << "DecodeStalls = " << Stats.DecodeStalls << std::endl;
-      //std::cout << "BranchesTaken = " << Stats.BranchesTaken << std::endl;
-      //std::cout << "ControlFlowChange = " << Stats.ControlFlowChange
-        //<< std::endl;
-      //std::cout << "MemoryAccessCount = " << Stats.MemoryAccessCount
-        //<< std::endl << std::endl;
-    }
-    AverageCycles /= NumCores;
-    AverageStalls /= NumCores;
-    AverageIdle /= NumCores;
-    AverageDecodeStalls /= NumCores;
-    AverageBranchesTaken /= NumCores;
-
-    std::cout << "Average Cycles: " << AverageCycles << std::endl;
-    std::cout << "  of which stalls: "
-      << AverageStalls << "\n   including " << AverageDecodeStalls
-      << " decode stalls." << std::endl;
-    std::cout << "Branches Taken: " << AverageBranchesTaken << std::endl;
-    std::cout << "Idle Cycles: " << AverageIdle << std::endl << std::endl;
-=======
       AverageBranchesNotTaken += Stats.BranchesNotTaken;
       ++KernelIterations;
     }
+
     AverageCycles /= KernelIterations;
     AverageIdle /= KernelIterations;
     AverageDecodeStalls /= KernelIterations;
@@ -250,7 +185,6 @@ LE1Device::~LE1Device()
       //<< AverageStalls << "\n   including " << AverageDecodeStalls
       //<< " decode stalls." << std::endl;
     //std::cout << "Idle Cycles = " << AverageIdle << std::endl << std::endl;
->>>>>>> complete-compile
   }
 
   if(Simulator)
@@ -262,48 +196,17 @@ LE1Device::~LE1Device()
 
 }
 
-// TODO Don't know where I should initialise the number of cores. For now, here.
-bool LE1Device::init()
-{
-#ifdef DEBUGCL
-  std::cerr << "Entering LE1Device::init " << SimulatorModel << std::endl;
-#endif
-  if (p_initialized)
-    return true;
-
-  pthread_cond_init(&p_events_cond, 0);
-  pthread_mutex_init(&p_events_mutex, 0);
-
-  p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
-  pthread_create(&p_workers[0], 0, &worker, this);
-
-  if(!Simulator->Initialise(SimulatorModel))
-    return false;
-
-  p_initialized = true;
-#ifdef DEBUGCL
-  std::cerr << "Leaving LE1Device::init\n";
-#endif
-  return true;
-}
 
 DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)
 {
 #ifdef DEBUGCL
   std::cerr << "Entering LE1Device::createDeviceBuffer\n";
 #endif
-<<<<<<< HEAD
-  if((global_base_addr + buffer->size()) > MaxGlobalAddr) {
-    std::cerr << "Error: Device doesn't have enough free memory to allocate \
-      buffer. global_base = " << global_base_addr << ", buffer size = " <<
-      buffer->size() << " and max_global = " << MaxGlobalAddr << std::endl;
-=======
   if((global_base_addr + buffer->size()) > LE1Device::MaxGlobalAddr) {
     std::cerr << "Error: Device doesn't have enough free memory to allocate \
       buffer. global_base = " << global_base_addr << ", buffer size = " <<
       buffer->size() << " and max_global = " << LE1Device::MaxGlobalAddr
       << std::endl;
->>>>>>> complete-compile
     exit(1);
   }
   else {

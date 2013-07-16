@@ -436,15 +436,7 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   if (system(assemble.c_str()) != 0)
     return false;
   else {
-<<<<<<< HEAD
-=======
     p_event->kernel()->SetBuilt();
-    /*
->>>>>>> complete-compile
-    // delete the intermediate files
-    std::string clean = "rm " + OriginalSourceName + " " + CoarsenedSourceName
-      + " " + CoarsenedBCName + " " + TempAsmName;
-    system(clean.c_str());*/
     return true;
   }
 }
@@ -530,32 +522,20 @@ bool LE1KernelEvent::CompileSource() {
   launcher << "int main(void) {\n";
   unsigned NestedLoops = 0;
   if (WorkgroupsPerCore[2] != 0) {
-<<<<<<< HEAD
-    launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
-=======
     launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2]
       << "; ++z) {\n"
->>>>>>> complete-compile
     <<      "__builtin_le1_set_group_id_2(z);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[1] != 0) {
-<<<<<<< HEAD
-    launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
-=======
     launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1]
       << "; ++y) {\n"
->>>>>>> complete-compile
     << "      __builtin_le1_set_group_id_1(y);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[0] != 0) {
-<<<<<<< HEAD
-    launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
-=======
     launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0]
       << "; ++x) {\n"
->>>>>>> complete-compile
     << "        __builtin_le1_set_group_id_0(x);\n";
     ++NestedLoops;
   }
@@ -1303,18 +1283,9 @@ bool LE1KernelEvent::run() {
  // TODO Use either simulator or hardware? And use variables
  // instead of hard coded parameters
   bool wasSuccess = false;
-<<<<<<< HEAD
-  LE1Simulator *Simulator = p_device->getSimulator();
-  //std::string SimulatorModel = p_device->model();
-
-  //if(!Simulator->Initialise(SimulatorModel))
-    //return false;
-  wasSuccess = Simulator->Run();
-=======
   //char* device_name = const_cast<char*>(p_device->model());
   //p_device->getSimulator()->LockAccess();
   wasSuccess = p_device->getSimulator()->Run();
->>>>>>> complete-compile
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
     return false;

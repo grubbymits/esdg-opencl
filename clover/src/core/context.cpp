@@ -66,12 +66,6 @@ Context::Context(const cl_context_properties *properties,
         p_pfn_notify = &default_pfn_notify;
 
     // Intialize LLVM, this can be done more than one time per program
-<<<<<<< HEAD
-    // FIXME Maybe we need to do this?
-=======
->>>>>>> complete-compile
-    //llvm::InitializeNativeTarget();
-    //llvm::InitializeNativeTargetAsmPrinter();
 
     // Explore the properties
     if (properties)

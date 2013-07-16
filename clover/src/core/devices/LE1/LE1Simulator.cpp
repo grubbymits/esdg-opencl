@@ -76,11 +76,6 @@ LE1Simulator::~LE1Simulator() {
   }
 }
 
-<<<<<<< HEAD
-bool LE1Simulator::Initialise(std::string &Machine) {
-
-  LockAccess();
-=======
 bool LE1Simulator::Initialise(const std::string &Machine) {
 
   LockAccess();
@@ -94,17 +89,12 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
   }*/
->>>>>>> complete-compile
   /* Setup global struct */
   /* readConf reads xml file and sets up global SYSTEM variable
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
      This sets up the internal registers of the LE1 as defined in the VTPRM
   */
-<<<<<<< HEAD
-  std::string FullPath(LE1Device::MachinesDir);
-=======
   std::string FullPath = LE1Device::MachinesDir;
->>>>>>> complete-compile
   FullPath.append(Machine);
   if(readConf(const_cast<char*>(FullPath.c_str())) == -1) {
     fprintf(stderr, "!!! ERROR reading machine model file !!!\n");
@@ -175,12 +165,9 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     }
   }
 
-<<<<<<< HEAD
-=======
   isInitialised = true;
 
   //pthread_mutex_unlock(&p_simulator_mutex);
->>>>>>> complete-compile
   UnlockAccess();
   return true;
 }
@@ -215,23 +202,6 @@ void LE1Simulator::SaveStats() {
       // Save the execution statistics
       SimulationStats NewStat(hypercontext);
       Stats.push_back(NewStat);
-<<<<<<< HEAD
-
-      /*
-        // Set current hypercontext to interact with
-        insizzleAPISetCurrent(s, c, hc, cl); // (system, context, hypercontext, cluster)
-        // Write stack pointer (SGPR 1)
-        insizzleAPIWrOneSGpr(1, (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC));
-        // Set original stack pointer and stack size for Insizzle to perform stack check
-        hypercontext->initialStackPointer
-          = (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC);
-
-        // Write Program Counter
-        insizzleAPIWrPC(0x0);
-
-        ++totalHC;*/
-=======
->>>>>>> complete-compile
 
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));

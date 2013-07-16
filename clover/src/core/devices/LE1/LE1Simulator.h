@@ -32,11 +32,7 @@ namespace Coal {
   public:
     LE1Simulator();
     ~LE1Simulator();
-<<<<<<< HEAD
-    bool Initialise(std::string &Machine);
-=======
     bool Initialise(const std::string &Machine);
->>>>>>> complete-compile
     void SaveStats(void);
     std::vector<SimulationStats> *GetStats() { return &Stats; }
     unsigned GetIterations() const { return LE1Simulator::iteration; }
