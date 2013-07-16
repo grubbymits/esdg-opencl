@@ -83,7 +83,6 @@ clCreateContext(const cl_context_properties  *properties,
 #ifdef DEBUGCL
     std::cerr << "Leaving clCreateContext\n";
 #endif
-
     return (_cl_context *)ctx;
 }
 
@@ -98,27 +97,26 @@ clCreateContextFromType(const cl_context_properties   *properties,
                         cl_int *                errcode_ret)
 {
 #ifdef DEBUGCL
-  std::cerr << "clCreateContextFromType\n";
+  std::cerr << "Entering clCreateContextFromType\n";
 #endif
-
-  // struct _cl_device_id : public Coal::DeviceInterface
-  // typedef struct _cl_device_id*  cl_device_id
-
-    cl_device_id devices;
+  const cl_uint num_entries = 5;
+    cl_device_id device[num_entries];
     cl_uint num_devices;
 
-    *errcode_ret = clGetDeviceIDs(0, device_type, 1, &devices, &num_devices);
+    *errcode_ret = clGetDeviceIDs(0, device_type, num_entries, device,
+                                  &num_devices);
 
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
-    cl_context ret_val =
-      clCreateContext(properties, num_devices, &devices, pfn_notify,
-                           user_data, errcode_ret);
+    cl_context Context =
+      clCreateContext(properties, num_devices, device, pfn_notify,
+                           user_data,
+                           errcode_ret);
 #ifdef DEBUGCL
-    std::cerr << "returned from clCreateContext\n";
+    std::cerr << "Leaving clCreateContextFromType\n";
 #endif
-    return ret_val;
+    return Context;
 }
 
 cl_int

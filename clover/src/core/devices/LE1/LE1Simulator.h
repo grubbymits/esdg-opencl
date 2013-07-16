@@ -24,14 +24,22 @@ namespace Coal {
     unsigned long MemoryAccessCount;
   };
 
+  typedef std::vector<SimulationStats> StatsSet;
+  typedef std::map<std::string, StatsSet> StatsMap;
+
   class LE1Simulator {
 
   public:
     LE1Simulator();
     ~LE1Simulator();
+<<<<<<< HEAD
     bool Initialise(std::string &Machine);
+=======
+    bool Initialise(const std::string &Machine);
+>>>>>>> complete-compile
     void SaveStats(void);
     std::vector<SimulationStats> *GetStats() { return &Stats; }
+    unsigned GetIterations() const { return LE1Simulator::iteration; }
     void ClearStats() { Stats.clear(); }
     int checkStatus(void);
     bool Run();
@@ -46,6 +54,7 @@ namespace Coal {
                      unsigned int* data);
 private:
   static unsigned iteration;
+  bool isInitialised;
   pthread_mutex_t p_simulator_mutex;
   unsigned dram_size;
   unsigned IRAMFileSize;
@@ -53,7 +62,7 @@ private:
   unsigned KernelNumber;
   systemConfig *SYS;
   systemT *LE1System;
-  std::vector<SimulationStats> Stats;
+  StatsSet Stats;
   };
 
   typedef std::vector<SimulationStats> StatsSet;

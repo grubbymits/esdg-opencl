@@ -52,6 +52,7 @@ LE1Simulator::LE1Simulator() {
   pthread_mutex_init(&p_simulator_mutex, 0);
   dram_size = 0;
   KernelNumber = 0;
+  isInitialised = false;
 }
 
 LE1Simulator::~LE1Simulator() {
@@ -75,15 +76,35 @@ LE1Simulator::~LE1Simulator() {
   }
 }
 
+<<<<<<< HEAD
 bool LE1Simulator::Initialise(std::string &Machine) {
 
   LockAccess();
+=======
+bool LE1Simulator::Initialise(const std::string &Machine) {
+
+  LockAccess();
+
+  if (LE1Simulator::isInitialised) {
+    std::cerr << "ERROR: Simulator is already initialised!\n";
+    return false;
+  }
+  /*
+  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
+    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
+    exit(EXIT_FAILURE);
+  }*/
+>>>>>>> complete-compile
   /* Setup global struct */
   /* readConf reads xml file and sets up global SYSTEM variable
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
      This sets up the internal registers of the LE1 as defined in the VTPRM
   */
+<<<<<<< HEAD
   std::string FullPath(LE1Device::MachinesDir);
+=======
+  std::string FullPath = LE1Device::MachinesDir;
+>>>>>>> complete-compile
   FullPath.append(Machine);
   if(readConf(const_cast<char*>(FullPath.c_str())) == -1) {
     fprintf(stderr, "!!! ERROR reading machine model file !!!\n");
@@ -154,6 +175,12 @@ bool LE1Simulator::Initialise(std::string &Machine) {
     }
   }
 
+<<<<<<< HEAD
+=======
+  isInitialised = true;
+
+  //pthread_mutex_unlock(&p_simulator_mutex);
+>>>>>>> complete-compile
   UnlockAccess();
   return true;
 }
@@ -188,6 +215,7 @@ void LE1Simulator::SaveStats() {
       // Save the execution statistics
       SimulationStats NewStat(hypercontext);
       Stats.push_back(NewStat);
+<<<<<<< HEAD
 
       /*
         // Set current hypercontext to interact with
@@ -202,6 +230,8 @@ void LE1Simulator::SaveStats() {
         insizzleAPIWrPC(0x0);
 
         ++totalHC;*/
+=======
+>>>>>>> complete-compile
 
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));
@@ -276,6 +306,7 @@ bool LE1Simulator::Run() {
 
   /* turn printout on */
   PRINT_OUT = 0;
+  bool MEM_DUMP = false;
 
     /* Load IRAM */
     {
@@ -512,7 +543,7 @@ bool LE1Simulator::Run() {
   }
 
   // Debugging information
-  if (PRINT_OUT) { 
+  if (MEM_DUMP) { 
     if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
                   LE1System->dram) == -1) {
       pthread_mutex_unlock(&p_simulator_mutex);
@@ -527,6 +558,11 @@ bool LE1Simulator::Run() {
       ++LE1Simulator::iteration;
     }
     system(CopyDump.str().c_str());
+  }
+
+  if (KernelNumber == 2) {
+    KernelNumber = 0;
+    ++LE1Simulator::iteration;
   }
 
   SaveStats();

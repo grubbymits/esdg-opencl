@@ -2,7 +2,7 @@
 	<systems>1</systems>
 	<type>homogeneous</type>
 	<system>
-		<contexts>2</contexts>
+		<contexts>8</contexts>
 		<SCALARSYS_PRESENT>1</SCALARSYS_PRESENT>
 		<PERIPH_PRESENT>0</PERIPH_PRESENT>
 		<DARCH>DRAM_SHARED</DARCH>

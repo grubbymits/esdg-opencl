@@ -35,12 +35,24 @@
 #include <core/deviceinterface.h>
 #include <core/devices/LE1/LE1device.h>
 
+<<<<<<< HEAD
 unsigned TotalDevices = 1;
 Coal::LE1Device LE1Devices[] = {
   //Coal::LE1Device("scalar", "4Context_Default.xml", 4),
   Coal::LE1Device("2w2a2m2ls1b", "4Context_2w2a2m2ls1b.xml", 4) } ;
   ///Coal::LE1Device("3w3a3m3ls1b", "4Context_Default.xml", 4),
  // Coal::LE1Device("4w4a4m4ls1b", "4Context_Default.xml", 4) };
+=======
+// TODO Add a LE1Device to this and replace the the cpu code
+const unsigned TotalDevices = 5;
+static Coal::LE1Device LE1Devices[] = {
+  Coal::LE1Device("2w2a2m2ls1b.xml", "2w2a2m2ls1b", 1),
+  Coal::LE1Device("2Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 2),
+  Coal::LE1Device("4Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 4),
+  Coal::LE1Device("8Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 8),
+  Coal::LE1Device("16Context_2w2a2m2ls1b.xml", "2w2a2m2ls1b", 16)
+};
+>>>>>>> complete-compile
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,
@@ -73,6 +85,7 @@ clGetDeviceIDs(cl_platform_id   platform,
         //if(!le1device.init())
           //return CL_DEVICE_NOT_AVAILABLE;
         if (devices) {
+<<<<<<< HEAD
           for (unsigned i = 0; i < TotalDevices; ++i)
             devices[i] = (cl_device_id)&LE1Devices[i];
         }
@@ -80,6 +93,14 @@ clGetDeviceIDs(cl_platform_id   platform,
         if (num_devices) {
           *num_devices = TotalDevices;
         }
+=======
+          for (unsigned i = 0; ((i < TotalDevices) && (i < num_entries)); ++i)
+            devices[i] = (cl_device_id)&LE1Devices[i];
+        }
+
+        if (num_devices)
+            *num_devices = TotalDevices;
+>>>>>>> complete-compile
     }
     else {
       std::cerr << "DEVICE_NOT_FOUND\n";

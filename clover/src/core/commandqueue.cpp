@@ -83,11 +83,18 @@ CommandQueue::CommandQueue(Context *ctx,
         return;
     }
 
+<<<<<<< HEAD
     /*
     if(!device->init()) {
       *errcode_ret = CL_INVALID_DEVICE;
       return;
     }*/
+=======
+    if (!device->init()) {
+      *errcode_ret = CL_INVALID_DEVICE;
+      return;
+    }
+>>>>>>> complete-compile
 
     *errcode_ret = checkProperties();
 }

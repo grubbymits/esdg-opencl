@@ -221,9 +221,7 @@ LE1InstrInfo::emitFrameIndexDebugValue(MachineFunction &MF, int FrameIx,
 //===----------------------------------------------------------------------===//
 
 static unsigned GetAnalyzableBrOpc(unsigned Opc) {
-  return (Opc == LE1::BR    || Opc == LE1::BRF)//    || Opc == LE1::BGTZ   ||
-          //Opc == LE1::BGEZ   || Opc == LE1::BLTZ   || Opc == LE1::BLEZ) ?
-         ? Opc : 0;
+  return (Opc == LE1::BR || Opc == LE1::BRF || Opc == LE1::GOTO) ? Opc : 0;
 }
 
 /// GetOppositeBranchOpc - Return the inverse of the specified
@@ -258,7 +256,6 @@ bool LE1InstrInfo::AnalyzeBranch(MachineBasicBlock &MBB,
                                   SmallVectorImpl<MachineOperand> &Cond,
                                   bool AllowModify) const
 {
-
   MachineBasicBlock::reverse_iterator I = MBB.rbegin(), REnd = MBB.rend();
 
   // Skip all the debug instructions.
@@ -276,8 +273,9 @@ bool LE1InstrInfo::AnalyzeBranch(MachineBasicBlock &MBB,
   unsigned LastOpc = LastInst->getOpcode();
 
   // Not an analyzable branch (must be an indirect jump).
-  if (!GetAnalyzableBrOpc(LastOpc))
+  if (!GetAnalyzableBrOpc(LastOpc)) {
     return true;
+  }
 
   // Get the second to last instruction in the block.
   unsigned SecondLastOpc = 0;
@@ -288,21 +286,19 @@ bool LE1InstrInfo::AnalyzeBranch(MachineBasicBlock &MBB,
     SecondLastOpc = GetAnalyzableBrOpc(SecondLastInst->getOpcode());
 
     // Not an analyzable branch (must be an indirect jump).
-    if (isUnpredicatedTerminator(SecondLastInst) && !SecondLastOpc)
+    if (isUnpredicatedTerminator(SecondLastInst) && !SecondLastOpc) {
       return true;
+    }
   }
 
   // If there is only one terminator instruction, process it.
   if (!SecondLastOpc) {
-    std::cout << "only one terminator\n";
     // Unconditional branch
     if (LastOpc == LE1::GOTO) {
-      std::cout << "last op is GOTO\n";
       TBB = LastInst->getOperand(0).getMBB();
       // If the basic block is next, remove the GOTO inst
       if(MBB.isLayoutSuccessor(TBB)) {
         LastInst->eraseFromParent();
-        std::cout << "is Successor\n";
       }
 
       return false;
@@ -315,15 +311,17 @@ bool LE1InstrInfo::AnalyzeBranch(MachineBasicBlock &MBB,
 
   // If we reached here, there are two branches.
   // If there are three terminators, we don't know what sort of block this is.
-  if (++I != REnd && isUnpredicatedTerminator(&*I))
+  if (++I != REnd && isUnpredicatedTerminator(&*I)) {
     return true;
+  }
 
   // If second to last instruction is an unconditional branch,
   // analyze it and remove the last instruction.
   if (SecondLastOpc == LE1::GOTO) {
     // Return if the last instruction cannot be removed.
-    if (!AllowModify)
+    if (!AllowModify) {
       return true;
+    }
 
     TBB = SecondLastInst->getOperand(0).getMBB();
     LastInst->eraseFromParent();
@@ -332,8 +330,9 @@ bool LE1InstrInfo::AnalyzeBranch(MachineBasicBlock &MBB,
 
   // Conditional branch followed by an unconditional branch.
   // The last one must be unconditional.
-  if (LastOpc != LE1::GOTO)
+  if (LastOpc != LE1::GOTO) {
     return true;
+  }
 
   AnalyzeCondBr(SecondLastInst, SecondLastOpc, TBB, Cond);
   FBB = LastInst->getOperand(0).getMBB();

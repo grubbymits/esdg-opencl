@@ -436,10 +436,15 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   if (system(assemble.c_str()) != 0)
     return false;
   else {
+<<<<<<< HEAD
+=======
+    p_event->kernel()->SetBuilt();
+    /*
+>>>>>>> complete-compile
     // delete the intermediate files
     std::string clean = "rm " + OriginalSourceName + " " + CoarsenedSourceName
       + " " + CoarsenedBCName + " " + TempAsmName;
-    system(clean.c_str());
+    system(clean.c_str());*/
     return true;
   }
 }
@@ -496,8 +501,13 @@ bool LE1KernelEvent::CompileSource() {
     return false;
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();
-  if (!Coarsener.Compile(CoarsenedBCName, WorkgroupSource))
+  Compiler LE1Compiler(p_device);
+  if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL))
     return false;
+  llvm::Module *WorkgroupModule = LE1Compiler.module();
+
+  //if (!Coarsener.Compile(CoarsenedBCName, WorkgroupSource))
+    //return false;
 
 #ifdef DEBUGCL
   std::cerr << "Merged Kernel\n";
@@ -505,7 +515,6 @@ bool LE1KernelEvent::CompileSource() {
 
   // Calculate the addresses in global memory where the arguments will be stored
   Kernel* kernel = p_event->kernel();
-
 
   std::stringstream launcher;
   for(unsigned i = 0, j = 0; i < kernel->numArgs(); ++i) {
@@ -521,17 +530,32 @@ bool LE1KernelEvent::CompileSource() {
   launcher << "int main(void) {\n";
   unsigned NestedLoops = 0;
   if (WorkgroupsPerCore[2] != 0) {
+<<<<<<< HEAD
     launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2] << "; ++z) {\n"
+=======
+    launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2]
+      << "; ++z) {\n"
+>>>>>>> complete-compile
     <<      "__builtin_le1_set_group_id_2(z);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[1] != 0) {
+<<<<<<< HEAD
     launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1] << "; ++y) {\n"
+=======
+    launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1]
+      << "; ++y) {\n"
+>>>>>>> complete-compile
     << "      __builtin_le1_set_group_id_1(y);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[0] != 0) {
+<<<<<<< HEAD
     launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0] << "; ++x) {\n"
+=======
+    launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0]
+      << "; ++x) {\n"
+>>>>>>> complete-compile
     << "        __builtin_le1_set_group_id_0(x);\n";
     ++NestedLoops;
   }
@@ -545,8 +569,6 @@ bool LE1KernelEvent::CompileSource() {
   for (unsigned i = 0; i < kernel->numArgs(); ++i) {
     const Kernel::Arg& arg = kernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
-      //launcher << arg_addrs[j];
-      //++j;
       launcher << "&BufferArg_" << i;
     }
     else {
@@ -563,6 +585,22 @@ bool LE1KernelEvent::CompileSource() {
     }
   }
 
+  std::string LauncherString = launcher.str();
+  Compiler MainCompiler(p_device);
+  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C))
+    return false;
+  llvm::Module *MainModule = MainCompiler.module();
+
+  // Link the main module with the coarsened kernel code
+  llvm::Module *CompleteModule =
+    MainCompiler.LinkModules(MainModule, WorkgroupModule);
+
+  // Output a single assembly file
+  if(!MainCompiler.CompileToAssembly(TempAsmName,
+                                     CompleteModule))
+    return false;
+
+  /*
   std::ofstream main;
   main.open("main.c", std::ofstream::out);
   main << launcher.str();
@@ -587,7 +625,7 @@ bool LE1KernelEvent::CompileSource() {
   compile_command << "llc -march=le1 -mcpu="<< p_device->target() << " " 
     << FinalBCName << " -o " << TempAsmName;
   if(system(compile_command.str().c_str()) != 0)
-    return false;
+    return false;*/
 
   //return compiler.produceAsm(input, output);
 
@@ -598,7 +636,10 @@ bool LE1KernelEvent::CompileSource() {
     //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
     << " > " << FinalAsmName;
   // FIXME return false?
-  system(pre_asm_command.str().c_str());
+  if (system(pre_asm_command.str().c_str()) != 0) {
+    std::cerr << "LLVM Transform failed\n";
+    return false;
+  }
 
   //std::stringstream clean;
   //clean << "rm " << merged_bc << " " << final_bc << " " << temp_asm << " main.o";
@@ -625,7 +666,6 @@ bool LE1KernelEvent::WriteDataArea() {
   std::cerr << "Entering LE1KernelEvent::WriteDataArea\n";
 #endif
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
-  std::cout << CopyCommand << std::endl;
   system(CopyCommand.c_str());
 
   std::ofstream FinalSource;
@@ -812,6 +852,7 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
 
     Data = buffer->data();
     buffer->setAddr(addr);
+
 #ifdef DEBUGCL
     std::cerr << "Set buffer arg address to " << addr << std::endl;
 #endif
@@ -1206,7 +1247,7 @@ void LE1KernelEvent::PrintData(const void* data,
       case sizeof(char): {
         // Write a zero padded array and integer value to fill a whole line
         const char* remaining_data = static_cast<const char*>(data) + offset;
-        remaining_data = &remaining_data[index+4];
+        //remaining_data = &remaining_data[index+4];
         unsigned padded_data = 0;
         char padded_array[4] = {0};
         for(unsigned i = 0; i < remaining_bytes; ++i) {
@@ -1227,7 +1268,7 @@ void LE1KernelEvent::PrintData(const void* data,
       case sizeof(short): {
         // Write a zero padded array and integer value to fill a whole line
         const short* remaining_data = static_cast<const short*>(data) + offset;
-        remaining_data = &remaining_data[index+4];
+        //remaining_data = &remaining_data[index+4];
         unsigned padded_data = 0;
         short padded_array[2] = {0};
         for(unsigned i = 0; i < (remaining_bytes >> 1); ++i) {
@@ -1262,12 +1303,18 @@ bool LE1KernelEvent::run() {
  // TODO Use either simulator or hardware? And use variables
  // instead of hard coded parameters
   bool wasSuccess = false;
+<<<<<<< HEAD
   LE1Simulator *Simulator = p_device->getSimulator();
   //std::string SimulatorModel = p_device->model();
 
   //if(!Simulator->Initialise(SimulatorModel))
     //return false;
   wasSuccess = Simulator->Run();
+=======
+  //char* device_name = const_cast<char*>(p_device->model());
+  //p_device->getSimulator()->LockAccess();
+  wasSuccess = p_device->getSimulator()->Run();
+>>>>>>> complete-compile
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
     return false;
@@ -1287,6 +1334,9 @@ bool LE1KernelEvent::run() {
       if (Arg.type()->isIntegerTy(8)) {
         p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
                                                (unsigned char*)buffer->data());
+        if (TotalSize == 1)
+          std::cerr << "Read back 1 byte: " << (unsigned) *((unsigned char*)(buffer->data()))
+            << std::endl;
       }
       // FIXME Shorts aren't handled!
 

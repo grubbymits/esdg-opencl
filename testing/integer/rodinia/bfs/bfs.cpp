@@ -209,9 +209,11 @@ void run_bfs_gpu(int no_of_nodes, Node *h_graph_nodes, int edge_list_size, \
 
                         std::cout << "----------- READ DATA ------------------\n";
 			_clMemcpyD2H(d_over,sizeof(char), &h_over);
+                        std::cout << "Iteration: " << k << ", h_over = "
+                          << (unsigned) h_over << std::endl;
                         ++k;
 
-			}while(h_over);
+			}while(h_over); //&& (k < 8));
                 std::cout << "----------- FINISHED LOOP ------------------\n";
   DataLine << "Number of iterations = " << k << std::endl;
   GPUResults << DataLine.str();
@@ -272,7 +274,7 @@ int main(int argc, char * argv[])
 	char *h_graph_mask, *h_updating_graph_mask, *h_graph_visited;
 	try{
 		char *input_f;
-		if(argc!=2){
+		if(argc!=3){
 		  Usage(argc, argv);
 		  exit(0);
 		}
@@ -285,6 +287,13 @@ int main(int argc, char * argv[])
 		  printf("Error Reading graph file\n");
 		  return 0;
 		}
+
+                std::istringstream iss(argv[2]);
+                if (!(iss >> device_id_inused)) {
+                  printf("Error reading device number\n");
+                  return 0;
+                }
+                std::cout << "device id = " << device_id_inused << std::endl;
 
 		int source = 0;
 

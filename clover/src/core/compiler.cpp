@@ -30,24 +30,39 @@
  * \brief Compiler wrapper around Clang
  */
 
+#include "deviceinterface.h"
 #include "compiler.h"
 
 #include <cstring>
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 #include <clang/Frontend/CompilerInvocation.h>
 #include <clang/Frontend/FrontendOptions.h>
 #include <clang/Frontend/TextDiagnosticPrinter.h>
 #include <clang/Frontend/LangStandard.h>
 #include <clang/Basic/Diagnostic.h>
+#include <clang/CodeGen/BackendUtil.h>
 #include <clang/CodeGen/CodeGenAction.h>
+#include <llvm/DataLayout.h>
+#include <llvm/Linker.h>
+#include <llvm/LLVMContext.h>
+#include <llvm/Module.h>
+#include <llvm/PassManager.h>
 #include <llvm/ADT/SmallVector.h>
+#include <llvm/ADT/StringRef.h>
 #include <llvm/ADT/Triple.h>
+#include <llvm/Bitcode/ReaderWriter.h>
+#include <llvm/Support/CodeGen.h>
+#include <llvm/Support/FormattedStream.h>
 #include <llvm/Support/Host.h>
 #include <llvm/Support/ManagedStatic.h>
-#include <llvm/Module.h>
-#include <llvm/LLVMContext.h>
+#include <llvm/Support/TargetRegistry.h>
+#include <llvm/Support/TargetSelect.h>
+#include <llvm/Support/ToolOutputFile.h>
+#include <llvm/Target/TargetLibraryInfo.h>
+#include <llvm/Target/TargetMachine.h>
 
 using namespace Coal;
 
@@ -58,6 +73,9 @@ Compiler::Compiler(DeviceInterface *device)
 #ifdef DEBUGCL
   std::cerr << "Constructing Compiler::Compiler\n";
 #endif
+  Triple = device->getTriple();
+  CPU = device->getCPU();
+
 }
 
 Compiler::~Compiler()
@@ -66,78 +84,204 @@ Compiler::~Compiler()
   std::cerr << "Destructing Compiler::Compiler\n";
 #endif
 }
-/*
-bool Compiler::AlreadyCompiled(std::string &name) {
-  for (std::vector<std::string>>::iterator NI = PreviousKernels.begin(),
-       NE = PreviousKernels.end(); NI != NE; ++NI) {
-    if (*NI.compare(name) == 0)
-      return true;
-  }
-  return false;
-}*/
 
-bool Compiler::produceAsm(const char* input,
-                          const char* output) {
-  /*
-  clang::CodeGenOptions &codegen_opts = p_compiler.getCodeGenOpts();
-  clang::DiagnosticOptions &diag_opts = p_compiler.getDiagnosticOpts();
-  clang::FrontendOptions &frontend_opts = p_compiler.getFrontendOpts();
-  clang::TargetOptions &target_opts = p_compiler.getTargetOpts();
-
-  // Set diagnostic options
-  diag_opts.Pedantic = true;
-  diag_opts.ShowColumn = true;
-  diag_opts.ShowLocation = true;
-  diag_opts.ShowCarets = false;
-  diag_opts.ShowFixits = true;
-  diag_opts.ShowColors = false;
-  diag_opts.ErrorLimit = 19;
-  diag_opts.MessageLength = 0;
-
-  // Set codegen options
-  codegen_opts.DebugInfo = false;
-  codegen_opts.AsmVerbose = true;
-  codegen_opts.OptimizationLevel = 3;
-
-  // Set frontend options
-  frontend_opts.ProgramAction = clang::frontend::EmitAssembly;
-  frontend_opts.OutputFile = output;
-
-  target_opts.Triple = "le1-llvm-none";
-  frontend_opts.Inputs.push_back(clang::FrontendInputFile(input,
-                                                          clang::IK_LLVM_IR));
-
+bool Compiler::CompileToBitcode(std::string &Source,
+                                clang::InputKind SourceKind) {
 #ifdef DEBUGCL
-    std::cerr << "About to compile...\n";
+  std::cerr << "Entering CompileToBitcode\n";
 #endif
-    // Compile
-    llvm::OwningPtr<clang::CodeGenAction> act(
-        new clang::EmitAssemblyAction(&llvm::getGlobalContext())
-    );
-
-    if (!p_compiler.ExecuteAction(*act))
-    {
-        // DEBUG
-        std::cerr << log() << std::endl;
-        return false;
-    }
-  */
-  clang::EmitAssemblyAction act(&llvm::getGlobalContext());
+  clang::EmitLLVMOnlyAction act(&llvm::getGlobalContext());
   std::string log;
   llvm::raw_string_ostream s_log(log);
 
-  p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitAssembly;
-  p_compiler.getFrontendOpts().Inputs.push_back(
-    clang::FrontendInputFile(input, clang::IK_LLVM_IR));
-  p_compiler.getFrontendOpts().OutputFile = output;
+  std::string TempFilename;
+  if (SourceKind == clang::IK_OpenCL) {
+    TempFilename = "temp.cl";
+    // Add libclc search path
+    p_compiler.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
+                                             clang::frontend::Angled,
+                                             false, false, false);
+    // Add libclc include
+    p_compiler.getPreprocessorOpts().Includes.push_back("clc/clc.h");
 
+    // clc.h requires that this macro be defined
+    p_compiler.getPreprocessorOpts().addMacroDef(
+      "cl_clang_storage_class_specifiers");
+
+    p_compiler.getCodeGenOpts().LinkBitcodeFile =
+      "/opt/esdg-opencl/lib/builtins.bc";
+  }
+  else {
+    TempFilename = "temp.c";
+  }
+
+  p_compiler.getFrontendOpts().Inputs.clear();
+  p_compiler.getPreprocessorOpts().RemappedFiles.clear();
+  p_compiler.getPreprocessorOpts().RemappedFileBuffers.clear();
+
+  p_compiler.getFrontendOpts().Inputs.push_back(
+    clang::FrontendInputFile(TempFilename, SourceKind));
+  p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitLLVMOnly;
+  //p_compiler.getFrontendOpts().OutputFile = OutputFile;
+
+  p_compiler.getHeaderSearchOpts().UseBuiltinIncludes = true;
+  p_compiler.getHeaderSearchOpts().UseStandardSystemIncludes = false;
+  p_compiler.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
+
+  p_compiler.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR,
+                                           clang::frontend::Angled,
+                                           false, false, false);
+
+  p_compiler.getCodeGenOpts().OptimizationLevel = 3;
+  p_compiler.getCodeGenOpts().setInlining(
+    clang::CodeGenOptions::OnlyAlwaysInlining);
+
+  p_compiler.getLangOpts().NoBuiltin = true;
+  p_compiler.getTargetOpts().Triple = Triple;
+  p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
+                                             SourceKind);
+
+  //llvm::MemoryBuffer Buffer = llvm::MemoryBuffer::getMemBuffer(Source);
+  p_compiler.getPreprocessorOpts()
+    .addRemappedFile(TempFilename, llvm::MemoryBuffer::getMemBuffer(Source));
+
+  p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+    s_log, &p_compiler.getDiagnosticOpts()));
+
+  // Compile the code
   if (!p_compiler.ExecuteAction(act)) {
 #ifdef DEBUGCL
-    std::cerr << "Assembly compilation failed\n";
+    std::cerr << "Compilation Failed\n";
+    std::cerr << log;
 #endif
     return false;
   }
+  p_module = act.takeModule();
 
+    //PrevKernels.push_back(name);
+#ifdef DEBUGCL
+  std::cerr << "Leaving Compiler::CompileToBitcode\n";
+#endif
+    return true;
+
+}
+
+llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
+#ifdef DEBUGCL
+  std::cerr << "Entering LinkModules\n";
+#endif
+  llvm::StringRef progName("MyLinker");
+  llvm::Linker ld(progName, m1);
+  if ( ld.LinkInModule(m2) ) {
+    return NULL;
+  }
+#ifdef DEBUGCL
+  std::cerr << "Leaving LinkModules\n";
+#endif
+  return ld.releaseModule();
+}
+
+// BackendUtil.cpp
+// CodeGenOptions
+bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
+#ifdef DEBUGCL
+  std::cerr << "Entering CompileToAssembly\n";
+#endif
+  clang::EmitAssemblyAction act(&llvm::getGlobalContext()); //Module->getContext()?
+
+  llvm::InitializeAllTargets();
+  llvm::InitializeAllTargetMCs();
+  llvm::InitializeAllAsmPrinters();
+
+  std::string Error;
+  const llvm::Target *TheTarget = llvm::TargetRegistry::lookupTarget(Triple,
+                                                                     Error);
+  if (!TheTarget) {
+    std::cerr << "Target not available: " << Error;
+    return false;
+  }
+
+  llvm::TargetOptions Options;
+  std::string FeatureSet;
+  std::auto_ptr<llvm::TargetMachine>
+    target(TheTarget->createTargetMachine(Triple,
+                                          CPU, FeatureSet, Options,
+                                          llvm::Reloc::Static,
+                                          llvm::CodeModel::Default,
+                                          llvm::CodeGenOpt::Default));
+  llvm::TargetMachine &Target = *target.get();
+
+  llvm::PassManager PM;
+  llvm::TargetLibraryInfo *TLI =
+    new llvm::TargetLibraryInfo(llvm::Triple(Triple));
+  TLI->disableAllFunctions();
+  PM.add(TLI);
+  if (target.get()) {
+    PM.add(new llvm::TargetTransformInfo(target->getScalarTargetTransformInfo(),
+                                         target->getVectorTargetTransformInfo())
+           );
+  }
+
+  if (const llvm::DataLayout *TD = Target.getDataLayout())
+    PM.add(new llvm::DataLayout(*TD));
+  else
+    PM.add(new llvm::DataLayout(M));
+
+  llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
+                                                             Error, 0);
+  if (!Error.empty()) {
+    std::cerr << Error;
+    delete FDOut;
+    delete TLI;
+    return false;
+  }
+
+  llvm::OwningPtr<llvm::tool_output_file> Out(FDOut);
+  if (!Out) {
+    std::cerr << "Couldn't create output file\n";
+    return false;
+  }
+  llvm::formatted_raw_ostream FOS(Out->os());
+  //AnalysisID StartAfterID = 0;
+  //AnalysisID StopAfterID = 0;
+
+  if (Target.addPassesToEmitFile(PM, FOS,
+                                 llvm::TargetMachine::CGFT_AssemblyFile,
+                                 false, 0, 0)) {
+    std::cerr << "Target does not support generation of this filetype!\n";
+    return false;
+  }
+
+  PM.run(*M);
+
+  Out->keep();
+
+  // Look at what llc does instead
+
+  //p_compiler.getFrontendOpts().Inputs.clear();
+  //p_compiler.getFrontendOpts().Inputs.push_back(
+    //clang::FrontendInputFile("temp.bc", clang::IK_LLVM_IR));
+  //p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitAssembly;
+  //p_compiler.getFrontendOpts().Inputs.push_back(
+    //clang::FrontendInputFile(llvm::MemoryBuffer::getMemBufferCopy(Source.str()),
+      //                       clang::IK_LLVM_IR));
+  //p_compiler.getFrontendOpts().OutputFile = Filename;
+  //p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
+    //                                         clang::IK_LLVM_IR);
+  //p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+    //s_log, &p_compiler.getDiagnosticOpts()));
+
+  //if (!p_compiler.ExecuteAction(act)) {
+//#ifdef DEBUGCL
+  //  std::cerr << "Assembly compilation failed\n";
+    //std::cerr << log;
+//#endif
+  //  return false;
+  //}
+
+#ifdef DEBUGCL
+  std::cerr << "Leaving CompileToAssembly\n";
+#endif
   return true;
 }
 
@@ -146,277 +290,9 @@ bool Compiler::produceAsm(const char* input,
 // intermediate format will now be .ast instead of .bc and this should mean
 // that source code changes will be minimal.
 
-#define CLANG_RESOURCE_DIR  "/opt/esdg-opencl/lib/clang/3.2/"
-#define LIBCLC_INCLUDEDIR   "/opt/esdg-opencl/include"
 //bool Compiler::compile(const std::string &options,
                                 //llvm::MemoryBuffer *src)
 //{
-bool Compiler::compile(std::string &triple, std::string &name,
-                       std::string &source) {
-#ifdef DEBUGCL
-  std::cerr << "Entering Compiler::compile\n";
-#endif
-    /* Set options */
-    //p_options = options;
-  std::string OutputFile = name + ".tmp.bc";
-
-    clang::EmitBCAction act(&llvm::getGlobalContext());
-    std::string log;
-    llvm::raw_string_ostream s_log(log);
-
-    p_compiler.getFrontendOpts().Inputs.push_back(
-      clang::FrontendInputFile(name, clang::IK_OpenCL));
-    p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitBC;
-    p_compiler.getFrontendOpts().OutputFile = OutputFile;
-    p_compiler.getHeaderSearchOpts().UseBuiltinIncludes = true;
-    p_compiler.getHeaderSearchOpts().UseStandardSystemIncludes = false;
-    p_compiler.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
-
-    // Add libclc search path
-    p_compiler.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDEDIR,
-                                             clang::frontend::Angled,
-                                             false, false, false);
-    p_compiler.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR,
-                                             clang::frontend::Angled,
-                                             false, false, false);
-
-    // Add libclc include
-    p_compiler.getPreprocessorOpts().Includes.push_back("clc/clc.h");
-
-    // clc.h requires that this macro be defined
-    p_compiler.getPreprocessorOpts().addMacroDef(
-      "cl_clang_storage_class_specifiers");
-
-    p_compiler.getCodeGenOpts().LinkBitcodeFile = "/opt/esdg-opencl/lib/builtins.bc";
-    //p_compiler.getCodeGenOpts().OptimizationLevel = 2;
-    p_compiler.getCodeGenOpts().setInlining(
-      clang::CodeGenOptions::OnlyAlwaysInlining);
-
-    p_compiler.getLangOpts().NoBuiltin = true;
-    p_compiler.getTargetOpts().Triple = triple;
-    p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
-                                               clang::IK_OpenCL);
-    p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
-        s_log, &p_compiler.getDiagnosticOpts()));
-
-    std::cout << source << std::endl;
-    p_compiler.getPreprocessorOpts()
-      .addRemappedFile(name, llvm::MemoryBuffer::getMemBuffer(source));
-
-    // Compile the code
-    if (!p_compiler.ExecuteAction(act)) {
-#ifdef DEBUGCL
-      std::cerr << "Compilation Failed\n";
-      std::cerr << log;
-#endif
-      return false;
-    }
-    p_module = act.takeModule();
-
-    //PrevKernels.push_back(name);
-#ifdef DEBUGCL
-  std::cerr << "Leaving Compiler::compile\n";
-#endif
-    return true;
-
-    /*
-    clang::CodeGenOptions &codegen_opts = p_compiler.getCodeGenOpts();
-    clang::DiagnosticOptions &diag_opts = p_compiler.getDiagnosticOpts();
-    clang::FrontendOptions &frontend_opts = p_compiler.getFrontendOpts();
-    clang::HeaderSearchOptions &header_opts = p_compiler.getHeaderSearchOpts();
-    clang::LangOptions &lang_opts = p_compiler.getLangOpts();
-    clang::TargetOptions &target_opts = p_compiler.getTargetOpts();
-    clang::PreprocessorOptions &prep_opts = p_compiler.getPreprocessorOpts();
-    clang::CompilerInvocation &invocation = p_compiler.getInvocation();
-
-    // Set codegen options
-    codegen_opts.DebugInfo = false;
-    codegen_opts.AsmVerbose = true;
-    codegen_opts.OptimizationLevel = 3;
-    codegen_opts.Inlining = clang::CodeGenOptions::OnlyAlwaysInlining;
-    codegen_opts.LinkBitcodeFile = "/usr/local/lib/esdg-opencl/le1/runtime.bc";
-
-    // Set diagnostic options
-    diag_opts.Pedantic = true;
-    diag_opts.ShowColumn = true;
-    diag_opts.ShowLocation = true;
-    diag_opts.ShowCarets = false;
-    diag_opts.ShowFixits = true;
-    diag_opts.ShowColors = false;
-    diag_opts.ErrorLimit = 19;
-    diag_opts.MessageLength = 0;
-
-    // Set frontend options
-    frontend_opts.ProgramAction = clang::frontend::EmitBC;
-    frontend_opts.DisableFree = true;
-    // FIXME Change this to the kernel specific name
-    frontend_opts.OutputFile = "program.bc";
-
-    // Set header search options
-    header_opts.Verbose = false;
-    //header_opts.UseBuiltinIncludes = false;
-    //header_opts.UseStandardSystemIncludes = false;
-    //header_opts.UseStandardCXXIncludes = false;
-
-    // Set preprocessor options
-    prep_opts.RetainRemappedFileBuffers = true;
-
-    // Set lang options
-    lang_opts.NoBuiltin = true;
-    lang_opts.OpenCL = true;
-    lang_opts.CPlusPlus = false;
-
-    // Set target options
-    target_opts.Triple = "le1-llvm-none";
-    //target_opts.CPU = "le1";
-
-    // Set invocation options
-    invocation.setLangDefaults(clang::IK_OpenCL);
-
-    // Parse the user options
-    std::istringstream options_stream(options);
-    std::string token;
-    bool Werror = false, inI = false, inD = false;
-
-    // Add options to make compilation of OpenCL code possible
-    prep_opts.addMacroDef("cl_clang_storage_class_specifiers");
-    header_opts.ResourceDir = "usr/local/lib/clang/3.1/";
-    header_opts.AddPath("/usr/local/include/libclc/generic/",
-                        clang::frontend::Angled,
-                        true,
-                        false,
-                        false);
-    header_opts.AddPath("/usr/local/include/libclc/le1/",
-                        clang::frontend::Angled,
-                        true,
-                        false,
-                        false);
-    header_opts.AddPath("/usr/include/",
-                        clang::frontend::Angled,
-                        true,
-                        false,
-                        false);
-    header_opts.AddPath("/usr/include/linux/",
-                        clang::frontend::Angled,
-                        true,
-                        false,
-                        false);
-
-    header_opts.AddPath("/usr/include/sys/",
-                        clang::frontend::Angled,
-                        true,
-                        false,
-                        false);
-    header_opts.AddPath("/usr/local/include",
-                        clang::frontend::Angled,
-                        true,
-                        false,
-                        false);
-    //prep_opts.Includes.push_back("/usr/include/linux/stddef.h");
-    prep_opts.Includes.push_back("/usr/local/include/libclc/generic/clc/clc.h");
-    //prep_opts.Includes.push_back("/usr/include/sys/types.h");
-
-    while (options_stream >> token)
-    {
-        if (inI)
-        {
-            // token is an include path
-            header_opts.AddPath(token, clang::frontend::Angled, true, false, false);
-            inI = false;
-            continue;
-        }
-        else if (inD)
-        {
-            // token is name or name=value
-            prep_opts.addMacroDef(token);
-        }
-
-        if (token == "-I")
-        {
-            inI = true;
-        }
-        else if (token == "-D")
-        {
-            inD = true;
-        }
-        else if (token == "-cl-single-precision-constant")
-        {
-            lang_opts.SinglePrecisionConstants = true;
-        }
-        else if (token == "-cl-opt-disable")
-        {
-            p_optimize = false;
-            codegen_opts.OptimizationLevel = 0;
-        }
-        else if (token == "-cl-mad-enable")
-        {
-            codegen_opts.LessPreciseFPMAD = true;
-        }
-        else if (token == "-cl-unsafe-math-optimizations")
-        {
-            codegen_opts.UnsafeFPMath = true;
-        }
-        else if (token == "-cl-finite-math-only")
-        {
-            codegen_opts.NoInfsFPMath = true;
-            codegen_opts.NoNaNsFPMath = true;
-        }
-        else if (token == "-cl-fast-relaxed-math")
-        {
-            codegen_opts.UnsafeFPMath = true;
-            codegen_opts.NoInfsFPMath = true;
-            codegen_opts.NoNaNsFPMath = true;
-            lang_opts.FastRelaxedMath = true;
-        }
-        else if (token == "-w")
-        {
-            diag_opts.IgnoreWarnings = true;
-        }
-        else if (token == "-Werror")
-        {
-            Werror = true;
-        }
-    }
-
-    // Create the diagnostics engine
-    p_log_printer = new clang::TextDiagnosticPrinter(p_log_stream, diag_opts);
-    p_compiler.createDiagnostics(0, NULL, p_log_printer);
-
-    if (!p_compiler.hasDiagnostics())
-        return false;
-
-    p_compiler.getDiagnostics().setWarningsAsErrors(Werror);
-
-    // Feed the compiler with source
-    //frontend_opts.Inputs.push_back(std::make_pair(clang::IK_OpenCL, "program.cl"));
-    // FIXME Change this to the kernel specific name
-    frontend_opts.Inputs.push_back(clang::FrontendInputFile("program.cl",
-                                                            clang::IK_OpenCL));
-    prep_opts.addRemappedFile("program.cl", source);
-#ifdef DEBUGCL
-    std::cerr << "About to compile...\n";
-#endif
-    // Compile
-    llvm::OwningPtr<clang::CodeGenAction> act(
-        new clang::EmitBCAction(&llvm::getGlobalContext())
-    );
-
-    if (!p_compiler.ExecuteAction(*act))
-    {
-        // DEBUG
-        std::cerr << log() << std::endl;
-        return false;
-    }
-
-    p_log_stream.flush();
-    p_module = act->takeModule();
-    prep_opts.eraseRemappedFile(prep_opts.remapped_file_buffer_end());
-
-
-    // Cleanup
-
-    return true;*/
-}
 
 const std::string &Compiler::log() const
 {

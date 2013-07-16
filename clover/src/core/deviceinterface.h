@@ -165,10 +165,13 @@ class DeviceInterface : public Object
          */
         virtual void freeEventDeviceData(Event *event) = 0;
 
-        virtual std::string &getTriple() { return Triple; }
+        virtual const std::string &getTriple() const { return Triple; }
+
+        virtual const std::string &getCPU() const { return CPU; }
 
     protected:
         std::string Triple;
+        std::string CPU;
 };
 
 /**

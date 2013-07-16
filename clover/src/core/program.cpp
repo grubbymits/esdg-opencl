@@ -303,7 +303,6 @@ cl_int Program::loadSources(cl_uint count, const char **strings,
     p_type = Source;
     p_state = Loaded;
 #ifdef DEBUGCL
-    std::cerr << p_source << std::endl;
   std::cerr << "Leaving Program::loadSources\n";
 #endif
 
@@ -393,17 +392,17 @@ cl_int Program::build(const char *options,
             // Write file
             // Debug
 
-            llvm::MemoryBuffer *buffer = llvm::MemoryBuffer::getMemBuffer(s_data,
-                                                                        s_name);
+            //llvm::MemoryBuffer *buffer = llvm::MemoryBuffer::getMemBuffer(s_data,
+              //                                                          s_name);
 
             // Compile
             // compile(std::string source, std::string name, std::string triple,
             //        std::string opts)
             // compile(p_source, triple, options ? options : std::string())
-            std::string triple = dep.device->getTriple();
-            std::string name = "program.cl";
+            //std::string triple = dep.device->getTriple();
+            //std::string name = "program.cl";
             //if (!dep.compiler->compile(options ? options : std::string(), buffer))
-            if (!dep.compiler->compile(triple, name, p_source))
+            if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL))
             {
                 if (pfn_notify)
                     pfn_notify((cl_program)this, user_data);
@@ -418,9 +417,9 @@ cl_int Program::build(const char *options,
             // Get module and its bitcode
             dep.linked_module = dep.compiler->module();
 
-            llvm::raw_string_ostream ostream(dep.unlinked_binary);
-            llvm::WriteBitcodeToFile(dep.linked_module, ostream);
-            ostream.flush();
+            //llvm::raw_string_ostream ostream(dep.unlinked_binary);
+            //llvm::WriteBitcodeToFile(dep.linked_module, ostream);
+            //ostream.flush();
         }
 
         // FIXME Need to link to an LE1 library!
