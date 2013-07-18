@@ -671,7 +671,7 @@ cl_int LE1Device::info(cl_device_info param_name,
             break;
 
         case CL_DEVICE_ENDIAN_LITTLE:
-            SIMPLE_ASSIGN(cl_bool, CL_TRUE);
+            SIMPLE_ASSIGN(cl_bool, CL_FALSE);
             break;
 
         case CL_DEVICE_AVAILABLE:
@@ -698,7 +698,7 @@ cl_int LE1Device::info(cl_device_info param_name,
             break;
 
         case CL_DEVICE_VENDOR:
-            STRING_ASSIGN("Mesa");
+            STRING_ASSIGN("ESDG");
             break;
 
         case CL_DRIVER_VERSION:
@@ -706,23 +706,15 @@ cl_int LE1Device::info(cl_device_info param_name,
             break;
 
         case CL_DEVICE_PROFILE:
-            STRING_ASSIGN("FULL_PROFILE");
+            STRING_ASSIGN("EMBEDDED_PROFILE");
             break;
 
         case CL_DEVICE_VERSION:
-            STRING_ASSIGN("OpenCL 1.1 Mesa " COAL_VERSION);
+            STRING_ASSIGN("OpenCL 1.1 ESDG- " COAL_VERSION);
             break;
 
         case CL_DEVICE_EXTENSIONS:
-            STRING_ASSIGN("cl_khr_global_int32_base_atomics"
-                          " cl_khr_global_int32_extended_atomics"
-                          " cl_khr_local_int32_base_atomics"
-                          " cl_khr_local_int32_extended_atomics"
-                          " cl_khr_byte_addressable_store"
-
-                          " cl_khr_fp64"
-                          " cl_khr_int64_base_atomics"
-                          " cl_khr_int64_extended_atomics")
+            STRING_ASSIGN(" cl_khr_byte_addressable_store");
 
             break;
 
@@ -771,6 +763,9 @@ cl_int LE1Device::info(cl_device_info param_name,
             break;
 
         default:
+#ifdef DEBUGCL
+            std::cerr << "ERROR: CL_INVALID VALUE\n";
+#endif
             return CL_INVALID_VALUE;
     }
 

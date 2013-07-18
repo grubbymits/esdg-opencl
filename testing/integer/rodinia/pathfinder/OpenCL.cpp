@@ -3,7 +3,8 @@
 
 OpenCL::OpenCL(int displayOutput)
 {
-	VERBOSE = displayOutput;
+  std::cout << "\n\nOpenCL\n\n";
+  VERBOSE = 1;
 }
 
 OpenCL::~OpenCL()
@@ -37,6 +38,7 @@ cl_command_queue OpenCL::q()
 
 void OpenCL::launch(string toLaunch)
 {
+  std::cout << "OpenCL::launch " << toLaunch << std::endl;
 	// Launch the kernel (or at least enqueue it).
 	ret = clEnqueueNDRangeKernel(command_queue, 
 	                             kernelArray[toLaunch],
@@ -105,6 +107,7 @@ void OpenCL::createKernel(string kernelName)
 
 void OpenCL::buildKernel()
 {
+  std::cout << "OpenCL::buildKernel\n";
 	/* Load the source code for all of the kernels into the array source_str */
 	FILE*  theFile;
 	char*  source_str;
@@ -140,10 +143,10 @@ void OpenCL::buildKernel()
 
 	// Memory cleanup for the variable used to hold the kernel source.
 	free(source_str);
-	
+
 	// Build (compile) the program.
 	ret = clBuildProgram(program, NULL, NULL, NULL, NULL, NULL);
-	
+
 	if (ret != CL_SUCCESS)
 	{
 		printf("\nError at clBuildProgram! Error code %i\n\n", ret);
@@ -193,6 +196,7 @@ void OpenCL::buildKernel()
 
 void OpenCL::getDevices(cl_device_type deviceType)
 {
+  std::cout << "OpenCL::getDevices\n";
 	cl_uint         platforms_n = 0;
 	cl_uint         devices_n   = 0;
 	
@@ -265,7 +269,7 @@ void OpenCL::getDevices(cl_device_type deviceType)
 	}
 	
 	// Create an OpenCL context.
-	context = clCreateContext(NULL, devices_n, device_id, NULL, NULL, &ret);
+	context = clCreateContext(NULL, 1, device_id, NULL, NULL, &ret);
 	if (ret != CL_SUCCESS)
 	{
 		printf("\nError at clCreateContext! Error code %i\n\n", ret);
@@ -284,7 +288,7 @@ void OpenCL::getDevices(cl_device_type deviceType)
 void OpenCL::init(int isGPU)
 {
 	if (isGPU)
-		getDevices(CL_DEVICE_TYPE_GPU);
+		getDevices(CL_DEVICE_TYPE_ACCELERATOR);
 	else
 		getDevices(CL_DEVICE_TYPE_CPU);
 

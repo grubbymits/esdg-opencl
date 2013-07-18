@@ -642,10 +642,16 @@ clEnqueueNDRangeKernel(cl_command_queue command_queue,
                        const cl_event * event_wait_list,
                        cl_event *       event)
 {
+#ifdef DEBUGCL
+  std::cerr << "Entering clEnqueueNDRangeKernel\n";
+#endif
     cl_int rs = CL_SUCCESS;
 
     if (!command_queue->isA(Coal::Object::T_CommandQueue))
     {
+#ifdef DEBUGCL
+      std::cerr << "ERROR, command queue is invalid\n";
+#endif
         return CL_INVALID_COMMAND_QUEUE;
     }
 
@@ -658,9 +664,16 @@ clEnqueueNDRangeKernel(cl_command_queue command_queue,
 
     if (rs != CL_SUCCESS)
     {
+#ifdef DEBUGCL
+      std::cerr << "ERROR, creating KernelEvent failed!\n";
+#endif
         delete command;
         return rs;
     }
+
+#ifdef DEBUGCL
+    std::cerr << "Returning from clEnqueueNDRangeKernel after queueEvent\n";
+#endif
 
     return queueEvent(command_queue, command, event, false);
 }

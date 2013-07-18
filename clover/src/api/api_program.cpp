@@ -235,13 +235,16 @@ clBuildProgram(cl_program           program,
       std::cerr << "!pfn_notify : INVALID_VALUE\n";
         return CL_INVALID_VALUE;
     }
+    // We cannot try to build a previously-failed program
+    if (program->state() != Coal::Program::Loaded)
+      return CL_INVALID_OPERATION;
 
 #ifdef DEBUGCL
     std::cerr << "Checking " << num_devices << " devices\n";
 #endif
     // Check the devices for compliance
-    if (num_devices)
-    {
+    //if (num_devices)
+    //{
         cl_uint context_num_devices = 0;
         cl_device_id *context_devices;
         Coal::Context *context = (Coal::Context *)program->parent();
@@ -266,12 +269,13 @@ clBuildProgram(cl_program           program,
 #endif
             return result;
         }
+
 #ifdef DEBUGCL
         std::cerr << "Checking " << context_num_devices << " context devices\n";
 #endif
 
-        for (cl_uint i=0; i<num_devices; ++i)
-        {
+        if (num_devices) {
+          for (cl_uint i=0; i < num_devices; ++i) {
             bool found = false;
 #ifdef DEBUGCL
             std::cerr << "device_list[" << i << "] addr = "
@@ -299,18 +303,24 @@ clBuildProgram(cl_program           program,
               return CL_INVALID_DEVICE;
             }
         }
-    }
-
-    // We cannot try to build a previously-failed program
-    if (program->state() != Coal::Program::Loaded)
-        return CL_INVALID_OPERATION;
-
 #ifdef DEBUCL
-    std::cerr << "Leaving clBuildProgram after program->build\n";
+        std::cerr << "Leaving clBuildProgram after program->build\n";
 #endif
-    // Build program
-    return program->build(options, pfn_notify, user_data, num_devices,
-                          (Coal::DeviceInterface * const*)device_list);
+        // Build program
+        return program->build(options, pfn_notify, user_data, num_devices,
+                              (Coal::DeviceInterface * const*)device_list);
+      }
+      // num devices wasn't specified and device_list is probably null, so
+      // build for all associated devices
+      else {
+#ifdef DEBUCL
+        std::cerr << "Leaving clBuildProgram after program->build\n";
+#endif
+        return program->build(options, pfn_notify, user_data,
+                              context_num_devices,
+                              context->getAllDevices());
+      }
+  return NULL;
 }
 
 cl_int

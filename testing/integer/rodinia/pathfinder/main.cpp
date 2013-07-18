@@ -112,24 +112,27 @@ int main(int argc, char** argv)
 
 	// Allocate device memory.
 	cl_mem d_gpuWall = clCreateBuffer(cl.ctxt(),
-	                                  CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR,
+	                                  CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
 	                                  sizeof(cl_int)*(size-cols),
 	                                  (data + cols),
 	                                  NULL);
+        std::cout << "Created d_gpuWall Buffer\n";
 
 	cl_mem d_gpuResult[2];
 
 	d_gpuResult[0] = clCreateBuffer(cl.ctxt(),
-	                                CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
+	                                CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
 	                                sizeof(cl_int)*cols,
 	                                data,
 	                                NULL);
+        std::cout << "Created d_gpuResult Buffer 0 \n";
 
 	d_gpuResult[1] = clCreateBuffer(cl.ctxt(),
 	                                CL_MEM_READ_WRITE,
 	                                sizeof(cl_int)*cols,
 	                                NULL,
 	                                NULL);
+        std::cout << "Create d_gpuResult Buffer 1\n";
 
 	cl_int* h_outputBuffer = (cl_int*)malloc(16384*sizeof(cl_int));
 	for (int i = 0; i < 16384; i++)
@@ -137,10 +140,11 @@ int main(int argc, char** argv)
 		h_outputBuffer[i] = 0;
 	}
 	cl_mem d_outputBuffer = clCreateBuffer(cl.ctxt(),
-	                                       CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR,
+	                                       CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
 	                                       sizeof(cl_int)*16384,
 	                                       h_outputBuffer,
 	                                       NULL);
+        std::cout << "Created d_outputBuffer\n";
 
 	int src = 1, final_ret = 0;
 	for (int t = 0; t < rows - 1; t += pyramid_height)
@@ -166,6 +170,7 @@ int main(int argc, char** argv)
 		clSetKernelArg(cl.kernel(kn), 9,  sizeof(cl_int) * (cl.localSize()), 0);
 		clSetKernelArg(cl.kernel(kn), 10, sizeof(cl_int) * (cl.localSize()), 0);
 		clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem), (void*) &d_outputBuffer);
+                std::cout << "Set all args\n";
 		cl.launch(kn);
 	}
 
@@ -179,6 +184,7 @@ int main(int argc, char** argv)
 	                    0,                        // Number of events in wait list. Not used.
 	                    NULL,                     // Event wait list. Not used.
 	                    NULL);                    // Event object for determining status. Not used.
+        std::cout << "Enqueued ReadBuffer for d_gpuResult\n";
 
 
 	// Copy string buffer used for debugging from device to host.
@@ -191,6 +197,8 @@ int main(int argc, char** argv)
 	                    0,                        // Number of events in wait list. Not used.
 	                    NULL,                     // Event wait list. Not used.
 	                    NULL);                    // Event object for determining status. Not used.
+
+        std::cout << "Enqueued ReadBuffer for d_outputBuffer\n";
 	
 	// Tack a null terminator at the end of the string.
 	h_outputBuffer[16383] = '\0';

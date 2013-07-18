@@ -10,12 +10,12 @@ typedef struct{
 	int no_of_edges;
 } Node;
 //--7 parameters
-__kernel void BFS_1( const restrict __global Node* g_graph_nodes,
-		     const restrict __global int* g_graph_edges, 
-		     restrict __global char* g_graph_mask, 
-		     restrict __global char* g_updating_graph_mask, 
-		     restrict __global char* g_graph_visited, 
-		     restrict __global int* g_cost, 
+__kernel void BFS_1( const __global Node* restrict g_graph_nodes,
+		     const __global int* restrict g_graph_edges, 
+		     __global char* restrict g_graph_mask, 
+		     __global char* restrict g_updating_graph_mask, 
+		     __global char* restrict g_graph_visited, 
+		     __global int* restrict g_cost, 
 		    const  int no_of_nodes){
   int tid = get_global_id(0);
   if  ( tid<no_of_nodes && g_graph_mask[tid]){
@@ -33,10 +33,10 @@ __kernel void BFS_1( const restrict __global Node* g_graph_nodes,
 }
 
 //--5 parameters
-__kernel void BFS_2(restrict __global char* g_graph_mask, 
-		    restrict __global char* g_updating_graph_mask, 
-		    restrict __global char* g_graph_visited, 
-		    restrict __global char* g_over,
+__kernel void BFS_2(__global char* restrict g_graph_mask, 
+		    __global char* restrict g_updating_graph_mask, 
+		    __global char* restrict g_graph_visited, 
+		    __global char* restrict g_over,
 		    const  int no_of_nodes) {
   int tid = get_global_id(0);
   if( tid<no_of_nodes && g_updating_graph_mask[tid]){

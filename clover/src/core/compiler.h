@@ -80,7 +80,8 @@ class Compiler
                         std::string &cpu);
 
         llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
-        bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind);
+        bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind,
+                              const std::string &Opts);
         bool CompileToAssembly(std::string &Filename, llvm::Module *Code);
         /**
          * \brief Compile \p source to produce a LLVM module

@@ -205,6 +205,7 @@ class Program : public Object
         Type p_type;
         State p_state;
         std::string p_source;
+        Context *ProgramContext;
 
         struct DeviceDependent
         {

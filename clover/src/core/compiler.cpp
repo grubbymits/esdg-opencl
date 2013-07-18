@@ -38,8 +38,10 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/CompilerInvocation.h>
 #include <clang/Frontend/FrontendOptions.h>
+#include <clang/Frontend/TextDiagnosticBuffer.h>
 #include <clang/Frontend/TextDiagnosticPrinter.h>
 #include <clang/Frontend/LangStandard.h>
 #include <clang/Basic/Diagnostic.h>
@@ -86,13 +88,53 @@ Compiler::~Compiler()
 }
 
 bool Compiler::CompileToBitcode(std::string &Source,
-                                clang::InputKind SourceKind) {
+                                clang::InputKind SourceKind,
+                                const std::string &Opts) {
 #ifdef DEBUGCL
   std::cerr << "Entering CompileToBitcode\n";
 #endif
+  clang::CompilerInvocation Invocation;
   clang::EmitLLVMOnlyAction act(&llvm::getGlobalContext());
   std::string log;
   llvm::raw_string_ostream s_log(log);
+
+  // Parse the compiler options
+  std::vector<std::string> opts_array;
+  std::istringstream ss(Opts);
+
+  while (!ss.eof()) {
+    std::string opt;
+    getline(ss, opt, ' ');
+    opts_array.push_back(opt);
+  }
+
+  // opts_array.push_back(name);
+
+  std::vector<const char*> opts_carray;
+  for (unsigned i = 0; i < opts_array.size(); i++) {
+    opts_carray.push_back(opts_array.at(i).c_str());
+  }
+
+  llvm::IntrusiveRefCntPtr<clang::DiagnosticIDs> DiagID;
+  llvm::IntrusiveRefCntPtr<clang::DiagnosticOptions> DiagOpts;
+  clang::TextDiagnosticBuffer *DiagBuffer;
+
+  DiagID = new clang::DiagnosticIDs();
+  DiagOpts = new clang::DiagnosticOptions();
+  DiagBuffer = new clang::TextDiagnosticBuffer();
+
+  clang::DiagnosticsEngine Diags(DiagID, &*DiagOpts, DiagBuffer);
+  bool Success;
+  Success =
+    clang::CompilerInvocation::CreateFromArgs(p_compiler.getInvocation(),
+                                        opts_carray.data(),
+                                        opts_carray.data() + opts_carray.size(),
+                                        Diags);
+
+  if (!Success) {
+    std::cerr << "!ERROR: Could not create CompilerInvocation!\n";
+    return false;
+  }
 
   std::string TempFilename;
   if (SourceKind == clang::IK_OpenCL) {
@@ -255,29 +297,6 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   PM.run(*M);
 
   Out->keep();
-
-  // Look at what llc does instead
-
-  //p_compiler.getFrontendOpts().Inputs.clear();
-  //p_compiler.getFrontendOpts().Inputs.push_back(
-    //clang::FrontendInputFile("temp.bc", clang::IK_LLVM_IR));
-  //p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitAssembly;
-  //p_compiler.getFrontendOpts().Inputs.push_back(
-    //clang::FrontendInputFile(llvm::MemoryBuffer::getMemBufferCopy(Source.str()),
-      //                       clang::IK_LLVM_IR));
-  //p_compiler.getFrontendOpts().OutputFile = Filename;
-  //p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
-    //                                         clang::IK_LLVM_IR);
-  //p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
-    //s_log, &p_compiler.getDiagnosticOpts()));
-
-  //if (!p_compiler.ExecuteAction(act)) {
-//#ifdef DEBUGCL
-  //  std::cerr << "Assembly compilation failed\n";
-    //std::cerr << log;
-//#endif
-  //  return false;
-  //}
 
 #ifdef DEBUGCL
   std::cerr << "Leaving CompileToAssembly\n";

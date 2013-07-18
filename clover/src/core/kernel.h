@@ -89,10 +89,10 @@ class Kernel : public Object
                  */
                 enum File
                 {
-                    Private = 0,  /*!< \brief __private */
-                    Global = 1,   /*!< \brief __global */
-                    Local = 2,    /*!< \brief __local */
-                    Constant = 3  /*!< \brief __constant */
+                    Private = 2,  /*!< \brief __private */
+                    Global = 3,   /*!< \brief __global */
+                    Local = 4,    /*!< \brief __local */
+                    Constant = 5  /*!< \brief __constant */
                 };
 
                 /**

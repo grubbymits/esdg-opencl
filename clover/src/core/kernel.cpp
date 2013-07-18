@@ -107,10 +107,10 @@ Kernel::DeviceDependent &Kernel::deviceDependent(DeviceInterface *device)
 cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
                            llvm::Module *module)
 {
-#ifdef DEBUGCL
-  std::cerr << "Entering Kernel::addFunction\n";
-#endif
     p_name = function->getName();
+#ifdef DEBUGCL
+  std::cerr << "Entering Kernel::addFunction : " << p_name << std::endl;
+#endif
 
     // Add a device dependent
     DeviceDependent dep;
@@ -136,6 +136,9 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
 
         if (arg_type->isPointerTy())
         {
+#ifdef DEBUGCL
+          std::cerr << "Arg " << i << " is a pointer\n";
+#endif
             // It's a pointer, dereference it
             llvm::PointerType *p_type = llvm::cast<llvm::PointerType>(arg_type);
 
@@ -143,8 +146,12 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
             arg_type = p_type->getElementType();
 
             // If it's a __local argument, we'll have to allocate memory at run time
-            if (file == Arg::Local)
+            if (file == Arg::Local) {
+#ifdef DEBUGCL
+              std::cerr << "Arg " << i << " is a __local pointer\n";
+#endif
                 p_has_locals = true;
+            }
 
             kind = Arg::Buffer;
 
@@ -169,6 +176,9 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
         }
         else
         {
+#ifdef DEBUGCL
+          std::cerr << "Arg " << i << " is not a pointer\n";
+#endif
             if (arg_type->isVectorTy())
             {
                 // It's a vector, we need its element's type
@@ -356,8 +366,12 @@ bool Kernel::argsSpecified() const
 {
     for (size_t i=0; i<p_args.size(); ++i)
     {
-        if (!p_args[i].defined())
+        if (!p_args[i].defined()) {
+#ifdef DEBUGCL
+          std::cerr << "ERROR: arg " << i << " is not defined!\n";
+#endif
             return false;
+        }
     }
 
     return true;
@@ -481,6 +495,9 @@ cl_int Kernel::workGroupInfo(DeviceInterface *device,
             break;
 
         default:
+#ifdef DEBUGCL
+            std::cerr << "Leaving Kernel::workGroupInfo, INVALID_VALUE\n";
+#endif
             return CL_INVALID_VALUE;
     }
 
@@ -493,10 +510,10 @@ cl_int Kernel::workGroupInfo(DeviceInterface *device,
     if (param_value)
         std::memcpy(param_value, value, value_length);
 
-    return CL_SUCCESS;
 #ifdef DEBUGCL
   std::cerr << "Leaving Kernel::workGroupInfo\n";
 #endif
+    return CL_SUCCESS;
 }
 
 /*

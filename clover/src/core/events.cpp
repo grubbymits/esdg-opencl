@@ -698,16 +698,25 @@ KernelEvent::KernelEvent(CommandQueue *parent,
         return;
 
     p_dev_kernel = kernel->deviceDependentKernel(device);
+#ifdef DEBUGCL
+    std::cerr << "got deviceDependentKernel\n";
+#endif
 
     if (!p_dev_kernel)
     {
         *errcode_ret = CL_INVALID_PROGRAM_EXECUTABLE;
+#ifdef DEBUGCL
+        std::cerr << "ERROR: deviceDependentKernel failed\n";
+#endif
         return;
     }
 
     // Check that contexts match
     if (k_ctx != q_ctx)
     {
+#ifdef DEBUGCL
+        std::cerr << "ERROR: contexts don't match!\n";
+#endif
         *errcode_ret = CL_INVALID_CONTEXT;
         return;
     }
@@ -715,6 +724,9 @@ KernelEvent::KernelEvent(CommandQueue *parent,
     // Check args
     if (!kernel->argsSpecified())
     {
+#ifdef DEBUGCL
+        std::cerr << "ERROR: kernel args aren't specifed\n";
+#endif
         *errcode_ret = CL_INVALID_KERNEL_ARGS;
         return;
     }
@@ -722,6 +734,9 @@ KernelEvent::KernelEvent(CommandQueue *parent,
     // Check dimension
     if (work_dim == 0 || work_dim > max_dims)
     {
+#ifdef DEBUGCL
+        std::cerr << "ERROR: invalid work dimension\n";
+#endif
         *errcode_ret = CL_INVALID_WORK_DIMENSION;
         return;
     }
@@ -799,10 +814,18 @@ KernelEvent::KernelEvent(CommandQueue *parent,
     // Check arguments (buffer alignment, image size, ...)
     for (unsigned int i=0; i<kernel->numArgs(); ++i)
     {
+#ifdef DEBUGCL
+      std::cerr << "Checking argument " << i << std::endl;
+#endif
         const Kernel::Arg &a = kernel->arg(i);
+        if (a.file() == Kernel::Arg::Local)
+          continue;
 
         if (a.kind() == Kernel::Arg::Buffer)
         {
+#ifdef DEBUGCL
+          std::cerr << "Arg is a buffer\n";
+#endif
             const MemObject *buffer = *(const MemObject **)(a.value(0));
 
             if (!BufferEvent::isSubBufferAligned(buffer, device))

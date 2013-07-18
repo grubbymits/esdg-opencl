@@ -2634,7 +2634,9 @@ public:
 
 void LE1TargetCodeGenInfo::SetTargetAttributes(const Decl *D,
                                                llvm::GlobalValue *GV,
-                                               CodeGen::CodeGenModule &M) const {
+                                               CodeGen::CodeGenModule &M)
+  const {
+
   const FunctionDecl *FD = dyn_cast<FunctionDecl>(D);
   if (!FD) return;
 
@@ -2650,7 +2652,7 @@ void LE1TargetCodeGenInfo::SetTargetAttributes(const Decl *D,
         // Convert the reqd_work_group_size() attributes to metadata.
         llvm::LLVMContext &Context = F->getContext();
         llvm::NamedMDNode *OpenCLMetadata = 
-            M.getModule().getOrInsertNamedMetadata("opencl.kernel_wg_size_info");
+          M.getModule().getOrInsertNamedMetadata("opencl.kernel_wg_size_info");
 
         SmallVector<llvm::Value*, 5> Operands;
         Operands.push_back(F);

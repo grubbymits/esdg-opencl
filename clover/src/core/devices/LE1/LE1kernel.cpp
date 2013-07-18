@@ -81,8 +81,10 @@ LE1Kernel::~LE1Kernel()
     pthread_mutex_destroy(&p_call_function_mutex);
 }
 
+// FIXME This probably needs to match device->info
 size_t LE1Kernel::workGroupSize() const
 {
+  return 256;
     return 0; // TODO
 }
 
@@ -493,8 +495,13 @@ bool LE1KernelEvent::CompileSource() {
     return false;
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();
+#ifdef DEBUGCL
+  std::cerr << std::endl << WorkgroupSource << std::endl;
+#endif
+
   Compiler LE1Compiler(p_device);
-  if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL))
+  std::string Opts = "";
+  if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts))
     return false;
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
@@ -567,7 +574,7 @@ bool LE1KernelEvent::CompileSource() {
 
   std::string LauncherString = launcher.str();
   Compiler MainCompiler(p_device);
-  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C))
+  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
     return false;
   llvm::Module *MainModule = MainCompiler.module();
 

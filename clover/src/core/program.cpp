@@ -159,8 +159,12 @@ std::vector<llvm::Function *> Program::kernelFunctions(DeviceDependent &dep)
 
     llvm::NamedMDNode *kernels = dep.linked_module->getNamedMetadata("opencl.kernels");
 
-    if (!kernels)
-        return rs;
+    if (!kernels) {
+#ifdef DEBUGCL
+      std::cerr << "Leaving Program::kernelFunctions, !kernels\n";
+#endif
+      return rs;
+    }
 
     for (unsigned int i=0; i<kernels->getNumOperands(); ++i)
     {
@@ -176,10 +180,10 @@ std::vector<llvm::Function *> Program::kernelFunctions(DeviceDependent &dep)
         rs.push_back(f);
     }
 
-    return rs;
 #ifdef DEBUGCL
   std::cerr << "Leaving Program::kernelFunctions\n";
 #endif
+    return rs;
 }
 
 Kernel *Program::createKernel(const std::string &name, cl_int *errcode_ret)
@@ -402,7 +406,8 @@ cl_int Program::build(const char *options,
             //std::string triple = dep.device->getTriple();
             //std::string name = "program.cl";
             //if (!dep.compiler->compile(options ? options : std::string(), buffer))
-            if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL))
+            if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL,
+                                              options ? options : std::string()))
             {
                 if (pfn_notify)
                     pfn_notify((cl_program)this, user_data);

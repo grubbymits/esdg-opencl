@@ -333,9 +333,9 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
     std::cout << "Declaring it as an array\n";
     if (LocalX != 0)
       NewDecl << "[" << LocalX << "]";
-    if (LocalY != 0)
+    if (LocalY > 1)
       NewDecl << "[" << LocalY << "]";
-    if (LocalZ != 0)
+    if (LocalZ > 1)
       NewDecl << "[" << LocalZ << "]";
     NewScalarRepls.insert(std::make_pair(varName, ND));
 
@@ -383,8 +383,10 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
 
 //template <typename T>
 void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
-  std::cout << "Creating scalar access for "
+#ifdef DEBUGCL
+  std::cerr << "Creating scalar access for "
       << Ref->getDecl()->getName().str() << std::endl;
+#endif
   unsigned offset = Ref->getDecl()->getName().str().length();
   SourceLocation loc = Ref->getLocEnd().getLocWithOffset(offset);
   TheRewriter.InsertText(loc, "[__kernel_local_id[0]]", true);
@@ -394,6 +396,7 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
 bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
   Stmt* ForBody = cast<ForStmt>(s)->getBody();
   SourceLocation ForLoc = s->getLocStart();
+  bool FoundBarriers = false;
 
   for (Stmt::child_iterator FI = ForBody->child_begin(),
        FE = ForBody->child_end(); FI != FE; ++FI) {
@@ -403,7 +406,7 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
       if (BarrierInLoop(nested)) {
         LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
         LoopsToDistribute.push_back(s);
-        return true;
+        FoundBarriers = true;
       }
     }
     else if (CallExpr* Call = dyn_cast_or_null<CallExpr>(*FI)) {
@@ -412,16 +415,25 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
       std::string FuncName = DeclName.getAsString();
 
       if (FuncName.compare("barrier") == 0) {
-        LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
-        LoopsToDistribute.push_back(s);
+        // Only record loops once, each loop may have several barriers within
+        // it though.
+        if (LoopsToDistribute.empty()) {
+          LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
+          LoopsToDistribute.push_back(s);
+        }
+        // FIXME When does LoopsToDistribute get cleared? Do we need to do the
+        // following checking..?
+        //else if (LoopsToDistribute.front() != s){ }
         LoopBarrier = Call;
         LoopBarriers.insert(std::make_pair(Call->getLocStart(), Call));
-        return true;
+        FoundBarriers = true;
       }
     }
   }
-  LoopsWithoutBarrier.insert(std::make_pair(ForLoc, s));
-  return false;
+  if (!FoundBarriers)
+    LoopsWithoutBarrier.insert(std::make_pair(ForLoc, s));
+
+  return FoundBarriers;
 }
 
 // Check for barrier calls within loops, this is necessary to close the
@@ -430,7 +442,9 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
 bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
   std::cout << "VisitForStmt\n";
   ForStmt* ForLoop = cast<ForStmt>(s);
+  ForLoop->dumpAll();
   SourceLocation ForLoc = ForLoop->getLocStart();
+
   // Check whether we've already visited the loop
   if (LoopsWithBarrier.find(ForLoc) != LoopsWithBarrier.end())
     return true;
@@ -441,77 +455,100 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
     // LoopsToReplicate is a vector containing one or more (nested)
     // loops that need to be distributed.
 
-    // Close the loop(s)
-    SourceLocation BarrierLoc = LoopBarrier->getLocStart();
-    for (unsigned i = 0; i < LoopsToDistribute.size(); ++i)
-      TheRewriter.InsertText(BarrierLoc, "}\n", true, true);
+    for (std::map<SourceLocation, CallExpr*>::iterator LBI
+         = LoopBarriers.begin(), LBE = LoopBarriers.end(); LBI != LBE; ++LBI) {
+      SourceLocation BarrierLoc = LBI->first;
+      LoopBarrier = LBI->second;
 
-    CloseLoop(BarrierLoc);
-    OpenLoop(BarrierLoc);
-
-    // Initialise the new loop(s)
-    while (!LoopsToDistribute.empty()) {
-      ForStmt *Loop = LoopsToDistribute.back();
-
-      // If the for loop use DeclRefExpr, we will need to move the
-      // declarations into a global scope since the while loop was has just
-      // been closed.
-      // TODO There must be a cleaner way of doing this?
-      for (Stmt::child_iterator FI = Loop->getInit()->child_begin(),
-           FE = Loop->getInit()->child_end(); FI != FE; ++FI) {
-        if (isa<DeclRefExpr>(*FI)) {
-          DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
-          NamedDecl *ND = Ref->getDecl();
-          std::string key = ND->getName().str();
-          if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
-            CreateLocalVariable(Ref, false);
-          }
+      bool isFinal = false;
+      Stmt::child_iterator Final;
+      for (Stmt::child_iterator FI = ForLoop->getBody()->child_begin(),
+           FE = ForLoop->getBody()->child_end(); FI != FE; ++FI) {
+        isFinal = false;
+        if (*FI == LoopBarrier) {
+          std::cerr << "Found loop\n";
+          isFinal = true;
+          Final = FI;
         }
       }
-      for (Stmt::child_iterator FI = Loop->getCond()->child_begin(),
-           FE = Loop->getCond()->child_end(); FI != FE; ++FI) {
-        if (isa<DeclRefExpr>(*FI)) {
-          DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
-          NamedDecl *ND = Ref->getDecl();
-          std::string key = ND->getName().str();
-          if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
-            CreateLocalVariable(Ref, false);
-          }
-        }
+      // Close the loop(s)
+      //SourceLocation BarrierLoc = LoopBarrier->getLocStart();
+      for (unsigned i = 0; i < LoopsToDistribute.size(); ++i)
+        TheRewriter.InsertText(BarrierLoc, "}\n", true, true);
+
+
+      if (isFinal) {
+        CloseLoop(ForLoop->getBody()->getLocEnd().getLocWithOffset(2));
+        OpenLoop(ForLoop->getBody()->getLocEnd().getLocWithOffset(2));
       }
-      for (Stmt::child_iterator FI = Loop->getInc()->child_begin(),
-           FE = Loop->getInc()->child_end(); FI != FE; ++FI) {
-        if (isa<DeclRefExpr>(*FI)) {
-          DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
-          NamedDecl *ND = Ref->getDecl();
-          std::string key = ND->getName().str();
-          if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
-            CreateLocalVariable(Ref, false);
-          }
-        }
+      else {
+        CloseLoop(BarrierLoc);
+        OpenLoop(BarrierLoc);
       }
 
-      LoopsToDistribute.pop_back();
-      Stmt *Init = Loop->getInit();
-      //const DeclStmt *CondVar = Loop->getConditionVariableDeclStmt();
-      Expr *Cond = Loop->getCond();
-      Expr *Inc = Loop->getInc();
+      // Initialise the new loop(s)
+      while (!LoopsToDistribute.empty()) {
+        ForStmt *Loop = LoopsToDistribute.back();
 
-      std::stringstream LoopHeader;
-      LoopHeader << "for (";
-      if (Init)
-        LoopHeader << TheRewriter.ConvertToString(Init) << "; ";
-      // FIXME Need to handle CondVar
-      //if (CondVar)
+        // If the for loop use DeclRefExpr, we will need to move the
+        // declarations into a global scope since the while loop was has just
+        // been closed.
+        // TODO There must be a cleaner way of doing this?
+        for (Stmt::child_iterator FI = Loop->getInit()->child_begin(),
+            FE = Loop->getInit()->child_end(); FI != FE; ++FI) {
+          if (isa<DeclRefExpr>(*FI)) {
+            DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
+            NamedDecl *ND = Ref->getDecl();
+            std::string key = ND->getName().str();
+            if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
+              CreateLocalVariable(Ref, false);
+            }
+          }
+        }
+        for (Stmt::child_iterator FI = Loop->getCond()->child_begin(),
+            FE = Loop->getCond()->child_end(); FI != FE; ++FI) {
+          if (isa<DeclRefExpr>(*FI)) {
+            DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
+            NamedDecl *ND = Ref->getDecl();
+            std::string key = ND->getName().str();
+            if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
+              CreateLocalVariable(Ref, false);
+            }
+          }
+        }
+        for (Stmt::child_iterator FI = Loop->getInc()->child_begin(),
+            FE = Loop->getInc()->child_end(); FI != FE; ++FI) {
+          if (isa<DeclRefExpr>(*FI)) {
+            DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
+            NamedDecl *ND = Ref->getDecl();
+            std::string key = ND->getName().str();
+            if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
+              CreateLocalVariable(Ref, false);
+            }
+          }
+        }
+
+        LoopsToDistribute.pop_back();
+        Stmt *Init = Loop->getInit();
+        //const DeclStmt *CondVar = Loop->getConditionVariableDeclStmt();
+        Expr *Cond = Loop->getCond();
+        Expr *Inc = Loop->getInc();
+
+        std::stringstream LoopHeader;
+        LoopHeader << "for (";
+        if (Init)
+          LoopHeader << TheRewriter.ConvertToString(Init) << "; ";
+        // FIXME Need to handle CondVar
+        //if (CondVar)
         //std::cout << TheRewriter.ConvertToString(static_cast<CondVar);
-      if (Cond)
-        LoopHeader << TheRewriter.ConvertToString(Cond) << "; ";
-      if (Inc)
-        LoopHeader << TheRewriter.ConvertToString(Inc) << ") {\n";
+        if (Cond)
+          LoopHeader << TheRewriter.ConvertToString(Cond) << "; ";
+        if (Inc)
+          LoopHeader << TheRewriter.ConvertToString(Inc) << ") {\n";
 
-      TheRewriter.InsertText(BarrierLoc, LoopHeader.str(), true, true);
+        TheRewriter.InsertText(BarrierLoc, LoopHeader.str(), true, true);
+      }
     }
-
   }
   return true;
 }
@@ -530,10 +567,10 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
     TheRewriter.InsertText(Call->getLocStart(), "//", true, true);
 
     if (LoopBarriers.find(Call->getLocStart()) == LoopBarriers.end()) {
+      // Close the triple nest so all work items complete
+      CloseLoop(Call->getLocEnd().getLocWithOffset(2));
       // Then open another nested loop for the code after the barrier
       OpenLoop(Call->getLocEnd().getLocWithOffset(2));
-      // Close the triple nest so all work items complete
-      CloseLoop(Call->getLocEnd().getLocWithOffset(1));
     }
   }
   return true;

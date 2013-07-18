@@ -85,6 +85,10 @@ class Context : public Object
          */
         bool hasDevice(DeviceInterface *device) const;
 
+        //unsigned getNumDevices() const { return p_num_devices; }
+
+        DeviceInterface **getAllDevices() const { return p_devices; }
+
     private:
         cl_context_properties *p_properties;
         void (CL_CALLBACK *p_pfn_notify)(const char *, const void *,
