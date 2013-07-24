@@ -165,10 +165,9 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
   return true;
 }
 
-//template <typename T>
+// If there are grouped declarations, split them into individual decls.
 bool WorkitemCoarsen::KernelInitialiser::VisitDeclStmt(Stmt *s) {
   DeclStmt *DS = cast<DeclStmt>(s);
-  // If there are grouped declarations, split them into individual decls.
   if (DS->isSingleDecl())
     return true;
   else {
@@ -299,27 +298,35 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
   }
 }
 
-//template <typename T>
 void WorkitemCoarsen::ThreadSerialiser::CloseLoop(SourceLocation Loc) {
     TheRewriter.InsertText(Loc, CloseWhile.str(), true, true);
 }
 
-//template <typename T>
 void WorkitemCoarsen::ThreadSerialiser::OpenLoop(SourceLocation Loc) {
   TheRewriter.InsertText(Loc, OpenWhile.str(), true, true);
 }
 
-//template <typename T>
 void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
                                                             bool ScalarRepl) {
   NamedDecl *ND = Ref->getDecl();
   std::string varName = ND->getName().str();
 
-  std::cout << "Creating local variable for " << varName << std::endl;
+  // Do not create local variables for variables who have limited scope,
+  // such as one declared in loop headers
+  if (ScopedVariables.find(varName) != ScopedVariables.end())
+    return;
+
+#ifdef DEBUGCL
+  std::cerr << "Creating local variable for " << varName << std::endl;
+#endif
 
   // Make sure we don't add the same value more than once
-  if (NewLocalDecls.find(varName) != NewLocalDecls.end())
+  if (NewLocalDecls.find(varName) != NewLocalDecls.end()) {
+#ifdef DEBUGCL
+    std::cerr << "But already added a new declaration for it\n";
+#endif
     return;
+  }
 
   std::string type = cast<ValueDecl>(ND)->getType().getAsString();
   std::stringstream NewDecl;
@@ -330,7 +337,9 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
   // to retrospectively look back at the previous references and turn them
   // into array accesses as well as just declaring the variables as an array.
   if (ScalarRepl) {
-    std::cout << "Declaring it as an array\n";
+#ifdef DEBUGCL
+    std::cerr << "Declaring it as an array\n";
+#endif
     if (LocalX != 0)
       NewDecl << "[" << LocalX << "]";
     if (LocalY > 1)
@@ -351,26 +360,35 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
   }
   NewDecl << ";\n";
 
+  // Declare the variable
   TheRewriter.InsertText(FuncStart, NewDecl.str(), true, true);
 
   // Remove the old declaration; if it wasn't initialised, remove the whole
   // statement and not just the type declaration.
   if (DeclStmts.find(varName) != DeclStmts.end()) {
     DeclStmt *DS = DeclStmts[varName];
+#ifdef DEBUGCL
+    std::cerr << "Removing old declaration of " << ND->getName().str()
+      << std::endl;
+    DS->dumpAll();
+#endif
+
     if (DS->child_begin() != DS->child_end()) {
       TheRewriter.RemoveText(ND->getLocStart(), type.length());
+
       if(ScalarRepl)
         AccessScalar(DeclStmts[varName]->getSingleDecl());
     }
     else {
-      TheRewriter.RemoveText(ND->getLocEnd().getLocWithOffset(1));
-      TheRewriter.RemoveText(ND->getSourceRange());
+      // Remove the semi-colon?
+      //TheRewriter.RemoveText(ND->getLocEnd());
+      TheRewriter.RemoveText(DS->getSourceRange());
+      //TheRewriter.RemoveText(ND->getSourceRange());
     }
     DeclStmts.erase(varName);
   }
 }
 
-//template <typename T>
 void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
   NamedDecl *ND = cast<NamedDecl>(decl);
   unsigned offset = ND->getName().str().length();
@@ -438,7 +456,6 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
 
 // Check for barrier calls within loops, this is necessary to close the
 // nested loops properly.
-//template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
   std::cout << "VisitForStmt\n";
   ForStmt* ForLoop = cast<ForStmt>(s);
@@ -489,19 +506,48 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
       // Initialise the new loop(s)
       while (!LoopsToDistribute.empty()) {
         ForStmt *Loop = LoopsToDistribute.back();
+#ifdef DEBUGCL
+        std::cerr << "Initialising new loop:\n";
+#endif
 
         // If the for loop use DeclRefExpr, we will need to move the
         // declarations into a global scope since the while loop was has just
         // been closed.
         // TODO There must be a cleaner way of doing this?
-        for (Stmt::child_iterator FI = Loop->getInit()->child_begin(),
-            FE = Loop->getInit()->child_end(); FI != FE; ++FI) {
-          if (isa<DeclRefExpr>(*FI)) {
-            DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
-            NamedDecl *ND = Ref->getDecl();
-            std::string key = ND->getName().str();
-            if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
-              CreateLocalVariable(Ref, false);
+        Stmt *LoopInit = Loop->getInit();
+        if ((cast<DeclStmt>(LoopInit))->isSingleDecl()) {
+#ifdef DEBUGCL
+          std::cerr << "Loop init is single decl\n";
+#endif
+          DeclStmt *InitDecl = cast<DeclStmt>(LoopInit);
+          NamedDecl *ND = cast<NamedDecl>(InitDecl->getSingleDecl());
+          std::string key = ND->getName().str();
+          ScopedVariables.insert(std::make_pair(key, ND));
+        }
+        else {
+#ifdef DEBUGCL
+          std::cerr << "Loop init has multiple declarations\n";
+#endif
+          for (Stmt::child_iterator FI = Loop->getInit()->child_begin(),
+               FE = Loop->getInit()->child_end(); FI != FE; ++FI) {
+
+            if (isa<DeclStmt>(*FI)) {
+#ifdef DEBUGCL
+              std::cerr << "Found DeclStmt in the Loop Init\n";
+#endif
+              DeclStmt *DS = cast<DeclStmt>(*FI);
+              NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
+              std::string key = ND->getName().str();
+              ScopedVariables.insert(std::make_pair(key, ND));
+            }
+            else if (isa<DeclRefExpr>(*FI)) {
+              DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
+              NamedDecl *ND = Ref->getDecl();
+              std::string key = ND->getName().str();
+
+              if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
+                CreateLocalVariable(Ref, false);
+              }
             }
           }
         }
@@ -534,10 +580,13 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
         Expr *Cond = Loop->getCond();
         Expr *Inc = Loop->getInc();
 
+        // FIXME I should look the code above and see how it affects the
+        // creation of a new loop. I just had to remove a ';' from the
+        // end of Init
         std::stringstream LoopHeader;
         LoopHeader << "for (";
         if (Init)
-          LoopHeader << TheRewriter.ConvertToString(Init) << "; ";
+          LoopHeader << TheRewriter.ConvertToString(Init);
         // FIXME Need to handle CondVar
         //if (CondVar)
         //std::cout << TheRewriter.ConvertToString(static_cast<CondVar);
@@ -546,6 +595,9 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
         if (Inc)
           LoopHeader << TheRewriter.ConvertToString(Inc) << ") {\n";
 
+#ifdef DEBUGCL
+        std::cerr << "Loop header: " << LoopHeader.str() << std::endl;
+#endif
         TheRewriter.InsertText(BarrierLoc, LoopHeader.str(), true, true);
       }
     }

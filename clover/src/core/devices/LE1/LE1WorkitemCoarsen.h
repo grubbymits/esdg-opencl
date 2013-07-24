@@ -151,6 +151,7 @@ private:
   std::vector<clang::NamedDecl*> Decls;
   std::map<std::string, clang::SourceLocation> DeclLocs;
   std::map<std::string, clang::NamedDecl*> NewLocalDecls;
+  std::map<std::string, clang::NamedDecl*> ScopedVariables;
   std::map<std::string, clang::NamedDecl*> NewScalarRepls;
   std::map<std::string, clang::DeclStmt*> DeclStmts;
   std::map<clang::SourceLocation, clang::CallExpr*>LoopBarriers;
