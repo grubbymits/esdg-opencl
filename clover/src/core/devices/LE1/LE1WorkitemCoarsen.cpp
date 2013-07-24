@@ -222,9 +222,11 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   std::string FuncName = DeclName.getAsString();
 
   // Modify any calls to get_global_id to use the generated local ids.
-  if (FuncName.compare("get_global_id") == 0) {
-    IntegerLiteral *Arg;
-    unsigned Index = 0;
+  IntegerLiteral *Arg;
+  unsigned Index = 0;
+  if ((FuncName.compare("get_global_id") == 0) ||
+      (FuncName.compare("get_local_id") == 0) ||
+      (FuncName.compare("get_local_size") == 0)) {
 
     if (IntegerLiteral::classof(Call->getArg(0))) {
       Arg = cast<IntegerLiteral>(Call->getArg(0));
@@ -237,6 +239,8 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
       llvm_unreachable("unhandled argument type!");
 
     Index = Arg->getValue().getZExtValue();
+  }
+  if (FuncName.compare("get_global_id") == 0) {
 
     // Remove the semi-colon after the call
     TheRewriter.RemoveText(Call->getLocEnd().getLocWithOffset(1), 1);
@@ -258,10 +262,33 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
       break;
     }
   }
-  // FIXME Handle local_id calls
   else if (FuncName.compare("get_local_id") == 0) {
+    TheRewriter.RemoveText(Call->getSourceRange());
+    if (Index == 0)
+      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
+                             "__kernel_local_id[0]");
+    else if (Index == 1)
+      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
+                             "__kernel_local_id[1]");
+    else
+      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
+                             "__kernel_local_id[2]");
 
   }
+  else if (FuncName.compare("get_local_size") == 0) {
+    TheRewriter.RemoveText(Call->getSourceRange());
+    std::stringstream local;
+    if (Index == 0)
+      local << LocalX;
+    else if (Index == 1)
+      local << LocalY;
+    else
+      local << LocalZ;
+
+    TheRewriter.InsertText(Call->getLocStart(), local.str());
+
+  }
+
   return true;
 }
 
@@ -510,10 +537,13 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
         std::cerr << "Initialising new loop:\n";
 #endif
 
+        // If the loop header declares variables, we stop them from being made
+        // local as their scope can die with the closing of the loop, as the
+        // header will be duplicated again.
+
         // If the for loop use DeclRefExpr, we will need to move the
         // declarations into a global scope since the while loop was has just
         // been closed.
-        // TODO There must be a cleaner way of doing this?
         Stmt *LoopInit = Loop->getInit();
         if ((cast<DeclStmt>(LoopInit))->isSingleDecl()) {
 #ifdef DEBUGCL
