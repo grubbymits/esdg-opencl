@@ -132,6 +132,9 @@ public:
 private:
   void CloseLoop(clang::SourceLocation Loc);
   void OpenLoop(clang::SourceLocation Loc);
+  void SaveLocalIDs(clang::SourceLocation Loc);
+  void RestoreLocalIDs(clang::SourceLocation Loc);
+  void CoarsenLoopBody(clang::Stmt *LoopBody, clang::CallExpr *Barrier);
   bool BarrierInLoop(clang::ForStmt *s);
   void CreateLocalVariable(clang::DeclRefExpr *Ref, bool ScalarRepl);
   void AccessScalar(clang::Decl *decl);
@@ -143,6 +146,11 @@ private:
   unsigned LocalZ;
   std::stringstream OpenWhile;
   std::stringstream CloseWhile;
+  std::stringstream SaveIDs;
+  std::stringstream RestoreIDs;
+  std::stringstream LocalArray;
+  std::stringstream SavedLocalArray;
+
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   StmtSetMap StmtRefs;

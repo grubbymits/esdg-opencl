@@ -301,16 +301,24 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
   if (LocalZ != 0) {
     OpenWhile << "\n__kernel_local_id[2] = 0;\n";
     OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
+
+    SaveIDs << "__kernel_local_id_save[2] = __kernel_local_id[2];\n";
+    RestoreIDs << "__kernel_local_id[2] = __kernel_local_id_save[2];\n";
   }
   if (LocalY != 0) {
     OpenWhile << "__kernel_local_id[1] = 0;\n";
     OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
+
+    SaveIDs << "__kernel_local_id_save[1] = __kernel_local_id[1];\n";
+    RestoreIDs << "__kernel_local_id[1] = __kernel_local_id_save[1];\n";
   }
   if (LocalX != 0) {
     OpenWhile << "__kernel_local_id[0] = 0;\n";
     OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
-  }
 
+    SaveIDs << "__kernel_local_id_save[0] = __kernel_local_id[0];\n";
+    RestoreIDs << "__kernel_local_id[0] = __kernel_local_id_save[0];\n";
+  }
   if (LocalX != 0) {
     CloseWhile << "\n__kernel_local_id[0]++;\n";
     CloseWhile  << "}\n";
@@ -323,6 +331,24 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
     CloseWhile << "__kernel_local_id[2]++;\n";
     CloseWhile << "}\n";
   }
+
+  LocalArray << "  int __kernel_local_id[";
+  SavedLocalArray << "  int __kernel_local_id_save[";
+  if (LocalZ && LocalY && LocalX) {
+    LocalArray << "3";
+    SavedLocalArray << "3";
+  }
+  else if (LocalY && LocalX) {
+    LocalArray << "2";
+    SavedLocalArray << "2";
+  }
+  else {
+    LocalArray << "1";
+    SavedLocalArray << "1";
+  }
+  LocalArray << "];\n";
+  SavedLocalArray << "];\n";
+
 }
 
 void WorkitemCoarsen::ThreadSerialiser::CloseLoop(SourceLocation Loc) {
@@ -331,6 +357,15 @@ void WorkitemCoarsen::ThreadSerialiser::CloseLoop(SourceLocation Loc) {
 
 void WorkitemCoarsen::ThreadSerialiser::OpenLoop(SourceLocation Loc) {
   TheRewriter.InsertText(Loc, OpenWhile.str(), true, true);
+}
+
+void WorkitemCoarsen::ThreadSerialiser::SaveLocalIDs(SourceLocation Loc) {
+  TheRewriter.InsertText(Loc, SavedLocalArray.str());
+  TheRewriter.InsertText(Loc, SaveIDs.str());
+}
+
+void WorkitemCoarsen::ThreadSerialiser::RestoreLocalIDs(SourceLocation Loc) {
+  TheRewriter.InsertText(Loc, RestoreIDs.str());
 }
 
 void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
@@ -437,6 +472,27 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
   TheRewriter.InsertText(loc, "[__kernel_local_id[0]]", true);
 }
 
+void WorkitemCoarsen::ThreadSerialiser::CoarsenLoopBody(Stmt *LoopBody,
+                                                        CallExpr *Barrier) {
+  // Use an offset to account for '{'
+  SourceLocation BeginLoc = LoopBody->getLocStart().getLocWithOffset(2);
+
+  // First we need to save the existing __kernel_local_id values as we are
+  // going to rewrite them to run another set of loops.
+  SaveLocalIDs(BeginLoc);
+
+  // Then we need to open the loop.
+  OpenLoop(BeginLoc);
+
+  // Then we close the loop at the location of the barrier and remove the call.
+  CloseLoop(Barrier->getLocStart());
+  // Then we restore the previous values of __kernel_local_id
+  RestoreLocalIDs(Barrier->getLocStart());
+
+  TheRewriter.InsertText(Barrier->getLocStart(), "//");
+
+}
+
 //template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
   Stmt* ForBody = cast<ForStmt>(s)->getBody();
@@ -450,7 +506,7 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
     if (ForStmt* nested = dyn_cast_or_null<ForStmt>(*FI)) {
       if (BarrierInLoop(nested)) {
         LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
-        LoopsToDistribute.push_back(s);
+        //LoopsToDistribute.push_back(s);
         FoundBarriers = true;
       }
     }
@@ -462,9 +518,11 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
       if (FuncName.compare("barrier") == 0) {
         // Only record loops once, each loop may have several barriers within
         // it though.
+        CoarsenLoopBody(s->getBody(), Call);
+
         if (LoopsToDistribute.empty()) {
           LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
-          LoopsToDistribute.push_back(s);
+          //LoopsToDistribute.push_back(s);
         }
         // FIXME When does LoopsToDistribute get cleared? Do we need to do the
         // following checking..?
@@ -493,6 +551,8 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
     return true;
   else if (LoopsWithoutBarrier.find(ForLoc) != LoopsWithoutBarrier.end())
     return true;
+
+  return BarrierInLoop(ForLoop);
 
   if (BarrierInLoop(ForLoop)) {
     // LoopsToReplicate is a vector containing one or more (nested)
