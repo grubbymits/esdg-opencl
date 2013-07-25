@@ -311,18 +311,6 @@ class LE1KernelEvent
         bool createFinalSource(LE1Program *prog);
         bool CompileSource(void);
         void CalculateBufferAddrs(unsigned Addr);
-        bool WriteDataArea();
-        void WriteKernelAttr(std::ostringstream &Output, size_t Attr);
-        bool HandleBufferArg(const Kernel::Arg &arg);
-        void PrintLine(unsigned Address,
-                       std::ostringstream &HexString,
-                       std::string &BinaryString);
-        void PrintData(const void *Data, size_t offset, size_t size,
-                       size_t total_bytes);
-        void PrintSingleElement(const void *Data, unsigned *Offset,
-                                size_t ElementSize);
-        void WriteStructData(llvm::StructType *StructArg, const void *Data,
-                             unsigned TotalSize);
         int checkStatus(void);
         bool run(void);
         /*!< \brief The next Work Group that will execute will be the last.
@@ -342,6 +330,22 @@ class LE1KernelEvent
         void workGroupFinished();
     public:
         static std::vector<LE1Buffer*> DeviceBuffers;
+
+    private:
+        void CreateLauncher(std::string &LauncherString,
+                            unsigned *WorkgroupsPerCore);
+        bool WriteDataArea();
+        void WriteKernelAttr(std::ostringstream &Output, size_t Attr);
+        bool HandleBufferArg(const Kernel::Arg &arg);
+        void PrintLine(unsigned Address,
+                       std::ostringstream &HexString,
+                       std::string &BinaryString);
+        void PrintData(const void *Data, size_t offset, size_t size,
+                       size_t total_bytes);
+        void PrintSingleElement(const void *Data, unsigned *Offset,
+                                size_t ElementSize);
+        void WriteStructData(llvm::StructType *StructArg, const void *Data,
+                             unsigned TotalSize);
 
     private:
         LE1Device *p_device;

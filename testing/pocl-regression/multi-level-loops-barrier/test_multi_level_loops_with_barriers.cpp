@@ -100,8 +100,8 @@ main(void)
 
         // Create buffer for A and copy host contents
         cl::Buffer aBuffer = cl::Buffer(
-            context, 
-            CL_MEM_READ_ONLY, 
+            context,
+            CL_MEM_READ_ONLY, // | CL_MEM_COPY_HOST_PTR,
             BUFFER_SIZE * sizeof(int), NULL, &errcode);
 
         if (errcode != CL_SUCCESS) {
@@ -141,6 +141,13 @@ main(void)
           0,
           BUFFER_SIZE * sizeof(int),
           A);
+
+        errcode = queue.enqueueWriteBuffer(
+          cBuffer,
+          CL_TRUE,
+          0,
+          WORK_ITEMS * sizeof(int),
+          R);
 
         if (errcode != CL_SUCCESS) {
           std::cerr << "Failed to enqueue buffer write!\n";

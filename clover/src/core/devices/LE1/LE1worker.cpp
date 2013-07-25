@@ -129,10 +129,21 @@ thread " << pthread_self() << std::endl;
                 }*/
                 else {
 #ifdef DEBUGCL
-                  std::cerr << "WriteBuffer\n";
+                  std::cerr << "WriteBuffer: write " << e->cb() << " bytes\n";
 #endif
                   device->getSimulator()->LockAccess();
                   char *data = (char *)buf->data();
+
+                  // Ensure we have a good pointer
+                  if (e->ptr() == NULL) {
+#ifdef DEBUGCL
+                    std::cerr << "!ERROR: Bad data pointer\n";
+#endif
+                    device->getSimulator()->UnlockAccess();
+                    errcode = CL_INVALID_HOST_PTR;
+                    break;
+                  }
+
                   std::memcpy(data, e->ptr(), e->cb());
                   device->getSimulator()->UnlockAccess();
                 }
@@ -143,7 +154,6 @@ thread " << pthread_self() << std::endl;
                 CopyBufferEvent *e = (CopyBufferEvent *)event;
                 LE1Buffer *src = (LE1Buffer *)e->source()->deviceBuffer(device);
                 LE1Buffer *dst = (LE1Buffer *)e->destination()->deviceBuffer(device);
-
                 std::memcpy(dst->data(), src->data(), e->cb());
                 break;
             }

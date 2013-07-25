@@ -202,7 +202,19 @@ int main(int argc, char** argv)
 	
 	// Tack a null terminator at the end of the string.
 	h_outputBuffer[16383] = '\0';
-	
+
+        bool Success = true;
+        std::cout << "DATA,   RESULT\n";
+        for (int i = 0; i < cols; i++) {
+          std::cout << data[i] << "     " << result[i] << std::endl;
+	  if (data[i] != result[i])
+            Success = false;
+        }
+        if (Success)
+          std::cout << "PASSED\n";
+        else
+          std::cout << "FAILED\n";
+
 #ifdef BENCH_PRINT
 	for (int i = 0; i < cols; i++)
 		printf("%d ", data[i]);

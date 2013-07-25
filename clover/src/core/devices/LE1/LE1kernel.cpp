@@ -455,7 +455,10 @@ void LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
       ArgAddrs.push_back(Addr);
-      Addr += (*(MemObject**)arg.data())->size();
+      if (arg.file() == Kernel::Arg::Local)
+        Addr += (arg.allocAtKernelRuntime() * p_device->numLE1s());
+      else
+        Addr += (*(MemObject**)arg.data())->size();
     }
   }
 }
@@ -512,26 +515,64 @@ bool LE1KernelEvent::CompileSource() {
   std::cerr << "Merged Kernel\n";
 #endif
 
+  std::string LauncherString;
+  CreateLauncher(LauncherString, WorkgroupsPerCore);
+
+  Compiler MainCompiler(p_device);
+  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
+    return false;
+  llvm::Module *MainModule = MainCompiler.module();
+
+  // Link the main module with the coarsened kernel code
+  llvm::Module *CompleteModule =
+    MainCompiler.LinkModules(MainModule, WorkgroupModule);
+
+  // Output a single assembly file
+  if(!MainCompiler.CompileToAssembly(TempAsmName,
+                                     CompleteModule))
+    return false;
+
+  std::stringstream pre_asm_command;
+  // TODO Include the script as a char array
+  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl "
+    << TempAsmName
+    //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
+    << " > " << FinalAsmName;
+  // FIXME return false?
+  if (system(pre_asm_command.str().c_str()) != 0) {
+    std::cerr << "LLVM Transform failed\n";
+    return false;
+  }
+
+#ifdef DEBUGCL
+  std::cerr << "Leaving LE1KernelEvent::CompileSource\n";
+#endif
+
+  p_event->kernel()->SetBuilt();
+  return true;
+}
+
+void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
+                                    unsigned *WorkgroupsPerCore) {
   // Calculate the addresses in global memory where the arguments will be stored
   Kernel* kernel = p_event->kernel();
 
   std::stringstream launcher;
-  for(unsigned i = 0, j = 0; i < kernel->numArgs(); ++i) {
+  for(unsigned i = 0; i < kernel->numArgs(); ++i) {
     const Kernel::Arg& arg = kernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
-      launcher << "extern int BufferArg_" << j << ";" << std::endl;
-      ++j;
+      launcher << "extern int BufferArg_" << i << ";" << std::endl;
+      //++j;
     }
   }
 
-  // FIXME Really not sure if this works!
   // Create a main function to the launcher for the kernel
   launcher << "int main(void) {\n";
   unsigned NestedLoops = 0;
   if (WorkgroupsPerCore[2] != 0) {
     launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2]
       << "; ++z) {\n"
-    <<      "__builtin_le1_set_group_id_2(z);\n";
+    <<      "   __builtin_le1_set_group_id_2(z);\n";
     ++NestedLoops;
   }
   if (WorkgroupsPerCore[1] != 0) {
@@ -548,16 +589,20 @@ bool LE1KernelEvent::CompileSource() {
   }
   launcher<< "        " << KernelName << "(";
 
-  // TODO Instead of writing a main file, passing immediates and having to
-  // compile every time, we can write the addresses to memory and pass them
-  // in variable names. This only then requires the few variables to be
-  // rewritten instead of compiling and linking everything each time.
-
   for (unsigned i = 0; i < kernel->numArgs(); ++i) {
     const Kernel::Arg& arg = kernel->arg(i);
-    if (arg.kind() == Kernel::Arg::Buffer) {
-      launcher << "&BufferArg_" << i;
+    // Local
+    if ((arg.kind() == Kernel::Arg::Buffer) &&
+        arg.allocAtKernelRuntime()) {
+      // We're defining the pointers as ints, so divide
+      unsigned size = arg.allocAtKernelRuntime() / 4;
+      launcher << "(&BufferArg_" << i << " + (__builtin_le1_read_cpuid() * "
+        << size << "))";
     }
+    // Global
+    else if (arg.kind() == Kernel::Arg::Buffer)
+      launcher << "&BufferArg_" << i;
+    // Private
     else {
       void *ArgData = const_cast<void*>(arg.data());
       launcher << *(static_cast<unsigned*>(ArgData));
@@ -572,72 +617,10 @@ bool LE1KernelEvent::CompileSource() {
     }
   }
 
-  std::string LauncherString = launcher.str();
-  Compiler MainCompiler(p_device);
-  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
-    return false;
-  llvm::Module *MainModule = MainCompiler.module();
-
-  // Link the main module with the coarsened kernel code
-  llvm::Module *CompleteModule =
-    MainCompiler.LinkModules(MainModule, WorkgroupModule);
-
-  // Output a single assembly file
-  if(!MainCompiler.CompileToAssembly(TempAsmName,
-                                     CompleteModule))
-    return false;
-
-  /*
-  std::ofstream main;
-  main.open("main.c", std::ofstream::out);
-  main << launcher.str();
-  main.close();
-
+  LauncherString = launcher.str();
 #ifdef DEBUGCL
-  std::cerr << "Created main file for the launcher\n";
+  std::cerr << LauncherString << std::endl;
 #endif
-
-  // TODO Clean this up
-  // Now that a main.c file exists, compile it to llvm ir and link with the
-  // kernel
-  system("clang -target le1 -emit-llvm -c main.c");
-  std::stringstream link;
-  link << "llvm-link main.o " << CoarsenedBCName << " -o " << FinalBCName;
-  if(system(link.str().c_str()) != 0)
-    return false;
-
-  // Run the transformation pass to prepare it for the assembler
-  // Compile the merged kernel to assembly
-  std::stringstream compile_command;
-  compile_command << "llc -march=le1 -mcpu="<< p_device->target() << " " 
-    << FinalBCName << " -o " << TempAsmName;
-  if(system(compile_command.str().c_str()) != 0)
-    return false;*/
-
-  //return compiler.produceAsm(input, output);
-
-  std::stringstream pre_asm_command;
-  // TODO Include the script as a char array
-  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl "
-    << TempAsmName
-    //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
-    << " > " << FinalAsmName;
-  // FIXME return false?
-  if (system(pre_asm_command.str().c_str()) != 0) {
-    std::cerr << "LLVM Transform failed\n";
-    return false;
-  }
-
-  //std::stringstream clean;
-  //clean << "rm " << merged_bc << " " << final_bc << " " << temp_asm << " main.o";
-#ifdef DEBUGCL
-  std::cerr << "Leaving LE1KernelEvent::CompileSource\n";
-#endif
-  //return system(clean.str().c_str());
-
-
-  p_event->kernel()->SetBuilt();
-  return true;
 }
 
 void LE1KernelEvent::WriteKernelAttr(std::ostringstream &Output, size_t attr) {
@@ -667,6 +650,7 @@ bool LE1KernelEvent::WriteDataArea() {
   addr = 0x4;
 
   Kernel* TheKernel = p_event->kernel();
+  unsigned NumCores = p_device->numLE1s();
 
   // FIXME Is this calculating the size properly?
   for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
@@ -675,7 +659,7 @@ bool LE1KernelEvent::WriteDataArea() {
     if (Arg.kind() == Kernel::Arg::Buffer) {
       // Local Buffers need to be copied for each workgroup (core).
       if (Arg.file() == Kernel::Arg::Local)
-        DataSize += (*(MemObject**)Arg.data())->size() * p_device->numLE1s();
+        DataSize += Arg.allocAtKernelRuntime() * NumCores;
       else
         DataSize += (*(MemObject**)Arg.data())->size();
     }
@@ -694,7 +678,6 @@ bool LE1KernelEvent::WriteDataArea() {
 
   Output << "00038 - group_id" << std::endl;
   unsigned GroupIdEnd = 0x38;
-  unsigned NumCores = p_device->numLE1s();
   for (unsigned i = 0; i < NumCores; ++i)
     GroupIdEnd += 4;
 
@@ -704,10 +687,13 @@ bool LE1KernelEvent::WriteDataArea() {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
       Output << std::hex << std::setw(5) << std::setfill('0') << ArgAddrs[j]
-        << " - BufferArg_" << j << std::endl;
+        << " - BufferArg_" << std::dec << i << std::endl;
       ++j;
     }
   }
+#ifdef DEBUGCL
+  std::cerr << "Written buffer addresses\n";
+#endif
 
   Output << std::endl;
   Output << "##Data Section - " << DataSize << " - Data_align=32" << std::endl;
@@ -760,6 +746,10 @@ bool LE1KernelEvent::WriteDataArea() {
   FinalSource << Output.str();
   FinalSource.close();
 
+#ifdef DEBUGCL
+  std::cerr << "Finished writing final source\n";
+#endif
+
   // First, write the global data first
   for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& Arg = TheKernel->arg(i);
@@ -773,6 +763,7 @@ bool LE1KernelEvent::WriteDataArea() {
         return false;
   }
 
+  /*
   // Then write the local area for each core
   for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& Arg = TheKernel->arg(i);
@@ -785,7 +776,7 @@ bool LE1KernelEvent::WriteDataArea() {
       for (unsigned i = 0; i < p_device->numLE1s(); ++i)
         if(!HandleBufferArg(Arg))
           return false;
-  }
+  }*/
 #ifdef DEBUGCL
   std::cerr << "Leaving createFinalSource\n";
 #endif
@@ -797,48 +788,18 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
 #ifdef DEBUGCL
   std::cerr << "HandleBufferArg\n";
 #endif
-    llvm::Type* type = arg.type();
-    LE1Buffer* buffer =
-      static_cast<LE1Buffer*>((*(MemObject**)arg.data())->deviceBuffer(p_device));
 
-    // Check whether this buffer has been passed to the device before
-    /*
-    bool isBufferOnDevice = false;
-    for (std::vector<LE1Buffer*>::iterator DI = DeviceBuffers.begin(),
-          DE = DeviceBuffers.end(); DI != DE; ++DI) {
-      if (*DI == buffer) {
-        isBufferOnDevice = true;
-        buffer = *DI;
-        break;
-      }
-    }*/
+  llvm::Type* type = arg.type();
+  LE1Buffer* buffer =
+    static_cast<LE1Buffer*>((*(MemObject**)arg.data())->deviceBuffer(p_device));
 
-    unsigned TotalSize = (*(MemObject**)arg.data())->size();
-    void *Data;
-    // If it is, it means that the data that is being passed to the new kernel
-    // needs to be updated with the results from the previous run.
-    /*
-    if (isBufferOnDevice) {
-      Data = malloc(TotalSize);
-#ifdef DEBUGCL
-      std::cerr << "Buffer is on device - need to get new data!\n";
-#endif
-      if (arg.type()->isIntegerTy(8))
-        p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
-                                               (unsigned char*)Data);
-      //else if (arg.type()->isIntegerTy(16))
-        //p_device->getSimulator()->readData(buffer->addr(), TotalSize, Data);
-      else if (arg.type()->isIntegerTy(32))
-        p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
-                                              (unsigned int*)Data);
-    }
-    else {
-      DeviceBuffers.push_back(buffer);
-      Data = buffer->data();
-    }*/
-
-    Data = buffer->data();
-    buffer->setAddr(addr);
+  unsigned TotalSize = (*(MemObject**)arg.data())->size();
+  void *Data = buffer->data();
+  // Check we actually have some data
+  if (Data == NULL) {
+    std::cerr << "! ERROR: NULL data!\n";
+    return false;
+  }
 
 #ifdef DEBUGCL
     std::cerr << "Set buffer arg address to " << addr << std::endl;
@@ -1303,11 +1264,11 @@ bool LE1KernelEvent::run() {
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
 
     const Kernel::Arg& Arg = TheKernel->arg(i);
-    if (Arg.kind() == Kernel::Arg::Buffer) {
-
+    if ((Arg.kind() == Kernel::Arg::Buffer) &&
+        (Arg.file() != Kernel::Arg::Local)) {
       LE1Buffer* buffer =
         static_cast<LE1Buffer*>((*(MemObject**)Arg.data())->deviceBuffer(p_device));
-      unsigned TotalSize = (*(MemObject**)Arg.data())->size();
+        unsigned TotalSize = (*(MemObject**)Arg.data())->size();
 
       if (Arg.type()->isIntegerTy(8)) {
         p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,

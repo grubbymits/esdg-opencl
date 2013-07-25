@@ -397,7 +397,7 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
 #ifdef DEBUGCL
     std::cerr << "Removing old declaration of " << ND->getName().str()
       << std::endl;
-    DS->dumpAll();
+    //DS->dumpAll();
 #endif
 
     if (DS->child_begin() != DS->child_end()) {
@@ -486,7 +486,6 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
 bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
   std::cout << "VisitForStmt\n";
   ForStmt* ForLoop = cast<ForStmt>(s);
-  ForLoop->dumpAll();
   SourceLocation ForLoc = ForLoop->getLocStart();
 
   // Check whether we've already visited the loop
@@ -544,15 +543,19 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
         // If the for loop use DeclRefExpr, we will need to move the
         // declarations into a global scope since the while loop was has just
         // been closed.
-        Stmt *LoopInit = Loop->getInit();
-        if ((cast<DeclStmt>(LoopInit))->isSingleDecl()) {
+        bool isDeclStmt = false;
+        if ((isa<DeclStmt>(Loop->getInit()))) {
 #ifdef DEBUGCL
           std::cerr << "Loop init is single decl\n";
 #endif
-          DeclStmt *InitDecl = cast<DeclStmt>(LoopInit);
-          NamedDecl *ND = cast<NamedDecl>(InitDecl->getSingleDecl());
-          std::string key = ND->getName().str();
-          ScopedVariables.insert(std::make_pair(key, ND));
+          DeclStmt *InitDecl = cast<DeclStmt>(Loop->getInit());
+          if (InitDecl->isSingleDecl()) {
+            NamedDecl *ND = cast<NamedDecl>(InitDecl->getSingleDecl());
+            std::string key = ND->getName().str();
+            ScopedVariables.insert(std::make_pair(key, ND));
+          }
+          isDeclStmt = true;
+          // FIXME Need to handle multiple declarations!!
         }
         else {
 #ifdef DEBUGCL
@@ -617,6 +620,8 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
         LoopHeader << "for (";
         if (Init)
           LoopHeader << TheRewriter.ConvertToString(Init);
+        if (!isDeclStmt)
+          LoopHeader << "; ";
         // FIXME Need to handle CondVar
         //if (CondVar)
         //std::cout << TheRewriter.ConvertToString(static_cast<CondVar);

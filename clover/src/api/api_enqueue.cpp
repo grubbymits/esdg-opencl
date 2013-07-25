@@ -137,6 +137,9 @@ clEnqueueWriteBuffer(cl_command_queue   command_queue,
     if (!command_queue->isA(Coal::Object::T_CommandQueue))
         return CL_INVALID_COMMAND_QUEUE;
 
+    if (ptr == NULL)
+      return CL_INVALID_HOST_PTR;
+
     Coal::WriteBufferEvent *command = new Coal::WriteBufferEvent(
         (Coal::CommandQueue *)command_queue,
         (Coal::MemObject *)buffer,
