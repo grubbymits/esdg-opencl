@@ -45,6 +45,7 @@ kernelSourceCode[] =
 " for (i = 0; i < 32; ++i) {\n"
 "   result[gid] = input[gid];\n"
 "   for (j = 0; j < i; ++j) {\n"
+"      gid = get_global_id(0);\n"
 "      result[gid] = input[gid] * input[gid + j];\n"  
 "      barrier(CLK_GLOBAL_MEM_FENCE);\n"
 "   }\n"
@@ -54,6 +55,7 @@ kernelSourceCode[] =
 int
 main(void)
 {
+  std::cout << "Begin\n";
     int A[BUFFER_SIZE];
     int R[WORK_ITEMS];
     cl_int err;
@@ -67,7 +69,7 @@ main(void)
         R[i] = i;
     }
 
-    try {
+    //try {
         std::vector<cl::Platform> platformList;
 
         // Pick platform
@@ -87,14 +89,14 @@ main(void)
 
         cl::Program program(context, sources, &errcode);
         if (errcode != CL_SUCCESS) {
-          std::cerr << "Failed to create program!\n";
+          std::cout << "Failed to create program!\n";
           exit(1);
         }
 
         // Build program
         errcode = program.build(devices);
         if (errcode != CL_SUCCESS) {
-          std::cerr << "Failed to build program!\n";
+          std::cout << "Failed to build program!\n";
           exit(1);
         }
 
@@ -105,7 +107,7 @@ main(void)
             BUFFER_SIZE * sizeof(int), NULL, &errcode);
 
         if (errcode != CL_SUCCESS) {
-          std::cerr << "Failed to create buffer!\n";
+          std::cout << "Failed to create buffer!\n";
           exit(1);
         }
 
@@ -117,21 +119,21 @@ main(void)
             NULL, &errcode);
 
         if (errcode != CL_SUCCESS) {
-          std::cerr << "Failed to create buffer!\n";
+          std::cout << "Failed to create buffer!" << std::endl;
           exit(1);
         }
 
         // Create kernel object
         cl::Kernel kernel(program, "test_kernel", &errcode);
         if (errcode != CL_SUCCESS) {
-          std::cerr << "Failed to create kernel!\n";
+          std::cout << "Failed to create kernel!" << std::endl;
           exit(1);
         }
 
         // Create command queue
         cl::CommandQueue queue(context, devices[0], 0, &errcode);
         if (errcode != CL_SUCCESS) {
-          std::cerr << "Failed to create command queue!\n";
+          std::cout << "Failed to create command queue!" << std::endl;
           exit(1);
         }
 
@@ -150,7 +152,7 @@ main(void)
           R);
 
         if (errcode != CL_SUCCESS) {
-          std::cerr << "Failed to enqueue buffer write!\n";
+          std::cout << "Failed to enqueue buffer write!" << std::endl;
           exit(1);
         }
 
@@ -160,6 +162,8 @@ main(void)
         kernel.setArg(1, sizeof(cl_mem), &cBuffer);
         kernel.setArg(2, a);
 
+        std::cout << "Set kernel args" << std::endl;
+
 
         // Do the work
         queue.enqueueNDRangeKernel(
@@ -168,19 +172,22 @@ main(void)
             cl::NDRange(WORK_ITEMS),
             cl::NullRange);
 
+        std::cout << "Enqueued range" << std::endl;
+
         // Map cBuffer to host pointer. This enforces a sync with 
         // the host backing space, remember we choose GPU device.
-        int * output = (int *) queue.enqueueReadBuffer(
+        cl_int output = queue.enqueueReadBuffer(
             cBuffer,
             CL_TRUE, // block 
             0,
             WORK_ITEMS * sizeof(int),
             R);
 
+        std::cout << "Enqueued ReadBuffer" << std::endl;
+
         bool ok = true;
         // TODO: validate results
         for (int gid = 0; gid < WORK_ITEMS; gid++) {
-
             int result;
             int i, j;
             for (i = 0; i < 32; ++i) {
@@ -192,14 +199,19 @@ main(void)
             if ((int)result != R[gid]) {
                 std::cout 
                     << "F(" << gid << ": " << (int)result << " != " << R[gid] 
-                    << ") ";
+                    << ")" << std::endl;
                 ok = false;
             }
         }
-        if (ok) 
+        std::cout << std::endl << "tested results" << std::endl;
+        if (ok) {
+          std::cout << "Passed" << std::endl;
           return EXIT_SUCCESS; 
-        else
+        }
+        else {
+          std::cout << "Failed" << std::endl;
           return EXIT_FAILURE;
+        }
 
         // Finally release our hold on accessing the memory
         err = queue.enqueueUnmapMemObject(
@@ -209,7 +221,7 @@ main(void)
         // There is no need to perform a finish on the final unmap
         // or release any objects as this all happens implicitly with
         // the C++ Wrapper API.
-    } 
+    /*} 
     catch (cl::Error err) {
          std::cerr
              << "ERROR: "
@@ -220,7 +232,8 @@ main(void)
              << std::endl;
 
          return EXIT_FAILURE;
-    }
+    }*/
+    std::cout << "Exit\n";
 
     return EXIT_SUCCESS;
 }

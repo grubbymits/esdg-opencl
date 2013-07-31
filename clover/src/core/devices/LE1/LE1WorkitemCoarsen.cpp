@@ -102,28 +102,28 @@ WorkitemCoarsen::KernelInitialiser::KernelInitialiser(Rewriter &R,
                                                         unsigned z)
     : LocalX(x), LocalY(y), LocalZ(z), TheRewriter(R) {
 
-  if (LocalZ != 0) {
+  if (LocalZ > 1) {
     OpenWhile << "\n__kernel_local_id[2] = 0;\n";
     OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
   }
-  if (LocalY != 0) {
+  if (LocalY > 1) {
     OpenWhile << "__kernel_local_id[1] = 0;\n";
     OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
   }
-  if (LocalX != 0) {
+  if (LocalX > 1) {
     OpenWhile << "__kernel_local_id[0] = 0;\n";
     OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
   }
 
-  if (LocalX != 0) {
+  if (LocalX > 1) {
     CloseWhile << "\n__kernel_local_id[0]++;\n";
     CloseWhile  << "}\n";
   }
-  if (LocalY != 0) {
+  if (LocalY > 1) {
     CloseWhile << " __kernel_local_id[1]++;\n";
     CloseWhile << "}\n";
   }
-  if (LocalZ != 0) {
+  if (LocalZ > 1) {
     CloseWhile << "__kernel_local_id[2]++;\n";
     CloseWhile << "}\n";
   }
@@ -182,7 +182,9 @@ bool WorkitemCoarsen::KernelInitialiser::VisitDeclStmt(Stmt *s) {
     for (DeclGroupRef::iterator DI = DS->decl_begin(); DI != DE; ++DI) {
       ND = cast<NamedDecl>((*DI));
       std::string key = ND->getName().str();
-      std::cout << ND->getName().str() << " is declared\n";
+#ifdef DEBUGCL
+      std::cerr << ND->getName().str() << " is declared\n";
+#endif
 
       std::string type = cast<ValueDecl>(ND)->getType().getAsString();
       std::stringstream newDecl;
@@ -298,47 +300,47 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
                                    unsigned y,
                                    unsigned z)
         : LocalX(x), LocalY(y), LocalZ(z), TheRewriter(R) {
-  if (LocalZ != 0) {
+  if (LocalZ > 1) {
     OpenWhile << "\n__kernel_local_id[2] = 0;\n";
     OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
 
     SaveIDs << "__kernel_local_id_save[2] = __kernel_local_id[2];\n";
     RestoreIDs << "__kernel_local_id[2] = __kernel_local_id_save[2];\n";
   }
-  if (LocalY != 0) {
+  if (LocalY > 1) {
     OpenWhile << "__kernel_local_id[1] = 0;\n";
     OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
 
     SaveIDs << "__kernel_local_id_save[1] = __kernel_local_id[1];\n";
     RestoreIDs << "__kernel_local_id[1] = __kernel_local_id_save[1];\n";
   }
-  if (LocalX != 0) {
+  if (LocalX > 1) {
     OpenWhile << "__kernel_local_id[0] = 0;\n";
     OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
 
     SaveIDs << "__kernel_local_id_save[0] = __kernel_local_id[0];\n";
     RestoreIDs << "__kernel_local_id[0] = __kernel_local_id_save[0];\n";
   }
-  if (LocalX != 0) {
+  if (LocalX > 1) {
     CloseWhile << "\n__kernel_local_id[0]++;\n";
     CloseWhile  << "}\n";
   }
-  if (LocalY != 0) {
+  if (LocalY > 1) {
     CloseWhile << " __kernel_local_id[1]++;\n";
     CloseWhile << "}\n";
   }
-  if (LocalZ != 0) {
+  if (LocalZ > 1) {
     CloseWhile << "__kernel_local_id[2]++;\n";
     CloseWhile << "}\n";
   }
 
   LocalArray << "  int __kernel_local_id[";
   SavedLocalArray << "  int __kernel_local_id_save[";
-  if (LocalZ && LocalY && LocalX) {
+  if (LocalZ > 1 && LocalY > 1 && LocalX > 1) {
     LocalArray << "3";
     SavedLocalArray << "3";
   }
-  else if (LocalY && LocalX) {
+  else if (LocalY > 1 && LocalX > 1) {
     LocalArray << "2";
     SavedLocalArray << "2";
   }
@@ -542,7 +544,9 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
 // Check for barrier calls within loops, this is necessary to close the
 // nested loops properly.
 bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
-  std::cout << "VisitForStmt\n";
+#ifdef DEBUGCL
+  std::cerr << "VisitForStmt\n";
+#endif
   ForStmt* ForLoop = cast<ForStmt>(s);
   SourceLocation ForLoc = ForLoop->getLocStart();
 
@@ -703,7 +707,9 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
 // Remove barrier calls and modify calls to kernel builtin functions.
 //template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
-  std::cout << "VisitCallExpr\n";
+#ifdef DEBUGCL
+  std::cerr << "VisitCallExpr\n";
+#endif
   CallExpr *Call = cast<CallExpr>(s);
   FunctionDecl* FD = Call->getDirectCallee();
   DeclarationName DeclName = FD->getNameInfo().getName();

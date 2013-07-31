@@ -795,6 +795,10 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
 
   unsigned TotalSize = (*(MemObject**)arg.data())->size();
   void *Data = buffer->data();
+
+  // FIXME - Does this work when using local buffers?
+  buffer->setAddr(addr);
+
   // Check we actually have some data
   if (Data == NULL) {
     std::cerr << "! ERROR: NULL data!\n";

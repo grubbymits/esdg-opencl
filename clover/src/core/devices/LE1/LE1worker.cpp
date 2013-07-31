@@ -320,6 +320,9 @@ thread " << pthread_self() << std::endl;
         }
         else
         {
+#ifdef DEBUGCL
+          std::cerr << "!ERROR: Event failed\n";
+#endif
             // The event failed
             event->setStatus((Event::Status)errcode);
 
