@@ -56,15 +56,15 @@ set(COAL_SRC_FILES
     core/devices/LE1/LE1WorkitemCoarsen.cpp
     #core/devices/LE1/LE1builtins.cpp
 
-    ${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.h.embed.h
-    ${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.c.bc.embed.h
-    ${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_impl.h
-    ${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_def.h
-    ${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_impl.h
-    ${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_def.h
+    #${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.h.embed.h
+    #${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.c.bc.embed.h
+    #${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_impl.h
+    #${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_def.h
+    #${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_impl.h
+    #${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_def.h
 )
 
-add_subdirectory(runtime)
+#add_subdirectory(runtime)
 
 add_library(OpenCL SHARED ${COAL_SRC_FILES})
 
@@ -74,22 +74,22 @@ add_library(InsizzleAPI SHARED IMPORTED)
 #add_library(xml2 STATIC IMPORTED)
 #add_library(m SHARED IMPORTED)
 
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.h.embed.h
-                            PROPERTIES GENERATED 1)
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.c.bc.embed.h
-                            PROPERTIES GENERATED 1)
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_impl.h
-                            PROPERTIES GENERATED 1)
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_def.h
-                            PROPERTIES GENERATED 1)
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_impl.h
-                            PROPERTIES GENERATED 1)
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_def.h
-                            PROPERTIES GENERATED 1)
+#set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.h.embed.h
+ #                           PROPERTIES GENERATED 1)
+#set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.c.bc.embed.h
+ #                           PROPERTIES GENERATED 1)
+#set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_impl.h
+ #                           PROPERTIES GENERATED 1)
+#set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/builtins_def.h
+ #                           PROPERTIES GENERATED 1)
+#set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_impl.h
+ #                           PROPERTIES GENERATED 1)
+#set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib_def.h
+ #                           PROPERTIES GENERATED 1)
 
-add_dependencies(OpenCL generate_stdlib_h)
-add_dependencies(OpenCL generate_stdlib_c)
-add_dependencies(OpenCL generate_builtins)
+#add_dependencies(OpenCL generate_stdlib_h)
+#add_dependencies(OpenCL generate_stdlib_c)
+#add_dependencies(OpenCL generate_builtins)
 add_dependencies(OpenCL InsizzleAPI)
 #add_dependencies(OpenCL WorkitemCoarsen)
 

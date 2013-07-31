@@ -23,6 +23,7 @@ find_program(LLVM_CONFIG_EXECUTABLE
   /usr/bin
   /usr/local/bin
   /opt/local/bin
+  /opt/esdg-opencl/bin
 )
 
 MACRO(FIND_LLVM_LIBS LLVM_CONFIG_EXECUTABLE _libname_ LIB_VAR OBJECT_VAR)

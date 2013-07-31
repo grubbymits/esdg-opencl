@@ -62,8 +62,8 @@
 #include <llvm/Analysis/Passes.h>
 #include <llvm/Transforms/IPO.h>
 
-#include <runtime/stdlib.h.embed.h>
-#include <runtime/stdlib.c.bc.embed.h>
+//#include <runtime/stdlib.h.embed.h>
+//#include <runtime/stdlib.c.bc.embed.h>
 
 using namespace Coal;
 
