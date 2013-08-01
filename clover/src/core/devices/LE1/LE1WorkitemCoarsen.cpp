@@ -480,8 +480,7 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
 
 void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
 #ifdef DEBUGCL
-  std::cerr << "FindRefsToReplicate" << std::endl;
-  s->dumpAll();
+  //std::cerr << "FindRefsToReplicate" << std::endl;
 #endif
 
   for (Stmt::child_iterator DI = s->child_begin(),
@@ -492,7 +491,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
 
     if (!isa<DeclRefExpr>(*DI)) {
 #ifdef DEBUGCL
-      std::cerr << "Stmt isn't reference" << std::endl;
+//      std::cerr << "Stmt isn't reference" << std::endl;
 #endif
       // don't try to replicate calls!
       if (!isa<CallExpr>(*DI))
@@ -505,7 +504,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
       // Reference may have already been replicated
       if (NewScalarRepls.find(key) != NewScalarRepls.end()) {
 #ifdef DEBUGCL
-        std::cerr << "Already replicated" << std::endl;
+  //      std::cerr << "Already replicated" << std::endl;
 #endif
         continue;
       }
@@ -513,7 +512,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
       // don't replicated our indexes
       if (key.compare("__kernel_local_id") == 0) {
 #ifdef DEBUGCL
-        std::cerr << "Reference is kernel index" << std::endl;
+    //    std::cerr << "Reference is kernel index" << std::endl;
 #endif
         continue;
       }
@@ -525,7 +524,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
         if ((*PI).compare(key) == 0) {
           isArgument = true;
 #ifdef DEBUGCL
-          std::cerr << "Reference is kernel argument" << std::endl;
+      //    std::cerr << "Reference is kernel argument" << std::endl;
 #endif
           break;
         }
@@ -533,6 +532,47 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
 
       if (!isArgument)
         CreateLocalVariable(RefExpr, true);
+    }
+  }
+}
+
+// Used to find variables in loop headers to keep from scalar replication. To
+// only be used when the loop has a barrier within.
+void WorkitemCoarsen::ThreadSerialiser::FindScopedVariables(Stmt *s) {
+  if (isa<DeclStmt>(s)) {
+    DeclStmt *Decl = cast<DeclStmt>(s);
+    if (Decl->isSingleDecl()) {
+      NamedDecl *ND = cast<NamedDecl>(Decl->getSingleDecl());
+      std::string key = ND->getName().str();
+      if (ScopedVariables.find(key) == ScopedVariables.end())
+        ScopedVariables.insert(std::make_pair(key, ND));
+    }
+  }
+  else {
+    for (Stmt::child_iterator FI = s->child_begin(),
+         FE = s->child_end(); FI != FE; ++FI) {
+
+      if (*FI == NULL)
+        continue;
+
+      if (isa<DeclStmt>(*FI)) {
+#ifdef DEBUGCL
+        std::cerr << "Found DeclStmt in the Loop Init\n";
+#endif
+        DeclStmt *DS = cast<DeclStmt>(*FI);
+        NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
+        std::string key = ND->getName().str();
+        ScopedVariables.insert(std::make_pair(key, ND));
+      }
+      else if (isa<DeclRefExpr>(*FI)) {
+        DeclRefExpr *Ref = cast<DeclRefExpr>(*FI);
+        NamedDecl *ND = Ref->getDecl();
+        std::string key = ND->getName().str();
+
+        if (NewLocalDecls.find(key) == NewLocalDecls.end()) {
+          CreateLocalVariable(Ref, false);
+        }
+      }
     }
   }
 }
@@ -545,6 +585,13 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(ForStmt *Loop) {
 #ifdef DEBUGCL
   std::cerr << "HandleBarrierInLoop\n";
 #endif
+  SourceLocation ForLoc = Loop->getLocStart();
+  // Check whether we've already visited the loop
+  if (LoopsWithBarrier.find(ForLoc) != LoopsWithBarrier.end())
+    return;
+  else if (LoopsWithoutBarrier.find(ForLoc) != LoopsWithoutBarrier.end())
+    return;
+
   Stmt *LoopBody = Loop->getBody();
   // Use an offset to account for curly brackets
   OpenLoop(Loop->getLocEnd().getLocWithOffset(2));
@@ -552,6 +599,9 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(ForStmt *Loop) {
   OpenLoop(LoopBody->getLocStart().getLocWithOffset(2));
   CloseLoop(Loop->getLocStart());
 
+  FindScopedVariables(Loop->getInit());
+  FindScopedVariables(Loop->getCond());
+  FindScopedVariables(Loop->getInc());
   FindRefsToReplicate(LoopBody);
 }
 
@@ -567,6 +617,9 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
     if (ForStmt* nested = dyn_cast_or_null<ForStmt>(*FI)) {
       if (BarrierInLoop(nested)) {
         LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
+#ifdef DEBUGCL
+        std::cerr << "Added loop to LoopsWithBarriers" << std::endl;
+#endif
         HandleBarrierInLoop(s);
         //LoopsToDistribute.push_back(s);
         FoundBarriers = true;
@@ -582,10 +635,13 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
         // it though.
         HandleBarrierInLoop(s);
 
-        if (LoopsToDistribute.empty()) {
+        //if (LoopsToDistribute.empty()) {
+#ifdef DEBUGCL
+        std::cerr << "Adding loop to LoopsWithBarrier" << std::endl;
+#endif
           LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
           //LoopsToDistribute.push_back(s);
-        }
+        //}
         // FIXME When does LoopsToDistribute get cleared? Do we need to do the
         // following checking..?
         //else if (LoopsToDistribute.front() != s){ }
@@ -595,8 +651,12 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
       }
     }
   }
-  if (!FoundBarriers)
+  if (!FoundBarriers) {
+#ifdef DEBUGCL
+    std::cerr << "Adding loop to LoopsWithoutBarrier" << std::endl;
+#endif
     LoopsWithoutBarrier.insert(std::make_pair(ForLoc, s));
+  }
 
   return FoundBarriers;
 }
@@ -815,13 +875,15 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
   if (FuncName.compare("barrier") == 0) {
     BarrierCalls.push_back(Call);
     TheRewriter.InsertText(Call->getLocStart(), "//", true, true);
+    CloseLoop(Call->getLocEnd().getLocWithOffset(2));
+    OpenLoop(Call->getLocEnd().getLocWithOffset(2));
 
-    if (LoopBarriers.find(Call->getLocStart()) == LoopBarriers.end()) {
+    //if (LoopBarriers.find(Call->getLocStart()) == LoopBarriers.end()) {
       // Close the triple nest so all work items complete
-      CloseLoop(Call->getLocEnd().getLocWithOffset(2));
+      //CloseLoop(Call->getLocEnd().getLocWithOffset(2));
       // Then open another nested loop for the code after the barrier
-      OpenLoop(Call->getLocEnd().getLocWithOffset(2));
-    }
+      //OpenLoop(Call->getLocEnd().getLocWithOffset(2));
+    //}
   }
   return true;
 }

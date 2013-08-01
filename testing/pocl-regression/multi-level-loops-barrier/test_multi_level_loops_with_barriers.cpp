@@ -191,7 +191,7 @@ main(void)
             int i, j;
             for (i = 0; i < 32; ++i) {
                 result = A[gid];
-                for (j = 0; j < 32; ++j) {
+                for (j = 0; j < 31; ++j) {
                     result = A[gid] * A[gid + j];
                 }
             }

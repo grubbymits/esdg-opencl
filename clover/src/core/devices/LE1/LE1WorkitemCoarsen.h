@@ -135,6 +135,7 @@ private:
   void SaveLocalIDs(clang::SourceLocation Loc);
   void RestoreLocalIDs(clang::SourceLocation Loc);
   void FindRefsToReplicate(clang::Stmt *s);
+  void FindScopedVariables(clang::Stmt *s);
   void HandleBarrierInLoop(clang::ForStmt *Loop);
   bool BarrierInLoop(clang::ForStmt *s);
   void CreateLocalVariable(clang::DeclRefExpr *Ref, bool ScalarRepl);
