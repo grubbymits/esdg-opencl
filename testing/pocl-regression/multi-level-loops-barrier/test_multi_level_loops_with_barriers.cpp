@@ -37,15 +37,14 @@
 static char
 kernelSourceCode[] = 
 "kernel \n"
-"void test_kernel(__global int *input, \n"
-"                 __global int *result,\n"
+"void test_kernel(__global int* restrict input, \n"
+"                 __global int* restrict result,\n"
 "                 int a) {\n"
 " int gid = get_global_id(0);\n"
 " int i, j;\n"
 " for (i = 0; i < 32; ++i) {\n"
 "   result[gid] = input[gid];\n"
 "   for (j = 0; j < i; ++j) {\n"
-"      gid = get_global_id(0);\n"
 "      result[gid] = input[gid] * input[gid + j];\n"  
 "      barrier(CLK_GLOBAL_MEM_FENCE);\n"
 "   }\n"

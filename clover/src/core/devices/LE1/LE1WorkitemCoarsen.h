@@ -134,7 +134,8 @@ private:
   void OpenLoop(clang::SourceLocation Loc);
   void SaveLocalIDs(clang::SourceLocation Loc);
   void RestoreLocalIDs(clang::SourceLocation Loc);
-  void CoarsenLoopBody(clang::Stmt *LoopBody, clang::CallExpr *Barrier);
+  void FindRefsToReplicate(clang::Stmt *s);
+  void HandleBarrierInLoop(clang::ForStmt *Loop);
   bool BarrierInLoop(clang::ForStmt *s);
   void CreateLocalVariable(clang::DeclRefExpr *Ref, bool ScalarRepl);
   void AccessScalar(clang::Decl *decl);

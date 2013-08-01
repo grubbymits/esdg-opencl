@@ -58,15 +58,49 @@ void test_kernel(__global int *input,
 //	 parent loop.
 
 
+kernel() {
+  kernel_init()
+  for() {
+    init_workitem()
+    for() {
+      workitem_work()
+      barrier()
+      more_workitem_work()
+    }
+    finalise_workitem()
+  }
+}
 
-for() {
-	init_workitem()
-	for() {
-		workitem_work()
-		barrier()
-		more_workitem_work()
-	}
-	finalise_workitem()
+// All work items need to have reached the barrier before the for loop is able
+// to loop back. workitem_work needs to be replicated, but that also means that
+// all the data for it also needs to have been calculated as well.
+
+kernel() {
+  open_loop()
+    kernel_init()
+  close_loop()
+
+  for() {
+    open_loop()
+      init_workitem()
+    close_loop()
+
+    for() {
+      open_loop()
+        workitem_work()
+      close_loop()
+
+      barrier()
+
+      open_loop()
+        more_workitem_work()
+      close_loop()
+    }
+
+    open_loop()
+      finalise_workitem()
+    close_loop()
+  }
 }
 
 
