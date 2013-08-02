@@ -361,6 +361,7 @@ void WorkitemCoarsen::ThreadSerialiser::OpenLoop(SourceLocation Loc) {
   TheRewriter.InsertText(Loc, OpenWhile.str(), true, true);
 }
 
+
 void WorkitemCoarsen::ThreadSerialiser::SaveLocalIDs(SourceLocation Loc) {
   TheRewriter.InsertText(Loc, SavedLocalArray.str());
   TheRewriter.InsertText(Loc, SaveIDs.str());
@@ -493,12 +494,24 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
 #ifdef DEBUGCL
 //      std::cerr << "Stmt isn't reference" << std::endl;
 #endif
-      // don't try to replicate calls!
-      if (!isa<CallExpr>(*DI))
+      // Don't replicate calls, but check parameters
+      //if (isa<CallExpr>(*DI))
+        //FindRefsToReplicate(*((*DI)->child_begin()));
+      //else
         FindRefsToReplicate(*DI);
     }
     else {
       DeclRefExpr *RefExpr = cast<DeclRefExpr>(*DI);
+
+      if (clang::FunctionDecl* FD =
+          dyn_cast<clang::FunctionDecl>(RefExpr->getDecl())) {
+#ifdef DEBUGCL
+        std::cerr << "FOUND FUNCTIONDECL\n";
+        (*DI)->dumpAll();
+#endif
+        continue;
+      }
+
       std::string key = RefExpr->getDecl()->getName().str();
 
       // Reference may have already been replicated
@@ -576,6 +589,23 @@ void WorkitemCoarsen::ThreadSerialiser::FindScopedVariables(Stmt *s) {
     }
   }
 }
+
+SourceLocation
+WorkitemCoarsen::ThreadSerialiser::GetOffsetInto(SourceLocation Loc) {
+  int offset = Lexer::MeasureTokenLength(Loc,
+                                   TheRewriter.getSourceMgr(),
+                                   TheRewriter.getLangOpts()) + 3;
+  return Loc.getLocWithOffset(offset);
+}
+
+SourceLocation
+WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
+  int offset = Lexer::MeasureTokenLength(Loc,
+                                         TheRewriter.getSourceMgr(),
+                                         TheRewriter.getLangOpts()) + 2;
+  return Loc.getLocWithOffset(offset);
+}
+
 // Whether a loop contains a barrier, nested or not, we follow these steps:
 // - close the main loop before this loop starts
 // - open a main loop at the start of the body of the loop
@@ -586,18 +616,19 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(ForStmt *Loop) {
   std::cerr << "HandleBarrierInLoop\n";
 #endif
   SourceLocation ForLoc = Loop->getLocStart();
-  // Check whether we've already visited the loop
-  if (LoopsWithBarrier.find(ForLoc) != LoopsWithBarrier.end())
+
+  // Check whether we've already handled this loop.
+  if (LoopsWithoutBarrier.find(ForLoc) != LoopsWithoutBarrier.end())
     return;
-  else if (LoopsWithoutBarrier.find(ForLoc) != LoopsWithoutBarrier.end())
+  if (LoopsWithBarrier.find(ForLoc) != LoopsWithBarrier.end())
     return;
 
   Stmt *LoopBody = Loop->getBody();
   // Use an offset to account for curly brackets
-  OpenLoop(Loop->getLocEnd().getLocWithOffset(2));
-  CloseLoop(LoopBody->getLocEnd());
-  OpenLoop(LoopBody->getLocStart().getLocWithOffset(2));
   CloseLoop(Loop->getLocStart());
+  OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
+  CloseLoop(LoopBody->getLocEnd());
+  OpenLoop(GetOffsetOut(Loop->getLocEnd()));
 
   FindScopedVariables(Loop->getInit());
   FindScopedVariables(Loop->getCond());
@@ -616,11 +647,11 @@ bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
     // Recursively visit inner loops
     if (ForStmt* nested = dyn_cast_or_null<ForStmt>(*FI)) {
       if (BarrierInLoop(nested)) {
-        LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
 #ifdef DEBUGCL
         std::cerr << "Added loop to LoopsWithBarriers" << std::endl;
 #endif
         HandleBarrierInLoop(s);
+        LoopsWithBarrier.insert(std::make_pair(ForLoc, s));
         //LoopsToDistribute.push_back(s);
         FoundBarriers = true;
       }

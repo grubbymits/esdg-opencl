@@ -134,6 +134,8 @@ private:
   void OpenLoop(clang::SourceLocation Loc);
   void SaveLocalIDs(clang::SourceLocation Loc);
   void RestoreLocalIDs(clang::SourceLocation Loc);
+  clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
+  clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
   void FindRefsToReplicate(clang::Stmt *s);
   void FindScopedVariables(clang::Stmt *s);
   void HandleBarrierInLoop(clang::ForStmt *Loop);
