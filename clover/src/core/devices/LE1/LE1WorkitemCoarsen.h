@@ -155,6 +155,7 @@ public:
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
   bool VisitDeclStmt(clang::Stmt *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
+  bool VisitParenExpr(clang::Expr *expr);
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
   virtual bool needsToFixScalarAccesses() const {

@@ -415,7 +415,8 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
   // increment because of a space between type and name
   ++offset;
   SourceLocation Loc = ND->getLocStart().getLocWithOffset(offset);
-  TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true);
+  if(TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true))
+    std::cerr << "ERROR - location not writable!\n";
 }
 
 // FIXME Scalar access only works for x dimension values!
@@ -425,8 +426,10 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
       << Ref->getDecl()->getName().str() << std::endl;
 #endif
   unsigned offset = Ref->getDecl()->getName().str().length();
-  SourceLocation loc = Ref->getLocEnd().getLocWithOffset(offset);
-  TheRewriter.InsertText(loc, "[__kernel_local_id[0]]", true);
+  SourceLocation Loc = Ref->getLocEnd().getLocWithOffset(offset);
+  if(TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true))
+    std::cerr << "ERROR - location not writable! Offset = "
+      << offset << std::endl;
 }
 
 void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
@@ -892,42 +895,51 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
 #ifdef DEBUGCL
   std::cerr << "VisitDeclRefExpr: " << key << std::endl;
 #endif
-
-  if (AllRefs.find(key) == AllRefs.end()) {
-    DeclRefSet refset;
-    refset.push_back(RefExpr);
-    AllRefs.insert(std::make_pair(key, refset));
-  }
-  else {
-    AllRefs[key].push_back(RefExpr);
-  }
-
-  SourceLocation RefLoc = RefExpr->getLocStart();
-
-  if (key.compare("xidx") == 0)
-    expr->dumpAll();
-
-  // If we've already added it, don't do it again, but we may need to access
-  // an array instead
-  if (NewScalarRepls.find(key) != NewScalarRepls.end()) {
-    AccessScalar(RefExpr);
-    return true;
-  }
-
   // Don't add it if its one of an work-item indexes
   if (key.compare("__kernel_local_id") == 0)
     return true;
 
-  // Also don't add it if it is a function parameter
+  // Don't add it if it is a function parameter
   for (std::vector<std::string>::iterator PI = ParamVars.begin(),
        PE = ParamVars.end(); PI != PE; ++PI) {
     if ((*PI).compare(key) == 0)
       return true;
   }
 
+  // Either create a new set for the Ref, or add it an the existing one
+  if (AllRefs.find(key) == AllRefs.end()) {
+#ifdef DEBUGCL
+    std::cerr << "Creating new refset\n";
+#endif
+    DeclRefSet refset;
+    refset.push_back(RefExpr);
+    AllRefs.insert(std::make_pair(key, refset));
+  }
+  else {
+#ifdef DEBUGCL
+    std::cerr << "Adding to existing set\n";
+#endif
+    AllRefs[key].push_back(RefExpr);
+  }
+
+  // If we've already added it, don't do it again
+  if (NewScalarRepls.find(key) != NewScalarRepls.end()) {
+    //AccessScalar(RefExpr);
+    return true;
+  }
+
+  /*
+  // Also don't add it if it is a function parameter
+  for (std::vector<std::string>::iterator PI = ParamVars.begin(),
+       PE = ParamVars.end(); PI != PE; ++PI) {
+    if ((*PI).compare(key) == 0)
+      return true;
+  }*/
+
   // First, get the location of the declartion of this variable. It will be
   // inside a while loop, but we have to figure out which one.
   NamedDecl *Decl = RefExpr->getDecl();
+  SourceLocation RefLoc = RefExpr->getLocStart();
 
   // Get the location of the variable declaration, and see if there's any
   // barrier calls between the reference and declaration.
@@ -942,6 +954,27 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
     }
   }
 
+  return true;
+}
+
+bool WorkitemCoarsen::ThreadSerialiser::VisitParenExpr(Expr *expr) {
+#ifdef DEBUGCL
+    std::cerr << "VisitParenExpr: " << std::endl;
+    expr->dumpAll();
+#endif
+  ParenExpr *Paren = cast<ParenExpr>(expr);
+  for (Expr::child_iterator EI = expr->child_begin(), EE = expr->child_end();
+       EI != EE; ++EI) {
+    if (isa<DeclRefExpr>(*EI)) {
+      DeclRefExpr *declRef = cast<DeclRefExpr>(*EI);
+#ifdef DEBUGCL
+      std::cerr << "Found DeclRefExpr: " << declRef->getDecl()->getName().str()
+        << std::endl;
+#endif
+      TheRewriter.InsertText(declRef->getLocStart(), " DeclRefExpr:", true);
+      VisitDeclRefExpr(declRef);
+    }
+  }
   return true;
 }
 
