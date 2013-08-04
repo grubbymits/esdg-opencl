@@ -29,8 +29,10 @@ class clang::FileManager;
 
 typedef std::vector<clang::Stmt*> StmtSet;
 typedef std::vector<clang::DeclRefExpr*> DeclRefSet;
+typedef std::vector<clang::NamedDecl*> NamedDeclSet;
 typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
+typedef std::map<std::string, NamedDeclSet> NamedDeclSetMap;
 
 class WorkitemCoarsen {
 
@@ -58,6 +60,14 @@ public:
   ~OpenCLCompiler();
   void setFile(std::string input);
   void Parse();
+
+  bool needsScalarFixes() {
+    return TheConsumer->needsScalarFixes();
+  }
+  void FixAllScalarAccesses() {
+    TheConsumer->FixAllScalarAccesses();
+  }
+
   const clang::RewriteBuffer *getRewriteBuf() {
     return TheRewriter.getRewriteBufferFor(SourceMgr->getMainFileID());
   }
@@ -79,6 +89,12 @@ public:
       Visitor.TraverseDecl(*b);
       return true;
     }
+  bool needsScalarFixes() const {
+    return Visitor.needsToFixScalarAccesses();
+  }
+  void FixAllScalarAccesses() {
+    Visitor.FixAllScalarAccesses();
+  }
 
 private:
   T Visitor;
@@ -94,34 +110,46 @@ private:
 
 }; // end class OpenCLCompiler
 
-private:
-class KernelInitialiser : public clang::RecursiveASTVisitor<KernelInitialiser> {
+// Base class for our visitors, ensures an interface for fixing scalars
+// and handles the trivial tasks of creating the frequently used strings
+// to open and close loops
 public:
-  KernelInitialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
-  bool VisitFunctionDecl(clang::FunctionDecl *f);
-  bool VisitDeclStmt(clang::Stmt *s);
-  bool VisitCallExpr(clang::Expr *s);
-  // TODO Visit ForStmts and ensure that they have open and close brackets,
-  // and do the same for if statements.
 
-private:
+template <typename T> class ASTVisitorBase :
+  public clang::RecursiveASTVisitor<T> {
+public:
+  ASTVisitorBase(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
+  virtual bool needsToFixScalarAccesses() const = 0;
+  virtual void FixAllScalarAccesses() = 0;
+protected:
   void CloseLoop(clang::SourceLocation Loc);
   void OpenLoop(clang::SourceLocation Loc);
-
-private:
   unsigned LocalX;
   unsigned LocalY;
   unsigned LocalZ;
   std::stringstream OpenWhile;
   std::stringstream CloseWhile;
   clang::Rewriter &TheRewriter;
+};
 
-}; // end class KernelInitialiser
+private:
 
-class ThreadSerialiser : public clang::RecursiveASTVisitor<ThreadSerialiser>
-{
+class KernelInitialiser : public ASTVisitorBase<KernelInitialiser> {
 public:
-  ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
+  KernelInitialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z)
+    : ASTVisitorBase(R, x, y, z) { }
+  bool VisitFunctionDecl(clang::FunctionDecl *f);
+  bool VisitDeclStmt(clang::Stmt *s);
+  bool VisitCallExpr(clang::Expr *s);
+
+  virtual bool needsToFixScalarAccesses() const { return false; }
+  virtual void FixAllScalarAccesses() { return; }
+};
+
+class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {
+public:
+  ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z)
+    : ASTVisitorBase(R, x, y, z) { }
   bool VisitForStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
@@ -129,11 +157,13 @@ public:
   bool VisitDeclRefExpr(clang::Expr *expr);
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
+  virtual bool needsToFixScalarAccesses() const {
+    return (!NewScalarRepls.empty());
+  }
+
+  virtual void FixAllScalarAccesses();
+
 private:
-  void CloseLoop(clang::SourceLocation Loc);
-  void OpenLoop(clang::SourceLocation Loc);
-  void SaveLocalIDs(clang::SourceLocation Loc);
-  void RestoreLocalIDs(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
   void FindRefsToReplicate(clang::Stmt *s);
@@ -145,13 +175,6 @@ private:
   void AccessScalar(clang::DeclRefExpr *Ref);
 
 private:
-  unsigned LocalX;
-  unsigned LocalY;
-  unsigned LocalZ;
-  std::stringstream OpenWhile;
-  std::stringstream CloseWhile;
-  std::stringstream SaveIDs;
-  std::stringstream RestoreIDs;
   std::stringstream LocalArray;
   std::stringstream SavedLocalArray;
 
@@ -172,8 +195,6 @@ private:
   std::vector<clang::ForStmt*>LoopsToDistribute;
   std::vector<clang::CallExpr*> BarrierCalls;
   clang::CallExpr* LoopBarrier;
-
-  clang::Rewriter &TheRewriter;
 
 }; // end class ThreadSerialiser
 

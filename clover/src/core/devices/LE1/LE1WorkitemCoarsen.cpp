@@ -74,6 +74,8 @@ bool WorkitemCoarsen::HandleBarriers() {
   OpenCLCompiler<ThreadSerialiser> SerialCompiler(LocalX, LocalY, LocalZ);
   SerialCompiler.setFile(InitKernelFilename);
   SerialCompiler.Parse();
+  if (SerialCompiler.needsScalarFixes())
+    SerialCompiler.FixAllScalarAccesses();
 
   const RewriteBuffer *RewriteBuf = SerialCompiler.getRewriteBuf();
   if (RewriteBuf == NULL) {
@@ -94,12 +96,11 @@ bool WorkitemCoarsen::HandleBarriers() {
   return true;
 }
 
-//template <typename T>
-//OpenCLCompiler<T>::KernelInitialiser::KernelInitialiser(Rewriter &R,
-WorkitemCoarsen::KernelInitialiser::KernelInitialiser(Rewriter &R,
-                                                        unsigned x,
-                                                        unsigned y,
-                                                        unsigned z)
+template <typename T>
+WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
+                                                   unsigned x,
+                                                   unsigned y,
+                                                   unsigned z)
     : LocalX(x), LocalY(y), LocalZ(z), TheRewriter(R) {
 
   if (LocalZ > 1) {
@@ -127,16 +128,17 @@ WorkitemCoarsen::KernelInitialiser::KernelInitialiser(Rewriter &R,
     CloseWhile << "__kernel_local_id[2]++;\n";
     CloseWhile << "}\n";
   }
+
 }
 
-//template <typename T>
+template <typename T>
 //void OpenCLCompiler<T>::KernelInitialiser::CloseLoop(SourceLocation Loc) {
-void WorkitemCoarsen::KernelInitialiser::CloseLoop(SourceLocation Loc) {
+void WorkitemCoarsen::ASTVisitorBase<T>::CloseLoop(SourceLocation Loc) {
   TheRewriter.InsertText(Loc, CloseWhile.str(), true, true);
 }
 
-//template <typename T>
-void WorkitemCoarsen::KernelInitialiser::OpenLoop(SourceLocation Loc) {
+template <typename T>
+void WorkitemCoarsen::ASTVisitorBase<T>::OpenLoop(SourceLocation Loc) {
   TheRewriter.InsertText(Loc, OpenWhile.str(), true, true);
 }
 
@@ -294,86 +296,29 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   return true;
 }
 
-//template <typename T>
-WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
-                                   unsigned x,
-                                   unsigned y,
-                                   unsigned z)
-        : LocalX(x), LocalY(y), LocalZ(z), TheRewriter(R) {
-  if (LocalZ > 1) {
-    OpenWhile << "\n__kernel_local_id[2] = 0;\n";
-    OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
+void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
+  // Iterate through all the named declarations and then visit all their
+  // references
+  for (std::map<std::string, NamedDecl*>::iterator NDI = NewScalarRepls.begin(),
+       NDE = NewScalarRepls.end(); NDI != NDE; ++NDI) {
 
-    SaveIDs << "__kernel_local_id_save[2] = __kernel_local_id[2];\n";
-    RestoreIDs << "__kernel_local_id[2] = __kernel_local_id_save[2];\n";
-  }
-  if (LocalY > 1) {
-    OpenWhile << "__kernel_local_id[1] = 0;\n";
-    OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
+    std::string varName = NDI->first;
+    DeclRefSet RefSet = AllRefs[varName];
 
-    SaveIDs << "__kernel_local_id_save[1] = __kernel_local_id[1];\n";
-    RestoreIDs << "__kernel_local_id[1] = __kernel_local_id_save[1];\n";
-  }
-  if (LocalX > 1) {
-    OpenWhile << "__kernel_local_id[0] = 0;\n";
-    OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
+    for (DeclRefSet::iterator DRI = RefSet.begin(), DRE = RefSet.end();
+         DRI != DRE; ++DRI) {
 
-    SaveIDs << "__kernel_local_id_save[0] = __kernel_local_id[0];\n";
-    RestoreIDs << "__kernel_local_id[0] = __kernel_local_id_save[0];\n";
+      AccessScalar(*DRI);
+    }
   }
-  if (LocalX > 1) {
-    CloseWhile << "\n__kernel_local_id[0]++;\n";
-    CloseWhile  << "}\n";
-  }
-  if (LocalY > 1) {
-    CloseWhile << " __kernel_local_id[1]++;\n";
-    CloseWhile << "}\n";
-  }
-  if (LocalZ > 1) {
-    CloseWhile << "__kernel_local_id[2]++;\n";
-    CloseWhile << "}\n";
-  }
-
-  LocalArray << "  int __kernel_local_id[";
-  SavedLocalArray << "  int __kernel_local_id_save[";
-  if (LocalZ > 1 && LocalY > 1 && LocalX > 1) {
-    LocalArray << "3";
-    SavedLocalArray << "3";
-  }
-  else if (LocalY > 1 && LocalX > 1) {
-    LocalArray << "2";
-    SavedLocalArray << "2";
-  }
-  else {
-    LocalArray << "1";
-    SavedLocalArray << "1";
-  }
-  LocalArray << "];\n";
-  SavedLocalArray << "];\n";
-
 }
 
-void WorkitemCoarsen::ThreadSerialiser::CloseLoop(SourceLocation Loc) {
-    TheRewriter.InsertText(Loc, CloseWhile.str(), true, true);
-}
-
-void WorkitemCoarsen::ThreadSerialiser::OpenLoop(SourceLocation Loc) {
-  TheRewriter.InsertText(Loc, OpenWhile.str(), true, true);
-}
-
-
-void WorkitemCoarsen::ThreadSerialiser::SaveLocalIDs(SourceLocation Loc) {
-  TheRewriter.InsertText(Loc, SavedLocalArray.str());
-  TheRewriter.InsertText(Loc, SaveIDs.str());
-}
-
-void WorkitemCoarsen::ThreadSerialiser::RestoreLocalIDs(SourceLocation Loc) {
-  TheRewriter.InsertText(Loc, RestoreIDs.str());
-}
-
+// Run this after parsing is complete, to access all the referenced variables
+// that have been replicated.
 void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
                                                             bool ScalarRepl) {
-  NamedDecl *ND = Ref->getDecl();
+
+  NamedDecl *ND = cast<NamedDecl>(Ref->getDecl());
   std::string varName = ND->getName().str();
 
   // Do not create local variables for variables who have limited scope,
@@ -416,12 +361,13 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
       NewDecl << "[" << LocalZ << "]";
     NewScalarRepls.insert(std::make_pair(varName, ND));
 
+    /*
     // Visit all the references of this variable
     DeclRefSet varRefs = AllRefs[varName];
     for (std::vector<DeclRefExpr*>::iterator RI = varRefs.begin(),
          RE = varRefs.end(); RI != RE; ++RI) {
       AccessScalar(*RI);
-    }
+    }*/
   }
   else {
     NewLocalDecls.insert(std::make_pair(varName, ND));
@@ -460,6 +406,10 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
 // FIXME Scalar access only works for x dimension values!
 void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
   NamedDecl *ND = cast<NamedDecl>(decl);
+#ifdef DEBUGCL
+  std::cerr << "Creating scalar access for " << ND->getName().str()
+    << std::endl;
+#endif
   unsigned offset = ND->getName().str().length();
   offset += cast<ValueDecl>(ND)->getType().getAsString().length();
   // increment because of a space between type and name
@@ -624,7 +574,7 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(ForStmt *Loop) {
     return;
 
   Stmt *LoopBody = Loop->getBody();
-  // Use an offset to account for curly brackets
+
   CloseLoop(Loop->getLocStart());
   OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
   CloseLoop(LoopBody->getLocEnd());
@@ -920,13 +870,11 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 }
 
 // TODO Need to handle continues and breaks
-//template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::WalkUpFromUnaryContinueStmt(
   UnaryOperator *S) {
   return true;
 }
 
-//template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitDeclStmt(Stmt *s) {
   DeclStmt *DS = cast<DeclStmt>(s);
   if (DS->isSingleDecl()) {
@@ -941,6 +889,9 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclStmt(Stmt *s) {
 bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   DeclRefExpr *RefExpr = cast<DeclRefExpr>(expr);
   std::string key = RefExpr->getDecl()->getName().str();
+#ifdef DEBUGCL
+  std::cerr << "VisitDeclRefExpr: " << key << std::endl;
+#endif
 
   if (AllRefs.find(key) == AllRefs.end()) {
     DeclRefSet refset;
@@ -952,6 +903,9 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   }
 
   SourceLocation RefLoc = RefExpr->getLocStart();
+
+  if (key.compare("xidx") == 0)
+    expr->dumpAll();
 
   // If we've already added it, don't do it again, but we may need to access
   // an array instead
