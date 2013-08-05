@@ -14,6 +14,7 @@
 #include "clang/Basic/TargetInfo.h"
 #include "clang/CodeGen/CodeGenAction.h"
 #include "clang/Frontend/CompilerInstance.h"
+#include "clang/Rewrite/Frontend/FrontendActions.h"
 #include "clang/Frontend/TextDiagnosticPrinter.h"
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Parse/ParseAST.h"
@@ -37,15 +38,20 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
 #ifdef DEBUGCL
   std::cerr << "CreateWorkgroup\n";
 #endif
-  OpenCLCompiler<KernelInitialiser> InitCompiler(LocalX, LocalY, LocalZ);
   OrigFilename = Filename;
-  InitCompiler.setFile(OrigFilename);
 
+  // Firstly, we need to expand the macros within the source code because
+  // it is not possible to rewrite their locations.
   std::string SourceContainer;
   llvm::raw_string_ostream ExpandedSource(SourceContainer);
-  InitCompiler.expandMacros(&ExpandedSource);
-  std::cout << ExpandedSource.str() << std::endl;
+  if(!ExpandMacros()) {
+    std::cerr << "!ERROR : Failed to expand macros" << std::endl;
+    return false;
+  }
 
+  // Initialise the kernel with the while loop(s) and check for barriers
+  OpenCLCompiler<KernelInitialiser> InitCompiler(LocalX, LocalY, LocalZ);
+  InitCompiler.setFile(OrigFilename);
   InitCompiler.Parse();
 
   // At this point the rewriter's buffer should be full with the rewritten
@@ -72,6 +78,44 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
   init_kernel << InitKernelSource;
   init_kernel.close();
   return HandleBarriers();
+}
+
+// Use a RewriteAction to expand all macros within the original source file
+bool WorkitemCoarsen::ExpandMacros() { //llvm::raw_string_ostream *NewSource) {
+  std::string log;
+  llvm::raw_string_ostream macro_log(log);
+  CompilerInstance CI;
+  RewriteMacrosAction act;
+
+  CI.getTargetOpts().Triple = "le1";
+  CI.getFrontendOpts().Inputs.push_back(FrontendInputFile(OrigFilename,
+                                                          IK_OpenCL));
+  // Overwrite original
+  CI.getFrontendOpts().OutputFile = OrigFilename;
+
+  CI.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
+                                   frontend::Angled,
+                                   false, false, false);
+  CI.getHeaderSearchOpts().AddPath(CLANG_INCLUDE_DIR, frontend::Angled,
+                                   false, false, false);
+  CI.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
+  CI.getPreprocessorOpts().Includes.push_back("clc/clc.h");
+  CI.getPreprocessorOpts().addMacroDef(
+    "cl_clang_storage_class_specifiers");
+  CI.getInvocation().setLangDefaults(CI.getLangOpts(), IK_OpenCL);
+
+  CI.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+      macro_log, &CI.getDiagnosticOpts()));
+
+  if (!CI.ExecuteAction(act)) {
+    std::cerr << "RewriteMacrosAction failed:" << std::endl
+      << log;
+    return false;
+  }
+#ifdef DEBUGCL
+  std::cerr << "Leaving ExpandMacros" << std::endl;
+#endif
+  return true;
 }
 
 bool WorkitemCoarsen::HandleBarriers() {
@@ -964,27 +1008,6 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   return true;
 }
 
-bool WorkitemCoarsen::ThreadSerialiser::VisitParenExpr(Expr *expr) {
-#ifdef DEBUGCL
-    std::cerr << "VisitParenExpr: " << std::endl;
-    expr->dumpAll();
-#endif
-  ParenExpr *Paren = cast<ParenExpr>(expr);
-  for (Expr::child_iterator EI = expr->child_begin(), EE = expr->child_end();
-       EI != EE; ++EI) {
-    if (isa<DeclRefExpr>(*EI)) {
-      DeclRefExpr *declRef = cast<DeclRefExpr>(*EI);
-#ifdef DEBUGCL
-      std::cerr << "Found DeclRefExpr: " << declRef->getDecl()->getName().str()
-        << std::endl;
-#endif
-      TheRewriter.InsertText(declRef->getLocStart(), " DeclRefExpr:", true);
-      VisitDeclRefExpr(declRef);
-    }
-  }
-  return true;
-}
-
 //template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitFunctionDecl(FunctionDecl *f) {
   // Only function definitions (with bodies), not declarations.
@@ -1016,7 +1039,7 @@ WorkitemCoarsen::OpenCLCompiler<T>::OpenCLCompiler(unsigned x,
   IntrusiveRefCntPtr<TargetOptions> TO(new TargetOptions);
   TO.getPtr()->Triple = llvm::sys::getDefaultTargetTriple();
   TargetInfo *TI = TargetInfo::CreateTargetInfo(
-  TheCompInst.getDiagnostics(), *TO);
+    TheCompInst.getDiagnostics(), *TO);
   TheCompInst.setTarget(TI);
 
   // Set the compiler up to handle OpenCL

@@ -24,6 +24,8 @@
 #include "llvm/Support/Path.h"
 #include "llvm/Support/FileSystem.h"
 
+#include <iostream>
+
 using namespace clang;
 
 //===----------------------------------------------------------------------===//
