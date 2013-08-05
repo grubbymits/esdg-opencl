@@ -51,7 +51,8 @@ clCreateContext(const cl_context_properties  *properties,
                 cl_int *                      errcode_ret)
 {
 #ifdef DEBUGCL
-  std::cerr << "clCreateContext for " << num_devices << " devices\n";
+  std::cerr << "clCreateContext for " << num_devices << " devices"
+    << std::endl;
 #endif
     cl_int default_errcode_ret;
 
@@ -71,7 +72,7 @@ clCreateContext(const cl_context_properties  *properties,
     Coal::Context *ctx = new Coal::Context(properties, num_devices, devices,
                                            pfn_notify, user_data, errcode_ret);
 #ifdef DEBUGCL
-    std::cerr << "Got Context\n";
+    std::cerr << "Got Context" << std::endl;
 #endif
 
     if (*errcode_ret != CL_SUCCESS)
@@ -82,7 +83,7 @@ clCreateContext(const cl_context_properties  *properties,
     }
 
 #ifdef DEBUGCL
-    std::cerr << "Leaving clCreateContext\n";
+    std::cerr << "Leaving clCreateContext" << std::endl;
 #endif
     return (_cl_context *)ctx;
 }
@@ -98,24 +99,30 @@ clCreateContextFromType(const cl_context_properties   *properties,
                         cl_int *                errcode_ret)
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering clCreateContextFromType\n";
+  std::cerr << "Entering clCreateContextFromType" << std::endl;
 #endif
   const cl_uint num_entries = TotalLE1Devices;
     cl_device_id device[num_entries];
-    cl_uint num_devices;
+    cl_uint num_devices = 1;
+    std::cerr << "Address of num_devices = " << std::hex << &num_devices
+      << std::endl;
 
-    *errcode_ret = clGetDeviceIDs(0, device_type, num_entries, device,
-                                  &num_devices);
+    if (errcode_ret) {
+      *errcode_ret = clGetDeviceIDs(0, device_type, num_entries, device,
+                                    &num_devices);
 
-    if (*errcode_ret != CL_SUCCESS)
+      if (*errcode_ret != CL_SUCCESS)
         return 0;
+    }
+    else
+      clGetDeviceIDs(0, device_type, num_entries, device, &num_devices);
 
     cl_context Context =
       clCreateContext(properties, num_devices, device, pfn_notify,
                            user_data,
                            errcode_ret);
 #ifdef DEBUGCL
-    std::cerr << "Leaving clCreateContextFromType\n";
+    std::cerr << "Leaving clCreateContextFromType" << std::endl;
 #endif
     return Context;
 }

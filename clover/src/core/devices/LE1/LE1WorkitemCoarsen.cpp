@@ -1100,8 +1100,8 @@ void WorkitemCoarsen::OpenCLCompiler<T>::setFile(std::string input) {
   // Set the main file handled by the source manager to the input file.
   const FileEntry *FileIn = FileMgr->getFile(input.c_str());
   SourceMgr->createMainFileID(FileIn);
-  //TheCompInst.getDiagnosticClient().BeginSourceFile(TheCompInst.getLangOpts(),
-    //                                          &TheCompInst.getPreprocessor());
+  TheCompInst.getDiagnosticClient().BeginSourceFile(TheCompInst.getLangOpts(),
+                                              &TheCompInst.getPreprocessor());
 }
 
 template <typename T>

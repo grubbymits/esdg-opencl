@@ -55,7 +55,9 @@ clGetDeviceIDs(cl_platform_id   platform,
                cl_uint *        num_devices)
 {
 #ifdef DEBUGCL
-  std::cerr << "clGetDeviceIDs\n";
+  std::cerr << "clGetDeviceIDs" << std::endl;
+  std::cerr << "Address of num_devices = " << std::hex << num_devices
+    << std::endl;
 #endif
     if (platform != 0) {
       std::cerr << "INVALID_PLATFORM\n";
@@ -82,14 +84,19 @@ clGetDeviceIDs(cl_platform_id   platform,
             devices[i] = (cl_device_id)&LE1Devices[i];
         }
 
-        if (num_devices)
+        if (num_devices) {
+          std::cerr << "Writing total devices = " << TotalLE1Devices << std::endl;
             *num_devices = TotalLE1Devices;
+        }
     }
     else {
       std::cerr << "DEVICE_NOT_FOUND\n";
         return CL_DEVICE_NOT_FOUND;
     }
 
+#ifdef DEBUGCL
+    std::cerr << "Returning CL_SUCCESS from clGetDeviceIDs" << std::endl;
+#endif
     return CL_SUCCESS;
 }
 

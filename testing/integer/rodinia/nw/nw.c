@@ -2,10 +2,9 @@
 #define LIMIT -999
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <iostream>
-#include <string>
+//#include <iostream>
+#include <string.h>
 #include <sys/time.h>
 
 #ifdef NV //NVIDIA
@@ -59,7 +58,7 @@ static int initialize(int use_gpu)
 	cl_platform_id platform_id;
 	if (clGetPlatformIDs(1, &platform_id, NULL) != CL_SUCCESS) { printf("ERROR: clGetPlatformIDs(1,*,0) failed\n"); return -1; }
 	cl_context_properties ctxprop[] = { CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id, 0};
-	device_type = use_gpu ? CL_DEVICE_TYPE_GPU : CL_DEVICE_TYPE_CPU;
+	device_type = use_gpu ? CL_DEVICE_TYPE_ACCELERATOR : CL_DEVICE_TYPE_CPU;
 	context = clCreateContextFromType( ctxprop, device_type, NULL, NULL, NULL );
 	if( !context ) { printf("ERROR: clCreateContextFromType(%s) failed\n", use_gpu ? "GPU" : "CPU"); return -1; }
 
@@ -69,7 +68,7 @@ static int initialize(int use_gpu)
 	printf("num_devices = %d\n", num_devices);
 	
 	if( result != CL_SUCCESS || num_devices < 1 ) { printf("ERROR: clGetContextInfo() failed\n"); return -1; }
-	device_list = new cl_device_id[num_devices];
+	device_list = malloc(sizeof(cl_device_id) * num_devices);
 	if( !device_list ) { printf("ERROR: new cl_device_id[] failed\n"); return -1; }
 	result = clGetContextInfo( context, CL_CONTEXT_DEVICES, size, device_list, NULL );
 	if( result != CL_SUCCESS ) { printf("ERROR: clGetContextInfo() failed\n"); return -1; }
@@ -85,7 +84,7 @@ static int shutdown()
 	// release resources
 	if( cmd_queue ) clReleaseCommandQueue( cmd_queue );
 	if( context ) clReleaseContext( context );
-	if( device_list ) delete device_list;
+	if( device_list ) free(device_list);
 
 	// reset all variables
 	cmd_queue = 0;
