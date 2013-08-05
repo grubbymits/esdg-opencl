@@ -81,7 +81,7 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
 }
 
 // Use a RewriteAction to expand all macros within the original source file
-bool WorkitemCoarsen::ExpandMacros() { //llvm::raw_string_ostream *NewSource) {
+bool WorkitemCoarsen::ExpandMacros() {
   std::string log;
   llvm::raw_string_ostream macro_log(log);
   CompilerInstance CI;
@@ -112,9 +112,6 @@ bool WorkitemCoarsen::ExpandMacros() { //llvm::raw_string_ostream *NewSource) {
       << log;
     return false;
   }
-#ifdef DEBUGCL
-  std::cerr << "Leaving ExpandMacros" << std::endl;
-#endif
   return true;
 }
 
@@ -364,6 +361,28 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
   }
 }
 
+/*
+void WorkitemCoarsen::ThreadSerialiser::AddToLocals(DeclRefExpr *Ref,
+                                                    bool ScalarRepl) {
+  NamedDecl *ND = cast<NamedDecl>(Ref->getDecl());
+  std::string varName = ND->getName().str();
+
+  // Do not create local variables for variables who have limited scope,
+  // such as one declared in loop headers
+  if (ScopedVariables.find(varName) != ScopedVariables.end())
+    return;
+
+  // Make sure we don't add the same value more than once
+  if (NewLocalDecls.find(varName) != NewLocalDecls.end()) {
+    return;
+  }
+
+  if (ScalarRepl)
+    NewScalarRepls.insert(std::make_pair(varName, ND));
+  else
+    NewLocalDecls.insert(std::make_pair(varName, ND));
+
+}*/
 // Run this after parsing is complete, to access all the referenced variables
 // that have been replicated.
 void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
@@ -483,76 +502,6 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
       << offset << std::endl;
 }
 
-void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
-#ifdef DEBUGCL
-  //std::cerr << "FindRefsToReplicate" << std::endl;
-#endif
-
-  for (Stmt::child_iterator DI = s->child_begin(),
-       DE = s->child_end(); DI != DE; ++DI) {
-
-    if (*DI == NULL)
-      continue;
-
-    if (!isa<DeclRefExpr>(*DI)) {
-#ifdef DEBUGCL
-//      std::cerr << "Stmt isn't reference" << std::endl;
-#endif
-      // Don't replicate calls, but check parameters
-      //if (isa<CallExpr>(*DI))
-        //FindRefsToReplicate(*((*DI)->child_begin()));
-      //else
-        FindRefsToReplicate(*DI);
-    }
-    else {
-      DeclRefExpr *RefExpr = cast<DeclRefExpr>(*DI);
-
-      if (clang::FunctionDecl* FD =
-          dyn_cast<clang::FunctionDecl>(RefExpr->getDecl())) {
-#ifdef DEBUGCL
-        std::cerr << "FOUND FUNCTIONDECL\n";
-        (*DI)->dumpAll();
-#endif
-        continue;
-      }
-
-      std::string key = RefExpr->getDecl()->getName().str();
-
-      // Reference may have already been replicated
-      if (NewScalarRepls.find(key) != NewScalarRepls.end()) {
-#ifdef DEBUGCL
-  //      std::cerr << "Already replicated" << std::endl;
-#endif
-        continue;
-      }
-
-      // don't replicated our indexes
-      if (key.compare("__kernel_local_id") == 0) {
-#ifdef DEBUGCL
-    //    std::cerr << "Reference is kernel index" << std::endl;
-#endif
-        continue;
-      }
-
-      bool isArgument = false;
-      // Also don't add it if it is a function parameter
-      for (std::vector<std::string>::iterator PI = ParamVars.begin(),
-           PE = ParamVars.end(); PI != PE; ++PI) {
-        if ((*PI).compare(key) == 0) {
-          isArgument = true;
-#ifdef DEBUGCL
-      //    std::cerr << "Reference is kernel argument" << std::endl;
-#endif
-          break;
-        }
-      }
-
-      if (!isArgument)
-        CreateLocalVariable(RefExpr, true);
-    }
-  }
-}
-
 // Used to find variables in loop headers to keep from scalar replication. To
 // only be used when the loop has a barrier within.
 void WorkitemCoarsen::ThreadSerialiser::FindScopedVariables(Stmt *s) {
@@ -610,6 +559,71 @@ WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
   return Loc.getLocWithOffset(offset);
 }
 
+void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
+
+  for (Stmt::child_iterator DI = s->child_begin(),
+       DE = s->child_end(); DI != DE; ++DI) {
+
+    if (*DI == NULL)
+      continue;
+
+    // Before we're traversing a node, we need to identify DeclStmts because
+    // CreateLocalVariable checks our list of discovered Stmts.
+    // TODO Remove this necessity by creating local variables, and removing
+    // the old declarations at the same time that we 'FixAllScalarAccesses'.
+    if(isa<DeclStmt>(*DI)) {
+      DeclStmt *declStmt = cast<DeclStmt>(*DI);
+      std::string name =
+        cast<NamedDecl>(declStmt->getSingleDecl())->getName().str();
+      DeclStmts.insert(std::make_pair(name, declStmt));
+    }
+
+    if (!isa<DeclRefExpr>(*DI)) {
+#ifdef DEBUGCL
+//      std::cerr << "Stmt isn't reference" << std::endl;
+#endif
+      // Don't replicate calls, but check parameters
+      //if (isa<CallExpr>(*DI))
+        //FindRefsToReplicate(*((*DI)->child_begin()));
+      //else
+        FindRefsToReplicate(*DI);
+    }
+    else {
+      DeclRefExpr *RefExpr = cast<DeclRefExpr>(*DI);
+
+      if (clang::FunctionDecl* FD =
+          dyn_cast<clang::FunctionDecl>(RefExpr->getDecl())) {
+        continue;
+      }
+
+      std::string key = RefExpr->getDecl()->getName().str();
+
+      // Reference may have already been replicated
+      if (NewScalarRepls.find(key) != NewScalarRepls.end()) {
+        continue;
+      }
+
+      // don't replicated our indexes
+      if (key.compare("__kernel_local_id") == 0) {
+        continue;
+      }
+
+      bool isArgument = false;
+      // Also don't add it if it is a function parameter
+      for (std::vector<std::string>::iterator PI = ParamVars.begin(),
+           PE = ParamVars.end(); PI != PE; ++PI) {
+        if ((*PI).compare(key) == 0) {
+          isArgument = true;
+          break;
+        }
+      }
+
+      if (!isArgument)
+        CreateLocalVariable(RefExpr, true);
+    }
+  }
+}
+
 // Whether a loop contains a barrier, nested or not, we follow these steps:
 // - close the main loop before this loop starts
 // - open a main loop at the start of the body of the loop
@@ -640,6 +654,7 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(ForStmt *Loop) {
   FindRefsToReplicate(LoopBody);
 }
 
+// Recursive function to whether the loop contains a barrier
 bool WorkitemCoarsen::ThreadSerialiser::BarrierInLoop(ForStmt* s) {
   Stmt* ForBody = cast<ForStmt>(s)->getBody();
   SourceLocation ForLoc = s->getLocStart();
@@ -713,6 +728,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
 
   return BarrierInLoop(ForLoop);
 
+  /*
   // If we find that a loop(s) contains a barrier, we need to coarsen individual
   // areas:
   // - Close loop before loop init
@@ -893,7 +909,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
       }
     }
   }
-  return true;
+  return true;*/
 }
 
 // Remove barrier calls and modify calls to kernel builtin functions.
