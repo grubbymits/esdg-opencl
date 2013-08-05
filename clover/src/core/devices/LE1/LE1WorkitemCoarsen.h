@@ -16,6 +16,7 @@
 
 namespace llvm {
   class Module;
+  class raw_ostream;
 }
 
 class clang::FunctionDecl;
@@ -59,6 +60,7 @@ public:
   OpenCLCompiler(unsigned x, unsigned y, unsigned z);
   ~OpenCLCompiler();
   void setFile(std::string input);
+  void expandMacros(llvm::raw_ostream *source);
   void Parse();
 
   bool needsScalarFixes() {

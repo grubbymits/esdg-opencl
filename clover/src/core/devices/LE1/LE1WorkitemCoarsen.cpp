@@ -18,6 +18,7 @@
 #include "clang/Lex/Preprocessor.h"
 #include "clang/Parse/ParseAST.h"
 #include "clang/Rewrite/Core/Rewriter.h"
+#include "clang/Rewrite/Frontend/Rewriters.h"
 #include "llvm/ADT/IntrusiveRefCntPtr.h"
 #include "llvm/Bitcode/ReaderWriter.h"
 #include "llvm/LLVMContext.h"
@@ -39,6 +40,12 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
   OpenCLCompiler<KernelInitialiser> InitCompiler(LocalX, LocalY, LocalZ);
   OrigFilename = Filename;
   InitCompiler.setFile(OrigFilename);
+
+  std::string SourceContainer;
+  llvm::raw_string_ostream ExpandedSource(SourceContainer);
+  InitCompiler.expandMacros(&ExpandedSource);
+  std::cout << ExpandedSource.str() << std::endl;
+
   InitCompiler.Parse();
 
   // At this point the rewriter's buffer should be full with the rewritten
@@ -1054,9 +1061,14 @@ void WorkitemCoarsen::OpenCLCompiler<T>::setFile(std::string input) {
   // Set the main file handled by the source manager to the input file.
   const FileEntry *FileIn = FileMgr->getFile(input.c_str());
   SourceMgr->createMainFileID(FileIn);
-  TheCompInst.getDiagnosticClient().BeginSourceFile(
-  TheCompInst.getLangOpts(),
-  &TheCompInst.getPreprocessor());
+  //TheCompInst.getDiagnosticClient().BeginSourceFile(TheCompInst.getLangOpts(),
+    //                                          &TheCompInst.getPreprocessor());
+}
+
+template <typename T>
+void WorkitemCoarsen::OpenCLCompiler<T>::expandMacros(llvm::raw_ostream *source)
+{
+  clang::RewriteMacrosInInput(TheCompInst.getPreprocessor(), source);
 }
 
 template <typename T>
