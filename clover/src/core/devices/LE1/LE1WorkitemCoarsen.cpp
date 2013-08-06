@@ -34,11 +34,13 @@ typedef std::vector<DeclRefExpr*> DeclRefSet;
 typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 
-bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
+bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
+                                      &kernel) {
 #ifdef DEBUGCL
   std::cerr << "CreateWorkgroup\n";
 #endif
   OrigFilename = Filename;
+  KernelName = kernel;
 
   // Firstly, we need to expand the macros within the source code because
   // it is not possible to rewrite their locations.
@@ -50,7 +52,8 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename) {
   }
 
   // Initialise the kernel with the while loop(s) and check for barriers
-  OpenCLCompiler<KernelInitialiser> InitCompiler(LocalX, LocalY, LocalZ);
+  OpenCLCompiler<KernelInitialiser> InitCompiler(LocalX, LocalY, LocalZ,
+                                                 KernelName);
   InitCompiler.setFile(OrigFilename);
   InitCompiler.Parse();
 
@@ -119,7 +122,8 @@ bool WorkitemCoarsen::HandleBarriers() {
 #ifdef DEBUGCL
   std::cerr << "HandleBarriers\n";
 #endif
-  OpenCLCompiler<ThreadSerialiser> SerialCompiler(LocalX, LocalY, LocalZ);
+  OpenCLCompiler<ThreadSerialiser> SerialCompiler(LocalX, LocalY, LocalZ,
+                                                  KernelName);
   SerialCompiler.setFile(InitKernelFilename);
   SerialCompiler.Parse();
   if (SerialCompiler.needsScalarFixes())
@@ -408,6 +412,10 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
     return;
   }
 
+  // Don't add function calls
+  if (isa<FunctionDecl>(Ref->getDecl()))
+    return;
+
   std::string type = cast<ValueDecl>(ND)->getType().getAsString();
   std::stringstream NewDecl;
   NewDecl << type << " " << varName;
@@ -591,10 +599,8 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
     else {
       DeclRefExpr *RefExpr = cast<DeclRefExpr>(*DI);
 
-      if (clang::FunctionDecl* FD =
-          dyn_cast<clang::FunctionDecl>(RefExpr->getDecl())) {
+      if (isa<FunctionDecl>(RefExpr->getDecl()))
         continue;
-      }
 
       std::string key = RefExpr->getDecl()->getName().str();
 
@@ -726,7 +732,8 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
   else if (LoopsWithoutBarrier.find(ForLoc) != LoopsWithoutBarrier.end())
     return true;
 
-  return BarrierInLoop(ForLoop);
+  BarrierInLoop(ForLoop);
+  return true;
 
   /*
   // If we find that a loop(s) contains a barrier, we need to coarsen individual
@@ -916,14 +923,21 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
 //template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 #ifdef DEBUGCL
-  std::cerr << "VisitCallExpr\n";
+  std::cerr << "VisitCallExpr: ";
 #endif
   CallExpr *Call = cast<CallExpr>(s);
   FunctionDecl* FD = Call->getDirectCallee();
   DeclarationName DeclName = FD->getNameInfo().getName();
   std::string FuncName = DeclName.getAsString();
 
+#ifdef DEBUGCL
+  std::cerr << FuncName << std::endl;
+#endif
+
   if (FuncName.compare("barrier") == 0) {
+#ifdef DEBUGCL
+    std::cerr << "Found Barrier\n";
+#endif
     BarrierCalls.push_back(Call);
     TheRewriter.InsertText(Call->getLocStart(), "//", true, true);
     CloseLoop(Call->getLocEnd().getLocWithOffset(2));
@@ -959,9 +973,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclStmt(Stmt *s) {
 bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   DeclRefExpr *RefExpr = cast<DeclRefExpr>(expr);
   std::string key = RefExpr->getDecl()->getName().str();
-#ifdef DEBUGCL
-  std::cerr << "VisitDeclRefExpr: " << key << std::endl;
-#endif
+
   // Don't add it if its one of an work-item indexes
   if (key.compare("__kernel_local_id") == 0)
     return true;
@@ -975,17 +987,11 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
 
   // Either create a new set for the Ref, or add it an the existing one
   if (AllRefs.find(key) == AllRefs.end()) {
-#ifdef DEBUGCL
-    std::cerr << "Creating new refset\n";
-#endif
     DeclRefSet refset;
     refset.push_back(RefExpr);
     AllRefs.insert(std::make_pair(key, refset));
   }
   else {
-#ifdef DEBUGCL
-    std::cerr << "Adding to existing set\n";
-#endif
     AllRefs[key].push_back(RefExpr);
   }
 
@@ -1042,10 +1048,21 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitFunctionDecl(FunctionDecl *f) {
   return true;
 }
 
+/*
+bool WorkitemCoarsen::ThreadSerialiser::HandleTopLevelDecl(DeclGroupRef DR) {
+  if (isa<FunctionDecl>(DR))
+    std::cerr << "Found FunctionDecl as TopLevelDecl\n";
+  for (DeclGroupRef::iterator b = DR.begin(), e = DR.end();
+       b != e; ++b)
+    Visitor.TraverseDecl(*b);
+  return true;
+}*/
+
 template <typename T>
 WorkitemCoarsen::OpenCLCompiler<T>::OpenCLCompiler(unsigned x,
-                                                unsigned y,
-                                                unsigned z) {
+                                                   unsigned y,
+                                                   unsigned z,
+                                                   std::string &name) {
 
   // CompilerInstance will hold the instance of the Clang compiler for us,
   // managing the various objects needed to run the compiler.
@@ -1087,7 +1104,7 @@ WorkitemCoarsen::OpenCLCompiler<T>::OpenCLCompiler(unsigned x,
 
   // Create an AST consumer instance which is going to get called by
   // ParseAST.
-  TheConsumer = new OpenCLASTConsumer(TheRewriter, x, y, z);
+  TheConsumer = new OpenCLASTConsumer(TheRewriter, x, y, z, name);
 }
 
 template <typename T>

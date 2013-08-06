@@ -20,9 +20,9 @@ Find_Package(Clang REQUIRED)
 Find_Package(Boost REQUIRED)
 
 ADD_DEFINITIONS("-DCOAL_BUILD_DIR=\"${CMAKE_BINARY_DIR}\"")
-ADD_DEFINITIONS("-DCOAL_INSTALL_DIR=\"${CMAKE_INSTALL_PREFIX}\"")
+ADD_DEFINITIONS("-DCOAL_INSTALL_DIR=\"/opt/esdg-opencl/lib\"")
 
-SET (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH
+SET (INCLUDE_INSTALL_DIR "/opt/esdg-opencl/include" CACHE PATH
     "The directory the headers are installed in")
 
 add_subdirectory(src)

@@ -302,6 +302,8 @@ class Kernel : public Object
         bool isBuilt() { return Built; }
         void SetBuilt() { Built = true; }
 
+        std::string &name() { return p_name; }
+
     private:
         std::string p_name;
         bool p_has_locals;

@@ -9,6 +9,7 @@
 
 #include <string>
 #include <sstream>
+#include <iostream>
 
 #define CLANG_RESOURCE_DIR  "/opt/esdg-opencl/lib/clang/3.2/"
 #define CLANG_INCLUDE_DIR   "/opt/esdg-opencl/lib/clang/3.2/include"
@@ -40,7 +41,7 @@ class WorkitemCoarsen {
 public:
   WorkitemCoarsen(unsigned x, unsigned y, unsigned z) :
     LocalX(x), LocalY(y), LocalZ(z) { }
-  bool CreateWorkgroup(std::string &Filename);
+  bool CreateWorkgroup(std::string &Filename, std::string &kernel);
   bool ExpandMacros();
   bool HandleBarriers();
   std::string &getInitialisedKernel() { return InitKernelSource; }
@@ -51,6 +52,7 @@ private:
   clang::CompilerInstance TheCompiler;
   llvm::Module *Module;
   std::string OrigFilename;
+  std::string KernelName;
   std::string InitKernelSource;
   std::string InitKernelFilename;
   std::string FinalKernel;
@@ -58,7 +60,7 @@ private:
 template <typename T> class OpenCLCompiler {
 
 public:
-  OpenCLCompiler(unsigned x, unsigned y, unsigned z);
+  OpenCLCompiler(unsigned x, unsigned y, unsigned z, std::string &name);
   ~OpenCLCompiler();
   void setFile(std::string input);
   void expandMacros(llvm::raw_ostream *source);
@@ -80,18 +82,27 @@ private:
 class OpenCLASTConsumer : public clang::ASTConsumer {
 
 public:
-  OpenCLASTConsumer(clang::Rewriter &R, unsigned x, unsigned y, unsigned z)
-    : Visitor(R, x, y, z) {}
+  OpenCLASTConsumer(clang::Rewriter &R, unsigned x, unsigned y, unsigned z,
+                    std::string &name)
+    : Visitor(R, x, y, z), KernelName(name) { }
 
   // Override the method that gets called for each parsed top-level
   // declaration.
   virtual bool HandleTopLevelDecl(clang::DeclGroupRef DR) {
     for (clang::DeclGroupRef::iterator b = DR.begin(), e = DR.end();
-         b != e; ++b)
+         b != e; ++b) {
+      if (clang::FunctionDecl *FD = llvm::dyn_cast<clang::FunctionDecl>(*b)) {
+        if (FD->hasBody()) {
+          // Only visit the kernel
+          if (FD->getNameAsString().compare(KernelName) != 0)
+            continue;
+        }
+      }
       // Traverse the declaration using our AST visitor.
       Visitor.TraverseDecl(*b);
-      return true;
     }
+    return true;
+  }
   bool needsScalarFixes() const {
     return Visitor.needsToFixScalarAccesses();
   }
@@ -100,6 +111,7 @@ public:
   }
 
 private:
+  std::string KernelName;
   T Visitor;
 
 };  // end class OpenCLASTConsumer

@@ -494,7 +494,7 @@ bool LE1KernelEvent::CompileSource() {
 
   // Then pass the file name to workitem coarsener
   WorkitemCoarsen Coarsener(merge_dims[0], merge_dims[1], merge_dims[2]);
-  if (!Coarsener.CreateWorkgroup(OriginalSourceName))
+  if (!Coarsener.CreateWorkgroup(OriginalSourceName, p_event->kernel()->name()))
     return false;
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();

@@ -8,7 +8,7 @@ include_directories (${Coal_SOURCE_DIR}/include
                     ${CMAKE_CURRENT_BINARY_DIR}
                     )
 
-#set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH "/opt/esdg-opencl/lib")
 set(CMAKE_CXX_FLAGS " -g -fno-rtti -DINSIZZLEAPI -DDEBUGCL")
 
 configure_file(core/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/config.h)
@@ -149,4 +149,4 @@ TARGET_LINK_LIBRARIES(OpenCL
 )
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
-install(TARGETS OpenCL LIBRARY DESTINATION /usr/lib)
+install(TARGETS OpenCL LIBRARY DESTINATION /opt/esdg-opencl/lib)
