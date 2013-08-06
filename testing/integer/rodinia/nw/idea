@@ -1,0 +1,59 @@
+Have a map of stmts that create a new scope, and contain a barrier, and
+declarations within them. Then have a map which uses the declaration
+statements to link all its references.
+
+Variables that need to be made local, can then only be replicated for that scope
+
+The types of statement that create a new scope:
+- while body,
+- for-loop body,
+- if-statement body - but these need to explored from the loops
+
+So,
+
+RemoveDeclaration(Stmt *s) {
+
+}
+
+// loops may contain scoping statements, such as if, which will declare values
+ExploreEnclosedStmt(Stmt *s, vector<DeclStmt*> *v) {
+  // iterate through children, pushing each DeclStmt to v
+  // if an 'EnclosedStmt' is found, explore it
+}
+
+// Gets passed a scoping stmt
+MapNewLocalVars(Stmt *s) {
+  // create a vector to hold DeclStmts,
+  // iterate through the children of s, pushing each DeclStmt found into the
+  // the vector,
+  // if an 'EncloseStmt' is found, explore it
+  // create a map entry, using 's' as the key and pair with the new vector
+}
+
+// iterate over statements, return true as soon as barrier is found
+isBarrierContained(Stmt *s) {
+
+}
+
+VisitForStmt(Stmt *s) {
+  if (!isBarrierContained(s))
+    return true;
+    
+  MapNewLocalVars(s)
+}
+
+// Create vectors for each variable, add to map using it's name as the key
+VisitDeclRefExpr(Expr *s) {
+
+}
+
+// Iterate through our map of Stmt -> <DeclRef>vector and create declarations
+// at the beginning of the scope
+CreateReplicatedVariables() {
+
+  // iterate through NewLocalVars map
+  // iterate through the DeclStmt within that map
+  // get the source range and name of variable
+  // access the DeclRefExpr map using the name
+  // check that the reference's location lies within the source range
+}

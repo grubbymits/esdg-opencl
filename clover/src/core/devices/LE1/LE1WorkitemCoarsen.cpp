@@ -400,21 +400,24 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
   if (ScopedVariables.find(varName) != ScopedVariables.end())
     return;
 
-#ifdef DEBUGCL
-  std::cerr << "Creating local variable for " << varName << std::endl;
-#endif
-
-  // Make sure we don't add the same value more than once
-  if (NewLocalDecls.find(varName) != NewLocalDecls.end()) {
-#ifdef DEBUGCL
-    std::cerr << "But already added a new declaration for it\n";
-#endif
-    return;
+  // Also don't add it if it is a function parameter
+  for (std::vector<std::string>::iterator PI = ParamVars.begin(),
+       PE = ParamVars.end(); PI != PE; ++PI) {
+    if ((*PI).compare(varName) == 0)
+      return;
   }
 
   // Don't add function calls
   if (isa<FunctionDecl>(Ref->getDecl()))
     return;
+
+  // Don't create locals of our local id!
+  if (varName.compare("__kernel_local_id") == 0)
+    return;
+
+#ifdef DEBUGCL
+  std::cerr << "Creating local variable for " << varName << std::endl;
+#endif
 
   std::string type = cast<ValueDecl>(ND)->getType().getAsString();
   std::stringstream NewDecl;
@@ -428,32 +431,38 @@ void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
   // If barriers are inside of loops, variables within the loops will also need
   // scalar replication.
   if (ScalarRepl) {
+    if (NewScalarRepls.find(varName) == NewScalarRepls.end()) {
 #ifdef DEBUGCL
-    std::cerr << "Declaring it as an array\n";
+      std::cerr << "Declaring it as an array\n";
 #endif
-    if (LocalX != 0)
-      NewDecl << "[" << LocalX << "]";
-    if (LocalY > 1)
-      NewDecl << "[" << LocalY << "]";
-    if (LocalZ > 1)
-      NewDecl << "[" << LocalZ << "]";
-    NewScalarRepls.insert(std::make_pair(varName, ND));
+      if (LocalX != 0)
+        NewDecl << "[" << LocalX << "]";
+      if (LocalY > 1)
+        NewDecl << "[" << LocalY << "]";
+      if (LocalZ > 1)
+        NewDecl << "[" << LocalZ << "]";
+      NewScalarRepls.insert(std::make_pair(varName, ND));
 
-    /*
-    // Visit all the references of this variable
-    DeclRefSet varRefs = AllRefs[varName];
-    for (std::vector<DeclRefExpr*>::iterator RI = varRefs.begin(),
-         RE = varRefs.end(); RI != RE; ++RI) {
-      AccessScalar(*RI);
-    }*/
+      NewDecl << ";\n";
+      TheRewriter.InsertText(FuncStart, NewDecl.str(), true, true);
+
+      /*
+      // Visit all the references of this variable
+      DeclRefSet varRefs = AllRefs[varName];
+      for (std::vector<DeclRefExpr*>::iterator RI = varRefs.begin(),
+           RE = varRefs.end(); RI != RE; ++RI) {
+        AccessScalar(*RI);
+      }*/
+    }
   }
   else {
-    NewLocalDecls.insert(std::make_pair(varName, ND));
+    if (NewLocalDecls.find(varName) == NewLocalDecls.end()) {
+      NewLocalDecls.insert(std::make_pair(varName, ND));
+      NewDecl << ";\n";
+      TheRewriter.InsertText(FuncStart, NewDecl.str(), true, true);
+    }
   }
-  NewDecl << ";\n";
 
-  // Declare the variable
-  TheRewriter.InsertText(FuncStart, NewDecl.str(), true, true);
 
   // Remove the old declaration; if it wasn't initialised, remove the whole
   // statement and not just the type declaration.
@@ -598,34 +607,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
     }
     else {
       DeclRefExpr *RefExpr = cast<DeclRefExpr>(*DI);
-
-      if (isa<FunctionDecl>(RefExpr->getDecl()))
-        continue;
-
-      std::string key = RefExpr->getDecl()->getName().str();
-
-      // Reference may have already been replicated
-      if (NewScalarRepls.find(key) != NewScalarRepls.end()) {
-        continue;
-      }
-
-      // don't replicated our indexes
-      if (key.compare("__kernel_local_id") == 0) {
-        continue;
-      }
-
-      bool isArgument = false;
-      // Also don't add it if it is a function parameter
-      for (std::vector<std::string>::iterator PI = ParamVars.begin(),
-           PE = ParamVars.end(); PI != PE; ++PI) {
-        if ((*PI).compare(key) == 0) {
-          isArgument = true;
-          break;
-        }
-      }
-
-      if (!isArgument)
-        CreateLocalVariable(RefExpr, true);
+      CreateLocalVariable(RefExpr, true);
     }
   }
 }
