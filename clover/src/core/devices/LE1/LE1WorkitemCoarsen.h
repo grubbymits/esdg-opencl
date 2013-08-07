@@ -183,9 +183,7 @@ public:
 private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
-  void FindRefsToReplicate(clang::Stmt *s);
 
-  void FindScopedVariables(clang::Stmt *s);
   void HandleBarrierInLoop(clang::ForStmt *Loop);
   bool BarrierInLoop(clang::ForStmt *s);
   void MapNewLocalVars(clang::Stmt *);
@@ -193,7 +191,6 @@ private:
                        clang::DeclStmt *theDecl,
                        std::vector<clang::DeclRefExpr*> *theRefs);
 
-  void CreateLocalVariable(clang::DeclRefExpr *Ref, bool ScalarRepl);
   void AccessScalar(clang::Decl *decl);
   void AccessScalar(clang::DeclRefExpr *Ref);
 
