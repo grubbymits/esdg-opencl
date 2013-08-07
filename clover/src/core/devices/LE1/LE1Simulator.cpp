@@ -613,7 +613,7 @@ void LE1Simulator::readIntData(unsigned int addr,
   unsigned int word = 0;
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
 #ifdef DEBUGCL
-//    std::cerr << "Attempting a read from 0x" << std::hex << addr << std::endl;
+    std::cerr << "Attempting a read from 0x" << std::hex << addr << std::endl;
 #endif
     insizzleAPIRdOneDramLocation(addr, &word);
     data[i] = word;

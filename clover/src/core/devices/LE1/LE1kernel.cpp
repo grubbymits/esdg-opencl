@@ -1277,14 +1277,18 @@ bool LE1KernelEvent::run() {
         (Arg.file() != Kernel::Arg::Local)) {
       LE1Buffer* buffer =
         static_cast<LE1Buffer*>((*(MemObject**)Arg.data())->deviceBuffer(p_device));
-        unsigned TotalSize = (*(MemObject**)Arg.data())->size();
+
+      if (buffer->data() == NULL) {
+        std::cerr << "!ERROR : Arg " << i << " buffer data is NULL"
+          << std::endl;
+        return false;
+      }
+
+      unsigned TotalSize = (*(MemObject**)Arg.data())->size();
 
       if (Arg.type()->isIntegerTy(8)) {
         p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
                                                (unsigned char*)buffer->data());
-        if (TotalSize == 1)
-          std::cerr << "Read back 1 byte: " << (unsigned) *((unsigned char*)(buffer->data()))
-            << std::endl;
       }
       // FIXME Shorts aren't handled!
 

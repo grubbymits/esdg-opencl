@@ -244,19 +244,61 @@ int main(int argc, char **argv){
 	cl_mem output_itemsets_d;
 	cl_mem reference_d;
 	
-	input_itemsets_d = clCreateBuffer(context, CL_MEM_READ_WRITE, max_cols * max_rows * sizeof(int), NULL, &err );
-	if(err != CL_SUCCESS) { printf("ERROR: clCreateBuffer input_item_set (size:%d) => %d\n", max_cols * max_rows, err); return -1;}
-	reference_d		 = clCreateBuffer(context, CL_MEM_READ_WRITE, max_cols * max_rows * sizeof(int), NULL, &err );
-	if(err != CL_SUCCESS) { printf("ERROR: clCreateBuffer reference (size:%d) => %d\n", max_cols * max_rows, err); return -1;}
-	output_itemsets_d = clCreateBuffer(context, CL_MEM_READ_WRITE, max_cols * max_rows * sizeof(int), NULL, &err );
-	if(err != CL_SUCCESS) { printf("ERROR: clCreateBuffer output_item_set (size:%d) => %d\n", max_cols * max_rows, err); return -1;}
-	
+	input_itemsets_d =
+          clCreateBuffer(context,
+                         CL_MEM_READ_WRITE,
+                         (max_cols * max_rows * sizeof(int)),
+                         NULL,
+                         &err );
+	if (err != CL_SUCCESS) { 
+          printf("ERROR: clCreateBuffer input_item_set (size:%d) => %d\n",
+                 max_cols * max_rows, err);
+          return -1;
+        }
+
+	reference_d = clCreateBuffer(context,
+                                     CL_MEM_READ_WRITE,
+                                     (max_cols * max_rows * sizeof(int)),
+                                     NULL,
+                                     &err );
+
+	if (err != CL_SUCCESS) {
+          printf("ERROR: clCreateBuffer reference (size:%d) => %d\n",
+                 max_cols * max_rows, err);
+          return -1;
+        }
+
+	output_itemsets_d = clCreateBuffer(context,
+                                           CL_MEM_READ_WRITE,
+                                           (max_cols * max_rows * sizeof(int)),
+                                           NULL,
+                                           &err );
+
+	if (err != CL_SUCCESS) {
+          printf("ERROR: clCreateBuffer output_item_set (size:%d) => %d\n",
+                 max_cols * max_rows, err);
+          return -1;
+        }
+
 	//write buffers
-	err = clEnqueueWriteBuffer(cmd_queue, input_itemsets_d, 1, 0, max_cols * max_rows * sizeof(int), input_itemsets, 0, 0, 0);
-	if(err != CL_SUCCESS) { printf("ERROR: clEnqueueWriteBuffer bufIn1 (size:%d) => %d\n", max_cols * max_rows, err); return -1; }
-	err = clEnqueueWriteBuffer(cmd_queue, reference_d, 1, 0, max_cols * max_rows * sizeof(int), reference, 0, 0, 0);
-	if(err != CL_SUCCESS) { printf("ERROR: clEnqueueWriteBuffer bufIn2 (size:%d) => %d\n", max_cols * max_rows, err); return -1; }
-		
+	err = clEnqueueWriteBuffer(cmd_queue, input_itemsets_d, 1, 0,
+                                   (max_cols * max_rows * sizeof(int)),
+                                   input_itemsets, 0, 0, 0);
+	if (err != CL_SUCCESS) {
+          printf("ERROR: clEnqueueWriteBuffer bufIn1 (size:%d) => %d\n",
+                 max_cols * max_rows, err);
+          return -1;
+        }
+
+	err = clEnqueueWriteBuffer(cmd_queue, reference_d, 1, 0,
+                                   (max_cols * max_rows * sizeof(int)),
+                                   reference, 0, 0, 0);
+	if (err != CL_SUCCESS) {
+          printf("ERROR: clEnqueueWriteBuffer bufIn2 (size:%d) => %d\n",
+                 max_cols * max_rows, err);
+          return -1;
+        }
+
 	int worksize = max_cols - 1;
 	printf("worksize = %d\n", worksize);
 	//these two parameters are for extension use, don't worry about it.
