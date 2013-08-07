@@ -166,6 +166,7 @@ public:
   ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z)
     : ASTVisitorBase(R, x, y, z) { }
   bool VisitForStmt(clang::Stmt *s);
+  bool VisitWhileStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
   bool VisitDeclStmt(clang::Stmt *s);
@@ -173,7 +174,8 @@ public:
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
   virtual bool needsToFixScalarAccesses() const {
-    return (!NewScalarRepls.empty());
+    return true;
+    //return (!NewScalarRepls.empty());
   }
 
   virtual void FixAllScalarAccesses();
@@ -182,9 +184,15 @@ private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
   void FindRefsToReplicate(clang::Stmt *s);
+
   void FindScopedVariables(clang::Stmt *s);
   void HandleBarrierInLoop(clang::ForStmt *Loop);
   bool BarrierInLoop(clang::ForStmt *s);
+  void MapNewLocalVars(clang::Stmt *);
+  void ScalarReplicate(clang::SourceLocation InsertLoc,
+                       clang::DeclStmt *theDecl,
+                       std::vector<clang::DeclRefExpr*> *theRefs);
+
   void CreateLocalVariable(clang::DeclRefExpr *Ref, bool ScalarRepl);
   void AccessScalar(clang::Decl *decl);
   void AccessScalar(clang::DeclRefExpr *Ref);
@@ -204,11 +212,13 @@ private:
   std::map<std::string, clang::NamedDecl*> ScopedVariables;
   std::map<std::string, clang::NamedDecl*> NewScalarRepls;
   std::map<std::string, clang::DeclStmt*> DeclStmts;
+  std::map<clang::Stmt*, std::vector<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::SourceLocation, clang::CallExpr*>LoopBarriers;
   std::map<clang::SourceLocation, clang::ForStmt*>LoopsWithBarrier;
   std::map<clang::SourceLocation, clang::ForStmt*>LoopsWithoutBarrier;
   std::vector<clang::ForStmt*>LoopsToDistribute;
   std::vector<clang::CallExpr*> BarrierCalls;
+  std::vector<clang::SourceLocation> BarrierLocations;
   clang::CallExpr* LoopBarrier;
 
 }; // end class ThreadSerialiser

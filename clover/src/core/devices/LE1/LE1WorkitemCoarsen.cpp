@@ -349,65 +349,94 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
 }
 
 void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
-  // Iterate through all the named declarations and then visit all their
-  // references
-  /*
-  for (std::map<std::string, NamedDecl*>::iterator NDI = NewScalarRepls.begin(),
-       NDE = NewScalarRepls.end(); NDI != NDE; ++NDI) {
-
-    std::string varName = NDI->first;
-    DeclRefSet RefSet = AllRefs[varName];
-
-    for (DeclRefSet::iterator DRI = RefSet.begin(), DRE = RefSet.end();
-         DRI != DRE; ++DRI) {
-
-      AccessScalar(*DRI);
-    }
-  }*/
-
+#ifdef DEBUGCL
+  std::cerr << "FixAllScalarAccesses" << std::endl;
+#endif
   // Iterate through the map of statments which contain barriers and find the
   // declarations that need to replicated. We do this by checking which
   // of the contained DeclRefExprs are separated from their DeclStmt by a
   // barrier.
-  for (std::map<Stmt*, std::vector<DeclStmt*>>::iterator MapI
+  for (std::map<Stmt*, std::vector<DeclStmt*> >::iterator MapI
        = ScopedDeclStmts.begin(), MapE = ScopedDeclStmts.end(); MapI != MapE;
        ++MapI) {
 
-    Stmt *s = MapI->first;
+    Stmt *ScopingStmt = MapI->first;
+    std::vector<DeclStmt*> DeclStmts = MapI->second;
+
     // Get source range
-    SourceLocation StmtStart = s->getLocStart();
-    SourceLocation StmtEnd = s->getLocEnd();
+    SourceLocation ScopeStart = ScopingStmt->getLocStart();
+    SourceLocation ScopeEnd = ScopingStmt->getLocEnd();
 
-    // Look through all the barrier locations to find the one(s) contained
-    // within this statement
-    for (std::vector<SourceLocation>::iterator BI = BarrierLocations.begin(),
-         BE = BarrierLocations.end(); BI != BE; ++BI) {
+    // For each DeclStmt, look at all it's Refs and check whether the
+    // location is separated by the location of the barrier
+    for (std::vector<DeclStmt*>::iterator DI = DeclStmts.begin(),
+         DE = DeclStmts.end(); DI != DE; ++DI) {
 
-      if ((*BI > StmtStart) && (*BI < StmtEnd)) {
+      if ((*DI) == NULL)
+        continue;
 
-        std::vector<DeclStmt*> DeclStmts = MapI->second;
-        // For each DeclStmt, look at all it's Refs and check whether the
-        // location is separated by the location of the barrier
-        for (std::vector<DeclStmt*>::iterator DI = DeclStmts.begin(),
-             DE = DeclStmts.end(); DI != DE; ++DI) {
+      // Only attempt to replicate the DeclStmt and its references once!
+      bool hasReplicated = false;
+      if (hasReplicated)
+        break;
 
-          //if ((*DI)->isSingleDecl()) {
-          NamedDecl *ND = cast<NamedDecl((*DI)->getSingleDecl());
-          std::string RefName = ND->getName().str();
-          //}
+      NamedDecl *ND = cast<NamedDecl>((*DI)->getSingleDecl());
+      std::string RefName = ND->getName().str();
+      if (AllRefs.find(RefName) == AllRefs.end())
+        continue;
 
-          std::vector<DeclRefExpr*> DeclRefs = AllRefs.find(RefName);
-          if (!DeclRefs)
-            continue;
+      SourceLocation DeclLoc = (*DI)->getLocStart();
+      std::vector<DeclRefExpr*> DeclRefs = AllRefs[RefName];
 
-          for (std::vector<DeclRefExpr*>::iterator RI = DeclRefs.begin(),
-               RE = DeclRefs.end(); RI != RE; ++RI) {
+      for (std::vector<DeclRefExpr*>::iterator RI = DeclRefs.begin(),
+           RE = DeclRefs.end(); RI != RE; ++RI) {
 
-            SourceLocation RefLoc = (*RI)->getLocStart();
+        if ((*RI) == NULL)
+          continue;
 
-            // Check if there is a barrier between the Stmt and Ref
-            if ((DeclLoc < *BI) && (*BI < RefLoc)) {
-              ScalarReplicate(*DI, &(*RI));
+        if (hasReplicated)
+          break;
+
+        SourceLocation RefLoc = (*RI)->getLocStart();
+
+        // Look through all the barrier locations to find the one(s) contained
+        // within this statement
+        for (std::vector<SourceLocation>::iterator BI =
+             BarrierLocations.begin(), BE = BarrierLocations.end(); BI != BE;
+             ++BI) {
+
+          SourceLocation BarrierLoc = *BI;
+          if ((ScopeStart < BarrierLoc) && (BarrierLoc < ScopeEnd)) {
+#ifdef DEBUGCL
+            std::cerr << "Found barrier within this scope" << std::endl;
+#endif
+            // Check if there is a barrier between the Stmt and Ref, if so
+            // ScalarReplicate will visit all the refs, so break from the
+            // loop.
+            if ((DeclLoc < BarrierLoc) && (BarrierLoc < RefLoc)) {
+
+              // Before replicated, we need to check whether the scope is in our
+              // first defined while loop, because if it is, the declarations
+              // need to be outside the loop, at the start of the kernel.
+              if (isa<WhileStmt>(ScopingStmt)) {
+#ifdef DEBUGCL
+                std::cerr << "Scope is a while" << std::endl;
+#endif
+                WhileStmt *theWhile = cast<WhileStmt>(ScopingStmt);
+                if (isa<DeclRefExpr>(theWhile->getCond())) {
+                  DeclRefExpr *RefExpr = cast<DeclRefExpr>(theWhile->getCond());
+                  std::string condVar =
+                    RefExpr->getDecl()->getName().str();
+#ifdef DEBUGCL
+                  std::cerr << ", Conditional = " << condVar << std::endl;
+#endif
+                  if (condVar.compare("__kernel_local_id") == 0)
+                    ScopeStart = FuncStart;
+                }
+              }
+              ScalarReplicate(ScopeStart, *DI, &DeclRefs);
+              hasReplicated = true;
+              break;
             }
           }
         }
@@ -416,38 +445,59 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
   }
 }
 
-/*
-void WorkitemCoarsen::ThreadSerialiser::AddToLocals(DeclRefExpr *Ref,
-                                                    bool ScalarRepl) {
-  NamedDecl *ND = cast<NamedDecl>(Ref->getDecl());
-  std::string varName = ND->getName().str();
-
-  // Do not create local variables for variables who have limited scope,
-  // such as one declared in loop headers
-  if (ScopedVariables.find(varName) != ScopedVariables.end())
-    return;
-
-  // Make sure we don't add the same value more than once
-  if (NewLocalDecls.find(varName) != NewLocalDecls.end()) {
-    return;
-  }
-
-  if (ScalarRepl)
-    NewScalarRepls.insert(std::make_pair(varName, ND));
-  else
-    NewLocalDecls.insert(std::make_pair(varName, ND));
-
-}*/
 // Run this after parsing is complete, to access all the referenced variables
 // within the DeclStmt which need to be replicated
 void
-WorkitemCoarsen::ThreadSerialiser::ScalarReplicate(DeclStmt *theDecl,
-                                    std::vector<DeclRefExpr> *theRefs) {
+WorkitemCoarsen::ThreadSerialiser::ScalarReplicate(SourceLocation InsertLoc,
+                                                   DeclStmt *theDecl,
+                                    std::vector<DeclRefExpr*> *theRefs) {
+#ifdef DEBUGCL
+  std::cerr << "ScalarReplicate: " << std::endl;
+#endif
+  NamedDecl *ND = cast<NamedDecl>(theDecl->getSingleDecl());
+  std::string varName = ND->getName().str();
+  std::string type = cast<ValueDecl>(ND)->getType().getAsString();
 
+#ifdef DEBUGCL
+  std::cerr << varName << std::endl;
+#endif
+
+  std::stringstream NewDecl;
+  NewDecl << type << " " << varName;
+
+  if (LocalX != 0)
+    NewDecl << "[" << LocalX << "]";
+  if (LocalY > 1)
+    NewDecl << "[" << LocalY << "]";
+  if (LocalZ > 1)
+    NewDecl << "[" << LocalZ << "]";
+
+  NewDecl << ";\n";
+  TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
+
+  // If the statement wasn't initialised, remove the whole statement
+  if (theDecl->child_begin() == theDecl->child_end())
+    TheRewriter.RemoveText(theDecl->getSourceRange());
+  else {
+    // Otherwise, just remove the type definition and make the initialisation
+    // access a scalar.
+    TheRewriter.RemoveText(ND->getLocStart(), type.length());
+    AccessScalar(theDecl->getSingleDecl());
+  }
+
+  // Then visit all the references to turn them into scalar accesses as well.
+  for (std::vector<DeclRefExpr*>::iterator RI = theRefs->begin(),
+       RE = theRefs->end(); RI != RE; ++RI)
+    AccessScalar(*RI);
 }
 
 void WorkitemCoarsen::ThreadSerialiser::CreateLocalVariable(DeclRefExpr *Ref,
                                                             bool ScalarRepl) {
+
+  // Shouldn't have to use this now
+  return;
+
+  ////////////////////////////////////////////////////////
 
   NamedDecl *ND = cast<NamedDecl>(Ref->getDecl());
   std::string varName = ND->getName().str();
@@ -635,6 +685,11 @@ WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
 
 void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
 
+  // Shouldn't need this now
+  return;
+
+  ///////////////////////////////////////////////////
+
   for (Stmt::child_iterator DI = s->child_begin(),
        DE = s->child_end(); DI != DE; ++DI) {
 
@@ -675,7 +730,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(Stmt *s) {
 // - close the main loop at the end of the body of the loop
 // - open the main loop when the for loop exits
 void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(ForStmt *Loop) {
-#ifdef 
+#ifdef DEBUGCL
   std::cerr << "HandleBarrierInLoop\n";
 #endif
   SourceLocation ForLoc = Loop->getLocStart();
@@ -698,12 +753,16 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(ForStmt *Loop) {
   FindScopedVariables(Loop->getCond());
   FindScopedVariables(Loop->getInc());
   //FindRefsToReplicate(LoopBody);
-  MapNewLocalVars(LoopBody);
+  MapNewLocalVars(Loop);
 }
 
 // Return true if the Stmt contains a child that is a barrier call. It does not
 // traverse the children's children.
 static bool isBarrierContained(Stmt *s) {
+#ifdef DEBUGCL
+  std::cerr << "isBarrierContained" << std::endl;
+#endif
+
   for (Stmt::child_iterator SI = s->child_begin(), SE = s->child_end();
        SI != SE; ++SI) {
     if (isa<CallExpr>(*SI)) {
@@ -719,20 +778,31 @@ static bool isBarrierContained(Stmt *s) {
 // Return true for any statements which could hold DeclStmts for the current
 // scope
 static bool isEnclosingStmt(Stmt *s) {
-  if (isa<IfStmt(s))
+  if (isa<IfStmt>(s))
     return true;
   return false;
 }
 
 // Pass a Stmt that creates it's own scope, then iterate over it's children to
-// find any DeclStmts within it.
+// find any DeclStmts within it. The Stmt is expected to be a loop.
 void WorkitemCoarsen::ThreadSerialiser::MapNewLocalVars(Stmt *s) {
+#ifdef DEBUGCL
+  std::cerr << "MapNewLocalVars" << std::endl;
+#endif
+  Stmt *Body = NULL;
+  if (isa<WhileStmt>(s))
+    Body = (cast<WhileStmt>(s))->getBody();
+  else if (isa<ForStmt>(s))
+    Body = (cast<ForStmt>(s))->getBody();
+
   std::vector<DeclStmt*> theDeclStmts;
-  for (Stmt::child_iterator SI = s->child_begin(), SE = s->child_end();
+  for (Stmt::child_iterator SI = Body->child_begin(), SE = Body->child_end();
        SI != SE; ++SI) {
 
-    if (isa<DeclStmt>(*SI))
-      theDeclStmts.push_back(*SI);
+    if (isa<DeclStmt>(*SI)) {
+      DeclStmt *declStmt = cast<DeclStmt>(*SI);
+      theDeclStmts.push_back(declStmt);
+    }
     //else if (isEnclosingStmt(*SI))
       //MapNewLocalVars(*SI);
 
@@ -827,6 +897,13 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
 
 }
 
+bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
+  WhileStmt *While = cast<WhileStmt>(s);
+  if (isBarrierContained(While->getBody()))
+    MapNewLocalVars(While);
+  return true;
+}
+
 // Remove barrier calls and modify calls to kernel builtin functions.
 //template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
@@ -846,7 +923,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 #ifdef DEBUGCL
     std::cerr << "Found Barrier\n";
 #endif
-    BarrierLocation.push_back(Call->getLocStart());
+    BarrierLocations.push_back(Call->getLocStart());
 
     BarrierCalls.push_back(Call);
     TheRewriter.InsertText(Call->getLocStart(), "//", true, true);
