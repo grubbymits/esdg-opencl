@@ -443,7 +443,7 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   }
 }
 
-void LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
+bool LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
   // FIXME should the global_addr be defined like this?
 
   // FIXME surely we could calculate this number during kernel creation?
@@ -460,7 +460,13 @@ void LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
       else
         Addr += (*(MemObject**)arg.data())->size();
     }
+
+    if (Addr > LE1Device::MaxGlobalAddr) {
+      std::cerr << "!ERROR: Addr exceeded MaxGlobalAddr" << std::endl;
+      return false;
+    }
   }
+  return true;
 }
 
 bool LE1KernelEvent::CompileSource() {
@@ -681,7 +687,8 @@ bool LE1KernelEvent::WriteDataArea() {
   for (unsigned i = 0; i < NumCores; ++i)
     GroupIdEnd += 4;
 
-  CalculateBufferAddrs(GroupIdEnd);
+  if (!CalculateBufferAddrs(GroupIdEnd))
+    return false;
 
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
@@ -799,11 +806,9 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
   // FIXME - Does this work when using local buffers?
   buffer->setAddr(addr);
 
-  // Check we actually have some data
-  if (Data == NULL) {
-    std::cerr << "! ERROR: NULL data!\n";
-    return false;
-  }
+  // FIXME Check we actually have data?
+  if (Data == NULL)
+    Data = new unsigned char [TotalSize]();
 
 #ifdef DEBUGCL
     std::cerr << "Set buffer arg address to " << addr << std::endl;
@@ -868,7 +873,7 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
       return false;
     }
 #ifdef DEBUGCL
-  std::cerr << "Leaving LE1KernelEvent::WriteDataArea\n";
+  std::cerr << "Leaving LE1KernelEvent::HandleBufferArg\n";
 #endif
   //if (isBufferOnDevice)
     //free(Data);

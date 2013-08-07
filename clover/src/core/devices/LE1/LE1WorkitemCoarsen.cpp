@@ -407,9 +407,6 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
 
           SourceLocation BarrierLoc = *BI;
           if ((ScopeStart < BarrierLoc) && (BarrierLoc < ScopeEnd)) {
-#ifdef DEBUGCL
-            std::cerr << "Found barrier within this scope" << std::endl;
-#endif
             // Check if there is a barrier between the Stmt and Ref, if so
             // ScalarReplicate will visit all the refs, so break from the
             // loop.
@@ -419,17 +416,14 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
               // first defined while loop, because if it is, the declarations
               // need to be outside the loop, at the start of the kernel.
               if (isa<WhileStmt>(ScopingStmt)) {
-#ifdef DEBUGCL
-                std::cerr << "Scope is a while" << std::endl;
-#endif
+
                 WhileStmt *theWhile = cast<WhileStmt>(ScopingStmt);
+
                 if (isa<DeclRefExpr>(theWhile->getCond())) {
                   DeclRefExpr *RefExpr = cast<DeclRefExpr>(theWhile->getCond());
                   std::string condVar =
                     RefExpr->getDecl()->getName().str();
-#ifdef DEBUGCL
-                  std::cerr << ", Conditional = " << condVar << std::endl;
-#endif
+
                   if (condVar.compare("__kernel_local_id") == 0)
                     ScopeStart = FuncStart;
                 }
@@ -495,10 +489,6 @@ WorkitemCoarsen::ThreadSerialiser::ScalarReplicate(SourceLocation InsertLoc,
 // FIXME Scalar access only works for x dimension values!
 void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
   NamedDecl *ND = cast<NamedDecl>(decl);
-#ifdef DEBUGCL
-  std::cerr << "Creating scalar access for " << ND->getName().str()
-    << std::endl;
-#endif
   unsigned offset = ND->getName().str().length();
   offset += cast<ValueDecl>(ND)->getType().getAsString().length();
   // increment because of a space between type and name
@@ -510,10 +500,6 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
 
 // FIXME Scalar access only works for x dimension values!
 void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
-#ifdef DEBUGCL
-  std::cerr << "Creating scalar access for "
-      << Ref->getDecl()->getName().str() << std::endl;
-#endif
   unsigned offset = Ref->getDecl()->getName().str().length();
   SourceLocation Loc = Ref->getLocEnd().getLocWithOffset(offset);
   if(TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true))
@@ -654,6 +640,12 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
     CloseLoop(Call->getLocEnd().getLocWithOffset(2));
     OpenLoop(Call->getLocEnd().getLocWithOffset(2));
   }
+  return true;
+}
+
+bool WorkitemCoarsen::ThreadSerialiser::VisitReturnStmt(Stmt *s) {
+  TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
+  TheRewriter.InsertTextBefore(s->getLocStart(), CloseWhile.str());
   return true;
 }
 

@@ -310,7 +310,7 @@ class LE1KernelEvent
 
         bool createFinalSource(LE1Program *prog);
         bool CompileSource(void);
-        void CalculateBufferAddrs(unsigned Addr);
+        bool CalculateBufferAddrs(unsigned Addr);
         int checkStatus(void);
         bool run(void);
         /*!< \brief The next Work Group that will execute will be the last.

@@ -93,13 +93,20 @@ public:
          b != e; ++b) {
       if (clang::FunctionDecl *FD = llvm::dyn_cast<clang::FunctionDecl>(*b)) {
         if (FD->hasBody()) {
-          // Only visit the kernel
-          if (FD->getNameAsString().compare(KernelName) != 0)
+          // Only visit the specified kernel
+          if (FD->getNameAsString().compare(KernelName) != 0) {
+            // Delete any other kernel in the source
+            if (FD->hasAttr<clang::OpenCLKernelAttr>()) {
+              clang::SourceLocation Start = FD->getLocStart();
+              clang::SourceLocation Finish = FD->getBody()->getLocEnd();
+              Visitor.RemoveText(Start, Finish);
+            }
             continue;
+          }
+          // Traverse the declaration using our AST visitor.
+          Visitor.TraverseDecl(*b);
         }
       }
-      // Traverse the declaration using our AST visitor.
-      Visitor.TraverseDecl(*b);
     }
     return true;
   }
@@ -136,6 +143,9 @@ public:
   ASTVisitorBase(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
   virtual bool needsToFixScalarAccesses() const = 0;
   virtual void FixAllScalarAccesses() = 0;
+  void RemoveText(clang::SourceLocation Start, clang::SourceLocation End) {
+    TheRewriter.RemoveText(clang::SourceRange(Start, End));
+  }
 protected:
   void CloseLoop(clang::SourceLocation Loc);
   void OpenLoop(clang::SourceLocation Loc);
@@ -168,6 +178,7 @@ public:
   bool VisitForStmt(clang::Stmt *s);
   bool VisitWhileStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
+  bool VisitReturnStmt(clang::Stmt *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
   bool VisitDeclStmt(clang::Stmt *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
