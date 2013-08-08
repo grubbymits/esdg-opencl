@@ -175,7 +175,7 @@ class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {
 public:
   ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z)
     : ASTVisitorBase(R, x, y, z) { }
-  bool VisitForStmt(clang::Stmt *s);
+  //bool VisitForStmt(clang::Stmt *s);
   bool VisitWhileStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
   bool VisitReturnStmt(clang::Stmt *s);
@@ -195,39 +195,22 @@ private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
-  void HandleBarrierInLoop(clang::ForStmt *Loop);
-  bool BarrierInLoop(clang::ForStmt *s);
-  void MapNewLocalVars(clang::Stmt *);
+  bool TraverseLoop(clang::Stmt *s, bool isMainLoop);
+  void HandleBarrierInLoop(clang::Stmt *Loop);
+  bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
+                               clang::DeclStmt *s,
+                               clang::Stmt *Scope);
   void ScalarReplicate(clang::SourceLocation InsertLoc,
-                       clang::DeclStmt *theDecl,
-                       std::vector<clang::DeclRefExpr*> *theRefs);
+                       clang::DeclStmt *theDecl);
 
   void AccessScalar(clang::Decl *decl);
   void AccessScalar(clang::DeclRefExpr *Ref);
 
 private:
-  std::stringstream LocalArray;
-  std::stringstream SavedLocalArray;
-
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
-  StmtSetMap StmtRefs;
   DeclRefSetMap AllRefs;
   std::vector<std::string> ParamVars;
-  std::vector<clang::NamedDecl*> Decls;
-  std::map<std::string, clang::SourceLocation> DeclLocs;
-  std::map<std::string, clang::NamedDecl*> NewLocalDecls;
-  std::map<std::string, clang::NamedDecl*> ScopedVariables;
-  std::map<std::string, clang::NamedDecl*> NewScalarRepls;
-  std::map<std::string, clang::DeclStmt*> DeclStmts;
-  std::map<clang::Stmt*, std::vector<clang::DeclStmt*> > ScopedDeclStmts;
-  std::map<clang::SourceLocation, clang::CallExpr*>LoopBarriers;
-  std::map<clang::SourceLocation, clang::ForStmt*>LoopsWithBarrier;
-  std::map<clang::SourceLocation, clang::ForStmt*>LoopsWithoutBarrier;
-  std::vector<clang::ForStmt*>LoopsToDistribute;
-  std::vector<clang::CallExpr*> BarrierCalls;
-  std::vector<clang::SourceLocation> BarrierLocations;
-  clang::CallExpr* LoopBarrier;
 
 }; // end class ThreadSerialiser
 
