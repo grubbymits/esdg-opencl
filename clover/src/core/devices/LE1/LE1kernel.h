@@ -308,6 +308,7 @@ class LE1KernelEvent
         LE1KernelEvent(LE1Device *device, KernelEvent *event);
         ~LE1KernelEvent();
 
+        bool AllocateBuffers();
         bool createFinalSource(LE1Program *prog);
         bool CompileSource(void);
         bool CalculateBufferAddrs(unsigned Addr);

@@ -50,6 +50,10 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
 : Object(Object::T_MemObject, ctx), p_num_devices(0), p_flags(flags),
   p_host_ptr(host_ptr), p_devicebuffers(0), p_dtor_callback(0)
 {
+#ifdef DEBUGCL
+  std::cerr << "Creating MemObject" << std::endl;
+#endif
+
     // Check the flags value
     const cl_mem_flags all_flags = CL_MEM_READ_WRITE | CL_MEM_WRITE_ONLY |
                                    CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR |
@@ -85,6 +89,9 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
         *errcode_ret = CL_INVALID_HOST_PTR;
         return;
     }
+#ifdef DEBUGCL
+    std::cerr << "Leaving MemObject Constructor Successfully" << std::endl;
+#endif
 }
 
 MemObject::~MemObject()

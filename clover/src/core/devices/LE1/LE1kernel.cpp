@@ -397,6 +397,31 @@ LE1KernelEvent::~LE1KernelEvent()
 #endif
 }
 
+// If there are multiple devices in the system, buffer allocation is delayed
+// until the first run. Check all the buffer argument to check whether they
+// are allocated and do so if not.
+bool LE1KernelEvent::AllocateBuffers() {
+  Kernel* TheKernel = p_event->kernel();
+
+  for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
+
+    const Kernel::Arg& Arg = TheKernel->arg(i);
+
+    if ((Arg.kind() == Kernel::Arg::Buffer) &&
+        (Arg.file() != Kernel::Arg::Local)) {
+
+      LE1Buffer* buffer = static_cast<LE1Buffer*>(
+        (*(MemObject**)Arg.data())->deviceBuffer(p_device));
+
+      if (buffer->data() == NULL) {
+        if (!((*(MemObject**)Arg.data())->allocate(p_device)))
+          return false;
+      }
+    }
+  }
+  return true;
+}
+
 bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   // TODO Create a proper .s file:
 #ifdef DEBUGCL
