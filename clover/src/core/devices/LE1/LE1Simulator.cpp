@@ -612,14 +612,8 @@ void LE1Simulator::readIntData(unsigned int addr,
   unsigned int num = numBytes >> 2;
   unsigned int word = 0;
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
-#ifdef DEBUGCL
-    std::cerr << "Attempting a read from 0x" << std::hex << addr << std::endl;
-#endif
     insizzleAPIRdOneDramLocation(addr, &word);
     data[i] = word;
-#ifdef DEBUGCL
-  //  std::cerr << "word = " << std::hex << word << std::endl;
-#endif
   }
 
   //pthread_mutex_unlock(&p_simulator_mutex);

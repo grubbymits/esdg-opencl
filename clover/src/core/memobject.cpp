@@ -104,6 +104,9 @@ MemObject::~MemObject()
 
 cl_int MemObject::init()
 {
+#ifdef DEBUGCL
+  std::cerr << "Entering MemObject::init" << std::endl;
+#endif
     // Get the device list of the context
     DeviceInterface **devices = 0;
     cl_int rs;
@@ -146,6 +149,8 @@ cl_int MemObject::init()
     // defered to first use, so host_ptr can become invalid. So, copy it in
     // a RAM location and keep it. Also, set a flag telling CPU devices that
     // they don't need to reallocate and re-copy host_ptr
+
+    // FIXME - So when do we actually allocate?!
     if (p_num_devices > 1 && (p_flags & CL_MEM_COPY_HOST_PTR))
     {
         void *tmp_hostptr = std::malloc(size());
@@ -192,10 +197,13 @@ cl_int MemObject::init()
     // If we have only one device, already allocate the buffer
     if (p_num_devices == 1)
     {
-        if (!p_devicebuffers[0]->allocate())
-            return CL_MEM_OBJECT_ALLOCATION_FAILURE;
+      if (!p_devicebuffers[0]->allocate())
+        return CL_MEM_OBJECT_ALLOCATION_FAILURE;
     }
 
+#ifdef DEBUGCL
+    std::cerr << "Returning CL_SUCCESS from MemObject::init" << std::endl;
+#endif
     return CL_SUCCESS;
 }
 
@@ -377,6 +385,9 @@ Buffer::Buffer(Context *ctx, size_t size, void *host_ptr, cl_mem_flags flags,
                cl_int *errcode_ret)
 : MemObject(ctx, flags, host_ptr, errcode_ret), p_size(size)
 {
+#ifdef DEBUGCL
+  std::cerr << "Creating Buffer of size " << size << std::endl;
+#endif
     if (size == 0)
     {
         *errcode_ret = CL_INVALID_BUFFER_SIZE;

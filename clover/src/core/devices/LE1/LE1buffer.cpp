@@ -46,7 +46,8 @@ LE1Buffer::LE1Buffer(LE1Device *device, MemObject *buffer, cl_int *rs)
   p_data_malloced(false)
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering LE1Buffer::LE1Buffer\n";
+  std::cerr << "Creating LE1Buffer::LE1Buffer of size " << buffer->size()
+    << std::endl;
 #endif
     if (buffer->type() == MemObject::SubBuffer)
     {
@@ -105,6 +106,9 @@ void *LE1Buffer::nativeGlobalPointer() const
 // and the address of where the buffer will be stored.
 bool LE1Buffer::allocate()
 {
+#ifdef DEBUGCL
+  std::cerr << "Entering LE1Buffer::allocate" << std::endl;
+#endif
     size_t buf_size = p_buffer->size();
 
     if (buf_size == 0)
@@ -130,6 +134,9 @@ bool LE1Buffer::allocate()
 
     // Say to the memobject that we are allocated
     p_buffer->deviceAllocated(this);
+#ifdef DEBUGCL
+    std::cerr << "Leaving LE1Buffer::allocate" << std::endl;
+#endif
 
     return true;
 }
