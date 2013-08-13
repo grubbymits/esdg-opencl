@@ -348,12 +348,55 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------------------- //
+// --------------------- End of KernelInitialiser -------------------------- //
+// ------------------------------------------------------------------------- //
 
+// When it comes to replicating, we will have a map of all the refs and we will
+// know in what scopes variables are declared. We will also know if those scopes
+// have nested scopes.
+
+// std::map<Stmt*, std::vector<Stmt*>> NestedLoops;
+// std::map<Stmt*, std::vector<DeclStmt*>> ScopedDeclStmts;
+// std::map<Stmt*, std::vector<CallExpr*>> Barriers;
+// std::map<std::string, std::vector<DeclRefExpr*>> AllRefs;
+
+// For each loop:
+// - check whether it contains a barrier, if it does:
+//    - get the location of the barrier(s)
+//    - get the list of DeclStmts, and lookup all the references
+//    - compare whether a barrier separates the Stmt and the Ref
+// - check all the nested loops, and do the above.
+
+// For any loop which contains a barrier, or a another loop that contains a
+// barrier, we will need to close and open the loop accordingly.
 void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
 #ifdef DEBUGCL
   std::cerr << "FixAllScalarAccesses" << std::endl;
 #endif
+
+  for (std::map<Stmt*, std::vector<Stmt*>>::iterator LoopI
+       = NestedLoops.begin(), LoopE = NestedLoops.end(); LoopI != LoopE;
+       ++LoopI) {
+
+    if (ScopedDeclStmts.find(*LoopI) == ScopedDeclStmts.end())
+      continue;
+
+    if (Barriers.find(*LoopI) != Barriers.end()) {
+      std::vector<CallExpr*> theBarriers = Barriers[*LoopI];
+
+    }
+  }
+}
+
+bool CheckNestedLoop(Stmt *Parent, Stmt *Loop) {
+
+  if ((ScopedDeclStmts.find(Loop) == ScopedDeclStmts.end()) &&
+      (Barriers.find(Loop) == Barriers.end()) &&
+      (NestedLoop.find(Loop) == NestedLoops.end()))
+    return false;
+
+
 }
 
 // Run this after parsing is complete, to access all the referenced variables
@@ -466,21 +509,12 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
   OpenLoop(GetOffsetOut(Loop->getLocEnd()));
 }
 
-// Return true if the Stmt contains a child that is a barrier call. It does not
-// traverse the children's children.
-static bool isBarrierContained(Stmt *s) {
-#ifdef DEBUGCL
-  std::cerr << "isBarrierContained" << std::endl;
-#endif
-
-  for (Stmt::child_iterator SI = s->child_begin(), SE = s->child_end();
-       SI != SE; ++SI) {
-    if (isa<CallExpr>(*SI)) {
-      FunctionDecl *FD = (cast<CallExpr>(*SI))->getDirectCallee();
-      std::string name = FD->getNameInfo().getName().getAsString();
-      if (name.compare("barrier") == 0)
-        return true;
-    }
+static inline bool isBarrier(Stmt *s) {
+  if (isa<CallExpr>(s)) {
+    FunctionDecl *FD = (cast<CallExpr>(*s))->getDirectCallee();
+    std::string name = FD->getNameInfo().getName().getAsString();
+    if (name.compare("barrier") == 0)
+      return true;
   }
   return false;
 }
@@ -488,60 +522,65 @@ static bool isBarrierContained(Stmt *s) {
 // We shall create a map, using the outer loop as the key, to contain all it's
 // loop children. We shall also then have a map of all the DeclStmts within the
 // loop, plus a map of vectors which will hold barriers.
-
-// When it comes to replicating, we will have a map of all the refs and we will
-// know in what scopes variables are declared. We will also know if those scopes
-// have nested scopes.
-
-// - For each loop iterate through the DeclStmt, DeclRefExpr and Barrier
-//   locations.
-// - Recursively iterate child loops and do the same.
-
-// For any loop which contains a barrier, or a another loop that contains a
-// barrier, we will need to close and open the loop accordingly.
-
-bool WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s,
-                                                     bool isMainLoop) {
+void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
   // create vector to hold loop stmts
+  Stmt *Body = NULL;
+  std::vector<Stmt*> InnerLoops;
   // create a vector to hold decl stmts
+  std::vector<DeclStmt*> InnerDeclStmts;
   // create a vector to hold barriers
+  std::vector<CallExpr*> InnerBarriers;
+
+  if (isa<WhileStmt>(s))
+    Body = (cast<WhileStmt>(s))->getBody();
+  else if (isa<ForStmt>(s))
+    Body = (cast<ForStmt>(s))->getBody();
 
   // Iterate through the children of s:
   // - Add DeclStmts to vector
   // - Add Barriers to vector,
   // - Add loops to vector, and traverse the loop
+  for (Stmt::iterator SI = Body->child_begin(),
+       SE = Body->child_end(); SI != SE; ++SI) {
+
+    if ((isa<WhileStmt>(*SI)) || (isa<ForStmt>(*SI))) {
+      InnerLoops.push_back(*SI);
+      // Recursively visit the loops from the parent
+      TraverseLoop(*SI);
+    }
+    else if (isa<DeclStmt>(*SI))
+      InnerDeclStmts.push_back(cast<DeclStmt>(*SI));
+    else if (isBarrier(*SI))
+      InnerBarriers.push_back(cast<CallExpr>(*SI));
+
+  }
 
   // add vectors to the maps, using 's' as the key
+  if (!InnerLoops.empty())
+    NestedLoops.insert(std::make_pair(s, InnerLoops));
+  if (!InnerDeclStmts.empty())
+    ScopedDeclStms.insert(std::make_pair(s, InnerDeclStmts));
+  if (!InnerBarriers.empty())
+    Barriers.insert(std::make_pair(s, InnerBarriers));
 }
 
 // Use this only as an entry into the kernel
 bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
-
-  // If it is the main loop, traverse it
+#ifdef DEBUGCL
+  std::cerr << "VisitWhileStmt" << std::endl;
+#endif
+  // Only traverse if it's the main outer loop
+  TraverseLoop(s);
+  return true;
 }
 
 // Remove barrier calls and modify calls to kernel builtin functions.
-//template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 #ifdef DEBUGCL
   std::cerr << "VisitCallExpr: ";
 #endif
-  CallExpr *Call = cast<CallExpr>(s);
-  FunctionDecl* FD = Call->getDirectCallee();
-  DeclarationName DeclName = FD->getNameInfo().getName();
-  std::string FuncName = DeclName.getAsString();
-
-#ifdef DEBUGCL
-  std::cerr << FuncName << std::endl;
-#endif
-
-  if (FuncName.compare("barrier") == 0) {
-#ifdef DEBUGCL
-    std::cerr << "Found Barrier\n";
-#endif
-    BarrierLocations.push_back(Call->getLocStart());
-
-    BarrierCalls.push_back(Call);
+  if (isBarrier(s)) {
+    CallExpr *Call = cast<CallExpr>(s);
     TheRewriter.InsertText(Call->getLocStart(), "//", true, true);
     CloseLoop(Call->getLocEnd().getLocWithOffset(2));
     OpenLoop(Call->getLocEnd().getLocWithOffset(2));
