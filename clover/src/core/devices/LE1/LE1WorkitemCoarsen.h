@@ -180,7 +180,6 @@ public:
   bool VisitCallExpr(clang::Expr *s);
   bool VisitReturnStmt(clang::Stmt *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
-  bool VisitDeclStmt(clang::Stmt *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
@@ -195,11 +194,12 @@ private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
-  bool TraverseLoop(clang::Stmt *s, bool isMainLoop);
+  void TraverseLoop(clang::Stmt *s);
   void HandleBarrierInLoop(clang::Stmt *Loop);
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
+  bool SearchNestedLoops(clang::Stmt *Loop, bool isOuterLoop);
   void ScalarReplicate(clang::SourceLocation InsertLoc,
                        clang::DeclStmt *theDecl);
 
@@ -207,9 +207,14 @@ private:
   void AccessScalar(clang::DeclRefExpr *Ref);
 
 private:
+  std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
+  std::map<clang::Stmt*, std::vector<clang::DeclStmt*> > ScopedDeclStmts;
+  std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
+  std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
-  DeclRefSetMap AllRefs;
+  clang::WhileStmt *OuterLoop;
+  //DeclRefSetMap AllRefs;
   std::vector<std::string> ParamVars;
 
 }; // end class ThreadSerialiser

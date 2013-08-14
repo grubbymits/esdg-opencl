@@ -361,42 +361,52 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
 // std::map<Stmt*, std::vector<CallExpr*>> Barriers;
 // std::map<std::string, std::vector<DeclRefExpr*>> AllRefs;
 
-// For each loop:
-// - check whether it contains a barrier, if it does:
-//    - get the location of the barrier(s)
-//    - get the list of DeclStmts, and lookup all the references
-//    - compare whether a barrier separates the Stmt and the Ref
-// - check all the nested loops, and do the above.
+// Recursively visit the inner loops, the function should return true if one of
+// its children return true, or if the loop itself has a barrier:
+// nestedBarriers = 0;
+// if (CheckNestedLoop(NestedLoop)
+//    ++nestedBarriers;
+// if (hasBarrier || nestedBarriers)
+//    HandleBarrierInLoop(this)
+//    return true;
+// else return false;
 
-// For any loop which contains a barrier, or a another loop that contains a
-// barrier, we will need to close and open the loop accordingly.
 void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
 #ifdef DEBUGCL
   std::cerr << "FixAllScalarAccesses" << std::endl;
 #endif
-
-  for (std::map<Stmt*, std::vector<Stmt*>>::iterator LoopI
-       = NestedLoops.begin(), LoopE = NestedLoops.end(); LoopI != LoopE;
-       ++LoopI) {
-
-    if (ScopedDeclStmts.find(*LoopI) == ScopedDeclStmts.end())
-      continue;
-
-    if (Barriers.find(*LoopI) != Barriers.end()) {
-      std::vector<CallExpr*> theBarriers = Barriers[*LoopI];
-
-    }
-  }
+  SearchNestedLoops(OuterLoop, true);
 }
 
-bool CheckNestedLoop(Stmt *Parent, Stmt *Loop) {
+bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
+                                                          bool isOuterLoop) {
 
-  if ((ScopedDeclStmts.find(Loop) == ScopedDeclStmts.end()) &&
-      (Barriers.find(Loop) == Barriers.end()) &&
-      (NestedLoop.find(Loop) == NestedLoops.end()))
+  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()))
     return false;
 
+  unsigned NestedBarriers = 0;
+  std::vector<Stmt*> InnerLoops = NestedLoops[Loop];
+  for (std::vector<Stmt*>::iterator LoopI
+       = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
+       ++LoopI) {
+    if (SearchNestedLoops(*LoopI, false))
+      ++NestedBarriers;
+  }
+  if ((!Barriers[Loop].empty()) || (NestedBarriers != 0)) {
 
+    // Appropriately open and close the workgroup loops if its an original loop
+    if (!isOuterLoop)
+      HandleBarrierInLoop(Loop);
+
+    // Then we need to check whether we need to scalar replicate any decls
+    // from this loop.
+    if (!ScopedDeclStmts[Loop].empty()) {
+
+    }
+    return true;
+  }
+  else
+    return false;
 }
 
 // Run this after parsing is complete, to access all the referenced variables
@@ -438,7 +448,7 @@ WorkitemCoarsen::ThreadSerialiser::ScalarReplicate(SourceLocation InsertLoc,
     AccessScalar(theDecl->getSingleDecl());
   }
 
-  std::vector<DeclRefExpr*> theRefs = AllRefs[varName];
+  std::vector<DeclRefExpr*> theRefs = AllRefs[theDecl->getSingleDecl()];
   // Then visit all the references to turn them into scalar accesses as well.
   for (std::vector<DeclRefExpr*>::iterator RI = theRefs.begin(),
        RE = theRefs.end(); RI != RE; ++RI)
@@ -493,7 +503,7 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
   std::cerr << "HandleBarrierInLoop\n";
 #endif
   // Record that this loop contains a barrier
-  LoopsWithBarrier.push_back(Loop);
+  //LoopsWithBarrier.push_back(Loop);
 
   Stmt *LoopBody = NULL;
   if (isa<ForStmt>(Loop))
@@ -511,7 +521,7 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
 
 static inline bool isBarrier(Stmt *s) {
   if (isa<CallExpr>(s)) {
-    FunctionDecl *FD = (cast<CallExpr>(*s))->getDirectCallee();
+    FunctionDecl *FD = (cast<CallExpr>(s))->getDirectCallee();
     std::string name = FD->getNameInfo().getName().getAsString();
     if (name.compare("barrier") == 0)
       return true;
@@ -523,8 +533,11 @@ static inline bool isBarrier(Stmt *s) {
 // loop children. We shall also then have a map of all the DeclStmts within the
 // loop, plus a map of vectors which will hold barriers.
 void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
-  // create vector to hold loop stmts
+#ifdef DEBUGCL
+  std::cerr << "TraverseLoop" << std::endl;
+#endif
   Stmt *Body = NULL;
+  // create vector to hold loop stmts
   std::vector<Stmt*> InnerLoops;
   // create a vector to hold decl stmts
   std::vector<DeclStmt*> InnerDeclStmts;
@@ -540,7 +553,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
   // - Add DeclStmts to vector
   // - Add Barriers to vector,
   // - Add loops to vector, and traverse the loop
-  for (Stmt::iterator SI = Body->child_begin(),
+  for (Stmt::child_iterator SI = Body->child_begin(),
        SE = Body->child_end(); SI != SE; ++SI) {
 
     if ((isa<WhileStmt>(*SI)) || (isa<ForStmt>(*SI))) {
@@ -559,7 +572,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
   if (!InnerLoops.empty())
     NestedLoops.insert(std::make_pair(s, InnerLoops));
   if (!InnerDeclStmts.empty())
-    ScopedDeclStms.insert(std::make_pair(s, InnerDeclStmts));
+    ScopedDeclStmts.insert(std::make_pair(s, InnerDeclStmts));
   if (!InnerBarriers.empty())
     Barriers.insert(std::make_pair(s, InnerBarriers));
 }
@@ -571,6 +584,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
 #endif
   // Only traverse if it's the main outer loop
   TraverseLoop(s);
+  OuterLoop = cast<WhileStmt>(s);
   return true;
 }
 
@@ -603,19 +617,20 @@ bool WorkitemCoarsen::ThreadSerialiser::WalkUpFromUnaryContinueStmt(
 // Create maps of all the references in the tree
 bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   DeclRefExpr *RefExpr = cast<DeclRefExpr>(expr);
-  std::string key = RefExpr->getDecl()->getName().str();
+  std::string VarName = RefExpr->getDecl()->getName().str();
 
   // Don't add it if its one of an work-item indexes
-  if (key.compare("__kernel_local_id") == 0)
+  if (VarName.compare("__kernel_local_id") == 0)
     return true;
 
   // Don't add it if it is a function parameter
   for (std::vector<std::string>::iterator PI = ParamVars.begin(),
        PE = ParamVars.end(); PI != PE; ++PI) {
-    if ((*PI).compare(key) == 0)
+    if ((*PI).compare(VarName) == 0)
       return true;
   }
 
+  Decl *key = RefExpr->getDecl();
   // Either create a new set for the Ref, or add it an the existing one
   if (AllRefs.find(key) == AllRefs.end()) {
     DeclRefSet refset;
