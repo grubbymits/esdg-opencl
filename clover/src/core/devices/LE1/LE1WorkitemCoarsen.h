@@ -200,6 +200,8 @@ private:
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
   bool SearchNestedLoops(clang::Stmt *Loop, bool isOuterLoop);
+  void FindRefsToReplicate(std::list<clang::DeclStmt*> &Stmts,
+                           clang::Stmt *Loop);
   void ScalarReplicate(clang::SourceLocation InsertLoc,
                        clang::DeclStmt *theDecl);
 
@@ -208,9 +210,11 @@ private:
 
 private:
   std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
-  std::map<clang::Stmt*, std::vector<clang::DeclStmt*> > ScopedDeclStmts;
+  std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
+  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RValueRefs;
+  std::map<clang::Decl*, clang::Stmt*> DeclParents;
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   clang::WhileStmt *OuterLoop;

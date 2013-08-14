@@ -375,7 +375,141 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
 #ifdef DEBUGCL
   std::cerr << "FixAllScalarAccesses" << std::endl;
 #endif
+  // Search nested loops will always return true for the outer loop
+  // as there is definitely a barrier somewhere, and it is accessible
+  // from the outer loop
   SearchNestedLoops(OuterLoop, true);
+
+  // Then we need to find all the variables that we need to replicate.
+  std::list<DeclStmt*> Stmts;
+  FindRefsToReplicate(Stmts, OuterLoop);
+
+}
+
+void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(
+  std::list<DeclStmt*> &Stmts, Stmt *Loop) {
+
+#ifdef DEBUGCL
+  std::cerr << "FindRefsToReplicate" << std::endl;
+#endif
+
+  // Again, quit early if there's gonna be nothing to find.
+  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()))
+    return;
+
+  // Get the DeclStmts of this loop, append it to the vector that has been
+  // passed; so the search space grows as we go deeper into the loops.
+  std::list<DeclStmt*> InnerDeclStmts = ScopedDeclStmts[Loop];
+
+  if (!NestedLoops[Loop].empty()) {
+    std::vector<Stmt*> InnerLoops = NestedLoops[Loop];
+    //Stmts.insert(Stmts.end(), InnerDeclStmts.begin(), InnerDeclStmts.end());
+
+    std::list<DeclStmt*>::iterator OrigEnd = Stmts.end();
+    Stmts.splice(Stmts.end(), InnerDeclStmts);
+
+    for (std::vector<Stmt*>::iterator LoopI = InnerLoops.begin(),
+         LoopE = InnerLoops.end(); LoopI != LoopE; ++LoopI) {
+      // Recursively visit inner loops to build up the vector of referable
+      // DeclStmts.
+      FindRefsToReplicate(Stmts, *LoopI);
+    }
+#ifdef DEBUGCL
+    std::cerr << "Erasing elements" << std::endl;
+#endif
+    // Erase this loop's DeclStmts from the larger set since we search them
+    // differently.
+    Stmts.erase(OrigEnd, Stmts.end());
+  }
+
+  // Start looking for references within this loop:
+#ifdef DEBUGCL
+  std::cerr << "Look for statements within this loop" << std::endl;
+#endif
+
+  // First we can check the DeclStmts within this Loop, and compare the ref
+  // locations to that of the barrier(s) also within this loop body.
+  std::vector<CallExpr*> InnerBarriers = Barriers[Loop];
+
+  for (std::list<DeclStmt*>::iterator DSI = InnerDeclStmts.begin(),
+       DSE = InnerDeclStmts.end(); DSI != DSE; ++DSI) {
+
+    std::vector<DeclRefExpr*> Refs = AllRefs[(*DSI)->getSingleDecl()];
+    SourceLocation DeclLoc = (*DSI)->getLocStart();
+    bool hasReplicated = false;
+
+    for (std::vector<CallExpr*>::iterator BI = InnerBarriers.begin(),
+         BE = InnerBarriers.end(); BI != BE; ++BI) {
+
+      // If it's already been replicated, we don't need to check any more
+      // barriers.
+      if (hasReplicated)
+        break;
+
+      SourceLocation BarrierLoc = (*BI)->getLocStart();
+
+      for (std::vector<DeclRefExpr*>::iterator RI = Refs.begin(),
+           RE = Refs.end(); RI != RE; ++RI) {
+
+        SourceLocation RefLoc = (*RI)->getLocStart();
+
+        if ((BarrierLoc < RefLoc) && (DeclLoc < BarrierLoc)) {
+          ScalarReplicate(Loop->getLocStart(), *DSI);
+          hasReplicated = true;
+          break;
+        }
+      }
+    }
+  }
+
+#ifdef DEBUGCL
+  std::cerr << "Now look through the rest of the Stmts, size = "
+    << Stmts.size() << std::endl;
+#endif
+
+  // Then just find any references, within the loop, to any of the DeclStmts
+  // in the larger set.
+  SourceLocation LoopStart;
+  SourceLocation LoopEnd;
+  if (isa<WhileStmt>(Loop)) {
+    LoopStart = (cast<WhileStmt>(Loop))->getBody()->getLocStart();
+    LoopEnd = (cast<WhileStmt>(Loop))->getBody()->getLocEnd();
+  }
+  else {
+    LoopStart = (cast<ForStmt>(Loop))->getBody()->getLocStart();
+    LoopEnd = (cast<ForStmt>(Loop))->getBody()->getLocEnd();
+  }
+
+  for (std::list<DeclStmt*>::iterator DSI = Stmts.begin(), DSE = Stmts.end();
+       DSI != DSE;) {
+
+    bool hasReplicated = false;
+#ifdef DEBUGCL
+    std::cerr << "Checking var: "
+      << cast<NamedDecl>((*DSI)->getSingleDecl())->getName().str() << std::endl;
+#endif
+
+    std::vector<DeclRefExpr*> Refs = AllRefs[(*DSI)->getSingleDecl()];
+
+    for (std::vector<DeclRefExpr*>::iterator RI = Refs.begin(), RE = Refs.end();
+         RI != RE; ++RI) {
+
+      SourceLocation RefLoc = (*RI)->getLocStart();
+      if ((LoopStart < RefLoc) && (RefLoc < LoopEnd)) {
+        SourceLocation InsertLoc = DeclParents[(*RI)->getDecl()]->getLocStart();
+        ScalarReplicate(InsertLoc, *DSI);
+        DSI = Stmts.erase(DSI);
+        hasReplicated = true;
+        break;
+      }
+    }
+    if (!hasReplicated)
+      ++DSI;
+  }
+#ifdef DEBUGCL
+  std::cerr << "Exit FindRefsToReplicate" << std::endl;
+#endif
+
 }
 
 bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
@@ -397,12 +531,6 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
     // Appropriately open and close the workgroup loops if its an original loop
     if (!isOuterLoop)
       HandleBarrierInLoop(Loop);
-
-    // Then we need to check whether we need to scalar replicate any decls
-    // from this loop.
-    if (!ScopedDeclStmts[Loop].empty()) {
-
-    }
     return true;
   }
   else
@@ -540,7 +668,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
   // create vector to hold loop stmts
   std::vector<Stmt*> InnerLoops;
   // create a vector to hold decl stmts
-  std::vector<DeclStmt*> InnerDeclStmts;
+  std::list<DeclStmt*> InnerDeclStmts;
   // create a vector to hold barriers
   std::vector<CallExpr*> InnerBarriers;
 
@@ -561,8 +689,11 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
       // Recursively visit the loops from the parent
       TraverseLoop(*SI);
     }
-    else if (isa<DeclStmt>(*SI))
-      InnerDeclStmts.push_back(cast<DeclStmt>(*SI));
+    else if (isa<DeclStmt>(*SI)) {
+      DeclStmt *stmt = cast<DeclStmt>(*SI);
+      InnerDeclStmts.push_back(stmt);
+      DeclParents.insert(std::make_pair(stmt->getSingleDecl(), s));
+    }
     else if (isBarrier(*SI))
       InnerBarriers.push_back(cast<CallExpr>(*SI));
 
@@ -639,6 +770,16 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   }
   else {
     AllRefs[key].push_back(RefExpr);
+  }
+  // Maintain lists of RValue exprs too
+  if (RefExpr->getValueKind() == clang::VK_RVALUE) {
+    if (RValueRefs.find(key) == RValueRefs.end()) {
+      DeclRefSet refset;
+      refset.push_back(RefExpr);
+      RValueRefs.insert(std::make_pair(key, refset));
+    }
+    else
+      RValueRefs[key].push_back(RefExpr);
   }
 
   return true;
