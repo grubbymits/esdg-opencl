@@ -181,6 +181,8 @@ public:
   bool VisitReturnStmt(clang::Stmt *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
+  bool VisitUnaryOperator(clang::Expr *expr);
+  bool VisitBinaryOperator(clang::Expr *expr);
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
   virtual bool needsToFixScalarAccesses() const {
@@ -199,11 +201,15 @@ private:
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
+  void SearchForIndVars(clang::Stmt *s);
   bool SearchNestedLoops(clang::Stmt *Loop, bool isOuterLoop);
-  void FindRefsToReplicate(std::list<clang::DeclStmt*> &Stmts,
-                           clang::Stmt *Loop);
-  void ScalarReplicate(clang::SourceLocation InsertLoc,
-                       clang::DeclStmt *theDecl);
+  void AssignIndVars(void);
+  void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
+                        clang::Stmt *Loop);
+  void ScalarExpand(clang::SourceLocation InsertLoc,
+                    clang::DeclStmt *theDecl);
+  void CreateLocal(clang::SourceLocation InsertLoc,
+                   clang::DeclStmt *s);
 
   void AccessScalar(clang::Decl *decl);
   void AccessScalar(clang::DeclRefExpr *Ref);
@@ -213,8 +219,10 @@ private:
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
-  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RValueRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
+  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RefAssignments;
+  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > PotentialIndVars;
+  std::vector<clang::Decl*> IndVars;
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   clang::WhileStmt *OuterLoop;

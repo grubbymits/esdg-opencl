@@ -156,29 +156,29 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
     : LocalX(x), LocalY(y), LocalZ(z), TheRewriter(R) {
 
   if (LocalZ > 1) {
-    OpenWhile << "\n__kernel_local_id[2] = 0;\n";
     OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
   }
   if (LocalY > 1) {
-    OpenWhile << "__kernel_local_id[1] = 0;\n";
     OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
   }
   if (LocalX > 1) {
-    OpenWhile << "__kernel_local_id[0] = 0;\n";
     OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
   }
 
   if (LocalX > 1) {
     CloseWhile << "\n__kernel_local_id[0]++;\n";
     CloseWhile  << "}\n";
+    CloseWhile << "__kernel_local_id[0] = 0;\n";
   }
   if (LocalY > 1) {
     CloseWhile << " __kernel_local_id[1]++;\n";
     CloseWhile << "}\n";
+    CloseWhile << "__kernel_local_id[1] = 0;\n";
   }
   if (LocalZ > 1) {
     CloseWhile << "__kernel_local_id[2]++;\n";
     CloseWhile << "}\n";
+    CloseWhile << "\n__kernel_local_id[2] = 0;\n";
   }
 
 }
@@ -210,7 +210,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
       FuncBegin << "2";
     else
       FuncBegin << "1";
-    FuncBegin << "];\n";
+    FuncBegin << "] = {0};\n";
 
     TheRewriter.InsertText(FuncBodyStart, FuncBegin.str(), true, true);
     OpenLoop(FuncBodyStart);
@@ -380,17 +380,49 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
   // from the outer loop
   SearchNestedLoops(OuterLoop, true);
 
+  // Then we see which variables are only assigned in loop headers, these
+  // are then disabled for expansion, though they can still be made local.
+  AssignIndVars();
+
   // Then we need to find all the variables that we need to replicate.
   std::list<DeclStmt*> Stmts;
-  FindRefsToReplicate(Stmts, OuterLoop);
+  FindRefsToExpand(Stmts, OuterLoop);
 
 }
 
-void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(
+void WorkitemCoarsen::ThreadSerialiser::AssignIndVars() {
+#ifdef DEBUGCL
+  std::cerr << "AssignIndVars" << std::endl;
+#endif
+
+  for (std::map<Decl*, std::list<DeclRefExpr*> >::iterator MI
+       = PotentialIndVars.begin(), ME = PotentialIndVars.end();
+       MI != ME; ++MI) {
+
+    Decl *decl = MI->first;
+    std::list<DeclRefExpr*> IndVarRefs = MI->second;
+    std::list<DeclRefExpr*> RefAssigns = RefAssignments[decl];
+
+#ifdef DEBUGCL
+    std::cerr << "Var: " << cast<NamedDecl>(decl)->getName().str()
+      << ". IndVarRefs.size = " << IndVarRefs.size() << " and RefAssigns = "
+      << RefAssigns.size() << std::endl;
+#endif
+
+    if (IndVarRefs.size() == RefAssigns.size()) {
+#ifdef DEBUGCL
+      std::cerr << "Found induction variable" << std::endl;
+#endif
+      IndVars.push_back(decl);
+    }
+  }
+}
+
+void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
   std::list<DeclStmt*> &Stmts, Stmt *Loop) {
 
 #ifdef DEBUGCL
-  std::cerr << "FindRefsToReplicate" << std::endl;
+  std::cerr << "FindRefsToExpand" << std::endl;
 #endif
 
   // Again, quit early if there's gonna be nothing to find.
@@ -412,7 +444,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(
          LoopE = InnerLoops.end(); LoopI != LoopE; ++LoopI) {
       // Recursively visit inner loops to build up the vector of referable
       // DeclStmts.
-      FindRefsToReplicate(Stmts, *LoopI);
+      FindRefsToExpand(Stmts, *LoopI);
     }
 #ifdef DEBUGCL
     std::cerr << "Erasing elements" << std::endl;
@@ -436,14 +468,14 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(
 
     std::vector<DeclRefExpr*> Refs = AllRefs[(*DSI)->getSingleDecl()];
     SourceLocation DeclLoc = (*DSI)->getLocStart();
-    bool hasReplicated = false;
+    bool hasExpanded = false;
 
     for (std::vector<CallExpr*>::iterator BI = InnerBarriers.begin(),
          BE = InnerBarriers.end(); BI != BE; ++BI) {
 
       // If it's already been replicated, we don't need to check any more
       // barriers.
-      if (hasReplicated)
+      if (hasExpanded)
         break;
 
       SourceLocation BarrierLoc = (*BI)->getLocStart();
@@ -454,8 +486,8 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(
         SourceLocation RefLoc = (*RI)->getLocStart();
 
         if ((BarrierLoc < RefLoc) && (DeclLoc < BarrierLoc)) {
-          ScalarReplicate(Loop->getLocStart(), *DSI);
-          hasReplicated = true;
+          ScalarExpand(Loop->getLocStart(), *DSI);
+          hasExpanded= true;
           break;
         }
       }
@@ -483,7 +515,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(
   for (std::list<DeclStmt*>::iterator DSI = Stmts.begin(), DSE = Stmts.end();
        DSI != DSE;) {
 
-    bool hasReplicated = false;
+    bool hasExpanded = false;
 #ifdef DEBUGCL
     std::cerr << "Checking var: "
       << cast<NamedDecl>((*DSI)->getSingleDecl())->getName().str() << std::endl;
@@ -497,21 +529,23 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToReplicate(
       SourceLocation RefLoc = (*RI)->getLocStart();
       if ((LoopStart < RefLoc) && (RefLoc < LoopEnd)) {
         SourceLocation InsertLoc = DeclParents[(*RI)->getDecl()]->getLocStart();
-        ScalarReplicate(InsertLoc, *DSI);
+        ScalarExpand(InsertLoc, *DSI);
         DSI = Stmts.erase(DSI);
-        hasReplicated = true;
+        hasExpanded = true;
         break;
       }
     }
-    if (!hasReplicated)
+    if (!hasExpanded)
       ++DSI;
   }
 #ifdef DEBUGCL
-  std::cerr << "Exit FindRefsToReplicate" << std::endl;
+  std::cerr << "Exit FindRefsToExpand" << std::endl;
 #endif
 
 }
 
+// Find out if this loop contains a barrier somehow, it will then
+// HandleBarrierInLoop if it finds something.
 bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
                                                           bool isOuterLoop) {
 
@@ -540,10 +574,22 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
 // Run this after parsing is complete, to access all the referenced variables
 // within the DeclStmt which need to be replicated
 void
-WorkitemCoarsen::ThreadSerialiser::ScalarReplicate(SourceLocation InsertLoc,
-                                                   DeclStmt *theDecl) {
+WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
+                                                DeclStmt *theDecl) {
+  bool isIndVar = false;
+  for (std::vector<Decl*>::iterator DI = IndVars.begin(), DE = IndVars.end();
+       DI != DE; ++DI) {
+    if (*DI == theDecl->getSingleDecl()) {
+      isIndVar = true;
+      break;
+    }
+  }
+  if (isIndVar) {
+    CreateLocal(InsertLoc, theDecl);
+    return;
+  }
 #ifdef DEBUGCL
-  std::cerr << "ScalarReplicate: " << std::endl;
+  std::cerr << "ScalarExpand: " << std::endl;
 #endif
   NamedDecl *ND = cast<NamedDecl>(theDecl->getSingleDecl());
   std::string varName = ND->getName().str();
@@ -583,6 +629,24 @@ WorkitemCoarsen::ThreadSerialiser::ScalarReplicate(SourceLocation InsertLoc,
     AccessScalar(*RI);
 }
 
+void WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
+                                                    DeclStmt *s) {
+  NamedDecl *ND = cast<NamedDecl>(s->getSingleDecl());
+  std::string varName = ND->getName().str();
+  std::string type = cast<ValueDecl>(ND)->getType().getAsString();
+  std::stringstream NewDecl;
+  NewDecl << type << " " << varName << ";\n";
+  TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
+
+  // If the statement wasn't initialised, remove the whole statement
+  if (s->child_begin() == s->child_end())
+    TheRewriter.RemoveText(s->getSourceRange());
+  else {
+    // Otherwise, just remove the type definition and make the initialisation
+    // access a scalar.
+    TheRewriter.RemoveText(ND->getLocStart(), type.length());
+  }
+}
 
 // FIXME Scalar access only works for x dimension values!
 void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
@@ -657,6 +721,54 @@ static inline bool isBarrier(Stmt *s) {
   return false;
 }
 
+void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
+#ifdef DEBUGCL
+  std::cerr << "SearchForIndVars" << std::endl;
+#endif
+
+  //for (Stmt::child_iterator CI = s->child_begin(), CE = s->child_end();
+    //   CI != CE; ++CI) {
+    if (isa<BinaryOperator>(s)) {
+      BinaryOperator *BO = cast<BinaryOperator>(s);
+      if (BinaryOperator::isAssignmentOp(BO->getOpcode())) {
+        Expr *LHS = BO->getLHS();
+        if (isa<DeclRefExpr>(LHS)) {
+          DeclRefExpr *ref = cast<DeclRefExpr>(LHS);
+          Decl *decl = ref->getDecl();
+
+          if (PotentialIndVars.find(decl) == PotentialIndVars.end()) {
+            std::list<DeclRefExpr*> RefList;
+            RefList.push_back(ref);
+            PotentialIndVars.insert(std::make_pair(decl, RefList));
+          }
+          else {
+            PotentialIndVars[decl].push_back(ref);
+          }
+        }
+      }
+    }
+    else if (isa<UnaryOperator>(s)) {
+      UnaryOperator *UO = cast<UnaryOperator>(s);
+      for (Stmt::child_iterator UOI = UO->child_begin(), UOE = UO->child_end();
+           UOI != UOE; ++UOI) {
+        if (isa<DeclRefExpr>(*UOI)) {
+          DeclRefExpr *ref = cast<DeclRefExpr>(*UOI);
+          Decl *decl = ref->getDecl();
+
+          if (PotentialIndVars.find(decl) == PotentialIndVars.end()) {
+            std::list<DeclRefExpr*> RefList;
+            RefList.push_back(ref);
+            PotentialIndVars.insert(std::make_pair(decl, RefList));
+          }
+          else {
+            PotentialIndVars[decl].push_back(ref);
+          }
+        }
+      }
+    }
+  //}
+}
+
 // We shall create a map, using the outer loop as the key, to contain all it's
 // loop children. We shall also then have a map of all the DeclStmts within the
 // loop, plus a map of vectors which will hold barriers.
@@ -674,8 +786,13 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
 
   if (isa<WhileStmt>(s))
     Body = (cast<WhileStmt>(s))->getBody();
-  else if (isa<ForStmt>(s))
-    Body = (cast<ForStmt>(s))->getBody();
+  else if (isa<ForStmt>(s)) {
+    ForStmt *For = cast<ForStmt>(s);
+    Body = For->getBody();
+    SearchForIndVars(For->getInit());
+    SearchForIndVars(For->getCond());
+    SearchForIndVars(For->getInc());
+  }
 
   // Iterate through the children of s:
   // - Add DeclStmts to vector
@@ -722,7 +839,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
 // Remove barrier calls and modify calls to kernel builtin functions.
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 #ifdef DEBUGCL
-  std::cerr << "VisitCallExpr: ";
+  std::cerr << "VisitCallExpr" << std::endl;
 #endif
   if (isBarrier(s)) {
     CallExpr *Call = cast<CallExpr>(s);
@@ -771,17 +888,61 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   else {
     AllRefs[key].push_back(RefExpr);
   }
-  // Maintain lists of RValue exprs too
-  if (RefExpr->getValueKind() == clang::VK_RVALUE) {
-    if (RValueRefs.find(key) == RValueRefs.end()) {
-      DeclRefSet refset;
-      refset.push_back(RefExpr);
-      RValueRefs.insert(std::make_pair(key, refset));
-    }
-    else
-      RValueRefs[key].push_back(RefExpr);
-  }
 
+  return true;
+}
+
+// We visit unary and binary operators to collect Decls that get assigned, so
+// we can determine possible induction variables. We also collect this data
+// directly from loop headers, if we find that variables are only assigned in
+// the header, then we assume it is an induction variable and doesn't need to
+// be expanded.
+bool WorkitemCoarsen::ThreadSerialiser::VisitUnaryOperator(Expr *expr) {
+#ifdef DEBUGCL
+  std::cerr << "VisitUnaryOperator" << std::endl;
+#endif
+  UnaryOperator *UO = cast<UnaryOperator>(expr);
+  for (Stmt::child_iterator CI = UO->child_begin(), CE = UO->child_end();
+       CI != CE; ++CI) {
+
+    if (isa<DeclRefExpr>(*CI)) {
+      DeclRefExpr *ref = cast<DeclRefExpr>(*CI);
+      Decl *decl = ref->getDecl();
+
+      if (RefAssignments.find(decl) == RefAssignments.end()) {
+        std::list<DeclRefExpr*> RefList;
+        RefList.push_back(ref);
+        RefAssignments.insert(std::make_pair(decl, RefList));
+      }
+      else {
+        RefAssignments[decl].push_back(ref);
+      }
+    }
+  }
+  return true;
+}
+
+bool WorkitemCoarsen::ThreadSerialiser::VisitBinaryOperator(Expr *expr) {
+#ifdef DEBUGCL
+  std::cerr << "VisitBinaryOperator" << std::endl;
+#endif
+  BinaryOperator *BO = cast<BinaryOperator>(expr);
+  if (BinaryOperator::isAssignmentOp(BO->getOpcode())) {
+    Expr *LHS = BO->getLHS();
+    if (isa<DeclRefExpr>(LHS)) {
+      DeclRefExpr *ref = cast<DeclRefExpr>(LHS);
+      Decl *decl = ref->getDecl();
+
+      if (RefAssignments.find(decl) == RefAssignments.end()) {
+        std::list<DeclRefExpr*> RefList;
+        RefList.push_back(ref);
+        RefAssignments.insert(std::make_pair(decl, RefList));
+      }
+      else {
+        RefAssignments[decl].push_back(ref);
+      }
+    }
+  }
   return true;
 }
 

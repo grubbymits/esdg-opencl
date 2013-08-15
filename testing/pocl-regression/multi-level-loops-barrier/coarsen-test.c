@@ -8,48 +8,52 @@ unsigned get_global_id(unsigned index) {
   return 0;
 }
  
-void test_kernel(int* restrict input, 
-                 int* restrict result) {
-  int j;
-  int gid[16];
-  int i;
-                 
-  int __kernel_local_id[3];
-  __kernel_local_id[0] = 0;
-  while (__kernel_local_id[0] < 16) {
-    gid[__kernel_local_id[0]] = get_global_id(0) + __kernel_local_id[0];
-    __kernel_local_id[0]++;
-  }
-  for (i = 0; i < 32; ++i) {
-    printf("i = %d\n", i);
-    __kernel_local_id[0] = 0;
-    while (__kernel_local_id[0] < 16) {
-      result[gid[__kernel_local_id[0]]] = input[gid[__kernel_local_id[0]]];
-      __kernel_local_id[0]++;
-    }
-    for (j = 0; j < i; ++j) {
-      printf ("j = %d\n", j);
+void test_kernel(int* input, 
+                                  int* result) {
+    int __kernel_local_id[3];
       __kernel_local_id[0] = 0;
-      while (__kernel_local_id[0] < 16) {
-        printf ("Calculating result[%d]:", gid[__kernel_local_id[0]]);
-        result[gid[__kernel_local_id[0]]] =
-          input[gid[__kernel_local_id[0]]] * input[gid[__kernel_local_id[0]] + j];
-        //barrier(CLK_GLOBAL_MEM_FENCE);
-        printf("%d\n", result[gid[__kernel_local_id[0]]]);
-        __kernel_local_id[0]++;
-      }
-    }
-    __kernel_local_id[0] = 0;
-    while (__kernel_local_id[0] < 16) {
-      __kernel_local_id[0]++;
-    }
-  }
-  __kernel_local_id[0] = 0;
-  while (__kernel_local_id[0] < 16) {
-    __kernel_local_id[0]++;
-  }
-}
+        int gid[16];
+          int j[16];
+            int i[16];
+              while (__kernel_local_id[0] < 16) {
+                    gid[__kernel_local_id[0]] = get_global_id(0) + __kernel_local_id[0];
+                        i[__kernel_local_id[0]] = 0;
+                        j[__kernel_local_id[0]] = 0;
+                        __kernel_local_id[0]++;
+                          }
+                for (i[__kernel_local_id[0]] = 0; i[__kernel_local_id[0]] < 32; ++i[__kernel_local_id[0]]) {
+                      __kernel_local_id[0] = 0;
+                          while (__kernel_local_id[0] < 16) {
+                                  result[gid[__kernel_local_id[0]]] = input[gid[__kernel_local_id[0]]];
+                                     
+                                        __kernel_local_id[0]++;
+                                            }
+                              for (j[__kernel_local_id[0]] = 0; j[__kernel_local_id[0]] < i[__kernel_local_id[0]]; ++j[__kernel_local_id[0]]) {
 
+                                      __kernel_local_id[0] = 0;
+                                            while (__kernel_local_id[0] < 16) {
+                                                      result[gid[__kernel_local_id[0]]] = input[gid[__kernel_local_id[0]]] * input[gid[__kernel_local_id[0]] + j[__kernel_local_id[0]]];
+                                                              //barrier( 2  /*CLK_GLOBAL_MEM_FENCE*/);
+                                                              __kernel_local_id[0]++;
+                                                                    }
+
+                                                  __kernel_local_id[0] = 0;
+                                                        while (__kernel_local_id[0] < 16) {
+                                                                  __kernel_local_id[0]++;
+                                                                        }
+                                                              
+                                                            }
+                                  __kernel_local_id[0] = 0;
+                                      while (__kernel_local_id[0] < 16) {
+                                              __kernel_local_id[0]++;
+                                                  }
+                                        }
+
+                __kernel_local_id[0] = 0;
+                while (__kernel_local_id[0] < 16) {
+                  __kernel_local_id[0]++;
+                }
+}
 int main(void) {
   int A[BUFFER_SIZE];
   int R[WORK_ITEMS];
