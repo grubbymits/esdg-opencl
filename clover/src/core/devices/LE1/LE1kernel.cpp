@@ -85,7 +85,6 @@ LE1Kernel::~LE1Kernel()
 size_t LE1Kernel::workGroupSize() const
 {
   return 256;
-    return 0; // TODO
 }
 
 cl_ulong LE1Kernel::localMemSize() const

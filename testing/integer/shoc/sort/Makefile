@@ -1,28 +1,18 @@
-CXX=clang++
-COMMONSRC=$(wildcard ../common/*.cpp)
-OBJ=$(patsubst %.cpp, %.o, $(COMMONSRC))
+#C compiler
+CC = clang++
 
-LIBPATH=/usr/lib:/usr/local/lib:/opt/esdg-opencl/lib
+SRC = Sort.cpp OpenCL.cpp
+LIBS = -L/opt/esdg-opencl/lib -lOpenCL
+INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
+CC_FLAGS = -g -DERRMSG
 
-LIBS = -lm `xml2-config --libs` -lpcre -L/opt/esdg-opencl/lib -lInsizzleAPI \
-       -lOpenCL -lclangFrontendTool -lclangFrontend -lclangDriver -lclangEdit \
-       -L/usr/lib/x86_64/linux-gnu -lstdc++ -lpthread
+EXE = sort 
 
-INC = -I/usr/include/x86_64-linux-gnu/c++/4.7/ -I/opt/esdg-opencl/include \
-      -I../common/
+release:$(SRC)
+	$(CC) $(CC_FLAGS) $(SRC) $(INC) $(LIBS) -o $(EXE)
 
-all: sort
+run:
+	./$(EXE)
 
-sort: $(OBJ) sort.o
-	ld $(LIBS) sort.o $(OBJ) sort.o -o $@
-
-sort.o : Sort.cpp
-	$(CXX) -o $@ $^ $(INC)
-
-%.o: $(COMMONSRC)
-	$(CXX) -o $@ $^ $(INC)
-
-clean:
-	rm -r binaries microblaze *.bc *.s sort
-
-.PHONY: clean
+clean: $(SRC)
+	rm -rf $(EXE) $(EXE).linkinfo result* *.txt *.s *.bc binaries microblaze *.ll *.dat *.csv *.tmp* init.*
