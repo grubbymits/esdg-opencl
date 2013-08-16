@@ -298,25 +298,28 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   }
   if (FuncName.compare("get_global_id") == 0) {
 
+    // Replace with a call to get_group_id and then add the local_id to it
     // Remove the semi-colon after the call
-    TheRewriter.RemoveText(Call->getLocEnd().getLocWithOffset(1), 1);
+    //TheRewriter.RemoveText(Call->getLocEnd().getLocWithOffset(1), 1);
 
+    std::stringstream GlobalId;
     switch(Index) {
     default:
       break;
     case 0:
-      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(2),
-                             " + __kernel_local_id[0];\n", true, true);
+      GlobalId << "get_group_id(0) * " << LocalX
+        << " + __kernel_local_id[0];//";
       break;
     case 1:
-      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(2),
-                             " + __kernel_local_id[1];\n", true, true);
+      GlobalId << "get_group_id(1) * " << LocalY
+        << " + __kernel_local_id[1];//";
       break;
     case 2:
-      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(2),
-                             " + __kernel_local_id[2];\n", true, true);
+      GlobalId << "get_group_id(2) * " << LocalZ
+        << " + __kernel_local_id[2];//";
       break;
     }
+    TheRewriter.InsertText(Call->getLocStart(), GlobalId.str());
   }
   else if (FuncName.compare("get_local_id") == 0) {
     TheRewriter.RemoveText(Call->getSourceRange());
