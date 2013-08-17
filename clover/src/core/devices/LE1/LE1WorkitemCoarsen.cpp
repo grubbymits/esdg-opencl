@@ -119,9 +119,6 @@ bool WorkitemCoarsen::ExpandMacros() {
 }
 
 bool WorkitemCoarsen::HandleBarriers() {
-#ifdef DEBUGCL
-  std::cerr << "HandleBarriers\n";
-#endif
   OpenCLCompiler<ThreadSerialiser> SerialCompiler(LocalX, LocalY, LocalZ,
                                                   KernelName);
   SerialCompiler.setFile(InitKernelFilename);
@@ -547,33 +544,6 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
 
 }
 
-// Find out if this loop contains a barrier somehow, it will then
-// HandleBarrierInLoop if it finds something.
-bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
-                                                          bool isOuterLoop) {
-
-  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()))
-    return false;
-
-  unsigned NestedBarriers = 0;
-  std::vector<Stmt*> InnerLoops = NestedLoops[Loop];
-  for (std::vector<Stmt*>::iterator LoopI
-       = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
-       ++LoopI) {
-    if (SearchNestedLoops(*LoopI, false))
-      ++NestedBarriers;
-  }
-  if ((!Barriers[Loop].empty()) || (NestedBarriers != 0)) {
-
-    // Appropriately open and close the workgroup loops if its an original loop
-    if (!isOuterLoop)
-      HandleBarrierInLoop(Loop);
-    return true;
-  }
-  else
-    return false;
-}
-
 // Run this after parsing is complete, to access all the referenced variables
 // within the DeclStmt which need to be replicated
 void
@@ -687,6 +657,42 @@ WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
                                          TheRewriter.getLangOpts()) + 2;
   return Loc.getLocWithOffset(offset);
 }
+
+// Find out if this loop contains a barrier somehow, it will then
+// HandleBarrierInLoop if it finds something.
+bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
+                                                          bool isOuterLoop) {
+#ifdef DEBUGCL
+  std::cerr << "SearchNestedLoops" << std::endl;
+#endif
+
+  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty())) {
+#ifdef DEBUGCL
+    std::cerr << "No nested loops and there's no barriers in this one"
+      << std::endl;
+#endif
+    return false;
+  }
+
+  unsigned NestedBarriers = 0;
+  std::vector<Stmt*> InnerLoops = NestedLoops[Loop];
+  for (std::vector<Stmt*>::iterator LoopI
+       = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
+       ++LoopI) {
+    if (SearchNestedLoops(*LoopI, false))
+      ++NestedBarriers;
+  }
+  if ((!Barriers[Loop].empty()) || (NestedBarriers != 0)) {
+
+    // Appropriately open and close the workgroup loops if its an original loop
+    if (!isOuterLoop)
+      HandleBarrierInLoop(Loop);
+    return true;
+  }
+  else
+    return false;
+}
+
 
 // Whether a loop contains a barrier, nested or not, we follow these steps:
 // - close the main loop before this loop starts
@@ -833,9 +839,23 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
 #ifdef DEBUGCL
   std::cerr << "VisitWhileStmt" << std::endl;
 #endif
+  WhileStmt *While = cast<WhileStmt>(s);
+#ifdef DEBUGCL
+  std::cerr << "Got while" << std::endl;
+#endif
+  VarDecl *Variable = While->getConditionVariable();
+#ifdef DEBUGCL
+  std::cerr << "Got variable" << std::endl;
+#endif
+  std::string VarName = Variable->getName().str();
   // Only traverse if it's the main outer loop
-  TraverseLoop(s);
-  OuterLoop = cast<WhileStmt>(s);
+#ifdef DEBUGCL
+  std::cerr << "While conditional = " << VarName << std::endl;
+#endif
+  if (VarName.compare("__kernel_local_id") == 0) {
+    TraverseLoop(While);
+    OuterLoop = While;
+  }
   return true;
 }
 
@@ -901,9 +921,6 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
 // the header, then we assume it is an induction variable and doesn't need to
 // be expanded.
 bool WorkitemCoarsen::ThreadSerialiser::VisitUnaryOperator(Expr *expr) {
-#ifdef DEBUGCL
-  std::cerr << "VisitUnaryOperator" << std::endl;
-#endif
   UnaryOperator *UO = cast<UnaryOperator>(expr);
   for (Stmt::child_iterator CI = UO->child_begin(), CE = UO->child_end();
        CI != CE; ++CI) {
@@ -926,9 +943,6 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitUnaryOperator(Expr *expr) {
 }
 
 bool WorkitemCoarsen::ThreadSerialiser::VisitBinaryOperator(Expr *expr) {
-#ifdef DEBUGCL
-  std::cerr << "VisitBinaryOperator" << std::endl;
-#endif
   BinaryOperator *BO = cast<BinaryOperator>(expr);
   if (BinaryOperator::isAssignmentOp(BO->getOpcode())) {
     Expr *LHS = BO->getLHS();
