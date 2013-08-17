@@ -101,6 +101,10 @@ public:
               clang::SourceLocation Finish = FD->getBody()->getLocEnd();
               Visitor.RemoveText(Start, Finish);
             }
+            else if (FD->isInlineSpecified()) {
+              Visitor.InsertText(FD->getLocStart(), "//");
+              Visitor.InsertText(FD->getLocStart().getLocWithOffset(6), "\n");
+            }
             continue;
           }
           // Traverse the declaration using our AST visitor.
@@ -143,8 +147,12 @@ public:
   ASTVisitorBase(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
   virtual bool needsToFixScalarAccesses() const = 0;
   virtual void FixAllScalarAccesses() = 0;
+
   void RemoveText(clang::SourceLocation Start, clang::SourceLocation End) {
     TheRewriter.RemoveText(clang::SourceRange(Start, End));
+  }
+  void InsertText(clang::SourceLocation InsertLoc, const char *text) {
+    TheRewriter.InsertText(InsertLoc, text);
   }
 protected:
   void CloseLoop(clang::SourceLocation Loc);
