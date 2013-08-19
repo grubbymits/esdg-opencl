@@ -566,14 +566,24 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
 #endif
   NamedDecl *ND = cast<NamedDecl>(theDecl->getSingleDecl());
   std::string varName = ND->getName().str();
-  std::string type = cast<ValueDecl>(ND)->getType().getAsString();
-
-#ifdef DEBUGCL
-  std::cerr << varName << std::endl;
-#endif
-
   std::stringstream NewDecl;
-  NewDecl << type << " " << varName;
+
+  ValueDecl *VD = cast<ValueDecl>(ND);
+  clang::QualType QualVarType = VD->getType();
+  const clang::Type *VarType = QualVarType.getTypePtr();
+  std::string typeStr;
+
+  if (VarType->isArrayType()) {
+    ConstantArrayType *arrayType =
+      cast<ConstantArrayType>(const_cast<Type*>(VarType));
+    uint64_t arraySize = arrayType->getSize().getZExtValue();
+    typeStr = arrayType->getElementType().getAsString();
+    NewDecl << typeStr <<  " " << varName << "[" << arraySize << "]";
+  }
+  else {
+    typeStr = QualVarType.getAsString();
+    NewDecl << typeStr << " " << varName;
+  }
 
   if (LocalX != 0)
     NewDecl << "[" << LocalX << "]";
@@ -591,7 +601,7 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
   else {
     // Otherwise, just remove the type definition and make the initialisation
     // access a scalar.
-    TheRewriter.RemoveText(ND->getLocStart(), type.length());
+    TheRewriter.RemoveText(ND->getLocStart(), typeStr.length());
     AccessScalar(theDecl->getSingleDecl());
   }
 
@@ -836,6 +846,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
 
 // Use this only as an entry into the kernel
 bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
+  static bool isFirstLoop = true;
 #ifdef DEBUGCL
   std::cerr << "VisitWhileStmt" << std::endl;
 #endif
@@ -843,19 +854,47 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
 #ifdef DEBUGCL
   std::cerr << "Got while" << std::endl;
 #endif
-  VarDecl *Variable = While->getConditionVariable();
-#ifdef DEBUGCL
-  std::cerr << "Got variable" << std::endl;
-#endif
-  std::string VarName = Variable->getName().str();
-  // Only traverse if it's the main outer loop
-#ifdef DEBUGCL
-  std::cerr << "While conditional = " << VarName << std::endl;
-#endif
-  if (VarName.compare("__kernel_local_id") == 0) {
+
+  if (isFirstLoop) {
     TraverseLoop(While);
     OuterLoop = While;
   }
+
+  isFirstLoop = false;
+  return true;
+
+  Expr *Cond = While->getCond();
+  if (Cond == NULL) {
+#ifdef DEBUGCL
+    std::cerr << "but Cond is NULL" << std::endl;
+#endif
+    return true;
+  }
+
+  for (Stmt::child_iterator CI = Cond->child_begin(), CE = Cond->child_end();
+       CI != CE; ++CI) {
+    if (isa<BinaryOperator>(*CI)) {
+#ifdef DEBUGCL
+      std::cerr << "Found BinaryOperator child of while" << std::endl;
+#endif
+      for (Stmt::child_iterator BI = (*CI)->child_begin(),
+           BE = (*CI)->child_end(); BI != BE; ++BI) {
+        if (isa<DeclRefExpr>(*BI)) {
+          NamedDecl *ND = cast<NamedDecl>((cast<DeclRefExpr>(*BI))->getDecl());
+          std::string VarName = ND->getName().str();
+#ifdef DEBUGCL
+          std::cerr << "While conditional = " << VarName << std::endl;
+#endif
+          if (VarName.compare("__kernel_local_id") == 0) {
+            TraverseLoop(While);
+            OuterLoop = While;
+            break;
+          }
+        }
+      }
+    }
+  }
+
   return true;
 }
 
