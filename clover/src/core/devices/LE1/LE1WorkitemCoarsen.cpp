@@ -668,9 +668,6 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
 // This function is to turn the original declstmt into the first access.
 // For arrays, we need to create a loop to initialise all elements of the
 // different work items:
-//  for (unsigned i = 0; i < localX; ++i)
-//    for (unsigned j = 0; j < arraySize; ++j)
-//      array[i][j] = initList[j];
 void WorkitemCoarsen::ThreadSerialiser::AccessNonScalar(DeclStmt *declStmt) {
   Decl *decl = declStmt->getSingleDecl();
   NamedDecl *ND = cast<NamedDecl>(decl);
@@ -837,12 +834,13 @@ void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
   //}
 }
 
+
 // We shall create a map, using the outer loop as the key, to contain all it's
 // loop children. We shall also then have a map of all the DeclStmts within the
 // loop, plus a map of vectors which will hold barriers.
 void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
 #ifdef DEBUGCL
-  std::cerr << "TraverseLoop" << std::endl;
+  std::cerr << "TraverseRegion" << std::endl;
 #endif
   Stmt *Body = NULL;
   // create vector to hold loop stmts
@@ -860,6 +858,15 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
     SearchForIndVars(For->getInit());
     SearchForIndVars(For->getCond());
     SearchForIndVars(For->getInc());
+  }
+  // TODO Rename the function to TraverseRegion, and use this function to visit
+  // functions called from within the kernel, we'll pass the body of the
+  // function, which i think is a CompoundStmt
+  else if (isa<CompoundStmt>(s))
+    Body = s;
+  else {
+    std::cerr << "!! ERROR - Stmt is not a region!" << std::endl;
+    return;
   }
 
   // Iterate through the children of s:
