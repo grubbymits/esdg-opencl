@@ -1,4 +1,4 @@
-#define FPTYPE uint
+#define FPTYPE int
 #define FPVECTYPE uint4
 
 #pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable 

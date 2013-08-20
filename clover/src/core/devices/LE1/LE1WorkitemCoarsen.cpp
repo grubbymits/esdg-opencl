@@ -544,6 +544,15 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
 
 }
 
+inline void
+WorkitemCoarsen::ThreadSerialiser::Expand(std::stringstream &NewDecl) {
+  if (LocalX != 0)
+    NewDecl << "[" << LocalX << "]";
+  if (LocalY > 1)
+    NewDecl << "[" << LocalY << "]";
+  if (LocalZ > 1)
+    NewDecl << "[" << LocalZ << "]";
+}
 // Run this after parsing is complete, to access all the referenced variables
 // within the DeclStmt which need to be replicated
 void
@@ -572,27 +581,25 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
   clang::QualType QualVarType = VD->getType();
   const clang::Type *VarType = QualVarType.getTypePtr();
   std::string typeStr;
+  bool isScalar = true;
 
   if (VarType->isArrayType()) {
     ConstantArrayType *arrayType =
       cast<ConstantArrayType>(const_cast<Type*>(VarType));
     uint64_t arraySize = arrayType->getSize().getZExtValue();
     typeStr = arrayType->getElementType().getAsString();
-    NewDecl << typeStr <<  " " << varName << "[" << arraySize << "]";
+    NewDecl << typeStr <<  " " << varName;
+    Expand(NewDecl);
+    NewDecl << "[" << arraySize << "];\n";
+    isScalar = false;
   }
   else {
     typeStr = QualVarType.getAsString();
     NewDecl << typeStr << " " << varName;
+    Expand(NewDecl);
+    NewDecl << ";\n";
   }
 
-  if (LocalX != 0)
-    NewDecl << "[" << LocalX << "]";
-  if (LocalY > 1)
-    NewDecl << "[" << LocalY << "]";
-  if (LocalZ > 1)
-    NewDecl << "[" << LocalZ << "]";
-
-  NewDecl << ";\n";
   TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
 
   // If the statement wasn't initialised, remove the whole statement
@@ -602,14 +609,20 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
     // Otherwise, just remove the type definition and make the initialisation
     // access a scalar.
     TheRewriter.RemoveText(ND->getLocStart(), typeStr.length());
-    AccessScalar(theDecl->getSingleDecl());
+    if(isScalar)
+      AccessScalar(theDecl->getSingleDecl());
+    else AccessNonScalar(theDecl);
   }
 
   std::vector<DeclRefExpr*> theRefs = AllRefs[theDecl->getSingleDecl()];
   // Then visit all the references to turn them into scalar accesses as well.
   for (std::vector<DeclRefExpr*>::iterator RI = theRefs.begin(),
-       RE = theRefs.end(); RI != RE; ++RI)
-    AccessScalar(*RI);
+       RE = theRefs.end(); RI != RE; ++RI) {
+    if (isScalar)
+      AccessScalar(*RI);
+    else
+      AccessNonScalar(*RI);
+  }
 }
 
 void WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
@@ -650,6 +663,42 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
   if(TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true))
     std::cerr << "ERROR - location not writable! Offset = "
       << offset << std::endl;
+}
+
+// This function is to turn the original declstmt into the first access.
+// For arrays, we need to create a loop to initialise all elements of the
+// different work items:
+//  for (unsigned i = 0; i < localX; ++i)
+//    for (unsigned j = 0; j < arraySize; ++j)
+//      array[i][j] = initList[j];
+void WorkitemCoarsen::ThreadSerialiser::AccessNonScalar(DeclStmt *declStmt) {
+  Decl *decl = declStmt->getSingleDecl();
+  NamedDecl *ND = cast<NamedDecl>(decl);
+  std::string nameStr = ND->getName().str();
+
+  unsigned index = 0;
+  InitListExpr *initList = cast<InitListExpr>(*(declStmt->child_begin()));
+  std::stringstream NewArrayInit;
+
+  for (Stmt::child_iterator CI = initList->child_begin(),
+       CE = initList->child_end(); CI != CE; ++CI) {
+
+    if (isa<IntegerLiteral>(*CI)) {
+      IntegerLiteral *lit = cast<IntegerLiteral>(*CI);
+      NewArrayInit << nameStr << "[__kernel_local_id[0]][" << index << "] = "
+        << lit->getValue().getZExtValue() << ";" << std::endl;
+    }
+    ++index;
+  }
+
+  TheRewriter.RemoveText(declStmt->getSourceRange());
+  TheRewriter.InsertText(ND->getLocStart(), NewArrayInit.str());
+}
+
+void WorkitemCoarsen::ThreadSerialiser::AccessNonScalar(DeclRefExpr *ref) {
+  unsigned offset = ref->getDecl()->getName().str().length();
+  SourceLocation Loc = ref->getLocEnd().getLocWithOffset(offset);
+  TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]");
 }
 
 SourceLocation

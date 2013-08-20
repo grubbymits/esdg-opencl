@@ -214,6 +214,7 @@ private:
   void AssignIndVars(void);
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);
+  void Expand(std::stringstream &NewDecl);
   void ScalarExpand(clang::SourceLocation InsertLoc,
                     clang::DeclStmt *theDecl);
   void CreateLocal(clang::SourceLocation InsertLoc,
@@ -221,6 +222,8 @@ private:
 
   void AccessScalar(clang::Decl *decl);
   void AccessScalar(clang::DeclRefExpr *Ref);
+  void AccessNonScalar(clang::DeclStmt *declStmt);
+  void AccessNonScalar(clang::DeclRefExpr *Ref);
 
 private:
   std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
