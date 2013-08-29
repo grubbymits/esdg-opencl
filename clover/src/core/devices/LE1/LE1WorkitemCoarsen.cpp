@@ -194,7 +194,7 @@ void WorkitemCoarsen::ASTVisitorBase<T>::OpenLoop(SourceLocation Loc) {
 //template <typename T>
 bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
   // Only function definitions (with bodies), not declarations.
-  if (f->hasBody()) {
+  if ((f->hasBody()) && (f->hasAttr<clang::OpenCLKernelAttr>())) {
     Stmt *FuncBody = f->getBody();
     SourceLocation FuncBodyStart =
     FuncBody->getLocStart().getLocWithOffset(2);
@@ -273,6 +273,8 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   FunctionDecl* FD = Call->getDirectCallee();
   DeclarationName DeclName = FD->getNameInfo().getName();
   std::string FuncName = DeclName.getAsString();
+
+  CalledFunctions.push_back(FD);
 
   // Modify any calls to get_global_id to use the generated local ids.
   IntegerLiteral *Arg;
@@ -838,7 +840,7 @@ void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
 // We shall create a map, using the outer loop as the key, to contain all it's
 // loop children. We shall also then have a map of all the DeclStmts within the
 // loop, plus a map of vectors which will hold barriers.
-void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
+void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
 #ifdef DEBUGCL
   std::cerr << "TraverseRegion" << std::endl;
 #endif
@@ -862,11 +864,11 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
   // TODO Rename the function to TraverseRegion, and use this function to visit
   // functions called from within the kernel, we'll pass the body of the
   // function, which i think is a CompoundStmt
-  else if (isa<CompoundStmt>(s))
-    Body = s;
   else {
-    std::cerr << "!! ERROR - Stmt is not a region!" << std::endl;
-    return;
+#ifdef DEBUGCL
+    std::cerr << "Traversing function body" << std::endl;
+#endif
+    Body = s;
   }
 
   // Iterate through the children of s:
@@ -879,7 +881,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
     if ((isa<WhileStmt>(*SI)) || (isa<ForStmt>(*SI))) {
       InnerLoops.push_back(*SI);
       // Recursively visit the loops from the parent
-      TraverseLoop(*SI);
+      TraverseRegion(*SI);
     }
     else if (isa<DeclStmt>(*SI)) {
       DeclStmt *stmt = cast<DeclStmt>(*SI);
@@ -888,6 +890,11 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseLoop(Stmt *s) {
     }
     else if (isBarrier(*SI))
       InnerBarriers.push_back(cast<CallExpr>(*SI));
+    else if (isa<CallExpr>(*SI)) {
+      FunctionDecl *FD = (cast<CallExpr>(*SI))->getDirectCallee();
+      CalledFunctions.push_back(FD);
+      TraverseRegion(FD->getBody());
+    }
 
   }
 
@@ -912,7 +919,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
 #endif
 
   if (isFirstLoop) {
-    TraverseLoop(While);
+    TraverseRegion(While);
     OuterLoop = While;
   }
 
@@ -942,7 +949,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
           std::cerr << "While conditional = " << VarName << std::endl;
 #endif
           if (VarName.compare("__kernel_local_id") == 0) {
-            TraverseLoop(While);
+            TraverseRegion(While);
             OuterLoop = While;
             break;
           }

@@ -93,19 +93,19 @@ public:
          b != e; ++b) {
       if (clang::FunctionDecl *FD = llvm::dyn_cast<clang::FunctionDecl>(*b)) {
         if (FD->hasBody()) {
-          // Only visit the specified kernel
-          if (FD->getNameAsString().compare(KernelName) != 0) {
-            // Delete any other kernel in the source
-            if (FD->hasAttr<clang::OpenCLKernelAttr>()) {
+          // Delete any other kernel in the source
+          if ((FD->hasAttr<clang::OpenCLKernelAttr>()) &&
+              (FD->getNameAsString().compare(KernelName) != 0)) {
               clang::SourceLocation Start = FD->getLocStart();
               clang::SourceLocation Finish = FD->getBody()->getLocEnd();
               Visitor.RemoveText(Start, Finish);
-            }
-            else if (FD->isInlineSpecified()) {
+              continue;
+          }
+          else {
+            if (FD->isInlineSpecified()) {
               Visitor.InsertText(FD->getLocStart(), "//");
               Visitor.InsertText(FD->getLocStart().getLocWithOffset(6), "\n");
             }
-            continue;
           }
           // Traverse the declaration using our AST visitor.
           Visitor.TraverseDecl(*b);
@@ -204,7 +204,7 @@ private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
-  void TraverseLoop(clang::Stmt *s);
+  void TraverseRegion(clang::Stmt *s);
   void HandleBarrierInLoop(clang::Stmt *Loop);
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
@@ -234,6 +234,8 @@ private:
   std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RefAssignments;
   std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > PotentialIndVars;
   std::vector<clang::Decl*> IndVars;
+  std::vector<clang::FunctionDecl*> AllFunctions;
+  std::vector<clang::FunctionDecl*> CalledFunctions;
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   clang::WhileStmt *OuterLoop;
