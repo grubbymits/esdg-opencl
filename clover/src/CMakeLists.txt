@@ -50,11 +50,14 @@ set(COAL_SRC_FILES
     core/devices/LE1/LE1device.cpp
     core/devices/LE1/LE1kernel.cpp
     core/devices/LE1/LE1program.cpp
-    #core/devices/LE1/LE1sampler.cpp
     core/devices/LE1/LE1worker.cpp
     core/devices/LE1/LE1Simulator.cpp
     core/devices/LE1/LE1WorkitemCoarsen.cpp
-    #core/devices/LE1/LE1builtins.cpp
+
+    core/devices/LE1/creduce/RewriteUtils.cpp
+    core/devices/LE1/creduce/Transformation.cpp
+    core/devices/LE1/creduce/TransformationManager.cpp
+    core/devices/LE1/creduce/SimpleInliner.cpp
 
     #${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.h.embed.h
     #${CMAKE_CURRENT_BINARY_DIR}/runtime/stdlib.c.bc.embed.h

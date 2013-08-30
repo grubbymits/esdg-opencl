@@ -14,6 +14,7 @@
 
 #include "SimpleInliner.h"
 
+#include <iostream>
 #include <sstream>
 
 #include "clang/AST/RecursiveASTVisitor.h"
@@ -212,6 +213,9 @@ bool SimpleInlinerFunctionStmtVisitor::VisitFunctionDecl(FunctionDecl *FD)
   ConsumerInstance->CollectionVisitor->TraverseDecl(FD);
 
   if (!FD->isVariadic()) {
+#ifdef DEBUGCL
+    std::cerr << "!FD->isVariadic" << std::endl;
+#endif
     ConsumerInstance->FunctionDeclNumStmts[FD->getCanonicalDecl()] = 
       ConsumerInstance->CollectionVisitor->getNumStmts();
   }
@@ -250,15 +254,31 @@ bool SimpleInliner::HandleTopLevelDecl(DeclGroupRef D)
 
 void SimpleInliner::HandleTranslationUnit(ASTContext &Ctx)
 {
+#ifdef DEBUGCL
+  std::cerr << "SimpleInliner::HandleTranslationUnit" << std::endl;
+#endif
   doAnalysis();
-  if (QueryInstanceOnly)
+  if (QueryInstanceOnly) {
+#ifdef DEBUGCL
+    std::cerr << "QueryInstanceOnly" << std::endl;
+#endif
     return;
+  }
 
   if (TransformationCounter > ValidInstanceNum) {
+#ifdef DEBUGCL
+    std::cerr << "TransformationCounter > ValidInstanceNum" << std::endl;
+#endif
     TransError = TransMaxInstanceError;
     return;
   }
 
+#ifdef DEBUGCL
+  if (!CurrentFD)
+    std::cerr << "NULL CurrentFD" << std::endl;
+  if (!TheCallExpr)
+    std::cerr << "NULL TheCallExpr" << std::endl;
+#endif
   TransAssert(CurrentFD && "NULL CurrentFD!");
   TransAssert(TheCallExpr && "NULL TheCallExpr!");
 
@@ -276,6 +296,10 @@ void SimpleInliner::HandleTranslationUnit(ASTContext &Ctx)
   if (Ctx.getDiagnostics().hasErrorOccurred() ||
       Ctx.getDiagnostics().hasFatalErrorOccurred())
     TransError = TransInternalError;
+
+#ifdef DEBUGCL
+  std::cerr << "Leaving HandleTranslationUnit" << std::endl;
+#endif
 }
 
 bool SimpleInliner::isValidArgExpr(const Expr *E)
@@ -326,21 +350,33 @@ bool SimpleInliner::hasValidArgExprs(const CallExpr *CE)
 
 void SimpleInliner::getValidFunctionDecls(void)
 {
+#ifdef DEBUGCL
+  std::cerr << "SimpleInliner::getValidFunctionDecls" << std::endl;
+  std::cerr << "FunctionDeclNumStmts.size = " << FunctionDeclNumStmts.size()
+    << std::endl;
+#endif
   for (FunctionDeclToNumStmtsMap::iterator I = FunctionDeclNumStmts.begin(),
        E = FunctionDeclNumStmts.end(); I != E; ++I) {
     FunctionDecl *FD = (*I).first;
+#ifdef DEBUGCL
+    std::cerr << FD->getName().str() << std::endl;
+#endif
     unsigned int NumStmts = (*I).second;
     unsigned int NumCalls = FunctionDeclNumCalls[FD];
 
-    if (((NumCalls == 1) && (NumStmts <= SingleMaxNumStmts)) ||
-        ((NumCalls > 1) && (NumStmts <= MaxNumStmts))) {
+    //if (((NumCalls == 1) && (NumStmts <= SingleMaxNumStmts)) ||
+      //  ((NumCalls > 1) && (NumStmts <= MaxNumStmts))) {
       ValidFunctionDecls.insert(FD);
-    }
+    //}
   }
 }
 
 void SimpleInliner::doAnalysis(void)
 {
+#ifdef DEBUGCL
+  std::cerr << "SimpleInliner::doAnalysis" << std::endl;
+  std::cerr << "Size of AllCallExprs = " << AllCallExprs.size() << std::endl;
+#endif
   getValidFunctionDecls();
 
   for (SmallVector<CallExpr *, 10>::iterator CI = AllCallExprs.begin(),
@@ -349,14 +385,33 @@ void SimpleInliner::doAnalysis(void)
     FunctionDecl *CalleeDecl = (*CI)->getDirectCallee(); 
     TransAssert(CalleeDecl && "Bad CalleeDecl!");
     FunctionDecl *CanonicalDecl = CalleeDecl->getCanonicalDecl();
-    if (!ValidFunctionDecls.count(CanonicalDecl))
+#ifdef DEBUGCL
+    std::cerr << "CanonicalDecl = " << CanonicalDecl->getName().str()
+      << std::endl;
+#endif
+    if (!ValidFunctionDecls.count(CanonicalDecl)) {
+#ifdef DEBUGCL
+      std::cerr << "!ValidFunctionDecls.count" << std::endl;
+#endif
       continue;
+    }
 
-    if (!hasValidArgExprs(*CI))
+    if (!hasValidArgExprs(*CI)) {
+#ifdef DEBUGCL
+      std::cerr << "!hasValidArgExprs" << std::endl;
+#endif
       continue;
+    }
 
     ValidInstanceNum++;
+#ifdef DEBUGCL
+    std::cerr << "TransformationCounter = " << TransformationCounter
+      << " and ValidInstanceNum = " << ValidInstanceNum << std::endl;
+#endif
     if (TransformationCounter == ValidInstanceNum) {
+#ifdef DEBUGCL
+      std::cerr << "TransformationCounter == ValidInstanceNum" << std::endl;
+#endif
       // It's possible the direct callee is not a definition
       if (!CalleeDecl->isThisDeclarationADefinition()) {
         CalleeDecl = CalleeDecl->getFirstDeclaration();
@@ -373,6 +428,9 @@ void SimpleInliner::doAnalysis(void)
       CurrentFD = CalleeDecl;
       TheCaller = CalleeToCallerMap[(*CI)];
       TransAssert(TheCaller && "NULL TheCaller!");
+#ifdef DEBUGCL
+      std::cerr << "Assigning TheCallExpr" << std::endl;
+#endif
       TheCallExpr = (*CI);
     }
   }

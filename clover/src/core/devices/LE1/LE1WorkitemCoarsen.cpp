@@ -5,6 +5,7 @@
 #include <fstream>
 
 #include "LE1WorkitemCoarsen.h"
+#include "creduce/TransformationManager.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Basic/Diagnostic.h"
@@ -37,7 +38,7 @@ typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
                                       &kernel) {
 #ifdef DEBUGCL
-  std::cerr << "CreateWorkgroup\n";
+  std::cerr << "CreateWorkgroup from " << Filename << std::endl;
 #endif
   OrigFilename = Filename;
   KernelName = kernel;
@@ -48,6 +49,28 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
   llvm::raw_string_ostream ExpandedSource(SourceContainer);
   if(!ExpandMacros()) {
     std::cerr << "!ERROR : Failed to expand macros" << std::endl;
+    return false;
+  }
+
+  TransformationManager *TM = TransformationManager::GetInstance();
+  TM->setSrcFileName(OrigFilename);
+  TM->setOutputFileName(OrigFilename);
+  TM->setTransformationCounter(1);
+
+  if (TM->setTransformation("simple-inliner") != 0) {
+    std::cerr << "!!ERROR: Setting transformation failed!" << std::endl;
+    return false;
+  }
+
+  std::string err;
+  if (!TM->initializeCompilerInstance(err)) {
+    std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
+      << err << std::endl;
+    return false;
+  }
+
+  if (!TM->doTransformation(err)) {
+    std::cerr << "Inline failed!:" << std::endl << err << std::endl;
     return false;
   }
 
@@ -273,8 +296,6 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   FunctionDecl* FD = Call->getDirectCallee();
   DeclarationName DeclName = FD->getNameInfo().getName();
   std::string FuncName = DeclName.getAsString();
-
-  CalledFunctions.push_back(FD);
 
   // Modify any calls to get_global_id to use the generated local ids.
   IntegerLiteral *Arg;

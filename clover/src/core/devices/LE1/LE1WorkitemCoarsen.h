@@ -94,19 +94,20 @@ public:
       if (clang::FunctionDecl *FD = llvm::dyn_cast<clang::FunctionDecl>(*b)) {
         if (FD->hasBody()) {
           // Delete any other kernel in the source
-          if ((FD->hasAttr<clang::OpenCLKernelAttr>()) &&
-              (FD->getNameAsString().compare(KernelName) != 0)) {
+          //if ((FD->hasAttr<clang::OpenCLKernelAttr>()) &&
+          if (FD->getNameAsString().compare(KernelName) != 0) {
               clang::SourceLocation Start = FD->getLocStart();
               clang::SourceLocation Finish = FD->getBody()->getLocEnd();
               Visitor.RemoveText(Start, Finish);
               continue;
           }
+          /*
           else {
             if (FD->isInlineSpecified()) {
               Visitor.InsertText(FD->getLocStart(), "//");
               Visitor.InsertText(FD->getLocStart().getLocWithOffset(6), "\n");
             }
-          }
+          }*/
           // Traverse the declaration using our AST visitor.
           Visitor.TraverseDecl(*b);
         }

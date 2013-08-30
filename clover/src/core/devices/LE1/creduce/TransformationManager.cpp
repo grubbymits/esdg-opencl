@@ -12,8 +12,10 @@
 #  include <config.h>
 #endif
 
+#include "../LE1WorkitemCoarsen.h"
 #include "TransformationManager.h"
 
+#include <iostream>
 #include <sstream>
 
 #include "clang/Basic/Diagnostic.h"
@@ -35,7 +37,7 @@
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
-#include "llvm/Config/config.h"
+//#include "llvm/Config/config.h"
 
 #include "Transformation.h"
 
@@ -87,9 +89,10 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   ClangInstance = new CompilerInstance();
   assert(ClangInstance);
   
-  ClangInstance->createDiagnostics();
+  ClangInstance->createDiagnostics(0, 0);
 
   CompilerInvocation &Invocation = ClangInstance->getInvocation();
+  /*
   InputKind IK = FrontendOptions::getInputKindForExtension(
         StringRef(SrcFileName).rsplit('.').second);
   if ((IK == IK_C) || (IK == IK_PreprocessedC)) {
@@ -104,13 +107,31 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   else {
     ErrorMsg = "Unsupported file type!";
     return false;
-  }
+  }*/
+
+ 
+  ClangInstance->getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
+                                               clang::frontend::Angled,
+                                               false, false, false);
+  ClangInstance->getHeaderSearchOpts().AddPath(
+    "/opt/esdg-opencl/lib/clang/3.2/include", clang::frontend::Angled,
+    false, false, false);
+  ClangInstance->getHeaderSearchOpts().ResourceDir =
+    "/opt/esdg-opencl/lib/clang/3.2/";
+  ClangInstance->getHeaderSearchOpts().UseBuiltinIncludes = true;
+  ClangInstance->getHeaderSearchOpts().UseStandardSystemIncludes = false;
+
+  ClangInstance->getPreprocessorOpts().Includes.push_back("clc/clc.h");
+  ClangInstance->getPreprocessorOpts().addMacroDef(
+    "cl_clang_storage_class_specifiers");
+
+  Invocation.setLangDefaults(ClangInstance->getLangOpts(), IK_OpenCL);
 
   TargetOptions &TargetOpts = ClangInstance->getTargetOpts();
-  TargetOpts.Triple = LLVM_DEFAULT_TARGET_TRIPLE;
+  TargetOpts.Triple = "le1"; //LLVM_DEFAULT_TARGET_TRIPLE;
   TargetInfo *Target = 
     TargetInfo::CreateTargetInfo(ClangInstance->getDiagnostics(),
-                                 &TargetOpts);
+                                 TargetOpts);
   ClangInstance->setTarget(Target);
   ClangInstance->createFileManager();
   ClangInstance->createSourceManager(ClangInstance->getFileManager());
@@ -127,7 +148,8 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(),
                                          PP.getLangOpts());
 
-  if (!ClangInstance->InitializeSourceManager(FrontendInputFile(SrcFileName, IK))) {
+  if (!ClangInstance->InitializeSourceManager(FrontendInputFile(SrcFileName,
+                                                                IK_OpenCL))) {
     ErrorMsg = "Cannot open source file!";
     return false;
   }
@@ -176,37 +198,64 @@ void TransformationManager::closeOutStream(llvm::raw_ostream *OutStream)
 
 bool TransformationManager::doTransformation(std::string &ErrorMsg)
 {
+#ifdef DEBUGCL
+  std::cerr << "Entering Transformation::doTransformation" << std::endl;
+#endif
   ErrorMsg = "";
 
+#ifdef DEBUGCL
+  std::cerr << "createSema" << std::endl;
+#endif
   ClangInstance->createSema(TU_Complete, 0);
-  ClangInstance->getDiagnostics().setSuppressAllDiagnostics(true);
+  //ClangInstance->getDiagnostics().setSuppressAllDiagnostics(true);
 
   CurrentTransformationImpl->setQueryInstanceFlag(QueryInstanceOnly);
   CurrentTransformationImpl->setTransformationCounter(TransformationCounter);
 
-  ParseAST(ClangInstance->getSema());
+#ifdef DEBUGCL
+  std::cerr << "ParseAST" << std::endl;
+#endif
+  ParseAST(ClangInstance->getSema(), true);
 
+#ifdef DEBUGCL
+  std::cerr << "getDiagnosticsClient" << std::endl;
+#endif
   ClangInstance->getDiagnosticClient().EndSourceFile();
 
   if (QueryInstanceOnly) {
+#ifdef DEBUGCL
+    std::cerr << "QueryInstanceOnly" << std::endl;
+#endif
     return true;
   }
 
   llvm::raw_ostream *OutStream = getOutStream();
   bool RV;
   if (CurrentTransformationImpl->transSuccess()) {
+#ifdef DEBUGCL
+    std::cerr << "transSuccess" << std::endl;
+#endif
     CurrentTransformationImpl->outputTransformedSource(*OutStream);
     RV = true;
   }
   else if (CurrentTransformationImpl->transInternalError()) {
+#ifdef DEBUGCL
+    std::cerr << "transInternalError" << std::endl;
+#endif
     CurrentTransformationImpl->outputOriginalSource(*OutStream);
     RV = true;
   }
   else {
+#ifdef DEBUGCL
+    std::cerr << "TransError" << std::endl;
+#endif
     CurrentTransformationImpl->getTransErrorMsg(ErrorMsg);
     RV = false;
   }
   closeOutStream(OutStream);
+#ifdef DEBUGCL
+  std::cerr << "Leaving doTransformation" << std::endl;
+#endif
   return RV;
 }
 

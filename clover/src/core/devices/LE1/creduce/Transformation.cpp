@@ -458,8 +458,12 @@ const FunctionDecl *Transformation::lookupFunctionDeclInGlobal(
         DeclarationName &DName, const DeclContext *Ctx)
 {
   DeclContext::lookup_const_result Result = Ctx->lookup(DName);
-  for (DeclContext::lookup_const_iterator I = Result.begin(), E = Result.end();
-       I != E; ++I) {
+  //for (DeclContext::lookup_const_iterator I = Result.begin(), E = Result.end();
+    //   I != E; ++I) {
+  for (; Result.first != Result.second; ++Result.first) {
+
+    DeclContext::lookup_const_iterator I = Result.first;
+
     if (const FunctionDecl *FD = dyn_cast<FunctionDecl>(*I)) {
       return FD;
     }
@@ -523,8 +527,12 @@ const FunctionDecl *Transformation::lookupFunctionDeclFromCtx(
         DeclarationName &DName, const DeclContext *Ctx)
 {
   DeclContext::lookup_const_result Result = Ctx->lookup(DName);
-  for (DeclContext::lookup_const_iterator I = Result.begin(), E = Result.end();
-       I != E; ++I) {
+  //for (DeclContext::lookup_const_iterator I = Result.begin(), E = Result.end();
+    //   I != E; ++I) {
+  for (; Result.first != Result.second; ++Result.first) {
+
+    DeclContext::lookup_const_iterator I = Result.first;
+
     if (const FunctionDecl *FD = dyn_cast<FunctionDecl>(*I)) {
       return FD;
     }
