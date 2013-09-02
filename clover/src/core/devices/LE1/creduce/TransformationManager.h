@@ -58,6 +58,14 @@ public:
     SrcFileName = FileName;
   }
 
+  void setSourceString(std::string &source) {
+    Source.assign(source);
+  }
+
+  std::string &getTransformedSource() {
+    return TransformedSource;
+  }
+
   void setOutputFileName(const std::string &FileName) {
     OutputFileName = FileName;
   }
@@ -69,6 +77,8 @@ public:
   bool getQueryInstanceFlag(void) {
     return QueryInstanceOnly;
   }
+
+  void reset(void);
 
   bool initializeCompilerInstance(std::string &ErrorMsg);
 
@@ -101,6 +111,10 @@ private:
   std::string SrcFileName;
 
   std::string OutputFileName;
+
+  std::string Source;
+
+  std::string TransformedSource;
 
   clang::CompilerInstance *ClangInstance;
 

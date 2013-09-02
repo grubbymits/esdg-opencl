@@ -362,6 +362,8 @@ cl_int Program::loadBinaries(const unsigned char **data, const size_t *lengths,
     return CL_SUCCESS;
 }
 
+#define TEMP_NAME "esdg_src.cl"
+
 cl_int Program::build(const char *options,
                       void (CL_CALLBACK *pfn_notify)(cl_program program,
                                                      void *user_data),
@@ -415,8 +417,22 @@ cl_int Program::build(const char *options,
                 return CL_BUILD_PROGRAM_FAILURE;
             }
 
+            std::ofstream temp_file;
+            temp_file.open(TEMP_NAME);
+            temp_file << p_source;
+            temp_file.close();
+
             // TODO Return here, the code only needs to be checked here.
-            dep.program->SetSource(p_source);
+            if (!dep.compiler->ExpandMacros(TEMP_NAME))
+              return CL_BUILD_PROGRAM_FAILURE;
+            if (!dep.compiler->InlineSource(TEMP_NAME))
+              return CL_BUILD_PROGRAM_FAILURE;
+
+            dep.program->SetSource(dep.compiler->getInlinedSource());
+#ifdef DEBUGCL
+            std::cerr << "------------------ INLINED SOURCE -------------------"
+              << std::endl << dep.compiler->getInlinedSource() << std::endl;
+#endif
             // TODO Get a list of kernel function names...?
 
             // Get module and its bitcode

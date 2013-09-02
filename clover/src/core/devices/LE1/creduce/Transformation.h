@@ -80,6 +80,8 @@ public:
 
   void outputTransformedSource(llvm::raw_ostream &OutStream);
 
+  void outputTransformedSource(std::string &Source);
+
   void setTransformationCounter(int Counter) {
     TransformationCounter = Counter;
   }

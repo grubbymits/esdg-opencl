@@ -10,6 +10,7 @@
 #include <string>
 #include <sstream>
 #include <iostream>
+#include <pthread.h>
 
 #define CLANG_RESOURCE_DIR  "/opt/esdg-opencl/lib/clang/3.2/"
 #define CLANG_INCLUDE_DIR   "/opt/esdg-opencl/lib/clang/3.2/include"
@@ -39,8 +40,7 @@ typedef std::map<std::string, NamedDeclSet> NamedDeclSetMap;
 class WorkitemCoarsen {
 
 public:
-  WorkitemCoarsen(unsigned x, unsigned y, unsigned z) :
-    LocalX(x), LocalY(y), LocalZ(z) { }
+  WorkitemCoarsen(unsigned x, unsigned y, unsigned z);
   bool CreateWorkgroup(std::string &Filename, std::string &kernel);
   bool ExpandMacros();
   bool HandleBarriers();
@@ -56,6 +56,7 @@ private:
   std::string InitKernelSource;
   std::string InitKernelFilename;
   std::string FinalKernel;
+  pthread_mutex_t p_inline_mutex;
 
 template <typename T> class OpenCLCompiler {
 

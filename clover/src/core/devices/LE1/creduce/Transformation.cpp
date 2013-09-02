@@ -103,6 +103,15 @@ void Transformation::outputTransformedSource(llvm::raw_ostream &OutStream)
   OutStream.flush();
 }
 
+void Transformation::outputTransformedSource(std::string &Source) {
+  FileID MainFileID = SrcManager->getMainFileID();
+  const RewriteBuffer *RWBuf = TheRewriter.getRewriteBufferFor(MainFileID);
+
+  // RWBuf is non-empty upon any rewrites
+  TransAssert(RWBuf && "Empty RewriteBuffer!");
+  Source.assign(std::string(RWBuf->begin(), RWBuf->end()));
+}
+
 void Transformation::outputOriginalSource(llvm::raw_ostream &OutStream)
 {
   FileID MainFileID = SrcManager->getMainFileID();

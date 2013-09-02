@@ -47,6 +47,7 @@
 #include <clang/Basic/Diagnostic.h>
 #include <clang/CodeGen/BackendUtil.h>
 #include <clang/CodeGen/CodeGenAction.h>
+#include <clang/Rewrite/Frontend/FrontendActions.h>
 #include <llvm/DataLayout.h>
 #include <llvm/Linker.h>
 #include <llvm/LLVMContext.h>
@@ -67,6 +68,7 @@
 #include <llvm/Target/TargetMachine.h>
 
 using namespace Coal;
+using namespace clang;
 
 Compiler::Compiler(DeviceInterface *device)
 : p_device(device), p_module(0), p_optimize(true), p_log_stream(p_log),
@@ -85,6 +87,75 @@ Compiler::~Compiler()
 #ifdef DEBUGCL
   std::cerr << "Destructing Compiler::Compiler\n";
 #endif
+}
+
+
+// Use a RewriteAction to expand all macros within the original source file
+bool Compiler::ExpandMacros(const char *filename) {
+  std::string log;
+  llvm::raw_string_ostream macro_log(log);
+  CompilerInstance CI;
+  RewriteMacrosAction act;
+
+  CI.getTargetOpts().Triple = Triple;
+  CI.getFrontendOpts().Inputs.push_back(FrontendInputFile(filename,
+                                                          IK_OpenCL));
+  // Overwrite original
+  CI.getFrontendOpts().OutputFile = filename;
+
+  CI.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
+                                   frontend::Angled,
+                                   false, false, false);
+  CI.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR, frontend::Angled,
+                                   false, false, false);
+  CI.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
+  CI.getPreprocessorOpts().Includes.push_back("clc/clc.h");
+  CI.getPreprocessorOpts().addMacroDef(
+    "cl_clang_storage_class_specifiers");
+  CI.getInvocation().setLangDefaults(CI.getLangOpts(), IK_OpenCL);
+
+  CI.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+      macro_log, &CI.getDiagnosticOpts()));
+
+  if (!CI.ExecuteAction(act)) {
+    std::cerr << "RewriteMacrosAction failed:" << std::endl
+      << log;
+    return false;
+  }
+  return true;
+}
+
+bool Compiler::InlineSource(const char *filename) {
+  TransformationManager *TM = TransformationManager::GetInstance();
+  TM->reset();
+
+  TM->setSrcFileName(filename);
+  TM->setOutputFileName(filename);
+  TM->setTransformationCounter(1);
+
+  if (TM->setTransformation("simple-inliner") != 0) {
+    std::cerr << "!!ERROR: Setting transformation failed!" << std::endl;
+    return false;
+  }
+
+  std::string err;
+  if (!TM->initializeCompilerInstance(err)) {
+    std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
+      << err << std::endl;
+    return false;
+  }
+
+  if (!TM->doTransformation(err)) {
+    std::cerr << "Inline failed!:" << std::endl << err << std::endl;
+    return false;
+  }
+
+  std::ifstream inlined_file(filename);
+  std::string str((std::istreambuf_iterator<char>(inlined_file)),
+                  std::istreambuf_iterator<char>());
+  InlinedSource.assign(str);
+
+  return true;
 }
 
 bool Compiler::CompileToBitcode(std::string &Source,

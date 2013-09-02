@@ -5,7 +5,6 @@
 #include <fstream>
 
 #include "LE1WorkitemCoarsen.h"
-#include "creduce/TransformationManager.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Basic/Diagnostic.h"
@@ -35,44 +34,28 @@ typedef std::vector<DeclRefExpr*> DeclRefSet;
 typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 
+WorkitemCoarsen::WorkitemCoarsen(unsigned x, unsigned y, unsigned z) :
+  LocalX(x), LocalY(y), LocalZ(z) {
+  pthread_mutex_init(&p_inline_mutex, 0);
+}
+
 bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
                                       &kernel) {
 #ifdef DEBUGCL
   std::cerr << "CreateWorkgroup from " << Filename << std::endl;
 #endif
-  OrigFilename = Filename;
+  OrigFilename.assign(Filename);
   KernelName = kernel;
 
   // Firstly, we need to expand the macros within the source code because
   // it is not possible to rewrite their locations.
+  /*
   std::string SourceContainer;
   llvm::raw_string_ostream ExpandedSource(SourceContainer);
   if(!ExpandMacros()) {
     std::cerr << "!ERROR : Failed to expand macros" << std::endl;
     return false;
-  }
-
-  TransformationManager *TM = TransformationManager::GetInstance();
-  TM->setSrcFileName(OrigFilename);
-  TM->setOutputFileName(OrigFilename);
-  TM->setTransformationCounter(1);
-
-  if (TM->setTransformation("simple-inliner") != 0) {
-    std::cerr << "!!ERROR: Setting transformation failed!" << std::endl;
-    return false;
-  }
-
-  std::string err;
-  if (!TM->initializeCompilerInstance(err)) {
-    std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
-      << err << std::endl;
-    return false;
-  }
-
-  if (!TM->doTransformation(err)) {
-    std::cerr << "Inline failed!:" << std::endl << err << std::endl;
-    return false;
-  }
+  }*/
 
   // Initialise the kernel with the while loop(s) and check for barriers
   OpenCLCompiler<KernelInitialiser> InitCompiler(LocalX, LocalY, LocalZ,

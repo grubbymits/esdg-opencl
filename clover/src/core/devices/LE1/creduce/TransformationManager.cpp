@@ -79,6 +79,22 @@ bool TransformationManager::isCLangOpt(void)
           .C99);
 }
 
+void TransformationManager::reset(void) {
+#ifdef DEBUGCL
+  std::cerr << "TransformationManager::reset" << std::endl;
+#endif
+  if (ClangInstance) {
+#ifdef DEBUGCL
+    std::cerr << "Deleting ClangInstance, addr: " << ClangInstance << std::endl;
+#endif
+    delete ClangInstance;
+    ClangInstance = NULL;
+  }
+  SrcFileName.erase();
+  OutputFileName.erase();
+  Source.erase();
+}
+
 bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
 {
   if (ClangInstance) {
@@ -87,29 +103,15 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   }
 
   ClangInstance = new CompilerInstance();
+#ifdef DEBUGCL
+  std::cerr << "Created ClangInstance at addr: " << ClangInstance << std::endl;
+#endif
   assert(ClangInstance);
   
   ClangInstance->createDiagnostics(0, 0);
 
   CompilerInvocation &Invocation = ClangInstance->getInvocation();
-  /*
-  InputKind IK = FrontendOptions::getInputKindForExtension(
-        StringRef(SrcFileName).rsplit('.').second);
-  if ((IK == IK_C) || (IK == IK_PreprocessedC)) {
-    Invocation.setLangDefaults(ClangInstance->getLangOpts(), IK_C);
-  }
-  else if ((IK == IK_CXX) || (IK == IK_PreprocessedCXX)) {
-    // ISSUE: it might cause some problems when building AST
-    // for a function which has a non-declared callee, e.g., 
-    // It results an empty AST for the caller. 
-    Invocation.setLangDefaults(ClangInstance->getLangOpts(), IK_CXX);
-  }
-  else {
-    ErrorMsg = "Unsupported file type!";
-    return false;
-  }*/
 
- 
   ClangInstance->getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
                                                clang::frontend::Angled,
                                                false, false, false);
@@ -129,7 +131,7 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
 
   TargetOptions &TargetOpts = ClangInstance->getTargetOpts();
   TargetOpts.Triple = "le1"; //LLVM_DEFAULT_TARGET_TRIPLE;
-  TargetInfo *Target = 
+  TargetInfo *Target =
     TargetInfo::CreateTargetInfo(ClangInstance->getDiagnostics(),
                                  TargetOpts);
   ClangInstance->setTarget(Target);
@@ -148,9 +150,22 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(),
                                          PP.getLangOpts());
 
-  if (!ClangInstance->InitializeSourceManager(FrontendInputFile(SrcFileName,
-                                                                IK_OpenCL))) {
-    ErrorMsg = "Cannot open source file!";
+  if (!SrcFileName.empty()) {
+    if (!ClangInstance->InitializeSourceManager(FrontendInputFile(SrcFileName,
+                                                                  IK_OpenCL))) {
+      ErrorMsg = "Cannot open source file!";
+      return false;
+    }
+  }
+  else if (!Source.empty()){
+    ClangInstance->getFrontendOpts().Inputs.push_back(
+      clang::FrontendInputFile("temp.cl", IK_OpenCL));
+    ClangInstance->getPreprocessorOpts()
+      .addRemappedFile("temp.cl", llvm::MemoryBuffer::getMemBuffer(Source));
+
+  }
+  else {
+    ErrorMsg = "Source not defined!";
     return false;
   }
 
@@ -159,6 +174,10 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
 
 void TransformationManager::Finalize(void)
 {
+#ifdef DEBUGCL
+  std::cerr << "TransformationManager::Finalize" << std::endl;
+#endif
+
   assert(TransformationManager::Instance);
   
   std::map<std::string, Transformation *>::iterator I, E;
@@ -172,7 +191,8 @@ void TransformationManager::Finalize(void)
   if (Instance->TransformationsMapPtr)
     delete Instance->TransformationsMapPtr;
 
-  delete Instance->ClangInstance;
+  if (Instance->ClangInstance)
+    delete Instance->ClangInstance;
 
   delete Instance;
   Instance = NULL;
@@ -199,7 +219,9 @@ void TransformationManager::closeOutStream(llvm::raw_ostream *OutStream)
 bool TransformationManager::doTransformation(std::string &ErrorMsg)
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering Transformation::doTransformation" << std::endl;
+  std::cerr << "Entering Transformation::doTransformation for "
+    << SrcFileName << std::endl;
+  std::cerr << "ClangInstance addr: " << ClangInstance << std::endl;
 #endif
   ErrorMsg = "";
 
@@ -235,7 +257,11 @@ bool TransformationManager::doTransformation(std::string &ErrorMsg)
 #ifdef DEBUGCL
     std::cerr << "transSuccess" << std::endl;
 #endif
-    CurrentTransformationImpl->outputTransformedSource(*OutStream);
+    if (!OutputFileName.empty())
+      CurrentTransformationImpl->outputTransformedSource(*OutStream);
+    else
+      CurrentTransformationImpl->outputTransformedSource(TransformedSource);
+
     RV = true;
   }
   else if (CurrentTransformationImpl->transInternalError()) {

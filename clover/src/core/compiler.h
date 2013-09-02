@@ -38,6 +38,8 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <llvm/Support/raw_ostream.h>
 
+#include "devices/LE1/creduce/TransformationManager.h"
+
 #define CLANG_RESOURCE_DIR "/opt/esdg-opencl/lib/clang/3.2/"
 #define LIBCLC_INCLUDE_DIR "/opt/esdg-opencl/include"
 
@@ -80,6 +82,13 @@ class Compiler
                         std::string &cpu);
 
         llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
+
+        std::string &getInlinedSource() { return InlinedSource; }
+
+        bool ExpandMacros(const char *filename);
+
+        bool InlineSource(const char *filename);
+
         bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind,
                               const std::string &Opts);
         bool CompileToAssembly(std::string &Filename, llvm::Module *Code);
@@ -145,6 +154,7 @@ class Compiler
         std::string CPU;
         llvm::raw_string_ostream p_log_stream;
         clang::TextDiagnosticPrinter *p_log_printer;
+        std::string InlinedSource;
         //std::string llvm_log;
         //llvm::raw_string_ostream *s_log;
 };
