@@ -164,6 +164,13 @@ bool WorkitemCoarsen::HandleBarriers() {
 #ifdef DEBUGCL
   std::cerr << "Finalised kernel:\n";
 #endif
+  
+  std::ofstream final_kernel;
+  std::string FinalKernelFilename = "final.";
+  FinalKernelFilename.append(OrigFilename);
+  final_kernel.open(FinalKernelFilename.c_str());
+  final_kernel << FinalKernel;
+  final_kernel.close();
 
   return true;
 }
