@@ -384,6 +384,14 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
 //    return true;
 // else return false;
 
+WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
+                                                    unsigned x,
+                                                    unsigned y,
+                                                    unsigned z)
+  : ASTVisitorBase(R, x, y, z) {
+    isFirstLoop = true;
+}
+
 void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
 #ifdef DEBUGCL
   std::cerr << "FixAllScalarAccesses" << std::endl;
@@ -439,7 +447,8 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
 #endif
 
   // Again, quit early if there's gonna be nothing to find.
-  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()))
+  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()) &&
+      ScopedRegions[Loop].empty())
     return;
 
   // Get the DeclStmts of this loop, append it to the vector that has been
@@ -455,6 +464,27 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
 
     for (std::vector<Stmt*>::iterator LoopI = InnerLoops.begin(),
          LoopE = InnerLoops.end(); LoopI != LoopE; ++LoopI) {
+      // Recursively visit inner loops to build up the vector of referable
+      // DeclStmts.
+      FindRefsToExpand(Stmts, *LoopI);
+    }
+#ifdef DEBUGCL
+    std::cerr << "Erasing elements" << std::endl;
+#endif
+    // Erase this loop's DeclStmts from the larger set since we search them
+    // differently.
+    Stmts.erase(OrigEnd, Stmts.end());
+  }
+  // Now check regions
+  else if (!ScopedRegions[Loop].empty()) {
+    std::vector<CompoundStmt*> InnerRegions = ScopedRegions[Loop];
+    //Stmts.insert(Stmts.end(), InnerDeclStmts.begin(), InnerDeclStmts.end());
+
+    std::list<DeclStmt*>::iterator OrigEnd = Stmts.end();
+    Stmts.splice(Stmts.end(), InnerDeclStmts);
+
+    for (std::vector<CompoundStmt*>::iterator LoopI = InnerRegions.begin(),
+         LoopE = InnerRegions.end(); LoopI != LoopE; ++LoopI) {
       // Recursively visit inner loops to build up the vector of referable
       // DeclStmts.
       FindRefsToExpand(Stmts, *LoopI);
@@ -520,9 +550,13 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
     LoopStart = (cast<WhileStmt>(Loop))->getBody()->getLocStart();
     LoopEnd = (cast<WhileStmt>(Loop))->getBody()->getLocEnd();
   }
-  else {
+  else if (isa<ForStmt>(Loop)) {
     LoopStart = (cast<ForStmt>(Loop))->getBody()->getLocStart();
     LoopEnd = (cast<ForStmt>(Loop))->getBody()->getLocEnd();
+  }
+  else {
+    LoopStart = (cast<CompoundStmt>(Loop))->getLBracLoc();
+    LoopEnd = (cast<CompoundStmt>(Loop))->getRBracLoc();
   }
 
   for (std::list<DeclStmt*>::iterator DSI = Stmts.begin(), DSE = Stmts.end();
@@ -735,7 +769,8 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
   std::cerr << "SearchNestedLoops" << std::endl;
 #endif
 
-  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty())) {
+  if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()) &&
+      ScopedRegions[Loop].empty()) {
 #ifdef DEBUGCL
     std::cerr << "No nested loops and there's no barriers in this one"
       << std::endl;
@@ -749,6 +784,12 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
        = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
        ++LoopI) {
     if (SearchNestedLoops(*LoopI, false))
+      ++NestedBarriers;
+  }
+  std::vector<CompoundStmt*> Compounds = ScopedRegions[Loop];
+  for (std::vector<CompoundStmt*>::iterator RegionI = Compounds.begin(),
+       RegionE = Compounds.end(); RegionI != RegionE; ++RegionI) {
+    if (SearchNestedLoops(*RegionI, false))
       ++NestedBarriers;
   }
   if ((!Barriers[Loop].empty()) || (NestedBarriers != 0)) {
@@ -847,6 +888,9 @@ void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
   //}
 }
 
+static inline bool isLoop(Stmt *s) {
+  return (isa<ForStmt>(s) || isa<WhileStmt>(s));
+}
 
 // We shall create a map, using the outer loop as the key, to contain all it's
 // loop children. We shall also then have a map of all the DeclStmts within the
@@ -862,51 +906,66 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
   std::list<DeclStmt*> InnerDeclStmts;
   // create a vector to hold barriers
   std::vector<CallExpr*> InnerBarriers;
+  // create a vector to hold scoped regions
+  std::vector<CompoundStmt*> Compounds;
 
-  if (isa<WhileStmt>(s))
-    Body = (cast<WhileStmt>(s))->getBody();
-  else if (isa<ForStmt>(s)) {
-    ForStmt *For = cast<ForStmt>(s);
-    Body = For->getBody();
-    SearchForIndVars(For->getInit());
-    SearchForIndVars(For->getCond());
-    SearchForIndVars(For->getInc());
+  if (isLoop(s)) {
+    if (isa<WhileStmt>(s))
+      Body = (cast<WhileStmt>(s))->getBody();
+    else if (isa<ForStmt>(s)) {
+      ForStmt *For = cast<ForStmt>(s);
+      Body = For->getBody();
+      SearchForIndVars(For->getInit());
+      SearchForIndVars(For->getCond());
+      SearchForIndVars(For->getInc());
+    }
+    // Iterate through the children of s:
+    // - Add DeclStmts to vector
+    // - Add Barriers to vector,
+    // - Add loops to vector, and traverse the loop
+    for (Stmt::child_iterator SI = Body->child_begin(),
+         SE = Body->child_end(); SI != SE; ++SI) {
+
+      if (isLoop(*SI)) {
+        InnerLoops.push_back(*SI);
+        // Recursively visit the loops from the parent
+        TraverseRegion(*SI);
+      }
+      else if (isa<DeclStmt>(*SI)) {
+        DeclStmt *stmt = cast<DeclStmt>(*SI);
+        InnerDeclStmts.push_back(stmt);
+        DeclParents.insert(std::make_pair(stmt->getSingleDecl(), s));
+      }
+      else if (isBarrier(*SI))
+        InnerBarriers.push_back(cast<CallExpr>(*SI));
+      else if (isa<CompoundStmt>(*SI)) {
+        Compounds.push_back(cast<CompoundStmt>(*SI));
+        TraverseRegion(*SI);
+      }
+    }
   }
-  // TODO Rename the function to TraverseRegion, and use this function to visit
-  // functions called from within the kernel, we'll pass the body of the
-  // function, which i think is a CompoundStmt
-  else {
-#ifdef DEBUGCL
-    std::cerr << "Traversing function body" << std::endl;
-#endif
-    Body = s;
-  }
+  else if (isa<CompoundStmt>(s)) {
+    CompoundStmt *CS = cast<CompoundStmt>(s);
+    for (CompoundStmt::body_iterator CI = CS->body_begin(), CE = CS->body_end();
+         CI != CE; ++CI) {
 
-  // Iterate through the children of s:
-  // - Add DeclStmts to vector
-  // - Add Barriers to vector,
-  // - Add loops to vector, and traverse the loop
-  for (Stmt::child_iterator SI = Body->child_begin(),
-       SE = Body->child_end(); SI != SE; ++SI) {
-
-    if ((isa<WhileStmt>(*SI)) || (isa<ForStmt>(*SI))) {
-      InnerLoops.push_back(*SI);
-      // Recursively visit the loops from the parent
-      TraverseRegion(*SI);
+      if (isLoop(*CI)) {
+        InnerLoops.push_back(*CI);
+        // Recursively visit the loops from the parent
+        TraverseRegion(*CI);
+      }
+      else if (isa<DeclStmt>(*CI)) {
+        DeclStmt *stmt = cast<DeclStmt>(*CI);
+        InnerDeclStmts.push_back(stmt);
+        DeclParents.insert(std::make_pair(stmt->getSingleDecl(), s));
+      }
+      else if (isBarrier(*CI))
+        InnerBarriers.push_back(cast<CallExpr>(*CI));
+      else if (isa<CompoundStmt>(*CI)) {
+        Compounds.push_back(cast<CompoundStmt>(*CI));
+        TraverseRegion(*CI);
+      }
     }
-    else if (isa<DeclStmt>(*SI)) {
-      DeclStmt *stmt = cast<DeclStmt>(*SI);
-      InnerDeclStmts.push_back(stmt);
-      DeclParents.insert(std::make_pair(stmt->getSingleDecl(), s));
-    }
-    else if (isBarrier(*SI))
-      InnerBarriers.push_back(cast<CallExpr>(*SI));
-    else if (isa<CallExpr>(*SI)) {
-      FunctionDecl *FD = (cast<CallExpr>(*SI))->getDirectCallee();
-      CalledFunctions.push_back(FD);
-      TraverseRegion(FD->getBody());
-    }
-
   }
 
   // add vectors to the maps, using 's' as the key
@@ -916,18 +975,19 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
     ScopedDeclStmts.insert(std::make_pair(s, InnerDeclStmts));
   if (!InnerBarriers.empty())
     Barriers.insert(std::make_pair(s, InnerBarriers));
+  if (!Compounds.empty())
+    ScopedRegions.insert(std::make_pair(s, Compounds));
 }
 
 // Use this only as an entry into the kernel
 bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
-  static bool isFirstLoop = true;
 #ifdef DEBUGCL
-  std::cerr << "VisitWhileStmt" << std::endl;
+  std::cerr << "VisitWhileStmt";
+  if (isFirstLoop)
+    std::cerr << " - is main loop";
+  std::cerr << std::endl;
 #endif
   WhileStmt *While = cast<WhileStmt>(s);
-#ifdef DEBUGCL
-  std::cerr << "Got while" << std::endl;
-#endif
 
   if (isFirstLoop) {
     TraverseRegion(While);

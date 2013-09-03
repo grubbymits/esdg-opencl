@@ -74,8 +74,7 @@ reduce(__global const FPTYPE * in,
 // This kernel scans the contents of local memory using a work
 // inefficient, but highly parallel Kogge-Stone style scan.
 // Set exclusive to 1 for an exclusive scan or 0 for an inclusive scan
-inline FPTYPE scanLocalMem(FPTYPE val, __local FPTYPE* lmem, int exclusive)
-{
+inline FPTYPE scanLocalMem(FPTYPE val, __local FPTYPE* lmem, int exclusive){
     // Set first half of local memory to zero to make room for scanning
     int idx = get_local_id(0);
     lmem[idx] = 0;

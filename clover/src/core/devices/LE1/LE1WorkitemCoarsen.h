@@ -183,8 +183,7 @@ public:
 
 class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {
 public:
-  ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z)
-    : ASTVisitorBase(R, x, y, z) { }
+  ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
   //bool VisitForStmt(clang::Stmt *s);
   bool VisitWhileStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
@@ -231,6 +230,8 @@ private:
   std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
+  std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
+
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
   std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RefAssignments;
@@ -240,6 +241,7 @@ private:
   std::vector<clang::FunctionDecl*> CalledFunctions;
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
+  bool isFirstLoop;
   clang::WhileStmt *OuterLoop;
   //DeclRefSetMap AllRefs;
   std::vector<std::string> ParamVars;
