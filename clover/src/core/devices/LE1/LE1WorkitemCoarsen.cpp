@@ -39,6 +39,18 @@ WorkitemCoarsen::WorkitemCoarsen(unsigned x, unsigned y, unsigned z) :
   pthread_mutex_init(&p_inline_mutex, 0);
 }
 
+void WorkitemCoarsen::DeleteTempFiles() {
+  std::stringstream DeleteCommand;
+
+  DeleteCommand << "rm ";
+
+  for (std::vector<std::string>::iterator SI = TempFiles.begin(),
+       SE = TempFiles.end(); SI != SE; ++SI)
+    DeleteCommand << (*SI) << " ";
+
+  system(DeleteCommand.str().c_str());
+}
+
 bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
                                       &kernel) {
 #ifdef DEBUGCL
@@ -46,6 +58,8 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
 #endif
   OrigFilename.assign(Filename);
   KernelName = kernel;
+
+  TempFiles.push_back(OrigFilename);
 
   // Firstly, we need to expand the macros within the source code because
   // it is not possible to rewrite their locations.
@@ -86,6 +100,9 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
   init_kernel.open(InitKernelFilename.c_str());
   init_kernel << InitKernelSource;
   init_kernel.close();
+
+  TempFiles.push_back(InitKernelFilename);
+
   return HandleBarriers();
 }
 
@@ -154,6 +171,8 @@ bool WorkitemCoarsen::HandleBarriers() {
   final_kernel.open(FinalKernelFilename.c_str());
   final_kernel << FinalKernel;
   final_kernel.close();
+
+  TempFiles.push_back(FinalKernelFilename);
 
   return true;
 }
@@ -409,6 +428,11 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
   std::list<DeclStmt*> Stmts;
   FindRefsToExpand(Stmts, OuterLoop);
 
+  /*
+  for (std::vector<Stmt*>::iterator SI = ParallelRegions.begin(),
+       SE = ParallelRegions.end(); SI != SE; ++SI)
+    HandleBarrierInLoop(*SI);*/
+
 }
 
 void WorkitemCoarsen::ThreadSerialiser::AssignIndVars() {
@@ -454,6 +478,8 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
   // Get the DeclStmts of this loop, append it to the vector that has been
   // passed; so the search space grows as we go deeper into the loops.
   std::list<DeclStmt*> InnerDeclStmts = ScopedDeclStmts[Loop];
+
+  // TODO Combine loops and regions
 
   if (!NestedLoops[Loop].empty()) {
     std::vector<Stmt*> InnerLoops = NestedLoops[Loop];
@@ -604,23 +630,29 @@ WorkitemCoarsen::ThreadSerialiser::Expand(std::stringstream &NewDecl) {
 // within the DeclStmt which need to be replicated
 void
 WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
-                                                DeclStmt *theDecl) {
+                                                DeclStmt *DS) {
   bool isIndVar = false;
   for (std::vector<Decl*>::iterator DI = IndVars.begin(), DE = IndVars.end();
        DI != DE; ++DI) {
-    if (*DI == theDecl->getSingleDecl()) {
+    if (*DI == DS->getSingleDecl()) {
       isIndVar = true;
       break;
     }
   }
   if (isIndVar) {
-    CreateLocal(InsertLoc, theDecl);
+    CreateLocal(InsertLoc, DS, true);
     return;
   }
-#ifdef DEBUGCL
-  std::cerr << "ScalarExpand: " << std::endl;
-#endif
-  NamedDecl *ND = cast<NamedDecl>(theDecl->getSingleDecl());
+
+  //bool isLocal = does the decl have a local qualifier?
+  bool isScalar = CreateLocal(InsertLoc, DS, needsExpansion);
+  if (isScalar)
+    RemoveScalarDeclStmt(DS, needsExpansion);
+  else
+    RemoveNonScalarDeclStmt(DS, needsExpansion);
+
+  /*
+  NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
   std::string varName = ND->getName().str();
   std::stringstream NewDecl;
 
@@ -650,18 +682,21 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
   TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
 
   // If the statement wasn't initialised, remove the whole statement
-  if (theDecl->child_begin() == theDecl->child_end())
-    TheRewriter.RemoveText(theDecl->getSourceRange());
+  VarDecl *varDecl = cast<VarDecl>(DS->getSingleDecl());
+  //if (!DS->DS->child_begin() == DS->child_end())
+  if (!varDecl->hasInit())
+    TheRewriter.RemoveText(DS->getSourceRange());
   else {
     // Otherwise, just remove the type definition and make the initialisation
     // access a scalar.
-    TheRewriter.RemoveText(ND->getLocStart(), typeStr.length());
+    //TheRewriter.RemoveText(ND->getLocStart(),
+      //                     (typeStr.length() + 1 + varName.length()));
     if(isScalar)
-      AccessScalar(theDecl->getSingleDecl());
-    else AccessNonScalar(theDecl);
-  }
+      CreateLocal(DS, true);
+    else AccessNonScalar(DS);
+  }*/
 
-  std::vector<DeclRefExpr*> theRefs = AllRefs[theDecl->getSingleDecl()];
+  std::vector<DeclRefExpr*> theRefs = AllRefs[DS->getSingleDecl()];
   // Then visit all the references to turn them into scalar accesses as well.
   for (std::vector<DeclRefExpr*>::iterator RI = theRefs.begin(),
        RE = theRefs.end(); RI != RE; ++RI) {
@@ -673,43 +708,111 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
 }
 
 void WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
-                                                    DeclStmt *s) {
+                                                    DeclStmt *s,
+                                                    bool toExpand) {
+  bool isScalar = true;
+  // Get all the necessary information about the variable
   NamedDecl *ND = cast<NamedDecl>(s->getSingleDecl());
+
+  clang::QualType QualVarType =
+    (cast<ValueDecl>(s->getSingleDecl()))->getType();
+  const clang::Type *VarType = QualVarType.getTypePtr();
+
   std::string varName = ND->getName().str();
-  std::string type = cast<ValueDecl>(ND)->getType().getAsString();
+
+  std::string typeStr;
+
+  // Create the string for the new declaration
   std::stringstream NewDecl;
-  NewDecl << type << " " << varName << ";\n";
+
+  if (VarType->isArrayType()) {
+    ConstantArrayType *arrayType =
+      cast<ConstantArrayType>(const_cast<Type*>(VarType));
+    uint64_t arraySize = arrayType->getSize().getZExtValue();
+    typeStr = arrayType->getElementType().getAsString();
+    NewDecl << typeStr <<  " " << varName;
+
+    if (toExpand)
+      Expand(NewDecl);
+
+    NewDecl << "[" << arraySize << "];\n";
+    isScalar = false;
+  }
+  else {
+    typeStr = QualVarType.getAsString();
+    NewDecl << typeStr << " " << varName;
+
+    if (toExpand)
+      Expand(NewDecl);
+
+    NewDecl << ";\n";
+  }
+
   TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
 
-  // If the statement wasn't initialised, remove the whole statement
-  if (s->child_begin() == s->child_end())
-    TheRewriter.RemoveText(s->getSourceRange());
-  else {
-    // Otherwise, just remove the type definition and make the initialisation
-    // access a scalar.
-    TheRewriter.RemoveText(ND->getLocStart(), type.length());
-  }
+  return isScalar;
+}
+
+// Turn the old declaration into a reference
+void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
+                                                             bool toExpand) {
+
+  VarDecl *VD = cast<VarDecl>(DS->getSingleDecl());
+
+  if (!VD->hasInit())
+    TheRewriter.RemoveText(DS->getSourceRange());
+
+  Expr* varInit = VD->getInit();
+  SourceLocation AccessLoc = varInit->getLocStart().getLocWithOffset(-1);
+
+  std::stringstream newAccess;
+  newAccess << std::endl << varName;
+
+  if (toExpand)
+    Expand(newAccess);
+
+  newAccess << " = ";
+
+  TheRewriter.RemoveText(SourceRange(DS->getLocStart(), AccessLoc));
+  TheRewriter.InsertText(AccessLoc, newAccess.str());
 }
 
 // FIXME Scalar access only works for x dimension values!
-void WorkitemCoarsen::ThreadSerialiser::AccessScalar(Decl *decl) {
-  NamedDecl *ND = cast<NamedDecl>(decl);
-  unsigned offset = ND->getName().str().length();
-  offset += cast<ValueDecl>(ND)->getType().getAsString().length();
-  // increment because of a space between type and name
-  ++offset;
-  SourceLocation Loc = ND->getLocStart().getLocWithOffset(offset);
-  if(TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true))
-    std::cerr << "ERROR - location not writable!\n";
+void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclStmt *DS) {
+  NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
+  std::string declStr = ND->getName().str();
+
+  std::stringstream newAccess;
+  newAccess << std::endl << declStr << "[__kernel_local_id[0]] = ";
+
+  VarDecl *VD = cast<VarDecl>(DS->getSingleDecl());
+  Expr* varInit = VD->getInit();
+  SourceLocation InsertLoc = varInit->getLocStart().getLocWithOffset(-1);
+
+#ifdef DEBUGCL
+  std::cerr << "------------------ DeclStmt -------------------- " << std::endl;
+  DS->dump();
+  std::cerr << "------------------ Init -------------------- " << std::endl;
+  varInit->dump();
+#endif
+
+  //TheRewriter.InsertText(DS->getLocStart(), "//");
+  TheRewriter.RemoveText(SourceRange(DS->getLocStart(), InsertLoc));
+  TheRewriter.InsertText(InsertLoc, newAccess.str());
 }
 
 // FIXME Scalar access only works for x dimension values!
 void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
-  unsigned offset = Ref->getDecl()->getName().str().length();
-  SourceLocation Loc = Ref->getLocEnd().getLocWithOffset(offset);
-  if(TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true))
-    std::cerr << "ERROR - location not writable! Offset = "
-      << offset << std::endl;
+  std::stringstream newAccess;
+  newAccess << Ref->getDecl()->getName().str() << "[__kernel_local_id[0]]";
+  //unsigned offset = Ref->getDecl()->getName().str().length();
+  //SourceLocation Loc = Ref->getLocEnd().getLocWithOffset(offset);
+  SourceLocation Loc = Ref->getLocStart();
+  //if(TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]", true))
+    //std::cerr << "ERROR - location not writable! Offset = "
+      //<< offset << std::endl;
+  TheRewriter.RemoveText(Ref->getSourceRange());
+  TheRewriter.InsertText(Loc, newAccess.str());
 }
 
 // This function is to turn the original declstmt into the first access.
@@ -786,16 +889,22 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
     if (SearchNestedLoops(*LoopI, false))
       ++NestedBarriers;
   }
+
   std::vector<CompoundStmt*> Compounds = ScopedRegions[Loop];
   for (std::vector<CompoundStmt*>::iterator RegionI = Compounds.begin(),
        RegionE = Compounds.end(); RegionI != RegionE; ++RegionI) {
-    if (SearchNestedLoops(*RegionI, false))
+    if (SearchNestedLoops(*RegionI, false)) {
+#ifdef DEBUGCL
+      std::cerr << "Found barrier within CompoundStmt" << std::endl;
+#endif
       ++NestedBarriers;
+    }
   }
   if ((!Barriers[Loop].empty()) || (NestedBarriers != 0)) {
 
     // Appropriately open and close the workgroup loops if its an original loop
     if (!isOuterLoop)
+      //ParallelRegions.push_back(Loop);
       HandleBarrierInLoop(Loop);
     return true;
   }
@@ -821,8 +930,18 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
     LoopBody = (cast<ForStmt>(Loop))->getBody();
   else if (isa<WhileStmt>(Loop))
     LoopBody = (cast<WhileStmt>(Loop))->getBody();
-  else
+  else if (isa<CompoundStmt>(Loop)) {
+#ifdef DEBUGCL
+    std::cerr << "Opening and closing loops in and around CompoundStmt"
+      << std::endl;
+#endif
+    CompoundStmt *CS = cast<CompoundStmt>(Loop);
+    CloseLoop(CS->getLBracLoc().getLocWithOffset(-1));
+    OpenLoop(GetOffsetInto(CS->getLBracLoc()));
+    CloseLoop(CS->getRBracLoc());
+    OpenLoop(GetOffsetOut(CS->getLocEnd()));
     return;
+  }
 
   CloseLoop(Loop->getLocStart());
   OpenLoop(GetOffsetInto(LoopBody->getLocStart()));

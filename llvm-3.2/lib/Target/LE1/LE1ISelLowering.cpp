@@ -187,12 +187,13 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   // LE1 Custom Operations
   // If we're compiling a library, expand the code using addcg and divs
-  /*
-  if(Subtarget->hasExpandDiv()) {
+  
+  //if(Subtarget->hasExpandDiv()) {
     setOperationAction(ISD::SDIV,             MVT::i32, Custom);
     setOperationAction(ISD::UDIV,             MVT::i32, Custom);
     setOperationAction(ISD::SREM,             MVT::i32, Custom);
     setOperationAction(ISD::UREM,             MVT::i32, Custom);
+    /*
   } else  {
     setLibcallName(RTLIB::SDIV_I32, "_i_div");
     setOperationAction(ISD::SDIV,   MVT::i32, Expand);
@@ -204,8 +205,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
     setLibcallName(RTLIB::UREM_I32, "_i_urem");
     setOperationAction(ISD::UREM,   MVT::i32, Expand);
   }*/
-  setOperationAction(ISD::SDIV, MVT::i32, Expand);
-  setOperationAction(ISD::UDIV, MVT::i32, Expand);
+  //setOperationAction(ISD::SDIV, MVT::i32, Expand);
+  //setOperationAction(ISD::UDIV, MVT::i32, Expand);
 
   // Softfloat Floating Point Library Calls
   // Integer to Float conversions

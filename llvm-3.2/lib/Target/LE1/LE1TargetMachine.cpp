@@ -14,8 +14,10 @@
 #include "LE1.h"
 #include "LE1TargetMachine.h"
 #include "llvm/PassManager.h"
+#include "llvm/PassSupport.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/Support/TargetRegistry.h"
+#include "llvm/Transforms/IPO.h"
 #include "llvm/Transforms/Scalar.h"
 #include <iostream>
 
@@ -50,10 +52,6 @@ LE1TargetMachine(const Target &T, StringRef TT,
 }
 
 bool LE1TargetMachine::addPassesForOptimizations(PassManagerBase &PM) {
-  PM.add(createPromoteMemoryToRegisterPass());
-  PM.add(createConstantPropagationPass());
-  PM.add(createCFGSimplificationPass());
-  PM.add(createDeadCodeEliminationPass());
   return false;
 }
 
@@ -74,6 +72,7 @@ public:
     return *getLE1TargetMachine().getSubtargetImpl();
   }
 
+  //virtual bool addPreISel();
   virtual bool addInstSelector();
   //virtual bool addPreRegAlloc();
   //virtual bool addPostRegAlloc();
@@ -93,10 +92,22 @@ bool LE1PassConfig::addInstSelector()
   addPass(createLE1ISelDag(getLE1TargetMachine()));
   return false;
 }
+/*
+bool LE1PassConfig::addPreISel() {
+  addPass(createPromoteMemoryToRegisterPass());
+  addPass(createConstantPropagationPass());
+  addPass(createDeadStoreEliminationPass());
+  addPass(createCFGSimplificationPass());
+  return true;
+}
+
+bool LE1PassConfig::addPostRegAlloc() {
+  addPass(createDeadCodeEliminationPass());
+  return true;
+}*/
 
 bool LE1PassConfig::addPreEmitPass()
 {
-  //PM->add(createLE1CFGOptimiser(getLE1TargetMachine()));
   addPass(createLE1ExpandPredSpillCode(getLE1TargetMachine()));
   addPass(createLE1Packetizer(getLE1TargetMachine()));
   return false;

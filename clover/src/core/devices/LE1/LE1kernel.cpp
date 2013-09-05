@@ -538,8 +538,7 @@ bool LE1KernelEvent::CompileSource() {
     return false;
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
-  //if (!Coarsener.Compile(CoarsenedBCName, WorkgroupSource))
-    //return false;
+  Coarsener.DeleteTempFiles();
 
 #ifdef DEBUGCL
   std::cerr << "Merged Kernel\n";

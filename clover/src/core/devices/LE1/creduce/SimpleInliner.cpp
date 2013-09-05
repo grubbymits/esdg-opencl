@@ -539,6 +539,8 @@ void SimpleInliner::copyFunctionBody(void)
 
   // Now we start rewriting
   int Delta = 1; // skip the first { symbol
+  FuncBodyStr.insert(Delta, "\n");
+  ++Delta;
   for(SmallVector<std::string, 10>::iterator I = ParmStrings.begin(),
        E = ParmStrings.end(); I != E; ++I) {
     std::string PStr = (*I);

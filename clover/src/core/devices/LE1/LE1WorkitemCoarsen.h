@@ -44,6 +44,7 @@ public:
   bool CreateWorkgroup(std::string &Filename, std::string &kernel);
   bool ExpandMacros();
   bool HandleBarriers();
+  void DeleteTempFiles();
   std::string &getInitialisedKernel() { return InitKernelSource; }
   std::string &getFinalKernel() { return FinalKernel; }
 
@@ -56,6 +57,7 @@ private:
   std::string InitKernelSource;
   std::string InitKernelFilename;
   std::string FinalKernel;
+  std::vector<std::string> TempFiles;
   pthread_mutex_t p_inline_mutex;
 
 template <typename T> class OpenCLCompiler {
@@ -219,9 +221,10 @@ private:
   void ScalarExpand(clang::SourceLocation InsertLoc,
                     clang::DeclStmt *theDecl);
   void CreateLocal(clang::SourceLocation InsertLoc,
-                   clang::DeclStmt *s);
+                   clang::DeclStmt *s,
+                   bool Expand);
 
-  void AccessScalar(clang::Decl *decl);
+  void AccessScalar(clang::DeclStmt *DS);
   void AccessScalar(clang::DeclRefExpr *Ref);
   void AccessNonScalar(clang::DeclStmt *declStmt);
   void AccessNonScalar(clang::DeclRefExpr *Ref);
@@ -236,9 +239,12 @@ private:
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
   std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RefAssignments;
   std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > PotentialIndVars;
+
   std::vector<clang::Decl*> IndVars;
   std::vector<clang::FunctionDecl*> AllFunctions;
   std::vector<clang::FunctionDecl*> CalledFunctions;
+  std::vector<clang::Stmt*> ParallelRegions;
+
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   bool isFirstLoop;

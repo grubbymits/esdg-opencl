@@ -28,5 +28,5 @@ has_asmprinter = 1
 type = Library
 name = LE1CodeGen
 parent = LE1
-required_libraries = AsmPrinter CodeGen Core MC LE1AsmPrinter LE1Desc LE1Info SelectionDAG Support Target
+required_libraries = AsmPrinter CodeGen Core MC LE1AsmPrinter LE1Desc LE1Info SelectionDAG Support Target 
 add_to_library_groups = LE1
