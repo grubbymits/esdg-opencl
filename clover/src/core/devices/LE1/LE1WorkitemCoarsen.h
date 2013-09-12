@@ -217,16 +217,19 @@ private:
   void AssignIndVars(void);
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);
-  void Expand(std::stringstream &NewDecl);
+  void ExpandDecl(std::stringstream &NewDecl);
+  void ExpandRef(std::stringstream &NewRef);
   void ScalarExpand(clang::SourceLocation InsertLoc,
                     clang::DeclStmt *theDecl);
-  void CreateLocal(clang::SourceLocation InsertLoc,
+  bool CreateLocal(clang::SourceLocation InsertLoc,
                    clang::DeclStmt *s,
-                   bool Expand);
+                   bool toExpand);
+  void RemoveScalarDeclStmt(clang::DeclStmt *DS,
+                            bool toExpand);
+  void RemoveNonScalarDeclStmt(clang::DeclStmt *DS,
+                               bool toExpand);
 
-  void AccessScalar(clang::DeclStmt *DS);
   void AccessScalar(clang::DeclRefExpr *Ref);
-  void AccessNonScalar(clang::DeclStmt *declStmt);
   void AccessNonScalar(clang::DeclRefExpr *Ref);
 
 private:
@@ -243,14 +246,12 @@ private:
   std::vector<clang::Decl*> IndVars;
   std::vector<clang::FunctionDecl*> AllFunctions;
   std::vector<clang::FunctionDecl*> CalledFunctions;
-  std::vector<clang::Stmt*> ParallelRegions;
 
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   bool isFirstLoop;
   clang::WhileStmt *OuterLoop;
-  //DeclRefSetMap AllRefs;
-  std::vector<std::string> ParamVars;
+  std::vector<clang::Decl*> ParamVars;
 
 }; // end class ThreadSerialiser
 

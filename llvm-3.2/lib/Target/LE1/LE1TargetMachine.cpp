@@ -49,6 +49,7 @@ LE1TargetMachine(const Target &T, StringRef TT,
   TLInfo(*this), TSInfo(*this),
   FrameLowering(Subtarget),
   InstrItins(Subtarget.getInstrItineraryData()) { 
+    TLInfo
 }
 
 bool LE1TargetMachine::addPassesForOptimizations(PassManagerBase &PM) {
