@@ -145,6 +145,14 @@ LE1TargetLowering(LE1TargetMachine &TM)
   // FIXME How to set default scheduler?
   //setSchedulingPreference(Sched::VLIW);
 
+  // Basically try to completely remove calls to these library functions
+  maxStoresPerMemset = 100;
+  maxStoresPerMemsetOptSize = 100;
+  maxStoresPerMemmove = 100;
+  maxStoresPerMemmoveOptSize = 100;
+  maxStoresPerMemcpy = 100;
+  maxStoresPerMemcpyOptSize = 100;
+
   // Load extended operations for i1 types must be promoted
   setLoadExtAction(ISD::EXTLOAD,  MVT::i1,  Promote);
   setLoadExtAction(ISD::ZEXTLOAD, MVT::i1,  Promote);

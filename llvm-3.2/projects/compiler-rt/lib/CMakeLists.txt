@@ -160,7 +160,7 @@ if(CAN_TARGET_X86_64)
     x86_64/floatundixf.S
     ${GENERIC_SOURCES}
     )
-  set_target_properties(clang_rt.x86_64 PROPERTIES COMPILE_FLAGS "-std=c99 ${TARGET_X86_64_CFLAGS}")
+  set_target_properties(clang_rt.x86_64 PROPERTIES COMPILE_FLAGS "-emit-llvm -c -std=c99 ${TARGET_X86_64_CFLAGS}")
   add_clang_compiler_rt_libraries(clang_rt.x86_64)
 endif()
 if(CAN_TARGET_I386)
