@@ -1539,7 +1539,7 @@ sub print_instructions {
     close CALLS_LIST;
 
   loop_for_printing:
-    open BIG_ENDIAN_INSTRUCTION, "> binaries/iram0.bin" or die
+    open BIG_ENDIAN_INSTRUCTION, "> binaries/$_[0]" or die
 	"Second Pass Failed\nCould not open file (binaries/iram0.bin : $!)\n";
 
     open IRAM_HEADER, "> $_[2]" or die
@@ -1718,7 +1718,8 @@ sub print_instructions {
 }
 
 sub print_data {
-    open BIG_ENDIAN_DATA, "> binaries/dram.bin" or die
+  
+    open BIG_ENDIAN_DATA, "> binaries/@_[0]" or die
 	"Second Pass Failed\nCould not open file (binaries/dram.bin): $!\n";
 
 #    open LITTLE_ENDIAN_DATA, "> @_[0]\.little" or die

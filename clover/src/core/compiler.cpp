@@ -131,7 +131,7 @@ bool Compiler::InlineSource(const char *filename) {
 
   TM->setSrcFileName(filename);
   TM->setOutputFileName(filename);
-  TM->setTransformationCounter(1);
+  TM->setTransformationCounter(2);
 
   if (TM->setTransformation("simple-inliner") != 0) {
     std::cerr << "!!ERROR: Setting transformation failed!" << std::endl;

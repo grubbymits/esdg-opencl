@@ -538,7 +538,7 @@ bool LE1KernelEvent::CompileSource() {
     return false;
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
-  Coarsener.DeleteTempFiles();
+  //Coarsener.DeleteTempFiles();
 
 #ifdef DEBUGCL
   std::cerr << "Merged Kernel\n";
@@ -1285,7 +1285,10 @@ bool LE1KernelEvent::run() {
   bool wasSuccess = false;
   //char* device_name = const_cast<char*>(p_device->model());
   //p_device->getSimulator()->LockAccess();
-  wasSuccess = p_device->getSimulator()->Run();
+  std::string dram = "binaries/final_" + KernelName + ".data.bin";
+  std::string iram = "binaries/final_" + KernelName + ".s.bin";
+
+  wasSuccess = p_device->getSimulator()->Run(iram.c_str(), dram.c_str());
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
     return false;

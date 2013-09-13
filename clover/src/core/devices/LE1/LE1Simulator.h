@@ -38,7 +38,7 @@ namespace Coal {
     unsigned GetIterations() const { return LE1Simulator::iteration; }
     void ClearStats() { Stats.clear(); }
     int checkStatus(void);
-    bool Run();
+    bool Run(const char *iram, const char *dram);
     void LockAccess();
     void UnlockAccess();
     void readCharData(unsigned int addr,

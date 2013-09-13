@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
   CL_CHECK_ERROR(err);
 
   // Number of local work items per group
-  const size_t local_wsize  = 256;
+  const size_t local_wsize  = 128;
     
   // Number of global work items
   const size_t global_wsize = 16384; // i.e. 64 work groups
@@ -158,6 +158,8 @@ int main(int argc, char *argv[])
   // Run
   // Assuming an 8 bit byte.
   for (int shift = 0; shift < sizeof(unsigned)*8; shift += radix_width) {
+    std::cout << "Shift = " << shift << std::endl;
+
     // Like scan, we use a reduce-then-scan approach
     // But before proceeding, update the shift appropriately
     // for each kernel. This is how many bits to shift to the
@@ -203,17 +205,20 @@ int main(int argc, char *argv[])
       CL_CHECK_ERROR(err);
     }
 
+    std::cout << "RUN REDUCE" << std::endl;
     // Each thread block gets an equal portion of the
     // input array, and computes occurrences of each digit.
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("reduce"), 1, NULL,
                                  &global_wsize, &local_wsize, 0, NULL, NULL);
 
+    std::cout << "RUN TOP_SCAN" << std::endl;
     // Next, a top-level exclusive scan is performed on the
     // per block histograms.  This is done by a single
     // work group (note global size here is the same as local).
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("top_scan"), 1, NULL,
                                  &local_wsize, &local_wsize, 0, NULL, NULL);
 
+    std::cout << "RUN BOTTOM_SCAN" << std::endl;
     // Finally, a bottom-level scan is performed by each block
     // that is seeded with the scanned histograms which rebins,
     // locally scans, then scatters keys to global memory

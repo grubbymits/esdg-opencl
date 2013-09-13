@@ -264,12 +264,11 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::Run() {
+bool LE1Simulator::Run(const char *iram, const char *dram) {
 #ifdef DEBUGCL
-  std::cerr << "Entered LE1Simulator::run\n";
+  std::cerr << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
+    << std::endl;
 #endif
-  const char *iram = "binaries/iram0.bin";
-  const char *dram = "binaries/dram.bin";
 
   LockAccess();
   ++KernelNumber;
