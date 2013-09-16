@@ -29,8 +29,6 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "poclu.h"
-
 #define WINDOW_SIZE 32
 #define WORK_ITEMS 2
 #define BUFFER_SIZE (WORK_ITEMS + WINDOW_SIZE)
@@ -42,12 +40,17 @@
 
 static char
 kernelSourceCode[] = 
+"
+"inline void func1() { } \n"
+"inline void func2() { } \n"
 "kernel \n"
-"void test_kernel(__global float *input, \n"
+"void test_kernel(__global int *input, \n"
 "                 __global int *result) {\n"
 "  int gid = get_global_id(0);\n"
-"  float global_sum = 0.0f;\n"
+"  int global_sum = 0;\n"
 "  int i;\n"
+"  func1();\n"
+"  func2();\n"
 "\n"
 " result[gid] = global_sum;\n"
 " for (i=0; i < 32; ++i) {\n"
@@ -67,9 +70,9 @@ kernelSourceCode[] =
 int
 main(void)
 {
-    cl_float A[BUFFER_SIZE];
-    cl_int R[WORK_ITEMS];
-    cl_int err = 0;
+    int A[BUFFER_SIZE];
+    int R[WORK_ITEMS];
+    int err = 0;
 
     for (int i = 0; i < BUFFER_SIZE; i++) {
         A[i] = i;
@@ -109,7 +112,7 @@ main(void)
         cl::Buffer aBuffer = cl::Buffer(
             context, 
             CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
-            BUFFER_SIZE * sizeof(float), 
+            BUFFER_SIZE * sizeof(int), 
             (void *) &A[0]);
 
         // Create buffer for that uses the host ptr C

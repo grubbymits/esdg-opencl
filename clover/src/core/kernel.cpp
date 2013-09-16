@@ -51,7 +51,7 @@ using namespace Coal;
 Kernel::Kernel(Program *program)
 : Object(Object::T_Kernel, program), p_has_locals(false)
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering Kernel::Kernel\n";
 #endif
     // TODO: Say a kernel is attached to the program (that becomes unalterable)
@@ -61,7 +61,7 @@ Kernel::Kernel(Program *program)
     null_dep.function = 0;
     null_dep.module = 0;
     Built = false;
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving Kernel::Kernel\n";
 #endif
 }
@@ -108,7 +108,7 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
                            llvm::Module *module)
 {
     p_name = function->getName();
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering Kernel::addFunction : " << p_name << std::endl;
 #endif
 
@@ -136,7 +136,7 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
 
         if (arg_type->isPointerTy())
         {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
           std::cerr << "Arg " << i << " is a pointer\n";
 #endif
             // It's a pointer, dereference it
@@ -147,7 +147,7 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
 
             // If it's a __local argument, we'll have to allocate memory at run time
             if (file == Arg::Local) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
               std::cerr << "Arg " << i << " is a __local pointer\n";
 #endif
                 p_has_locals = true;
@@ -176,7 +176,7 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
         }
         else
         {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
           std::cerr << "Arg " << i << " is not a pointer\n";
 #endif
             if (arg_type->isVectorTy())
@@ -239,7 +239,7 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
 
     dep.kernel = device->createDeviceKernel(this, dep.function);
     p_device_dependent.push_back(dep);
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving Kernel::addFunction\n";
 #endif
 
@@ -255,7 +255,7 @@ llvm::Function *Kernel::function(DeviceInterface *device) const
 
 cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering Kernel::setArg\n";
   std::cerr << "index = " << index << " size = " << size << std::endl;
 #endif
@@ -264,14 +264,14 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
         return CL_INVALID_ARG_INDEX;
 
     Arg &arg = p_args[index];
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "p_args.size = " << p_args.size() << std::endl;
 #endif
 
     // Special case for __local pointers
     if (arg.file() == Arg::Local)
     {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
       std::cerr << "Arg::Local\n";
 #endif
         if (size == 0)
@@ -287,7 +287,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
 
     // Check that size corresponds to the arg type
     size_t arg_size = arg.valueSize();
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "arg_size = " << arg_size << std::endl;
 #endif
 
@@ -324,7 +324,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
             case Arg::Buffer:
             case Arg::Image2D:
             case Arg::Image3D:
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
               std::cerr << "Arg::Buffer, Arg::Image2D, Arg::Image3D\n";
 #endif
                 // Special case buffers : value can be 0 (or point to 0)
@@ -346,7 +346,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
   {
     DeviceDependent &rs = p_device_dependent[i];
   }
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "Leaving Kernel::setArg\n";
 #endif
     return CL_SUCCESS;
@@ -367,7 +367,7 @@ bool Kernel::argsSpecified() const
     for (size_t i=0; i<p_args.size(); ++i)
     {
         if (!p_args[i].defined()) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
           std::cerr << "ERROR: arg " << i << " is not defined!\n";
 #endif
             return false;
@@ -394,7 +394,7 @@ cl_int Kernel::info(cl_kernel_info param_name,
                     void *param_value,
                     size_t *param_value_size_ret) const
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering Kernel::info\n";
 #endif
     void *value = 0;
@@ -440,7 +440,7 @@ cl_int Kernel::info(cl_kernel_info param_name,
 
     if (param_value)
         std::memcpy(param_value, value, value_length);
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving Kernel::info\n";
 #endif
 
@@ -453,7 +453,7 @@ cl_int Kernel::workGroupInfo(DeviceInterface *device,
                              void *param_value,
                              size_t *param_value_size_ret) const
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering Kernel::workGroupInfo\n";
 #endif
     void *value = 0;
@@ -495,7 +495,7 @@ cl_int Kernel::workGroupInfo(DeviceInterface *device,
             break;
 
         default:
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
             std::cerr << "Leaving Kernel::workGroupInfo, INVALID_VALUE\n";
 #endif
             return CL_INVALID_VALUE;
@@ -510,7 +510,7 @@ cl_int Kernel::workGroupInfo(DeviceInterface *device,
     if (param_value)
         std::memcpy(param_value, value, value_length);
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving Kernel::workGroupInfo\n";
 #endif
     return CL_SUCCESS;
@@ -528,7 +528,7 @@ Kernel::Arg::Arg(unsigned short vec_dim, File file, Kind kind, llvm::Type* type)
   if (type->getTypeID() == llvm::Type::PointerTyID)
     pointer = true;
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Creating Kernel::Arg::Arg\n";
   switch(kind) {
   case Invalid:
@@ -612,7 +612,7 @@ void Kernel::Arg::alloc()
 
 void Kernel::Arg::loadData(const void *data)
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Kernel::Arg::loadData\n";
   std::cerr << "copying " << p_vec_dim * valueSize() << " bytes of data\n";
 #endif

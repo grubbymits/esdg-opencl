@@ -56,7 +56,7 @@ LE1Simulator::LE1Simulator() {
 }
 
 LE1Simulator::~LE1Simulator() {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "! DELETING SIMULATOR !\n";
 #endif
   pthread_mutex_destroy(&p_simulator_mutex);
@@ -131,7 +131,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     // FIXME This needs to come from the device
     STACK_SIZE = SYS->STACK_SIZE;
     dram_size = ((SYS->DRAM_SHARED_CONFIG >> 8) & 0xFFFF) * 1024;
-#ifdef DEBUGCL
+#ifdef DBG_SIM
     std::cerr << "DRAM_SHARED_CONFIG = " << SYS->DRAM_SHARED_CONFIG
       << std::endl;
 #endif
@@ -214,20 +214,20 @@ void LE1Simulator::SaveStats() {
 }
 
 void LE1Simulator::LockAccess(void) {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "Trying to lock access to simulator\n";
 #endif
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
   }
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "Successfully locked access to simulator\n";
 #endif
 }
 
 void LE1Simulator::UnlockAccess(void) {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "Unlocking access to simulator\n";
 #endif
   pthread_mutex_unlock(&p_simulator_mutex);
@@ -265,12 +265,12 @@ int LE1Simulator::checkStatus(void) {
 }
 
 bool LE1Simulator::Run(const char *iram, const char *dram) {
-#ifdef DEBUGCL
-  std::cerr << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
+#ifdef DBG_SIM
+  std::cout << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
     << std::endl;
 #endif
 
-  LockAccess();
+  //LockAccess();
   ++KernelNumber;
 
   /* turn printout on */
@@ -279,7 +279,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
     /* Load IRAM */
     {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
       std::cerr << "Loading IRAM\n";
 #endif
       char *i_data = NULL;
@@ -287,7 +287,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       FILE *inst = fopen(iram, "rb");
       if(inst == NULL) {
         fprintf(stderr, "!!! ERROR Could not open file (%s) !!!\n", iram);
-        pthread_mutex_unlock(&p_simulator_mutex);
+        //pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
       fseek(inst, 0L, SEEK_END);
@@ -299,11 +299,11 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       i_data = (char *)calloc(sizeof(char), IRAMFileSize);
       if(i_data == NULL) {
         fprintf(stderr, "!!! ERROR Could not allocate memory (i_data) !!!\n");
-        pthread_mutex_unlock(&p_simulator_mutex);
+        //pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
       fread(i_data, sizeof(char), IRAMFileSize, inst);
-#ifdef DEBUGCL
+#ifdef DBG_SIM
       std::cerr << "Read in IRAM file\n";
 #endif
 
@@ -317,19 +317,22 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
         //systemConfig *SYS = (systemConfig *)((size_t)SYSTEM
           //                                   + (s * sizeof(systemConfig)));
-#ifdef DEBUGCL
+#ifdef DBG_SIM
+      std::cerr << "Read in IRAM file\n";
         std::cerr << "Got System Config, " << (SYS->SYSTEM_CONFIG & 0xff)
           << " contexts\n";
 #endif
 
         /* loop through all contexts and hypercontexts */
         for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff); ++c) {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
+      std::cerr << "Read in IRAM file\n";
           std::cerr << "Now looping through all contexts\n";
 #endif
           contextConfig *CNT = (contextConfig *)((size_t)SYS->CONTEXT
                                                  + (c * sizeof(contextConfig)));
-#ifdef DEBUGCL
+#ifdef DBG_SIM
+      std::cerr << "Read in IRAM file\n";
           std::cerr << "Got Context Config\n";
 #endif
 
@@ -349,7 +352,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
               if(MSB2LSBDW(word) != (unsigned int)*(unsigned int *)(i_data + i)) {
                 fprintf(stderr, "!!! ERROR: 0x%08x != 0x%08x !!!\n", word,
                         (unsigned int)*(unsigned int *)(i_data + i));
-                pthread_mutex_unlock(&p_simulator_mutex);
+                //pthread_mutex_unlock(&p_simulator_mutex);
                 return false;
               }
             }
@@ -357,7 +360,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
         }
       }
     }
-#ifdef DEBUGCL
+#ifdef DBG_SIM
       std::cerr << "Each context has the IRAM loaded\n";
 #endif
 
@@ -367,7 +370,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
   /* Load DRAM */
   {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
     std::cerr << "Loading DRAM\n";
 #endif
     unsigned int DRAMFileSize = 0;
@@ -376,7 +379,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     FILE *data = fopen(dram, "rb");
     if(data == NULL) {
       fprintf(stderr, "!!! ERROR Could not open file (%s) !!!\n", dram);
-      pthread_mutex_unlock(&p_simulator_mutex);
+      //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
     fseek(data, 0L, SEEK_END);
@@ -386,7 +389,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     if(DRAMFileSize > dram_size) {
       fprintf(stderr, "!!! ERROR DRAM is larger than the size specified !!!\n");
       fprintf(stderr, "DRAM = %d and fileSize = %d\n", dram_size, DRAMFileSize);
-      pthread_mutex_unlock(&p_simulator_mutex);
+      //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
 
@@ -394,7 +397,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     d_data = (char *)calloc(sizeof(char), dram_size);
     if(d_data == NULL) {
       fprintf(stderr, "!!! ERROR Could not allocate memory (d_data) !!!\n");
-      pthread_mutex_unlock(&p_simulator_mutex);
+      //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
     fread(d_data, sizeof(char), DRAMFileSize, data);
@@ -412,7 +415,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       if(MSB2LSBDW(word) != (unsigned int)*(unsigned int *)(d_data + i)) {
         fprintf(stderr, "!!! ERROR: 0x%08x != 0x%08x !!!\n", word,
                 (unsigned int)*(unsigned int *)(d_data + i));
-        pthread_mutex_unlock(&p_simulator_mutex);
+        //pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
     }
@@ -430,7 +433,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
   /* Set all available Context to RUNNING */
   {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
     std::cerr << "Setting Contexts to RUNNING\n";
 #endif
   /* system, context, hypercontext, cluster */
@@ -499,7 +502,15 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       if (PRINT_OUT)
         printf("-------------------------------------------- end of cycle %lld\n",
           cycleCount);
-      insizzleAPIClock(g, gTracePacket);
+
+      if (insizzleAPIClock(g, gTracePacket) == INSIZZLE_FAIL) {
+        // Something has gone wrong...
+        printf("-------------------------------------------- end of cycle %lld\n",
+          cycleCount);
+        std::cout << "!!ERROR - Simulation failed!" << std::endl;
+        return false;
+      }
+
 
       /* Check here for control flow changes */
       /* Nothing in gTracePacket to find this */
@@ -515,7 +526,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
   if (MEM_DUMP) { 
     if(memoryDump(((((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024) >> 2), 0,
                   LE1System->dram) == -1) {
-      pthread_mutex_unlock(&p_simulator_mutex);
+      //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
     std::ostringstream CopyDump;
@@ -536,9 +547,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
   SaveStats();
 
-  pthread_mutex_unlock(&p_simulator_mutex);
+  //pthread_mutex_unlock(&p_simulator_mutex);
 
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "Finished running simulation. globalS = "
     << std::hex << globalS << std::endl;
 #endif
@@ -553,7 +564,7 @@ void LE1Simulator::readCharData(unsigned int addr,
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
     exit(EXIT_FAILURE);
   }*/
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "Entering LE1Simulator::readCharData\n"
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
     << " bytes. globalS = " << std::hex << globalS << std::endl;
@@ -598,7 +609,7 @@ short* LE1Simulator::readShortData(unsigned addr, unsigned numBytes) {
 void LE1Simulator::readIntData(unsigned int addr,
                                unsigned int numBytes,
                                unsigned int* data) {
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "Entering LE1Simulator::readIntData\n"
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
     << " bytes.\n";
@@ -616,7 +627,7 @@ void LE1Simulator::readIntData(unsigned int addr,
   }
 
   //pthread_mutex_unlock(&p_simulator_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_SIM
   std::cerr << "Leaving LE1Simulator::readIntData\n";
 #endif
 }

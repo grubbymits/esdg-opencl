@@ -50,7 +50,7 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
 : Object(Object::T_MemObject, ctx), p_num_devices(0), p_flags(flags),
   p_host_ptr(host_ptr), p_devicebuffers(0), p_dtor_callback(0)
 {
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
   std::cerr << "Creating MemObject" << std::endl;
 #endif
 
@@ -89,7 +89,7 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
         *errcode_ret = CL_INVALID_HOST_PTR;
         return;
     }
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
     std::cerr << "Leaving MemObject Constructor Successfully" << std::endl;
 #endif
 }
@@ -111,7 +111,7 @@ MemObject::~MemObject()
 
 cl_int MemObject::init()
 {
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
   std::cerr << "Entering MemObject::init" << std::endl;
 #endif
     // Get the device list of the context
@@ -208,7 +208,7 @@ cl_int MemObject::init()
         return CL_MEM_OBJECT_ALLOCATION_FAILURE;
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
     std::cerr << "Returning CL_SUCCESS from MemObject::init" << std::endl;
 #endif
     return CL_SUCCESS;
@@ -392,7 +392,7 @@ Buffer::Buffer(Context *ctx, size_t size, void *host_ptr, cl_mem_flags flags,
                cl_int *errcode_ret)
 : MemObject(ctx, flags, host_ptr, errcode_ret), p_size(size)
 {
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
   std::cerr << "Creating Buffer of size " << size << std::endl;
 #endif
     if (size == 0)

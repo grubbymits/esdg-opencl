@@ -29,6 +29,9 @@
 #define MAX_HYPERCONTEXT      16 /* per context */
 #define MAX_CLUSTERS          16 /* per context */
 
+#define INSIZZLE_FAIL -1
+#define INSIZZLE_SUCCESS 0
+
 
 extern unsigned char isLLVM;
 extern unsigned memAlign;
@@ -195,7 +198,7 @@ int serviceThreadRequests(systemT *);
 void performMemoryOp(struct memReqT *, unsigned, systemT *);
 void serviceMemRequest(systemT *, unsigned, unsigned, unsigned);
 void serviceMemRequestNOSTALLS(systemT *, unsigned, unsigned, unsigned);
-void serviceMemRequestPERFECT(systemT *, unsigned);
+int serviceMemRequestPERFECT(systemT *, unsigned);
 
 void returnOpcode(opT);
 void stateDumpToTerminal(instruction, hyperContextT *, unsigned long long);

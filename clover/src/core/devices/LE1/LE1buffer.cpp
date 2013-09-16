@@ -45,7 +45,7 @@ LE1Buffer::LE1Buffer(LE1Device *device, MemObject *buffer, cl_int *rs)
 : DeviceBuffer(), p_device(device), p_buffer(buffer), p_data(0),
   p_data_malloced(false)
 {
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
   std::cerr << "Creating LE1Buffer::LE1Buffer of size " << buffer->size()
     << std::endl;
 #endif
@@ -67,14 +67,14 @@ LE1Buffer::LE1Buffer(LE1Device *device, MemObject *buffer, cl_int *rs)
        start_addr = device->global_base_addr(); */
     else if (buffer->flags() & CL_MEM_USE_HOST_PTR)
     {
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
       std::cerr << "CL_MEM_USE_HOST_PTR\n";
 #endif
         // We use the host ptr, we are already allocated
         p_data = buffer->host_ptr();
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
     std::cerr << "Leaving LE1Buffer::LE1Buffer\n";
 #endif
     // NOTE: This function can also reject Image buffers by setting a value
@@ -83,7 +83,7 @@ LE1Buffer::LE1Buffer(LE1Device *device, MemObject *buffer, cl_int *rs)
 
 LE1Buffer::~LE1Buffer()
 {
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
   std::cerr << "DELETING BUFFER\n";
 #endif
     if (p_data_malloced)
@@ -106,7 +106,7 @@ void *LE1Buffer::nativeGlobalPointer() const
 // and the address of where the buffer will be stored.
 bool LE1Buffer::allocate()
 {
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
   std::cerr << "Entering LE1Buffer::allocate" << std::endl;
 #endif
     size_t buf_size = p_buffer->size();
@@ -134,7 +134,7 @@ bool LE1Buffer::allocate()
 
     // Say to the memobject that we are allocated
     p_buffer->deviceAllocated(this);
-#ifdef DEBUGCL
+#ifdef DBG_BUFFER
     std::cerr << "Leaving LE1Buffer::allocate" << std::endl;
 #endif
 

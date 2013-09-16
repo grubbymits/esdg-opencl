@@ -33,6 +33,8 @@
 #ifndef __DEVICEINTERFACE_H__
 #define __DEVICEINTERFACE_H__
 
+#include <iostream>
+
 #include <CL/cl.h>
 #include "object.h"
 #include "kernel.h"
@@ -280,7 +282,9 @@ class DeviceProgram
          */
         virtual bool build(llvm::Module *module) = 0;
 
-        void SetSource(std::string &s) { Source = s; }
+        void SetSource(std::string &s) { Source = s;
+          std::cerr << Source << std::endl; }
+
         std::string &getSource() { return Source; }
 
     protected:

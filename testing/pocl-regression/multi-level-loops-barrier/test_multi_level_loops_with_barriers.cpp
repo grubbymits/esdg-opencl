@@ -36,7 +36,7 @@
 // without -loop-barriers the BTR result seems more sensible
 static char
 kernelSourceCode[] = 
-"kernel \n"
+"__kernel\n"
 "void test_kernel(__global int* input, \n"
 "                 __global int* result,\n"
 "                 int a) {\n"

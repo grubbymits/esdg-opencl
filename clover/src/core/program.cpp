@@ -425,18 +425,30 @@ cl_int Program::build(const char *options,
             // TODO Return here, the code only needs to be checked here.
             if (!dep.compiler->ExpandMacros(TEMP_NAME))
               return CL_BUILD_PROGRAM_FAILURE;
-            if (!dep.compiler->InlineSource(TEMP_NAME))
-              return CL_BUILD_PROGRAM_FAILURE;
 
-            dep.program->SetSource(dep.compiler->getInlinedSource());
+            bool needsInlining = false;
+
+            if (needsInlining) {
+              if (!dep.compiler->InlineSource(TEMP_NAME))
+                return CL_BUILD_PROGRAM_FAILURE;
+
+              dep.program->SetSource(dep.compiler->getInlinedSource());
 #ifdef DEBUGCL
-            std::cerr << "------------------ INLINED SOURCE -------------------"
-              << std::endl << dep.compiler->getInlinedSource() << std::endl;
+              std::cerr << "------------------ INLINED SOURCE -------------------"
+                << std::endl << dep.compiler->getInlinedSource() << std::endl;
 #endif
             // TODO Get a list of kernel function names...?
 
-            // Get module and its bitcode
-            dep.linked_module = dep.compiler->module();
+              // Get module and its bitcode
+              dep.linked_module = dep.compiler->module();
+            }
+            else {
+              std::ifstream expandedSource(TEMP_NAME);
+              std::string str((std::istreambuf_iterator<char>(expandedSource)),
+                              std::istreambuf_iterator<char>());
+              dep.program->SetSource(str);
+              dep.linked_module = dep.compiler->module();
+            }
 
             //llvm::raw_string_ostream ostream(dep.unlinked_binary);
             //llvm::WriteBitcodeToFile(dep.linked_module, ostream);

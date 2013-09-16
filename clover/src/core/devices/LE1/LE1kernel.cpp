@@ -131,7 +131,7 @@ T k_exp(T base, unsigned int e)
 size_t LE1Kernel::guessWorkGroupSize(cl_uint num_dims, cl_uint dim,
                           size_t global_work_size) const
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1Kernel::guessWorkGroupSize\n";
 #endif
     unsigned int cpus = p_device->numLE1s();
@@ -161,7 +161,7 @@ size_t LE1Kernel::guessWorkGroupSize(cl_uint num_dims, cl_uint dim,
         }
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "Leaving LE1Kernel::guessWorkGroupSize\n";
 #endif
     // Return the size
@@ -342,17 +342,17 @@ LE1KernelEvent::LE1KernelEvent(LE1Device *device, KernelEvent *event)
 : p_device(device), p_event(event), p_current_wg(0), p_finished_wg(0),
   p_kernel_args(0)
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::LE1KernelEvent\n";
 #endif
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "mutex_init\n";
 #endif
     // Mutex
     pthread_mutex_init(&p_mutex, 0);
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "memset\n";
 #endif
     // Set current work group to (0, 0, ..., 0)
@@ -363,7 +363,7 @@ LE1KernelEvent::LE1KernelEvent(LE1Device *device, KernelEvent *event)
 
     for (cl_uint i=0; i<event->work_dim(); ++i)
     {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
       std::cerr << "i = " << i << ", global work size = "
         << event->global_work_size(i) << " and local work size = "
         << event->local_work_size(i) << std::endl;
@@ -376,14 +376,14 @@ LE1KernelEvent::LE1KernelEvent(LE1Device *device, KernelEvent *event)
 
         p_num_wg *= p_max_work_groups[i] + 1;
     }
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::LE1KernelEvent\n";
 #endif
 }
 
 LE1KernelEvent::~LE1KernelEvent()
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::~LE1KernelEvent\n";
 #endif
     pthread_mutex_destroy(&p_mutex);
@@ -391,7 +391,7 @@ LE1KernelEvent::~LE1KernelEvent()
     if (p_kernel_args)
         std::free(p_kernel_args);
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::~LE1KernelEvent\n";
 #endif
 }
@@ -409,6 +409,10 @@ bool LE1KernelEvent::AllocateBuffers() {
     if ((Arg.kind() == Kernel::Arg::Buffer) &&
         (Arg.file() != Kernel::Arg::Local)) {
 
+#ifdef DBG_KERNEL
+  std::cerr << "Allocating buffer for arg " << i << std::endl;
+#endif
+
       LE1Buffer* buffer = static_cast<LE1Buffer*>(
         (*(MemObject**)Arg.data())->deviceBuffer(p_device));
 
@@ -423,7 +427,7 @@ bool LE1KernelEvent::AllocateBuffers() {
 
 bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   // TODO Create a proper .s file:
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering createFinalSource\n";
 #endif
 
@@ -447,11 +451,15 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
       return false;
   }
   else {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "Program has already been compiled\n";
 #endif
   }
 
+  p_event->kernel()->SetBuilt();
+  return true;
+
+  /*
   if (!WriteDataArea())
     return false;
 
@@ -464,7 +472,7 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   else {
     p_event->kernel()->SetBuilt();
     return true;
-  }
+  }*/
 }
 
 bool LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
@@ -479,6 +487,10 @@ bool LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
       ArgAddrs.push_back(Addr);
+#ifdef DBG_KERNEL
+      std::cerr << "Arg " << i << "'s address being set to " << Addr
+        << std::endl;
+#endif
       if (arg.file() == Kernel::Arg::Local)
         Addr += (arg.allocAtKernelRuntime() * p_device->numLE1s());
       else
@@ -494,8 +506,9 @@ bool LE1KernelEvent::CalculateBufferAddrs(unsigned Addr) {
 }
 
 bool LE1KernelEvent::CompileSource() {
-#ifdef DEBUGCL
-  std::cerr << "Entering LE1KernelEvent::CompileSource\n";
+#ifdef DBG_KERNEL
+  std::cerr << "Entering LE1KernelEvent::CompileSource for " << KernelName
+    << std::endl;
 #endif
 
   // TODO This part needs to calculate how many cores to instantiate
@@ -528,7 +541,7 @@ bool LE1KernelEvent::CompileSource() {
     return false;
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << std::endl << WorkgroupSource << std::endl;
 #endif
 
@@ -540,7 +553,7 @@ bool LE1KernelEvent::CompileSource() {
 
   //Coarsener.DeleteTempFiles();
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Merged Kernel\n";
 #endif
 
@@ -573,7 +586,7 @@ bool LE1KernelEvent::CompileSource() {
     return false;
   }
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::CompileSource\n";
 #endif
 
@@ -647,7 +660,7 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
   }
 
   LauncherString = launcher.str();
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << LauncherString << std::endl;
 #endif
 }
@@ -661,8 +674,9 @@ void LE1KernelEvent::WriteKernelAttr(std::ostringstream &Output, size_t attr) {
 }
 
 bool LE1KernelEvent::WriteDataArea() {
-#ifdef DEBUGCL
-  std::cerr << "Entering LE1KernelEvent::WriteDataArea\n";
+#ifdef DBG_KERNEL
+  std::cerr << "Entering LE1KernelEvent::WriteDataArea for " << KernelName
+    << std::endl;
 #endif
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
   system(CopyCommand.c_str());
@@ -716,12 +730,16 @@ bool LE1KernelEvent::WriteDataArea() {
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
+#ifdef DBG_KERNEL
+      std::cerr << "Writing arg " << i << "'s address as " << ArgAddrs[j]
+        << std::endl;
+#endif
       Output << std::hex << std::setw(5) << std::setfill('0') << ArgAddrs[j]
         << " - BufferArg_" << std::dec << i << std::endl;
       ++j;
     }
   }
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Written buffer addresses\n";
 #endif
 
@@ -732,17 +750,21 @@ bool LE1KernelEvent::WriteDataArea() {
     << ConvertToBinary(p_event->work_dim())
     << std::endl;
 
-  for(unsigned i = 0; i < 3; ++i)
+  for(unsigned i = 0; i < 3; ++i) {
     WriteKernelAttr(Output, p_event->global_work_size(i));
-#ifdef DEBUGCL
-  std::cerr << "Written global work size\n";
+#ifdef DBG_KERNEL
+  std::cerr << "Written global work size = " << p_event->global_work_size(i)
+    << std::endl;
 #endif
+  }
 
-  for (unsigned i = 0; i < 3; ++i)
+  for (unsigned i = 0; i < 3; ++i) {
     WriteKernelAttr(Output, p_event->local_work_size(i));
-#ifdef DEBUGCL
-  std::cerr << "Written local work size\n";
+#ifdef DBG_KERNEL
+  std::cerr << "Written local work size = " << p_event->local_work_size(i)
+    << std::endl;
 #endif
+  }
 
   // FIXME Printing num_groups?
   for (unsigned i = 0; i < 3; ++i) {
@@ -756,13 +778,13 @@ bool LE1KernelEvent::WriteDataArea() {
     }
   }
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Written work groups (cores)\n";
 #endif
 
   for(unsigned i = 0; i < 3; ++i)
     WriteKernelAttr(Output, p_event->global_work_offset(i));
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Written global work offset\n";
 #endif
 
@@ -776,7 +798,7 @@ bool LE1KernelEvent::WriteDataArea() {
   FinalSource << Output.str();
   FinalSource.close();
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Finished writing final source\n";
 #endif
 
@@ -807,7 +829,7 @@ bool LE1KernelEvent::WriteDataArea() {
         if(!HandleBufferArg(Arg))
           return false;
   }*/
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving createFinalSource\n";
 #endif
 
@@ -815,7 +837,7 @@ bool LE1KernelEvent::WriteDataArea() {
 }
 
 bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "HandleBufferArg\n";
 #endif
 
@@ -833,11 +855,11 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
   if (Data == NULL)
     Data = new unsigned char [TotalSize]();
 
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "Set buffer arg address to " << addr << std::endl;
 #endif
     if (type->getTypeID() == llvm::Type::IntegerTyID) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
       std::cerr << "Data is int\n";
 #endif
       if (type->isIntegerTy(8)) {
@@ -851,20 +873,20 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
       }
     }
     else if (type->getTypeID() == llvm::Type::FloatTyID) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
       std::cerr << "Data is float\n";
 #endif
       PrintData(Data, 0, sizeof(int), TotalSize);
     }
     else if (type->getTypeID() == llvm::Type::VectorTyID) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
       std::cerr << "Data is vector type\n";
 #endif
       llvm::Type* elementType =
         static_cast<llvm::VectorType*>(type)->getElementType();
 
       if (elementType->getTypeID() == llvm::Type::IntegerTyID) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
         std::cerr << "Elements are integers\n";
 #endif
         if (elementType->isIntegerTy(8)) {
@@ -883,7 +905,7 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
       }
     }
     else if (type->getTypeID() == llvm::Type::StructTyID) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
       std::cerr << "Data is Struct\n";
 #endif
       llvm::StructType* StructArg = static_cast<llvm::StructType*>(type);
@@ -895,7 +917,7 @@ bool LE1KernelEvent::HandleBufferArg(const Kernel::Arg &arg) {
         << std::endl;
       return false;
     }
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::HandleBufferArg\n";
 #endif
   //if (isBufferOnDevice)
@@ -921,7 +943,7 @@ void LE1KernelEvent::WriteStructData(llvm::StructType *StructArg,
   // FIXME are pointers allowed in structs?
 
   unsigned NumElements = StructArg->getNumElements();
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Data is struct type, size = " << TotalSize << " with "
     << NumElements << " elements" << std::endl;
 #endif
@@ -999,9 +1021,6 @@ static void ConvertToBinary(std::string *binary_string,
 inline void LE1KernelEvent::PrintLine(unsigned Address,
                                       std::ostringstream &HexString,
                                       std::string &BinaryString) {
-#ifdef DEBUGCL
-  //std::cerr << "PrintLine\n";
-#endif
   std::ofstream asm_out;
   asm_out.open(CompleteFilename.c_str(), std::ios_base::app);
   std::ostringstream DataLine(std::ostringstream::out);
@@ -1030,10 +1049,6 @@ inline void LE1KernelEvent::PrintLine(unsigned Address,
 void LE1KernelEvent::PrintSingleElement(const void *Data,
                                         unsigned *Offset,
                                         size_t ElementSize) {
-#ifdef DEBUGCL
-  //std::cerr << "PrintSingleElement, Address = " << addr << " + " << *Offset
-    //<< std::endl;
-#endif
   static unsigned ByteCount = 0;
   static std::string BinaryString;
   static std::ostringstream HexString;
@@ -1138,7 +1153,7 @@ void LE1KernelEvent::PrintData(const void* data,
                                size_t offset,
                                size_t size,
                                size_t total_bytes) {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entered print_data\n";
   std::cerr << "Start address = " << addr << std::endl;
   std::cerr << "Offset = " << offset << ", total bytes = " << total_bytes
@@ -1273,24 +1288,45 @@ void LE1KernelEvent::PrintData(const void* data,
 
   asm_out.close();
   addr = device_mem_ptr;
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving print_data\n";
 #endif
 
 }
 
 bool LE1KernelEvent::run() {
+#ifdef DBG_KERNEL
+  std::cerr << "Entering LE1KernelEvent::run" << std::endl;
+#endif
  // TODO Use either simulator or hardware? And use variables
  // instead of hard coded parameters
   bool wasSuccess = false;
   //char* device_name = const_cast<char*>(p_device->model());
-  //p_device->getSimulator()->LockAccess();
+  LE1Simulator *simulator = p_device->getSimulator();
+  simulator->LockAccess();
+
+  if (!WriteDataArea()) {
+    pthread_mutex_unlock(&p_mutex);
+    simulator->UnlockAccess();
+    return false;
+  }
+
+  std::string assemble = "perl " + LE1Device::ScriptsDir + "secondpass.pl ";
+  assemble.append(CompleteFilename);
+  assemble.append(" -OPC=").append(LE1Device::IncDir + "opcodes.txt");
+
+  if (system(assemble.c_str()) != 0) {
+    simulator->UnlockAccess();
+    return false;
+  }
+
   std::string dram = "binaries/final_" + KernelName + ".data.bin";
   std::string iram = "binaries/final_" + KernelName + ".s.bin";
 
-  wasSuccess = p_device->getSimulator()->Run(iram.c_str(), dram.c_str());
+  wasSuccess = simulator->Run(iram.c_str(), dram.c_str());
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
+    simulator->UnlockAccess();
     return false;
   }
 
@@ -1301,6 +1337,10 @@ bool LE1KernelEvent::run() {
     const Kernel::Arg& Arg = TheKernel->arg(i);
     if ((Arg.kind() == Kernel::Arg::Buffer) &&
         (Arg.file() != Kernel::Arg::Local)) {
+
+#ifdef DBG_KERNEL
+      std::cerr << "Updating kernel arg " << i << std::endl;
+#endif
       LE1Buffer* buffer =
         static_cast<LE1Buffer*>((*(MemObject**)Arg.data())->deviceBuffer(p_device));
 
@@ -1336,21 +1376,24 @@ bool LE1KernelEvent::run() {
   }
 
   p_device->SaveStats(KernelName);
-  //p_device->getSimulator()->UnlockAccess();
+  simulator->UnlockAccess();
 
   // Release event
   pthread_mutex_unlock(&p_mutex);
+#ifdef DBG_KERNEL
+  std::cerr << "Leaving LE1KernelEvent::run" << std::endl;
+#endif
   return wasSuccess;
 }
 
 bool LE1KernelEvent::reserve()
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::reserve\n";
 #endif
     // Lock, this will be unlocked in takeInstance()
     pthread_mutex_lock(&p_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::reserve\n";
 #endif
 
@@ -1362,7 +1405,7 @@ bool LE1KernelEvent::reserve()
 
 bool LE1KernelEvent::finished()
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::finished\n";
 #endif
     bool rs;
@@ -1372,7 +1415,7 @@ bool LE1KernelEvent::finished()
     rs = (p_finished_wg == p_num_wg);
 
     pthread_mutex_unlock(&p_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::finished\n";
 #endif
 
@@ -1381,7 +1424,7 @@ bool LE1KernelEvent::finished()
 
 void LE1KernelEvent::workGroupFinished()
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::workGroupFinished\n";
 #endif
     pthread_mutex_lock(&p_mutex);
@@ -1389,14 +1432,14 @@ void LE1KernelEvent::workGroupFinished()
     p_finished_wg++;
 
     pthread_mutex_unlock(&p_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "Leaving LE1KernelEvent::workGroupFinished\n";
 #endif
 }
 
 LE1KernelWorkGroup *LE1KernelEvent::takeInstance()
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::takeInstance\n";
 #endif
     LE1KernelWorkGroup *wg = new LE1KernelWorkGroup((LE1Kernel *)p_event->deviceKernel(),
@@ -1410,7 +1453,7 @@ LE1KernelWorkGroup *LE1KernelEvent::takeInstance()
 
     // Release event
     pthread_mutex_unlock(&p_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "Leaving LE1KernelEvent::takeInstance\n";
 #endif
 
@@ -1437,7 +1480,7 @@ LE1KernelWorkGroup::LE1KernelWorkGroup(LE1Kernel *kernel, KernelEvent *event,
   p_work_dim(event->work_dim()), p_contexts(0), p_stack_size(8192 /* TODO */),
   p_had_barrier(false)
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelWorkGroup::LE1KernelWorkGroup\n";
 #endif
 
@@ -1456,31 +1499,31 @@ LE1KernelWorkGroup::LE1KernelWorkGroup(LE1Kernel *kernel, KernelEvent *event,
         p_global_id_start_offset[i] = (p_index[i] * event->local_work_size(i))
                          + event->global_work_offset(i);
     }
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelWorkGroup::LE1KernelWorkGroup\n";
 #endif
 }
 
 LE1KernelWorkGroup::~LE1KernelWorkGroup()
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelWorkGroup::~LE1KernelWorkGroup\n";
 #endif
     p_cpu_event->workGroupFinished();
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelWorkGroup::~LE1KernelWorkGroup\n";
 #endif
 }
 
 void *LE1KernelWorkGroup::callArgs(std::vector<void *> &locals_to_free)
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelWorkGroup::callArgs\n";
 #endif
     if (p_cpu_event->kernelArgs() && !p_kernel->kernel()->hasLocals())
     {
         // We have cached the args and can reuse them
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
       std::cerr << "Leaving callArgs because we have cached the args\n";
 #endif
         return p_cpu_event->kernelArgs();
@@ -1587,7 +1630,7 @@ void *LE1KernelWorkGroup::callArgs(std::vector<void *> &locals_to_free)
 
 bool LE1KernelWorkGroup::run()
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelWorkGroup::run\n";
 #endif
   /*
@@ -1652,7 +1695,7 @@ bool LE1KernelWorkGroup::run()
         std::free(p_args);
     }
     */
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelWorkGroup::run\n";
 #endif
     return true;
@@ -1660,7 +1703,7 @@ bool LE1KernelWorkGroup::run()
 
 LE1KernelWorkGroup::Context *LE1KernelWorkGroup::getContextAddr(unsigned int index)
 {
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelWorkGroup::getContextAddr\n";
 #endif
     size_t size;
@@ -1669,7 +1712,7 @@ LE1KernelWorkGroup::Context *LE1KernelWorkGroup::getContextAddr(unsigned int ind
     // Each Context in data is an element of size p_stack_size + sizeof(Context)
     size = p_stack_size + sizeof(Context);
     size *= index;  // To get an offset
-#ifdef DEBUGCL
+#ifdef DBG_KERNEL
     std::cerr << "Leaving LE1KernelWorkGroup::getContextAddr\n";
 #endif
 

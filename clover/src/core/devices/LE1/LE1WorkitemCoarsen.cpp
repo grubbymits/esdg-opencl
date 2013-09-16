@@ -724,7 +724,6 @@ bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
   std::cerr << "Entering CreateLocal ";
   if (toExpand)
     std::cerr << " - going to expand variable ";
-  std::cerr << pthread_self();
   std::cerr << std::endl;
 #endif
 
@@ -747,7 +746,7 @@ bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
     ConstantArrayType *arrayType =
       cast<ConstantArrayType>(const_cast<Type*>(VarType));
     uint64_t arraySize = arrayType->getSize().getZExtValue();
-    typeStr = arrayType->getElementType().getAsString();
+    typeStr = arrayType->getElementType().getUnqualifiedType().getAsString();
     NewDecl << typeStr <<  " " << varName;
 
     if (toExpand)

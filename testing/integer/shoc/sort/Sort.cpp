@@ -11,13 +11,10 @@ bool verifySort(unsigned int *keys, const size_t size)
 
     for (unsigned int i = 0; i < size - 1; i++)
     {
+      std::cout << "keys[" << i << "] = " << keys[i] << std::endl;
         if (keys[i] > keys[i + 1])
         {
             passed = false;
-#ifdef VERBOSE_OUTPUT
-            std::cout << "Idx: " << i;
-            std::cout << " Key: " << keys[i] << "\n";
-#endif
         }
     }
     std::cout << "Test ";
@@ -49,7 +46,9 @@ int main(int argc, char *argv[])
   int size = probSizes[0];
 
   // Convert to MiB
-  size = (size * 1024 * 1024) / sizeof(unsigned);
+  //size = (size * 1024 * 1024) / sizeof(unsigned);
+  // Convert to KiB
+  size = (size * 1024) / sizeof(unsigned);
 
   // Create input data on CPU
   unsigned int bytes = size * sizeof(unsigned);
@@ -105,10 +104,10 @@ int main(int argc, char *argv[])
   CL_CHECK_ERROR(err);
 
   // Number of local work items per group
-  const size_t local_wsize  = 128;
+  const size_t local_wsize  = 256;
     
   // Number of global work items
-  const size_t global_wsize = 16384; // i.e. 64 work groups
+  const size_t global_wsize = 256;//16384; // i.e. 64 work groups
   const size_t num_work_groups = global_wsize / local_wsize;
 
   // Allocate device memory for local work group intermediate sums
