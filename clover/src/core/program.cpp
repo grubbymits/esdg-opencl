@@ -423,14 +423,21 @@ cl_int Program::build(const char *options,
             temp_file.close();
 
             // TODO Return here, the code only needs to be checked here.
-            if (!dep.compiler->ExpandMacros(TEMP_NAME))
+            if (!dep.compiler->ExpandMacros(TEMP_NAME)) {
+              if (pfn_notify)
+                pfn_notify((cl_program)this, user_data);
               return CL_BUILD_PROGRAM_FAILURE;
+            }
 
-            bool needsInlining = false;
+            bool needsInlining = true;
 
             if (needsInlining) {
-              if (!dep.compiler->InlineSource(TEMP_NAME))
+
+              if (!dep.compiler->InlineSource(TEMP_NAME)) {
+                if (pfn_notify)
+                  pfn_notify((cl_program)this, user_data);
                 return CL_BUILD_PROGRAM_FAILURE;
+              }
 
               dep.program->SetSource(dep.compiler->getInlinedSource());
 #ifdef DEBUGCL

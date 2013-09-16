@@ -11,7 +11,6 @@ bool verifySort(unsigned int *keys, const size_t size)
 
     for (unsigned int i = 0; i < size - 1; i++)
     {
-      std::cout << "keys[" << i << "] = " << keys[i] << std::endl;
         if (keys[i] > keys[i + 1])
         {
             passed = false;
@@ -107,7 +106,7 @@ int main(int argc, char *argv[])
   const size_t local_wsize  = 256;
     
   // Number of global work items
-  const size_t global_wsize = 256;//16384; // i.e. 64 work groups
+  const size_t global_wsize = 16384; // i.e. 64 work groups
   const size_t num_work_groups = global_wsize / local_wsize;
 
   // Allocate device memory for local work group intermediate sums
@@ -210,6 +209,12 @@ int main(int argc, char *argv[])
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("reduce"), 1, NULL,
                                  &global_wsize, &local_wsize, 0, NULL, NULL);
 
+    err = clEnqueueReadBuffer(cl.queue(), d_idata, true, 0, bytes, h_odata,
+                              0, NULL, NULL);
+    std::cout << "SHIFT = " << shift << " : " << std::endl;
+    for (unsigned int i = 0; i < size - 1; i++)
+      std::cout << "keys[" << i << "] = " << h_odata[i] << std::endl;
+
     std::cout << "RUN TOP_SCAN" << std::endl;
     // Next, a top-level exclusive scan is performed on the
     // per block histograms.  This is done by a single
@@ -217,12 +222,26 @@ int main(int argc, char *argv[])
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("top_scan"), 1, NULL,
                                  &local_wsize, &local_wsize, 0, NULL, NULL);
 
+    err = clEnqueueReadBuffer(cl.queue(), d_idata, true, 0, bytes, h_odata,
+                              0, NULL, NULL);
+    std::cout << "SHIFT = " << shift << " : " << std::endl;
+    for (unsigned int i = 0; i < size - 1; i++)
+      std::cout << "keys[" << i << "] = " << h_odata[i] << std::endl;
+
     std::cout << "RUN BOTTOM_SCAN" << std::endl;
     // Finally, a bottom-level scan is performed by each block
     // that is seeded with the scanned histograms which rebins,
     // locally scans, then scatters keys to global memory
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("bottom_scan"), 1, NULL,
                                  &global_wsize, &local_wsize, 0, NULL, NULL);
+
+    err = clEnqueueReadBuffer(cl.queue(), d_idata, true, 0, bytes, h_odata,
+                              0, NULL, NULL);
+    std::cout << "SHIFT = " << shift << " : " << std::endl;
+    for (unsigned int i = 0; i < size - 1; i++)
+      std::cout << "keys[" << i << "] = " << h_odata[i] << std::endl;
+
+
   }
 
   err = cl.finish();
