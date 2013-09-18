@@ -50,6 +50,10 @@ TransformationManager::TransformationsMapPtr;
 
 TransformationManager *TransformationManager::GetInstance(void)
 {
+  if (!TransformationManager::TransformationsMapPtr) {
+    TransformationManager::TransformationsMapPtr = 
+      new std::map<std::string, Transformation *>();
+  }
 #ifdef DEBUGCL
   std::cerr << "TransformationManager::GetInstance" << std::endl;
 #endif

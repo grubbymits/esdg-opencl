@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
   // Problem Sizes
   int probSizes[4] = { 1, 8, 32, 64 };
-  int size = probSizes[0];
+  int size = probSizes[1];
 
   // Convert to MiB
   //size = (size * 1024 * 1024) / sizeof(unsigned);
@@ -107,7 +107,8 @@ int main(int argc, char *argv[])
   const size_t local_wsize  = 256;
     
   // Number of global work items
-  const size_t global_wsize = 256; //16384; // i.e. 64 work groups
+  //const size_t global_wsize = 16384; // i.e. 64 work groups
+  const size_t global_wsize = size;
   const size_t num_work_groups = global_wsize / local_wsize;
 
   // Allocate device memory for local work group intermediate sums
@@ -154,7 +155,9 @@ int main(int argc, char *argv[])
   err = cl.finish();
   CL_CHECK_ERROR(err);
 
+#ifdef DEBUG_SORT
   unsigned temp_data[global_wsize] = {0};
+#endif
 
   // Run
   // Assuming an 8 bit byte.
@@ -210,6 +213,15 @@ int main(int argc, char *argv[])
     // input array, and computes occurrences of each digit.
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("reduce"), 1, NULL,
                                  &global_wsize, &local_wsize, 0, NULL, NULL);
+#ifdef DEBUG_SORT
+    err = clEnqueueReadBuffer(cl.queue(), d_isums, true, 0,
+                              num_work_groups * num_digits * sizeof(cl_int),
+                              temp_data, 0, NULL, NULL);
+    for (unsigned i = 0; i < num_work_groups * num_digits; ++i)
+      std::cout << "d_isums[" << i << "] = " << temp_data[i] << std::endl;
+#endif
+
+    cl.finish();
 
     std::cout << "RUN TOP_SCAN" << std::endl;
     // Next, a top-level exclusive scan is performed on the
@@ -218,6 +230,16 @@ int main(int argc, char *argv[])
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("top_scan"), 1, NULL,
                                  &local_wsize, &local_wsize, 0, NULL, NULL);
 
+    cl.finish();
+#ifdef DEBUG_SORT
+    err = clEnqueueReadBuffer(cl.queue(), d_isums, true, 0,
+                              num_work_groups * num_digits * sizeof(cl_int),
+                              temp_data, 0, NULL, NULL);
+    cl.finish();
+    for (unsigned i = 0; i < num_work_groups * num_digits; ++i)
+      std::cout << "d_isums[" << i << "] = " << temp_data[i] << std::endl;
+#endif
+
     std::cout << "RUN BOTTOM_SCAN" << std::endl;
     // Finally, a bottom-level scan is performed by each block
     // that is seeded with the scanned histograms which rebins,
@@ -225,6 +247,8 @@ int main(int argc, char *argv[])
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("bottom_scan"), 1, NULL,
                                  &global_wsize, &local_wsize, 0, NULL, NULL);
 
+    cl.finish();
+#ifdef DEBUG_SORT
     if (even) {
       err = clEnqueueReadBuffer(cl.queue(), d_odata, true, 0, bytes, temp_data,
                               0, NULL, NULL);
@@ -242,6 +266,7 @@ int main(int argc, char *argv[])
         std::cout << "keys[" << i << "] = " << temp_data[i] << std::endl;
 
     }
+#endif
   }
 
   err = cl.finish();
@@ -255,10 +280,10 @@ int main(int argc, char *argv[])
 
   // If answer is incorrect, stop test and do not report performance
   if (! verifySort(h_odata, size)) {
-    std::cout << "FAIL" << std::endl;
+    std::cerr << "FAIL" << std::endl;
     return -1;
   }
-  std::cout << "PASS" << std::endl;
+  std::cerr << "PASS" << std::endl;
 
   return 0;
 }
