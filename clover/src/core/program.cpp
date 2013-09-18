@@ -429,38 +429,27 @@ cl_int Program::build(const char *options,
               return CL_BUILD_PROGRAM_FAILURE;
             }
 
-            bool needsInlining = true;
 
-            if (needsInlining) {
-
-              if (!dep.compiler->InlineSource(TEMP_NAME)) {
-                if (pfn_notify)
-                  pfn_notify((cl_program)this, user_data);
-                return CL_BUILD_PROGRAM_FAILURE;
-              }
-
+            int inlineResult = dep.compiler->InlineSource(TEMP_NAME);
+            if (inlineResult == -1) {
+              if (pfn_notify)
+                pfn_notify((cl_program)this, user_data);
+              return CL_BUILD_PROGRAM_FAILURE;
+            }
+            // Nothing was inlined
+            else if (inlineResult == 1)
+              dep.program->SetSource(p_source);
+            else
               dep.program->SetSource(dep.compiler->getInlinedSource());
-#ifdef DEBUGCL
-              std::cerr << "------------------ INLINED SOURCE -------------------"
-                << std::endl << dep.compiler->getInlinedSource() << std::endl;
-#endif
-            // TODO Get a list of kernel function names...?
 
-              // Get module and its bitcode
-              dep.linked_module = dep.compiler->module();
-            }
-            else {
-              std::ifstream expandedSource(TEMP_NAME);
-              std::string str((std::istreambuf_iterator<char>(expandedSource)),
-                              std::istreambuf_iterator<char>());
-              dep.program->SetSource(str);
-              dep.linked_module = dep.compiler->module();
-            }
+            // Get module and its bitcode
+            dep.linked_module = dep.compiler->module();
+        }
 
             //llvm::raw_string_ostream ostream(dep.unlinked_binary);
             //llvm::WriteBitcodeToFile(dep.linked_module, ostream);
             //ostream.flush();
-        }
+      //}
 
         // FIXME Need to link to an LE1 library!
         // Link p_linked_module with the stdlib if the device needs that

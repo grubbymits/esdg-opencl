@@ -38,7 +38,6 @@
 #include <clang/Frontend/CompilerInstance.h>
 #include <llvm/Support/raw_ostream.h>
 
-#include "devices/LE1/creduce/TransformationManager.h"
 
 #define CLANG_RESOURCE_DIR "/opt/esdg-opencl/lib/clang/3.2/"
 #define LIBCLC_INCLUDE_DIR "/opt/esdg-opencl/include"
@@ -87,7 +86,7 @@ class Compiler
 
         bool ExpandMacros(const char *filename);
 
-        bool InlineSource(const char *filename);
+        int InlineSource(const char *filename);
 
         bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind,
                               const std::string &Opts);

@@ -32,6 +32,8 @@
 
 #include "deviceinterface.h"
 #include "compiler.h"
+#include "devices/LE1/creduce/TransformationManager.h"
+#include "devices/LE1/creduce/SimpleInliner.h"
 
 #include <cstring>
 #include <string>
@@ -87,6 +89,7 @@ Compiler::~Compiler()
 #ifdef DEBUGCL
   std::cerr << "Destructing Compiler::Compiler\n";
 #endif
+  //TransformationManager::Finalize();
 }
 
 
@@ -125,29 +128,63 @@ bool Compiler::ExpandMacros(const char *filename) {
   return true;
 }
 
-bool Compiler::InlineSource(const char *filename) {
+int Compiler::InlineSource(const char *filename) {
+#ifdef DEBUGCL
+  std::cerr << "Entering Compiler::InlineSource for " << filename << std::endl;
+#endif
+  std::string err;
   TransformationManager *TM = TransformationManager::GetInstance();
-  TM->reset();
 
+  // First check whether there are any functions to inline
+  SimpleInliner *simpleInliner = new SimpleInliner("simple-inliner", "inline");
+  TM->setTransformation(simpleInliner);
   TM->setSrcFileName(filename);
   TM->setOutputFileName(filename);
-  TM->setTransformationCounter(2);
+  TM->setQueryInstanceFlag(true);
+  TM->setTransformationCounter(1);
 
-  if (TM->setTransformation("simple-inliner") != 0) {
-    std::cerr << "!!ERROR: Setting transformation failed!" << std::endl;
-    return false;
-  }
-
-  std::string err;
   if (!TM->initializeCompilerInstance(err)) {
     std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
       << err << std::endl;
-    return false;
+    return -1;
   }
 
   if (!TM->doTransformation(err)) {
-    std::cerr << "Inline failed!:" << std::endl << err << std::endl;
-    return false;
+    std::cerr << "!!ERROR: " << err << std::endl;
+    return -1;
+  }
+
+  int numInstances = TM->getNumTransformationInstances();
+#ifdef DEBUGCL
+  std::cerr << "Need to inline " << numInstances << " functions"
+    << std::endl;
+#endif
+
+  if (numInstances == 0) {
+    return 1;
+  }
+
+  int completed = 0;
+  while (completed != numInstances) {
+    TM->reset();
+    simpleInliner = new SimpleInliner("simple-inliner", "inline");
+    TM->setTransformation(simpleInliner);
+    TM->setSrcFileName(filename);
+    TM->setOutputFileName(filename);
+    TM->setQueryInstanceFlag(false);
+    TM->setTransformationCounter(1);
+
+    if (!TM->initializeCompilerInstance(err)) {
+      std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
+        << err << std::endl;
+      return -1;
+    }
+
+    if (!TM->doTransformation(err)) {
+      std::cerr << "Inline failed!:" << std::endl << err << std::endl;
+      return -1;
+    }
+    ++completed;
   }
 
   std::ifstream inlined_file(filename);
@@ -155,7 +192,9 @@ bool Compiler::InlineSource(const char *filename) {
                   std::istreambuf_iterator<char>());
   InlinedSource.assign(str);
 
-  return true;
+  TransformationManager::Finalize();
+
+  return 0;
 }
 
 bool Compiler::CompileToBitcode(std::string &Source,

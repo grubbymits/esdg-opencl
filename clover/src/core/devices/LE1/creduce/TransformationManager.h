@@ -11,6 +11,7 @@
 #ifndef TRANSFORMATION_MANAGER_H
 #define TRANSFORMATION_MANAGER_H
 
+#include <iostream>
 #include <string>
 #include <map>
 #include <cassert>
@@ -41,10 +42,19 @@ public:
 
   bool verify(std::string &ErrorMsg);
 
+  /*
   int setTransformation(const std::string &Trans) {
     if (TransformationsMap.find(Trans.c_str()) == TransformationsMap.end())
       return -1;
     CurrentTransformationImpl = TransformationsMap[Trans.c_str()];
+#ifdef DEBUGCL
+    std::cerr << "Set CurrentTransformationImpl to " << Trans.c_str()
+      << std::endl;
+#endif
+    return 0;
+  }*/
+  int setTransformation(Transformation *TransImpl) {
+    CurrentTransformationImpl = TransImpl;
     return 0;
   }
 
@@ -77,6 +87,8 @@ public:
   bool getQueryInstanceFlag(void) {
     return QueryInstanceOnly;
   }
+
+  int getNumTransformationInstances(void);
 
   void reset(void);
 

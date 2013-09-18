@@ -52,8 +52,8 @@ also it will keep the inlined function body unchanged. \
 If the inlined body has no reference anymore, c_delta \
 will remove it entirely. \n";
 
-static RegisterTransformation<SimpleInliner>
-         Trans("simple-inliner", DescriptionMsg);
+//static RegisterTransformation<SimpleInliner>
+  //       Trans("simple-inliner", DescriptionMsg);
 
 class SimpleInlinerCollectionVisitor : public 
   RecursiveASTVisitor<SimpleInlinerCollectionVisitor> {
@@ -597,6 +597,9 @@ void SimpleInliner::replaceCallExpr(void)
 
 SimpleInliner::~SimpleInliner(void)
 {
+#ifdef DEBUGCL
+  std::cerr << "Destroying SimpleInliner" << std::endl;
+#endif
   delete NameQueryWrap;
   delete CollectionVisitor;
   delete FunctionVisitor;

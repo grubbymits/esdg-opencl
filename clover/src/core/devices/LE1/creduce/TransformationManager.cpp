@@ -50,11 +50,18 @@ TransformationManager::TransformationsMapPtr;
 
 TransformationManager *TransformationManager::GetInstance(void)
 {
+#ifdef DEBUGCL
+  std::cerr << "TransformationManager::GetInstance" << std::endl;
+#endif
   if (TransformationManager::Instance)
     return TransformationManager::Instance;
 
   TransformationManager::Instance = new TransformationManager();
   assert(TransformationManager::Instance);
+
+#ifdef DEBUGCL
+  std::cerr << "Created new TransformationManager" << std::endl;
+#endif
 
   TransformationManager::Instance->TransformationsMap = 
     *TransformationManager::TransformationsMapPtr;
@@ -85,11 +92,14 @@ void TransformationManager::reset(void) {
 #endif
   if (ClangInstance) {
 #ifdef DEBUGCL
-    std::cerr << "Deleting ClangInstance, addr: " << ClangInstance << std::endl;
+    std::cerr << "Deleting ClangInstance" << std::endl;
 #endif
     delete ClangInstance;
     ClangInstance = NULL;
   }
+#ifdef DEBUGCL
+  std::cerr << "Clearing associated strings" << std::endl;
+#endif
   SrcFileName.erase();
   OutputFileName.erase();
   Source.erase();
@@ -97,15 +107,17 @@ void TransformationManager::reset(void) {
 
 bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
 {
+#ifdef DEBUGCL
+  std::cerr << "Entering TransformationManager::initializeCompilerInstance"
+    << std::endl;
+#endif
+
   if (ClangInstance) {
     ErrorMsg = "CompilerInstance has been initialized!";
     return false;
   }
 
   ClangInstance = new CompilerInstance();
-#ifdef DEBUGCL
-  std::cerr << "Created ClangInstance at addr: " << ClangInstance << std::endl;
-#endif
   assert(ClangInstance);
   
   ClangInstance->createDiagnostics(0, 0);
@@ -130,6 +142,7 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   Invocation.setLangDefaults(ClangInstance->getLangOpts(), IK_OpenCL);
 
   TargetOptions &TargetOpts = ClangInstance->getTargetOpts();
+  // FIXME This shouldn't be fixed
   TargetOpts.Triple = "le1"; //LLVM_DEFAULT_TARGET_TRIPLE;
   TargetInfo *Target =
     TargetInfo::CreateTargetInfo(ClangInstance->getDiagnostics(),
@@ -145,7 +158,11 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   ClangInstance->createASTContext();
 
   assert(CurrentTransformationImpl && "Bad transformation instance!");
+
+  // FIXME - When ClangInstance is deleted, I believe its destroying
+  // the transformation too!
   ClangInstance->setASTConsumer(CurrentTransformationImpl);
+
   Preprocessor &PP = ClangInstance->getPreprocessor();
   PP.getBuiltinInfo().InitializeBuiltins(PP.getIdentifierTable(),
                                          PP.getLangOpts());
@@ -338,6 +355,10 @@ void TransformationManager::printTransformationNames(void)
        I != E; ++I) {
     llvm::outs() << (*I).first << "\n";
   }
+}
+
+int TransformationManager::getNumTransformationInstances(void) {
+    return CurrentTransformationImpl->getNumTransformationInstances();
 }
 
 void TransformationManager::outputNumTransformationInstances(void)
