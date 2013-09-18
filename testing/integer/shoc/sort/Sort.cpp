@@ -15,6 +15,7 @@ bool verifySort(unsigned int *keys, const size_t size)
         {
             passed = false;
         }
+        std::cout << "keys[" << i << "] = " << keys[i] << std::endl;
     }
     std::cout << "Test ";
     if (passed)
@@ -106,7 +107,7 @@ int main(int argc, char *argv[])
   const size_t local_wsize  = 256;
     
   // Number of global work items
-  const size_t global_wsize = 16384; // i.e. 64 work groups
+  const size_t global_wsize = 256; //16384; // i.e. 64 work groups
   const size_t num_work_groups = global_wsize / local_wsize;
 
   // Allocate device memory for local work group intermediate sums
@@ -153,10 +154,11 @@ int main(int argc, char *argv[])
   err = cl.finish();
   CL_CHECK_ERROR(err);
 
+  unsigned temp_data[global_wsize] = {0};
+
   // Run
   // Assuming an 8 bit byte.
   for (int shift = 0; shift < sizeof(unsigned)*8; shift += radix_width) {
-    std::cout << "Shift = " << shift << std::endl;
 
     // Like scan, we use a reduce-then-scan approach
     // But before proceeding, update the shift appropriately
@@ -209,24 +211,12 @@ int main(int argc, char *argv[])
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("reduce"), 1, NULL,
                                  &global_wsize, &local_wsize, 0, NULL, NULL);
 
-    err = clEnqueueReadBuffer(cl.queue(), d_idata, true, 0, bytes, h_odata,
-                              0, NULL, NULL);
-    std::cout << "SHIFT = " << shift << " : " << std::endl;
-    for (unsigned int i = 0; i < size - 1; i++)
-      std::cout << "keys[" << i << "] = " << h_odata[i] << std::endl;
-
     std::cout << "RUN TOP_SCAN" << std::endl;
     // Next, a top-level exclusive scan is performed on the
     // per block histograms.  This is done by a single
     // work group (note global size here is the same as local).
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("top_scan"), 1, NULL,
                                  &local_wsize, &local_wsize, 0, NULL, NULL);
-
-    err = clEnqueueReadBuffer(cl.queue(), d_idata, true, 0, bytes, h_odata,
-                              0, NULL, NULL);
-    std::cout << "SHIFT = " << shift << " : " << std::endl;
-    for (unsigned int i = 0; i < size - 1; i++)
-      std::cout << "keys[" << i << "] = " << h_odata[i] << std::endl;
 
     std::cout << "RUN BOTTOM_SCAN" << std::endl;
     // Finally, a bottom-level scan is performed by each block
@@ -235,13 +225,23 @@ int main(int argc, char *argv[])
     err = clEnqueueNDRangeKernel(cl.queue(), cl.kernel("bottom_scan"), 1, NULL,
                                  &global_wsize, &local_wsize, 0, NULL, NULL);
 
-    err = clEnqueueReadBuffer(cl.queue(), d_idata, true, 0, bytes, h_odata,
+    if (even) {
+      err = clEnqueueReadBuffer(cl.queue(), d_odata, true, 0, bytes, temp_data,
                               0, NULL, NULL);
-    std::cout << "SHIFT = " << shift << " : " << std::endl;
-    for (unsigned int i = 0; i < size - 1; i++)
-      std::cout << "keys[" << i << "] = " << h_odata[i] << std::endl;
+      std::cout << "Now even, reading d_odata" << std::endl;
+      std::cout << "shift = " << shift << " : " << std::endl;
+      for (unsigned int i = 0; i < size - 1; i++)
+        std::cout << "keys[" << i << "] = " << temp_data[i] << std::endl;
+    }
+    else {
+      err = clEnqueueReadBuffer(cl.queue(), d_idata, true, 0, bytes, temp_data,
+                              0, NULL, NULL);
+      std::cout << "Now odd, reading d_idata" << std::endl;
+      std::cout << "shift = " << shift << " : " << std::endl;
+      for (unsigned int i = 0; i < size - 1; i++)
+        std::cout << "keys[" << i << "] = " << temp_data[i] << std::endl;
 
-
+    }
   }
 
   err = cl.finish();
