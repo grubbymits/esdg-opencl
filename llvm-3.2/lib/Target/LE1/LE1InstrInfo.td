@@ -452,7 +452,7 @@ class EffectiveAddress<string instr_asm> :
 // -----------------------------------------------------------------------//
 
 // Conditional Branch
-let isBranch = 1, isTerminator = 1, isBarrier = 1 in
+let isBranch = 1, isTerminator = 1 in //isBarrier = 1 in
 class CBranch<string instr_asm, SDNode OpNode>:
       LE1Inst<(outs),
       (ins BRegs:$cond, brtarget:$dst),

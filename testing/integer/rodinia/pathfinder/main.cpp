@@ -35,6 +35,11 @@ int   Ne = rows * cols;
 int*  data;
 int** wall;
 int*  result;
+
+int* omp_data;
+int** omp_wall;
+int* omp_result;
+
 int   pyramid_height;
 
 void init(int argc, char** argv)
@@ -52,12 +57,17 @@ void init(int argc, char** argv)
 	}
 	data = new int[rows * cols];
 	wall = new int*[rows];
+        omp_data = new int[rows *cols];
+	omp_wall = new int*[rows];
+
 	for (int n = 0; n < rows; n++)
 	{
 		// wall[n] is set to be the nth row of the data array.
 		wall[n] = data + cols * n;
+                omp_wall[n] = omp_data + cols * n;
 	}
 	result = new int[cols];
+        omp_result = new int[cols];
 
 	int seed = M_SEED;
 	srand(seed);
@@ -67,8 +77,12 @@ void init(int argc, char** argv)
 		for (int j = 0; j < cols; j++)
 		{
 			wall[i][j] = rand() % 10;
+                        omp_wall[i][j] = wall[i][j];
 		}
 	}
+        for (int j = 0; j < cols; j++)
+          omp_result[j] = omp_wall[0][j];
+
 #ifdef BENCH_PRINT
 	for (int i = 0; i < rows; i++)
 	{
@@ -79,6 +93,29 @@ void init(int argc, char** argv)
 		printf("\n");
 	}
 #endif
+}
+
+void run_omp(void) {
+  int *src, *dst, *temp;
+  int min;
+
+  dst = omp_result;
+  src = new int[cols];
+
+  for (int t = 0; t < rows-1; t++) {
+    temp = src;
+    src = dst;
+    dst = temp;
+    #pragma omp parallel for private(min)
+    for(int n = 0; n < cols; n++){
+      min = src[n];
+      if (n > 0)
+        min = MIN(min, src[n-1]);
+      if (n < cols-1)
+        min = MIN(min, src[n+1]);
+      dst[n] = omp_wall[t+1][n]+min;
+    }
+  }
 }
 
 void fatal(char *s)
@@ -203,12 +240,26 @@ int main(int argc, char** argv)
 	// Tack a null terminator at the end of the string.
 	h_outputBuffer[16383] = '\0';
 
+        run_omp();
+        int success = 1;
+        for (int i = 0; i < cols; i++) {
+          if (result[i] != omp_result[i]) {
+            printf("FAIL: result[%d] = %d but omp_result[%d] = %d\n",
+                  i, result[i], i, omp_result[i]);
+            printf("data = %d, omp_data = %d\n", data[i], omp_data[i]);
+            success = 0;
+          }
+        }
+        if (success)
+          printf("SUCCESS\n");
+
 #ifdef BENCH_PRINT
+        printf("data: \n");
 	for (int i = 0; i < cols; i++)
-		printf("%d ", data[i]);
-	printf("\n");
+		printf("%d\n", data[i]);
+	printf("\nresult: \n");
 	for (int i = 0; i < cols; i++)
-		printf("%d ", result[i]);
+		printf("%d\n", result[i]);
 	printf("\n");
 #endif
 
@@ -216,6 +267,9 @@ int main(int argc, char** argv)
 	delete[] data;
 	delete[] wall;
 	delete[] result;
+	delete[] omp_data;
+	delete[] omp_wall;
+	delete[] omp_result;
 	
 	return EXIT_SUCCESS;
 }

@@ -4,7 +4,7 @@ CC = clang++
 SRC = main.cpp OpenCL.cpp
 LIBS = -L/opt/esdg-opencl/lib -lOpenCL
 INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
-CC_FLAGS =
+CC_FLAGS = -fopenmp 
 
 EXE = pathfinder
 

@@ -55,6 +55,7 @@ void OpenCL::launch(string toLaunch)
 		printf("\nError attempting to launch %s. Error in clCreateProgramWithSource with error code %i\n\n", toLaunch.c_str(), ret);
 		exit(1);
 	}
+        clFinish(command_queue);
 }
 
 void OpenCL::gwSize(size_t theSize)

@@ -778,19 +778,30 @@ bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
 void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
                                                              bool toExpand) {
 #ifdef DEBUGCL
-  std::cerr << "Entering RemoveScalarDeclStmt" << std::endl;
+  std::cerr << "Entering RemoveScalarDeclStmt:\n" << std::endl;
+  DS->dumpAll();
 #endif
 
   VarDecl *VD = cast<VarDecl>(DS->getSingleDecl());
   NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
+  ValueDecl *ValD = cast<ValueDecl>(DS->getSingleDecl());
+
   std::string varName = ND->getName().str();
 
   if (!VD->hasInit()) {
+#ifdef DEBUGCL
+    std::cerr << "DeclStmt has no initialiser" << std::endl;
+#endif
     TheRewriter.RemoveText(DS->getSourceRange());
     return;
   }
 
   Expr* varInit = VD->getInit();
+#ifdef DEBUGCL
+  std::cerr << "Initialiser = ";
+  varInit->dumpPretty(VD->getASTContext());
+  std::cerr << std::endl;
+#endif
   SourceLocation AccessLoc = varInit->getLocStart().getLocWithOffset(-1);
 
   std::stringstream newAccess;
@@ -801,7 +812,8 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
 
   newAccess << " = ";
 
-  TheRewriter.RemoveText(SourceRange(DS->getLocStart(), AccessLoc));
+  TheRewriter.InsertText(DS->getLocStart(), "//");
+  TheRewriter.InsertText(AccessLoc, "\n");
   TheRewriter.InsertText(AccessLoc, newAccess.str());
 #ifdef DEBUGCL
   std::cerr << "Leaving RemoveScalarDeclStmt" << std::endl;
@@ -846,6 +858,8 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveNonScalarDeclStmt(DeclStmt *DS,
     ++index;
   }
 
+  // FIXME - What happens when the original initialiser has already been
+  // expanded?!
   TheRewriter.RemoveText(DS->getSourceRange());
   TheRewriter.InsertText(ND->getLocStart(), NewArrayInit.str());
 #ifdef DEBUGCL
