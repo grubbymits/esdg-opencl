@@ -147,9 +147,9 @@ sub write_target_desc ($%) {
   my @MULS;
   my @LSUS;
   my @BRUS;
-  for(my $ISS = 0; $ISS < $mm{issue_width}; ++$ISS) {
-    $ISSS[$ISS] = "ISS_${ISS}_${target_desc}";
-  }
+  #for(my $ISS = 0; $ISS < $mm{issue_width}; ++$ISS) {
+   # $ISSS[$ISS] = "ISS_${ISS}_${target_desc}";
+  #}
   for(my $ALU = 0; $ALU < $mm{ialus}; ++$ALU) {
     $ALUS[$ALU] = "ALU_${ALU}_${target_desc}";
   }
@@ -169,9 +169,9 @@ sub write_target_desc ($%) {
   say TARGET "//  $mm{ialus} ALU(s), $mm{imults} MUL(s), $mm{lsus} LSU(s) and $mm{brus} BRU(s)";
   say TARGET "//===---------------------------------------------------------------------===//";
 
-  foreach(@ISSS) {
-    say TARGET "def $_    : FuncUnit;";
-  }
+  #foreach(@ISSS) {
+   # say TARGET "def $_    : FuncUnit;";
+  #}
   foreach(@ALUS) {
     say TARGET "def $_    : FuncUnit;";
   }
@@ -188,9 +188,9 @@ sub write_target_desc ($%) {
   print TARGET "\n";
   say TARGET "def LE1${target_desc}Itineraries : ProcessorItineraries< [";
   print TARGET "    ";
-  foreach(@ISSS) {
-    print TARGET "$_, ";
-  }
+  #foreach(@ISSS) {
+   # print TARGET "$_, ";
+  #}
   print TARGET "\n    ";
   foreach(@ALUS) {
     print TARGET "$_, ";
@@ -213,18 +213,18 @@ sub write_target_desc ($%) {
 
   # ALU Itineraries
   say TARGET "    InstrItinData<IIAlu,  [InstrStage<1,";
-  print TARGET "    [";
-  for my $i (0 .. $#ISSS) {
-    if($i < $#ALUS) {
-      print TARGET "$ISSS[$i], ";
-    }
-    else {
-      print TARGET "$ISSS[$i]";
-    }
-  }
-  say TARGET "], 0>,\n";
+  #print TARGET "    [";
+  #for my $i (0 .. $#ISSS) {
+   # if($i < $#ALUS) {
+    #  print TARGET "$ISSS[$i], ";
+    #}
+    #else {
+     # print TARGET "$ISSS[$i]";
+    #}
+  #}
+  #say TARGET "], 0>,\n";
 
-  say TARGET "                           InstrStage<1,";
+  #say TARGET "                           InstrStage<1,";
   print TARGET "    [";
   for my $i (0 .. $#ALUS) {
     if($i < $#ALUS) {
@@ -238,17 +238,17 @@ sub write_target_desc ($%) {
 
   # Multiplier Itineraries
   say TARGET "    InstrItinData<IIMul,  [InstrStage<1,";
-  print TARGET "    [";
-  for my $i (0 .. $#ISSS) {
-    if($i < $#ALUS) {
-      print TARGET "$ISSS[$i], ";
-    }
-    else {
-      print TARGET "$ISSS[$i]";
-    }
-  }
-  say TARGET "], 0>,\n";
-  say TARGET "                           InstrStage<1,";
+  #print TARGET "    [";
+  #for my $i (0 .. $#ISSS) {
+   # if($i < $#ALUS) {
+    #  print TARGET "$ISSS[$i], ";
+    #}
+    #else {
+    #  print TARGET "$ISSS[$i]";
+    #}
+  #}
+  #say TARGET "], 0>,\n";
+  #say TARGET "                           InstrStage<1,";
   print TARGET "    [";
   for my $i (0 .. $#MULS) {
     if($i < $#MULS) {
@@ -262,17 +262,17 @@ sub write_target_desc ($%) {
 
   # LSU Itineraries
   say TARGET "    InstrItinData<IILoadStore,  [InstrStage<1,";
-  print TARGET "    [";
-  for my $i (0 .. $#ISSS) {
-    if($i < $#ALUS) {
-      print TARGET "$ISSS[$i], ";
-    }
-    else {
-      print TARGET "$ISSS[$i]";
-    }
-  }
-  say TARGET "], 0>,\n";
-  say TARGET "                                 InstrStage<1,";
+  #print TARGET "    [";
+  #for my $i (0 .. $#ISSS) {
+  #  if($i < $#ALUS) {
+   #   print TARGET "$ISSS[$i], ";
+    #}
+    #else {
+    #  print TARGET "$ISSS[$i]";
+    #}
+  #}
+  #say TARGET "], 0>,\n";
+  #say TARGET "                                 InstrStage<1,";
   print TARGET "    [";
   for my $i (0 .. $#LSUS) {
     if($i < $#LSUS) {
@@ -286,17 +286,17 @@ sub write_target_desc ($%) {
 
   # Branch Itineraries
   say TARGET "    InstrItinData<IIBranch,  [InstrStage<1,";
-  print TARGET "    [";
-  for my $i (0 .. $#ISSS) {
-    if($i < $#ALUS) {
-      print TARGET "$ISSS[$i], ";
-    }
-    else {
-      print TARGET "$ISSS[$i]";
-    }
-  }
-  say TARGET "], 0>,\n";
-  say TARGET "                              InstrStage<6,";
+  #print TARGET "    [";
+  #for my $i (0 .. $#ISSS) {
+   # if($i < $#ALUS) {
+    #  print TARGET "$ISSS[$i], ";
+    #}
+    #else {
+     # print TARGET "$ISSS[$i]";
+    #}
+  #}
+  #say TARGET "], 0>,\n";
+  #say TARGET "                              InstrStage<6,";
   print TARGET "    [";
   for my $i (0 .. $#BRUS) {
     if($i < $#BRUS) {

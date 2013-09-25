@@ -83,7 +83,7 @@ LE1Device::LE1Device(const std::string &SimModel, const std::string &Target,
 bool LE1Device::init()
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering LE1Device::init\n";
+  std::cerr << "Entering LE1Device::init for " << CPU << std::endl;
 #endif
   if (p_initialized)
     return true;
@@ -107,8 +107,14 @@ bool LE1Device::init()
 
 LE1Device::~LE1Device()
 {
+#ifdef DEBUGCL
+  std::cerr << "Destructing " << CPU << " target" << std::endl;
+#endif
 
   if (!p_initialized) {
+#ifdef DEBUGCL
+    std::cerr << "Device wasn't initialised" << std::endl;
+#endif
     if (Simulator)
       delete Simulator;
     return;

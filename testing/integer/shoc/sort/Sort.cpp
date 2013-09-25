@@ -28,9 +28,14 @@ bool verifySort(unsigned int *keys, const size_t size)
 
 int main(int argc, char *argv[])
 {
+  if (argc != 2) {
+    printf("Error: device num not passed!\n");
+    exit(1);
+  }
+  unsigned device_num = atoi(argv[1]);
   // Initialise
   OpenCL cl(1);
-  cl.getDevices(CL_DEVICE_TYPE_ACCELERATOR);
+  cl.getDevices(CL_DEVICE_TYPE_ACCELERATOR, device_num);
   cl.buildSource("sort.cl");
   cl.createKernel("reduce");
   cl.createKernel("top_scan");
@@ -43,7 +48,7 @@ int main(int argc, char *argv[])
 
   // Problem Sizes
   int probSizes[4] = { 1, 8, 32, 64 };
-  int size = probSizes[1];
+  int size = probSizes[2];
 
   // Convert to MiB
   //size = (size * 1024 * 1024) / sizeof(unsigned);

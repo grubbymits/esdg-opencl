@@ -23,7 +23,7 @@ public:
 	OpenCL(int displayOutput);
 	~OpenCL();
 	void createKernel(std::string kernelName);
-	void getDevices(cl_device_type deviceType);
+	void getDevices(cl_device_type deviceType, unsigned device_num);
 	void buildSource(const char *filename);
 
         int setArg(std::string name, unsigned num, size_t size, void* data) {
@@ -47,6 +47,7 @@ private:
 	cl_int                  ret;               // Holds the error code returned by cl functions.
 	cl_platform_id          platform_id[100];
 	cl_device_id            device_id[100];
+        unsigned                device;
         std::map<std::string, cl_kernel>  kernelArray;
 	cl_context              context;
 	cl_command_queue        command_queue;

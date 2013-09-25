@@ -76,11 +76,12 @@ Compiler::Compiler(DeviceInterface *device)
 : p_device(device), p_module(0), p_optimize(true), p_log_stream(p_log),
   p_log_printer(0)
 {
-#ifdef DEBUGCL
-  std::cerr << "Constructing Compiler::Compiler\n";
-#endif
   Triple = device->getTriple();
   CPU = device->getCPU();
+#ifdef DEBUGCL
+  std::cerr << "Constructing Compiler::Compiler for " << Triple << " "
+    << CPU << std::endl;
+#endif
 
 }
 

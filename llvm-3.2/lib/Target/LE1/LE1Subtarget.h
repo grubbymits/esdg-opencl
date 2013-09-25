@@ -41,6 +41,7 @@ public:
 
   bool HasExpandDiv;
   bool NeedsNops;
+  unsigned issueWidth;
 
 public:
 
@@ -60,6 +61,7 @@ public:
 
   bool hasExpandDiv() const { return HasExpandDiv; }
   bool needsNops() const { return NeedsNops; }
+  unsigned getIssueWidth() const { return issueWidth; }
 };
 } // End llvm namespace
 

@@ -280,6 +280,11 @@ isSoloInstruction(MachineInstr *MI) {
 // of ScheduleDAG.
 bool LE1PacketizerList::
 isLegalToPacketizeTogether(SUnit *SUI, SUnit *SUJ) {
+
+  // First check whether the maximum issue width has been met.
+  if(CurrentPacketMIs.size() >= TM.getSubtarget<LE1Subtarget>().getIssueWidth())
+    return false;
+
   //DEBUG(dbgs() << "\nisLegalToPacketize?");
   MachineInstr *I = SUI->getInstr();
   MachineInstr *J = SUJ->getInstr();

@@ -78,7 +78,7 @@ void OpenCL::createKernel(std::string kernelName)
   kernelArray[kernelName] = kernel;
 	
   // Get the kernel work group size.
-  clGetKernelWorkGroupInfo(kernelArray[kernelName], device_id[0],
+  clGetKernelWorkGroupInfo(kernelArray[kernelName], device_id[device],
                            CL_KERNEL_WORK_GROUP_SIZE, sizeof(size_t), &lwsize,
                            NULL);
   if (lwsize == 0) {
@@ -160,12 +160,14 @@ void OpenCL::buildSource(const char *filename)
 	  char*  build_log;
 	  size_t log_size;
 	  // First call to know the proper size
-	  clGetProgramBuildInfo(program, device_id[0], CL_PROGRAM_BUILD_LOG, 0,
+	  clGetProgramBuildInfo(program, device_id[device],
+                                CL_PROGRAM_BUILD_LOG, 0,
                                 NULL, &log_size);
 	  build_log = new char[log_size + 1];
 
 	  // Second call to get the log
-	  clGetProgramBuildInfo(program, device_id[0], CL_PROGRAM_BUILD_LOG,
+	  clGetProgramBuildInfo(program, device_id[device],
+                                CL_PROGRAM_BUILD_LOG,
                                 log_size, build_log, NULL);
 	  build_log[log_size] = '\0';
 	  std::cout << build_log << std::endl;
@@ -196,11 +198,13 @@ void OpenCL::buildSource(const char *filename)
 	  size_t log_size;
 
 	  // First call to know the proper size
-	  clGetProgramBuildInfo(program, device_id[0], CL_PROGRAM_BUILD_LOG, 0,
+	  clGetProgramBuildInfo(program, device_id[device],
+                                CL_PROGRAM_BUILD_LOG, 0,
                                 NULL, &log_size);
 	  build_log = new char[log_size + 1];
 	  // Second call to get the log
-	  clGetProgramBuildInfo(program, device_id[0], CL_PROGRAM_BUILD_LOG,
+	  clGetProgramBuildInfo(program, device_id[device],
+                                CL_PROGRAM_BUILD_LOG,
                                 log_size, build_log, NULL);
 	  build_log[log_size] = '\0';
 	  std::cout << build_log << std::endl;
@@ -214,7 +218,7 @@ void OpenCL::buildSource(const char *filename)
 	}
 }
 
-void OpenCL::getDevices(cl_device_type deviceType)
+void OpenCL::getDevices(cl_device_type deviceType, unsigned device_num)
 {
   std::cout << "OpenCL::getDevices\n";
 	cl_uint         platforms_n = 0;
@@ -288,16 +292,22 @@ void OpenCL::getDevices(cl_device_type deviceType)
 		printf("\n");
 	}
 	
+        if (device_num >= devices_n) {
+          printf("\nError: device_num is too large\n");
+          exit(1);
+        }
+        device = device_num;
+
 	// Create an OpenCL context.
-	context = clCreateContext(NULL, 1, device_id, NULL, NULL, &ret);
+	context = clCreateContext(NULL, 1, &(device_id[device]), NULL, NULL, &ret);
 	if (ret != CL_SUCCESS)
 	{
 		printf("\nError at clCreateContext! Error code %i\n\n", ret);
 		exit(1);
 	}
- 
+
 	// Create a command queue.
-	command_queue = clCreateCommandQueue(context, device_id[0], 0, &ret);
+	command_queue = clCreateCommandQueue(context, device_id[device], 0, &ret);
 	if (ret != CL_SUCCESS)
 	{
 		printf("\nError at clCreateCommandQueue! Error code %i\n\n", ret);

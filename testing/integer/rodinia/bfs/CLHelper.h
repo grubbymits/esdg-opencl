@@ -131,8 +131,8 @@ void _clCmdParams(int argc, char* argv[]){
 //  devices have no relationship with context
 void _clInit()
 {
-  int DEVICE_ID_INUSED = device_id_inused;
   cl_int resultCL;
+  int DEVICE_ID = device_id_inused;
     
   oclHandles.context = NULL;
   oclHandles.devices = NULL;
@@ -182,6 +182,7 @@ void _clInit()
   cl_context_properties cprops[3] = { CL_CONTEXT_PLATFORM,
                                       (cl_context_properties)targetPlatform, 0
                                     };
+  /*
   cl_context temp = clCreateContextFromType(cprops, 
                                                 CL_DEVICE_TYPE_ACCELERATOR, 
                                                 NULL, 
@@ -192,7 +193,7 @@ void _clInit()
   oclHandles.context = temp;
 
   if ((resultCL != CL_SUCCESS) || (oclHandles.context == NULL))
-    throw (string("InitCL()::Error: Creating Context (clCreateContextFromType)"));
+    throw (string("InitCL()::Error: Creating Context (clCreateContextFromType)")); */
   //-----------------------------------------------
   //--cambine-3: detect OpenCL devices	
   /* First, get the size of device list */
@@ -205,6 +206,9 @@ void _clInit()
   }
   if (deviceListSize == 0)
     throw(string("InitCL()::Error: No devices found."));
+
+  if (DEVICE_ID >= deviceListSize)
+    throw(string("device num is greater than list size"));
 
   //std::cout<<"device number:"<<deviceListSize<<std::endl;
 
@@ -223,10 +227,21 @@ void _clInit()
   if(oclHandles.cl_status!=CL_SUCCESS){
     throw(string("exception in _clInit -> clGetDeviceIDs-2"));   	
   }
+
+  cl_context temp = clCreateContext(NULL, 1, &(oclHandles.devices[DEVICE_ID]),
+                                    NULL, NULL, &resultCL);
+
+  std::cout << "bfs: got context\n";
+  oclHandles.context = temp;
+  if ((resultCL != CL_SUCCESS) || (oclHandles.context == NULL))
+    throw (string("InitCL()::Error: Creating Context (clCreateContextFromType)"));
+
+
+
   //-----------------------------------------------
   //--cambine-4: Create an OpenCL command queue    
   oclHandles.queue = clCreateCommandQueue(oclHandles.context, 
-                                          oclHandles.devices[DEVICE_ID_INUSED], 
+                                          oclHandles.devices[DEVICE_ID], 
                                           0, 
                                           &resultCL);
 
@@ -251,8 +266,8 @@ void _clInit()
   //insert debug information
   //std::string options= "-cl-nv-verbose"; //Doesn't work on AMD machines
   //options += " -cl-nv-opt-level=3";
-  resultCL = clBuildProgram(oclHandles.program, deviceListSize,
-                            oclHandles.devices, NULL, NULL,NULL);
+  resultCL = clBuildProgram(oclHandles.program, 1, //deviceListSize,
+                            &oclHandles.devices[DEVICE_ID], NULL, NULL,NULL);
 
   if ((resultCL != CL_SUCCESS) || (oclHandles.program == NULL))
   {
@@ -260,7 +275,7 @@ void _clInit()
 
     size_t length;
     resultCL = clGetProgramBuildInfo(oclHandles.program, 
-                                     oclHandles.devices[DEVICE_ID_INUSED], 
+                                     oclHandles.devices[DEVICE_ID], 
                                      CL_PROGRAM_BUILD_LOG, 
                                      0, 
                                      NULL, 
@@ -271,7 +286,7 @@ void _clInit()
 
     char* buffer = (char*)malloc(length);
     resultCL = clGetProgramBuildInfo(oclHandles.program, 
-                                     oclHandles.devices[DEVICE_ID_INUSED], 
+                                     oclHandles.devices[DEVICE_ID], 
                                      CL_PROGRAM_BUILD_LOG, 
                                      length, 
                                      buffer, 
@@ -317,7 +332,7 @@ void _clInit()
     if(ptx_file==NULL){
 	throw(string("exceptions in allocate ptx file."));
     }
-    fprintf(ptx_file,"%s",binaries[DEVICE_ID_INUSED]);
+    fprintf(ptx_file,"%s",binaries[DEVICE_ID]);
     fclose(ptx_file);
     std::cout<<"--cambine:writing ptd information done."<<std::endl;
     for(int i=0;i<deviceListSize;i++)
@@ -345,7 +360,7 @@ void _clInit()
     size_t ret_val_size;
     oclHandles.cl_status =
       clGetProgramBuildInfo(oclHandles.program,
-                            oclHandles.devices[DEVICE_ID_INUSED],
+                            oclHandles.devices[DEVICE_ID],
                             CL_PROGRAM_BUILD_LOG, 0, NULL, &ret_val_size);
     if(oclHandles.cl_status!=CL_SUCCESS){
 	throw(string("exceptions in _InitCL -> getting resource information"));
@@ -354,7 +369,7 @@ void _clInit()
     build_log = (char *)malloc(ret_val_size+1);
     oclHandles.cl_status =
       clGetProgramBuildInfo(oclHandles.program,
-                            oclHandles.devices[DEVICE_ID_INUSED],
+                            oclHandles.devices[DEVICE_ID],
                             CL_PROGRAM_BUILD_LOG, ret_val_size, build_log,
                             NULL);
     if(oclHandles.cl_status!=CL_SUCCESS){

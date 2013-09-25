@@ -47,7 +47,6 @@ def IIRestore   : InstrItinClass;
 def IIRestoreLr : InstrItinClass;
 */
 // Functional Units
-def ISS_0   : FuncUnit;
 def ALU_0   : FuncUnit;
 def MUL_0   : FuncUnit;
 def LSU_0   : FuncUnit;
@@ -62,24 +61,28 @@ def BRU_0    : FuncUnit;
 // LE1 Generic instruction itineraries.
 //===----------------------------------------------------------------------===//
 def LE1ScalarItineraries : ProcessorItineraries<
-                            [ISS_0, ALU_0, MUL_0, LSU_0, BRU_0], [], [
+                            [ALU_0, MUL_0, LSU_0, BRU_0], [], [
 
-    InstrItinData<IIAlu, [InstrStage<1, [ISS_0], 0>,
+    InstrItinData<IIAlu, [
                           InstrStage<1, [ALU_0]>], [2, 1]>,
 
-    InstrItinData<IILoadStore, [InstrStage<1, [ISS_0], 0>,
+    InstrItinData<IILoadStore, [
                                 InstrStage<1, [LSU_0]>], [2, 1]>,
 
-    InstrItinData<IIMul, [InstrStage<1, [ISS_0], 0>,
+    InstrItinData<IIMul, [
                           InstrStage<1, [MUL_0]>], [2, 1]>,
 
-    InstrItinData<IIBranch, [InstrStage<1, [ISS_0], 0>,
+    InstrItinData<IIBranch, [
                              InstrStage<5, [BRU_0]>], [6, 1]> ]>;
 
 def LE1ModelScalar : SchedMachineModel {
   let IssueWidth = 1;
   let Itineraries = LE1ScalarItineraries;
 }
-
-include "MachineModels/LE12w2a2m2ls1b.td"
-include "MachineModels/LE13w3a3m3ls1b.td"
+include "MachineModels/LE12w2a1m1ls1b.td"
+include "MachineModels/LE12w2a1m2ls1b.td"
+include "MachineModels/LE13w3a1m1ls1b.td"
+include "MachineModels/LE13w3a1m2ls1b.td"
+include "MachineModels/LE14w4a1m1ls1b.td"
+include "MachineModels/LE14w4a1m2ls1b.td"
+include "MachineModels/LE14w4a1m4ls1b.td"
