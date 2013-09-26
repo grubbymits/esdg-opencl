@@ -436,11 +436,8 @@ cl_int Program::build(const char *options,
                 pfn_notify((cl_program)this, user_data);
               return CL_BUILD_PROGRAM_FAILURE;
             }
-            // Nothing was inlined
-            else if (inlineResult == 1)
-              dep.program->SetSource(p_source);
             else
-              dep.program->SetSource(dep.compiler->getInlinedSource());
+              dep.program->SetSource(dep.compiler->getFinalSource());
 
             // Get module and its bitcode
             dep.linked_module = dep.compiler->module();

@@ -82,7 +82,7 @@ class Compiler
 
         llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
 
-        std::string &getInlinedSource() { return InlinedSource; }
+        std::string &getFinalSource() { return FinalSource; }
 
         bool ExpandMacros(const char *filename);
 
@@ -153,7 +153,7 @@ class Compiler
         std::string CPU;
         llvm::raw_string_ostream p_log_stream;
         clang::TextDiagnosticPrinter *p_log_printer;
-        std::string InlinedSource;
+        std::string FinalSource;
         //std::string llvm_log;
         //llvm::raw_string_ostream *s_log;
 };

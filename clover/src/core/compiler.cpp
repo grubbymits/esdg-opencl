@@ -96,6 +96,9 @@ Compiler::~Compiler()
 
 // Use a RewriteAction to expand all macros within the original source file
 bool Compiler::ExpandMacros(const char *filename) {
+#ifdef DEBUGCL
+  std::cerr << "Entering Compiler::ExpandMacros" << std::endl;
+#endif
   std::string log;
   llvm::raw_string_ostream macro_log(log);
   CompilerInstance CI;
@@ -126,6 +129,9 @@ bool Compiler::ExpandMacros(const char *filename) {
       << log;
     return false;
   }
+#ifdef DEBUGCL
+  std::cerr << "Successfully leaving Compiler::ExpandMacros" << std::endl;
+#endif
   return true;
 }
 
@@ -161,37 +167,36 @@ int Compiler::InlineSource(const char *filename) {
     << std::endl;
 #endif
 
-  if (numInstances == 0) {
-    return 1;
-  }
+  if (numInstances != 0) {
 
-  int completed = 0;
-  while (completed != numInstances) {
-    TM->reset();
-    simpleInliner = new SimpleInliner("simple-inliner", "inline");
-    TM->setTransformation(simpleInliner);
-    TM->setSrcFileName(filename);
-    TM->setOutputFileName(filename);
-    TM->setQueryInstanceFlag(false);
-    TM->setTransformationCounter(1);
+    int completed = 0;
+    while (completed != numInstances) {
+      TM->reset();
+      simpleInliner = new SimpleInliner("simple-inliner", "inline");
+      TM->setTransformation(simpleInliner);
+      TM->setSrcFileName(filename);
+      TM->setOutputFileName(filename);
+      TM->setQueryInstanceFlag(false);
+      TM->setTransformationCounter(1);
 
-    if (!TM->initializeCompilerInstance(err)) {
-      std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
-        << err << std::endl;
-      return -1;
+      if (!TM->initializeCompilerInstance(err)) {
+        std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
+          << err << std::endl;
+        return -1;
+      }
+
+      if (!TM->doTransformation(err)) {
+        std::cerr << "Inline failed!:" << std::endl << err << std::endl;
+        return -1;
+      }
+      ++completed;
     }
-
-    if (!TM->doTransformation(err)) {
-      std::cerr << "Inline failed!:" << std::endl << err << std::endl;
-      return -1;
-    }
-    ++completed;
   }
 
   std::ifstream inlined_file(filename);
   std::string str((std::istreambuf_iterator<char>(inlined_file)),
                   std::istreambuf_iterator<char>());
-  InlinedSource.assign(str);
+  FinalSource.assign(str);
 
   TransformationManager::Finalize();
 

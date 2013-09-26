@@ -623,6 +623,10 @@ void LE1Simulator::readIntData(unsigned int addr,
   unsigned int word = 0;
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
     insizzleAPIRdOneDramLocation(addr, &word);
+#ifdef DBG_SIM
+    std::cerr << "read " << (int)word << " from " << std::hex << addr
+      << std::endl;
+#endif
     data[i] = word;
   }
 

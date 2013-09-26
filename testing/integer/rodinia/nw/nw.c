@@ -49,33 +49,62 @@ static cl_device_type   device_type;
 static cl_device_id   * device_list;
 static cl_int           num_devices;
 
-static int initialize(int use_gpu)
+static int initialize(int use_gpu, int DEVICE_ID)
 {
 	cl_int result;
 	size_t size;
 
 	// create OpenCL context
 	cl_platform_id platform_id;
-	if (clGetPlatformIDs(1, &platform_id, NULL) != CL_SUCCESS) { printf("ERROR: clGetPlatformIDs(1,*,0) failed\n"); return -1; }
-	cl_context_properties ctxprop[] = { CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id, 0};
-	device_type = use_gpu ? CL_DEVICE_TYPE_ACCELERATOR : CL_DEVICE_TYPE_CPU;
-	context = clCreateContextFromType( ctxprop, device_type, NULL, NULL, NULL );
-	if( !context ) { printf("ERROR: clCreateContextFromType(%s) failed\n", use_gpu ? "GPU" : "CPU"); return -1; }
+	if (clGetPlatformIDs(1, &platform_id, NULL) != CL_SUCCESS) {
+          printf("ERROR: clGetPlatformIDs(1,*,0) failed\n");
+          return -1;
+        }
 
-	// get the list of GPUs
-	result = clGetContextInfo( context, CL_CONTEXT_DEVICES, 0, NULL, &size );
-	num_devices = (int) (size / sizeof(cl_device_id));
-	printf("num_devices = %d\n", num_devices);
-	
-	if( result != CL_SUCCESS || num_devices < 1 ) { printf("ERROR: clGetContextInfo() failed\n"); return -1; }
+	device_type = use_gpu ? CL_DEVICE_TYPE_ACCELERATOR : CL_DEVICE_TYPE_CPU;
+        result = clGetDeviceIDs(platform_id,
+                                device_type,
+                                0, NULL, &num_devices);
+
+        if (result != CL_SUCCESS) {
+          printf("clGetDeviceIDs failed\n");
+          return -1;
+        }
+
+        if (num_devices == 0) {
+          printf("No devices\n");
+          return -1;
+        }
+
 	device_list = malloc(sizeof(cl_device_id) * num_devices);
-	if( !device_list ) { printf("ERROR: new cl_device_id[] failed\n"); return -1; }
-	result = clGetContextInfo( context, CL_CONTEXT_DEVICES, size, device_list, NULL );
-	if( result != CL_SUCCESS ) { printf("ERROR: clGetContextInfo() failed\n"); return -1; }
+        if (device_list == 0) {
+          printf("Could not allocate memory for device list\n");
+          return -1;
+        }
+
+        result = clGetDeviceIDs(platform_id,
+                                device_type,
+                                num_devices,
+                                device_list,
+                                NULL);
+        if (result != CL_SUCCESS) {
+          printf("Could not get all devices\n");
+          return -1;
+        }
+
+        context = clCreateContext(NULL, 1, &device_list[DEVICE_ID],
+                                  NULL, NULL, &result);
+        if (result != CL_SUCCESS) {
+          printf("Failed to create context\n");
+          return -1;
+        }
 
 	// create command queue for the first device
-	cmd_queue = clCreateCommandQueue( context, device_list[0], 0, NULL );
-	if( !cmd_queue ) { printf("ERROR: clCreateCommandQueue() failed\n"); return -1; }
+	cmd_queue = clCreateCommandQueue( context, device_list[DEVICE_ID], 0, NULL );
+	if( !cmd_queue ) {
+          printf("ERROR: clCreateCommandQueue() failed\n");
+          return -1;
+        }
 	return 0;
 }
 
@@ -154,41 +183,57 @@ int main(int argc, char **argv){
 	int *reference;
 	int *input_itemsets;
 	int *output_itemsets;
+
+        int *omp_reference;
+        int *omp_input_itemsets;
+        int *omp_output_itemsets;
 	
 	reference = (int *)malloc( max_rows * max_cols * sizeof(int) );
-    input_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
+        input_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
 	output_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
 	
+	omp_reference = (int *)malloc( max_rows * max_cols * sizeof(int) );
+        omp_input_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
+	omp_output_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
+
 	srand(7);
 	
 	//initialization 
 	for (int i = 0 ; i < max_cols; i++){
 		for (int j = 0 ; j < max_rows; j++){
 			input_itemsets[i*max_cols+j] = 0;
+			omp_input_itemsets[i*max_cols+j] = 0;
 		}
 	}
 
 	for( int i=1; i< max_rows ; i++){    //initialize the cols
-			input_itemsets[i*max_cols] = rand() % 10 + 1;
+	  input_itemsets[i*max_cols] = rand() % 10 + 1;
+	  omp_input_itemsets[i*max_cols] = input_itemsets[i*max_cols];
 	}
 	
-    for( int j=1; j< max_cols ; j++){    //initialize the rows
-			input_itemsets[j] = rand() % 10 + 1;
+        for( int j=1; j< max_cols ; j++){    //initialize the rows
+	  input_itemsets[j] = rand() % 10 + 1;
+          omp_input_itemsets[j] = input_itemsets[j];
 	}
 	
 	for (int i = 1 ; i < max_cols; i++){
-		for (int j = 1 ; j < max_rows; j++){
-		reference[i*max_cols+j] = blosum62[input_itemsets[i*max_cols]][input_itemsets[j]];
-		}
+	  for (int j = 1 ; j < max_rows; j++){
+	    reference[i*max_cols+j] = blosum62[input_itemsets[i*max_cols]][input_itemsets[j]];
+	    omp_reference[i*max_cols+j] =
+              blosum62[omp_input_itemsets[i*max_cols]][omp_input_itemsets[j]];
+	  }
 	}
 
-    for( int i = 1; i< max_rows ; i++)
-       input_itemsets[i*max_cols] = -i * penalty;
-	for( int j = 1; j< max_cols ; j++)
-       input_itemsets[j] = -j * penalty;
-	
+        for( int i = 1; i< max_rows ; i++) {
+          input_itemsets[i*max_cols] = -i * penalty;
+          omp_input_itemsets[i*max_cols] = -i * penalty;
+        }
+	for( int j = 1; j< max_cols ; j++) {
+          input_itemsets[j] = -j * penalty;
+          omp_input_itemsets[j] = -j * penalty;
+        }
+
 	int sourcesize = 1024*1024;
-		
 	char * source = (char *)calloc(sourcesize, sizeof(char)); 
 	if(!source) { printf("ERROR: calloc(%d) failed\n", sourcesize); return -1; }
 
@@ -213,7 +258,7 @@ int main(int argc, char **argv){
 	
 	int use_gpu = 1;
 	// OpenCL initialization
-	if(initialize(use_gpu)) return -1;
+	if(initialize(use_gpu, 0)) return -1;
 
 	// compile kernel
 	cl_int err = 0;
@@ -331,22 +376,29 @@ int main(int argc, char **argv){
 	
 	printf("Processing upper-left matrix\n");
 	for( int blk = 1 ; blk <= worksize/BLOCK_SIZE ; blk++){
-	
-		global_work[0] = BLOCK_SIZE * blk;
-		local_work[0]  = BLOCK_SIZE;
-		clSetKernelArg(kernel1, 7, sizeof(cl_int), (void*) &blk);
-		err = clEnqueueNDRangeKernel(cmd_queue, kernel1, 2, NULL, global_work, local_work, 0, 0, 0);
-		if(err != CL_SUCCESS) { printf("ERROR: 1  clEnqueueNDRangeKernel()=>%d failed\n", err); return -1; }			
+	  global_work[0] = BLOCK_SIZE * blk;
+	  local_work[0]  = BLOCK_SIZE;
+	  clSetKernelArg(kernel1, 7, sizeof(cl_int), (void*) &blk);
+	  err = clEnqueueNDRangeKernel(cmd_queue, kernel1, 2, NULL, global_work, local_work, 0, 0, 0);
+	  if(err != CL_SUCCESS) {
+            printf("ERROR: 1  clEnqueueNDRangeKernel()=>%d failed\n", err);
+            return -1;
+          } 
+	  clFinish(cmd_queue);
 	}
 	clFinish(cmd_queue);
 	
 	printf("Processing lower-right matrix\n");
-	for( int blk =  worksize/BLOCK_SIZE - 1  ; blk >= 1 ; blk--){	   
-		global_work[0] = BLOCK_SIZE * blk;
-		local_work[0] =  BLOCK_SIZE;
-		clSetKernelArg(kernel2, 7, sizeof(cl_int), (void*) &blk);
-        err = clEnqueueNDRangeKernel(cmd_queue, kernel2, 2, NULL, global_work, local_work, 0, 0, 0);
-		if(err != CL_SUCCESS) { printf("ERROR: 2 clEnqueueNDRangeKernel()=>%d failed\n", err); return -1; }
+	for( int blk =  worksize/BLOCK_SIZE - 1  ; blk >= 1 ; blk--){
+	  global_work[0] = BLOCK_SIZE * blk;
+	  local_work[0] =  BLOCK_SIZE;
+	  clSetKernelArg(kernel2, 7, sizeof(cl_int), (void*) &blk);
+          err = clEnqueueNDRangeKernel(cmd_queue, kernel2, 2, NULL, global_work, local_work, 0, 0, 0);
+	  if(err != CL_SUCCESS) {
+            printf("ERROR: 2 clEnqueueNDRangeKernel()=>%d failed\n", err);
+            return -1;
+          }
+          clFinish(cmd_queue);
 	}
 	clFinish(cmd_queue);
 	fflush(stdout);
@@ -354,69 +406,189 @@ int main(int argc, char **argv){
 	clFinish(cmd_queue);
 
 //#define TRACEBACK	
+	printf("OpenCL Computation Done\n");
+	printf("Processing top-left matrix\n");
+
+    int index = 0;
+    for( int i = 0 ; i < max_cols-2 ; i++){
+#ifdef OPENMP
+	   omp_set_num_threads(omp_num_threads);
+       #pragma omp parallel for shared(input_itemsets) firstprivate(i,max_cols,penalty) private(idx, index) 
+#endif 
+      for( int idx = 0 ; idx <= i ; idx++){
+        index = (idx + 1) * max_cols + (i + 1 - idx);
+        omp_input_itemsets[index] =
+          maximum( omp_input_itemsets[index-1-max_cols]+ omp_reference[index],
+		   omp_input_itemsets[index-1] - penalty,
+		   omp_input_itemsets[index-max_cols] - penalty);
+	}
+      }
+      printf("Processing bottom-right matrix\n");
+      //Compute bottom-right matrix 
+      for( int i = max_cols - 4 ; i >= 0 ; i--){
+#ifdef OPENMP	
+        omp_set_num_threads(omp_num_threads);
+    #pragma omp parallel for shared(input_itemsets) firstprivate(i,max_cols,penalty) private(idx, index) 
+#endif 
+       for( int idx = 0 ; idx <= i ; idx++){
+	  index =  ( max_cols - idx - 2 ) * max_cols + idx + max_cols - i - 2 ;
+	  omp_input_itemsets[index] =
+            maximum( omp_input_itemsets[index-1-max_cols]+ omp_reference[index], 
+		     omp_input_itemsets[index-1] - penalty, 
+		     omp_input_itemsets[index-max_cols]  - penalty);
+	}
+
+      }
+      int *cl_res = malloc(max_rows * sizeof(int));
+      int *mp_res = malloc(max_rows * sizeof(int));
+      unsigned res_index = 0;
 #ifdef TRACEBACK
 	
 	FILE *fpo = fopen("result.txt","w");
 	fprintf(fpo, "print traceback value GPU:\n");
     
 	for (int i = max_rows - 2,  j = max_rows - 2; i>=0, j>=0;){
-		int nw, n, w, traceback;
-		if ( i == max_rows - 2 && j == max_rows - 2 )
-			fprintf(fpo, "%d ", output_itemsets[ i * max_cols + j]); //print the first element
-		if ( i == 0 && j == 0 )
-           break;
-		if ( i > 0 && j > 0 ){
-			nw = output_itemsets[(i - 1) * max_cols + j - 1];
-		    w  = output_itemsets[ i * max_cols + j - 1 ];
-            n  = output_itemsets[(i - 1) * max_cols + j];
-		}
-		else if ( i == 0 ){
-		    nw = n = LIMIT;
-		    w  = output_itemsets[ i * max_cols + j - 1 ];
-		}
-		else if ( j == 0 ){
-		    nw = w = LIMIT;
-            n  = output_itemsets[(i - 1) * max_cols + j];
-		}
-		else{
-		}
+	  int nw, n, w, traceback;
 
-		//traceback = maximum(nw, w, n);
-		int new_nw, new_w, new_n;
-		new_nw = nw + reference[i * max_cols + j];
-		new_w = w - penalty;
-		new_n = n - penalty;
+	  if ( i == max_rows - 2 && j == max_rows - 2 ) {
+	    fprintf(fpo, "%d ", output_itemsets[ i * max_cols + j]); //print the first element
+            cl_res[res_index] = output_itemsets[ i * max_cols + j];
+            ++res_index;
+          }
+	  if ( i == 0 && j == 0 )
+            break;
+
+	  if ( i > 0 && j > 0 ){
+	    nw = output_itemsets[(i - 1) * max_cols + j - 1];
+	    w  = output_itemsets[ i * max_cols + j - 1 ];
+            n  = output_itemsets[(i - 1) * max_cols + j];
+	  }
+	  else if ( i == 0 ){
+	    nw = n = LIMIT;
+	    w  = output_itemsets[ i * max_cols + j - 1 ];
+	  }
+	  else if ( j == 0 ){
+	    nw = w = LIMIT;
+            n  = output_itemsets[(i - 1) * max_cols + j];
+	  }
+	  else{
+	  }
+
+	  //traceback = maximum(nw, w, n);
+	  int new_nw, new_w, new_n;
+	  new_nw = nw + reference[i * max_cols + j];
+	  new_w = w - penalty;
+	  new_n = n - penalty;
 		
-		traceback = maximum(new_nw, new_w, new_n);
-		if(traceback == new_nw)
-			traceback = nw;
-		if(traceback == new_w)
-			traceback = w;
-		if(traceback == new_n)
+	  traceback = maximum(new_nw, new_w, new_n);
+	  if(traceback == new_nw)
+	    traceback = nw;
+	  if(traceback == new_w)
+	    traceback = w;
+	  if(traceback == new_n)
             traceback = n;
-			
-		fprintf(fpo, "%d ", traceback);
 
-		if(traceback == nw )
-		{i--; j--; continue;}
+	  fprintf(fpo, "%d ", traceback);
+          cl_res[res_index] = traceback;
+          ++res_index;
 
-        else if(traceback == w )
-		{j--; continue;}
+	  if(traceback == nw )
+	  {i--; j--; continue;}
 
-        else if(traceback == n )
-		{i--; continue;}
+          else if(traceback == w )
+	  {j--; continue;}
 
-		else
-		;
+          else if(traceback == n )
+	  {i--; continue;}
+
+	  else ;
 	}
 	
+        printf("res_index = %d after writing CL results\n", res_index);
+        res_index = 0;
+        fprintf(fpo, "\nprint traceback value from OMP:\n");
+	for (int i = max_rows - 2,  j = max_rows - 2; i>=0, j>=0;){
+          int omp_nw, omp_n, omp_w, omp_traceback;
+
+	  if ( i == max_rows - 2 && j == max_rows - 2 ) {
+	    fprintf(fpo, "%d ", omp_input_itemsets[ i * max_cols + j]); //print the first element
+            mp_res[res_index] = omp_input_itemsets[ i * max_cols + j];
+            ++res_index;
+          }
+	  if ( i == 0 && j == 0 )
+            break;
+
+	  if ( i > 0 && j > 0 ){
+	    omp_nw = omp_input_itemsets[(i - 1) * max_cols + j - 1];
+	    omp_w  = omp_input_itemsets[ i * max_cols + j - 1 ];
+            omp_n  = omp_input_itemsets[(i - 1) * max_cols + j];
+	  }
+	  else if ( i == 0 ){
+	    omp_nw = omp_n = LIMIT;
+	    omp_w  = omp_input_itemsets[ i * max_cols + j - 1 ];
+	  }
+	  else if ( j == 0 ){
+	    omp_nw = omp_w = LIMIT;
+            omp_n  = omp_input_itemsets[(i - 1) * max_cols + j];
+	  }
+	  else{
+	  }
+
+	  int omp_new_nw, omp_new_w, omp_new_n;
+	  omp_new_nw = omp_nw + omp_reference[i * max_cols + j];
+	  omp_new_w = omp_w - penalty;
+	  omp_new_n = omp_n - penalty;
+
+	  omp_traceback = maximum(omp_new_nw, omp_new_w, omp_new_n);
+	  if(omp_traceback == omp_new_nw)
+	    omp_traceback = omp_nw;
+	  if(omp_traceback == omp_new_w)
+	    omp_traceback = omp_w;
+	  if(omp_traceback == omp_new_n)
+            omp_traceback = omp_n;
+
+	  fprintf(fpo, "%d ", omp_traceback);
+          mp_res[res_index] = omp_traceback;
+          ++res_index;
+
+	  if(omp_traceback == omp_nw )
+	  {i--; j--; continue;}
+
+          else if(omp_traceback == omp_w )
+	  {j--; continue;}
+
+          else if(omp_traceback == omp_n )
+	  {i--; continue;}
+
+	  else ;
+        }
+
 	fclose(fpo);
+        int success = 1;
+        printf("res_index = %d after writing MP results\n", res_index);
+        for (unsigned i = 0; i < max_rows-1; i++) {
+          if (cl_res[i] != mp_res[i]) {
+            printf("Mismatch at inndex %d: mp_res = %d, but cl_res = %d\n",
+                    i, mp_res[i], cl_res[i]);
+            success = 0;
+          }
+        }
+        if (success)
+          printf("PASS\n");
+        else
+          printf("FAIL\n");
+
+        /*
+        printf("\n--------------------------------------------\n");
+        for (unsigned i = 0; i < max_rows * max_cols; ++i)
+          if (omp_input_itemsets[i] != output_itemsets[i])
+            printf("Results do not match at %d: omp =  %d | cl = %d\n",
+                   i, omp_input_itemsets[i], output_itemsets[i]);*/
 
 #endif
 
-	printf("Computation Done\n");
-    // OpenCL shutdown
-	if(shutdown()) return -1;
+      // OpenCL shutdown
+      if(shutdown()) return -1;
 
 	clReleaseMemObject(input_itemsets_d);
 	clReleaseMemObject(output_itemsets_d);
@@ -425,6 +597,11 @@ int main(int argc, char **argv){
 	free(reference);
 	free(input_itemsets);
 	free(output_itemsets);
+        free(omp_reference);
+        free(omp_input_itemsets);
+        free(omp_output_itemsets);
+        free(mp_res);
+        free(cl_res);
 	
 }
 
