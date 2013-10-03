@@ -1,32 +1,14 @@
-DEPTH = ../../..
+CXX = clang++
+CXXFLAGS = -O2 -g -fPIC
+SRC = $(wildcard *.cpp)
+OBJ = $(patsubst %.cpp, %.o, $(SRC))
+INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
+LIBS = -L/opt/esdg-opencl/lib/ -lOpenCL
 
-include $(DEPTH)/make/openclsdkdefs.mk 
+target = SDKUtil.so
 
-####
-#
-#  Targets
-#
-####
+lib : $(OBJ)
+	ld $(OBJ) $(LIBS) -o $(target)
 
-OPENCL			= 1
-SDK_STATIC_LIB	        = 1
-LIB_TARGET 		= SDKUtil
-LIB_TARGET_INSTALL   	= SDKUtil
-LIB_DIR_INSTALL   	= $(DEPTH)/TempSDKUtil/lib/
-
-####
-#
-#  C/CPP files
-#
-####
-
-FILES = SDKApplication \
-        SDKBitMap \
-	SDKCommon \
-	SDKCommandArgs \
-	SDKFile \
-	SDKThread
-
-INCLUDEDIRS += include 
-
-include $(DEPTH)/make/openclsdkrules.mk 
+%.o : %.cpp
+	$(CXX) $(INC) $(CXX_FLAGS) $(LIBS) $< -o $@

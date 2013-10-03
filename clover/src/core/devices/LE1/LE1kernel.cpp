@@ -443,6 +443,7 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
 
   //CalculateBufferAddrs();
 
+  /*
   // Only compile a kernel once
   if (!p_event->kernel()->isBuilt()) {
     // FIXME Change this to the kernel specific name
@@ -454,7 +455,9 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
 #ifdef DBG_KERNEL
     std::cerr << "Program has already been compiled\n";
 #endif
-  }
+  }*/
+  if(!CompileSource())
+    return false;
 
   p_event->kernel()->SetBuilt();
   return true;

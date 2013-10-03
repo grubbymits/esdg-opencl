@@ -624,8 +624,11 @@ void LE1Simulator::readIntData(unsigned int addr,
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
     insizzleAPIRdOneDramLocation(addr, &word);
 #ifdef DBG_SIM
-    std::cerr << "read " << (int)word << " from " << std::hex << addr
-      << std::endl;
+    //if (data[i] != word)
+    /*
+      std::cout << "updating " << std::hex << addr << " with different data: "
+        << "current data = " << std::dec << (int)data[i] << " and new = "
+        << (int)word << std::endl;*/
 #endif
     data[i] = word;
   }

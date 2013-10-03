@@ -110,7 +110,3 @@ __kernel void dynproc_kernel (int iteration,
 		gpuResults[xidx] = result[tx];
 	}
 }
-
-
-
-

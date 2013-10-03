@@ -23,7 +23,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <string>
 #include <fstream>
 #include <malloc.h>
-#include <SDKCommon.hpp>
+#include "SDKCommon.hpp"
 
 /**
  * namespace streamsdk

@@ -24,7 +24,6 @@ using namespace std;
 #define STR_SIZE 256
 #define DEVICE   0
 #define M_SEED   9
-#define BENCH_PRINT
 #define IN_RANGE(x, min, max)	((x)>=(min) && (x)<=(max))
 #define CLAMP_RANGE(x, min, max) x = (x<(min)) ? min : ((x>(max)) ? max : x )
 #define MIN(a, b) ((a)<=(b) ? (a) : (b))
@@ -246,7 +245,7 @@ int main(int argc, char** argv)
           if (result[i] != omp_result[i]) {
             printf("FAIL: result[%d] = %d but omp_result[%d] = %d\n",
                   i, result[i], i, omp_result[i]);
-            printf("data = %d, omp_data = %d\n", data[i], omp_data[i]);
+            //printf("data = %d, omp_data = %d\n", data[i], omp_data[i]);
             success = 0;
           }
         }

@@ -54,8 +54,6 @@ void clang::ParseAST(Preprocessor &PP, ASTConsumer *Consumer,
 }
 
 void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
-  printf("Entered ParseAST\n");
-
   // Collect global stats on Decls/Stmts (until we have a module streamer).
   if (PrintStats) {
     Decl::EnableStatistics();
@@ -67,13 +65,10 @@ void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
   std::swap(OldCollectStats, S.CollectStats);
 
   ASTConsumer *Consumer = &S.getASTConsumer();
-  printf("Got Consumer\n");
 
   OwningPtr<Parser> ParseOP(new Parser(S.getPreprocessor(), S,
                                        SkipFunctionBodies));
   Parser &P = *ParseOP.get();
-
-  printf("Got Parser\n");
 
   PrettyStackTraceParserEntry CrashInfo(P);
 
@@ -81,9 +76,7 @@ void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
   llvm::CrashRecoveryContextCleanupRegistrar<Parser>
     CleanupParser(ParseOP.get());
 
-  printf("Attempting to enter MainSourceFile\n");
   S.getPreprocessor().EnterMainSourceFile();
-  printf("Attempting to Initialise Parser\n");
   P.Initialize();
 
   // C11 6.9p1 says translation units must have at least one top-level
@@ -92,7 +85,6 @@ void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
   // is empty we should still emit the (pedantic) diagnostic.
   Parser::DeclGroupPtrTy ADecl;
   ExternalASTSource *External = S.getASTContext().getExternalSource();
-  printf("Got ExternalASTSource\n");
   if (External)
     External->StartTranslationUnit(Consumer);
 
@@ -115,7 +107,6 @@ void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
        E = S.WeakTopLevelDecls().end(); I != E; ++I)
     Consumer->HandleTopLevelDecl(DeclGroupRef(*I));
 
-  printf("Attempting to HandleTranslationUnit\n");
   Consumer->HandleTranslationUnit(S.getASTContext());
 
   std::swap(OldCollectStats, S.CollectStats);
@@ -127,5 +118,4 @@ void clang::ParseAST(Sema &S, bool PrintStats, bool SkipFunctionBodies) {
     Stmt::PrintStats();
     Consumer->PrintStats();
   }
-  printf("Leaving ParseAST normally\n");
 }

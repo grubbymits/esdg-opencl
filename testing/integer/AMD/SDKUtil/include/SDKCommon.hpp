@@ -34,7 +34,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <vector>
 #include <malloc.h>
 
-#include <CL/opencl.h>
+#include <CL/cl.h>
 
 #ifdef _WIN32
 #include <windows.h>

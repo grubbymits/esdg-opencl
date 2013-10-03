@@ -21,14 +21,16 @@ namespace llvm {
   class raw_ostream;
 }
 
-class clang::FunctionDecl;
-class clang::Stmt;
-class clang::Expr;
-class clang::CallExpr;
-class clang::DeclRefExpr;
-class clang::UnaryOperator;
-class clang::FileManager;
+namespace clang {
+  class FunctionDecl;
+  class Stmt;
+  class Expr;
+  class CallExpr;
+  class DeclRefExpr;
+  class UnaryOperator;
+  class FileManager;
 
+}
 
 typedef std::vector<clang::Stmt*> StmtSet;
 typedef std::vector<clang::DeclRefExpr*> DeclRefSet;
@@ -42,7 +44,6 @@ class WorkitemCoarsen {
 public:
   WorkitemCoarsen(unsigned x, unsigned y, unsigned z);
   bool CreateWorkgroup(std::string &Filename, std::string &kernel);
-  bool ExpandMacros();
   bool HandleBarriers();
   void DeleteTempFiles();
   std::string &getInitialisedKernel() { return InitKernelSource; }
@@ -66,17 +67,9 @@ public:
   OpenCLCompiler(unsigned x, unsigned y, unsigned z, std::string &name);
   ~OpenCLCompiler();
   void setFile(std::string input);
-  void expandMacros(llvm::raw_ostream *source);
   void Parse();
-
-  bool needsScalarFixes() {
-    return TheConsumer->needsScalarFixes();
-  }
-  void FixAllScalarAccesses() {
-    TheConsumer->FixAllScalarAccesses();
-  }
-
   const clang::RewriteBuffer *getRewriteBuf() {
+    TheConsumer->RewriteSource();
     return TheRewriter.getRewriteBufferFor(SourceMgr->getMainFileID());
   }
 
@@ -118,14 +111,19 @@ public:
         }
       }
     }
+    //Visitor.RewriteSource();
     return true;
   }
+  void RewriteSource() {
+    Visitor.RewriteSource();
+  }
+  /*
   bool needsScalarFixes() const {
     return Visitor.needsToFixScalarAccesses();
   }
   void FixAllScalarAccesses() {
     Visitor.FixAllScalarAccesses();
-  }
+  }*/
 
 private:
   std::string KernelName;
@@ -151,14 +149,15 @@ template <typename T> class ASTVisitorBase :
   public clang::RecursiveASTVisitor<T> {
 public:
   ASTVisitorBase(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
-  virtual bool needsToFixScalarAccesses() const = 0;
-  virtual void FixAllScalarAccesses() = 0;
+  //virtual bool needsToFixScalarAccesses() const = 0;
+  //virtual void FixAllScalarAccesses() = 0;
+  virtual void RewriteSource();
 
+  void InsertText(clang::SourceLocation InsertLoc, std::string text) {
+    SourceToInsert.push_back(std::make_pair(InsertLoc, text));
+  }
   void RemoveText(clang::SourceLocation Start, clang::SourceLocation End) {
     TheRewriter.RemoveText(clang::SourceRange(Start, End));
-  }
-  void InsertText(clang::SourceLocation InsertLoc, const char *text) {
-    TheRewriter.InsertText(InsertLoc, text);
   }
 protected:
   void CloseLoop(clang::SourceLocation Loc);
@@ -169,6 +168,7 @@ protected:
   std::stringstream OpenWhile;
   std::stringstream CloseWhile;
   clang::Rewriter &TheRewriter;
+  std::list<std::pair<clang::SourceLocation, std::string> > SourceToInsert;
 };
 
 private:
@@ -180,14 +180,13 @@ public:
   bool VisitFunctionDecl(clang::FunctionDecl *f);
   bool VisitDeclStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
-
-  virtual bool needsToFixScalarAccesses() const { return false; }
-  virtual void FixAllScalarAccesses() { return; }
 };
 
 class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {
 public:
   ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
+  void RewriteSource();
+
   //bool VisitForStmt(clang::Stmt *s);
   bool VisitWhileStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
@@ -198,23 +197,18 @@ public:
   bool VisitBinaryOperator(clang::Expr *expr);
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
-  virtual bool needsToFixScalarAccesses() const {
-    return true;
-    //return (!NewScalarRepls.empty());
-  }
-
-  virtual void FixAllScalarAccesses();
-
 private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
   void TraverseRegion(clang::Stmt *s);
   void HandleBarrierInLoop(clang::Stmt *Loop);
+  void HandleBreaks(clang::Stmt *Region);
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
   void SearchForIndVars(clang::Stmt *s);
+  void SearchForBreaks(clang::Stmt *Region, clang::Stmt *s);
   bool SearchNestedLoops(clang::Stmt *Loop, bool isOuterLoop);
   void AssignIndVars(void);
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
@@ -238,6 +232,7 @@ private:
   std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
+  std::map<clang::Stmt*, std::list<clang::BreakStmt*> > BreakStmts;
   std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
 
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
@@ -248,6 +243,7 @@ private:
   std::vector<clang::Decl*> IndVars;
   std::vector<clang::FunctionDecl*> AllFunctions;
   std::vector<clang::FunctionDecl*> CalledFunctions;
+
 
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;

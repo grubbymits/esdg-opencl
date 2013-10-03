@@ -207,7 +207,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
                                 clang::InputKind SourceKind,
                                 const std::string &Opts) {
 #ifdef DEBUGCL
-  std::cerr << "Entering CompileToBitcode\n";
+  std::cerr << "Entering CompileToBitcode" << std::endl;
 #endif
   clang::CompilerInvocation Invocation;
   clang::EmitLLVMOnlyAction act(&llvm::getGlobalContext());

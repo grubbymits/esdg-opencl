@@ -202,6 +202,8 @@ DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)
 #ifdef DEBUGCL
   std::cerr << "Entering LE1Device::createDeviceBuffer\n";
 #endif
+  // FIXME This shouldn't close the program, it needs to somehow get an error
+  // back to the user
   if((global_base_addr + buffer->size()) > LE1Device::MaxGlobalAddr) {
     std::cerr << "Error: Device doesn't have enough free memory to allocate \
       buffer. global_base = " << global_base_addr << ", buffer size = " <<

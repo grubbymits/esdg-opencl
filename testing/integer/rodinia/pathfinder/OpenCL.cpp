@@ -133,7 +133,8 @@ void OpenCL::buildKernel()
 	program = clCreateProgramWithSource(context,
 	                                    1,
 	                                    (const char **) &source_str,
-	                                    NULL,           // Number of chars in kernel src. NULL means src is null-terminated.
+                                            &source_size,
+	                                    //NULL,           // Number of chars in kernel src. NULL means src is null-terminated.
 	                                    &ret);          // Return status message in the ret variable.
 
 	if (ret != CL_SUCCESS)

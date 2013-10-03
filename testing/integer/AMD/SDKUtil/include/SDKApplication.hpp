@@ -20,8 +20,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #ifndef SDKAPPLICATION_H_
 #define SDKAPPLICATION_H_
-#include <SDKCommon.hpp>
-#include <SDKCommandArgs.hpp>
+#include "SDKCommon.hpp"
+#include "SDKCommandArgs.hpp"
 
 /**
  * GLOBAL DEFINED Macros

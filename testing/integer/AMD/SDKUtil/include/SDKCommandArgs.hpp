@@ -25,7 +25,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <string>
 #include <ctime>
 #include <string.h>
-#include <SDKCommon.hpp>
+#include "SDKCommon.hpp"
 
 /**
  * namespace streamsdk

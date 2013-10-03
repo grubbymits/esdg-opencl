@@ -313,6 +313,7 @@ int main(int argc, char **argv){
           return -1;
         }
 
+        /*
 	output_itemsets_d = clCreateBuffer(context,
                                            CL_MEM_READ_WRITE,
                                            (max_cols * max_rows * sizeof(int)),
@@ -323,7 +324,7 @@ int main(int argc, char **argv){
           printf("ERROR: clCreateBuffer output_item_set (size:%d) => %d\n",
                  max_cols * max_rows, err);
           return -1;
-        }
+        }*/
 
 	//write buffers
 	err = clEnqueueWriteBuffer(cmd_queue, input_itemsets_d, 1, 0,
@@ -352,33 +353,34 @@ int main(int argc, char **argv){
 	
 	clSetKernelArg(kernel1, 0, sizeof(void *), (void*) &reference_d);
 	clSetKernelArg(kernel1, 1, sizeof(void *), (void*) &input_itemsets_d);
-	clSetKernelArg(kernel1, 2, sizeof(void *), (void*) &output_itemsets_d);
-	clSetKernelArg(kernel1, 3, sizeof(cl_int) * (BLOCK_SIZE + 1) *(BLOCK_SIZE+1), (void*)NULL );
-	clSetKernelArg(kernel1, 4, sizeof(cl_int) *  BLOCK_SIZE * BLOCK_SIZE, (void*)NULL );
-	clSetKernelArg(kernel1, 5, sizeof(cl_int), (void*) &max_cols);
-	clSetKernelArg(kernel1, 6, sizeof(cl_int), (void*) &penalty);
-	clSetKernelArg(kernel1, 8, sizeof(cl_int), (void*) &block_width);
-	clSetKernelArg(kernel1, 9, sizeof(cl_int), (void*) &worksize);
-	clSetKernelArg(kernel1, 10, sizeof(cl_int), (void*) &offset_r);
-	clSetKernelArg(kernel1, 11, sizeof(cl_int), (void*) &offset_c);
+	//clSetKernelArg(kernel1, 2, sizeof(void *), (void*) &output_itemsets_d);
+	clSetKernelArg(kernel1, 2, sizeof(cl_int) * (BLOCK_SIZE + 1) *(BLOCK_SIZE+1), (void*)NULL );
+	clSetKernelArg(kernel1, 3, sizeof(cl_int) *  BLOCK_SIZE * BLOCK_SIZE, (void*)NULL );
+	clSetKernelArg(kernel1, 4, sizeof(cl_int), (void*) &max_cols);
+	clSetKernelArg(kernel1, 5, sizeof(cl_int), (void*) &penalty);
+	clSetKernelArg(kernel1, 7, sizeof(cl_int), (void*) &block_width);
+	clSetKernelArg(kernel1, 8, sizeof(cl_int), (void*) &worksize);
+	clSetKernelArg(kernel1, 9, sizeof(cl_int), (void*) &offset_r);
+	clSetKernelArg(kernel1, 10, sizeof(cl_int), (void*) &offset_c);
 
 	clSetKernelArg(kernel2, 0, sizeof(void *), (void*) &reference_d);
 	clSetKernelArg(kernel2, 1, sizeof(void *), (void*) &input_itemsets_d);
-	clSetKernelArg(kernel2, 2, sizeof(void *), (void*) &output_itemsets_d);
-	clSetKernelArg(kernel2, 3, sizeof(cl_int) * (BLOCK_SIZE + 1) *(BLOCK_SIZE+1), (void*)NULL );
-	clSetKernelArg(kernel2, 4, sizeof(cl_int) * BLOCK_SIZE *BLOCK_SIZE, (void*)NULL );
-	clSetKernelArg(kernel2, 5, sizeof(cl_int), (void*) &max_cols);
-	clSetKernelArg(kernel2, 6, sizeof(cl_int), (void*) &penalty);
-	clSetKernelArg(kernel2, 8, sizeof(cl_int), (void*) &block_width);
-	clSetKernelArg(kernel2, 9, sizeof(cl_int), (void*) &worksize);
-	clSetKernelArg(kernel2, 10, sizeof(cl_int), (void*) &offset_r);
-	clSetKernelArg(kernel2, 11, sizeof(cl_int), (void*) &offset_c);
-	
+	//clSetKernelArg(kernel2, 2, sizeof(void *), (void*) &output_itemsets_d);
+	clSetKernelArg(kernel2, 2, sizeof(cl_int) * (BLOCK_SIZE + 1) *(BLOCK_SIZE+1), (void*)NULL );
+	clSetKernelArg(kernel2, 3, sizeof(cl_int) * BLOCK_SIZE *BLOCK_SIZE, (void*)NULL );
+	clSetKernelArg(kernel2, 4, sizeof(cl_int), (void*) &max_cols);
+	clSetKernelArg(kernel2, 5, sizeof(cl_int), (void*) &penalty);
+	clSetKernelArg(kernel2, 7, sizeof(cl_int), (void*) &block_width);
+	clSetKernelArg(kernel2, 8, sizeof(cl_int), (void*) &worksize);
+	clSetKernelArg(kernel2, 9, sizeof(cl_int), (void*) &offset_r);
+	clSetKernelArg(kernel2, 10, sizeof(cl_int), (void*) &offset_c);
+
 	printf("Processing upper-left matrix\n");
 	for( int blk = 1 ; blk <= worksize/BLOCK_SIZE ; blk++){
 	  global_work[0] = BLOCK_SIZE * blk;
 	  local_work[0]  = BLOCK_SIZE;
-	  clSetKernelArg(kernel1, 7, sizeof(cl_int), (void*) &blk);
+	  clSetKernelArg(kernel1, 6, sizeof(cl_int), (void*) &blk);
+          printf("Enqueue Kernel 1 with block %d\n", blk);
 	  err = clEnqueueNDRangeKernel(cmd_queue, kernel1, 2, NULL, global_work, local_work, 0, 0, 0);
 	  if(err != CL_SUCCESS) {
             printf("ERROR: 1  clEnqueueNDRangeKernel()=>%d failed\n", err);
@@ -392,7 +394,8 @@ int main(int argc, char **argv){
 	for( int blk =  worksize/BLOCK_SIZE - 1  ; blk >= 1 ; blk--){
 	  global_work[0] = BLOCK_SIZE * blk;
 	  local_work[0] =  BLOCK_SIZE;
-	  clSetKernelArg(kernel2, 7, sizeof(cl_int), (void*) &blk);
+          printf("Enqueue Kernel 2 with block %d\n", blk);
+	  clSetKernelArg(kernel2, 6, sizeof(cl_int), (void*) &blk);
           err = clEnqueueNDRangeKernel(cmd_queue, kernel2, 2, NULL, global_work, local_work, 0, 0, 0);
 	  if(err != CL_SUCCESS) {
             printf("ERROR: 2 clEnqueueNDRangeKernel()=>%d failed\n", err);
@@ -564,8 +567,8 @@ int main(int argc, char **argv){
         }
 
 	fclose(fpo);
+
         int success = 1;
-        printf("res_index = %d after writing MP results\n", res_index);
         for (unsigned i = 0; i < max_rows-1; i++) {
           if (cl_res[i] != mp_res[i]) {
             printf("Mismatch at inndex %d: mp_res = %d, but cl_res = %d\n",

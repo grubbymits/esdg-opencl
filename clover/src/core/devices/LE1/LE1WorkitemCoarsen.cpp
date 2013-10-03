@@ -106,48 +106,11 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
   return HandleBarriers();
 }
 
-// Use a RewriteAction to expand all macros within the original source file
-bool WorkitemCoarsen::ExpandMacros() {
-  std::string log;
-  llvm::raw_string_ostream macro_log(log);
-  CompilerInstance CI;
-  RewriteMacrosAction act;
-
-  CI.getTargetOpts().Triple = "le1";
-  CI.getFrontendOpts().Inputs.push_back(FrontendInputFile(OrigFilename,
-                                                          IK_OpenCL));
-  // Overwrite original
-  CI.getFrontendOpts().OutputFile = OrigFilename;
-
-  CI.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
-                                   frontend::Angled,
-                                   false, false, false);
-  CI.getHeaderSearchOpts().AddPath(CLANG_INCLUDE_DIR, frontend::Angled,
-                                   false, false, false);
-  CI.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
-  CI.getPreprocessorOpts().Includes.push_back("clc/clc.h");
-  CI.getPreprocessorOpts().addMacroDef(
-    "cl_clang_storage_class_specifiers");
-  CI.getInvocation().setLangDefaults(CI.getLangOpts(), IK_OpenCL);
-
-  CI.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
-      macro_log, &CI.getDiagnosticOpts()));
-
-  if (!CI.ExecuteAction(act)) {
-    std::cerr << "RewriteMacrosAction failed:" << std::endl
-      << log;
-    return false;
-  }
-  return true;
-}
-
 bool WorkitemCoarsen::HandleBarriers() {
   OpenCLCompiler<ThreadSerialiser> SerialCompiler(LocalX, LocalY, LocalZ,
                                                   KernelName);
   SerialCompiler.setFile(InitKernelFilename);
   SerialCompiler.Parse();
-  if (SerialCompiler.needsScalarFixes())
-    SerialCompiler.FixAllScalarAccesses();
 
   const RewriteBuffer *RewriteBuf = SerialCompiler.getRewriteBuf();
   if (RewriteBuf == NULL) {
@@ -177,6 +140,15 @@ bool WorkitemCoarsen::HandleBarriers() {
   return true;
 }
 
+static bool SortLocations(std::pair<SourceLocation, std::string> first,
+                          std::pair<SourceLocation, std::string> second) {
+
+  if (first.first < second.first)
+    return true;
+  else
+    return false;
+}
+
 template <typename T>
 WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
                                                    unsigned x,
@@ -184,6 +156,7 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
                                                    unsigned z)
     : LocalX(x), LocalY(y), LocalZ(z), TheRewriter(R) {
 
+  OpenWhile << "\n";
   if (LocalZ > 1) {
     OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
   }
@@ -213,23 +186,50 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
 }
 
 template <typename T>
-//void OpenCLCompiler<T>::KernelInitialiser::CloseLoop(SourceLocation Loc) {
+void WorkitemCoarsen::ASTVisitorBase<T>::RewriteSource() {
+  SourceToInsert.sort(SortLocations);
+
+  for (std::list<std::pair<SourceLocation, std::string> >::iterator PI =
+       SourceToInsert.begin(), PE = SourceToInsert.end(); PI != PE; ++PI) {
+    SourceLocation Loc = (*PI).first;
+    std::string Text = (*PI).second;
+    TheRewriter.InsertText(Loc, Text);
+  }
+}
+
+template <typename T>
 void WorkitemCoarsen::ASTVisitorBase<T>::CloseLoop(SourceLocation Loc) {
-  TheRewriter.InsertText(Loc, CloseWhile.str(), true, true);
+  //TheRewriter.InsertText(Loc, CloseWhile.str(), true, true);
+  InsertText(Loc, CloseWhile.str());
 }
 
 template <typename T>
 void WorkitemCoarsen::ASTVisitorBase<T>::OpenLoop(SourceLocation Loc) {
-  TheRewriter.InsertText(Loc, OpenWhile.str(), true, true);
+  //TheRewriter.InsertText(Loc, OpenWhile.str(), true, true);
+  InsertText(Loc, OpenWhile.str());
 }
 
-//template <typename T>
+static inline bool isBarrier(Stmt *s) {
+  if (isa<CallExpr>(s)) {
+    FunctionDecl *FD = (cast<CallExpr>(s))->getDirectCallee();
+    std::string name = FD->getNameInfo().getName().getAsString();
+    if (name.compare("barrier") == 0)
+      return true;
+  }
+  return false;
+}
+
+static inline bool isLoop(Stmt *s) {
+  return (isa<ForStmt>(s) || isa<WhileStmt>(s));
+}
+// ------------------------------------------------------------------------- //
+// --------------------- Start of KernelInitialiser ------------------------ //
+// ------------------------------------------------------------------------- //
 bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
   // Only function definitions (with bodies), not declarations.
   if ((f->hasBody()) && (f->hasAttr<clang::OpenCLKernelAttr>())) {
     Stmt *FuncBody = f->getBody();
-    SourceLocation FuncBodyStart =
-    FuncBody->getLocStart().getLocWithOffset(2);
+    SourceLocation FuncBodyStart = FuncBody->getLocStart().getLocWithOffset(2);
 
     std::stringstream FuncBegin;
     FuncBegin << "  int __kernel_local_id[";
@@ -241,7 +241,8 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
       FuncBegin << "1";
     FuncBegin << "] = {0};\n";
 
-    TheRewriter.InsertText(FuncBodyStart, FuncBegin.str(), true, true);
+    //TheRewriter.InsertText(FuncBodyStart, FuncBegin.str(), true, true);
+    InsertText(FuncBodyStart, FuncBegin.str());
     OpenLoop(FuncBodyStart);
     CloseLoop(FuncBody->getLocEnd());
   }
@@ -272,7 +273,8 @@ bool WorkitemCoarsen::KernelInitialiser::VisitDeclStmt(Stmt *s) {
       std::string type = cast<ValueDecl>(ND)->getType().getAsString();
       std::stringstream newDecl;
       newDecl << "\n" << type << " " << key << ";";
-      TheRewriter.InsertText(ND->getLocStart(), newDecl.str(), true);
+      //TheRewriter.InsertText(ND->getLocStart(), newDecl.str(), true);
+      InsertText(ND->getLocStart(), newDecl.str());
     }
 
     // Handle the last declaration which could also be initialised.
@@ -282,10 +284,12 @@ bool WorkitemCoarsen::KernelInitialiser::VisitDeclStmt(Stmt *s) {
     std::string type = cast<ValueDecl>(ND)->getType().getAsString();
     std::stringstream newDecl;
     newDecl << "\n" << type << " " << key;
-    TheRewriter.InsertText(ND->getLocStart(), newDecl.str(), true);
+    //TheRewriter.InsertText(ND->getLocStart(), newDecl.str(), true);
+    InsertText(ND->getLocStart(), newDecl.str());
 
     if (s->child_begin() == s->child_end()) {
-      TheRewriter.InsertText(ND->getLocStart(), ";");
+      //TheRewriter.InsertText(ND->getLocStart(), ";");
+      InsertText(ND->getLocStart(), ";");
       return true;
     }
 
@@ -293,7 +297,8 @@ bool WorkitemCoarsen::KernelInitialiser::VisitDeclStmt(Stmt *s) {
          SI != SE; ++SI) {
       std::stringstream init;
       init << " = " << TheRewriter.ConvertToString(*SI) << ";";
-      TheRewriter.InsertText(ND->getLocStart(), init.str(), true);
+      //TheRewriter.InsertText(ND->getLocStart(), init.str(), true);
+      InsertText(ND->getLocStart(), init.str());
     }
   }
   return true;
@@ -348,19 +353,29 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
         << " + __kernel_local_id[2];//";
       break;
     }
-    TheRewriter.InsertText(Call->getLocStart(), GlobalId.str());
+    //TheRewriter.InsertText(Call->getLocStart(), GlobalId.str());
+    InsertText(Call->getLocStart(), GlobalId.str());
   }
   else if (FuncName.compare("get_local_id") == 0) {
     TheRewriter.RemoveText(Call->getSourceRange());
-    if (Index == 0)
-      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
-                             "__kernel_local_id[0]");
-    else if (Index == 1)
-      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
-                             "__kernel_local_id[1]");
-    else
-      TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
-                             "__kernel_local_id[2]");
+    if (Index == 0) {
+      //TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
+        //                     "__kernel_local_id[0]");
+      InsertText(Call->getLocEnd().getLocWithOffset(1),
+                 "__kernel_local_id[0]");
+    }
+    else if (Index == 1) {
+      //TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
+        //                     "__kernel_local_id[1]");
+      InsertText(Call->getLocEnd().getLocWithOffset(1),
+                 "__kernel_local_id[1]");
+    }
+    else {
+      //TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
+        //                     "__kernel_local_id[2]");
+      InsertText(Call->getLocEnd().getLocWithOffset(1),
+                 "__kernel_local_id[2]");
+    }
 
   }
   else if (FuncName.compare("get_local_size") == 0) {
@@ -373,7 +388,8 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
     else
       local << LocalZ;
 
-    TheRewriter.InsertText(Call->getLocStart(), local.str());
+    //TheRewriter.InsertText(Call->getLocStart(), local.str());
+    InsertText(Call->getLocStart(), local.str());
 
   }
 
@@ -403,6 +419,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
 //    return true;
 // else return false;
 
+
 WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
                                                     unsigned x,
                                                     unsigned y,
@@ -411,9 +428,10 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
     isFirstLoop = true;
 }
 
-void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
+
+void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
 #ifdef DEBUGCL
-  std::cerr << "FixAllScalarAccesses" << std::endl;
+  std::cerr << "ThreadSerialiser::RewriteSource" << std::endl;
 #endif
 
   // Visit all the loops which contain barriers, and create regions that are
@@ -428,6 +446,15 @@ void WorkitemCoarsen::ThreadSerialiser::FixAllScalarAccesses() {
   std::list<DeclStmt*> Stmts;
   FindRefsToExpand(Stmts, OuterLoop);
 
+  // Once we have decided all the text we need to insert, sort it and write it
+  SourceToInsert.sort(SortLocations);
+
+  for (std::list<std::pair<SourceLocation, std::string> >::iterator PI =
+       SourceToInsert.begin(), PE = SourceToInsert.end(); PI != PE; ++PI) {
+    SourceLocation Loc = (*PI).first;
+    std::string Text = (*PI).second;
+    TheRewriter.InsertText(Loc, Text);
+  }
 }
 
 void WorkitemCoarsen::ThreadSerialiser::AssignIndVars() {
@@ -765,7 +792,8 @@ bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
     NewDecl << ";\n";
   }
 
-  TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
+  //TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
+  InsertText(InsertLoc, NewDecl.str());
 
 #ifdef DEBUGCL
   std::cerr << "Leaving CreateLocal" << std::endl;
@@ -812,9 +840,12 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
 
   newAccess << " = ";
 
-  TheRewriter.InsertText(DS->getLocStart(), "//");
-  TheRewriter.InsertText(AccessLoc, "\n");
-  TheRewriter.InsertText(AccessLoc, newAccess.str());
+  //TheRewriter.InsertText(DS->getLocStart(), "//");
+  //TheRewriter.InsertText(AccessLoc, "\n");
+  //TheRewriter.InsertText(AccessLoc, newAccess.str());
+  InsertText(DS->getLocStart(), "//");
+  InsertText(AccessLoc, "\n");
+  InsertText(AccessLoc, newAccess.str());
 #ifdef DEBUGCL
   std::cerr << "Leaving RemoveScalarDeclStmt" << std::endl;
 #endif
@@ -861,7 +892,8 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveNonScalarDeclStmt(DeclStmt *DS,
   // FIXME - What happens when the original initialiser has already been
   // expanded?!
   TheRewriter.RemoveText(DS->getSourceRange());
-  TheRewriter.InsertText(ND->getLocStart(), NewArrayInit.str());
+  //TheRewriter.InsertText(ND->getLocStart(), NewArrayInit.str());
+  InsertText(ND->getLocStart(), NewArrayInit.str());
 #ifdef DEBUGCL
   std::cerr << "Leaving RemoveNonScalarDeclStmt" << std::endl;
 #endif
@@ -873,13 +905,15 @@ void WorkitemCoarsen::ThreadSerialiser::AccessScalar(DeclRefExpr *Ref) {
   ExpandRef(newAccess);
   SourceLocation Loc = Ref->getLocStart();
   TheRewriter.RemoveText(Ref->getSourceRange());
-  TheRewriter.InsertText(Loc, newAccess.str());
+  //TheRewriter.InsertText(Loc, newAccess.str());
+  InsertText(Loc, newAccess.str());
 }
 
 void WorkitemCoarsen::ThreadSerialiser::AccessNonScalar(DeclRefExpr *ref) {
   unsigned offset = ref->getDecl()->getName().str().length();
   SourceLocation Loc = ref->getLocEnd().getLocWithOffset(offset);
-  TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]");
+  //TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]");
+  InsertText(Loc, "[__kernel_local_id[0]]");
 }
 
 SourceLocation
@@ -977,21 +1011,87 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
     return;
   }
 
+  // This loop may also contain a break statement that will we have to handle.
+  // To handle the problem, we can create a scoped boolean variable which will
+  // shall set on hitting the break - this is necessary since the break is just
+  // about to be enclosed in one of our while loops.
+  if (BreakStmts.find(Loop) != BreakStmts.end())
+    HandleBreaks(Loop);
+
   CloseLoop(Loop->getLocStart());
   OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
   CloseLoop(LoopBody->getLocEnd());
   OpenLoop(GetOffsetOut(Loop->getLocEnd()));
+
 }
 
-static inline bool isBarrier(Stmt *s) {
-  if (isa<CallExpr>(s)) {
-    FunctionDecl *FD = (cast<CallExpr>(s))->getDirectCallee();
-    std::string name = FD->getNameInfo().getName().getAsString();
-    if (name.compare("barrier") == 0)
-      return true;
+// We should check whether there is a barrier after the break, if so this
+// will give the position of the closing bracket. Otherwise the closing
+// bracket will be at the end of loop.
+void WorkitemCoarsen::ThreadSerialiser::HandleBreaks(Stmt *Region) {
+  std::list<BreakStmt*> Breaks = BreakStmts[Region];
+  std::vector<CallExpr*> InnerBarriers = Barriers[Region];
+  SourceLocation RegionStart;
+  SourceLocation RegionEnd;
+
+  if (isa<WhileStmt>(Region)) {
+    RegionStart = (cast<WhileStmt>(Region))->getBody()->getLocStart();
+    RegionEnd = (cast<WhileStmt>(Region))->getBody()->getLocEnd();
   }
-  return false;
+  else if (isa<ForStmt>(Region)) {
+    RegionStart = (cast<ForStmt>(Region))->getBody()->getLocStart();
+    RegionEnd = (cast<ForStmt>(Region))->getBody()->getLocEnd();
+  }
+  else {
+    RegionStart = (cast<CompoundStmt>(Region))->getLBracLoc();
+    RegionEnd = (cast<CompoundStmt>(Region))->getRBracLoc();
+  }
+
+  for (std::list<BreakStmt*>::iterator BRI = Breaks.begin(),
+       BRE = Breaks.end(); BRI != BRE; ++BRI) {
+
+    SourceLocation BreakLoc = (*BRI)->getLocStart();
+    CallExpr *ProceedingBarrier = NULL;
+
+    for (std::vector<CallExpr*>::iterator BI = InnerBarriers.begin(),
+         BE = InnerBarriers.end(); BI != BE; ++BI) {
+
+      // Here we compare the locations of the barriers to find the one that
+      // directly proceeds the break
+      SourceLocation BarrierLoc = (*BI)->getLocStart();
+      if (BreakLoc < BarrierLoc) {
+        if (ProceedingBarrier) {
+          if (BarrierLoc < ProceedingBarrier->getLocStart())
+            ProceedingBarrier = *BI;
+        }
+        else
+          ProceedingBarrier = *BI;
+      }
+    }
+
+    SourceLocation InsertLoc;
+    if (ProceedingBarrier)
+      InsertLoc = ProceedingBarrier->getLocEnd().getLocWithOffset(2);
+    else
+      InsertLoc = RegionEnd;
+
+    // Now we have our location to insert some book keeping code - another
+    // break to actually break from the original loop using the new variable
+    // we declared earlier.
+    //TheRewriter.InsertText(InsertLoc, "\nif (__kernel_break_again) break;");
+    //TheRewriter.InsertText(BreakLoc.getLocWithOffset(2),
+      //                     "__kernel_break_again = true;");
+    InsertText(BreakLoc, "__kernel_break_again = true;");
+    InsertText(BreakLoc, "\n");
+    InsertText(InsertLoc, "\nif (__kernel_break_again) break;");
+
+  }
+  //TheRewriter.InsertText(RegionStart.getLocWithOffset(2),
+    //                     "bool __kernel_break_again = false;");
+  InsertText(RegionStart.getLocWithOffset(3),
+             "bool __kernel_break_again = false;");
 }
+
 
 void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
 #ifdef DEBUGCL
@@ -1041,9 +1141,34 @@ void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
   //}
 }
 
-static inline bool isLoop(Stmt *s) {
-  return (isa<ForStmt>(s) || isa<WhileStmt>(s));
+// TODO Search and handle continue statements, as well as going traversing
+// deeper.
+void WorkitemCoarsen::ThreadSerialiser::SearchForBreaks(Stmt *Region, Stmt *s) {
+#ifdef DEBUGCL
+  std::cerr << "SearchForBreaks" << std::endl;
+#endif
+
+  std::list<BreakStmt*> Breaks;
+  Stmt *Then = (cast<IfStmt>(s))->getThen();
+  for (Stmt::child_iterator SI = Then->child_begin(), SE = Then->child_end();
+       SI != SE; ++SI) {
+    if (!(*SI))
+      continue;
+
+    if (isa<BreakStmt>(*SI))
+      Breaks.push_back(cast<BreakStmt>(*SI));
+  }
+  if (!Breaks.empty()) {
+#ifdef DEBUGCL
+    std::cerr << "Found " << Breaks.size() << " breaks" << std::endl;
+#endif
+    if (BreakStmts.find(Region) == BreakStmts.end())
+      BreakStmts.insert(std::make_pair(Region, Breaks));
+    else
+      BreakStmts[Region].splice(BreakStmts[Region].end(), Breaks);
+  }
 }
+
 
 // We shall create a map, using the outer loop as the key, to contain all it's
 // loop children. We shall also then have a map of all the DeclStmts within the
@@ -1091,10 +1216,14 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
       }
       else if (isBarrier(*SI))
         InnerBarriers.push_back(cast<CallExpr>(*SI));
+
+
       else if (isa<CompoundStmt>(*SI)) {
         Compounds.push_back(cast<CompoundStmt>(*SI));
         TraverseRegion(*SI);
       }
+      else if (isa<IfStmt>(*SI))
+        SearchForBreaks(s, *SI);
     }
   }
   // TODO Probably should just merge this into the code above, unless this needs
@@ -1116,20 +1245,26 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
       }
       else if (isBarrier(*CI))
         InnerBarriers.push_back(cast<CallExpr>(*CI));
+
       else if (isa<CompoundStmt>(*CI)) {
         Compounds.push_back(cast<CompoundStmt>(*CI));
         TraverseRegion(*CI);
       }
+      else if (isa<IfStmt>(*CI))
+        SearchForBreaks(s, *CI);
     }
   }
 
   // add vectors to the maps, using 's' as the key
   if (!InnerLoops.empty())
     NestedLoops.insert(std::make_pair(s, InnerLoops));
+
   if (!InnerDeclStmts.empty())
     ScopedDeclStmts.insert(std::make_pair(s, InnerDeclStmts));
+
   if (!InnerBarriers.empty())
     Barriers.insert(std::make_pair(s, InnerBarriers));
+
   if (!Compounds.empty())
     ScopedRegions.insert(std::make_pair(s, Compounds));
 }
@@ -1194,22 +1329,18 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 #endif
   if (isBarrier(s)) {
     CallExpr *Call = cast<CallExpr>(s);
-    TheRewriter.InsertText(Call->getLocStart(), "//", true, true);
+    InsertText(Call->getLocStart(), "//");
     CloseLoop(Call->getLocEnd().getLocWithOffset(2));
-    OpenLoop(Call->getLocEnd().getLocWithOffset(2));
+    OpenLoop(Call->getLocEnd().getLocWithOffset(3));
   }
   return true;
 }
 
 bool WorkitemCoarsen::ThreadSerialiser::VisitReturnStmt(Stmt *s) {
-  TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
-  TheRewriter.InsertTextBefore(s->getLocStart(), CloseWhile.str());
-  return true;
-}
-
-// TODO Need to handle continues and breaks
-bool WorkitemCoarsen::ThreadSerialiser::WalkUpFromUnaryContinueStmt(
-  UnaryOperator *S) {
+  //TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
+  //TheRewriter.InsertTextBefore(s->getLocStart(), CloseWhile.str());
+  InsertText(s->getLocEnd().getLocWithOffset(1), OpenWhile.str());
+  InsertText(s->getLocStart().getLocWithOffset(-1), CloseWhile.str());
   return true;
 }
 
@@ -1375,12 +1506,6 @@ void WorkitemCoarsen::OpenCLCompiler<T>::setFile(std::string input) {
   SourceMgr->createMainFileID(FileIn);
   TheCompInst.getDiagnosticClient().BeginSourceFile(TheCompInst.getLangOpts(),
                                               &TheCompInst.getPreprocessor());
-}
-
-template <typename T>
-void WorkitemCoarsen::OpenCLCompiler<T>::expandMacros(llvm::raw_ostream *source)
-{
-  clang::RewriteMacrosInInput(TheCompInst.getPreprocessor(), source);
 }
 
 template <typename T>
