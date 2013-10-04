@@ -149,7 +149,7 @@ int StringSearch::setupCL()
     }
     else //deviceType = "gpu" 
     {
-        dType = CL_DEVICE_TYPE_GPU;
+        dType = CL_DEVICE_TYPE_ACCELERATOR;
         if(isThereGPU() == false)
         {
             std::cout << "GPU not found. Falling back to CPU device" << std::endl;
@@ -274,7 +274,7 @@ int StringSearch::setupCL()
 
     cl_uchar *ptr;
     // Move text data host to device
-    status = mapBuffer( textBuf, ptr, textLength, CL_MAP_WRITE_INVALIDATE_REGION);
+    status = mapBuffer( textBuf, ptr, textLength, CL_MAP_WRITE);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(textBuf)");
     memcpy(ptr, text, textLength);
     status = unmapBuffer(textBuf, ptr);
@@ -282,7 +282,7 @@ int StringSearch::setupCL()
 
     // Move subStr data host to device
     status = mapBuffer( subStrBuf, ptr, subStr.length(),
-                        CL_MAP_WRITE_INVALIDATE_REGION);
+                        CL_MAP_WRITE);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(subStrBuf)");
     memcpy(ptr, subStr.c_str(), subStr.length());
     status = unmapBuffer(subStrBuf, ptr);

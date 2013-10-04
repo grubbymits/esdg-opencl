@@ -1,29 +1,7 @@
-DEPTH = ../../../../..
+CXX = clang++
+CXXFLAGS = -g -O2
+INC = -I/opt/esdg-opencl/include -I/usr/include/x86_64-linux-gnu/c++/4.7 -I../SDKUtil/include
+LIBS = -L/opt/esdg-opencl/lib -lOpenCL -L../SDKUtil -lSDKUtil
 
-include $(DEPTH)/make/openclsdkdefs.mk 
-
-####
-#
-#  Targets
-#
-####
-
-OPENCL			= 1
-SAMPLE_EXE		= 1
-EXE_TARGET 		= StringSearch
-EXE_TARGET_INSTALL   	= StringSearch
-
-####
-#
-#  C/CPP files
-#
-####
-
-FILES 	= StringSearch
-CLFILES	= StringSearch_Kernels.cl
-IMAGES  = StringSearch_Input.txt
-
-LLIBS  	+= SDKUtil
-
-include $(DEPTH)/make/openclsdkrules.mk 
-
+string-search : StringSearch.cpp
+	$(CXX) $(CXXFLAGS) $(INC) $< $(LIBS) -o $@

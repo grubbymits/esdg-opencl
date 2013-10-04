@@ -1,0 +1,57 @@
+kernel() {
+
+  for () {
+
+    if ()
+      return;
+  }
+}
+
+The return statement may, or may not, be based on the local id.
+If it is based on the local id, it would be incorrect to exit
+the function since the other threads could continue past it. If it
+is not based on the local id, all threads will encounter it and exit.
+
+kernel() {
+  bool __kernel_invalid_id[local_size] = { false };
+  unsigned total_current_workitems = get_local_size();
+
+  while() {
+
+  }
+  for () {
+    unsigned returned_counter = 0;
+    while() {
+      if () {
+        __kernel_invalid_id[__local_id] = true;
+        ++returned_counter;
+        continue;
+      }
+    }
+
+    if (returned_counter == total_current_workitems)
+      return;
+
+    total_current_workitems -= returned_counter;
+  }
+  while() {
+    if (__kernel_invalid_id[__local_id])
+      continue;
+  }
+}
+
+So, we kinda treat the returns like barriers. We encase them in our while loop
+and transform them into continue statements. This probably how we should handle
+breaks as well, but with a final break instead of a return. A counter is
+introduced to keep track of how many threads are left to run, and the kernel
+will exit when the returned_counter equals the total threads. In any future
+while loop, any index that has already returned is skipped through the use of
+a continue at the start of the loop. So:
+  - a counter needs to be declared at the beginning of the parent loop,
+  - an array needs to be declared at the start of the kernel to hold returned
+    indexes,
+  - return statements need to be replaced with continues,
+  - when the closing the encasing while loop closes:
+    - we need to check the local counter,
+    - we need to reduce the total of current threads.
+  - any while loops proceeding will need to check the array of invalid indexes.
