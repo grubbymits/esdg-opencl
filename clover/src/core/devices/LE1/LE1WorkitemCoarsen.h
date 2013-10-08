@@ -202,14 +202,16 @@ private:
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
   void TraverseRegion(clang::Stmt *s);
-  void HandleBarrierInLoop(clang::Stmt *Loop);
+  void TraverseConditionalRegion(clang::Stmt *Region, clang::Stmt *s);
+  bool SearchThroughRegions(clang::Stmt *Loop, bool isOuterLoop);
+  void HandleNonParallelRegion(clang::Stmt *Loop);
   void HandleBreaks(clang::Stmt *Region);
+  void HandleReturnStmts();
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
   void SearchForIndVars(clang::Stmt *s);
   void SearchForBreaks(clang::Stmt *Region, clang::Stmt *s);
-  bool SearchNestedLoops(clang::Stmt *Loop, bool isOuterLoop);
   void AssignIndVars(void);
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);
@@ -232,8 +234,13 @@ private:
   std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
-  std::map<clang::Stmt*, std::list<clang::BreakStmt*> > BreakStmts;
   std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
+  std::map<clang::Stmt*,
+    std::list<std::pair<clang::Stmt*, clang::ContinueStmt*> > > ContinueStmts;
+  std::map<clang::Stmt*,
+    std::list<std::pair<clang::Stmt*, clang::BreakStmt*> > > BreakStmts;
+  std::map<clang::Stmt*,
+    std::list<std::pair<clang::Stmt*, clang::ReturnStmt*> > > ReturnStmts;
 
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;

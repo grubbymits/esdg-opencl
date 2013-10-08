@@ -434,19 +434,28 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
   std::cerr << "ThreadSerialiser::RewriteSource" << std::endl;
 #endif
 
-  // Visit all the loops which contain barriers, and create regions that are
-  // contained by the multi-level while loops
-  SearchNestedLoops(OuterLoop, true);
+  if (!Barriers.empty()) {
+    // Visit all the loops which contain barriers, and create regions that are
+    // contained by the multi-level while loops
+    SearchThroughRegions(OuterLoop, true);
 
-  // Then we see which variables are only assigned in loop headers, these
-  // are then disabled for expansion, though they can still be made local.
-  AssignIndVars();
+    // Then we see which variables are only assigned in loop headers, these
+    // are then disabled for expansion, though they can still be made local.
+    AssignIndVars();
 
-  // Then we need to find all the variables that we need to replicate.
-  std::list<DeclStmt*> Stmts;
-  FindRefsToExpand(Stmts, OuterLoop);
+    // Then we need to find all the variables that we need to replicate.
+    std::list<DeclStmt*> Stmts;
+    FindRefsToExpand(Stmts, OuterLoop);
+  }
+  else if (!ReturnStmts.empty()) {
+    // Handle returns in the absence of barrier calls.
+    // If the the return is in the outer loop, it just gets converted into a
+    // continue. If it is in an inner loop, it is converted into a break with
+    // a conditional continue inserted after the enclosing loop
+    HandleReturnStmts();
+  }
 
-  // Once we have decided all the text we need to insert, sort it and write it
+    // Once we have decided all the text we need to insert, sort it and write it
   SourceToInsert.sort(SortLocations);
 
   for (std::list<std::pair<SourceLocation, std::string> >::iterator PI =
@@ -934,10 +943,10 @@ WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
 
 // Find out if this loop contains a barrier somehow, it will then
 // HandleBarrierInLoop if it finds something.
-bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
-                                                          bool isOuterLoop) {
+bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Loop,
+                                                             bool isOuterLoop) {
 #ifdef DEBUGCL
-  std::cerr << "SearchNestedLoops" << std::endl;
+  std::cerr << "SearchThroughRegions" << std::endl;
 #endif
 
   if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()) &&
@@ -954,14 +963,14 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
   for (std::vector<Stmt*>::iterator LoopI
        = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
        ++LoopI) {
-    if (SearchNestedLoops(*LoopI, false))
+    if (SearchThroughRegions(*LoopI, false))
       ++NestedBarriers;
   }
 
   std::vector<CompoundStmt*> Compounds = ScopedRegions[Loop];
   for (std::vector<CompoundStmt*>::iterator RegionI = Compounds.begin(),
        RegionE = Compounds.end(); RegionI != RegionE; ++RegionI) {
-    if (SearchNestedLoops(*RegionI, false)) {
+    if (SearchThroughRegions(*RegionI, false)) {
 #ifdef DEBUGCL
       std::cerr << "Found barrier within CompoundStmt" << std::endl;
 #endif
@@ -973,7 +982,7 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
     // Appropriately open and close the workgroup loops if its an original loop
     if (!isOuterLoop)
       //ParallelRegions.push_back(Loop);
-      HandleBarrierInLoop(Loop);
+      HandleNonParallelRegion(Loop);
     return true;
   }
   else
@@ -986,7 +995,7 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
 // - open a main loop at the start of the body of the loop
 // - close the main loop at the end of the body of the loop
 // - open the main loop when the for loop exits
-void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
+void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Loop) {
 #ifdef DEBUGCL
   std::cerr << "HandleBarrierInLoop\n";
 #endif
@@ -1015,8 +1024,8 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
   // To handle the problem, we can create a scoped boolean variable which will
   // shall set on hitting the break - this is necessary since the break is just
   // about to be enclosed in one of our while loops.
-  if (BreakStmts.find(Loop) != BreakStmts.end())
-    HandleBreaks(Loop);
+  //if (BreakStmts.find(Loop) != BreakStmts.end())
+    //HandleBreaks(Loop);
 
   CloseLoop(Loop->getLocStart());
   OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
@@ -1025,10 +1034,24 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
 
 }
 
+typedef std::map<Stmt*, std::list<std::pair<Stmt*, ReturnStmt*> > >::iterator
+  ReturnListIterator;
+// Iterate through the map of return statements and insert the necessary
+// code to maintain correctnesss. A return in the main loop just becomes a
+// continue, whereas a return in an inner loop becomes a break from the inner
+// loop and then a continue is used to skip the rest of the work-item.
+void WorkitemCoarsen::ThreadSerialiser::HandleReturnStmts() {
+  for (ReturnListIterator RLI = ReturnStmts.begin(), RLE = ReturnStmts.end();
+       RLI != RLE; ++RLI) {
+
+  }
+}
+
 // We should check whether there is a barrier after the break, if so this
 // will give the position of the closing bracket. Otherwise the closing
 // bracket will be at the end of loop.
 void WorkitemCoarsen::ThreadSerialiser::HandleBreaks(Stmt *Region) {
+  /*
   std::list<BreakStmt*> Breaks = BreakStmts[Region];
   std::vector<CallExpr*> InnerBarriers = Barriers[Region];
   SourceLocation RegionStart;
@@ -1090,6 +1113,7 @@ void WorkitemCoarsen::ThreadSerialiser::HandleBreaks(Stmt *Region) {
     //                     "bool __kernel_break_again = false;");
   InsertText(RegionStart.getLocWithOffset(3),
              "bool __kernel_break_again = false;");
+             */
 }
 
 
@@ -1141,31 +1165,56 @@ void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
   //}
 }
 
-// TODO Search and handle continue statements, as well as going traversing
-// deeper.
-void WorkitemCoarsen::ThreadSerialiser::SearchForBreaks(Stmt *Region, Stmt *s) {
+void WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region,
+                                                                  Stmt *s) {
 #ifdef DEBUGCL
-  std::cerr << "SearchForBreaks" << std::endl;
+  std::cerr << "TraverseConditionalRegion" << std::endl;
 #endif
+  IfStmt *ifStmt = cast<IfStmt>(s);
 
-  std::list<BreakStmt*> Breaks;
-  Stmt *Then = (cast<IfStmt>(s))->getThen();
+  Stmt *Then = ifStmt->getThen();
   for (Stmt::child_iterator SI = Then->child_begin(), SE = Then->child_end();
        SI != SE; ++SI) {
     if (!(*SI))
       continue;
 
-    if (isa<BreakStmt>(*SI))
-      Breaks.push_back(cast<BreakStmt>(*SI));
-  }
-  if (!Breaks.empty()) {
-#ifdef DEBUGCL
-    std::cerr << "Found " << Breaks.size() << " breaks" << std::endl;
-#endif
-    if (BreakStmts.find(Region) == BreakStmts.end())
-      BreakStmts.insert(std::make_pair(Region, Breaks));
-    else
-      BreakStmts[Region].splice(BreakStmts[Region].end(), Breaks);
+    if (isa<ContinueStmt>(*SI)) {
+      ContinueStmt *CS = cast<ContinueStmt>(*SI);
+      std::pair<Stmt*, ContinueStmt*> ContinuePair = std::make_pair(Then, CS);
+      if (ContinueStmts.find(Region) == ContinueStmts.end()) {
+        std::list<std::pair<Stmt*, ContinueStmt*> > NewList;
+        NewList.push_back(ContinuePair);
+        ContinueStmts.insert(std::make_pair(Region, NewList));
+      }
+      else
+        ContinueStmts[Region].push_back(ContinuePair);
+    }
+    if (isa<BreakStmt>(*SI)) {
+      BreakStmt *BS = cast<BreakStmt>(*SI);
+      std::pair<Stmt*, BreakStmt*> BreakPair = std::make_pair(Then, BS);
+      if (BreakStmts.find(Region) == BreakStmts.end()) {
+        std::list<std::pair<Stmt*, BreakStmt*> > NewList;
+        NewList.push_back(BreakPair);
+        BreakStmts.insert(std::make_pair(Region, NewList));
+      }
+      else
+        BreakStmts[Region].push_back(BreakPair);
+    }
+    if (isa<ReturnStmt>(*SI)) {
+      ReturnStmt *RS = cast<ReturnStmt>(*SI);
+      std::pair<Stmt*, ReturnStmt*> ReturnPair = std::make_pair(Then, RS);
+      if (ReturnStmts.find(Region) == ReturnStmts.end()) {
+        std::list<std::pair<Stmt*, ReturnStmt*> > NewList;
+        NewList.push_back(ReturnPair);
+        ReturnStmts.insert(std::make_pair(Region, NewList));
+      }
+      else
+        ReturnStmts[Region].push_back(ReturnPair);
+    }
+    if (isa<IfStmt>(*SI))
+      TraverseConditionalRegion(Region, *SI);
+    if (isLoop(*SI))
+      TraverseRegion(*SI);
   }
 }
 
@@ -1223,7 +1272,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
         TraverseRegion(*SI);
       }
       else if (isa<IfStmt>(*SI))
-        SearchForBreaks(s, *SI);
+        TraverseConditionalRegion(s, *SI);
     }
   }
   // TODO Probably should just merge this into the code above, unless this needs
@@ -1251,7 +1300,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
         TraverseRegion(*CI);
       }
       else if (isa<IfStmt>(*CI))
-        SearchForBreaks(s, *CI);
+        TraverseConditionalRegion(s, *CI);
     }
   }
 
