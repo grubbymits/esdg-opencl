@@ -1034,15 +1034,33 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Loop) {
 
 }
 
+typedef std::list<std::pair<Stmt*, ReturnStmt*> > PairedReturnsList;
 typedef std::map<Stmt*, std::list<std::pair<Stmt*, ReturnStmt*> > >::iterator
+  ReturnMapListIterator;
+typedef std::list<std::pair<Stmt*, ReturnStmt*> >::iterator
   ReturnListIterator;
 // Iterate through the map of return statements and insert the necessary
-// code to maintain correctnesss. A return in the main loop just becomes a
-// continue, whereas a return in an inner loop becomes a break from the inner
-// loop and then a continue is used to skip the rest of the work-item.
+// code to maintain correctnesss, when there is no barrier calls. A return in
+// the main loop just becomes a continue, whereas a return in an inner loop
+// becomes a break from the inner loop and then a continue is used to skip the
+// rest of the work-item.
 void WorkitemCoarsen::ThreadSerialiser::HandleReturnStmts() {
-  for (ReturnListIterator RLI = ReturnStmts.begin(), RLE = ReturnStmts.end();
-       RLI != RLE; ++RLI) {
+
+  // First convert returns in the outer loop to continues.
+  if (ReturnStmts.find(OuterLoop) != ReturnStmts.end()) {
+    PairedReturnsList PRL = ReturnStmts[OuterLoop];
+
+    for (ReturnListIterator RLI = PRL.begin(),
+         RLE = PRL.end(); RLI != RLE; ++RLI)
+      InsertText(*RLI->second.getLocStart(), "continue; //");
+
+    // Remove from the list so we don't try to handle this region again.
+    ReturnStmts.erase(OuterLoop);
+  }
+
+  for (ReturnMapListIterator RMLI = ReturnStmts.begin(),
+       RMLE = ReturnStmts.end(); RMLI != RMLE; ++RMLI) {
+    for (ReturnListIterator RLI = (*RMLI)->begin()
 
   }
 }
