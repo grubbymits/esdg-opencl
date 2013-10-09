@@ -425,7 +425,15 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
                                                     unsigned y,
                                                     unsigned z)
   : ASTVisitorBase(R, x, y, z) {
+
     isFirstLoop = true;
+    InvalidThreadInit << "bool __kernel_invalid_threads[" << x << "]";
+    if (y > 1)
+      InvalidThreadInit << "[" << y << "]";
+    if (z > 1)
+      InvalidThreadInit << "[" << z << "]";
+    InvalidThreadInit << ";\n";
+    InvalidThreadInit << "unsigned __kernel_total_invalid_threads = 0;\n";
 }
 
 
@@ -435,6 +443,14 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
 #endif
 
   if (!Barriers.empty()) {
+
+    // We may need to insert some variables to track valid local ids.
+    if (!ReturnStmts.empty()) {
+      InsertText(OuterLoop->getLocStart(), InvalidThreadInit.str());
+      OpenWhile << "if (__kernel_invalid_threads[__kernel_local_id[0])\n";
+      OpenWhile << "  continue;";
+    }
+
     // Visit all the loops which contain barriers, and create regions that are
     // contained by the multi-level while loops
     SearchThroughRegions(OuterLoop, true);
@@ -452,8 +468,10 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
     // If the the return is in the outer loop, it just gets converted into a
     // continue. If it is in an inner loop, it is converted into a break with
     // a conditional continue inserted after the enclosing loop
-    HandleReturnStmts();
+    SearchForReturns(OuterLoop, 0);
   }
+  else
+    return;
 
     // Once we have decided all the text we need to insert, sort it and write it
   SourceToInsert.sort(SortLocations);
@@ -948,6 +966,20 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Loop,
 #ifdef DEBUGCL
   std::cerr << "SearchThroughRegions" << std::endl;
 #endif
+  // This function will first be called with the OuterLoop, incrementing the
+  // depth to 0.
+  static unsigned depth = -1;
+  ++depth;
+
+  // Fix any regions that need modifying
+  static ReturnFixer returnFixer(&ReturnStmts, &SourceToInsert);
+
+  if (!ReturnStmts[Loop].empty()) {
+    if (Barriers[Loop].empty())
+      FixReturnsInBarrierAbsence(Loop, depth);
+    else
+      returnFixer.FixInBarrierPresence(Loop, depth);
+  }
 
   if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()) &&
       ScopedRegions[Loop].empty()) {
@@ -955,6 +987,7 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Loop,
     std::cerr << "No nested loops and there's no barriers in this one"
       << std::endl;
 #endif
+    --depth;
     return false;
   }
 
@@ -983,10 +1016,13 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Loop,
     if (!isOuterLoop)
       //ParallelRegions.push_back(Loop);
       HandleNonParallelRegion(Loop);
+    --depth;
     return true;
   }
-  else
+  else {
+    --depth;
     return false;
+  }
 }
 
 
@@ -1020,12 +1056,13 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Loop) {
     return;
   }
 
-  // This loop may also contain a break statement that will we have to handle.
-  // To handle the problem, we can create a scoped boolean variable which will
-  // shall set on hitting the break - this is necessary since the break is just
-  // about to be enclosed in one of our while loops.
-  //if (BreakStmts.find(Loop) != BreakStmts.end())
-    //HandleBreaks(Loop);
+  // Remove all the barriers from this region
+  for (std::vector<CallExpr*>::iterator CI = Barriers[Loop].begin(),
+       CE = Barriers[Loop].end(); CI != CE; ++CI) {
+    InsertText((*CI)->getLocStart(), "//");
+    CloseLoop((*CI)->getLocEnd().getLocWithOffset(2));
+    OpenLoop((*CI)->getLocEnd().getLocWithOffset(3));
+  }
 
   CloseLoop(Loop->getLocStart());
   OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
@@ -1034,36 +1071,122 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Loop) {
 
 }
 
-typedef std::list<std::pair<Stmt*, ReturnStmt*> > PairedReturnsList;
-typedef std::map<Stmt*, std::list<std::pair<Stmt*, ReturnStmt*> > >::iterator
-  ReturnMapListIterator;
-typedef std::list<std::pair<Stmt*, ReturnStmt*> >::iterator
-  ReturnListIterator;
-// Iterate through the map of return statements and insert the necessary
-// code to maintain correctnesss, when there is no barrier calls. A return in
-// the main loop just becomes a continue, whereas a return in an inner loop
-// becomes a break from the inner loop and then a continue is used to skip the
-// rest of the work-item.
-void WorkitemCoarsen::ThreadSerialiser::HandleReturnStmts() {
+// Returns get converted into continues while in the outer loop. So when at a
+// depth of 1, a continue needs to be inserted when exiting the loop instead of
+// a break - this would exit the whole kernel otherwise.
+void
+WorkitemCoarsen::ThreadSerialiser::FixReturnsInBarrierAbsence(Stmt *Region,
+                                                              unsigned depth)
+{
+#ifdef DEBUGCL
+  std::cerr << "Entering ThreadSerialiser::SearchForReturns, depth = "
+    << depth << std::endl;
+#endif
+  /*
+  // Recursively visit all the nested regions
+  if (!NestedLoops[Region].empty()) {
 
-  // First convert returns in the outer loop to continues.
-  if (ReturnStmts.find(OuterLoop) != ReturnStmts.end()) {
-    PairedReturnsList PRL = ReturnStmts[OuterLoop];
+    std::vector<Stmt*> InnerLoops = NestedLoops[Region];
 
-    for (ReturnListIterator RLI = PRL.begin(),
-         RLE = PRL.end(); RLI != RLE; ++RLI)
-      InsertText(*RLI->second.getLocStart(), "continue; //");
+    for (std::vector<Stmt*>::iterator LoopI
+         = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
+         ++LoopI)
 
-    // Remove from the list so we don't try to handle this region again.
-    ReturnStmts.erase(OuterLoop);
+      SearchForReturns(*LoopI, depth+1);
   }
 
-  for (ReturnMapListIterator RMLI = ReturnStmts.begin(),
-       RMLE = ReturnStmts.end(); RMLI != RMLE; ++RMLI) {
-    for (ReturnListIterator RLI = (*RMLI)->begin()
+  if (ReturnStmts[Region].empty()) {
+    --depth;
+    return;
+  }*/
 
+  // This is a list of return instructions, paired with their conditional stmt.
+  PairedReturnsList PRL = ReturnStmts[Region];
+
+  if (depth == 0) {
+    // Convert returns in the outer loop to continues.
+    for (PairedReturnsList::iterator RLI = PRL.begin(),
+         RLE = PRL.end(); RLI != RLE; ++RLI)
+      InsertText((*RLI)->second.getLocStart(), "continue; //");
+  }
+  else {
+    SourceLocation RegionEnd;
+    if (isa<ForStmt>(Region))
+      RegionEnd = (cast<ForStmt>(Region))->getLocEnd.getLocWithOffset(2);
+    if (isa<WhileStmt>(Region))
+      RegionEnd = (cast<WhileStmt>(Region))->getLocEnd.getLocWithOffset(2);
+
+    InsertText(Region->getLocStart(), "bool __kernel_invalid_index = false;");
+
+    for (PairedReturnsList::iterator RLI = PRL.begin(),
+         RLE = PRL.end(); RLI != RLE; ++RLI)
+      InsertText((*RLI)->second.getLocStart(),
+                 "__kernel_invalid_index = true; break; //");
+
+    if (depth > 1)
+      InsertText(RegionEnd, "if (__kernel_invalid_index) break;");
+    else if (depth == 1)
+      InsertText(RegionEnd, "if (__kernel_invalid_index) continue;");
+
+    // if depth == 0 then the continue used inplace of the return is enough
+  }
+
+  ReturnStmts->erase(Region);
+  //--depth;
+}
+
+// FixInBarrierPresence needs to convert the code from something like this:
+//
+//for () {
+//  some_work();
+//  barrier();
+//  if ()
+//    return;
+//  more_work();
+//}
+//
+// To something like this:
+//
+//bool invalid_threads[local_size];
+//unsigned total_invalid_threads = 0;
+
+//for () {
+//  while() {
+//    some_work();
+//  }
+//  while() {
+//    if () {
+//      ++invalid_threads;
+//      invalid_index[local_id] = true;
+//      continue;
+//    }
+//    if (invalid_threads == local_size)
+//      return;
+//    more_work();
+//  }
+//}
+// The while loops also have to check against invalid indexes. This is performed
+// in RewriteSource by appending the appropriate source to the OpenWhile string.
+template <typename T>
+void WorkitemCoarsen::StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
+                                                         unsigned depth) {
+  if (*StmtMap[Region].empty())
+    return;
+
+  std::list<std::pair<Stmt*, T> > PSL = *StmtMap[Region];
+
+  // For each of the return statements, replace it with a continue and insert
+  // the necessary book keeping code.
+  for (std::list<std::pair<Stmt*, T> >::iterator SLI = PSL.begin(),
+       SLE = PSL.end(); SLI != SLE; ++SLI) {
+
+    Stmt *cond = (*SLI).first;
+    T *s = (*SLI).second;
+    InsertText(s->getLocStart(), UnaryConvert.str());
+    InsertText(cond->getLocEnd().getLocWithOffset(1), ValidCheck.str());
   }
 }
+
 
 // We should check whether there is a barrier after the break, if so this
 // will give the position of the closing bracket. Otherwise the closing
@@ -1390,6 +1513,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
 }
 
 // Remove barrier calls and modify calls to kernel builtin functions.
+/*
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 #ifdef DEBUGCL
   std::cerr << "VisitCallExpr" << std::endl;
@@ -1401,15 +1525,16 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
     OpenLoop(Call->getLocEnd().getLocWithOffset(3));
   }
   return true;
-}
+}*/
 
+/*
 bool WorkitemCoarsen::ThreadSerialiser::VisitReturnStmt(Stmt *s) {
   //TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
   //TheRewriter.InsertTextBefore(s->getLocStart(), CloseWhile.str());
   InsertText(s->getLocEnd().getLocWithOffset(1), OpenWhile.str());
   InsertText(s->getLocStart().getLocWithOffset(-1), CloseWhile.str());
   return true;
-}
+}*/
 
 // Create maps of all the references in the tree
 bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
