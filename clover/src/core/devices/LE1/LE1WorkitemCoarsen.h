@@ -45,6 +45,11 @@ class WorkitemCoarsen {
 
 public:
   WorkitemCoarsen(unsigned x, unsigned y, unsigned z);
+  ~WorkitemCoarsen() {
+#ifdef DBG_WRKGRP
+    std::cerr << "Destroying WorkitemCoarsen" << std::endl;
+#endif
+  }
   bool CreateWorkgroup(std::string &Filename, std::string &kernel);
   bool HandleBarriers();
   void DeleteTempFiles();
@@ -142,6 +147,81 @@ private:
 
 }; // end class OpenCLCompiler
 
+
+typedef std::list<std::pair<clang::Stmt*, clang::ReturnStmt*> > PairedReturnList;
+typedef std::list<std::pair<clang::Stmt*, clang::ContinueStmt*> > PairedContinueList;
+typedef std::list<std::pair<clang::Stmt*, clang::BreakStmt*> > PairedBreakList;
+
+template <typename T> class StmtFixer {
+public:
+  StmtFixer(//std::map<clang::Stmt*,
+            //std::list<std::pair<clang::Stmt*, T*> > > &map,
+            StringList *list, unsigned x, unsigned y, unsigned z)
+    : SourceToInsert(list), localX(x), localY(y), localZ(z) {
+#ifdef DBG_WRKGRP
+      std::cerr << "Constructing StmtFixer" << std::endl;
+#endif
+      UnaryConvert << " { ++__kernel_total_invalid_threads;\n";
+      UnaryConvert << " __kernel_invalid_threads[__esdg_idx]";
+      if (y > 1)
+        UnaryConvert << "[__esdg_idy]";
+      if (z > 1)
+        UnaryConvert << "[__esdg_idz]";
+      UnaryConvert << " = true;\ncontinue;\n} //";
+
+      // FIXME This only works for one dimension!
+      ValidCheck << "\nif (__kernel_total_invalid_threads == " << x << ") ";
+    }
+
+  void InsertText(clang::SourceLocation InsertLoc, std::string text) {
+#ifdef DBG_WRKGRP
+    std::cerr << "StmtFixer::InsertText: " << text << std::endl;
+#endif
+    SourceToInsert->push_back(std::make_pair(InsertLoc, text));
+  }
+  void FixInBarrierPresence(clang::Stmt* Region,
+                            std::list<std::pair<clang::Stmt*, T> > &PSL,
+                            unsigned depth);
+protected:
+  std::stringstream ValidCheck;
+private:
+  //std::map<clang::Stmt*,
+    //std::list<std::pair<clang::Stmt*, T*> > > *StmtMap;
+  StringList *SourceToInsert;
+  unsigned localX, localY, localZ;
+  std::stringstream UnaryConvert;
+};
+
+class ReturnFixer : public StmtFixer<clang::ReturnStmt*> {
+public:
+  ReturnFixer(//std::map<clang::Stmt*, PairedReturnList> *map,
+              StringList *list, unsigned x, unsigned y, unsigned z)
+    : StmtFixer(list, x, y, z) {
+      ValidCheck << "return;";
+#ifdef DBG_WRKGRP
+      std::cerr << "Constructing ReturnFixer" << std::endl;
+#endif
+  }
+};
+/*
+class BreakFixer : public StmtFixer<clang::BreakStmt*> {
+public:
+  BreakFixer(std::map<clang::Stmt*, PairedBreakList> *map,
+              StringList *list, unsigned x, unsigned y, unsigned z)
+    : StmtFixer(map, list, x, y, z) {
+    ValidCheck << "break;";
+  }
+};
+
+class ContinueFixer : public StmtFixer<clang::ContinueStmt*> {
+public:
+  ContinueFixer(std::map<clang::Stmt*, PairedContinueList> *map,
+              StringList *list, unsigned x, unsigned y, unsigned z)
+    : StmtFixer(map, list, x, y, z) {
+    ValidCheck << "continue;";
+  }
+};*/
+
 // Base class for our visitors, ensures an interface for fixing scalars
 // and handles the trivial tasks of creating the frequently used strings
 // to open and close loops
@@ -188,10 +268,11 @@ public:
 class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {
 public:
   ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
+  ~ThreadSerialiser() { delete returnFixer; }
   void RewriteSource();
 
   //bool VisitForStmt(clang::Stmt *s);
-  bool VisitWhileStmt(clang::Stmt *s);
+  bool VisitForStmt(clang::Stmt *s);
   //bool VisitCallExpr(clang::Expr *s);
   //bool VisitReturnStmt(clang::Stmt *s);
   //bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
@@ -206,10 +287,12 @@ private:
 
   void TraverseRegion(clang::Stmt *s);
   void TraverseConditionalRegion(clang::Stmt *Region, clang::Stmt *s);
+  void CheckForUnary(clang::Stmt *Region, clang::Stmt *Then, clang::Stmt *unary);
   bool SearchThroughRegions(clang::Stmt *Loop, bool isOuterLoop);
-  void HandleNonParallelRegion(clang::Stmt *Loop);
+  void HandleNonParallelRegion(clang::Stmt *Loop, unsigned depth);
   void HandleBreaks(clang::Stmt *Region);
   void HandleReturnStmts();
+  void FixReturnsInBarrierAbsence(clang::Stmt*, unsigned depth);
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
@@ -236,7 +319,7 @@ private:
 private:
   std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
-  std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
+  std::map<clang::Stmt*, std::vector<clang::Stmt*> > Barriers;
   std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
   std::map<clang::Stmt*,
     std::list<std::pair<clang::Stmt*, clang::ContinueStmt*> > > ContinueStmts;
@@ -258,74 +341,13 @@ private:
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   bool isFirstLoop;
-  clang::WhileStmt *OuterLoop;
+  clang::ForStmt *OuterLoop;
   std::vector<clang::Decl*> ParamVars;
+  std::stringstream InvalidThreadInit;
+  ReturnFixer *returnFixer;
 
 }; // end class ThreadSerialiser
 
-typedef std::list<std::pair<clang::Stmt*, clang::ReturnStmt*> > PairedReturnList;
-typedef std::list<std::pair<clang::Stmt*, clang::ContinueStmt*> > PairedContinueList;
-typedef std::list<std::pair<clang::Stmt*, clang::BreakStmt*> > PairedBreakList;
-
-template <typename T> class StmtFixer {
-public:
-  StmtFixer(std::map<clang::Stmt*,
-            std::list<std::pair<clang::Stmt*, clang::T*> > > *map,
-            StringList *list, unsigned x, unsigned y, unsigned z)
-    : StmtMap(map), SourceToInsert(list), localX(x), localY(y), localZ(z) {
-
-      UnaryConvert << " { ++__kernel_total_invalid_threads;\n;
-      UnaryConvert << " __kernel_invalid_threads[__kernel_local_id[0]]";
-      if (y > 1)
-        UnaryConvert << "[__kernel_local_id[1]]";
-      if (z > 1)
-        UnaryConvert << "[__kernel_local_id[2]]";
-      UnaryConvert << " = true;\ncontine; }";
-
-      // FIXME This only works for one dimension!
-      ValidCheck << "if (__kernel_total_invalid_threads == " << x << ") ";
-    }
-
-  void InsertText(clang::SourceLocation InsertLoc, std::string text) {
-    SourceToInsert->push_back(std::make_pair(InsertLoc, text));
-  }
-  void FixInBarrierPresence(Stmt *Region, unsigned depth);
-protected:
-  std::stringstream ValidCheck;
-private:
-  std::map<clang::Stmt*,
-    std::list<std::pair<clang::Stmt*, clang::T*> > > *StmtMap;
-  StringList *SourceToInsert;
-  unsigned localX, localY, localZ;
-  std::stringstream UnaryConvert;
-};
-
-class ReturnFixer : public StmtFixer<clang::ReturnStmt*> {
-public:
-  ReturnFixer(std::map<clang::Stmt*, PairedReturnList> *map,
-              StringList *list, unsigned x, unsigned y, unsigned z)
-    : StmtFixer(map, list, x, y, z) {
-      ValidCheck << "return;";
-  }
-};
-
-class BreakFixer : public StmtFixer<clang::BreakStmt*> {
-public:
-  ReturnFixer(std::map<clang::Stmt*, PairedBreakList> *map,
-              StringList *list, unsigned x, unsigned y, unsigned z)
-    : StmtFixer(map, list, x, y, z) {
-    ValidCheck << "break;";
-  }
-};
-
-class ContinueFixer : public StmtFixer<clang::ContinueStmt*> {
-public:
-  ReturnFixer(std::map<clang::Stmt*, PairedContinueList> *map,
-              StringList *list, unsigned x, unsigned y, unsigned z)
-    : StmtFixer(map, list, x, y, z) {
-    ValidCheck << "continue;";
-  }
-};
 
 }; // end class WorkitemCoarsen
 
