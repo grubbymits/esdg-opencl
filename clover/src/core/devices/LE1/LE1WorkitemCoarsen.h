@@ -188,7 +188,7 @@ public:
   void RewriteSource();
 
   //bool VisitForStmt(clang::Stmt *s);
-  bool VisitWhileStmt(clang::Stmt *s);
+  bool VisitForStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
   bool VisitReturnStmt(clang::Stmt *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
@@ -248,7 +248,7 @@ private:
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   bool isFirstLoop;
-  clang::WhileStmt *OuterLoop;
+  clang::ForStmt *OuterLoop;
   std::vector<clang::Decl*> ParamVars;
 
 }; // end class ThreadSerialiser

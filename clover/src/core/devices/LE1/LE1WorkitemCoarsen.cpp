@@ -158,29 +158,35 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
 
   OpenWhile << "\n";
   if (LocalZ > 1) {
-    OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
+    //OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
+    OpenWhile << "for (unsigned __esdg_idz = 0; __esdg_idz < " << LocalZ
+      << "; ++__esdg_idz) {\n";
   }
   if (LocalY > 1) {
-    OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
+    //OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
+    OpenWhile << "for (unsigned __esdg_idy = 0; __esdg_idy < " << LocalY
+      << "; ++__esdg_idy) {\n";
   }
   if (LocalX > 1) {
-    OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
+    //OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
+    OpenWhile << "for (unsigned __esdg_idx = 0; __esdg_idx < " << LocalX
+      << "; ++__esdg_idx) {\n";
   }
 
   if (LocalX > 1) {
-    CloseWhile << "\n__kernel_local_id[0]++;\n";
-    CloseWhile  << "}\n";
-    CloseWhile << "__kernel_local_id[0] = 0;\n";
+    //CloseWhile << "\n__kernel_local_id[0]++;\n";
+    CloseWhile  << "\n}\n";
+    //CloseWhile << "__kernel_local_id[0] = 0;\n";
   }
   if (LocalY > 1) {
-    CloseWhile << " __kernel_local_id[1]++;\n";
-    CloseWhile << "}\n";
-    CloseWhile << "__kernel_local_id[1] = 0;\n";
+    //CloseWhile << " __kernel_local_id[1]++;\n";
+    CloseWhile << "\n}\n";
+    //CloseWhile << "__kernel_local_id[1] = 0;\n";
   }
   if (LocalZ > 1) {
-    CloseWhile << "__kernel_local_id[2]++;\n";
-    CloseWhile << "}\n";
-    CloseWhile << "\n__kernel_local_id[2] = 0;\n";
+    //CloseWhile << "__kernel_local_id[2]++;\n";
+    CloseWhile << "\n}\n";
+    //CloseWhile << "\n__kernel_local_id[2] = 0;\n";
   }
 
 }
@@ -232,6 +238,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
     SourceLocation FuncBodyStart = FuncBody->getLocStart().getLocWithOffset(2);
 
     std::stringstream FuncBegin;
+    /*
     FuncBegin << "  int __kernel_local_id[";
     if (LocalZ && LocalY && LocalX)
       FuncBegin << "3";
@@ -242,7 +249,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
     FuncBegin << "] = {0};\n";
 
     //TheRewriter.InsertText(FuncBodyStart, FuncBegin.str(), true, true);
-    InsertText(FuncBodyStart, FuncBegin.str());
+    InsertText(FuncBodyStart, FuncBegin.str());*/
     OpenLoop(FuncBodyStart);
     CloseLoop(FuncBody->getLocEnd());
   }
@@ -342,15 +349,15 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
       break;
     case 0:
       GlobalId << "get_group_id(0) * " << LocalX
-        << " + __kernel_local_id[0];//";
+        << " + __esdg_idx;//"; //__kernel_local_id[0];//";
       break;
     case 1:
       GlobalId << "get_group_id(1) * " << LocalY
-        << " + __kernel_local_id[1];//";
+        << " + __esdg_idy;//";//__kernel_local_id[1];//";
       break;
     case 2:
       GlobalId << "get_group_id(2) * " << LocalZ
-        << " + __kernel_local_id[2];//";
+        << " + __esdg_idz;//";//__kernel_local_id[2];//";
       break;
     }
     //TheRewriter.InsertText(Call->getLocStart(), GlobalId.str());
@@ -362,19 +369,22 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
       //TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
         //                     "__kernel_local_id[0]");
       InsertText(Call->getLocEnd().getLocWithOffset(1),
-                 "__kernel_local_id[0]");
+                 "__esdg_idx");
+                 //"__kernel_local_id[0]");
     }
     else if (Index == 1) {
       //TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
         //                     "__kernel_local_id[1]");
       InsertText(Call->getLocEnd().getLocWithOffset(1),
-                 "__kernel_local_id[1]");
+                 "__esdg_idy");
+                 //"__kernel_local_id[1]");
     }
     else {
       //TheRewriter.InsertText(Call->getLocEnd().getLocWithOffset(1),
         //                     "__kernel_local_id[2]");
       InsertText(Call->getLocEnd().getLocWithOffset(1),
-                 "__kernel_local_id[2]");
+                 "__esdg_idz");
+                 //"__kernel_local_id[2]");
     }
 
   }
@@ -666,11 +676,11 @@ WorkitemCoarsen::ThreadSerialiser::ExpandRef(std::stringstream &NewRef) {
   std::cerr << "ExpandRef" << std::endl;
 #endif
   if (LocalX != 0)
-    NewRef << "[__kernel_local_id[0]]";
+    NewRef << "[__esdg_idx]"; //"[__kernel_local_id[0]]";
   if (LocalY > 1)
-    NewRef << "[__kernel_local_id[1]]";
+    NewRef << "[__esdg_idy]"; //"[__kernel_local_id[1]]";
   if (LocalZ > 1)
-    NewRef << "[__kernel_local_id[2]]";
+    NewRef << "[__esdg_idz]"; //"[__kernel_local_id[2]]";
 }
 
 // Run this after parsing is complete, to access all the referenced variables
@@ -913,7 +923,7 @@ void WorkitemCoarsen::ThreadSerialiser::AccessNonScalar(DeclRefExpr *ref) {
   unsigned offset = ref->getDecl()->getName().str().length();
   SourceLocation Loc = ref->getLocEnd().getLocWithOffset(offset);
   //TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]");
-  InsertText(Loc, "[__kernel_local_id[0]]");
+  InsertText(Loc, "[__esdg_idx]"); //"[__kernel_local_id[0]]");
 }
 
 SourceLocation
@@ -1270,55 +1280,21 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
 }
 
 // Use this only as an entry into the kernel
-bool WorkitemCoarsen::ThreadSerialiser::VisitWhileStmt(Stmt *s) {
+bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
 #ifdef DEBUGCL
-  std::cerr << "VisitWhileStmt";
+  std::cerr << "VisitForStmt";
   if (isFirstLoop)
     std::cerr << " - is main loop";
   std::cerr << std::endl;
 #endif
-  WhileStmt *While = cast<WhileStmt>(s);
+  ForStmt *For = cast<ForStmt>(s);
 
   if (isFirstLoop) {
-    TraverseRegion(While);
-    OuterLoop = While;
+    TraverseRegion(For);
+    OuterLoop = For;
   }
 
   isFirstLoop = false;
-  return true;
-
-  Expr *Cond = While->getCond();
-  if (Cond == NULL) {
-#ifdef DEBUGCL
-    std::cerr << "but Cond is NULL" << std::endl;
-#endif
-    return true;
-  }
-
-  for (Stmt::child_iterator CI = Cond->child_begin(), CE = Cond->child_end();
-       CI != CE; ++CI) {
-    if (isa<BinaryOperator>(*CI)) {
-#ifdef DEBUGCL
-      std::cerr << "Found BinaryOperator child of while" << std::endl;
-#endif
-      for (Stmt::child_iterator BI = (*CI)->child_begin(),
-           BE = (*CI)->child_end(); BI != BE; ++BI) {
-        if (isa<DeclRefExpr>(*BI)) {
-          NamedDecl *ND = cast<NamedDecl>((cast<DeclRefExpr>(*BI))->getDecl());
-          std::string VarName = ND->getName().str();
-#ifdef DEBUGCL
-          std::cerr << "While conditional = " << VarName << std::endl;
-#endif
-          if (VarName.compare("__kernel_local_id") == 0) {
-            TraverseRegion(While);
-            OuterLoop = While;
-            break;
-          }
-        }
-      }
-    }
-  }
-
   return true;
 }
 
@@ -1339,8 +1315,8 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 bool WorkitemCoarsen::ThreadSerialiser::VisitReturnStmt(Stmt *s) {
   //TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
   //TheRewriter.InsertTextBefore(s->getLocStart(), CloseWhile.str());
-  InsertText(s->getLocEnd().getLocWithOffset(1), OpenWhile.str());
-  InsertText(s->getLocStart().getLocWithOffset(-1), CloseWhile.str());
+  InsertText(s->getLocStart().getLocWithOffset(-2), CloseWhile.str());
+  InsertText(s->getLocStart().getLocWithOffset(-1), OpenWhile.str());
   return true;
 }
 
@@ -1350,7 +1326,11 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   std::string VarName = RefExpr->getDecl()->getName().str();
 
   // Don't add it if its one of an work-item indexes
-  if (VarName.compare("__kernel_local_id") == 0)
+  if (VarName.compare("__esdg_idx") == 0)
+    return true;
+  if (VarName.compare("__esdg_idy") == 0)
+    return true;
+  if (VarName.compare("__esdg_idz") == 0)
     return true;
 
   Decl *key = RefExpr->getDecl();
