@@ -189,7 +189,7 @@ public:
 
   //bool VisitForStmt(clang::Stmt *s);
   bool VisitForStmt(clang::Stmt *s);
-  bool VisitCallExpr(clang::Expr *s);
+  //bool VisitCallExpr(clang::Expr *s);
   bool VisitReturnStmt(clang::Stmt *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
@@ -202,14 +202,14 @@ private:
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
   void TraverseRegion(clang::Stmt *s);
-  void HandleBarrierInLoop(clang::Stmt *Loop);
+  void HandleNonParallelRegion(clang::Stmt *Region, int depth);
   void HandleBreaks(clang::Stmt *Region);
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
   void SearchForIndVars(clang::Stmt *s);
   void SearchForBreaks(clang::Stmt *Region, clang::Stmt *s);
-  bool SearchNestedLoops(clang::Stmt *Loop, bool isOuterLoop);
+  bool SearchNestedLoops(clang::Stmt *Loop);
   void AssignIndVars(void);
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);

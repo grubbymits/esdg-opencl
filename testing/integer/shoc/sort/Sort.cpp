@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
   // Problem Sizes
   int probSizes[4] = { 1, 8, 32, 64 };
-  int size = probSizes[2];
+  int size = probSizes[1];
 
   // Convert to MiB
   //size = (size * 1024 * 1024) / sizeof(unsigned);

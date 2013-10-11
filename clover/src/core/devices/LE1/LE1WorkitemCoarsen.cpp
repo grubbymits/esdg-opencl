@@ -446,7 +446,7 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
 
   // Visit all the loops which contain barriers, and create regions that are
   // contained by the multi-level while loops
-  SearchNestedLoops(OuterLoop, true);
+  SearchNestedLoops(OuterLoop);
 
   // Then we see which variables are only assigned in loop headers, these
   // are then disabled for expansion, though they can still be made local.
@@ -944,11 +944,13 @@ WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
 
 // Find out if this loop contains a barrier somehow, it will then
 // HandleBarrierInLoop if it finds something.
-bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
-                                                          bool isOuterLoop) {
+bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop) {
+                                                          //bool isOuterLoop) {
 #ifdef DEBUGCL
   std::cerr << "SearchNestedLoops" << std::endl;
 #endif
+  static int depth = -1;
+  ++depth;
 
   if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()) &&
       ScopedRegions[Loop].empty()) {
@@ -956,6 +958,7 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
     std::cerr << "No nested loops and there's no barriers in this one"
       << std::endl;
 #endif
+    --depth;
     return false;
   }
 
@@ -964,14 +967,14 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
   for (std::vector<Stmt*>::iterator LoopI
        = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
        ++LoopI) {
-    if (SearchNestedLoops(*LoopI, false))
+    if (SearchNestedLoops(*LoopI))
       ++NestedBarriers;
   }
 
   std::vector<CompoundStmt*> Compounds = ScopedRegions[Loop];
   for (std::vector<CompoundStmt*>::iterator RegionI = Compounds.begin(),
        RegionE = Compounds.end(); RegionI != RegionE; ++RegionI) {
-    if (SearchNestedLoops(*RegionI, false)) {
+    if (SearchNestedLoops(*RegionI)) {
 #ifdef DEBUGCL
       std::cerr << "Found barrier within CompoundStmt" << std::endl;
 #endif
@@ -981,13 +984,16 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
   if ((!Barriers[Loop].empty()) || (NestedBarriers != 0)) {
 
     // Appropriately open and close the workgroup loops if its an original loop
-    if (!isOuterLoop)
+    //if (!isOuterLoop)
       //ParallelRegions.push_back(Loop);
-      HandleBarrierInLoop(Loop);
+    HandleNonParallelRegion(Loop, depth);
+    --depth;
     return true;
   }
-  else
+  else {
+    --depth;
     return false;
+  }
 }
 
 
@@ -996,43 +1002,53 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop,
 // - open a main loop at the start of the body of the loop
 // - close the main loop at the end of the body of the loop
 // - open the main loop when the for loop exits
-void WorkitemCoarsen::ThreadSerialiser::HandleBarrierInLoop(Stmt *Loop) {
+void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
+                                                                int depth)
+{
 #ifdef DEBUGCL
-  std::cerr << "HandleBarrierInLoop\n";
+  std::cerr << "HandleNonParallelRegion\n";
 #endif
-  // Record that this loop contains a barrier
-  //LoopsWithBarrier.push_back(Loop);
+  // Remove the barriers of this region
+  if (Barriers[Region].size() == 1) {
+    CallExpr *Call = Barriers[Region].front();
+    InsertText(Call->getLocStart(), "//");
+    CloseLoop(Call->getLocEnd().getLocWithOffset(2));
+    OpenLoop(Call->getLocEnd().getLocWithOffset(3));
+  }
+  else {
+    for (std::vector<CallExpr*>::iterator Call = Barriers[Region].begin(),
+       End = Barriers[Region].end(); Call != End; ++Call) {
+      InsertText((*Call)->getLocStart(), "//");
+      CloseLoop((*Call)->getLocEnd().getLocWithOffset(2));
+      OpenLoop((*Call)->getLocEnd().getLocWithOffset(3));
+    }
+  }
+
+  if (depth != 0) {
 
   Stmt *LoopBody = NULL;
-  if (isa<ForStmt>(Loop))
-    LoopBody = (cast<ForStmt>(Loop))->getBody();
-  else if (isa<WhileStmt>(Loop))
-    LoopBody = (cast<WhileStmt>(Loop))->getBody();
-  else if (isa<CompoundStmt>(Loop)) {
+  if (isa<ForStmt>(Region))
+    LoopBody = (cast<ForStmt>(Region))->getBody();
+  else if (isa<WhileStmt>(Region))
+    LoopBody = (cast<WhileStmt>(Region))->getBody();
+  if (!isa<CompoundStmt>(Region)) {
+    CloseLoop(Region->getLocStart());
+    OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
+    CloseLoop(LoopBody->getLocEnd());
+    OpenLoop(GetOffsetOut(Region->getLocEnd()));
+  }
+  else if (isa<CompoundStmt>(Region)) {
 #ifdef DEBUGCL
     std::cerr << "Opening and closing loops in and around CompoundStmt"
       << std::endl;
 #endif
-    CompoundStmt *CS = cast<CompoundStmt>(Loop);
+    CompoundStmt *CS = cast<CompoundStmt>(Region);
     CloseLoop(CS->getLBracLoc().getLocWithOffset(-1));
     OpenLoop(GetOffsetInto(CS->getLBracLoc()));
     CloseLoop(CS->getRBracLoc());
     OpenLoop(GetOffsetOut(CS->getLocEnd()));
-    return;
   }
-
-  // This loop may also contain a break statement that will we have to handle.
-  // To handle the problem, we can create a scoped boolean variable which will
-  // shall set on hitting the break - this is necessary since the break is just
-  // about to be enclosed in one of our while loops.
-  if (BreakStmts.find(Loop) != BreakStmts.end())
-    HandleBreaks(Loop);
-
-  CloseLoop(Loop->getLocStart());
-  OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
-  CloseLoop(LoopBody->getLocEnd());
-  OpenLoop(GetOffsetOut(Loop->getLocEnd()));
-
+  }
 }
 
 // We should check whether there is a barrier after the break, if so this
@@ -1299,6 +1315,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
 }
 
 // Remove barrier calls and modify calls to kernel builtin functions.
+/*
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
 #ifdef DEBUGCL
   std::cerr << "VisitCallExpr" << std::endl;
@@ -1310,7 +1327,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
     OpenLoop(Call->getLocEnd().getLocWithOffset(3));
   }
   return true;
-}
+}*/
 
 bool WorkitemCoarsen::ThreadSerialiser::VisitReturnStmt(Stmt *s) {
   //TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
