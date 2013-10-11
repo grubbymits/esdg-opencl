@@ -35,7 +35,7 @@
 #include "LE1buffer.h"
 #include "LE1program.h"
 #include "LE1Simulator.h"
-#include "LE1WorkitemCoarsen.h"
+#include "coarsener/SourceRewriter.h"
 //#include "LE1builtins.h"
 
 #include "../../compiler.h"

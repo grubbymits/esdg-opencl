@@ -4,7 +4,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "LE1WorkitemCoarsen.h"
+#include "SourceRewriter.h"
+#include "StmtFixers.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Basic/Diagnostic.h"
@@ -28,6 +29,7 @@
 #include "llvm/Support/raw_ostream.h"
 
 using namespace clang;
+using namespace Coal;
 
 typedef std::vector<Stmt*> StmtSet;
 typedef std::vector<DeclRefExpr*> DeclRefSet;
@@ -454,6 +456,7 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
     InvalidThreadInit << " = {false};\n";
     InvalidThreadInit << "unsigned __kernel_total_invalid_threads = 0;\n";
     returnFixer = new ReturnFixer(&SourceToInsert, x, y, z);
+    breakFixer = new BreakFixer(&SourceToInsert, x, y, z);
 }
 
 
@@ -1054,7 +1057,8 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
   }
 
   if (!ReturnStmts[Region].empty())
-    returnFixer->FixInBarrierPresence(Region, ReturnStmts[Region], depth);
+    returnFixer->FixInBarrierPresence(Region, ReturnStmts[Region],
+                                      Barriers[Region], depth);
 
   // Insert opening and closing loops for all regions, except the outer loop
   if (depth != 0) {
@@ -1068,6 +1072,11 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
       OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
       CloseLoop(LoopBody->getLocEnd());
       OpenLoop(GetOffsetOut(Region->getLocEnd()));
+
+      // Handle any breaks that may be in this loop
+      if (!BreakStmts[Region].empty())
+        breakFixer->FixInBarrierPresence(Region, BreakStmts[Region],
+                                         Barriers[Region], depth);
     }
     else if (isa<CompoundStmt>(Region)) {
       CompoundStmt *CS = cast<CompoundStmt>(Region);
@@ -1124,69 +1133,6 @@ WorkitemCoarsen::ThreadSerialiser::FixReturnsInBarrierAbsence(Stmt *Region,
 
   ReturnStmts.erase(Region);
   //--depth;
-}
-
-// FixInBarrierPresence needs to convert the code from something like this:
-//
-//for () {
-//  some_work();
-//  barrier();
-//  if ()
-//    return;
-//  more_work();
-//}
-//
-// To something like this:
-//
-//bool invalid_threads[local_size];
-//unsigned total_invalid_threads = 0;
-
-//for () {
-//  while() {
-//    some_work();
-//  }
-//  while() {
-//    if () {
-//      ++invalid_threads;
-//      invalid_index[local_id] = true;
-//      continue;
-//    }
-//    if (invalid_threads == local_size)
-//      return;
-//    more_work();
-//  }
-//}
-// The while loops also have to check against invalid indexes. This is performed
-// in RewriteSource by appending the appropriate source to the OpenWhile string.
-template <typename T> void
-WorkitemCoarsen::StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
-  std::list<std::pair<Stmt*, T> > &PSL, unsigned depth) {
-
-#ifdef DBG_WRKGRP
-  std::cerr << "Entering FixInBarrierPresence" << std::endl;
-#endif
-
-  // For each of the return statements, replace it with a continue and insert
-  // the necessary book keeping code.
-  if (PSL.size() == 1) {
-#ifdef DBG_WRKGRP
-    std::cerr << "Statement list is only one element long" << std::endl;
-#endif
-    Stmt *cond = PSL.front().first;
-    T s = PSL.front().second;
-    InsertText(s->getLocStart(), UnaryConvert.str());
-    InsertText(Region->getLocEnd().getLocWithOffset(1), ValidCheck.str());
-    return;
-  }
-  // else
-  for (typename std::list<std::pair<Stmt*, T> >::iterator SLI = PSL.begin(),
-       SLE = PSL.end(); SLI != SLE; ++SLI) {
-
-    Stmt *cond = (*SLI).first;
-    T s = (*SLI).second;
-    InsertText(s->getLocStart(), UnaryConvert.str());
-    InsertText(Region->getLocEnd().getLocWithOffset(1), ValidCheck.str());
-  }
 }
 
 void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
@@ -1257,6 +1203,9 @@ void WorkitemCoarsen::ThreadSerialiser::CheckForUnary(Stmt *Region,
       ContinueStmts[Region].push_back(ContinuePair);
   }
   if (isa<BreakStmt>(unary)) {
+#ifdef DBG_WRKGRP
+    std::cerr << "Found BreakStmt" << std::endl;
+#endif
     BreakStmt *BS = cast<BreakStmt>(unary);
     std::pair<Stmt*, BreakStmt*> BreakPair = std::make_pair(Then, BS);
     if (BreakStmts.find(Region) == BreakStmts.end()) {
@@ -1287,6 +1236,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region,
                                                                   Stmt *s) {
 #ifdef DBG_WRKGRP
   std::cerr << "TraverseConditionalRegion" << std::endl;
+  s->dumpAll();
 #endif
   IfStmt *ifStmt = cast<IfStmt>(s);
 
@@ -1294,7 +1244,8 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region,
   // if the body is a CompoundStmt, get the first child of it
   if (Then->child_begin() != Then->child_end())
     Then = *(Then->child_begin());
-  else {
+
+  if (Then->child_begin() == Then->child_end()) {
     CheckForUnary(Region, ifStmt, Then);
     return;
   }

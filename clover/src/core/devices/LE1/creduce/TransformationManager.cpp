@@ -12,7 +12,7 @@
 #  include <config.h>
 #endif
 
-#include "../LE1WorkitemCoarsen.h"
+#include "../coarsener/SourceRewriter.h"
 #include "TransformationManager.h"
 
 #include <iostream>

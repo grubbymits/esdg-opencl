@@ -52,7 +52,9 @@ set(COAL_SRC_FILES
     core/devices/LE1/LE1program.cpp
     core/devices/LE1/LE1worker.cpp
     core/devices/LE1/LE1Simulator.cpp
-    core/devices/LE1/LE1WorkitemCoarsen.cpp
+
+    core/devices/LE1/coarsener/SourceRewriter.cpp
+    core/devices/LE1/coarsener/StmtFixers.cpp
 
     core/devices/LE1/creduce/RewriteUtils.cpp
     core/devices/LE1/creduce/Transformation.cpp
