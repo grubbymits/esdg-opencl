@@ -159,33 +159,33 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
   OpenWhile << "\n";
   if (LocalZ > 1) {
     //OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
-    OpenWhile << "for (unsigned __esdg_idz = 0; __esdg_idz < " << LocalZ
+    OpenWhile << "for (; __esdg_idz < " << LocalZ
       << "; ++__esdg_idz) {\n";
   }
   if (LocalY > 1) {
     //OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
-    OpenWhile << "for (unsigned __esdg_idy = 0; __esdg_idy < " << LocalY
+    OpenWhile << "for (; __esdg_idy < " << LocalY
       << "; ++__esdg_idy) {\n";
   }
   if (LocalX > 1) {
     //OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
-    OpenWhile << "for (unsigned __esdg_idx = 0; __esdg_idx < " << LocalX
+    OpenWhile << "for (; __esdg_idx < " << LocalX
       << "; ++__esdg_idx) {\n";
   }
 
   if (LocalX > 1) {
     //CloseWhile << "\n__kernel_local_id[0]++;\n";
-    CloseWhile  << "\n}\n";
+    CloseWhile  << "\n} __esdg_idx = 0;\n";
     //CloseWhile << "__kernel_local_id[0] = 0;\n";
   }
   if (LocalY > 1) {
     //CloseWhile << " __kernel_local_id[1]++;\n";
-    CloseWhile << "\n}\n";
+    CloseWhile << "\n} __esdg_idy = 0;\n";
     //CloseWhile << "__kernel_local_id[1] = 0;\n";
   }
   if (LocalZ > 1) {
     //CloseWhile << "__kernel_local_id[2]++;\n";
-    CloseWhile << "\n}\n";
+    CloseWhile << "\n} __esdg_idz = 0;\n";
     //CloseWhile << "\n__kernel_local_id[2] = 0;\n";
   }
 
@@ -238,18 +238,23 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
     SourceLocation FuncBodyStart = FuncBody->getLocStart().getLocWithOffset(2);
 
     std::stringstream FuncBegin;
+    FuncBegin << "  unsigned __esdg_idx = 0;";
+    if (LocalY > 1)
+      FuncBegin << "  unsigned __esdg_idy = 0;";
+    if (LocalZ > 1)
+      FuncBegin << "  unsigned __esdg_idz = 0;";
+
     /*
-    FuncBegin << "  int __kernel_local_id[";
     if (LocalZ && LocalY && LocalX)
       FuncBegin << "3";
     else if (LocalY && LocalX)
       FuncBegin << "2";
     else
       FuncBegin << "1";
-    FuncBegin << "] = {0};\n";
+    FuncBegin << "] = {0};\n";*/
 
     //TheRewriter.InsertText(FuncBodyStart, FuncBegin.str(), true, true);
-    InsertText(FuncBodyStart, FuncBegin.str());*/
+    InsertText(FuncBodyStart, FuncBegin.str());
     OpenLoop(FuncBodyStart);
     CloseLoop(FuncBody->getLocEnd());
   }
@@ -1123,6 +1128,8 @@ void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
 #ifdef DEBUGCL
   std::cerr << "SearchForIndVars" << std::endl;
 #endif
+  if (!s)
+    return;
 
   //for (Stmt::child_iterator CI = s->child_begin(), CE = s->child_end();
     //   CI != CE; ++CI) {
