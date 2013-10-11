@@ -110,7 +110,8 @@ nw_kernel1(__global int  * reference_d,
 
    for ( int ty = 0 ; ty < BLOCK_SIZE ; ty++)
      input_itemsets_d[index + cols * ty] = SCORE((ty+1), (tx+1));
-    
+   
+   if(1) 
     return;
    
 }
@@ -198,7 +199,7 @@ nw_kernel2(__global int  * reference_d,
 	for ( int ty = 0 ; ty < BLOCK_SIZE ; ty++)
 		input_itemsets_d[index + ty * cols] = SCORE((ty+1), (tx+1));
 	
-    
+   if(1) 
     return;
   
 }

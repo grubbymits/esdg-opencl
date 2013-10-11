@@ -53,7 +53,7 @@ void WorkitemCoarsen::DeleteTempFiles() {
 
 bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
                                       &kernel) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "CreateWorkgroup from " << Filename << std::endl;
 #endif
   OrigFilename.assign(Filename);
@@ -90,7 +90,7 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
   // You can "follow" its code path to see how this can be done programmatically
 
   InitKernelSource = std::string(RewriteBuf->begin(), RewriteBuf->end());
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Finished initialising workgroup\n";
 #endif
 
@@ -124,7 +124,7 @@ bool WorkitemCoarsen::HandleBarriers() {
   FinalKernel = std::string(RewriteBuf->begin(), RewriteBuf->end());
   //final_kernel.close();
 
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Finalised kernel:\n";
 #endif
   
@@ -159,20 +159,24 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
   OpenWhile << "\n";
   if (LocalZ > 1) {
     //OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
-    OpenWhile << "for (; __esdg_idz < " << LocalZ
+    OpenWhile << "for (__esdg_idz = 0; __esdg_idz < " << LocalZ
       << "; ++__esdg_idz) {\n";
   }
   if (LocalY > 1) {
     //OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
-    OpenWhile << "for (; __esdg_idy < " << LocalY
+    OpenWhile << "for (__esdg_idy = 0; __esdg_idy < " << LocalY
       << "; ++__esdg_idy) {\n";
   }
   if (LocalX > 1) {
     //OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
-    OpenWhile << "for (; __esdg_idx < " << LocalX
+    OpenWhile << "for (__esdg_idx = 0; __esdg_idx < " << LocalX
       << "; ++__esdg_idx) {\n";
   }
 
+  // We reset them at the end just in case a proceeding loop uses a expanded
+  // variable. The variable should have only been expanded because we select
+  // the variables very, very lazily. The loop would contain a barrier of sorts
+  // and a barrier cannot be executed because of a thread local variable...
   if (LocalX > 1) {
     //CloseWhile << "\n__kernel_local_id[0]++;\n";
     CloseWhile  << "\n} __esdg_idx = 0;\n";
@@ -278,7 +282,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitDeclStmt(Stmt *s) {
     for (DeclGroupRef::iterator DI = DS->decl_begin(); DI != DE; ++DI) {
       ND = cast<NamedDecl>((*DI));
       std::string key = ND->getName().str();
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
       std::cerr << ND->getName().str() << " is declared\n";
 #endif
 
@@ -440,18 +444,35 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
                                                     unsigned y,
                                                     unsigned z)
   : ASTVisitorBase(R, x, y, z) {
+
     isFirstLoop = true;
+    InvalidThreadInit << "bool __kernel_invalid_threads[" << x << "]";
+    if (y > 1)
+      InvalidThreadInit << "[" << y << "]";
+    if (z > 1)
+      InvalidThreadInit << "[" << z << "]";
+    InvalidThreadInit << " = {false};\n";
+    InvalidThreadInit << "unsigned __kernel_total_invalid_threads = 0;\n";
+    returnFixer = new ReturnFixer(&SourceToInsert, x, y, z);
 }
 
 
 void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "ThreadSerialiser::RewriteSource" << std::endl;
 #endif
 
+    // We may need to insert some variables to track valid local ids.
+    if (!ReturnStmts.empty() && !Barriers.empty()) {
+      InsertText(OuterLoop->getLocStart(), InvalidThreadInit.str());
+      // FIXME This only works for one dimension!
+      OpenWhile << "if (__kernel_invalid_threads[__esdg_idx])\n";
+      OpenWhile << "  continue;";
+    }
+
   // Visit all the loops which contain barriers, and create regions that are
   // contained by the multi-level while loops
-  SearchNestedLoops(OuterLoop);
+  SearchThroughRegions(OuterLoop);
 
   // Then we see which variables are only assigned in loop headers, these
   // are then disabled for expansion, though they can still be made local.
@@ -473,7 +494,7 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
 }
 
 void WorkitemCoarsen::ThreadSerialiser::AssignIndVars() {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "AssignIndVars" << std::endl;
 #endif
 
@@ -485,14 +506,14 @@ void WorkitemCoarsen::ThreadSerialiser::AssignIndVars() {
     std::list<DeclRefExpr*> IndVarRefs = MI->second;
     std::list<DeclRefExpr*> RefAssigns = RefAssignments[decl];
 
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
     std::cerr << "Var: " << cast<NamedDecl>(decl)->getName().str()
       << ". IndVarRefs.size = " << IndVarRefs.size() << " and RefAssigns = "
       << RefAssigns.size() << std::endl;
 #endif
 
     if (IndVarRefs.size() == RefAssigns.size()) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
       std::cerr << "Found induction variable" << std::endl;
 #endif
       IndVars.push_back(decl);
@@ -503,7 +524,7 @@ void WorkitemCoarsen::ThreadSerialiser::AssignIndVars() {
 void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
   std::list<DeclStmt*> &Stmts, Stmt *Loop) {
 
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "FindRefsToExpand" << std::endl;
 #endif
 
@@ -531,7 +552,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
       // DeclStmts.
       FindRefsToExpand(Stmts, *LoopI);
     }
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
     std::cerr << "Erasing elements" << std::endl;
 #endif
     // Erase this loop's DeclStmts from the larger set since we search them
@@ -552,7 +573,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
       // DeclStmts.
       FindRefsToExpand(Stmts, *LoopI);
     }
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
     std::cerr << "Erasing elements" << std::endl;
 #endif
     // Erase this loop's DeclStmts from the larger set since we search them
@@ -561,7 +582,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
   }
 
   // Start looking for references within this loop:
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Look for statements within this loop" << std::endl;
 #endif
 
@@ -608,7 +629,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
     }
   }
 
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Now look through the rest of the Stmts, size = "
     << Stmts.size() << std::endl;
 #endif
@@ -634,7 +655,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
        DSI != DSE;) {
 
     bool hasExpanded = false;
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
     std::cerr << "Checking var: "
       << cast<NamedDecl>((*DSI)->getSingleDecl())->getName().str() << std::endl;
 #endif
@@ -656,7 +677,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
     if (!hasExpanded)
       ++DSI;
   }
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Exit FindRefsToExpand" << std::endl;
 #endif
 
@@ -664,7 +685,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
 
 inline void
 WorkitemCoarsen::ThreadSerialiser::ExpandDecl(std::stringstream &NewDecl) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "ExpandDecl" << std::endl;
 #endif
   if (LocalX != 0)
@@ -677,7 +698,7 @@ WorkitemCoarsen::ThreadSerialiser::ExpandDecl(std::stringstream &NewDecl) {
 
 inline void
 WorkitemCoarsen::ThreadSerialiser::ExpandRef(std::stringstream &NewRef) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "ExpandRef" << std::endl;
 #endif
   if (LocalX != 0)
@@ -693,7 +714,7 @@ WorkitemCoarsen::ThreadSerialiser::ExpandRef(std::stringstream &NewRef) {
 void
 WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
                                                 DeclStmt *DS) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Entering ScalarExpand " << pthread_self() << std::endl;
 #endif
 
@@ -719,7 +740,7 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
   bool isVariableLocal = (qualType.getAddressSpace() == LangAS::opencl_local) ?
     true : false;
 
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   if (isVariableLocal)
     std::cerr << "variable has local storage = " <<
       (int)qualType.getAddressSpace() << std::endl;
@@ -739,7 +760,7 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
 
   // No need to visit its references if it's __local
   if (isVariableLocal) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
     std::cerr << "Leaving ScalarExpand" << std::endl;
 #endif
     return;
@@ -754,7 +775,7 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
     else
       AccessNonScalar(*RI);
   }
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Leaving ScalarExpand" << std::endl;
 #endif
 }
@@ -762,7 +783,7 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
 bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
                                                     DeclStmt *s,
                                                     bool toExpand) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Entering CreateLocal ";
   if (toExpand)
     std::cerr << " - going to expand variable ";
@@ -810,7 +831,7 @@ bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
   //TheRewriter.InsertText(InsertLoc, NewDecl.str(), true, true);
   InsertText(InsertLoc, NewDecl.str());
 
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Leaving CreateLocal" << std::endl;
 #endif
 
@@ -820,7 +841,7 @@ bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
 // Turn the old declaration into a reference
 void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
                                                              bool toExpand) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Entering RemoveScalarDeclStmt:\n" << std::endl;
   DS->dumpAll();
 #endif
@@ -832,7 +853,7 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
   std::string varName = ND->getName().str();
 
   if (!VD->hasInit()) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
     std::cerr << "DeclStmt has no initialiser" << std::endl;
 #endif
     TheRewriter.RemoveText(DS->getSourceRange());
@@ -840,7 +861,7 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
   }
 
   Expr* varInit = VD->getInit();
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Initialiser = ";
   varInit->dumpPretty(VD->getASTContext());
   std::cerr << std::endl;
@@ -861,14 +882,14 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
   InsertText(DS->getLocStart(), "//");
   InsertText(AccessLoc, "\n");
   InsertText(AccessLoc, newAccess.str());
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Leaving RemoveScalarDeclStmt" << std::endl;
 #endif
 }
 // Turn the old declaration into a reference
 void WorkitemCoarsen::ThreadSerialiser::RemoveNonScalarDeclStmt(DeclStmt *DS,
                                                                 bool toExpand) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Entering RemoveNonScalarDeclStmt" << std::endl;
 #endif
 
@@ -909,7 +930,7 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveNonScalarDeclStmt(DeclStmt *DS,
   TheRewriter.RemoveText(DS->getSourceRange());
   //TheRewriter.InsertText(ND->getLocStart(), NewArrayInit.str());
   InsertText(ND->getLocStart(), NewArrayInit.str());
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "Leaving RemoveNonScalarDeclStmt" << std::endl;
 #endif
 }
@@ -949,20 +970,23 @@ WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
 
 // Find out if this loop contains a barrier somehow, it will then
 // HandleBarrierInLoop if it finds something.
-bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop) {
+bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Loop) {
                                                           //bool isOuterLoop) {
-#ifdef DEBUGCL
-  std::cerr << "SearchNestedLoops" << std::endl;
+#ifdef DBG_WRKGRP
+  std::cerr << "SearchThroughRegions" << std::endl;
 #endif
   static int depth = -1;
   ++depth;
 
   if ((NestedLoops[Loop].empty()) && (Barriers[Loop].empty()) &&
       ScopedRegions[Loop].empty()) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
     std::cerr << "No nested loops and there's no barriers in this one"
       << std::endl;
 #endif
+    if (!ReturnStmts[Loop].empty())
+      FixReturnsInBarrierAbsence(Loop, depth);
+
     --depth;
     return false;
   }
@@ -972,15 +996,15 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop) {
   for (std::vector<Stmt*>::iterator LoopI
        = InnerLoops.begin(), LoopE = InnerLoops.end(); LoopI != LoopE;
        ++LoopI) {
-    if (SearchNestedLoops(*LoopI))
+    if (SearchThroughRegions(*LoopI))
       ++NestedBarriers;
   }
 
   std::vector<CompoundStmt*> Compounds = ScopedRegions[Loop];
   for (std::vector<CompoundStmt*>::iterator RegionI = Compounds.begin(),
        RegionE = Compounds.end(); RegionI != RegionE; ++RegionI) {
-    if (SearchNestedLoops(*RegionI)) {
-#ifdef DEBUGCL
+    if (SearchThroughRegions(*RegionI)) {
+#ifdef DBG_WRKGRP
       std::cerr << "Found barrier within CompoundStmt" << std::endl;
 #endif
       ++NestedBarriers;
@@ -1010,7 +1034,7 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchNestedLoops(Stmt *Loop) {
 void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
                                                                 int depth)
 {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "HandleNonParallelRegion\n";
 #endif
   // Remove the barriers of this region
@@ -1029,103 +1053,144 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
     }
   }
 
-  if (depth != 0) {
+  if (!ReturnStmts[Region].empty())
+    returnFixer->FixInBarrierPresence(Region, ReturnStmts[Region], depth);
 
-  Stmt *LoopBody = NULL;
-  if (isa<ForStmt>(Region))
-    LoopBody = (cast<ForStmt>(Region))->getBody();
-  else if (isa<WhileStmt>(Region))
-    LoopBody = (cast<WhileStmt>(Region))->getBody();
-  if (!isa<CompoundStmt>(Region)) {
-    CloseLoop(Region->getLocStart());
-    OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
-    CloseLoop(LoopBody->getLocEnd());
-    OpenLoop(GetOffsetOut(Region->getLocEnd()));
-  }
-  else if (isa<CompoundStmt>(Region)) {
-#ifdef DEBUGCL
-    std::cerr << "Opening and closing loops in and around CompoundStmt"
-      << std::endl;
-#endif
-    CompoundStmt *CS = cast<CompoundStmt>(Region);
-    CloseLoop(CS->getLBracLoc().getLocWithOffset(-1));
-    OpenLoop(GetOffsetInto(CS->getLBracLoc()));
-    CloseLoop(CS->getRBracLoc());
-    OpenLoop(GetOffsetOut(CS->getLocEnd()));
-  }
+  // Insert opening and closing loops for all regions, except the outer loop
+  if (depth != 0) {
+    Stmt *LoopBody = NULL;
+    if (isa<ForStmt>(Region))
+      LoopBody = (cast<ForStmt>(Region))->getBody();
+    else if (isa<WhileStmt>(Region))
+      LoopBody = (cast<WhileStmt>(Region))->getBody();
+    if (!isa<CompoundStmt>(Region)) {
+      CloseLoop(Region->getLocStart());
+      OpenLoop(GetOffsetInto(LoopBody->getLocStart()));
+      CloseLoop(LoopBody->getLocEnd());
+      OpenLoop(GetOffsetOut(Region->getLocEnd()));
+    }
+    else if (isa<CompoundStmt>(Region)) {
+      CompoundStmt *CS = cast<CompoundStmt>(Region);
+      CloseLoop(CS->getLBracLoc().getLocWithOffset(-1));
+      OpenLoop(GetOffsetInto(CS->getLBracLoc()));
+      CloseLoop(CS->getRBracLoc());
+      OpenLoop(GetOffsetOut(CS->getLocEnd()));
+    }
   }
 }
 
-// We should check whether there is a barrier after the break, if so this
-// will give the position of the closing bracket. Otherwise the closing
-// bracket will be at the end of loop.
-void WorkitemCoarsen::ThreadSerialiser::HandleBreaks(Stmt *Region) {
-  std::list<BreakStmt*> Breaks = BreakStmts[Region];
-  std::vector<CallExpr*> InnerBarriers = Barriers[Region];
-  SourceLocation RegionStart;
-  SourceLocation RegionEnd;
+// Returns get converted into continues while in the outer loop. So when at a
+// depth of 1, a continue needs to be inserted when exiting the loop instead of
+// a break - this would exit the whole kernel otherwise.
+void
+WorkitemCoarsen::ThreadSerialiser::FixReturnsInBarrierAbsence(Stmt *Region,
+                                                              unsigned depth)
+{
+#ifdef DBG_WRKGRP
+  std::cerr << "Entering ThreadSerialiser::FixReturnsInBarrierAbsence, depth = "
+    << depth << std::endl;
+#endif
 
-  if (isa<WhileStmt>(Region)) {
-    RegionStart = (cast<WhileStmt>(Region))->getBody()->getLocStart();
-    RegionEnd = (cast<WhileStmt>(Region))->getBody()->getLocEnd();
-  }
-  else if (isa<ForStmt>(Region)) {
-    RegionStart = (cast<ForStmt>(Region))->getBody()->getLocStart();
-    RegionEnd = (cast<ForStmt>(Region))->getBody()->getLocEnd();
+  // This is a list of return instructions, paired with their conditional stmt.
+  PairedReturnList PRL = ReturnStmts[Region];
+
+  if (depth == 0) {
+    // Convert returns in the outer loop to continues.
+    for (PairedReturnList::iterator RLI = PRL.begin(),
+         RLE = PRL.end(); RLI != RLE; ++RLI)
+      InsertText((*RLI).second->getLocStart(), "continue; //");
   }
   else {
-    RegionStart = (cast<CompoundStmt>(Region))->getLBracLoc();
-    RegionEnd = (cast<CompoundStmt>(Region))->getRBracLoc();
+    SourceLocation RegionEnd;
+    if (isa<ForStmt>(Region))
+      RegionEnd = (cast<ForStmt>(Region))->getLocEnd().getLocWithOffset(2);
+    if (isa<WhileStmt>(Region))
+      RegionEnd = (cast<WhileStmt>(Region))->getLocEnd().getLocWithOffset(2);
+
+    InsertText(Region->getLocStart(), "bool __kernel_invalid_index = false;");
+
+    for (PairedReturnList::iterator RLI = PRL.begin(),
+         RLE = PRL.end(); RLI != RLE; ++RLI)
+      InsertText((*RLI).second->getLocStart(),
+                 "__kernel_invalid_index = true; break; //");
+
+    if (depth > 1)
+      InsertText(RegionEnd, "if (__kernel_invalid_index) break;");
+    else if (depth == 1)
+      InsertText(RegionEnd, "if (__kernel_invalid_index) continue;");
+
+    // if depth == 0 then the continue used inplace of the return is enough
   }
 
-  for (std::list<BreakStmt*>::iterator BRI = Breaks.begin(),
-       BRE = Breaks.end(); BRI != BRE; ++BRI) {
-
-    SourceLocation BreakLoc = (*BRI)->getLocStart();
-    CallExpr *ProceedingBarrier = NULL;
-
-    for (std::vector<CallExpr*>::iterator BI = InnerBarriers.begin(),
-         BE = InnerBarriers.end(); BI != BE; ++BI) {
-
-      // Here we compare the locations of the barriers to find the one that
-      // directly proceeds the break
-      SourceLocation BarrierLoc = (*BI)->getLocStart();
-      if (BreakLoc < BarrierLoc) {
-        if (ProceedingBarrier) {
-          if (BarrierLoc < ProceedingBarrier->getLocStart())
-            ProceedingBarrier = *BI;
-        }
-        else
-          ProceedingBarrier = *BI;
-      }
-    }
-
-    SourceLocation InsertLoc;
-    if (ProceedingBarrier)
-      InsertLoc = ProceedingBarrier->getLocEnd().getLocWithOffset(2);
-    else
-      InsertLoc = RegionEnd;
-
-    // Now we have our location to insert some book keeping code - another
-    // break to actually break from the original loop using the new variable
-    // we declared earlier.
-    //TheRewriter.InsertText(InsertLoc, "\nif (__kernel_break_again) break;");
-    //TheRewriter.InsertText(BreakLoc.getLocWithOffset(2),
-      //                     "__kernel_break_again = true;");
-    InsertText(BreakLoc, "__kernel_break_again = true;");
-    InsertText(BreakLoc, "\n");
-    InsertText(InsertLoc, "\nif (__kernel_break_again) break;");
-
-  }
-  //TheRewriter.InsertText(RegionStart.getLocWithOffset(2),
-    //                     "bool __kernel_break_again = false;");
-  InsertText(RegionStart.getLocWithOffset(3),
-             "bool __kernel_break_again = false;");
+  ReturnStmts.erase(Region);
+  //--depth;
 }
 
+// FixInBarrierPresence needs to convert the code from something like this:
+//
+//for () {
+//  some_work();
+//  barrier();
+//  if ()
+//    return;
+//  more_work();
+//}
+//
+// To something like this:
+//
+//bool invalid_threads[local_size];
+//unsigned total_invalid_threads = 0;
+
+//for () {
+//  while() {
+//    some_work();
+//  }
+//  while() {
+//    if () {
+//      ++invalid_threads;
+//      invalid_index[local_id] = true;
+//      continue;
+//    }
+//    if (invalid_threads == local_size)
+//      return;
+//    more_work();
+//  }
+//}
+// The while loops also have to check against invalid indexes. This is performed
+// in RewriteSource by appending the appropriate source to the OpenWhile string.
+template <typename T> void
+WorkitemCoarsen::StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
+  std::list<std::pair<Stmt*, T> > &PSL, unsigned depth) {
+
+#ifdef DBG_WRKGRP
+  std::cerr << "Entering FixInBarrierPresence" << std::endl;
+#endif
+
+  // For each of the return statements, replace it with a continue and insert
+  // the necessary book keeping code.
+  if (PSL.size() == 1) {
+#ifdef DBG_WRKGRP
+    std::cerr << "Statement list is only one element long" << std::endl;
+#endif
+    Stmt *cond = PSL.front().first;
+    T s = PSL.front().second;
+    InsertText(s->getLocStart(), UnaryConvert.str());
+    InsertText(Region->getLocEnd().getLocWithOffset(1), ValidCheck.str());
+    return;
+  }
+  // else
+  for (typename std::list<std::pair<Stmt*, T> >::iterator SLI = PSL.begin(),
+       SLE = PSL.end(); SLI != SLE; ++SLI) {
+
+    Stmt *cond = (*SLI).first;
+    T s = (*SLI).second;
+    InsertText(s->getLocStart(), UnaryConvert.str());
+    InsertText(Region->getLocEnd().getLocWithOffset(1), ValidCheck.str());
+  }
+}
 
 void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "SearchForIndVars" << std::endl;
 #endif
   if (!s)
@@ -1174,40 +1239,89 @@ void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
   //}
 }
 
-// TODO Search and handle continue statements, as well as going traversing
-// deeper.
-void WorkitemCoarsen::ThreadSerialiser::SearchForBreaks(Stmt *Region, Stmt *s) {
-#ifdef DEBUGCL
-  std::cerr << "SearchForBreaks" << std::endl;
+void WorkitemCoarsen::ThreadSerialiser::CheckForUnary(Stmt *Region,
+                                                      Stmt *Then,
+                                                      Stmt *unary) {
+#ifdef DBG_WRKGRP
+  std::cerr << "Entering CheckForUnary" << std::endl;
 #endif
-
-  std::list<BreakStmt*> Breaks;
-  Stmt *Then = (cast<IfStmt>(s))->getThen();
-  for (Stmt::child_iterator SI = Then->child_begin(), SE = Then->child_end();
-       SI != SE; ++SI) {
-    if (!(*SI))
-      continue;
-
-    if (isa<BreakStmt>(*SI))
-      Breaks.push_back(cast<BreakStmt>(*SI));
-  }
-  if (!Breaks.empty()) {
-#ifdef DEBUGCL
-    std::cerr << "Found " << Breaks.size() << " breaks" << std::endl;
-#endif
-    if (BreakStmts.find(Region) == BreakStmts.end())
-      BreakStmts.insert(std::make_pair(Region, Breaks));
+  if (isa<ContinueStmt>(unary)) {
+    ContinueStmt *CS = cast<ContinueStmt>(unary);
+    std::pair<Stmt*, ContinueStmt*> ContinuePair = std::make_pair(Then, CS);
+    if (ContinueStmts.find(Region) == ContinueStmts.end()) {
+      std::list<std::pair<Stmt*, ContinueStmt*> > NewList;
+      NewList.push_back(ContinuePair);
+      ContinueStmts.insert(std::make_pair(Region, NewList));
+    }
     else
-      BreakStmts[Region].splice(BreakStmts[Region].end(), Breaks);
+      ContinueStmts[Region].push_back(ContinuePair);
+  }
+  if (isa<BreakStmt>(unary)) {
+    BreakStmt *BS = cast<BreakStmt>(unary);
+    std::pair<Stmt*, BreakStmt*> BreakPair = std::make_pair(Then, BS);
+    if (BreakStmts.find(Region) == BreakStmts.end()) {
+      std::list<std::pair<Stmt*, BreakStmt*> > NewList;
+      NewList.push_back(BreakPair);
+      BreakStmts.insert(std::make_pair(Region, NewList));
+    }
+    else
+      BreakStmts[Region].push_back(BreakPair);
+  }
+  if (isa<ReturnStmt>(unary)) {
+#ifdef DBG_WRKGRP
+    std::cerr << "Found ReturnStmt" << std::endl;
+#endif
+    ReturnStmt *RS = cast<ReturnStmt>(unary);
+    std::pair<Stmt*, ReturnStmt*> ReturnPair = std::make_pair(Then, RS);
+    if (ReturnStmts.find(Region) == ReturnStmts.end()) {
+      std::list<std::pair<Stmt*, ReturnStmt*> > NewList;
+      NewList.push_back(ReturnPair);
+      ReturnStmts.insert(std::make_pair(Region, NewList));
+    }
+    else
+      ReturnStmts[Region].push_back(ReturnPair);
   }
 }
 
+void WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region,
+                                                                  Stmt *s) {
+#ifdef DBG_WRKGRP
+  std::cerr << "TraverseConditionalRegion" << std::endl;
+#endif
+  IfStmt *ifStmt = cast<IfStmt>(s);
+
+  Stmt *Then = ifStmt->getThen();
+  // if the body is a CompoundStmt, get the first child of it
+  if (Then->child_begin() != Then->child_end())
+    Then = *(Then->child_begin());
+  else {
+    CheckForUnary(Region, ifStmt, Then);
+    return;
+  }
+
+  for (Stmt::child_iterator SI = Then->child_begin(), SE = Then->child_end();
+       SI != SE; ++SI) {
+
+    if (!(*SI))
+      continue;
+
+#ifdef DBG_WRKGRP
+    std::cerr << "iterating through ConditionalRegion" << std::endl;
+#endif
+    CheckForUnary(Region, ifStmt, *SI);
+
+    if (isa<IfStmt>(*SI))
+      TraverseConditionalRegion(Region, *SI);
+    if (isLoop(*SI))
+      TraverseRegion(*SI);
+  }
+}
 
 // We shall create a map, using the outer loop as the key, to contain all it's
 // loop children. We shall also then have a map of all the DeclStmts within the
 // loop, plus a map of vectors which will hold barriers.
 void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "TraverseRegion" << std::endl;
 #endif
   Stmt *Body = NULL;
@@ -1256,7 +1370,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
         TraverseRegion(*SI);
       }
       else if (isa<IfStmt>(*SI))
-        SearchForBreaks(s, *SI);
+        TraverseConditionalRegion(s, *SI);
     }
   }
   // TODO Probably should just merge this into the code above, unless this needs
@@ -1284,7 +1398,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
         TraverseRegion(*CI);
       }
       else if (isa<IfStmt>(*CI))
-        SearchForBreaks(s, *CI);
+        TraverseConditionalRegion(s, *CI);
     }
   }
 
@@ -1304,7 +1418,7 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
 
 // Use this only as an entry into the kernel
 bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "VisitForStmt";
   if (isFirstLoop)
     std::cerr << " - is main loop";
@@ -1324,7 +1438,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
 // Remove barrier calls and modify calls to kernel builtin functions.
 /*
 bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
   std::cerr << "VisitCallExpr" << std::endl;
 #endif
   if (isBarrier(s)) {
@@ -1335,14 +1449,14 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
   }
   return true;
 }*/
-
+/*
 bool WorkitemCoarsen::ThreadSerialiser::VisitReturnStmt(Stmt *s) {
   //TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
   //TheRewriter.InsertTextBefore(s->getLocStart(), CloseWhile.str());
   InsertText(s->getLocStart().getLocWithOffset(-2), CloseWhile.str());
   InsertText(s->getLocStart().getLocWithOffset(-1), OpenWhile.str());
   return true;
-}
+}*/
 
 // Create maps of all the references in the tree
 bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
@@ -1362,7 +1476,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   for (std::vector<Decl*>::iterator PI = ParamVars.begin(),
        PE = ParamVars.end(); PI != PE; ++PI) {
     if (key == (*PI)) {
-#ifdef DEBUGCL
+#ifdef DBG_WRKGRP
       std::cerr << "Not adding " << VarName << " to AllRefs as it is an Arg"
         << std::endl;
 #endif

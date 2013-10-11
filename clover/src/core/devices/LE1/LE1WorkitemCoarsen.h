@@ -39,6 +39,11 @@ typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 typedef std::map<std::string, NamedDeclSet> NamedDeclSetMap;
 
+typedef std::list<std::pair<clang::Stmt*, clang::ReturnStmt*> > PairedReturnList;
+typedef std::list<std::pair<clang::Stmt*, clang::ContinueStmt*> > PairedContinueList;
+typedef std::list<std::pair<clang::Stmt*, clang::BreakStmt*> > PairedBreakList;
+typedef std::list<std::pair<clang::SourceLocation, std::string> > StringList;
+
 class WorkitemCoarsen {
 
 public:
@@ -140,6 +145,77 @@ private:
 
 }; // end class OpenCLCompiler
 
+
+template <typename T> class StmtFixer {
+public:
+  StmtFixer(//std::map<clang::Stmt*,
+            //std::list<std::pair<clang::Stmt*, T*> > > &map,
+            StringList *list, unsigned x, unsigned y, unsigned z)
+    : SourceToInsert(list), localX(x), localY(y), localZ(z) {
+#ifdef DBG_WRKGRP
+      std::cerr << "Constructing StmtFixer" << std::endl;
+#endif
+      UnaryConvert << " { ++__kernel_total_invalid_threads;\n";
+      UnaryConvert << " __kernel_invalid_threads[__esdg_idx]";
+      if (y > 1)
+        UnaryConvert << "[__esdg_idy]";
+      if (z > 1)
+        UnaryConvert << "[__esdg_idz]";
+      UnaryConvert << " = true;\ncontinue;\n} //";
+
+      // FIXME This only works for one dimension!
+      ValidCheck << "\nif (__kernel_total_invalid_threads == " << x << ") ";
+    }
+
+  void InsertText(clang::SourceLocation InsertLoc, std::string text) {
+#ifdef DBG_WRKGRP
+    std::cerr << "StmtFixer::InsertText: " << text << std::endl;
+#endif
+    SourceToInsert->push_back(std::make_pair(InsertLoc, text));
+  }
+  void FixInBarrierPresence(clang::Stmt* Region,
+                            std::list<std::pair<clang::Stmt*, T> > &PSL,
+                            unsigned depth);
+protected:
+  std::stringstream ValidCheck;
+private:
+  //std::map<clang::Stmt*,
+    //std::list<std::pair<clang::Stmt*, T*> > > *StmtMap;
+  StringList *SourceToInsert;
+  unsigned localX, localY, localZ;
+  std::stringstream UnaryConvert;
+};
+
+class ReturnFixer : public StmtFixer<clang::ReturnStmt*> {
+public:
+  ReturnFixer(//std::map<clang::Stmt*, PairedReturnList> *map,
+              StringList *list, unsigned x, unsigned y, unsigned z)
+    : StmtFixer(list, x, y, z) {
+      ValidCheck << "return;";
+#ifdef DBG_WRKGRP
+      std::cerr << "Constructing ReturnFixer" << std::endl;
+#endif
+  }
+};
+/*
+class BreakFixer : public StmtFixer<clang::BreakStmt*> {
+public:
+  BreakFixer(std::map<clang::Stmt*, PairedBreakList> *map,
+              StringList *list, unsigned x, unsigned y, unsigned z)
+    : StmtFixer(map, list, x, y, z) {
+    ValidCheck << "break;";
+  }
+};
+
+class ContinueFixer : public StmtFixer<clang::ContinueStmt*> {
+public:
+  ContinueFixer(std::map<clang::Stmt*, PairedContinueList> *map,
+              StringList *list, unsigned x, unsigned y, unsigned z)
+    : StmtFixer(map, list, x, y, z) {
+    ValidCheck << "continue;";
+  }
+};*/
+
 // Base class for our visitors, ensures an interface for fixing scalars
 // and handles the trivial tasks of creating the frequently used strings
 // to open and close loops
@@ -168,7 +244,7 @@ protected:
   std::stringstream OpenWhile;
   std::stringstream CloseWhile;
   clang::Rewriter &TheRewriter;
-  std::list<std::pair<clang::SourceLocation, std::string> > SourceToInsert;
+  StringList SourceToInsert;
 };
 
 private:
@@ -190,7 +266,7 @@ public:
   //bool VisitForStmt(clang::Stmt *s);
   bool VisitForStmt(clang::Stmt *s);
   //bool VisitCallExpr(clang::Expr *s);
-  bool VisitReturnStmt(clang::Stmt *s);
+  //bool VisitReturnStmt(clang::Stmt *s);
   bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
   bool VisitUnaryOperator(clang::Expr *expr);
@@ -202,14 +278,20 @@ private:
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
   void TraverseRegion(clang::Stmt *s);
+  void TraverseConditionalRegion(clang::Stmt* Region,
+                                 clang::Stmt* s);
+  void CheckForUnary(clang::Stmt *Region,
+                     clang::Stmt *Then,
+                     clang::Stmt *unary);
   void HandleNonParallelRegion(clang::Stmt *Region, int depth);
-  void HandleBreaks(clang::Stmt *Region);
+  void FixReturnsInBarrierAbsence(clang::Stmt* Region,
+                                  unsigned depth);
+  //void HandleBreaks(clang::Stmt *Region);
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
   void SearchForIndVars(clang::Stmt *s);
-  void SearchForBreaks(clang::Stmt *Region, clang::Stmt *s);
-  bool SearchNestedLoops(clang::Stmt *Loop);
+  bool SearchThroughRegions(clang::Stmt *Loop);
   void AssignIndVars(void);
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);
@@ -232,8 +314,11 @@ private:
   std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
-  std::map<clang::Stmt*, std::list<clang::BreakStmt*> > BreakStmts;
   std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
+
+  std::map<clang::Stmt*, PairedContinueList> ContinueStmts;
+  std::map<clang::Stmt*, PairedBreakList> BreakStmts;
+  std::map<clang::Stmt*, PairedReturnList> ReturnStmts;
 
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
@@ -250,6 +335,8 @@ private:
   bool isFirstLoop;
   clang::ForStmt *OuterLoop;
   std::vector<clang::Decl*> ParamVars;
+  std::stringstream InvalidThreadInit;
+  ReturnFixer *returnFixer;
 
 }; // end class ThreadSerialiser
 
