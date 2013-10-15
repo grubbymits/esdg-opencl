@@ -275,7 +275,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
   /* turn printout on */
   PRINT_OUT = 0;
-  bool MEM_DUMP = false;
+  bool MEM_DUMP = true;
 
     /* Load IRAM */
     {
@@ -616,8 +616,6 @@ void LE1Simulator::readIntData(unsigned int addr,
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
     insizzleAPIRdOneDramLocation(addr, &word);
 #ifdef DBG_SIM
-    if (numBytes == 160)
-      std::cerr << "data = " << word << std::endl;
     //if (data[i] != word)
     /*
       std::cout << "updating " << std::hex << addr << " with different data: "

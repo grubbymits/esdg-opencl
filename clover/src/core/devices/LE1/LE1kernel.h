@@ -335,18 +335,19 @@ class LE1KernelEvent
     private:
         void CreateLauncher(std::string &LauncherString,
                             unsigned *WorkgroupsPerCore);
+        /*
         bool WriteDataArea();
         void WriteKernelAttr(std::ostringstream &Output, size_t Attr);
         bool HandleBufferArg(const Kernel::Arg &arg);
         void PrintLine(unsigned Address,
                        std::ostringstream &HexString,
                        std::string &BinaryString);
-        void PrintData(const void *Data, size_t offset, size_t size,
-                       size_t total_bytes);
+        void PrintData(const void *Data, unsigned addr, size_t offset,
+                       size_t size, size_t total_bytes);
         void PrintSingleElement(const void *Data, unsigned *Offset,
                                 size_t ElementSize);
         void WriteStructData(llvm::StructType *StructArg, const void *Data,
-                             unsigned TotalSize);
+                             unsigned TotalSize);*/
 
     private:
         LE1Device *p_device;
@@ -356,8 +357,8 @@ class LE1KernelEvent
         size_t p_current_wg, p_finished_wg, p_num_wg;
         pthread_mutex_t p_mutex;
         void *p_kernel_args;
-        static unsigned int addr;
-        std::vector<unsigned> ArgAddrs;
+        //static unsigned int addr;
+        //std::vector<unsigned> ArgAddrs;
         std::string OriginalSource;
         std::string OriginalSourceName;
         std::string KernelName;

@@ -19,7 +19,7 @@ __kernel void dynproc_kernel (int iteration,
 	int BLOCK_SIZE = get_local_size(0);
 	int bx = get_group_id(0);
 	int tx = get_local_id(0);
-	printf("Group id = %d", bx);
+	//printf("Group id = %d", bx);
 
 	// Each block finally computes result for a small block
 	// after N iterations.
@@ -51,7 +51,6 @@ __kernel void dynproc_kernel (int iteration,
 
 	bool isValid = IN_RANGE(tx, validXmin, validXmax);
 
-	breakCounter[get_group_id(0)] = get_local_id(0);
 
 	if(IN_RANGE(xidx, 0, cols-1))
 	{
@@ -95,6 +94,7 @@ __kernel void dynproc_kernel (int iteration,
 		{
 			// we are on the last iteration, and thus don't need to 
 			// compute for the next step.
+	                breakCounter[get_group_id(0)]++;
 			break;
 		}
 

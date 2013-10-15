@@ -9,7 +9,7 @@ include_directories (${Coal_SOURCE_DIR}/include
                     )
 
 set(CMAKE_INSTALL_RPATH "/opt/esdg-opencl/lib")
-set(CMAKE_CXX_FLAGS " -g -fno-rtti -DINSIZZLEAPI -DDBG_SIM -DDBG_WRKGRP")
+set(CMAKE_CXX_FLAGS " -g -fno-rtti -DINSIZZLEAPI -DDBG_SIM -DDBG_KERNEL -DDBG_WRKGRP")
 
 configure_file(core/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/config.h)
 
@@ -52,6 +52,7 @@ set(COAL_SRC_FILES
     core/devices/LE1/LE1program.cpp
     core/devices/LE1/LE1worker.cpp
     core/devices/LE1/LE1Simulator.cpp
+    core/devices/LE1/LE1DataPrinter.cpp
 
     core/devices/LE1/coarsener/SourceRewriter.cpp
     core/devices/LE1/coarsener/StmtFixers.cpp
