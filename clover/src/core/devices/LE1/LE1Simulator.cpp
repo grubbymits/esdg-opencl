@@ -318,23 +318,14 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
         //systemConfig *SYS = (systemConfig *)((size_t)SYSTEM
           //                                   + (s * sizeof(systemConfig)));
 #ifdef DBG_SIM
-      std::cerr << "Read in IRAM file\n";
         std::cerr << "Got System Config, " << (SYS->SYSTEM_CONFIG & 0xff)
           << " contexts\n";
 #endif
 
         /* loop through all contexts and hypercontexts */
         for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff); ++c) {
-#ifdef DBG_SIM
-      std::cerr << "Read in IRAM file\n";
-          std::cerr << "Now looping through all contexts\n";
-#endif
           contextConfig *CNT = (contextConfig *)((size_t)SYS->CONTEXT
                                                  + (c * sizeof(contextConfig)));
-#ifdef DBG_SIM
-      std::cerr << "Read in IRAM file\n";
-          std::cerr << "Got Context Config\n";
-#endif
 
           for (hc=0; hc<((CNT->CONTEXT_CONFIG >> 4) & 0xf); ++hc) {
             /* Set current hypercontext to interact with */
@@ -533,6 +524,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
       << "-" << LE1Simulator::iteration<< ".dat";
 
+    // TODO this number must just be left from BFS.
     if (KernelNumber == 2) {
       KernelNumber = 0;
       ++LE1Simulator::iteration;
@@ -567,7 +559,7 @@ void LE1Simulator::readCharData(unsigned int addr,
 #ifdef DBG_SIM
   std::cerr << "Entering LE1Simulator::readCharData\n"
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
-    << " bytes. globalS = " << std::hex << globalS << std::endl;
+    << " bytes." << std::endl;
 #endif
 
   unsigned bytes = 0;
@@ -624,6 +616,8 @@ void LE1Simulator::readIntData(unsigned int addr,
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
     insizzleAPIRdOneDramLocation(addr, &word);
 #ifdef DBG_SIM
+    if (numBytes == 160)
+      std::cerr << "data = " << word << std::endl;
     //if (data[i] != word)
     /*
       std::cout << "updating " << std::hex << addr << " with different data: "

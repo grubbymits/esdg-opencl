@@ -182,6 +182,21 @@ int main(int argc, char** argv)
 	                                       NULL);
         std::cout << "Created d_outputBuffer\n";
 
+        unsigned numWorkGroups = (rows * cols / cl.localSize());
+        std::cout << "numWorkGroups = " << numWorkGroups << std::endl;
+
+        cl_uint *h_breakCounterBuffer =
+          (cl_uint*)malloc(numWorkGroups * sizeof(cl_uint));
+
+        for (unsigned i = 0; i < numWorkGroups; ++i)
+          h_breakCounterBuffer[i] = 0;
+
+        cl_mem d_breakCounterBuffer = clCreateBuffer(cl.ctxt(),
+                                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                                     sizeof(cl_uint) * numWorkGroups,
+                                                     h_breakCounterBuffer,
+                                                     NULL);
+
 	int src = 1, final_ret = 0;
 	for (int t = 0; t < rows - 1; t += pyramid_height)
 	{
@@ -194,6 +209,7 @@ int main(int argc, char** argv)
 		int theHalo = HALO;
 
 		// Set the kernel arguments.
+                std::cout << "arg0 = " << arg0 << std::endl;
 		clSetKernelArg(cl.kernel(kn), 0,  sizeof(cl_int), (void*) &arg0);
 		clSetKernelArg(cl.kernel(kn), 1,  sizeof(cl_mem), (void*) &d_gpuWall);
 		clSetKernelArg(cl.kernel(kn), 2,  sizeof(cl_mem), (void*) &d_gpuResult[src]);
@@ -206,8 +222,10 @@ int main(int argc, char** argv)
 		clSetKernelArg(cl.kernel(kn), 9,  sizeof(cl_int) * (cl.localSize()), 0);
 		clSetKernelArg(cl.kernel(kn), 10, sizeof(cl_int) * (cl.localSize()), 0);
 		clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem), (void*) &d_outputBuffer);
+                clSetKernelArg(cl.kernel(kn), 12, sizeof(cl_mem), (void*) &d_breakCounterBuffer);
                 std::cout << "Set all args\n";
 		cl.launch(kn);
+
 	}
 
 	// Copy results back to host.
@@ -235,19 +253,34 @@ int main(int argc, char** argv)
 	                    NULL);                    // Event object for determining status. Not used.
 
         std::cout << "Enqueued ReadBuffer for d_outputBuffer\n";
-	
 	// Tack a null terminator at the end of the string.
 	h_outputBuffer[16383] = '\0';
+
+        clEnqueueReadBuffer(cl.q(),
+                            d_breakCounterBuffer,
+                            CL_TRUE,
+                            0,
+                            sizeof(cl_uint) * numWorkGroups,
+                            h_breakCounterBuffer,
+                            0,
+                            NULL,
+                            NULL);
+
+          for (unsigned group = 0; group < numWorkGroups; ++group)
+            std::cout << "breaks in group " << group << " = "
+              << (unsigned)h_breakCounterBuffer[group] << std::endl;
+
 
         run_omp();
         int success = 1;
         for (int i = 0; i < cols; i++) {
-          if (result[i] != omp_result[i]) {
-            printf("FAIL: result[%d] = %d but omp_result[%d] = %d\n",
+          if (result[i] == omp_result[i]) {
+            printf("CORRECT: result[%d] = %d and omp_result[%d] = %d\n",
                   i, result[i], i, omp_result[i]);
             //printf("data = %d, omp_data = %d\n", data[i], omp_data[i]);
-            success = 0;
           }
+          else
+            success = 0;
         }
         if (success)
           printf("SUCCESS\n");

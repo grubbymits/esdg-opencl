@@ -579,7 +579,7 @@ bool LE1KernelEvent::CompileSource() {
 
   std::stringstream pre_asm_command;
   // TODO Include the script as a char array
-  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl "
+  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl -syscall "
     << TempAsmName
     //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
     << " > " << FinalAsmName;
