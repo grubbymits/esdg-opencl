@@ -359,7 +359,7 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
       return false;
     }
 #ifdef DBG_KERNEL
-  std::cerr << "Leaving LE1KernelEvent::HandleBufferArg\n";
+  std::cerr << "Leaving LE1DataPrinter::HandleBufferArg\n";
 #endif
   //if (isBufferOnDevice)
     //free(Data);

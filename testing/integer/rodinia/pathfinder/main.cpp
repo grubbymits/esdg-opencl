@@ -185,6 +185,7 @@ int main(int argc, char** argv)
         unsigned numWorkGroups = (rows * cols / cl.localSize());
         std::cout << "numWorkGroups = " << numWorkGroups << std::endl;
 
+        // Create our counters
         cl_uint *h_breakCounterBuffer =
           (cl_uint*)malloc(numWorkGroups * sizeof(cl_uint));
 
@@ -195,6 +196,17 @@ int main(int argc, char** argv)
                                                      CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
                                                      sizeof(cl_uint) * numWorkGroups,
                                                      h_breakCounterBuffer,
+                                                     NULL);
+        cl_uint *h_computedCounterBuffer =
+          (cl_uint*)malloc(numWorkGroups * sizeof(cl_uint));
+
+        for (unsigned i = 0; i < numWorkGroups; ++i)
+          h_computedCounterBuffer[i] = 0;
+
+        cl_mem d_computedCounterBuffer = clCreateBuffer(cl.ctxt(),
+                                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                                     sizeof(cl_uint) * numWorkGroups,
+                                                     h_computedCounterBuffer,
                                                      NULL);
 
 	int src = 1, final_ret = 0;
@@ -222,9 +234,43 @@ int main(int argc, char** argv)
 		clSetKernelArg(cl.kernel(kn), 9,  sizeof(cl_int) * (cl.localSize()), 0);
 		clSetKernelArg(cl.kernel(kn), 10, sizeof(cl_int) * (cl.localSize()), 0);
 		clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem), (void*) &d_outputBuffer);
-                clSetKernelArg(cl.kernel(kn), 12, sizeof(cl_mem), (void*) &d_breakCounterBuffer);
+                clSetKernelArg(cl.kernel(kn), 12, sizeof(cl_mem),
+                               (void*) &d_breakCounterBuffer);
+                clSetKernelArg(cl.kernel(kn), 13, sizeof(cl_mem),
+                               (void*) &d_computedCounterBuffer);
                 std::cout << "Set all args\n";
 		cl.launch(kn);
+
+        // --------------------------- DEBUG ------------------------------- //
+        clEnqueueReadBuffer(cl.q(),
+                            d_breakCounterBuffer,
+                            CL_TRUE,
+                            0,
+                            sizeof(cl_uint) * numWorkGroups,
+                            h_breakCounterBuffer,
+                            0,
+                            NULL,
+                            NULL);
+
+          for (unsigned group = 0; group < numWorkGroups; ++group)
+            std::cout << "breaks in group " << group << " = "
+              << (unsigned)h_breakCounterBuffer[group] << std::endl;
+
+        clEnqueueReadBuffer(cl.q(),
+                            d_computedCounterBuffer,
+                            CL_TRUE,
+                            0,
+                            sizeof(cl_uint) * numWorkGroups,
+                            h_computedCounterBuffer,
+                            0,
+                            NULL,
+                            NULL);
+
+          for (unsigned group = 0; group < numWorkGroups; ++group)
+            std::cout << "computed in group " << group << " = "
+              << (unsigned)h_computedCounterBuffer[group] << std::endl;
+
+        // ------------------------------------------------------------------ //
 
 	}
 
@@ -256,31 +302,18 @@ int main(int argc, char** argv)
 	// Tack a null terminator at the end of the string.
 	h_outputBuffer[16383] = '\0';
 
-        clEnqueueReadBuffer(cl.q(),
-                            d_breakCounterBuffer,
-                            CL_TRUE,
-                            0,
-                            sizeof(cl_uint) * numWorkGroups,
-                            h_breakCounterBuffer,
-                            0,
-                            NULL,
-                            NULL);
-
-          for (unsigned group = 0; group < numWorkGroups; ++group)
-            std::cout << "breaks in group " << group << " = "
-              << (unsigned)h_breakCounterBuffer[group] << std::endl;
-
-
         run_omp();
         int success = 1;
         for (int i = 0; i < cols; i++) {
-          if (result[i] == omp_result[i]) {
-            printf("CORRECT: result[%d] = %d and omp_result[%d] = %d\n",
+          if (result[i] != omp_result[i]) {
+            printf("FAIL: result[%d] = %d but omp_result[%d] = %d\n",
                   i, result[i], i, omp_result[i]);
             //printf("data = %d, omp_data = %d\n", data[i], omp_data[i]);
+            success = 0;
           }
           else
-            success = 0;
+            printf("CORRECT: result[%d] = %d and omp_result[%d] = %d\n",
+                  i, result[i], i, omp_result[i]);
         }
         if (success)
           printf("SUCCESS\n");

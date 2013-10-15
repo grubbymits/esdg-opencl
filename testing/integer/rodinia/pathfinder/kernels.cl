@@ -14,7 +14,8 @@ __kernel void dynproc_kernel (int iteration,
                               __local int* prev,
                               __local int* result,
                               __global int* outputBuffer,
-                              __global int* breakCounter)
+                              __global int* breakCounter,
+                              __global int* computedCounter)
 {
 	int BLOCK_SIZE = get_local_size(0);
 	int bx = get_group_id(0);
@@ -102,6 +103,7 @@ __kernel void dynproc_kernel (int iteration,
 		{
 			//Assign the computation range
 			prev[tx] = result[tx];
+                        computedCounter[get_group_id(0)]++;
 		}
 		barrier(CLK_LOCAL_MEM_FENCE);
 	}
