@@ -152,7 +152,8 @@ int main(int argc, char** argv)
 	                                  sizeof(cl_int)*(size-cols),
 	                                  (data + cols),
 	                                  NULL);
-        std::cout << "Created d_gpuWall Buffer\n";
+        std::cout << "Created d_gpuWall Buffer of size " << std::hex
+          << (unsigned)(sizeof(cl_int)*(size-cols)) << " bytes" << std::endl;
 
 	cl_mem d_gpuResult[2];
 
@@ -170,6 +171,7 @@ int main(int argc, char** argv)
 	                                NULL);
         std::cout << "Create d_gpuResult Buffer 1\n";
 
+        /*
 	cl_int* h_outputBuffer = (cl_int*)malloc(16384*sizeof(cl_int));
 	for (int i = 0; i < 16384; i++)
 	{
@@ -180,7 +182,7 @@ int main(int argc, char** argv)
 	                                       sizeof(cl_int)*16384,
 	                                       h_outputBuffer,
 	                                       NULL);
-        std::cout << "Created d_outputBuffer\n";
+        std::cout << "Created d_outputBuffer\n";*/
 
         unsigned numWorkGroups = (rows * cols / cl.localSize());
         std::cout << "numWorkGroups = " << numWorkGroups << std::endl;
@@ -209,6 +211,28 @@ int main(int argc, char** argv)
                                                      h_computedCounterBuffer,
                                                      NULL);
 
+        cl_uint *h_workitemCounterBuffer =
+          (cl_uint*)malloc(numWorkGroups * sizeof(cl_uint));
+
+        for (unsigned i = 0; i < numWorkGroups; ++i)
+          h_workitemCounterBuffer[i] = 0;
+
+        cl_mem d_workitemCounterBuffer =
+          clCreateBuffer(cl.ctxt(),
+                         CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                         sizeof(cl_uint) * numWorkGroups,
+                         h_workitemCounterBuffer,
+                         NULL);
+
+
+        cl_uint h_totalWorkitemBuffer = 0;
+        cl_mem d_totalWorkitemBuffer =
+          clCreateBuffer(cl.ctxt(),
+                         CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                         sizeof(cl_uint),
+                         &h_totalWorkitemBuffer,
+                         NULL);
+
 	int src = 1, final_ret = 0;
 	for (int t = 0; t < rows - 1; t += pyramid_height)
 	{
@@ -222,22 +246,40 @@ int main(int argc, char** argv)
 
 		// Set the kernel arguments.
                 std::cout << "arg0 = " << arg0 << std::endl;
-		clSetKernelArg(cl.kernel(kn), 0,  sizeof(cl_int), (void*) &arg0);
-		clSetKernelArg(cl.kernel(kn), 1,  sizeof(cl_mem), (void*) &d_gpuWall);
-		clSetKernelArg(cl.kernel(kn), 2,  sizeof(cl_mem), (void*) &d_gpuResult[src]);
-		clSetKernelArg(cl.kernel(kn), 3,  sizeof(cl_mem), (void*) &d_gpuResult[final_ret]);
-		clSetKernelArg(cl.kernel(kn), 4,  sizeof(cl_int), (void*) &cols);
-		clSetKernelArg(cl.kernel(kn), 5,  sizeof(cl_int), (void*) &rows);
+                std::cout << "src = " << src << std::endl;
+                std::cout << "final_ret = " << final_ret << std::endl;
+		clSetKernelArg(cl.kernel(kn), 0,  sizeof(cl_int),
+                               (void*) &arg0);
+		clSetKernelArg(cl.kernel(kn), 1,  sizeof(cl_mem),
+                               (void*) &d_gpuWall);
+		clSetKernelArg(cl.kernel(kn), 2,  sizeof(cl_mem),
+                               (void*) &d_gpuResult[src]);
+		clSetKernelArg(cl.kernel(kn), 3,  sizeof(cl_mem),
+                               (void*) &d_gpuResult[final_ret]);
+		clSetKernelArg(cl.kernel(kn), 4,  sizeof(cl_int),
+                               (void*) &cols);
+		clSetKernelArg(cl.kernel(kn), 5,  sizeof(cl_int),
+                               (void*) &rows);
 		clSetKernelArg(cl.kernel(kn), 6,  sizeof(cl_int), (void*) &t);
-		clSetKernelArg(cl.kernel(kn), 7,  sizeof(cl_int), (void*) &borderCols);
-		clSetKernelArg(cl.kernel(kn), 8,  sizeof(cl_int), (void*) &theHalo);
-		clSetKernelArg(cl.kernel(kn), 9,  sizeof(cl_int) * (cl.localSize()), 0);
-		clSetKernelArg(cl.kernel(kn), 10, sizeof(cl_int) * (cl.localSize()), 0);
-		clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem), (void*) &d_outputBuffer);
-                clSetKernelArg(cl.kernel(kn), 12, sizeof(cl_mem),
+		clSetKernelArg(cl.kernel(kn), 7,  sizeof(cl_int),
+                               (void*) &borderCols);
+		clSetKernelArg(cl.kernel(kn), 8,  sizeof(cl_int),
+                               (void*) &theHalo);
+		clSetKernelArg(cl.kernel(kn), 9,
+                               sizeof(cl_int) * (cl.localSize()), 0);
+		clSetKernelArg(cl.kernel(kn), 10,
+                               sizeof(cl_int) * (cl.localSize()), 0);
+                /*
+		clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem),
+                               (void*) &d_outputBuffer);*/
+                clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem),
                                (void*) &d_breakCounterBuffer);
-                clSetKernelArg(cl.kernel(kn), 13, sizeof(cl_mem),
+                clSetKernelArg(cl.kernel(kn), 12, sizeof(cl_mem),
                                (void*) &d_computedCounterBuffer);
+                clSetKernelArg(cl.kernel(kn), 13, sizeof(cl_mem),
+                              (void*) &d_workitemCounterBuffer);
+                clSetKernelArg(cl.kernel(kn), 14, sizeof(cl_mem),
+                               (void*) &d_totalWorkitemBuffer);
                 std::cout << "Set all args\n";
 		cl.launch(kn);
 
@@ -270,6 +312,33 @@ int main(int argc, char** argv)
             std::cout << "computed in group " << group << " = "
               << (unsigned)h_computedCounterBuffer[group] << std::endl;
 
+        clEnqueueReadBuffer(cl.q(),
+                            d_workitemCounterBuffer,
+                            CL_TRUE,
+                            0,
+                            sizeof(cl_uint) * numWorkGroups,
+                            h_workitemCounterBuffer,
+                            0,
+                            NULL,
+                            NULL);
+
+          for (unsigned group = 0; group < numWorkGroups; ++group)
+            std::cout << "workitems in group " << group << " = "
+              << (unsigned)h_workitemCounterBuffer[group] << std::endl;
+
+
+          clEnqueueReadBuffer(cl.q(),
+                              d_totalWorkitemBuffer,
+                              CL_TRUE,
+                              0,
+                              sizeof(cl_uint),
+                              &h_totalWorkitemBuffer,
+                              0,
+                              NULL,
+                              NULL);
+
+          std::cout << "Total workitems so far = " << h_totalWorkitemBuffer
+            << std::endl;
         // ------------------------------------------------------------------ //
 
 	}
@@ -288,6 +357,7 @@ int main(int argc, char** argv)
 
 
 	// Copy string buffer used for debugging from device to host.
+        /*
 	clEnqueueReadBuffer(cl.q(),                   // The command queue.
 	                    d_outputBuffer,           // Debug buffer on the device.
 	                    CL_TRUE,                  // Blocking? (ie. Wait at this line until read has finished?)
@@ -300,7 +370,7 @@ int main(int argc, char** argv)
 
         std::cout << "Enqueued ReadBuffer for d_outputBuffer\n";
 	// Tack a null terminator at the end of the string.
-	h_outputBuffer[16383] = '\0';
+	h_outputBuffer[16383] = '\0';*/
 
         run_omp();
         int success = 1;

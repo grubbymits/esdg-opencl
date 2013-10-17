@@ -1247,26 +1247,39 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region,
     return;
   }
 
+  if (isa<CompoundStmt>(Then)) {
 #ifdef DBG_WRKGRP
     std::cerr << "if statement body is a CompoundStmt" << std::endl;
 #endif
 
-  CompoundStmt *CS = cast<CompoundStmt>(Then);
-  for (CompoundStmt::body_iterator CI = CS->body_begin(), CE = CS->body_end();
-       CI != CE; ++CI) {
+    CompoundStmt *CS = cast<CompoundStmt>(Then);
+    for (CompoundStmt::body_iterator CI = CS->body_begin(), CE = CS->body_end();
+         CI != CE; ++CI) {
 
-    if (!(*CI))
-      continue;
+      if (!(*CI))
+        continue;
 
 #ifdef DBG_WRKGRP
-    std::cerr << "iterating through ConditionalRegion" << std::endl;
+      std::cerr << "iterating through ConditionalRegion" << std::endl;
 #endif
-    CheckForUnary(Region, ifStmt, *CI);
+      CheckForUnary(Region, ifStmt, *CI);
 
-    if (isa<IfStmt>(*CI))
-      TraverseConditionalRegion(Region, *CI);
-    if (isLoop(*CI))
-      TraverseRegion(*CI);
+      if (isa<IfStmt>(*CI))
+        TraverseConditionalRegion(Region, *CI);
+      else if (isLoop(*CI))
+        TraverseRegion(*CI);
+    }
+  }
+  else {
+    for (Stmt::child_iterator SI = Then->child_begin(), SE = Then->child_end();
+         SI != SE; ++SI) {
+
+      CheckForUnary(Region, ifStmt, *SI);
+      if (isa<IfStmt>(*SI))
+        TraverseConditionalRegion(Region, *SI);
+      else if (isLoop(*SI))
+        TraverseRegion(*SI);
+    }
   }
 }
 

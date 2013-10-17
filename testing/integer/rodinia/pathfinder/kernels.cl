@@ -13,14 +13,18 @@ __kernel void dynproc_kernel (int iteration,
                               int HALO,
                               __local int* prev,
                               __local int* result,
-                              __global int* outputBuffer,
+                              //__global int* outputBuffer,
                               __global int* breakCounter,
-                              __global int* computedCounter)
+                              __global int* computedCounter,
+                              __global int* workitemCounter,
+                              __global int* totalWorkitems)
 {
 	int BLOCK_SIZE = get_local_size(0);
 	int bx = get_group_id(0);
 	int tx = get_local_id(0);
-	//printf("Group id = %d", bx);
+
+	workitemCounter[bx]++;
+	(*totalWorkitems)++;
 
 	// Each block finally computes result for a small block
 	// after N iterations.
@@ -79,13 +83,13 @@ __kernel void dynproc_kernel (int iteration,
 			
 			// ===================================================================
 			// add debugging info to the debug output buffer...
-			if (tx==11 && i==0)
-			{
+			//if (tx==11 && i==0)
+			//{
 				// set bufIndex to what value/range of values you want to know.
-				int bufIndex = gpuSrc[xidx];
+				//int bufIndex = gpuSrc[xidx];
 				// dont touch the line below.
-				outputBuffer[bufIndex] = 1;
-			}
+				//outputBuffer[bufIndex] = 1;
+			//}
 			// ===================================================================
 		}
 
@@ -95,7 +99,7 @@ __kernel void dynproc_kernel (int iteration,
 		{
 			// we are on the last iteration, and thus don't need to 
 			// compute for the next step.
-	                breakCounter[get_group_id(0)]++;
+	        breakCounter[get_group_id(0)]++;
 			break;
 		}
 
@@ -103,7 +107,7 @@ __kernel void dynproc_kernel (int iteration,
 		{
 			//Assign the computation range
 			prev[tx] = result[tx];
-                        computedCounter[get_group_id(0)]++;
+            computedCounter[get_group_id(0)]++;
 		}
 		barrier(CLK_LOCAL_MEM_FENCE);
 	}

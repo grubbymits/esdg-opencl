@@ -582,10 +582,13 @@ void _clMemcpyD2H(cl_mem d_mem, int size, void * h_mem) throw(string){
 
 //--------------------------------------------------------
 //set kernel arguments
-void _clSetArgs(int kernel_id, int arg_idx, void * d_mem, int size = 0) throw(string){
-	if(!size){
-		oclHandles.cl_status = clSetKernelArg(oclHandles.kernel[kernel_id], arg_idx, sizeof(d_mem), &d_mem);
-		#ifdef ERRMSG
+void _clSetArgs(int kernel_id, int arg_idx, void * d_mem, int size = 0)
+  throw(string) {
+
+  if(!size){
+    oclHandles.cl_status = clSetKernelArg(oclHandles.kernel[kernel_id], arg_idx,
+                                          sizeof(d_mem), &d_mem);
+    #ifdef ERRMSG
 		oclHandles.error_str = "excpetion in _clSetKernelArg() ";
 		switch(oclHandles.cl_status){
 			case CL_INVALID_KERNEL:

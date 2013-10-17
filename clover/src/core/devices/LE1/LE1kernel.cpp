@@ -103,18 +103,6 @@ size_t LE1Kernel::preferredWorkGroupSizeMultiple() const
     return 0; // TODO set preferredWorkGroupSizeMultiple after ILP analysis
 }
 
-static std::string ConvertToBinary(unsigned int value) {
-  std::string binary_string;
-    unsigned mask = 0x80000000;
-    while(mask > 0x00) {
-      if((value & mask) != 0)
-        binary_string += "1";
-      else
-        binary_string += "0";
-      mask = mask >> 1;
-    }
-    return binary_string;
-}
 
 template<typename T>
 T k_exp(T base, unsigned int e)
@@ -583,6 +571,8 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
     }
   }
 
+  launcher << "\nvoid reset_local(int *buffer, int size);\n\n";
+
   // Create a main function to the launcher for the kernel
   launcher << "int main(void) {\n";
   unsigned NestedLoops = 0;
@@ -612,11 +602,12 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
     if ((arg.kind() == Kernel::Arg::Buffer) &&
         arg.allocAtKernelRuntime()) {
       // We're defining the pointers as ints, so divide
+      // FIXME what if the size isn't divisible by four?
       unsigned size = arg.allocAtKernelRuntime() / 4;
       launcher << "(&BufferArg_" << i << " + (__builtin_le1_read_cpuid() * "
         << size << "))";
     }
-    // Global
+    // Global and local
     else if (arg.kind() == Kernel::Arg::Buffer)
       launcher << "&BufferArg_" << i;
     // Private
@@ -628,11 +619,26 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
       launcher << ", ";
     else {
       launcher << ");\n";
+
+      for (unsigned i = 0; i < kernel->numArgs(); ++i) {
+        const Kernel::Arg& arg = kernel->arg(i);
+        if (arg.file() == Kernel::Arg::Local) {
+          unsigned size = arg.allocAtKernelRuntime() / 4;
+          launcher << "      reset_local(&BufferArg_" << i << ", "
+            << size << ");\n";
+        }
+      }
+
       for (unsigned i = 0; i < NestedLoops; ++i)
         launcher << "}\n";
       launcher << "return 0;\n}";
     }
   }
+
+  launcher << "\nvoid reset_local(int *buffer, int size) {\n"
+    << "  for (unsigned id = 0; id < size; ++id)\n"
+    << "    buffer[id] = 0;\n"
+    << "}\n";
 
   LauncherString = launcher.str();
 #ifdef DBG_KERNEL
