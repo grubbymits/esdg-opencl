@@ -185,6 +185,7 @@ int main(int argc, char** argv)
         std::cout << "Created d_outputBuffer\n";*/
 
         unsigned numWorkGroups = (rows * cols / cl.localSize());
+        unsigned globalSize = rows * cols;
         std::cout << "numWorkGroups = " << numWorkGroups << std::endl;
 
         // Create our counters
@@ -199,28 +200,42 @@ int main(int argc, char** argv)
                                                      sizeof(cl_uint) * numWorkGroups,
                                                      h_breakCounterBuffer,
                                                      NULL);
+        cl_uint *h_validBuffer=
+          (cl_uint*)malloc(globalSize * sizeof(cl_uint));
+
+        for (unsigned i = 0; i < globalSize ; ++i)
+          h_validBuffer[i] = 0;
+
+        cl_mem d_validBuffer =
+          clCreateBuffer(cl.ctxt(),
+                         CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                         sizeof(cl_uint) * globalSize,
+                         h_validBuffer,
+                         NULL);
+
         cl_uint *h_computedCounterBuffer =
-          (cl_uint*)malloc(numWorkGroups * sizeof(cl_uint));
+          (cl_uint*)malloc(globalSize * sizeof(cl_uint));
 
-        for (unsigned i = 0; i < numWorkGroups; ++i)
-          h_computedCounterBuffer[i] = 0;
+        for (unsigned i = 0; i < globalSize ; ++i)
+          h_computedCounterBuffer[i] = -1;
 
-        cl_mem d_computedCounterBuffer = clCreateBuffer(cl.ctxt(),
-                                                     CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                                                     sizeof(cl_uint) * numWorkGroups,
-                                                     h_computedCounterBuffer,
-                                                     NULL);
+        cl_mem d_computedCounterBuffer =
+          clCreateBuffer(cl.ctxt(),
+                         CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                         sizeof(cl_uint) * globalSize,
+                         h_computedCounterBuffer,
+                         NULL);
 
         cl_uint *h_workitemCounterBuffer =
-          (cl_uint*)malloc(numWorkGroups * sizeof(cl_uint));
+          (cl_uint*)malloc(globalSize * sizeof(cl_uint));
 
-        for (unsigned i = 0; i < numWorkGroups; ++i)
+        for (unsigned i = 0; i < globalSize; ++i)
           h_workitemCounterBuffer[i] = 0;
 
         cl_mem d_workitemCounterBuffer =
           clCreateBuffer(cl.ctxt(),
                          CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                         sizeof(cl_uint) * numWorkGroups,
+                         sizeof(cl_uint) * globalSize,
                          h_workitemCounterBuffer,
                          NULL);
 
@@ -280,10 +295,29 @@ int main(int argc, char** argv)
                               (void*) &d_workitemCounterBuffer);
                 clSetKernelArg(cl.kernel(kn), 14, sizeof(cl_mem),
                                (void*) &d_totalWorkitemBuffer);
+                clSetKernelArg(cl.kernel(kn), 15, sizeof(cl_mem),
+                               (void*) &d_validBuffer);
                 std::cout << "Set all args\n";
 		cl.launch(kn);
 
         // --------------------------- DEBUG ------------------------------- //
+                std::cout << std::endl;
+        clEnqueueReadBuffer(cl.q(),
+                            d_validBuffer,
+                            CL_TRUE,
+                            0,
+                            sizeof(cl_uint) * globalSize,
+                            h_validBuffer,
+                            0,
+                            NULL,
+                            NULL);
+
+          for (unsigned id = 0; id < globalSize; ++id)
+            if (h_validBuffer[id])
+              std::cout << "id " << id << " is valid" << std::endl;
+
+          std::cout << std::endl;
+
         clEnqueueReadBuffer(cl.q(),
                             d_breakCounterBuffer,
                             CL_TRUE,
@@ -295,37 +329,45 @@ int main(int argc, char** argv)
                             NULL);
 
           for (unsigned group = 0; group < numWorkGroups; ++group)
-            std::cout << "breaks in group " << group << " = "
+            std::cout << "total breaks in group " << group << " = "
               << (unsigned)h_breakCounterBuffer[group] << std::endl;
+
+          std::cout << std::endl;
 
         clEnqueueReadBuffer(cl.q(),
                             d_computedCounterBuffer,
                             CL_TRUE,
                             0,
-                            sizeof(cl_uint) * numWorkGroups,
+                            sizeof(cl_uint) * rows * cols,
                             h_computedCounterBuffer,
                             0,
                             NULL,
                             NULL);
 
-          for (unsigned group = 0; group < numWorkGroups; ++group)
-            std::cout << "computed in group " << group << " = "
-              << (unsigned)h_computedCounterBuffer[group] << std::endl;
-
         clEnqueueReadBuffer(cl.q(),
                             d_workitemCounterBuffer,
                             CL_TRUE,
                             0,
-                            sizeof(cl_uint) * numWorkGroups,
+                            sizeof(cl_uint) * globalSize,
                             h_workitemCounterBuffer,
                             0,
                             NULL,
                             NULL);
 
-          for (unsigned group = 0; group < numWorkGroups; ++group)
-            std::cout << "workitems in group " << group << " = "
-              << (unsigned)h_workitemCounterBuffer[group] << std::endl;
+          for (unsigned id = 0; id < globalSize; ++id)
+            if (h_workitemCounterBuffer[id] != 0)
+              std::cout << "computed counter for id " << id << " = "
+                << (unsigned)h_workitemCounterBuffer[id] << std::endl;
 
+          std::cout << std::endl;
+
+          for (unsigned id = 0; id < rows * cols; ++id)
+            if ((int)h_computedCounterBuffer[id] != -1)
+              std::cout << "computed group computed at id " << id
+                << " = "
+                << (int)h_computedCounterBuffer[id] << std::endl;
+
+          std::cout << std::endl;
 
           clEnqueueReadBuffer(cl.q(),
                               d_totalWorkitemBuffer,
@@ -336,6 +378,8 @@ int main(int argc, char** argv)
                               0,
                               NULL,
                               NULL);
+
+          std::cout << std::endl;
 
           std::cout << "Total workitems so far = " << h_totalWorkitemBuffer
             << std::endl;
