@@ -274,7 +274,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
   ++KernelNumber;
 
   /* turn printout on */
-  PRINT_OUT = 0;
+  PRINT_OUT = 1;
   bool MEM_DUMP = true;
 
     /* Load IRAM */

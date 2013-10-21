@@ -152,8 +152,6 @@ int main(int argc, char** argv)
 	                                  sizeof(cl_int)*(size-cols),
 	                                  (data + cols),
 	                                  NULL);
-        std::cout << "Created d_gpuWall Buffer of size " << std::hex
-          << (unsigned)(sizeof(cl_int)*(size-cols)) << " bytes" << std::endl;
 
 	cl_mem d_gpuResult[2];
 
@@ -162,14 +160,12 @@ int main(int argc, char** argv)
 	                                sizeof(cl_int)*cols,
 	                                data,
 	                                NULL);
-        std::cout << "Created d_gpuResult Buffer 0 \n";
 
 	d_gpuResult[1] = clCreateBuffer(cl.ctxt(),
 	                                CL_MEM_READ_WRITE,
 	                                sizeof(cl_int)*cols,
 	                                NULL,
 	                                NULL);
-        std::cout << "Create d_gpuResult Buffer 1\n";
 
         /*
 	cl_int* h_outputBuffer = (cl_int*)malloc(16384*sizeof(cl_int));
@@ -200,8 +196,8 @@ int main(int argc, char** argv)
                                                      sizeof(cl_uint) * numWorkGroups,
                                                      h_breakCounterBuffer,
                                                      NULL);
-        cl_uint *h_validBuffer=
-          (cl_uint*)malloc(globalSize * sizeof(cl_uint));
+        cl_uchar *h_validBuffer=
+          (cl_uchar*)malloc(globalSize * sizeof(cl_uchar));
 
         for (unsigned i = 0; i < globalSize ; ++i)
           h_validBuffer[i] = 0;
@@ -209,7 +205,7 @@ int main(int argc, char** argv)
         cl_mem d_validBuffer =
           clCreateBuffer(cl.ctxt(),
                          CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
-                         sizeof(cl_uint) * globalSize,
+                         sizeof(cl_uchar) * globalSize,
                          h_validBuffer,
                          NULL);
 
@@ -297,7 +293,6 @@ int main(int argc, char** argv)
                                (void*) &d_totalWorkitemBuffer);
                 clSetKernelArg(cl.kernel(kn), 15, sizeof(cl_mem),
                                (void*) &d_validBuffer);
-                std::cout << "Set all args\n";
 		cl.launch(kn);
 
         // --------------------------- DEBUG ------------------------------- //
@@ -306,7 +301,7 @@ int main(int argc, char** argv)
                             d_validBuffer,
                             CL_TRUE,
                             0,
-                            sizeof(cl_uint) * globalSize,
+                            sizeof(cl_uchar) * globalSize,
                             h_validBuffer,
                             0,
                             NULL,
@@ -314,7 +309,7 @@ int main(int argc, char** argv)
 
           for (unsigned id = 0; id < globalSize; ++id)
             if (h_validBuffer[id])
-              std::cout << "id " << id << " is valid" << std::endl;
+              std::cout << "global id " << id << " is valid" << std::endl;
 
           std::cout << std::endl;
 
@@ -329,7 +324,7 @@ int main(int argc, char** argv)
                             NULL);
 
           for (unsigned group = 0; group < numWorkGroups; ++group)
-            std::cout << "total breaks in group " << group << " = "
+            std::cout << "total breaks in group " << group << " = " << std::dec
               << (unsigned)h_breakCounterBuffer[group] << std::endl;
 
           std::cout << std::endl;
@@ -356,18 +351,21 @@ int main(int argc, char** argv)
 
           for (unsigned id = 0; id < globalSize; ++id)
             if (h_workitemCounterBuffer[id] != 0)
-              std::cout << "computed counter for id " << id << " = "
-                << (unsigned)h_workitemCounterBuffer[id] << std::endl;
+              std::cout << "total times 'computed' at global id " << id << " = "
+                << std::dec << (unsigned)h_workitemCounterBuffer[id]
+                << " in group " << h_computedCounterBuffer[id]
+                << std::endl;
 
           std::cout << std::endl;
 
-          for (unsigned id = 0; id < rows * cols; ++id)
+          /*
+          for (unsigned id = 0; id < globalSize; ++id)
             if ((int)h_computedCounterBuffer[id] != -1)
-              std::cout << "computed group computed at id " << id
-                << " = "
+              std::cout << "computed group computed at global id " << id
+                << " = " << std::dec
                 << (int)h_computedCounterBuffer[id] << std::endl;
 
-          std::cout << std::endl;
+          std::cout << std::endl;*/
 
           clEnqueueReadBuffer(cl.q(),
                               d_totalWorkitemBuffer,
@@ -381,8 +379,8 @@ int main(int argc, char** argv)
 
           std::cout << std::endl;
 
-          std::cout << "Total workitems so far = " << h_totalWorkitemBuffer
-            << std::dec << std::endl;
+          std::cout << "Total workitems so far = " << std::dec
+            << (unsigned) h_totalWorkitemBuffer << std::endl;
         // ------------------------------------------------------------------ //
 
 	}
@@ -397,7 +395,6 @@ int main(int argc, char** argv)
 	                    0,                        // Number of events in wait list. Not used.
 	                    NULL,                     // Event wait list. Not used.
 	                    NULL);                    // Event object for determining status. Not used.
-        std::cout << "Enqueued ReadBuffer for d_gpuResult\n";
 
 
 	// Copy string buffer used for debugging from device to host.

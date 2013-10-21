@@ -20,19 +20,17 @@ __kernel void dynproc_kernel (int iteration,
                               __global int* totalWorkitems,
                               __global bool* validBuffer)
 {
+	(*totalWorkitems)++;
 	int BLOCK_SIZE = get_local_size(0);
 	int bx = get_group_id(0);
 	int tx = get_local_id(0);
 
 	
-	(*totalWorkitems)++;
 
 	// Each block finally computes result for a small block
 	// after N iterations.
 	// it is the non-overlapping small blocks that cover
 	// all the input data
-
-        /* CLK_LOCAL_MEM_FENCE is defined in cl.h */
 
 	// calculate the small block size.
 	int small_block_cols = BLOCK_SIZE - (iteration*HALO*2);
@@ -120,7 +118,7 @@ __kernel void dynproc_kernel (int iteration,
 			prev[tx] = result[tx];
 			unsigned computedId = get_global_id(0);
 			workitemCounter[computedId]++;
-            computedCounter[computedId] = get_group_id(0);
+                        computedCounter[computedId] = get_group_id(0);
 		}
 		barrier(CLK_LOCAL_MEM_FENCE);
 	}
