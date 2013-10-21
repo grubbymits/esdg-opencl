@@ -120,6 +120,11 @@ void clang::RewriteMacrosInInput(Preprocessor &PP, raw_ostream *OS) {
       continue;
     }
 
+    if (RawTok.is(tok::comment)) {
+      RawTok = GetNextRawTok(RawTokens, CurRawTok, false);
+      continue;
+    }
+
     // If the raw file hits a preprocessor directive, they will be extra tokens
     // in the raw file that don't exist in the preprocsesed file.  However, we
     // choose to preserve them in the output file and otherwise handle them

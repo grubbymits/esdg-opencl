@@ -31,6 +31,8 @@ __kernel void dynproc_kernel (int iteration,
 	// it is the non-overlapping small blocks that cover
 	// all the input data
 
+        /* CLK_LOCAL_MEM_FENCE is defined in cl.h */
+
 	// calculate the small block size.
 	int small_block_cols = BLOCK_SIZE - (iteration*HALO*2);
 

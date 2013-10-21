@@ -296,7 +296,7 @@ int main(int argc, char** argv)
 
           for (unsigned group = 0; group < numWorkGroups; ++group)
             std::cout << "breaks in group " << group << " = "
-              << (unsigned)h_breakCounterBuffer[group] << std::endl;
+              << std::dec << (unsigned)h_breakCounterBuffer[group] << std::endl;
 
         clEnqueueReadBuffer(cl.q(),
                             d_computedCounterBuffer,
@@ -310,7 +310,7 @@ int main(int argc, char** argv)
 
           for (unsigned group = 0; group < numWorkGroups; ++group)
             std::cout << "computed in group " << group << " = "
-              << (unsigned)h_computedCounterBuffer[group] << std::endl;
+              << std::dec << (unsigned)h_computedCounterBuffer[group] << std::endl;
 
         clEnqueueReadBuffer(cl.q(),
                             d_workitemCounterBuffer,
@@ -323,7 +323,7 @@ int main(int argc, char** argv)
                             NULL);
 
           for (unsigned group = 0; group < numWorkGroups; ++group)
-            std::cout << "workitems in group " << group << " = "
+            std::cout << "workitems in group " << group << " = " << std::dec
               << (unsigned)h_workitemCounterBuffer[group] << std::endl;
 
 
@@ -338,7 +338,7 @@ int main(int argc, char** argv)
                               NULL);
 
           std::cout << "Total workitems so far = " << h_totalWorkitemBuffer
-            << std::endl;
+            << std::dec << std::endl;
         // ------------------------------------------------------------------ //
 
 	}
