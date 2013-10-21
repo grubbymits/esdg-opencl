@@ -1429,6 +1429,10 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   DeclRefExpr *RefExpr = cast<DeclRefExpr>(expr);
   std::string VarName = RefExpr->getDecl()->getName().str();
 
+#ifdef DBG_WRKGRP
+  std::cerr << "VisitDeclRefExpr for " << VarName << std::endl;
+#endif
+
   // Don't add it if its one of an work-item indexes
   if (VarName.compare("__esdg_idx") == 0)
     return true;

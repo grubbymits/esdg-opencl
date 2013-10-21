@@ -17,13 +17,14 @@ __kernel void dynproc_kernel (int iteration,
                               __global int* breakCounter,
                               __global int* computedCounter,
                               __global int* workitemCounter,
-                              __global int* totalWorkitems)
+                              __global int* totalWorkitems,
+                              __global bool* validBuffer)
 {
 	int BLOCK_SIZE = get_local_size(0);
 	int bx = get_group_id(0);
 	int tx = get_local_id(0);
 
-	workitemCounter[bx]++;
+	
 	(*totalWorkitems)++;
 
 	// Each block finally computes result for a small block
@@ -58,11 +59,19 @@ __kernel void dynproc_kernel (int iteration,
 
 	bool isValid = IN_RANGE(tx, validXmin, validXmax);
 
+	unsigned global_id = get_global_id(0);
+
+	if (isValid)
+		validBuffer[global_id] = true;
+
 
 	if(IN_RANGE(xidx, 0, cols-1))
 	{
+
 		prev[tx] = gpuSrc[xidx];
 	}
+
+
 	
 	barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -109,7 +118,9 @@ __kernel void dynproc_kernel (int iteration,
 		{
 			//Assign the computation range
 			prev[tx] = result[tx];
-            computedCounter[get_group_id(0)]++;
+			unsigned computedId = get_global_id(0);
+			workitemCounter[computedId]++;
+            computedCounter[computedId] = get_group_id(0);
 		}
 		barrier(CLK_LOCAL_MEM_FENCE);
 	}

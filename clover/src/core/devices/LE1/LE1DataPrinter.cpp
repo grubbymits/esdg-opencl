@@ -253,9 +253,11 @@ bool LE1DataPrinter::AppendDataArea() {
     if (Arg.kind() != Kernel::Arg::Buffer)
       continue;
 
-    if (Arg.file() != Kernel::Arg::Local)
+    if (Arg.file() != Kernel::Arg::Local) {
       if (!HandleBufferArg(Arg))
         return false;
+    }
+    else InitialiseLocal(Arg, ArgAddrs[i]);
   }
 
 #ifdef DBG_KERNEL
@@ -273,6 +275,30 @@ void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
       << attr << " - "
       << ConvertToBinary(attr) << std::endl;
     //addr += 4;
+}
+
+void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
+  unsigned TotalSize = arg.allocAtKernelRuntime();
+  llvm::Type* type = arg.type();
+
+  void *Data = new unsigned char[TotalSize]();
+
+  if (type->getTypeID() == llvm::Type::IntegerTyID) {
+#ifdef DBG_KERNEL
+      std::cerr << "Data is int\n";
+#endif
+      if (type->isIntegerTy(8)) {
+        PrintData(Data, Addr, 0, sizeof(char), TotalSize);
+      }
+      else if (type->isIntegerTy(16)) {
+        PrintData(Data, Addr, 0, sizeof(short), TotalSize);
+      }
+      else if (type->isIntegerTy(32)) {
+        PrintData(Data, Addr, 0, sizeof(int), TotalSize);
+      }
+    }
+
+  delete (unsigned char*)Data;
 }
 
 bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
