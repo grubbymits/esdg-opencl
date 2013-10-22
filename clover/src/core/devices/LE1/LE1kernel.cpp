@@ -417,10 +417,13 @@ bool LE1KernelEvent::AllocateBuffers() {
 bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   // TODO Create a proper .s file:
 #ifdef DBG_KERNEL
-  std::cerr << "Entering createFinalSource\n";
+  std::cerr << "Entering createFinalSource: ";
 #endif
 
   KernelName = p_event->kernel()->function(p_device)->getName();
+#ifdef DBG_KERNEL
+  std::cerr << KernelName << std::endl;
+#endif
   OriginalSource = prog->getSource();
   OriginalSourceName = KernelName + ".cl";
   CoarsenedSourceName = "workgroup_" + KernelName  + ".cl";
@@ -449,6 +452,10 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
     return false;
 
   p_event->kernel()->SetBuilt();
+#if DBG_KERNEL
+  std::cerr << "Successfully leaving createFinalSource" << std::endl;
+#endif
+
   return true;
 
   /*

@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = -g -O2
+CXXFLAGS = -g -O0
 INC = -I/opt/esdg-opencl/include -I/usr/include/x86_64-linux-gnu/c++/4.7 -I../SDKUtil/include
 LIBS = -L/opt/esdg-opencl/lib -lOpenCL -L../SDKUtil -lSDKUtil
 

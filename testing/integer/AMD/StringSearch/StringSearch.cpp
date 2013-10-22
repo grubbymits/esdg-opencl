@@ -518,6 +518,7 @@ int StringSearch::verifyResults()
 
         // compare the results and see if they match 
         bool result = (count == cpuResults.size());
+        std::cout << "cpuResults.size = " << cpuResults.size() << std::endl;
         result = result && std::equal (ptrBuff, ptrBuff+count, cpuResults.begin());
         if(result)
         {

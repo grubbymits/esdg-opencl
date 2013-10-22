@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = -O2 -c -g -fPIC
+CXXFLAGS = -c -g -fPIC
 SRC = $(wildcard *.cpp)
 OBJ = $(patsubst %.cpp, %.o, $(SRC))
 INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
