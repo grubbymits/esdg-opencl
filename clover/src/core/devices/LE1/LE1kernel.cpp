@@ -733,6 +733,39 @@ bool LE1KernelEvent::run() {
         p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
                                               (unsigned*)buffer->data());
       }
+
+      else if (Arg.type()->getTypeID() == llvm::Type::VectorTyID) {
+#ifdef DBG_KERNEL
+        std::cerr << "Data is vector type\n";
+#endif
+        llvm::Type* elementType =
+          static_cast<llvm::VectorType*>(Arg.type())->getElementType();
+
+        if (elementType->getTypeID() == llvm::Type::IntegerTyID) {
+#ifdef DBG_KERNEL
+          std::cerr << "Elements are integers\n";
+#endif
+          if (elementType->isIntegerTy(8)) {
+            p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
+                                                (unsigned char*)buffer->data());
+          }
+          else if (elementType->isIntegerTy(16)) {
+            std::cerr << "!!! ERROR - shorts still aren't handled!"
+              << std::endl;
+            wasSuccess = false;
+            break;
+          }
+          else if (elementType->isIntegerTy(32)) {
+            p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
+                                              (unsigned*)buffer->data());
+          }
+        }
+        else {
+          std::cerr << " !!! ERROR - unhandled vector buffer type!!\n";
+          wasSuccess = false;
+          break;
+        }
+      }
       else {
         std::cerr << " !!! ERROR - unhandled buffer type!!\n";
         wasSuccess = false;

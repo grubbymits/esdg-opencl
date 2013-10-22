@@ -1,28 +1,7 @@
-DEPTH = ../../../../..
+CXX = clang++
+CXXFLAGS = -g -O0
+INC = -I/opt/esdg-opencl/include -I/usr/include/x86_64-linux-gnu/c++/4.7 -I../SDKUtil/include
+LIBS = -L/opt/esdg-opencl/lib -lOpenCL -L../SDKUtil -lSDKUtil
 
-include $(DEPTH)/make/openclsdkdefs.mk 
-
-####
-#
-#  Targets
-#
-####
-
-OPENCL			= 1
-SAMPLE_EXE		= 1
-EXE_TARGET 		= BinarySearch
-EXE_TARGET_INSTALL   	= BinarySearch
-
-####
-#
-#  C/CPP files
-#
-####
-
-FILES 	= BinarySearch
-CLFILES	= BinarySearch_Kernels.cl
-
-LLIBS  	+= SDKUtil
-
-include $(DEPTH)/make/openclsdkrules.mk 
-
+binary-search: BinarySearch.cpp
+	$(CXX) $(CXXFLAGS) $(INC) $< $(LIBS) -o $@

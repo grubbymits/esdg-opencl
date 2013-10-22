@@ -27,7 +27,7 @@ int BinarySearch::setupBinarySearch()
     cl_uint max = length * 20;
     cl_uint inputSizeBytes = length *  sizeof(cl_uint);
 
-	int status = mapBuffer( inputBuffer, input, inputSizeBytes, CL_MAP_WRITE_INVALIDATE_REGION);
+	int status = mapBuffer( inputBuffer, input, inputSizeBytes, CL_MAP_WRITE);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(inputBuffer in setupBinarySearch)");
 
     // random initialisation of input
@@ -125,7 +125,7 @@ BinarySearch::setupCL(void)
     }
     else //deviceType = "gpu" 
     {
-        dType = CL_DEVICE_TYPE_GPU;
+        dType = CL_DEVICE_TYPE_ACCELERATOR;
         if(isThereGPU() == false)
         {
             std::cout << "GPU not found. Falling back to CPU device" << std::endl;
@@ -292,7 +292,7 @@ BinarySearch::runCLKernels(void)
     status = mapBuffer( outputBuffer, output, sizeof(cl_uint4), CL_MAP_WRITE );
 	CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(outputBuffer)");   
 
-	status = mapBuffer( inputBuffer, input, inputSizeBytes, CL_MAP_WRITE_INVALIDATE_REGION);
+	status = mapBuffer( inputBuffer, input, inputSizeBytes, CL_MAP_WRITE);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(inputBuffer in setupBinarySearch");
 
     if((input[0] > findMe) || (input[length - 1] < findMe))

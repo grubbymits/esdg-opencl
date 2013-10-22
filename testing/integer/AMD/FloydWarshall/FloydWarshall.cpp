@@ -121,7 +121,7 @@ FloydWarshall::setupCL(void)
     }
     else //deviceType = "gpu" 
     {
-        dType = CL_DEVICE_TYPE_GPU;
+        dType = CL_DEVICE_TYPE_ACCELERATOR;
         if(isThereGPU() == false)
         {
             std::cout << "GPU not found. Fall back to CPU device" << std::endl;

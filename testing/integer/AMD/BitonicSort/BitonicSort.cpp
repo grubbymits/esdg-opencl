@@ -24,7 +24,7 @@ int BitonicSort::setupBitonicSort()
     // allocate and init memory used by host 
     inputSizeBytes = length * sizeof(cl_uint);
 
-    int status = mapBuffer( inputBuffer, input, inputSizeBytes, CL_MAP_WRITE_INVALIDATE_REGION);
+    int status = mapBuffer( inputBuffer, input, inputSizeBytes, CL_MAP_WRITE);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(inputBuffer)");
 
     // random initialisation of input
@@ -123,7 +123,7 @@ BitonicSort::setupCL(void)
     }
     else //deviceType = "gpu" 
     {
-        dType = CL_DEVICE_TYPE_GPU;
+        dType = CL_DEVICE_TYPE_ACCELERATOR;
         if(isThereGPU() == false)
         {
             std::cout << "GPU not found. Falling back to CPU device" << std::endl;
