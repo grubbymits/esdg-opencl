@@ -448,13 +448,14 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
   : ASTVisitorBase(R, x, y, z) {
 
     isFirstLoop = true;
-    InvalidThreadInit << "bool __kernel_invalid_threads[" << x << "]";
+    InvalidThreadInit << "bool __kernel_invalid_global_threads[" << x << "]";
     if (y > 1)
       InvalidThreadInit << "[" << y << "]";
     if (z > 1)
       InvalidThreadInit << "[" << z << "]";
     InvalidThreadInit << " = {false};\n";
-    InvalidThreadInit << "unsigned __kernel_total_invalid_threads = 0;\n";
+    InvalidThreadInit << "unsigned __kernel_total_invalid_global_threads = 0;"
+      << std::endl;
     returnFixer = new ReturnFixer(&SourceToInsert, x, y, z);
     breakFixer = new BreakFixer(&SourceToInsert, x, y, z);
 }
@@ -469,7 +470,7 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
     if (!ReturnStmts.empty() && !Barriers.empty()) {
       InsertText(OuterLoop->getLocStart(), InvalidThreadInit.str());
       // FIXME This only works for one dimension!
-      OpenWhile << "if (__kernel_invalid_threads[__esdg_idx])\n";
+      OpenWhile << "if (__kernel_invalid_global_threads[__esdg_idx])\n";
       OpenWhile << "  continue;";
     }
 

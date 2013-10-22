@@ -92,7 +92,7 @@ __kernel void
     {
         if (compare(text+stringPos, localPattern, patternLength) == 1)
         {
-            int count = atomic_inc(&groupSuccessCounter);
+            int count = groupSuccessCounter++; //atomic_inc(&groupSuccessCounter);
             resultBuffer[beginSearchIdx+count] = stringPos;
         }
     }
@@ -189,7 +189,7 @@ __kernel void
             if ((first == TOLOWER(text[beginSearchIdx+stringPos])) && (second == TOLOWER(text[beginSearchIdx+stringPos+1])))
 #endif
             {
-                stackPos = atomic_inc(&stack1Counter);
+                stackPos = stack1Counter++; //atomic_inc(&stack1Counter);
                 stack1[stackPos] = stringPos;
             }
         }
@@ -209,7 +209,7 @@ __kernel void
       // another 8-bytes from the positions in stack1 and store the match positions in stack2.
         if(localIdx < stackSize)
         {
-            revStackPos = atomic_dec(&stack1Counter);
+            revStackPos = stack1Counter++; //atomic_dec(&stack1Counter);
             int pos = stack1[--revStackPos];
 #ifdef CASE_SENSITIVE
             bool status = (localPattern[2] == text[beginSearchIdx+pos+2]);
@@ -233,7 +233,7 @@ __kernel void
 #endif
             if (status)
             {
-                stackPos = atomic_inc(&stack2Counter);
+                stackPos = stack2Counter++; //atomic_inc(&stack2Counter);
                 stack2[stackPos] = pos;
             }
         }
@@ -251,7 +251,7 @@ __kernel void
         if(localIdx < stackSize)
         {
 #ifdef ENABLE_2ND_LEVEL_FILTER
-            revStackPos = atomic_dec(&stack2Counter);
+            revStackPos = stack2Counter++; //atomic_dec(&stack2Counter);
             int pos = stack2[--revStackPos];
             if (compare(text+beginSearchIdx+pos+10, localPattern+10, patternLength-10) == 1)
 #else
@@ -261,7 +261,7 @@ __kernel void
 #endif
             {
                 // Full match found
-                int count = atomic_inc(&groupSuccessCounter);
+                int count = groupSuccessCounter++; //atomic_inc(&groupSuccessCounter);
                 resultBuffer[beginSearchIdx+count] = beginSearchIdx+pos;
             }
         }

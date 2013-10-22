@@ -339,16 +339,16 @@ int SDKSample::validatePlatformAndDeviceOptions()
             amdPlatform = true; 
 
 
-        cl_device_type dType = CL_DEVICE_TYPE_GPU;
+        cl_device_type dType = CL_DEVICE_TYPE_ACCELERATOR;
         if(deviceType.compare("cpu") == 0)
             dType = CL_DEVICE_TYPE_CPU;
         if(deviceType.compare("gpu") == 0)
-            dType = CL_DEVICE_TYPE_GPU;
+            dType = CL_DEVICE_TYPE_ACCELERATOR;
         else
             dType = CL_DEVICE_TYPE_ALL;
 
         // Check for GPU
-        if(dType == CL_DEVICE_TYPE_GPU)
+        if(dType == CL_DEVICE_TYPE_ACCELERATOR)
         {
             cl_context_properties cps[3] = 
             {

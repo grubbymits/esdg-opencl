@@ -16,7 +16,7 @@ ReturnFixer::ReturnFixer(StringList *list, unsigned x, unsigned y, unsigned z)
   : StmtFixer(list, x, y, z) {
 
   InvalidCounter = "__kernel_total_invalid_global_threads";
-  InvalidArray = "__kernel_global_local_threads";
+  InvalidArray = "__kernel_invalid_global_threads";
 
   InvalidCounterInit = "unsigned ";
   InvalidCounterInit.append(InvalidCounter).append(" = 0;");
@@ -37,11 +37,12 @@ ReturnFixer::ReturnFixer(StringList *list, unsigned x, unsigned y, unsigned z)
   }
   arrayInit << " = { false };";
 
+  AccessInvalidArray = arrayAccess.str();
+  InvalidArrayInit = arrayInit.str();
+
   convert << " { ++" << InvalidCounter << ";\n";
   convert << AccessInvalidArray << " = true;\ncontinue;\n} //";
 
-  AccessInvalidArray = arrayAccess.str();
-  InvalidArrayInit = arrayInit.str();
   UnaryConvert = convert.str();
 
   // FIXME This only works for one dimension!

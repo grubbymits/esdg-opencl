@@ -320,6 +320,7 @@ getOpenCLErrorCodeStr(T input)
             return "CL_INVALID_MIP_LEVEL";                   
         case CL_INVALID_GLOBAL_WORK_SIZE:
             return "CL_INVALID_GLOBAL_WORK_SIZE";            
+            /*
         case CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR:
             return "CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR";
         case CL_PLATFORM_NOT_FOUND_KHR:
@@ -329,7 +330,7 @@ getOpenCLErrorCodeStr(T input)
         case CL_DEVICE_PARTITION_FAILED_EXT:
             return "CL_DEVICE_PARTITION_FAILED_EXT";
         case CL_INVALID_PARTITION_COUNT_EXT:
-            return "CL_INVALID_PARTITION_COUNT_EXT"; 
+            return "CL_INVALID_PARTITION_COUNT_EXT"; */
         default:
             return "unknown error code";
     }
@@ -684,13 +685,14 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
     CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_SINGLE_FP_CONFIG) failed");
 
     // Double precision floating point configuration
+    /*
     status = clGetDeviceInfo(
                     deviceId, 
                     CL_DEVICE_DOUBLE_FP_CONFIG,
                     sizeof(cl_device_fp_config),
                     &doubleFpConfig,
                     NULL);
-    CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_DOUBLE_FP_CONFIG) failed");
+    CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_DOUBLE_FP_CONFIG) failed");*/
 
     // Global memory cache type
     status = clGetDeviceInfo(
@@ -1223,6 +1225,7 @@ SDKCommon::generateBinaryImage(const bifData &binaryData)
     /*
      * If we could find our platform, use it. Otherwise use just available platform.
      */
+    /*
     cl_context_properties cps[5] = 
     {
         CL_CONTEXT_PLATFORM, 
@@ -1230,11 +1233,11 @@ SDKCommon::generateBinaryImage(const bifData &binaryData)
         CL_CONTEXT_OFFLINE_DEVICES_AMD,
         (cl_context_properties)1,
         0
-    };
+    };*/
 
     cl_context context = clCreateContextFromType(
-                            cps,
-                            CL_DEVICE_TYPE_ALL,
+                            NULL,
+                            CL_DEVICE_TYPE_ACCELERATOR,
                             NULL,
                             NULL,
                             &status);
@@ -1481,10 +1484,12 @@ SDKCommon::getPlatform(cl_platform_id &platform, int platformId, bool platformId
         cl_platform_id* platforms = new cl_platform_id[numPlatforms];
         status = clGetPlatformIDs(numPlatforms, platforms, NULL);
         CHECK_OPENCL_ERROR(status, "clGetPlatformIDs failed.");
+        std::cout << "Found " << numPlatforms << " platform(s)" << std::endl;
 
         if(platformIdEnabled)
         {
             platform = platforms[platformId];
+            std::cout << "platformIdEnabled = " << platformId << std::endl;
         }
         else
         {
@@ -1499,7 +1504,7 @@ SDKCommon::getPlatform(cl_platform_id &platform, int platformId, bool platformId
 				CHECK_OPENCL_ERROR(status, "clGetPlatformInfo failed.");
 
                 platform = platforms[i];
-                if (!strcmp(platformName, "Advanced Micro Devices, Inc.")) 
+                if (!strcmp(platformName, "Mesa")) 
                 {
                     break;
                 }
@@ -1509,11 +1514,12 @@ SDKCommon::getPlatform(cl_platform_id &platform, int platformId, bool platformId
         delete[] platforms;
     }
 
+    /*
     if(NULL == platform)
     {
         error("NULL platform found so Exiting Application.");
         return SDK_FAILURE;
-    }
+    }*/
 
     return SDK_SUCCESS;
 }
