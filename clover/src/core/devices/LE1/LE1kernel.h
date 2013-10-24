@@ -334,7 +334,8 @@ class LE1KernelEvent
 
     private:
         void CreateLauncher(std::string &LauncherString,
-                            unsigned *WorkgroupsPerCore);
+                            unsigned *WorkgroupsPerCore,
+                            unsigned disabledCores);
         /*
         bool WriteDataArea();
         void WriteKernelAttr(std::ostringstream &Output, size_t Attr);

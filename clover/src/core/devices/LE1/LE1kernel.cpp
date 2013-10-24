@@ -484,6 +484,7 @@ bool LE1KernelEvent::CompileSource() {
   // TODO This part needs to calculate how many cores to instantiate
   // Impose an upper limit of 12 cores?
   unsigned cores = p_device->numLE1s();
+  unsigned disabledCores = 0;
   unsigned merge_dims[3] = {1, 1, 1};
   unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
 
@@ -491,16 +492,50 @@ bool LE1KernelEvent::CompileSource() {
   // barriers, so we need to take that into consideration. If the user didn't
   // set a local size, we set it just by global_work_size / num_of_cores. We
   // can adjust the launcher to work with several workgroups in this case.
+  // Here we also choose to disable some cores if the data set sizes do not fit
+  // properly onto the current configuration.
+
+  for (unsigned i = 0; i < p_event->work_dim(); ++i) {
+
+    unsigned global_work_size = p_event->global_work_size(i);
+    unsigned local_work_size = p_event->local_work_size(i);
+
+    if (global_work_size > 1) {
+
+      if (local_work_size > 1) {
+        WorkgroupsPerCore[i] = global_work_size / local_work_size;
+        merge_dims[i] = local_work_size;
+      }
+      else {
+        merge_dims[i] = global_work_size / local_work_size;
+        WorkgroupsPerCore[i] = global_work_size / merge_dims[i];
+      }
+
+      if (i == 0) {
+        if (WorkgroupsPerCore[i] % cores != 0) {
+
+          do {
+            ++disabledCores;
+          } while (WorkgroupsPerCore[i] % (cores - disabledCores) != 0);
+
+          WorkgroupsPerCore[i] /= (cores - disabledCores);
+        }
+        else
+          WorkgroupsPerCore[i] /= cores;
+      }
+    }
+  }
+
+  /*
   for(unsigned i = 0; i < p_event->work_dim(); ++i) {
     merge_dims[i] = p_event->global_work_size(i) / cores;
     if (p_event->local_work_size(i) != merge_dims[i]) {
       WorkgroupsPerCore[i] = merge_dims[i] / p_event->local_work_size(i);
       merge_dims[i] = p_event->local_work_size(i);
-
-      if (i != 0)
-        WorkgroupsPerCore[i] *= cores;
     }
-  }
+    if (i != 0)
+      WorkgroupsPerCore[i] *= cores;
+  }*/
 
   // First, write the source string to a file
   std::ofstream SourceFile;
@@ -531,7 +566,7 @@ bool LE1KernelEvent::CompileSource() {
 #endif
 
   std::string LauncherString;
-  CreateLauncher(LauncherString, WorkgroupsPerCore);
+  CreateLauncher(LauncherString, WorkgroupsPerCore, disabledCores);
 
   Compiler MainCompiler(p_device);
   if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
@@ -568,9 +603,19 @@ bool LE1KernelEvent::CompileSource() {
 }
 
 void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
-                                    unsigned *WorkgroupsPerCore) {
+                                    unsigned *WorkgroupsPerCore,
+                                    unsigned disabledCores) {
+
+#ifdef DBG_KERNEL
+  std::cerr << "Entering CreateLauncher with WorkgroupsPerCore = "
+    << WorkgroupsPerCore[0] << ", " << WorkgroupsPerCore[1] << " and "
+    << WorkgroupsPerCore[2] << std::endl
+    << "Number of disabled cores = " << disabledCores << std::endl;
+#endif
+
   // Calculate the addresses in global memory where the arguments will be stored
   Kernel* kernel = p_event->kernel();
+  unsigned totalCores = p_device->numLE1s();
 
   std::stringstream launcher;
   for(unsigned i = 0; i < kernel->numArgs(); ++i) {
@@ -585,6 +630,11 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
 
   // Create a main function to the launcher for the kernel
   launcher << "int main(void) {\n";
+
+  if (disabledCores)
+    launcher << "  if (__builtin_le1_read_cpuid() > "
+      << (totalCores - disabledCores - 1) << ") return 0;\n" << std::endl;
+
   unsigned NestedLoops = 0;
   if (WorkgroupsPerCore[2] != 0) {
     launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2]
