@@ -496,6 +496,9 @@ bool LE1KernelEvent::CompileSource() {
     if (p_event->local_work_size(i) != merge_dims[i]) {
       WorkgroupsPerCore[i] = merge_dims[i] / p_event->local_work_size(i);
       merge_dims[i] = p_event->local_work_size(i);
+
+      if (i != 0)
+        WorkgroupsPerCore[i] *= cores;
     }
   }
 
@@ -598,7 +601,8 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
   if (WorkgroupsPerCore[0] != 0) {
     launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0]
       << "; ++x) {\n"
-    << "        __builtin_le1_set_group_id_0(x);\n";
+    << "        __builtin_le1_set_group_id_0(x + " << WorkgroupsPerCore[0]
+    << " * __builtin_le1_read_cpuid());\n";
     ++NestedLoops;
   }
   launcher<< "        " << KernelName << "(";

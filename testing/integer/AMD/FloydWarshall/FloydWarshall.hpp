@@ -76,7 +76,7 @@ public:
     FloydWarshall(std::string name)
         : SDKSample(name)    {
             seed = 123;
-            numNodes = 256;
+            numNodes = 128;
             pathDistanceMatrix = NULL;
             pathMatrix = NULL;
             verificationPathDistanceMatrix = NULL;
@@ -95,7 +95,7 @@ public:
     FloydWarshall(const char* name)
         : SDKSample(name)    {
             seed = 123;
-            numNodes = 256;
+            numNodes = 128;
             pathDistanceMatrix = NULL;
             pathMatrix = NULL;
             verificationPathDistanceMatrix = NULL;

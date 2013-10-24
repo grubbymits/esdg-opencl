@@ -120,7 +120,7 @@ RadixSort::setupRadixSort()
      */
     int status = mapBuffer( origUnsortedDataBuf, unsortedData,
                             (elementCount * sizeof(cl_uint)),
-                            CL_MAP_WRITE_INVALIDATE_REGION );
+                            CL_MAP_WRITE);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(origUnsortedDataBuf)");
 
 	for(int i=0; i < elementCount; i++)
@@ -168,7 +168,7 @@ RadixSort::setupCL(void)
     }
     else //deviceType = "gpu" 
     {
-        dType = CL_DEVICE_TYPE_GPU;
+        dType = CL_DEVICE_TYPE_ACCELERATOR;
         if(isThereGPU() == false)
         {
             std::cout << "GPU not found. Falling back to CPU device" << std::endl;
@@ -277,7 +277,7 @@ RadixSort::setupCL(void)
     // Final output
     sortedDataBuf = clCreateBuffer(
         context, 
-        CL_MEM_WRITE_ONLY|CL_MEM_HOST_READ_ONLY,
+        CL_MEM_WRITE_ONLY|CL_MEM_READ_ONLY,
         elementCount * sizeof(cl_uint),
         NULL,
         &status);

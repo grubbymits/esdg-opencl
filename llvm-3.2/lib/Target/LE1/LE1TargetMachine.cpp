@@ -72,7 +72,7 @@ public:
     return *getLE1TargetMachine().getSubtargetImpl();
   }
 
-  //virtual bool addPreISel();
+  virtual bool addPreISel();
   virtual bool addInstSelector();
   //virtual bool addPreRegAlloc();
   //virtual bool addPostRegAlloc();
@@ -92,15 +92,15 @@ bool LE1PassConfig::addInstSelector()
   addPass(createLE1ISelDag(getLE1TargetMachine()));
   return false;
 }
-/*
+
 bool LE1PassConfig::addPreISel() {
   addPass(createPromoteMemoryToRegisterPass());
-  addPass(createConstantPropagationPass());
-  addPass(createDeadStoreEliminationPass());
-  addPass(createCFGSimplificationPass());
+  //addPass(createConstantPropagationPass());
+  //addPass(createDeadStoreEliminationPass());
+  //addPass(createCFGSimplificationPass());
   return true;
 }
-
+/*
 bool LE1PassConfig::addPostRegAlloc() {
   addPass(createDeadCodeEliminationPass());
   return true;
