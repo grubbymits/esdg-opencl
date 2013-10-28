@@ -5,3 +5,6 @@ LIBS = -L/opt/esdg-opencl/lib -lOpenCL -L../SDKUtil -lSDKUtil
 
 binary-search: BinarySearch.cpp
 	$(CXX) $(CXXFLAGS) $(INC) $< $(LIBS) -o $@
+
+clean: BinarySearch.cpp
+	rm -rf binary-search *.s *.bc binaries microblaze *.dat *.csv *.tmp* init.*

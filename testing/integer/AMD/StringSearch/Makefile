@@ -5,3 +5,6 @@ LIBS = -L/opt/esdg-opencl/lib -lOpenCL -L../SDKUtil -lSDKUtil
 
 string-search : StringSearch.cpp
 	$(CXX) $(CXXFLAGS) $(INC) $< $(LIBS) -o $@
+
+clean: StringSearch.cpp
+	rm -rf string-search *.s *.bc binaries microblaze *.dat *.csv *.tmp* init.*

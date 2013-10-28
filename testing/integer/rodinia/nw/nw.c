@@ -48,9 +48,12 @@ static cl_command_queue cmd_queue;
 static cl_device_type   device_type;
 static cl_device_id   * device_list;
 static cl_int           num_devices;
+static cl_int           chosen_device;
 
 static int initialize(int use_gpu, int DEVICE_ID)
 {
+  printf("initialize platform with device id = %d\n", DEVICE_ID);
+
 	cl_int result;
 	size_t size;
 
@@ -92,7 +95,7 @@ static int initialize(int use_gpu, int DEVICE_ID)
           return -1;
         }
 
-        context = clCreateContext(NULL, 1, &device_list[DEVICE_ID],
+        context = clCreateContext(NULL, 1, &(device_list[DEVICE_ID]),
                                   NULL, NULL, &result);
         if (result != CL_SUCCESS) {
           printf("Failed to create context\n");
@@ -161,12 +164,13 @@ int main(int argc, char **argv){
 	char * tempchar;
 	// the lengths of the two sequences should be able to divided by 16.
 	// And at current stage  max_rows needs to equal max_cols
-	if (argc == 4)
+	if (argc == 5)
 	{
 		max_rows = atoi(argv[1]);
 		max_cols = atoi(argv[1]);
 		penalty = atoi(argv[2]);
 		tempchar = argv[3];
+                chosen_device = atoi(argv[4]);
 	}
     else{
 	     usage(argc, argv);
@@ -258,7 +262,7 @@ int main(int argc, char **argv){
 	
 	int use_gpu = 1;
 	// OpenCL initialization
-	if(initialize(use_gpu, 0)) return -1;
+	if(initialize(use_gpu, chosen_device)) return -1;
 
 	// compile kernel
 	cl_int err = 0;

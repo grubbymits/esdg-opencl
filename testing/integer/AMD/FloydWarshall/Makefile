@@ -5,3 +5,6 @@ LIBS = -L/opt/esdg-opencl/lib -lOpenCL -L../SDKUtil -lSDKUtil
 
 floyd-warshall: FloydWarshall.cpp
 	$(CXX) $(CXXFLAGS) $(INC) $< $(LIBS) -o $@
+
+clean: FloydWarshall.cpp
+	rm -rf floyd-warshall *.s *.bc binaries microblaze *.dat *.csv *.tmp* init.*

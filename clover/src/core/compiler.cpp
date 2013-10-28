@@ -290,7 +290,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
                                            clang::frontend::Angled,
                                            false, false, false);
 
-  p_compiler.getCodeGenOpts().OptimizationLevel = 0;
+  p_compiler.getCodeGenOpts().OptimizationLevel = 3;
   p_compiler.getCodeGenOpts().SimplifyLibCalls = false;
   p_compiler.getCodeGenOpts().setInlining(
     clang::CodeGenOptions::OnlyAlwaysInlining);
