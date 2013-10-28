@@ -1326,6 +1326,9 @@ multiclass SlctPats<Instruction CmpOpR, Instruction CmpOpI, CondCode CC> {
   def : Pat<(selectcc CPURegs:$lhs, imm:$rhs, 0, CPURegs:$F, CC),
             (SLCTrr (i1 (CmpOpI CPURegs:$lhs, imm:$rhs)), ZERO, CPURegs:$F)>;
 
+  def : Pat<(selectcc (trunc CPURegs:$lhs), 0, CPURegs:$T, CPURegs:$F, CC),
+            (SLCTrr (i1 (CmpOpR (ANDi CPURegs:$lhs, (i32 1)), ZERO)),
+                    CPURegs:$T, CPURegs:$F)>;
 
 }
 

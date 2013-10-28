@@ -95,9 +95,9 @@ bool LE1PassConfig::addInstSelector()
 
 bool LE1PassConfig::addPreISel() {
   addPass(createPromoteMemoryToRegisterPass());
-  //addPass(createConstantPropagationPass());
-  //addPass(createDeadStoreEliminationPass());
-  //addPass(createCFGSimplificationPass());
+  addPass(createConstantPropagationPass());
+  addPass(createDeadStoreEliminationPass());
+  addPass(createCFGSimplificationPass());
   return true;
 }
 /*
