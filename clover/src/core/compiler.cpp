@@ -129,6 +129,14 @@ bool Compiler::ExpandMacros(const char *filename) {
       << log;
     return false;
   }
+
+  RewriteIncludesAction rewriteIncludesAct;
+  if (!CI.ExecuteAction(rewriteIncludesAct)) {
+    std::cerr << "RewriteIncludes failed: " << std::endl
+      << log;
+    return false;
+  }
+
 #ifdef DEBUGCL
   std::cerr << "Successfully leaving Compiler::ExpandMacros" << std::endl;
 #endif
@@ -207,7 +215,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
                                 clang::InputKind SourceKind,
                                 const std::string &Opts) {
 #ifdef DEBUGCL
-  std::cerr << "Entering CompileToBitcode" << std::endl;
+  std::cerr << "Entering CompileToBitcode:" << std::endl << Opts << std::endl;
 #endif
   clang::CompilerInvocation Invocation;
   clang::EmitLLVMOnlyAction act(&llvm::getGlobalContext());
@@ -216,13 +224,15 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
   // Parse the compiler options
   std::vector<std::string> opts_array;
+  // FIXME Add this back in, but it broke JohnTheRipper
+  /*
   std::istringstream ss(Opts);
 
   while (!ss.eof()) {
     std::string opt;
     getline(ss, opt, ' ');
     opts_array.push_back(opt);
-  }
+  }*/
 
   // opts_array.push_back(name);
 
