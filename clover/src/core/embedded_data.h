@@ -8,17 +8,13 @@
 
 namespace Coal {
 
+  class EmbeddedData;
+
   template<class T, class Allocator = std::allocator<T> >
           class GlobalVariable;
 
-  typedef typename std::vector<GlobalVariable<unsigned>*>::iterator
-    word_iterator;
-  typedef typename std::vector<GlobalVariable<unsigned short>*>::iterator
-    half_iterator;
-  typedef typename std::vector<GlobalVariable<unsigned char>*>::iterator
-    byte_iterator;
-
 class EmbeddedData {
+
 public:
 
   template <typename T> class GlobalVariable {
@@ -40,6 +36,14 @@ public:
       return totalSize;
     }
 
+    unsigned getAddr() const {
+      return varAddr;
+    }
+
+    std::string &getName() {
+      return name;
+    }
+
   private:
     std::string name;
     unsigned varAddr;
@@ -47,6 +51,20 @@ public:
     unsigned totalSize;
 
   };
+
+  typedef typename std::vector<GlobalVariable<unsigned>*>::iterator
+    word_iterator;
+  typedef typename std::vector<GlobalVariable<unsigned short>*>::iterator
+    half_iterator;
+  typedef typename std::vector<GlobalVariable<unsigned char>*>::iterator
+    byte_iterator;
+
+  typedef typename std::vector<GlobalVariable<unsigned>*>::const_iterator
+    const_word_iterator;
+  typedef typename std::vector<GlobalVariable<unsigned short>*>::const_iterator
+    const_half_iterator;
+  typedef typename std::vector<GlobalVariable<unsigned char>*>::const_iterator
+    const_byte_iterator;
 
 public:
 
@@ -63,6 +81,18 @@ public:
     globalWords.push_back(var);
   }
   unsigned getTotalSize();
+
+  const std::vector<GlobalVariable<unsigned>*>* getWords() const {
+    return &globalWords;
+  }
+
+  const std::vector<GlobalVariable<unsigned short>*>* getHalves() const {
+    return &globalHalves;
+  }
+
+  const std::vector<GlobalVariable<unsigned char>*>* getBytes() const {
+    return &globalBytes;
+  }
 
 private:
   unsigned totalSize;

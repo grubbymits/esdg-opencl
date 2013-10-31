@@ -12,11 +12,11 @@ unsigned EmbeddedData::getTotalSize() {
 
   for (half_iterator HI = globalHalves.begin(), HE = globalHalves.end();
        HI != HE; ++HI)
-    totalSize += HI->getSize();
+    totalSize += (*HI)->getSize();
 
   for (byte_iterator BI = globalBytes.begin(), BE = globalBytes.end();
        BI != BE; ++BI)
-    totalSize += BI->getSize();
+    totalSize += (*BI)->getSize();
 
   return totalSize;
 }

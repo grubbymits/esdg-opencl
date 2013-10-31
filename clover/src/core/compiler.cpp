@@ -361,7 +361,7 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
   for (llvm::Module::global_iterator GI = M->global_begin(),
        GE = M->global_end(); GI != GE; ++GI) {
 
-    GlobalVariable *GV = GI;
+    llvm::GlobalVariable *GV = GI;
     StringRef name = GV->getName();
 
 #ifdef DBG_COMPILER
@@ -398,12 +398,12 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
         if (type->isIntegerTy(32)) {
 
           EmbeddedData::GlobalVariable<unsigned> *newGlobal =
-            new GlobalVariable<unsigned>(name.str());
+            new EmbeddedData::GlobalVariable<unsigned>(name.str());
 
           for (unsigned i = 0; i < NumElements; ++i)
             newGlobal->addElement(CDS->getElementAsInteger(i));
 
-          embeddedData.addWordVariable(newGlobal);
+          theData.addWordVariable(newGlobal);
 
         }
       }

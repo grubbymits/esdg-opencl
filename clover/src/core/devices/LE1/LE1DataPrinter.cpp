@@ -103,7 +103,13 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     << std::endl;
 #endif
 
-  CurrentAddr += embeddedData.getTotalSize();
+  // Calculate the address for any embedded data
+  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
+       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
+
+    (*WI)->setAddr(CurrentAddr);
+    CurrentAddr += (*WI)->getSize();
+  }
 
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
@@ -149,11 +155,12 @@ bool LE1DataPrinter::AppendDataArea() {
   Output << "00034 - num_cores" << std::endl;
   Output << "00038 - group_id" << std::endl;
 
-  // Print labels for embedded data
-  if (!embeddedData.isEmpty()) {
-#ifdef DBG_KERNEL
-    std::cerr << "Embedded data is not empty, so printing labels" << std::endl;
-#endif
+  // Print labels for any embedded data
+  // FIXME Only handle 32-bit data
+  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
+       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
+    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
+      << " - " << (*WI)->getName() << std::endl;
   }
 
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
