@@ -3,7 +3,6 @@
 #include "LE1device.h"
 #include "LE1kernel.h"
 
-#include "../../embedded_data.h"
 #include "../../events.h"
 #include "../../kernel.h"
 #include "../../memobject.h"
@@ -98,6 +97,14 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 
   unsigned CurrentAddr = AttrAddrEnd;
 
+  // Place the embedded data before the buffers.
+#ifdef DBG_KERNEL
+  std::cerr << "Size of embedded data = " << embeddedData.getTotalSize()
+    << std::endl;
+#endif
+
+  CurrentAddr += embeddedData.getTotalSize();
+
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
@@ -141,6 +148,13 @@ bool LE1DataPrinter::AppendDataArea() {
   Output << "00028 - global_offset" << std::endl;
   Output << "00034 - num_cores" << std::endl;
   Output << "00038 - group_id" << std::endl;
+
+  // Print labels for embedded data
+  if (!embeddedData.isEmpty()) {
+#ifdef DBG_KERNEL
+    std::cerr << "Embedded data is not empty, so printing labels" << std::endl;
+#endif
+  }
 
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);

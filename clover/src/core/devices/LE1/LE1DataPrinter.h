@@ -2,6 +2,7 @@
 #define _LE1_DATA_PRINTER_H
 
 #include "../../deviceinterface.h"
+#include "../../embedded_data.h"
 
 #include <fstream>
 #include <sstream>
@@ -50,6 +51,7 @@ private:
   private:
     KernelEvent *p_event;
     LE1Device *TheDevice;
+    EmbeddedData embeddedData;
     unsigned NumCores;
     Kernel *TheKernel;
     std::vector<unsigned> ArgAddrs;

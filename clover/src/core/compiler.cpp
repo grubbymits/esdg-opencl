@@ -373,7 +373,6 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
 
     if (GV->hasInitializer()) {
       Constant *C = GV->getInitializer();
-      llvm::Type *type = C->getType();
       unsigned NumOps = C->getNumOperands();
 #ifdef DBG_COMPILER
       std::cerr << "Global variable " << name.str() << " has " << NumOps
@@ -387,18 +386,25 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
       else if (isa<ConstantDataSequential>(C)) {
         ConstantDataSequential *CDS = cast<ConstantDataSequential>(C);
         unsigned NumElements = CDS->getNumElements();
+        llvm::Type *type = CDS->getElementType();
+
 #ifdef DBG_COMPILER
         std::cerr << "global is a ConstantDataSequential with "
           << NumElements << " elements:" << std::endl;
         for (unsigned i = 0; i < NumElements; ++i)
           std::cerr << CDS->getElementAsInteger(i) << std::endl;
 #endif
-        if (type->isIntegerTy(32)) {
-          unsigned *newData = new unsigned[NumElements]();
-          for (unsigned i = 0; i < NumElements; ++i)
-            newData[i] = (unsigned)CDS->getElementAsInteger(i);
 
-          theData.dataWords.push_back(std::make_pair(name, newData));
+        if (type->isIntegerTy(32)) {
+
+          EmbeddedData::GlobalVariable<unsigned> *newGlobal =
+            new GlobalVariable<unsigned>(name.str());
+
+          for (unsigned i = 0; i < NumElements; ++i)
+            newGlobal->addElement(CDS->getElementAsInteger(i));
+
+          embeddedData.addWordVariable(newGlobal);
+
         }
       }
     }

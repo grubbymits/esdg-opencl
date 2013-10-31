@@ -30,6 +30,7 @@ set(COAL_SRC_FILES
 
     core/context.cpp
     core/commandqueue.cpp
+    core/embedded_data.cpp
     core/memobject.cpp
     core/events.cpp
     core/program.cpp
