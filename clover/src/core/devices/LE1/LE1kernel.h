@@ -34,6 +34,7 @@
 #define __LE1_KERNEL_H__
 
 #include "../../deviceinterface.h"
+#include "../../embedded_data.h"
 #include <core/config.h>
 
 //#include <llvm/ExecutionEngine/GenericValue.h>
@@ -358,6 +359,7 @@ class LE1KernelEvent
         size_t p_current_wg, p_finished_wg, p_num_wg;
         pthread_mutex_t p_mutex;
         void *p_kernel_args;
+        EmbeddedData embeddedData;
         //static unsigned int addr;
         //std::vector<unsigned> ArgAddrs;
         std::string OriginalSource;

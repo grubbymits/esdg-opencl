@@ -57,6 +57,7 @@ namespace Coal
 {
 
 class DeviceInterface;
+class EmbeddedData;
 
 /**
  * \brief Compiler using Clang
@@ -81,6 +82,8 @@ class Compiler
                         std::string &cpu);
 
         llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
+
+        bool ExtractKernelData(llvm::Module *M, EmbeddedData &theData);
 
         std::string &getFinalSource() { return FinalSource; }
 

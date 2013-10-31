@@ -30,8 +30,9 @@
  * \brief Compiler wrapper around Clang
  */
 
-#include "deviceinterface.h"
 #include "compiler.h"
+#include "deviceinterface.h"
+#include "embedded_data.h"
 #include "devices/LE1/creduce/TransformationManager.h"
 #include "devices/LE1/creduce/SimpleInliner.h"
 
@@ -50,6 +51,7 @@
 #include <clang/CodeGen/BackendUtil.h>
 #include <clang/CodeGen/CodeGenAction.h>
 #include <clang/Rewrite/Frontend/FrontendActions.h>
+#include <llvm/Constants.h>
 #include <llvm/DataLayout.h>
 #include <llvm/Linker.h>
 #include <llvm/LLVMContext.h>
@@ -71,6 +73,7 @@
 
 using namespace Coal;
 using namespace clang;
+using namespace llvm;
 
 Compiler::Compiler(DeviceInterface *device)
 : p_device(device), p_module(0), p_optimize(true), p_log_stream(p_log),
@@ -78,7 +81,7 @@ Compiler::Compiler(DeviceInterface *device)
 {
   Triple = device->getTriple();
   CPU = device->getCPU();
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Constructing Compiler::Compiler for " << Triple << " "
     << CPU << std::endl;
 #endif
@@ -87,7 +90,7 @@ Compiler::Compiler(DeviceInterface *device)
 
 Compiler::~Compiler()
 {
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Destructing Compiler::Compiler\n";
 #endif
   //TransformationManager::Finalize();
@@ -96,7 +99,7 @@ Compiler::~Compiler()
 
 // Use a RewriteAction to expand all macros within the original source file
 bool Compiler::ExpandMacros(const char *filename) {
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Entering Compiler::ExpandMacros" << std::endl;
 #endif
   std::string log;
@@ -137,14 +140,14 @@ bool Compiler::ExpandMacros(const char *filename) {
     return false;
   }
 
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Successfully leaving Compiler::ExpandMacros" << std::endl;
 #endif
   return true;
 }
 
 int Compiler::InlineSource(const char *filename) {
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Entering Compiler::InlineSource for " << filename << std::endl;
 #endif
   std::string err;
@@ -170,7 +173,7 @@ int Compiler::InlineSource(const char *filename) {
   }
 
   int numInstances = TM->getNumTransformationInstances();
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Need to inline " << numInstances << " functions"
     << std::endl;
 #endif
@@ -214,7 +217,7 @@ int Compiler::InlineSource(const char *filename) {
 bool Compiler::CompileToBitcode(std::string &Source,
                                 clang::InputKind SourceKind,
                                 const std::string &Opts) {
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Entering CompileToBitcode:" << std::endl << Opts << std::endl;
 #endif
   clang::CompilerInvocation Invocation;
@@ -319,7 +322,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
   // Compile the code
   if (!p_compiler.ExecuteAction(act)) {
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
     std::cerr << "Compilation Failed\n";
     std::cerr << log;
 #endif
@@ -328,7 +331,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
   p_module = act.takeModule();
 
     //PrevKernels.push_back(name);
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Leaving Compiler::CompileToBitcode\n";
 #endif
     return true;
@@ -336,7 +339,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
 }
 
 llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Entering LinkModules\n";
 #endif
   llvm::StringRef progName("MyLinker");
@@ -344,16 +347,74 @@ llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
   if ( ld.LinkInModule(m2) ) {
     return NULL;
   }
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Leaving LinkModules\n";
 #endif
   return ld.releaseModule();
 }
 
+bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
+#ifdef DBG_COMPILER
+  std::cerr << "Entering Compiler::ExtractKernelData" << std::endl;
+#endif
+
+  for (llvm::Module::global_iterator GI = M->global_begin(),
+       GE = M->global_end(); GI != GE; ++GI) {
+
+    GlobalVariable *GV = GI;
+    StringRef name = GV->getName();
+
+#ifdef DBG_COMPILER
+    std::cerr << "GV = " << name.str() << std::endl;
+#endif
+
+    if (isa<Function>(GV))
+      continue;
+
+    if (GV->hasInitializer()) {
+      Constant *C = GV->getInitializer();
+      llvm::Type *type = C->getType();
+      unsigned NumOps = C->getNumOperands();
+#ifdef DBG_COMPILER
+      std::cerr << "Global variable " << name.str() << " has " << NumOps
+        << " values" << std::endl;
+#endif
+      if (isa<ConstantArray>(C)) {
+#ifdef DBG_COMPILER
+        std::cerr << "global is a ConstantArray" << std::endl;
+#endif
+      }
+      else if (isa<ConstantDataSequential>(C)) {
+        ConstantDataSequential *CDS = cast<ConstantDataSequential>(C);
+        unsigned NumElements = CDS->getNumElements();
+#ifdef DBG_COMPILER
+        std::cerr << "global is a ConstantDataSequential with "
+          << NumElements << " elements:" << std::endl;
+        for (unsigned i = 0; i < NumElements; ++i)
+          std::cerr << CDS->getElementAsInteger(i) << std::endl;
+#endif
+        if (type->isIntegerTy(32)) {
+          unsigned *newData = new unsigned[NumElements]();
+          for (unsigned i = 0; i < NumElements; ++i)
+            newData[i] = (unsigned)CDS->getElementAsInteger(i);
+
+          theData.dataWords.push_back(std::make_pair(name, newData));
+        }
+      }
+    }
+    else {
+      std::cerr << "ERROR: pretty sure data should be initialised!"
+        << std::endl;
+      return false;
+    }
+  }
+  return true;
+}
+
 // BackendUtil.cpp
 // CodeGenOptions
 bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Entering CompileToAssembly\n";
 #endif
   clang::EmitAssemblyAction act(&llvm::getGlobalContext()); //Module->getContext()?
@@ -425,7 +486,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
 
   Out->keep();
 
-#ifdef DEBUGCL
+#ifdef DBG_COMPILER
   std::cerr << "Leaving CompileToAssembly\n";
 #endif
   return true;

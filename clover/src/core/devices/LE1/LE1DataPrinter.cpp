@@ -3,6 +3,7 @@
 #include "LE1device.h"
 #include "LE1kernel.h"
 
+#include "../../embedded_data.h"
 #include "../../events.h"
 #include "../../kernel.h"
 #include "../../memobject.h"
@@ -77,11 +78,13 @@ static void ConvertToBinary(std::string *binary_string,
 }
 
 LE1DataPrinter::LE1DataPrinter(LE1Device *device,
+                               EmbeddedData &data,
                                KernelEvent *event,
                                const char* sourceName) {
   p_event = event;
   TheKernel = event->kernel();
   TheDevice = device;
+  embeddedData = data;
   FinalSourceName = sourceName;
   NumCores = TheDevice->numLE1s();
   AttrAddrEnd = 0x38;

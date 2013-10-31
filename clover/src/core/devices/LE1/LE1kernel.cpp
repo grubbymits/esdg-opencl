@@ -560,9 +560,11 @@ bool LE1KernelEvent::CompileSource() {
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
   //Coarsener.DeleteTempFiles();
+  if (!LE1Compiler.ExtractKernelData(WorkgroupModule, embeddedData))
+    return false;
 
 #ifdef DBG_KERNEL
-  std::cerr << "Merged Kernel\n";
+  std::cerr << "Merged Kernel and extracted any embedded data\n";
 #endif
 
   std::string LauncherString;
@@ -581,6 +583,7 @@ bool LE1KernelEvent::CompileSource() {
   if(!MainCompiler.CompileToAssembly(TempAsmName,
                                      CompleteModule))
     return false;
+
 
   std::stringstream pre_asm_command;
   // TODO Include the script as a char array
@@ -722,7 +725,7 @@ bool LE1KernelEvent::run() {
 
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
   system(CopyCommand.c_str());
-  LE1DataPrinter dataPrinter(p_device, p_event,
+  LE1DataPrinter dataPrinter(p_device, embeddedData, p_event,
                              CompleteFilename.c_str());
 
   if (!dataPrinter.AppendDataArea()) {

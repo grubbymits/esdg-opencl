@@ -15,11 +15,15 @@ namespace Coal {
   class KernelEvent;
   class LE1Device;
   class LE1Kernel;
+  class EmbeddedData;
 
 
 class LE1DataPrinter {
 public:
-  LE1DataPrinter(LE1Device *device, KernelEvent *event, const char* sourceName);
+  LE1DataPrinter(LE1Device *device,
+                 EmbeddedData &data,
+                 KernelEvent *event,
+                 const char* sourceName);
   bool AppendDataArea();
 private:
   void WriteKernelAttr(std::ostringstream &Output,

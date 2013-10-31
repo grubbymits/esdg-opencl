@@ -72,6 +72,7 @@
 // Simple compute kernel which computes the square of an input array 
 //
 const char *KernelSource =
+"const int refarray[] = { 20, 50, 80, 100 };\n"
 "__kernel void array_mult(\n" \
 "   __global int* input1,\n" \
 "   __global int* input2,\n" \
