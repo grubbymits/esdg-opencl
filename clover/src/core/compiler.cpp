@@ -303,7 +303,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
                                            clang::frontend::Angled,
                                            false, false, false);
 
-  p_compiler.getCodeGenOpts().OptimizationLevel = 3;
+  p_compiler.getCodeGenOpts().OptimizationLevel = 1;
   p_compiler.getCodeGenOpts().SimplifyLibCalls = false;
   p_compiler.getCodeGenOpts().setInlining(
     clang::CodeGenOptions::OnlyAlwaysInlining);
@@ -347,6 +347,7 @@ llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
   if ( ld.LinkInModule(m2) ) {
     return NULL;
   }
+
 #ifdef DBG_COMPILER
   std::cerr << "Leaving LinkModules\n";
 #endif
@@ -407,6 +408,11 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
 
         }
       }
+      else {
+        std::cerr << "!! ERROR: Unhandled initialised global variable"
+          << std::endl;
+        return false;
+      }
     }
     else {
       std::cerr << "ERROR: pretty sure data should be initialised!"
@@ -444,7 +450,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
                                           CPU, FeatureSet, Options,
                                           llvm::Reloc::Static,
                                           llvm::CodeModel::Default,
-                                          llvm::CodeGenOpt::Aggressive));
+                                          llvm::CodeGenOpt::Default));
   llvm::TargetMachine &Target = *target.get();
 
   llvm::PassManager PM;
@@ -497,15 +503,6 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
 #endif
   return true;
 }
-
-// TODO - I think this is possible...
-// Compile nows need to take the source file and write to an AST. So the
-// intermediate format will now be .ast instead of .bc and this should mean
-// that source code changes will be minimal.
-
-//bool Compiler::compile(const std::string &options,
-                                //llvm::MemoryBuffer *src)
-//{
 
 const std::string &Compiler::log() const
 {

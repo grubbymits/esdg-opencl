@@ -79,7 +79,7 @@ const char *KernelSource =
 "   __global int* output)\n" \
 "{\n" \
 "   int i = get_global_id(0);\n" \
-"   output[i] = input1[i] * input2[i];\n" \
+"   output[i] = input1[i] * input2[i] + 0.5;\n" \
 "}\n" \
 "\n";
  

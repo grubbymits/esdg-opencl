@@ -14,6 +14,7 @@ using namespace CodeGen;
 
 CGSoftFloatRuntime::CGSoftFloatRuntime(CodeGenModule &CGM) : CGM(CGM) {
   llvm::Module &M = CGM.getModule();
+  std::cerr << "Entering CGSoftFloatRuntime" << std::endl;
 
   // Iterate through all the functions of the module
 
@@ -22,7 +23,11 @@ CGSoftFloatRuntime::CGSoftFloatRuntime(CodeGenModule &CGM) : CGM(CGM) {
   for (llvm::Module::iterator FI = M.begin(),
     FE = M.end(); FI != FE; ++FI) {
 
+
     llvm::Function *F = FI;
+
+    std::cerr << "Iterating through function:" << F->getName().str()
+      << std::endl;
 
     // Iterate through all the basic block of the function
     for (llvm::Function::BasicBlockListType::iterator BI = F->begin(),
@@ -37,6 +42,7 @@ CGSoftFloatRuntime::CGSoftFloatRuntime(CodeGenModule &CGM) : CGM(CGM) {
         llvm::Instruction *I = II;
 
         if (II->getType()->getTypeID() == llvm::Type::FloatTyID) {
+          std::cerr << "Found FP instruction" << std::endl;
 
           StringRef FuncName;
           llvm::FunctionType *FuncType; //IntegerType::getInt32Ty(C);

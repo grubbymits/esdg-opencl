@@ -44,6 +44,10 @@ public:
       return name;
     }
 
+    const T* getData() {
+      return dataSet.data();
+    }
+
   private:
     std::string name;
     unsigned varAddr;

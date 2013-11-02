@@ -269,7 +269,16 @@ bool LE1DataPrinter::AppendDataArea() {
   FinalSource << Output.str();
   FinalSource.close();
 
-  // First, write the global data first
+  // Print Embedded Data
+  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
+       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
+    size_t totalBytes = (*WI)->getSize();
+    const unsigned* data = (*WI)->getData();
+    PrintData(data, PrintAddr, 0, sizeof(int), totalBytes);
+    PrintAddr += totalBytes;
+  }
+
+  // Handle buffers
   for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& Arg = TheKernel->arg(i);
 
