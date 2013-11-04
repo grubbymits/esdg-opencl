@@ -48,9 +48,9 @@ CGSoftFloatRuntime::CGSoftFloatRuntime(CodeGenModule &CGM) : CGM(CGM) {
           llvm::FunctionType *FuncType; //IntegerType::getInt32Ty(C);
           std::vector<llvm::Type*> ParamTys;
           llvm::Type *Int32Ty = llvm::Type::getInt32Ty(CGM.getLLVMContext());
-          llvm::Attributes Attrs
-            = llvm::Attributes::get(CGM.getLLVMContext(),
-                                    llvm::Attributes::NoUnwind);
+          llvm::Attributes Attrs;
+            //= llvm::Attributes::get(CGM.getLLVMContext(),
+              //                      llvm::Attributes::NoUnwind);
 
           switch(I->getOpcode()) {
           default:
@@ -61,6 +61,9 @@ CGSoftFloatRuntime::CGSoftFloatRuntime(CodeGenModule &CGM) : CGM(CGM) {
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             CGM.CreateRuntimeFunction(FuncType, FuncName, Attrs);
+            std::cerr << "Created Runtime Function for float32_add:"
+              << std::endl << std::endl;
+            M.dump();
             break;
           case llvm::Instruction::FSub:
             FuncName = "float32_sub";

@@ -83,6 +83,10 @@ class Compiler
 
         llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
 
+        void ScanForSoftfloat();
+
+        llvm::Module *LinkRuntime(llvm::Module *M);
+
         bool ExtractKernelData(llvm::Module *M, EmbeddedData &theData);
 
         std::string &getFinalSource() { return FinalSource; }

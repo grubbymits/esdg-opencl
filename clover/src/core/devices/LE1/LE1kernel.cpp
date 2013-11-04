@@ -559,12 +559,9 @@ bool LE1KernelEvent::CompileSource() {
     return false;
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
-  //Coarsener.DeleteTempFiles();
-  if (!LE1Compiler.ExtractKernelData(WorkgroupModule, embeddedData))
-    return false;
 
 #ifdef DBG_KERNEL
-  std::cerr << "Merged Kernel and extracted any embedded data\n";
+  std::cerr << "Merged Kernel\n";
 #endif
 
   std::string LauncherString;
@@ -578,6 +575,18 @@ bool LE1KernelEvent::CompileSource() {
   // Link the main module with the coarsened kernel code
   llvm::Module *CompleteModule =
     MainCompiler.LinkModules(MainModule, WorkgroupModule);
+
+  MainCompiler.ScanForSoftfloat();
+
+  CompleteModule = MainCompiler.LinkRuntime(CompleteModule);
+
+  //Coarsener.DeleteTempFiles();
+  if (!LE1Compiler.ExtractKernelData(CompleteModule, embeddedData))
+    return false;
+
+#ifdef DBG_KERNEL
+  std::cerr << "Extracted any embedded data" << std::endl;
+#endif
 
   // Output a single assembly file
   if(!MainCompiler.CompileToAssembly(TempAsmName,

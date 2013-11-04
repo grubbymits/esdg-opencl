@@ -53,6 +53,9 @@
 #include <clang/Rewrite/Frontend/FrontendActions.h>
 #include <llvm/Constants.h>
 #include <llvm/DataLayout.h>
+#include <llvm/DerivedTypes.h>
+#include <llvm/Function.h>
+#include <llvm/Instruction.h>
 #include <llvm/Linker.h>
 #include <llvm/LLVMContext.h>
 #include <llvm/Module.h>
@@ -65,6 +68,7 @@
 #include <llvm/Support/FormattedStream.h>
 #include <llvm/Support/Host.h>
 #include <llvm/Support/ManagedStatic.h>
+#include <llvm/Support/Path.h>
 #include <llvm/Support/TargetRegistry.h>
 #include <llvm/Support/TargetSelect.h>
 #include <llvm/Support/ToolOutputFile.h>
@@ -303,7 +307,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
                                            clang::frontend::Angled,
                                            false, false, false);
 
-  p_compiler.getCodeGenOpts().OptimizationLevel = 1;
+  p_compiler.getCodeGenOpts().OptimizationLevel = 3;
   p_compiler.getCodeGenOpts().SimplifyLibCalls = false;
   p_compiler.getCodeGenOpts().setInlining(
     clang::CodeGenOptions::OnlyAlwaysInlining);
@@ -332,6 +336,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
     //PrevKernels.push_back(name);
 #ifdef DBG_COMPILER
+  p_module->dump();
   std::cerr << "Leaving Compiler::CompileToBitcode\n";
 #endif
     return true;
@@ -352,6 +357,120 @@ llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
   std::cerr << "Leaving LinkModules\n";
 #endif
   return ld.releaseModule();
+}
+
+llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
+#ifdef DBG_COMPILER
+  std::cerr << "Entering LinkRuntime" << std::endl;
+#endif
+
+  llvm::StringRef progName("MyLinker");
+  llvm::Linker ld(progName, M);
+
+  bool isNative = false;
+  if (ld.LinkInFile(llvm::sys::Path("/opt/esdg-opencl/lib/builtins.bc"),
+                     isNative)) {
+    return NULL;
+  }
+
+  return ld.releaseModule();
+
+}
+
+void Compiler::ScanForSoftfloat() {
+
+  for (llvm::Module::iterator FI = p_module->begin(),
+    FE = p_module->end(); FI != FE; ++FI) {
+
+    llvm::Function *F = FI;
+
+    std::cerr << "Iterating through function:" << F->getName().str()
+      << std::endl;
+
+    // Iterate through all the basic block of the function
+    for (llvm::Function::BasicBlockListType::iterator BI = F->begin(),
+         BE = F->end(); BI != BE; ++BI) {
+
+      llvm::BasicBlock *B = BI;
+
+      // Visit all the instructions witin the basic block
+      for (llvm::BasicBlock::InstListType::iterator II = B->begin(),
+           IE = B->end(); II != IE; ++II) {
+
+        llvm::Instruction *I = II;
+        StringRef FuncName;
+        llvm::FunctionType *FuncType; //IntegerType::getInt32Ty(C);
+        std::vector<llvm::Type*> ParamTys;
+        llvm::Type *Int32Ty =
+          llvm::Type::getInt32Ty(p_module->getContext());
+        llvm::Attributes Attrs;
+          //= llvm::Attributes::get(CGM.getLLVMContext(),
+            //                      llvm::Attributes::NoUnwind);
+
+        if (II->getType()->getTypeID() == llvm::Type::FloatTyID) {
+          std::cerr << "Found FP instruction" << std::endl;
+
+          switch(I->getOpcode()) {
+          default:
+            break;
+          case llvm::Instruction::FAdd:
+            FuncName = "float32_add";
+            ParamTys.push_back(Int32Ty);
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            break;
+          case llvm::Instruction::FSub:
+            FuncName = "float32_sub";
+            ParamTys.push_back(Int32Ty);
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            break;
+          case llvm::Instruction::FMul:
+            FuncName = "float32_mul";
+            ParamTys.push_back(Int32Ty);
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            break;
+          case llvm::Instruction::FDiv:
+            FuncName = "float32_div";
+            ParamTys.push_back(Int32Ty);
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            break;
+          case llvm::Instruction::UIToFP:
+          case llvm::Instruction::SIToFP:
+            FuncName = "int32_to_float32";
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            break;
+          case llvm::Instruction::FPTrunc:
+          case llvm::Instruction::FPExt:
+          case llvm::Instruction::FCmp:
+          case llvm::Instruction::FRem:
+            break;
+          }
+        }
+        else {
+          switch(I->getOpcode()) {
+          default:
+            break;
+          case llvm::Instruction::FPToSI:
+          case llvm::Instruction::FPToUI:
+            FuncName = "float32_to_int32";
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
@@ -379,9 +498,31 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
       std::cerr << "Global variable " << name.str() << " has " << NumOps
         << " values" << std::endl;
 #endif
-      if (isa<ConstantArray>(C)) {
+      if (isa<ConstantInt>(C)) {
+        ConstantInt *CI = cast<ConstantInt>(C);
 #ifdef DBG_COMPILER
-        std::cerr << "global is a ConstantArray" << std::endl;
+        std::cerr << "global is a ConstantInt" << std::endl;
+#endif
+        llvm::Type *type = CI->getType();
+        if (type->isIntegerTy(32)) {
+
+          EmbeddedData::GlobalVariable<unsigned> *newGlobal =
+            new EmbeddedData::GlobalVariable<unsigned>(name.str());
+
+          newGlobal->addElement(CI->getZExtValue());
+          theData.addWordVariable(newGlobal);
+        }
+        else {
+          std::cerr << "!!ERROR: Unhandled ConstantInt initialiser"
+            << std::endl;
+          return false;
+        }
+      }
+      else if (isa<ConstantArray>(C)) {
+#ifdef DBG_COMPILER
+         std::cerr << "!!ERROR: global is a ConstantArray and not handled"
+           << std::endl;
+         return false;
 #endif
       }
       else if (isa<ConstantDataSequential>(C)) {
@@ -415,9 +556,8 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
       }
     }
     else {
-      std::cerr << "ERROR: pretty sure data should be initialised!"
-        << std::endl;
-      return false;
+      std::cerr << "GlobalVariable " << name.str()
+        << " does not have initialiser!" << std::endl;
     }
   }
   return true;
@@ -450,7 +590,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
                                           CPU, FeatureSet, Options,
                                           llvm::Reloc::Static,
                                           llvm::CodeModel::Default,
-                                          llvm::CodeGenOpt::Default));
+                                          llvm::CodeGenOpt::Aggressive));
   llvm::TargetMachine &Target = *target.get();
 
   llvm::PassManager PM;
