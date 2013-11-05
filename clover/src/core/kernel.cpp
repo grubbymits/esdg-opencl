@@ -347,7 +347,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
     DeviceDependent &rs = p_device_dependent[i];
   }
 #ifdef DBG_KERNEL
-    std::cerr << "Leaving Kernel::setArg\n";
+    std::cerr << "Leaving Kernel::setArg with CL_SUCCESS\n";
 #endif
     return CL_SUCCESS;
 }

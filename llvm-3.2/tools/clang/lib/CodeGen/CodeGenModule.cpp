@@ -130,7 +130,7 @@ CodeGenModule::~CodeGenModule() {
   delete ObjCRuntime;
   delete OpenCLRuntime;
   delete CUDARuntime;
-  //delete SoftFloatRuntime;
+  delete SoftFloatRuntime;
   delete TheTargetCodeGenInfo;
   delete &ABI;
   delete TBAA;
@@ -183,9 +183,8 @@ void CodeGenModule::Release() {
   EmitGlobalAnnotations();
   EmitLLVMUsed();
 
-  /*
   if (Context.getTargetInfo().getTriple().getArch() == llvm::Triple::le1)
-    createSoftFloatRuntime();*/
+    createSoftFloatRuntime();
 
   SimplifyPersonality();
 

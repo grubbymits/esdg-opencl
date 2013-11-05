@@ -40,17 +40,16 @@ CGSoftFloatRuntime::CGSoftFloatRuntime(CodeGenModule &CGM) : CGM(CGM) {
            IE = B->end(); II != IE; ++II) {
 
         llvm::Instruction *I = II;
+        StringRef FuncName;
+        llvm::FunctionType *FuncType; //IntegerType::getInt32Ty(C);
+        std::vector<llvm::Type*> ParamTys;
+        llvm::Type *Int32Ty = llvm::Type::getInt32Ty(CGM.getLLVMContext());
+        llvm::Attributes Attrs;
+          //= llvm::Attributes::get(CGM.getLLVMContext(),
+            //                      llvm::Attributes::NoUnwind);
 
         if (II->getType()->getTypeID() == llvm::Type::FloatTyID) {
           std::cerr << "Found FP instruction" << std::endl;
-
-          StringRef FuncName;
-          llvm::FunctionType *FuncType; //IntegerType::getInt32Ty(C);
-          std::vector<llvm::Type*> ParamTys;
-          llvm::Type *Int32Ty = llvm::Type::getInt32Ty(CGM.getLLVMContext());
-          llvm::Attributes Attrs;
-            //= llvm::Attributes::get(CGM.getLLVMContext(),
-              //                      llvm::Attributes::NoUnwind);
 
           switch(I->getOpcode()) {
           default:
@@ -86,17 +85,27 @@ CGSoftFloatRuntime::CGSoftFloatRuntime(CodeGenModule &CGM) : CGM(CGM) {
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             CGM.CreateRuntimeFunction(FuncType, FuncName, Attrs);
             break;
-          case llvm::Instruction::FRem:
-          case llvm::Instruction::FPToSI:
-            FuncName = "float32_to_int32";
-            break;
           case llvm::Instruction::UIToFP:
           case llvm::Instruction::SIToFP:
             FuncName = "int32_to_float32";
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            CGM.CreateRuntimeFunction(FuncType, FuncName, Attrs);
             break;
           case llvm::Instruction::FPTrunc:
           case llvm::Instruction::FPExt:
           case llvm::Instruction::FCmp:
+          case llvm::Instruction::FRem:
+            break;
+          }
+        }
+        else {
+          switch(I->getOpcode()) {
+          case llvm::Instruction::FPToSI:
+            FuncName = "float32_to_int32";
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            CGM.CreateRuntimeFunction(FuncType, FuncName, Attrs);
             break;
           }
         }

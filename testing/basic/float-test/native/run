@@ -2,12 +2,17 @@
 
 echo Compiling
 clang -target le1 -O0 -emit-llvm -c $1 -o test.bc
-llvm-link test.bc /opt/esdg-opencl/lib/builtins.bc -o linked-float.bc
-llc linked-float.bc -o float.s
+llvm-link test.bc /opt/esdg-opencl/lib/builtins.bc -o linked.bc
+llc linked.bc -o test.s
+rm linked.bc
+rm test.bc
 
 echo Transforming assembly file
-perl ~/Dropbox/src/LE1/Assembler/llvmTransform.pl float.s > final.s
+perl ~/Dropbox/src/LE1/Assembler/llvmTransform.pl test.s > final.s
+rm test.s
+
 echo Running second pass
 perl ~/Dropbox/src/LE1/Assembler/secondpass.pl final.s -OPC=/opt/esdg-opencl/include/opcodes.txt
+
 echo Starting Insizzle
 ~/Dropbox/src/LE1/Insizzle/INSIZZLE /opt/esdg-opencl/machines/Default_1wide.xml -printout

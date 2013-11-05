@@ -19,9 +19,7 @@ for benchmark in ${benchmarks[@]}
 do
   (
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/sam/src/esdg-opencl/testing/integer/AMD/SDKUtil
-    #cd ${benchmarks[$benchmark]}
     cd $benchmark
-    echo $benchmark
     make clean
     make
     bash ./run > output &
