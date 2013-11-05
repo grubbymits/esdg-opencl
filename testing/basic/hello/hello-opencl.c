@@ -65,7 +65,7 @@
  
 // Use a static data size for simplicity
 //
-#define DATA_SIZE (1)
+#define DATA_SIZE (256)
  
 ////////////////////////////////////////////////////////////////////////////////
  
@@ -79,7 +79,7 @@ const char *KernelSource =
 "   __global int* output)\n" \
 "{\n" \
 "   int i = get_global_id(0);\n" \
-"   output[i] = (input1[i] * input2[i]) + (float)1024.0;\n" \
+"   output[i] = (input1[i] * input2[i]) + (float)1.0;\n" \
 "}\n" \
 "\n";
  
@@ -96,8 +96,8 @@ int main(int argc, char** argv)
 
     srand(time(NULL));
     for (unsigned i = 0; i < DATA_SIZE; ++i) {
-      data1[i] = (short)rand();
-      data2[i] = (short)rand();
+      data1[i] = 0xffff & rand();
+      data2[i] = 0xffff & rand();
     }
  
     size_t global;                      // global domain size for our calculation
@@ -264,15 +264,19 @@ int main(int argc, char** argv)
     correct = 0;
     for(i = 0; i < count; i++)
     {
-      int expected = data1[i] * data2[i] + 1024;
-        if(results[i] == expected)
-            correct++;
-        else {
-          printf("data1 = %d, data2 = %d\n", data1[i], data2[i]);
-          printf("results[%d] = %x, and expected = %x. ", i, results[i],
-                 expected);
-          printf("The difference being %d\n", results[i] - expected);
-        }
+      float expected = data1[i] * data2[i] + 1.0;
+      float res = results[i];
+      //printf("    data1 = %x, data2 = %x\n", data1[i], data2[i]);
+
+      if(res == expected) {
+        correct++;
+        printf("[%d] - CORRECT: %f\n", i, res);
+      }
+      else {
+        printf("[%d] - FAIL: %f, and expected = %f : ", i, res,
+               expected);
+        printf("data1 = %d, data2 = %d\n", data1[i], data2[i]);
+      }
     }
     
     // Print a brief summary detailing the results
