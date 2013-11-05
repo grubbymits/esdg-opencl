@@ -1,3 +1,8 @@
 #!/bin/sh
 
+echo Transforming assembly file
 perl /opt/esdg-opencl/scripts/llvmTransform.pl $1 > final.s
+echo Running second pass
+perl /opt/esdg-opencl/scripts/secondpass.pl final.s -OPC=/opt/esdg-opencl/include/opcodes.txt
+echo Starting Insizzle
+~/Dropbox/src/LE1/Insizzle/INSIZZLE /opt/esdg-opencl/machines/Default_1wide.xml -printout
