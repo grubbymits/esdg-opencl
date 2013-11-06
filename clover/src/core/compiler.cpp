@@ -56,6 +56,7 @@
 #include <llvm/DerivedTypes.h>
 #include <llvm/Function.h>
 #include <llvm/Instruction.h>
+#include <llvm/IntrinsicInst.h>
 #include <llvm/Linker.h>
 #include <llvm/LLVMContext.h>
 #include <llvm/Module.h>
@@ -378,7 +379,11 @@ llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
 }
 
 void Compiler::ScanForSoftfloat() {
-
+#ifdef DBG_COMPILER
+  std::cerr << "Compiler::ScanForSoftFloat" << std::endl << std::endl;
+  p_module->dump();
+  std::cerr << std::endl;
+#endif
   for (llvm::Module::iterator FI = p_module->begin(),
     FE = p_module->end(); FI != FE; ++FI) {
 
@@ -412,6 +417,10 @@ void Compiler::ScanForSoftfloat() {
 
           switch(I->getOpcode()) {
           default:
+#ifdef DBG_COMPILER
+            std::cerr << "UNHANDLED FP INSTRUCTION: " << I->getOpcodeName()
+              << std::endl;
+#endif
             break;
           case llvm::Instruction::FAdd:
             FuncName = "float32_add";
@@ -452,6 +461,36 @@ void Compiler::ScanForSoftfloat() {
           case llvm::Instruction::FPExt:
           case llvm::Instruction::FCmp:
           case llvm::Instruction::FRem:
+#ifdef DBG_COMPILER
+            std::cerr << "UNHANDLED FP INSTRUCTION: " << I->getOpcodeName()
+              << std::endl;
+#endif
+            break;
+          case llvm::Instruction::Call:
+            if (isa<llvm::IntrinsicInst>(I)) {
+              llvm::IntrinsicInst *II = cast<llvm::IntrinsicInst>(I);
+
+              switch(II->getIntrinsicID()) {
+              default:
+                break;
+              case Intrinsic::sqrt:
+                FuncName = "float32_sqrt";
+                ParamTys.push_back(Int32Ty);
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                break;
+              case Intrinsic::fmuladd:
+                FuncName = "float32_mul";
+                ParamTys.push_back(Int32Ty);
+                ParamTys.push_back(Int32Ty);
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
+
+                FuncName = "float32_add";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                break;
+              }
+            }
             break;
           }
         }

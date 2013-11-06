@@ -465,6 +465,8 @@ void LE1DataPrinter::WriteStructData(llvm::StructType *StructArg,
         else if (ElementType->isIntegerTy(8))
           PrintSingleElement(Data, Addr, &DataWritten, sizeof(char));
       }
+      else if (ElementType->isFloatTy())
+        PrintSingleElement(Data, Addr, &DataWritten, sizeof(float));
     }
   }
 }
