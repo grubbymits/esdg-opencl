@@ -783,30 +783,112 @@ bool LE1KernelEvent::run() {
       }
 
       unsigned TotalSize = (*(MemObject**)Arg.data())->size();
+      llvm::Type *argType = Arg.type();
 
-      if (Arg.type()->isIntegerTy(8)) {
+      if (argType->isIntegerTy(8)) {
         simulator->readByteData(buffer->addr(), TotalSize,
                                 (unsigned char*)buffer->data());
       }
-      else if (Arg.type()->isIntegerTy(16)) {
+      else if (argType->isIntegerTy(16)) {
         simulator->readHalfData(buffer->addr(), TotalSize,
                                 (unsigned short*)buffer->data());
       }
-      else if (Arg.type()->isIntegerTy(32)) {
+      else if (argType->isIntegerTy(32)) {
         simulator->readWordData(buffer->addr(), TotalSize,
                                 (unsigned*)buffer->data());
       }
-      else if (Arg.type()->getTypeID() == llvm::Type::FloatTyID)
+      else if (argType->getTypeID() == llvm::Type::FloatTyID)
         simulator->readWordData(buffer->addr(), TotalSize,
                                 (unsigned*)buffer->data());
 
-      // FIXME This only handles aligned structures!
-      else if (Arg.type()->isStructTy()) {
-        simulator->readWordData(buffer->addr(), TotalSize,
+      // FIXME This will be really slow since it reads an element at a time.
+      else if (argType->isStructTy()) {
+        llvm::StructType* StructArg = static_cast<llvm::StructType*>(argType);
+#ifdef DBG_KERNEL
+        std::cerr << "Arg is Struct with " << StructArg->getNumElements()
+          << " elements" << std::endl;
+#endif
+
+        // Use one call to the simulator to read data if possible
+        llvm::Type *prevElement = StructArg->getElementType(0);
+        bool uniformTypes = true;
+        for (unsigned i = 1; i < StructArg->getNumElements(); ++i) {
+          if (prevElement != StructArg->getElementType(i)) {
+            uniformTypes = false;
+            break;
+          }
+        }
+        if (uniformTypes) {
+#ifdef DBG_KERNEL
+          std::cerr << "Struct contains just one type" << std::endl;
+#endif
+          if (prevElement->isIntegerTy(8))
+            simulator->readByteData(buffer->addr(), TotalSize,
+                                (unsigned char*)buffer->data());
+          else if (prevElement->isIntegerTy(16))
+            simulator->readHalfData(buffer->addr(), TotalSize,
+                                (unsigned short*)buffer->data());
+          else if (prevElement->isIntegerTy(32))
+            simulator->readWordData(buffer->addr(), TotalSize,
                                 (unsigned*)buffer->data());
+          else if (prevElement->isFloatTy())
+            simulator->readWordData(buffer->addr(), TotalSize,
+                                    (unsigned*)buffer->data());
+          else {
+            std::cerr << "!!ERROR: Unhandled struct element type"
+              << std::endl;
+            return false;
+          }
+        }
+        else {
+
+          unsigned finalAddr = buffer->addr() + TotalSize;
+          unsigned readAddr = buffer->addr();
+
+          while (readAddr < finalAddr) {
+
+            // FIXME Is this setup for correct packing? Does +readAddr work??
+            for (llvm::StructType::element_iterator EI
+                 = StructArg->element_begin(), EE = StructArg->element_end();
+                 EI != EE; ++EI) {
+
+              llvm::Type *elementType = *EI;
+
+              if (elementType->isIntegerTy(8)) {
+                simulator->readByteData(readAddr, 1,
+                                    (unsigned char*)buffer->data() + readAddr);
+                ++readAddr;
+              }
+              if (elementType->isIntegerTy(16)) {
+                if (readAddr % 2 != 0)
+                  ++readAddr;
+
+                simulator->readHalfData(readAddr, 2,
+                                    (unsigned short*)buffer->data() + readAddr);
+                readAddr += 2;
+              }
+              if (elementType->isIntegerTy(32)) {
+                if (readAddr % 4 != 0)
+                  readAddr += readAddr % 4;
+
+                simulator->readWordData(readAddr, 4,
+                                      (unsigned*)buffer->data() + readAddr);
+                readAddr += 4;
+              }
+              if (elementType->isFloatTy()) {
+                if (readAddr % 4 != 0)
+                  readAddr += readAddr % 4;
+
+                simulator->readWordData(readAddr, 4,
+                                      (unsigned*)buffer->data() + readAddr);
+                readAddr += 4;
+              }
+            }
+          }
+        }
       }
 
-      else if (Arg.type()->getTypeID() == llvm::Type::VectorTyID) {
+      else if (argType->getTypeID() == llvm::Type::VectorTyID) {
 #ifdef DBG_KERNEL
         std::cerr << "Data is vector type\n";
 #endif
