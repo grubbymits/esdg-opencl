@@ -8,7 +8,7 @@ rm linked.bc
 rm test.bc
 
 echo Transforming assembly file
-perl ~/Dropbox/src/LE1/Assembler/llvmTransform.pl test.s > final.s
+perl ~/llvmTransform.pl test.s > final.s
 rm test.s
 
 echo Running second pass

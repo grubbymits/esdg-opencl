@@ -548,7 +548,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
   return true;
 }
 
-void LE1Simulator::readCharData(unsigned int addr,
+bool LE1Simulator::readByteData(unsigned int addr,
                                 unsigned int numBytes,
                                 unsigned char *data) {
   /*
@@ -588,19 +588,43 @@ void LE1Simulator::readCharData(unsigned int addr,
       }*/
     }
   }
+  else {
+    std::cerr << "!! ERROR: Unhandled number of bytes to read back from device!"
+      << std::endl;
+    return false;
+  }
 
+  return true;
   //pthread_mutex_unlock(&p_simulator_mutex);
 }
-/*
-short* LE1Simulator::readShortData(unsigned addr, unsigned numBytes) {
-  for(unsigned i = addr; i < addr + numBytes; i=i+2) {
 
+bool LE1Simulator::readHalfData(unsigned addr,
+                                unsigned numBytes,
+                                unsigned short *data) {
+  unsigned bytes = 0;
+  if (numBytes < 4) {
+    insizzleAPIRdOneDramLocation(addr, &bytes);
+    data[0] = (unsigned short) (bytes >> 16);
   }
+  else if ((numBytes % 4) == 0) {
+    for(unsigned i = addr; i < addr + numBytes; i=i+2) {
+      bytes = 0;
+      insizzleAPIRdOneDramLocation(addr, &bytes);
+      data[i+1] = (unsigned short) 0xFF & bytes;
+      data[i] = (unsigned short) 0xFF & (bytes >> 16);
+    }
+  }
+  else {
+    std::cerr << "!!ERROR: Unhandled number of bytes to read back from device!"
+      << std::endl;
+    return false;
+  }
+  return true;
 }
-*/
-void LE1Simulator::readIntData(unsigned int addr,
-                               unsigned int numBytes,
-                               unsigned int* data) {
+
+bool LE1Simulator::readWordData(unsigned int addr,
+                                unsigned int numBytes,
+                                unsigned int* data) {
 #ifdef DBG_SIM
   std::cerr << "Entering LE1Simulator::readIntData\n"
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
@@ -629,5 +653,6 @@ void LE1Simulator::readIntData(unsigned int addr,
 #ifdef DBG_SIM
   std::cerr << "Leaving LE1Simulator::readIntData\n";
 #endif
+  return true;
 }
 

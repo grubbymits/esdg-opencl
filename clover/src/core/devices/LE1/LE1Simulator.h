@@ -41,13 +41,15 @@ namespace Coal {
     bool Run(const char *iram, const char *dram);
     void LockAccess();
     void UnlockAccess();
-    void readCharData(unsigned int addr,
+    bool readByteData(unsigned int addr,
                       unsigned int numBytes,
                       unsigned char *data);
-    //unsigned short* readShortData(unsigned addr, unsigned numBytes);
-    void readIntData(unsigned int addr,
-                     unsigned int numBytes,
-                     unsigned int* data);
+    bool readHalfData(unsigned addr,
+                      unsigned numBytes,
+                      unsigned short *data);
+    bool readWordData(unsigned int addr,
+                      unsigned int numBytes,
+                      unsigned int* data);
 private:
   static unsigned iteration;
   bool isInitialised;

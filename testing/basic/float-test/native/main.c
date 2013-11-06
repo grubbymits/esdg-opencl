@@ -8,16 +8,16 @@
 // = 782226415
 // = 2E9FD3EF
 
-int a = 0;
-int b = 0;
+//int a = 0;
+//int b = 0;
 int c = 0;
 int d = 0;
 int e = 0;
 int f = 0;
 
 int main(void) {
-  a = -30006;
-  b = -26069;
+  int a = 25261;
+  int b = 1682;
 
   c = a * b;
   d = int32_to_float32(c);
@@ -34,6 +34,5 @@ int main(void) {
 
   printf("Native result = %x\n", native);
 #endif
-
-  return 0;
+  return f;
 }

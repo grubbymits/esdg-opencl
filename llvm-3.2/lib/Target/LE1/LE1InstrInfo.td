@@ -843,6 +843,7 @@ def : Pat<(srl (shl CPURegs:$src, (i32 16)), (i32 16)),
           (ZXTH CPURegs:$src)>;
 def : Pat<(srl (shl CPURegs:$src, (i32 24)), (i32 24)),
           (ZXTB CPURegs:$src)>;
+
 def : Pat<(and CPURegs:$src, (i32 0x000000FF)),
           (ZXTB CPURegs:$src)>;
 def : Pat<(and CPURegs:$src, (i32 0x0000FFFF)),

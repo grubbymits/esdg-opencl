@@ -6,7 +6,7 @@ llvm-link test.bc /opt/esdg-opencl/lib/builtins.bc -o linked-float.bc
 llc linked-float.bc -o float.s
 
 echo Transforming assembly file
-perl ~/Dropbox/src/LE1/Assembler/llvmTransform.pl float.s > final.s
+perl ~/llvmTransform.pl float.s > final.s
 echo Running second pass
 perl ~/Dropbox/src/LE1/Assembler/secondpass.pl final.s -OPC=/opt/esdg-opencl/include/opcodes.txt
 echo Starting Insizzle

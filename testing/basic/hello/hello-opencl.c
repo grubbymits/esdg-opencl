@@ -74,12 +74,12 @@
 const char *KernelSource =
 "const int refarray[] = { 20, 50, 80, 100 };\n"
 "__kernel void array_mult(\n" \
-"   __global int* input1,\n" \
-"   __global int* input2,\n" \
-"   __global int* output)\n" \
+"   __global float* input1,\n" \
+"   __global float* input2,\n" \
+"   __global float* output)\n" \
 "{\n" \
 "   int i = get_global_id(0);\n" \
-"   output[i] = (input1[i] * input2[i]) + (float)1.0;\n" \
+"   output[i] = (input1[i] * input2[i]);\n" \
 "}\n" \
 "\n";
  
@@ -89,9 +89,9 @@ int main(int argc, char** argv)
 {
     int err;                            // error code returned from api calls
       
-    int data1[DATA_SIZE]; //= {0,1,2,3,4,5,6,7,8,9};              // original data set given to device
-    int data2[DATA_SIZE]; //= {0,10,20,30,40,50,60,70,80,90};              // original data set given to device
-    int results[DATA_SIZE]; //= {0,0,0,0,0,0,0,0,0,0};           // results returned from device
+    float data1[DATA_SIZE]; //= {0,1,2,3,4,5,6,7,8,9};              // original data set given to device
+    float data2[DATA_SIZE]; //= {0,10,20,30,40,50,60,70,80,90};              // original data set given to device
+    float results[DATA_SIZE]; //= {0,0,0,0,0,0,0,0,0,0};           // results returned from device
     unsigned int correct;               // number of correct results returned
 
     srand(time(NULL));
@@ -182,9 +182,9 @@ int main(int argc, char** argv)
  
     // Create the input and output arrays in device memory for our calculation
     //
-    input1 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(int) * count, NULL, NULL);
-    input2 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(int) * count, NULL, NULL);
-    output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(int) * count, NULL, NULL);
+    input1 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(float) * count, NULL, NULL);
+    input2 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(float) * count, NULL, NULL);
+    output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(float) * count, NULL, NULL);
     if (!input1 || !input2 || !output)
     {
         printf("Error: Failed to allocate device memory!\n");
@@ -193,8 +193,8 @@ int main(int argc, char** argv)
     
     // Write our data set into the input array in device memory 
     //
-    err = clEnqueueWriteBuffer(commands, input1, CL_TRUE, 0, sizeof(int) * count, data1, 0, NULL, NULL);
-    err = clEnqueueWriteBuffer(commands, input2, CL_TRUE, 0, sizeof(int) * count, data2, 0, NULL, NULL);
+    err = clEnqueueWriteBuffer(commands, input1, CL_TRUE, 0, sizeof(float) * count, data1, 0, NULL, NULL);
+    err = clEnqueueWriteBuffer(commands, input2, CL_TRUE, 0, sizeof(float) * count, data2, 0, NULL, NULL);
     if (err != CL_SUCCESS)
     {
         printf("Error: Failed to write to source array!\n");
@@ -264,7 +264,7 @@ int main(int argc, char** argv)
     correct = 0;
     for(i = 0; i < count; i++)
     {
-      float expected = data1[i] * data2[i] + 1.0;
+      float expected = data1[i] * data2[i];
       float res = results[i];
       //printf("    data1 = %x, data2 = %x\n", data1[i], data2[i]);
 
@@ -275,7 +275,7 @@ int main(int argc, char** argv)
       else {
         printf("[%d] - FAIL: %f, and expected = %f : ", i, res,
                expected);
-        printf("data1 = %d, data2 = %d\n", data1[i], data2[i]);
+        printf("data1 = %f, data2 = %f\n", data1[i], data2[i]);
       }
     }
     

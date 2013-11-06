@@ -785,19 +785,25 @@ bool LE1KernelEvent::run() {
       unsigned TotalSize = (*(MemObject**)Arg.data())->size();
 
       if (Arg.type()->isIntegerTy(8)) {
-        p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
-                                               (unsigned char*)buffer->data());
+        simulator->readByteData(buffer->addr(), TotalSize,
+                                (unsigned char*)buffer->data());
       }
-      // FIXME Shorts aren't handled!
-
+      else if (Arg.type()->isIntegerTy(16)) {
+        simulator->readHalfData(buffer->addr(), TotalSize,
+                                (unsigned short*)buffer->data());
+      }
       else if (Arg.type()->isIntegerTy(32)) {
-        p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
-                                              (unsigned*)buffer->data());
+        simulator->readWordData(buffer->addr(), TotalSize,
+                                (unsigned*)buffer->data());
       }
+      else if (Arg.type()->getTypeID() == llvm::Type::FloatTyID)
+        simulator->readWordData(buffer->addr(), TotalSize,
+                                (unsigned*)buffer->data());
+
       // FIXME This only handles aligned structures!
       else if (Arg.type()->isStructTy()) {
-        p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
-                                              (unsigned*)buffer->data());
+        simulator->readWordData(buffer->addr(), TotalSize,
+                                (unsigned*)buffer->data());
       }
 
       else if (Arg.type()->getTypeID() == llvm::Type::VectorTyID) {
@@ -812,18 +818,16 @@ bool LE1KernelEvent::run() {
           std::cerr << "Elements are integers\n";
 #endif
           if (elementType->isIntegerTy(8)) {
-            p_device->getSimulator()->readCharData(buffer->addr(), TotalSize,
-                                                (unsigned char*)buffer->data());
+            simulator->readByteData(buffer->addr(), TotalSize,
+                                    (unsigned char*)buffer->data());
           }
           else if (elementType->isIntegerTy(16)) {
-            std::cerr << "!!! ERROR - shorts still aren't handled!"
-              << std::endl;
-            wasSuccess = false;
-            break;
+            simulator->readHalfData(buffer->addr(), TotalSize,
+                                    (unsigned short*)buffer->data());
           }
           else if (elementType->isIntegerTy(32)) {
-            p_device->getSimulator()->readIntData(buffer->addr(), TotalSize,
-                                              (unsigned*)buffer->data());
+            simulator->readWordData(buffer->addr(), TotalSize,
+                                   (unsigned*)buffer->data());
           }
         }
         else {
