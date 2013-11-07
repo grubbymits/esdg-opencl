@@ -440,6 +440,24 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
 //    return true;
 // else return false;
 
+static bool isWorkgroupLoop(ForStmt *s) {
+#ifdef DBG_WRKGRP
+  std::cerr << "isWorkgroupLoop" << std::endl;
+#endif
+  Stmt *init = s->getInit();
+  for (Stmt::child_iterator SI = init->child_begin(), SE = init->child_end();
+       SI != SE; ++SI) {
+    if (isa<DeclRefExpr>(*SI)) {
+      DeclRefExpr *expr = cast<DeclRefExpr>(*SI);
+      NamedDecl *ND = cast<NamedDecl>(expr->getDecl());
+      std::string name = ND->getName().str();
+
+      return (name.compare("esdg_idx") ||
+              name.compare("esdg_idy") ||
+              name.compare("esdg_idz"));
+    }
+  }
+}
 
 WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
                                                     unsigned x,
@@ -448,11 +466,16 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
   : ASTVisitorBase(R, x, y, z) {
 
     isFirstLoop = true;
+    numDimensions = 1;
     InvalidThreadInit << "bool __kernel_invalid_global_threads[" << x << "]";
-    if (y > 1)
+    if (y > 1) {
       InvalidThreadInit << "[" << y << "]";
-    if (z > 1)
+      ++numDimensions;
+    }
+    if (z > 1) {
       InvalidThreadInit << "[" << z << "]";
+      ++numDimensions;
+    }
     InvalidThreadInit << " = {false};\n";
     InvalidThreadInit << "unsigned __kernel_total_invalid_global_threads = 0;"
       << std::endl;
@@ -625,7 +648,14 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
         SourceLocation RefLoc = (*RI)->getLocStart();
 
         if ((BarrierLoc < RefLoc) && (DeclLoc < BarrierLoc)) {
-          ScalarExpand(Loop->getLocStart(), *DSI);
+          SourceLocation InsertLoc;
+          if (isa<ForStmt>(Loop)) {
+            if (isWorkgroupLoop(cast<ForStmt>(Loop)))
+              InsertLoc = FuncBodyStart;
+            else
+              InsertLoc = Loop->getLocStart();
+          }
+          ScalarExpand(InsertLoc, *DSI);
           hasExpanded= true;
           break;
         }
@@ -672,6 +702,10 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
       SourceLocation RefLoc = (*RI)->getLocStart();
       if ((LoopStart < RefLoc) && (RefLoc < LoopEnd)) {
         SourceLocation InsertLoc = DeclParents[(*RI)->getDecl()]->getLocStart();
+        if (isa<ForStmt>(Loop)) {
+          if (isWorkgroupLoop(cast<ForStmt>(Loop)))
+            InsertLoc = FuncBodyStart;
+        }
         ScalarExpand(InsertLoc, *DSI);
         DSI = Stmts.erase(DSI);
         hasExpanded = true;
@@ -1062,7 +1096,7 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
                                       Barriers[Region], depth);
 
   // Insert opening and closing loops for all regions, except the outer loop
-  if (depth != 0) {
+  if (depth > (numDimensions - 1)) {
     Stmt *LoopBody = NULL;
     if (isa<ForStmt>(Region))
       LoopBody = (cast<ForStmt>(Region))->getBody();

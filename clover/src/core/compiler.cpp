@@ -138,12 +138,15 @@ bool Compiler::ExpandMacros(const char *filename) {
     return false;
   }
 
+  // FIXME Took this out because it broke sort. Think it's because it inserts:
+  // # 1 esdg_src.cl at the top
+  /*
   RewriteIncludesAction rewriteIncludesAct;
   if (!CI.ExecuteAction(rewriteIncludesAct)) {
     std::cerr << "RewriteIncludes failed: " << std::endl
       << log;
     return false;
-  }
+  }*/
 
 #ifdef DBG_COMPILER
   std::cerr << "Successfully leaving Compiler::ExpandMacros" << std::endl;

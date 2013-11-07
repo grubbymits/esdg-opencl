@@ -274,6 +274,7 @@ private:
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
   bool isFirstLoop;
+  unsigned numDimensions;
   clang::ForStmt *OuterLoop;
   std::vector<clang::Decl*> ParamVars;
   std::stringstream InvalidThreadInit;
