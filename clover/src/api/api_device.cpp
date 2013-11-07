@@ -37,7 +37,7 @@
 
 // TODO Add a LE1Device to this and replace the the cpu code
 static Coal::LE1Device LE1Devices[TotalLE1Devices] = {
-  Coal::LE1Device("Default_1wide.xml", "scalar", 1)            // 0
+  //Coal::LE1Device("Default_1wide.xml", "scalar", 1)            // 0
   //Coal::LE1Device("Default_2wide_1ls.xml", "2w2a1m1ls1b", 1),   // 1
 
   //Coal::LE1Device("Default_2wide_2ls.xml", "2w2a1m2ls1b", 1),   // 2
@@ -60,7 +60,7 @@ static Coal::LE1Device LE1Devices[TotalLE1Devices] = {
 
   //Coal::LE1Device("2Context_3wide_2ls.xml", "3w3a1m2ls1b", 2),  // 14
   //Coal::LE1Device("4Context_3wide_2ls.xml", "3w3a1m2ls1b", 4),  // 15
-  //Coal::LE1Device("8Context_3wide_2ls.xml", "3w3a1m2ls1b", 8)   // 16
+  Coal::LE1Device("8Context_3wide_2ls.xml", "3w3a1m2ls1b", 8)   // 16
 };
 
 cl_int

@@ -111,6 +111,13 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     CurrentAddr += (*WI)->getSize();
   }
 
+  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
+       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
+
+    (*WI)->setAddr(CurrentAddr);
+    CurrentAddr += (*WI)->getSize();
+  }
+
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
@@ -159,6 +166,11 @@ bool LE1DataPrinter::AppendDataArea() {
   // FIXME Only handle 32-bit data
   for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
        WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
+    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
+      << " - " << (*WI)->getName() << std::endl;
+  }
+  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
+       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
     Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
       << " - " << (*WI)->getName() << std::endl;
   }
@@ -275,6 +287,14 @@ bool LE1DataPrinter::AppendDataArea() {
     size_t totalBytes = (*WI)->getSize();
     const unsigned* data = (*WI)->getData();
     PrintData(data, PrintAddr, 0, sizeof(int), totalBytes);
+    PrintAddr += totalBytes;
+  }
+
+  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
+       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
+    size_t totalBytes = (*WI)->getSize();
+    const unsigned short* data = (*WI)->getData();
+    PrintData(data, PrintAddr, 0, sizeof(short), totalBytes);
     PrintAddr += totalBytes;
   }
 

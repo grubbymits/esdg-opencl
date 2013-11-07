@@ -585,7 +585,20 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
             newGlobal->addElement(CDS->getElementAsInteger(i));
 
           theData.addWordVariable(newGlobal);
+        }
+        else if (type->isIntegerTy(16)) {
+          EmbeddedData::GlobalVariable<unsigned short> *newGlobal =
+            new EmbeddedData::GlobalVariable<unsigned short>(name.str());
 
+          for (unsigned i = 0; i < NumElements; ++i)
+            newGlobal->addElement(CDS->getElementAsInteger(i));
+
+          theData.addHalfVariable(newGlobal);
+        }
+        else {
+          std::cerr << "!! ERROR: Unhandled initialised global variable"
+            << std::endl;
+          return false;
         }
       }
       else {
