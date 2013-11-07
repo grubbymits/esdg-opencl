@@ -719,8 +719,6 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
 #endif
 }
 
-
-
 bool LE1KernelEvent::run() {
 #ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::run" << std::endl;
