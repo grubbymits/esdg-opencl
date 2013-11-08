@@ -26,7 +26,7 @@
 
 using namespace clang;
 using namespace llvm;
-
+/*
 static const char *DescriptionMsg =
 "A really simple inliner. \
 This transformation does a simple source-to-source \
@@ -50,7 +50,7 @@ this step is skipped) \n\
 Each transformation iteration only transforms one callexpr, \
 also it will keep the inlined function body unchanged. \
 If the inlined body has no reference anymore, c_delta \
-will remove it entirely. \n";
+will remove it entirely. \n";*/
 
 //static RegisterTransformation<SimpleInliner>
   //       Trans("simple-inliner", DescriptionMsg);
@@ -365,8 +365,8 @@ void SimpleInliner::getValidFunctionDecls(void)
 #ifdef DEBUGCL
     std::cerr << FD->getName().str() << std::endl;
 #endif
-    unsigned int NumStmts = (*I).second;
-    unsigned int NumCalls = FunctionDeclNumCalls[FD];
+    //unsigned int NumStmts = (*I).second;
+    //unsigned int NumCalls = FunctionDeclNumCalls[FD];
 
     //if (((NumCalls == 1) && (NumStmts <= SingleMaxNumStmts)) ||
       //  ((NumCalls > 1) && (NumStmts <= MaxNumStmts))) {

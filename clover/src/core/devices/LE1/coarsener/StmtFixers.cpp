@@ -180,7 +180,7 @@ void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
 #ifdef DBG_WRKGRP
     std::cerr << "Statement list is only one element long" << std::endl;
 #endif
-    Stmt *cond = PSL.front().first;
+    //Stmt *cond = PSL.front().first;
     T s = PSL.front().second;
     InsertText(s->getLocStart(), UnaryConvert);
     return;
@@ -189,7 +189,7 @@ void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
   for (typename std::list<std::pair<Stmt*, T> >::iterator SLI = PSL.begin(),
        SLE = PSL.end(); SLI != SLE; ++SLI) {
 
-    Stmt *cond = (*SLI).first;
+    //Stmt *cond = (*SLI).first;
     T s = (*SLI).second;
     InsertText(s->getLocStart(), UnaryConvert);
   }

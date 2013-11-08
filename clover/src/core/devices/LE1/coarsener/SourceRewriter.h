@@ -91,7 +91,7 @@ class OpenCLASTConsumer : public clang::ASTConsumer {
 public:
   OpenCLASTConsumer(clang::Rewriter &R, unsigned x, unsigned y, unsigned z,
                     std::string &name)
-    : Visitor(R, x, y, z), KernelName(name) { }
+    : KernelName(name), Visitor(R, x, y, z) { }
 
   // Override the method that gets called for each parsed top-level
   // declaration.
@@ -198,10 +198,7 @@ public:
 class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {
 public:
   ThreadSerialiser(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
-  ~ThreadSerialiser() {
-    delete returnFixer;
-    delete breakFixer;
-  }
+  ~ThreadSerialiser();
   void RewriteSource();
 
   //bool VisitForStmt(clang::Stmt *s);

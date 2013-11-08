@@ -176,14 +176,14 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
 void LE1Simulator::SaveStats() {
   // 0 = Single system
     /* system, context, hypercontext, cluster */
-    unsigned char s = 0;
-    unsigned char c = 0;
-    unsigned char hc = 0;
-    unsigned char cl = 0;
+    //unsigned char s = 0;
+    //unsigned char c = 0;
+    //unsigned char hc = 0;
+    //unsigned char cl = 0;
   SYS = (systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
   LE1System = (systemT *)((size_t)galaxyT + (0 * sizeof(systemT)));
 
-  unsigned int totalHC = 0;
+  //unsigned int totalHC = 0;
   for (unsigned c = 0; c < (SYS->SYSTEM_CONFIG & 0xFF); ++c) {
     contextConfig *CNT
       = (contextConfig *)((size_t)SYS->CONTEXT + (c * sizeof(contextConfig)));
@@ -565,6 +565,7 @@ bool LE1Simulator::readByteData(unsigned int addr,
   }
   else {
     unsigned remainingBytes = numBytes - (numBytes % 4);
+    unsigned lastPos = 0;
     for (unsigned i = 0; i < (numBytes - remainingBytes);
          addr = (addr + 4), i += 4) {
       bytes = 0;
@@ -573,12 +574,13 @@ bool LE1Simulator::readByteData(unsigned int addr,
       data[i+2] = (unsigned char) 0xFF & (bytes >> 8);
       data[i+1] = (unsigned char) 0xFF & (bytes >> 16);
       data[i] = (unsigned char) 0xFF & (bytes >> 24);
+      lastPos = i + 4;
     }
     if (remainingBytes != 0) {
       bytes = 0;
       insizzleAPIRdOneDramLocation(addr, &bytes);
       for (unsigned i = 0; i < remainingBytes; ++i)
-        data[i] = 0xFF & (bytes >> (24 - (i * 8)));
+        data[lastPos + i] = 0xFF & (bytes >> (24 - (i * 8)));
     }
   }
 

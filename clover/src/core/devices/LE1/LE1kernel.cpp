@@ -178,7 +178,7 @@ T next_power_of_two(T k) {
         if (k == 0)
                 return 1;
         k--;
-        for (int i=1; i<sizeof(T)*8; i<<=1)
+        for (unsigned i=1; i<sizeof(T)*8; i<<=1)
                 k = k | k >> i;
         return k+1;
 }
@@ -191,7 +191,7 @@ size_t LE1Kernel::typeOffset(size_t &offset, size_t type_len)
     type_len = next_power_of_two(type_len);
     size_t mask = ~(type_len - 1);
 
-    while (rs & mask != rs)
+    while ((rs & mask) != rs)
         rs++;
 
     // Where to try to place the next value
@@ -201,6 +201,7 @@ size_t LE1Kernel::typeOffset(size_t &offset, size_t type_len)
 }
 
 // TODO !! Look at this, help create a launcher?
+/*
 llvm::Function *LE1Kernel::callFunction()
 {
     pthread_mutex_lock(&p_call_function_mutex);
@@ -215,7 +216,7 @@ llvm::Function *LE1Kernel::callFunction()
     }
 
     llvm::Function *stub_function;
-    return stub_function;
+    return stub_function;*/
 
     /* Create a stub function in the form of
      *
@@ -318,7 +319,7 @@ llvm::Function *LE1Kernel::callFunction()
     pthread_mutex_unlock(&p_call_function_mutex);
 
     return stub_function;*/
-}
+//}
 
 /*
  * LE1KernelEvent
@@ -957,11 +958,11 @@ bool LE1KernelEvent::finished()
 #ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::finished\n";
 #endif
-    bool rs;
+    //bool rs;
 
     pthread_mutex_lock(&p_mutex);
 
-    rs = (p_finished_wg == p_num_wg);
+    //rs = (p_finished_wg == p_num_wg);
 
     pthread_mutex_unlock(&p_mutex);
 #ifdef DBG_KERNEL

@@ -457,6 +457,7 @@ static bool isWorkgroupLoop(ForStmt *s) {
               name.compare("esdg_idz"));
     }
   }
+  return false;
 }
 
 WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
@@ -483,6 +484,10 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
     breakFixer = new BreakFixer(&SourceToInsert, x, y, z);
 }
 
+WorkitemCoarsen::ThreadSerialiser::~ThreadSerialiser() {
+  delete returnFixer;
+  delete breakFixer;
+}
 
 void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
 #ifdef DBG_WRKGRP
@@ -886,7 +891,6 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
 
   VarDecl *VD = cast<VarDecl>(DS->getSingleDecl());
   NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
-  ValueDecl *ValD = cast<ValueDecl>(DS->getSingleDecl());
 
   std::string varName = ND->getName().str();
 

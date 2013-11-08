@@ -96,7 +96,7 @@ class LE1Kernel : public DeviceKernel
         LE1Device *device() const;  /*!< \brief device on which the kernel will be run */
 
         llvm::Function *function() const;   /*!< \brief \c llvm::Function representing the kernel but <strong>not to be run</strong> */
-        llvm::Function *callFunction();     /*!< \brief stub function used to run the kernel, see \ref llvm */
+        //llvm::Function *callFunction();     /*!< \brief stub function used to run the kernel, see \ref llvm */
 
         /**
          * \brief Calculate where to place a value in an array

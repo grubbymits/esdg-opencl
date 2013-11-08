@@ -334,11 +334,11 @@ thread " << pthread_self() << std::endl;
     }
 
     // Free mmapped() data if needed
-    size_t mapped_size;
-    void *mapped_data;// = getWorkItemsData(mapped_size);
+    //size_t mapped_size;
+    //void *mapped_data;// = getWorkItemsData(mapped_size);
 
-    if (mapped_data)
-        munmap(mapped_data, mapped_size);
+    //if (mapped_data)
+        //munmap(mapped_data, mapped_size);
 
     return 0;
 }
