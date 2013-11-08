@@ -118,6 +118,14 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     CurrentAddr += (*WI)->getSize();
   }
 
+  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
+       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
+
+    (*WI)->setAddr(CurrentAddr);
+    CurrentAddr += (*WI)->getSize();
+  }
+
+  // Calculate buffer addresses
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
@@ -163,7 +171,6 @@ bool LE1DataPrinter::AppendDataArea() {
   Output << "00038 - group_id" << std::endl;
 
   // Print labels for any embedded data
-  // FIXME Only handle 32-bit data
   for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
        WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
     Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
@@ -174,7 +181,13 @@ bool LE1DataPrinter::AppendDataArea() {
     Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
       << " - " << (*WI)->getName() << std::endl;
   }
+  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
+       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
+    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
+      << " - " << (*WI)->getName() << std::endl;
+  }
 
+  // Print labels for buffers
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
 
@@ -295,6 +308,14 @@ bool LE1DataPrinter::AppendDataArea() {
     size_t totalBytes = (*WI)->getSize();
     const unsigned short* data = (*WI)->getData();
     PrintData(data, PrintAddr, 0, sizeof(short), totalBytes);
+    PrintAddr += totalBytes;
+  }
+
+  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
+       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
+    size_t totalBytes = (*WI)->getSize();
+    const unsigned char* data = (*WI)->getData();
+    PrintData(data, PrintAddr, 0, sizeof(char), totalBytes);
     PrintAddr += totalBytes;
   }
 

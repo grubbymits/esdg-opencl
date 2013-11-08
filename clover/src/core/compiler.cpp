@@ -91,6 +91,8 @@ Compiler::Compiler(DeviceInterface *device)
     << CPU << std::endl;
 #endif
 
+  //p_compiler.getCodeGenOpts().BackendOptions.push_back("unroll-count=2");
+
 }
 
 Compiler::~Compiler()
@@ -224,26 +226,24 @@ int Compiler::InlineSource(const char *filename) {
 
 bool Compiler::CompileToBitcode(std::string &Source,
                                 clang::InputKind SourceKind,
-                                const std::string &Opts) {
+                                std::string &Opts) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering CompileToBitcode:" << std::endl << Opts << std::endl;
 #endif
-  clang::CompilerInvocation Invocation;
+  //clang::CompilerInvocation Invocation;
   clang::EmitLLVMOnlyAction act(&llvm::getGlobalContext());
   std::string log;
   llvm::raw_string_ostream s_log(log);
 
   // Parse the compiler options
   std::vector<std::string> opts_array;
-  // FIXME Add this back in, but it broke JohnTheRipper
-  /*
   std::istringstream ss(Opts);
 
   while (!ss.eof()) {
     std::string opt;
     getline(ss, opt, ' ');
     opts_array.push_back(opt);
-  }*/
+  }
 
   // opts_array.push_back(name);
 
@@ -301,6 +301,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
   p_compiler.getFrontendOpts().Inputs.push_back(
     clang::FrontendInputFile(TempFilename, SourceKind));
   p_compiler.getFrontendOpts().ProgramAction = clang::frontend::EmitLLVMOnly;
+
   //p_compiler.getFrontendOpts().OutputFile = OutputFile;
 
   p_compiler.getHeaderSearchOpts().UseBuiltinIncludes = true;
@@ -316,7 +317,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
   p_compiler.getCodeGenOpts().setInlining(
     clang::CodeGenOptions::OnlyAlwaysInlining);
 
-  p_compiler.getLangOpts().NoBuiltin = true;
+  p_compiler.getLangOpts().NoBuiltin = false;
   p_compiler.getTargetOpts().Triple = Triple;
   p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
                                              SourceKind);

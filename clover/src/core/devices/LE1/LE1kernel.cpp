@@ -555,7 +555,12 @@ bool LE1KernelEvent::CompileSource() {
 #endif
 
   Compiler LE1Compiler(p_device);
-  std::string Opts = "";
+  std::string Opts = "-funroll-loops ";
+  Opts.append("-mllvm -unroll-threshold=10 ");
+  Opts.append("-mllvm -unroll-runtime ");
+  Opts.append("-mllvm -unroll-allow-partial ");
+  Opts.append("-mllvm -unroll-count=2");
+
   if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts))
     return false;
   llvm::Module *WorkgroupModule = LE1Compiler.module();

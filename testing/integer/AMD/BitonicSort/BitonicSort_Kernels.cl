@@ -39,7 +39,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
  */
 
 __kernel 
-void bitonicSort(__global uint * theArray,
+void bitonicSort(uint * restrict theArray,
                  const uint stage, 
                  const uint passOfStage,
                  const uint direction)

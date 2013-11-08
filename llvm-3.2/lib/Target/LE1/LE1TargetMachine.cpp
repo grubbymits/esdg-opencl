@@ -15,6 +15,8 @@
 #include "LE1TargetMachine.h"
 #include "llvm/PassManager.h"
 #include "llvm/PassSupport.h"
+#include "llvm/CodeGen/MachineScheduler.h"
+#include "llvm/CodeGen/SchedulerRegistry.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Transforms/IPO.h"
@@ -52,7 +54,17 @@ LE1TargetMachine(const Target &T, StringRef TT,
 }
 
 bool LE1TargetMachine::addPassesForOptimizations(PassManagerBase &PM) {
-  return false;
+  PM.add(createPromoteMemoryToRegisterPass());
+  PM.add(createConstantPropagationPass());
+  PM.add(createIndVarSimplifyPass());
+  PM.add(createLoopSimplifyPass());
+  PM.add(createDeadStoreEliminationPass());
+  PM.add(createConstantPropagationPass());
+  PM.add(createCFGSimplificationPass());
+  PM.add(createLoopRotatePass());
+  PM.add(createLoopUnswitchPass());
+  PM.add(createLoopUnrollPass());
+  return true;
 }
 
 namespace {
@@ -96,8 +108,14 @@ bool LE1PassConfig::addInstSelector()
 bool LE1PassConfig::addPreISel() {
   addPass(createPromoteMemoryToRegisterPass());
   addPass(createConstantPropagationPass());
-  addPass(createDeadStoreEliminationPass());
   addPass(createCFGSimplificationPass());
+  addPass(createBlockPlacementPass());
+  addPass(createDeadStoreEliminationPass());
+  addPass(createConstantPropagationPass());
+  addPass(createLoopSimplifyPass());
+  addPass(createLoopRotatePass());
+  addPass(createLoopUnswitchPass());
+  addPass(createLoopUnrollPass());
   return true;
 }
 /*

@@ -359,7 +359,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
     default:
       break;
     case 0:
-      GlobalId << "get_group_id(0) * " << LocalX
+      GlobalId << "__builtin_le1_read_group_id_0() * " << LocalX
         << " + __esdg_idx;//"; //__kernel_local_id[0];//";
       break;
     case 1:
