@@ -409,8 +409,7 @@ cl_int Program::build(const char *options,
             //std::string name = "program.cl";
             //if (!dep.compiler->compile(options ? options : std::string(), buffer))
             if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL,
-                                                std::string(options)))
-                                              //options ? options : std::string()))
+                                          options ? options : std::string()))
             {
                 if (pfn_notify)
                     pfn_notify((cl_program)this, user_data);

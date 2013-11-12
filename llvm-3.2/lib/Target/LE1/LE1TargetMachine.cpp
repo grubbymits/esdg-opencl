@@ -56,14 +56,14 @@ LE1TargetMachine(const Target &T, StringRef TT,
 bool LE1TargetMachine::addPassesForOptimizations(PassManagerBase &PM) {
   PM.add(createPromoteMemoryToRegisterPass());
   PM.add(createConstantPropagationPass());
-  PM.add(createIndVarSimplifyPass());
-  PM.add(createLoopSimplifyPass());
   PM.add(createDeadStoreEliminationPass());
   PM.add(createConstantPropagationPass());
   PM.add(createCFGSimplificationPass());
+  PM.add(createIndVarSimplifyPass());
+  PM.add(createLoopSimplifyPass());
   PM.add(createLoopRotatePass());
   PM.add(createLoopUnswitchPass());
-  PM.add(createLoopUnrollPass());
+  PM.add(createLoopUnrollPass(10, 2, 1));
   return true;
 }
 
@@ -112,10 +112,11 @@ bool LE1PassConfig::addPreISel() {
   addPass(createBlockPlacementPass());
   addPass(createDeadStoreEliminationPass());
   addPass(createConstantPropagationPass());
+  addPass(createIndVarSimplifyPass());
   addPass(createLoopSimplifyPass());
   addPass(createLoopRotatePass());
   addPass(createLoopUnswitchPass());
-  addPass(createLoopUnrollPass());
+  addPass(createLoopUnrollPass(10, 2, 1));
   return true;
 }
 /*

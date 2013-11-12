@@ -75,6 +75,7 @@
 #include <llvm/Support/ToolOutputFile.h>
 #include <llvm/Target/TargetLibraryInfo.h>
 #include <llvm/Target/TargetMachine.h>
+#include <llvm/Transforms/Scalar.h>
 
 using namespace Coal;
 using namespace clang;
@@ -226,7 +227,7 @@ int Compiler::InlineSource(const char *filename) {
 
 bool Compiler::CompileToBitcode(std::string &Source,
                                 clang::InputKind SourceKind,
-                                std::string &Opts) {
+                                const std::string &Opts) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering CompileToBitcode:" << std::endl << Opts << std::endl;
 #endif
@@ -347,6 +348,18 @@ bool Compiler::CompileToBitcode(std::string &Source,
     return true;
 
 }
+
+void Compiler::RunOptimisations(llvm::Module *M) {
+  PassManager PM;
+  PM.add(createIndVarSimplifyPass());
+  PM.add(createLoopUnrollPass(10, 2, 1));
+  PM.run(*M);
+#ifdef DBG_COMPILER
+  std::cerr << "Module after running optimisations:" << std::endl;
+  M->dump();
+#endif
+}
+
 
 llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
 #ifdef DBG_COMPILER
@@ -627,9 +640,15 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
 #endif
   clang::EmitAssemblyAction act(&llvm::getGlobalContext()); //Module->getContext()?
 
+
   llvm::InitializeAllTargets();
   llvm::InitializeAllTargetMCs();
   llvm::InitializeAllAsmPrinters();
+
+  llvm::PassRegistry &Registry = *llvm::PassRegistry::getPassRegistry();
+  llvm::initializeCore(Registry);
+  llvm::initializeScalarOpts(Registry);
+  llvm::initializeTarget(Registry);
 
   std::string Error;
   const llvm::Target *TheTarget = llvm::TargetRegistry::lookupTarget(Triple,
@@ -665,6 +684,9 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   else
     PM.add(new llvm::DataLayout(M));
 
+  PM.add(createIndVarSimplifyPass());
+  PM.add(createLoopUnrollPass(10, 2, 1));
+
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
                                                              Error, 0);
   if (!Error.empty()) {
@@ -683,6 +705,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   //AnalysisID StartAfterID = 0;
   //AnalysisID StopAfterID = 0;
 
+
   if (Target.addPassesToEmitFile(PM, FOS,
                                  llvm::TargetMachine::CGFT_AssemblyFile,
                                  false, 0, 0)) {
@@ -690,6 +713,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
     return false;
   }
 
+  llvm::cl::PrintOptionValues();
   PM.run(*M);
 
   Out->keep();
