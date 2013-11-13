@@ -158,12 +158,12 @@ LE1Device::~LE1Device()
       ++KernelIterations;
     }
 
-    AverageCycles /= KernelIterations;
-    AverageIdle /= KernelIterations;
-    AverageDecodeStalls /= KernelIterations;
-    AverageStalls /= KernelIterations;
-    AverageBranchesTaken /= KernelIterations;
-    AverageBranchesNotTaken /= KernelIterations;
+    //AverageCycles /= KernelIterations;
+    //AverageIdle /= KernelIterations;
+    //AverageDecodeStalls /= KernelIterations;
+    //AverageStalls /= KernelIterations;
+    //AverageBranchesTaken /= KernelIterations;
+    //AverageBranchesNotTaken /= KernelIterations;
 
     // Write results to a CSV file
     // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches

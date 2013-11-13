@@ -1,0 +1,19 @@
+digraph "CFG for 'main' function" {
+	label="CFG for 'main' function";
+
+	Node0xaa26330 [shape=record,label="{entry:\l  %retval = alloca i32\l  %0 = alloca i32\l  %i = alloca i32\l  %step = alloca i32\l  %x = alloca i32\l  %\"alloca point\" = bitcast i32 0 to i32\l  store i32 0, i32* %i, align 4\l  store i32 0, i32* %step, align 4\l  store i32 0, i32* %x, align 4\l  store i32 0, i32* %i, align 4\l  br label %bb3\l}"];
+	Node0xaa26330 -> Node0xaa236d0;
+	Node0xaa236d0 [shape=record,label="{bb3:                                              \l  %1 = load i32* %i, align 4\l  %2 = icmp sle i32 %1, 99999999\l  br i1 %2, label %bb, label %bb4\l|{<s0>T|<s1>F}}"];
+	Node0xaa236d0:s0 -> Node0xaa23730;
+	Node0xaa236d0:s1 -> Node0xaa24740;
+	Node0xaa23730 [shape=record,label="{bb:                                               \l  %3 = load i32* %i, align 4\l  %4 = and i32 %3, 255\l  %5 = icmp eq i32 %4, 0\l  br i1 %5, label %bb1, label %bb2\l|{<s0>T|<s1>F}}"];
+	Node0xaa23730:s0 -> Node0xaa24800;
+	Node0xaa23730:s1 -> Node0xaa246e0;
+	Node0xaa246e0 [shape=record,label="{bb2:                                              \l  %6 = load i32* %step, align 4\l  %7 = sub nsw i32 %6, 1\l  %8 = shl i32 %7, 2\l  store i32 %8, i32* %x, align 4\l  %9 = load i32* %i, align 4\l  %10 = add nsw i32 %9, 1\l  store i32 %10, i32* %i, align 4\l  br label %bb3\l}"];
+	Node0xaa246e0 -> Node0xaa236d0;
+	Node0xaa24740 [shape=record,label="{bb4:                                              \l  %11 = load i32* %x, align 4\l  %12 = call i32 (i8*, ...)* @printf(i8* noalias getelementptr inbounds ([7 x i8]* @.str, i64 0, i64 0), i32 %11) nounwind\l  store i32 0, i32* %0, align 4\l  %13 = load i32* %0, align 4\l  store i32 %13, i32* %retval, align 4\l  br label %return\l}"];
+	Node0xaa24740 -> Node0xaa247a0;
+	Node0xaa247a0 [shape=record,label="{return:                                           \l  %retval5 = load i32* %retval\l  ret i32 %retval5\l}"];
+	Node0xaa24800 [shape=record,label="{bb1:                                              \l  %14 = load i32* %i, align 4\l  store i32 %14, i32* %step, align 4\l  %15 = load i32* %step, align 4\l  %16 = sub nsw i32 %15, 1\l  %17 = shl i32 %16, 2\l  store i32 %17, i32* %x, align 4\l  %18 = load i32* %i, align 4\l  %19 = add nsw i32 %18, 1\l  store i32 %19, i32* %i, align 4\l  br label %bb3\l}"];
+	Node0xaa24800 -> Node0xaa236d0;
+}

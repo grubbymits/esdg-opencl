@@ -226,7 +226,7 @@ int Compiler::InlineSource(const char *filename) {
 
 bool Compiler::CompileToBitcode(std::string &Source,
                                 clang::InputKind SourceKind,
-                                std::string &Opts) {
+                                const std::string &Opts) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering CompileToBitcode:" << std::endl << Opts << std::endl;
 #endif

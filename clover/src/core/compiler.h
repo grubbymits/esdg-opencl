@@ -96,7 +96,7 @@ class Compiler
         int InlineSource(const char *filename);
 
         bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind,
-                              std::string &Opts);
+                              const std::string &Opts);
         bool CompileToAssembly(std::string &Filename, llvm::Module *Code);
         /**
          * \brief Compile \p source to produce a LLVM module
