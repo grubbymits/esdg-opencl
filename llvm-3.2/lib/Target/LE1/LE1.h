@@ -26,6 +26,7 @@ namespace llvm {
 
   FunctionPass *createLE1RemoveExtendOps(LE1TargetMachine &TM);
   FunctionPass *createLE1ISelDag(LE1TargetMachine &TM);
+  FunctionPass *createLE1BBMerger(LE1TargetMachine &TM);
   //FunctionPass *createLE1DelaySlotFillerPass(LE1TargetMachine &TM);
   FunctionPass *createLE1Packetizer(LE1TargetMachine &TM);
   //FunctionPass *createLE1ExpandPseudoPass(LE1TargetMachine &TM);

@@ -12,6 +12,7 @@ add_public_tablegen_target(LE1CommonTableGen)
 
 add_llvm_target(LE1CodeGen
   LE1AsmPrinter.cpp
+  LE1BBMerger.cpp
   LE1CFGOptimiser.cpp
   LE1ExpandPredSpillCode.cpp
   LE1InstrInfo.cpp

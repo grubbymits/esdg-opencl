@@ -54,6 +54,7 @@ LE1TargetMachine(const Target &T, StringRef TT,
 }
 
 bool LE1TargetMachine::addPassesForOptimizations(PassManagerBase &PM) {
+  /*
   PM.add(createPromoteMemoryToRegisterPass());
   PM.add(createConstantPropagationPass());
   PM.add(createDeadStoreEliminationPass());
@@ -63,7 +64,7 @@ bool LE1TargetMachine::addPassesForOptimizations(PassManagerBase &PM) {
   PM.add(createLoopSimplifyPass());
   PM.add(createLoopRotatePass());
   PM.add(createLoopUnswitchPass());
-  PM.add(createLoopUnrollPass(10, 2, 1));
+  PM.add(createLoopUnrollPass(10, 2, 1));*/
   return true;
 }
 
@@ -89,7 +90,7 @@ public:
   virtual bool addInstSelector();
   virtual void addMachineSSAOptimization();
   virtual bool addPreSched2();
-  //virtual bool addPreRegAlloc();
+  virtual bool addPreRegAlloc();
   //virtual bool addPostRegAlloc();
   virtual bool addPreEmitPass();
 };
@@ -129,6 +130,11 @@ void LE1PassConfig::addMachineSSAOptimization() {
 
 bool LE1PassConfig::addPreSched2() {
   addPass(&TailDuplicateID);
+  return false;
+}
+
+bool LE1PassConfig::addPreRegAlloc() {
+  addPass(createLE1BBMerger(getLE1TargetMachine()));
   return false;
 }
 

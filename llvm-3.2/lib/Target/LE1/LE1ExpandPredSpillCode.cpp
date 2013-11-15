@@ -55,6 +55,10 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
     for(MachineBasicBlock::iterator MII = MBB->begin(); MII!= MBB->end();
         ++MII) {
       MachineInstr *MI = MII;
+
+      if (MI->isPseudo())
+        continue;
+
       DebugLoc DL = MI->getDebugLoc();
 
       int Opc = MI->getOpcode();

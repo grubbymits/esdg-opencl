@@ -128,6 +128,7 @@ bool LE1Packetizer::runOnMachineFunction(MachineFunction &MF) {
 
   for(MachineFunction::iterator MBBb = MF.begin(), MBBe = MF.end();
       MBBb != MBBe; ++MBBb) {
+
     // Find scheduling regions and packetize each of them
     unsigned RemainingCount = MBBb->size();
     for(MachineBasicBlock::iterator RegionEnd = MBBb->end();
