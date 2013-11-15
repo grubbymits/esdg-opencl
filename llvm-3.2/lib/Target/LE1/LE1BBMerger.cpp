@@ -1,14 +1,25 @@
 #include "LE1TargetMachine.h"
 #include "LE1Subtarget.h"
 #include "LE1MachineFunction.h"
+#include "MCTargetDesc/LE1MCTargetDesc.h"
+#include "llvm/Instructions.h"
+#include "llvm/CodeGen/MachineFunction.h"
 #include "llvm/CodeGen/MachineFunctionPass.h"
 #include "llvm/CodeGen/Passes.h"
+#include "llvm/MC/MCInstrDesc.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetInstrInfo.h"
+
+
+//#define GET_INSTRINFO_ENUM
+//#define GET_INSTRINFO_MC_DESC
+//#include "LE1GenInstrInfo.inc"
 
 using namespace llvm;
 
 namespace {
+
+
   class LE1BBMerger : public MachineFunctionPass {
     LE1TargetMachine &TM;
     const LE1Subtarget &ST;
@@ -31,39 +42,107 @@ bool LE1BBMerger::runOnMachineFunction(MachineFunction &MF) {
   for(MachineFunction::iterator MBBb = MF.begin(), MBBe = MF.end();
       MBBb != MBBe; ++MBBb) {
 
-    MachineBasicBlock *MBB = MBBb;
+    MachineBasicBlock *A = MBBb;
 
-    if (MBB->succ_size() == 2) {
+    if (A->succ_size() == 2) {
       std::cerr << "MBB has 2 successors" << std::endl;
-      MachineBasicBlock *succ1 = *(MBB->succ_begin());
-      MachineBasicBlock *succ2 = (*++(MBB->succ_begin()));
-      if ((succ1->succ_size() == 1) && (succ2->succ_size() == 1)) {
+      MachineBasicBlock *B = *(A->succ_begin());
+      MachineBasicBlock *C = (*++(A->succ_begin()));
+      if ((B->succ_size() == 1) && (C->succ_size() == 1)) {
         std::cerr << "Both successors have one successor" << std::endl;
 
-        MachineBasicBlock *succ1_succ1 = *(succ1->succ_begin());
-        MachineBasicBlock *succ2_succ1 = *(succ2->succ_begin());
+        if (*(B->succ_begin()) == *(C->succ_begin())) {
+          MachineBasicBlock *D = *(B->succ_begin());
 
-
-        if (succ1_succ1 == succ2_succ1) {
           std::cerr << "FOUND MBB DIAMOND:" << std::endl;
-          std::cerr << "MBB = " << std::endl;
-          MBB->dump();
-          std::cerr << "SUCC1 = " << std::endl;
-          succ1->dump();
-          std::cerr << "SUCC2 = " << std::endl;
-          succ2->dump();
-          std::cerr << "END = " << std::endl;
-          succ1_succ1->dump();
-        }
-        else {
-          std::cout << "succ1_succ1 has " << succ1_succ1->succ_size()
-            << " successors" << std::endl;
-          std::cout << "succ2_succ1 has " << succ2_succ1->succ_size()
-            << " successors" << std::endl;
-          if (succ1->isSuccessor(succ2_succ1)) {
-            std::cerr << "succ2's successor is a successor of succ1"
-              << std::endl;
+          std::cerr << "A = " << std::endl;
+          A->dump();
+          std::cerr << "B = " << std::endl;
+          B->dump();
+          std::cerr << "C = " << std::endl;
+          C->dump();
+          std::cerr << "D = " << std::endl;
+          D->dump();
+
+          // Blocks B and C should not have PHI nodes and they will have at most
+          // one terminator each.
+          MachineBasicBlock::iterator BBegin = B->getFirstNonPHI();
+          MachineBasicBlock::iterator BEnd = B->getFirstTerminator();
+          if (BEnd->isTerminator())
+            --BEnd;
+          MachineBasicBlock::iterator CBegin = C->getFirstNonPHI();
+          MachineBasicBlock::iterator CEnd = C->getFirstTerminator();
+          if (CEnd->isTerminator())
+            --CEnd;
+
+          // There will be a maximum of two terminators, the first of which will
+          // be the conditional.
+          MachineBasicBlock::iterator ATerm = A->getFirstTerminator();
+          unsigned CondReg = ATerm->getOperand(0).getReg();
+          MachineBasicBlock *TargetBB = ATerm->getOperand(1).getMBB();
+          unsigned Opcode = ATerm->getOpcode();
+
+          std::cerr << "Splicing A with B" << std::endl;
+          if (BBegin == BEnd)
+            A->splice(ATerm, B, BBegin);
+          else
+            A->splice(ATerm, B, BBegin, BEnd);
+
+          std::cerr << "Splicing A with C" << std::endl;
+          if (CBegin == CEnd)
+            A->splice(ATerm, C, CBegin);
+          else
+            A->splice(ATerm, C, CBegin, CEnd);
+
+          // Remove terminator(s) from block A
+          std::cerr << "Removing terminator from A" << std::endl;
+          A->erase(ATerm);
+          if (A->getFirstTerminator()->isTerminator())
+            A->erase(A->getFirstTerminator());
+
+          // If Block D's predecessors are only B and C, we don't have to leave
+          // a copy of the block and so we don't have to modify the PHI inst.
+          // Iterate through the PHI nodes and insert LE1::SLCT insts at the end
+          // of block A.
+          if (D->pred_size() == 2) {
+            MachineBasicBlock::iterator Phi = --(D->getFirstNonPHI());
+            while (Phi->isPHI()) {
+
+              unsigned Opc = 0;
+              if (Opcode == LE1::BR)
+                Opc = LE1::SLCTrr;
+              else
+                Opc = LE1::SLCTFrr;
+
+              // The conditional terminator of block A determines how the select
+              // instructions work. The operands of the PHI node have values as
+              // well as the BB which it is coming from:
+              // vregD = PHI vregB <BB_B>, vregC <BB_C>
+              // We can check whether Target refers to BB_B or BB_C
+              // vregD = Opc Cond, TargetBB, Other
+              Value *True = NULL;
+              Value *False = NULL;
+              if (Phi->getIncomingBlock(0) == TargetBB) {
+                True = Phi->getIncomingValue(0);
+                False = Phi->getIncomingValue(1);
+              }
+              else {
+                True = Phi->getIncomingValue(1);
+                False = Phi->getIncomingValue(0);
+              }
+              MachineInstr *MI = BuildMI(Opc, 3, DestReg).addReg(CondReg);
+
+            }
           }
+          else {
+
+          }
+
+          std::cerr << "New A = " << std::endl;
+          A->dump();
+
+          B->eraseFromParent();
+          C->eraseFromParent();
         }
       }
     }
