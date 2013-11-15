@@ -349,18 +349,6 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
 }
 
-void Compiler::RunOptimisations(llvm::Module *M) {
-  PassManager PM;
-  PM.add(createIndVarSimplifyPass());
-  PM.add(createLoopUnrollPass(10, 2, 1));
-  PM.run(*M);
-#ifdef DBG_COMPILER
-  std::cerr << "Module after running optimisations:" << std::endl;
-  M->dump();
-#endif
-}
-
-
 llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering LinkModules\n";

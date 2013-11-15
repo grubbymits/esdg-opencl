@@ -32,6 +32,7 @@
 #include "llvm/Support/Format.h"
 #include "llvm/Support/raw_ostream.h"
 //#include "llvm/Target/TargetData.h"
+#include "llvm/Transforms/IPO/PassManagerBuilder.h"
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/Cloning.h"
 
@@ -46,7 +47,7 @@ STATISTIC(FinalCodeSize,     "Final code size (# Lines)");
 
 // command line arguments
 static cl::opt<double>
-PROB("prob", cl::init(0.8),
+PROB("prob", cl::init(0.5),
      cl::desc("The threshold probability used to identify traces"));
 
 static cl::opt<bool>
@@ -89,17 +90,22 @@ bool SuperBlock::runOnFunction(Function& F) {
   // (for code rearrangement purposes)
   map<BasicBlock*, BasicBlock*>* revSuperBlocks =
     new map<BasicBlock*, BasicBlock*>();
-  for (map<BasicBlock*, list<BasicBlock*> >::iterator sp = superBlocks.begin(), sp_e = superBlocks.end();
-       sp != sp_e; ++sp) {
-    revSuperBlocks->insert(pair<BasicBlock*, BasicBlock*>(sp->first, sp->second.back()));
-    for (list<BasicBlock*>::iterator it = sp->second.begin(), it_e = --sp->second.end(); it != it_e; ++it) {
-      revSuperBlocks->insert(pair<BasicBlock*, BasicBlock*>(*it, sp->second.back()));
+  for (map<BasicBlock*, list<BasicBlock*> >::iterator sp = superBlocks.begin(),
+       sp_e = superBlocks.end(); sp != sp_e; ++sp) {
+    revSuperBlocks->insert(pair<BasicBlock*, BasicBlock*>(sp->first,
+                                                          sp->second.back()));
+    for (list<BasicBlock*>::iterator it = sp->second.begin(),
+         it_e = --sp->second.end(); it != it_e; ++it) {
+      revSuperBlocks->insert(pair<BasicBlock*, BasicBlock*>(*it,
+                                                            sp->second.back()));
     }
   }
 
   // rearrange code layout to improve I-cache performance
-  set<BasicBlock*>* visitedBBs = new set<BasicBlock*>();     // keeps track of which BBs that are visited
-  set<BasicBlock*>* placedBBs = new set<BasicBlock*>();      // keeps track of which BBs have already been placed in code
+  // keeps track of which BBs that are visited
+  set<BasicBlock*>* visitedBBs = new set<BasicBlock*>();
+  // keeps track of which BBs have already been placed in code
+  set<BasicBlock*>* placedBBs = new set<BasicBlock*>();
   placedBBs->insert(F.begin());
   rearrangeCodeLayout(F.begin(), visitedBBs, placedBBs, revSuperBlocks);
 
@@ -117,10 +123,12 @@ bool SuperBlock::runOnFunction(Function& F) {
   return true;
 }
 
-BasicBlock* SuperBlock::bestSuccessor(BasicBlock* currBB,
-                                      double& cum_prob,
-                                      set<BasicBlock*>* unvisitedBBs,
-				      set<pair<const BasicBlock*, const BasicBlock*> >* backEdges) {
+BasicBlock*
+SuperBlock::bestSuccessor(BasicBlock* currBB,
+                          double& cum_prob,
+                          set<BasicBlock*>* unvisitedBBs,
+			  set<pair<const BasicBlock*,
+                          const BasicBlock*> >* backEdges) {
   double maxEdgeWeight = 0.0;
   double totalExFreq = PI->getExecutionCount(currBB);
   BasicBlock* bestSuccBB = NULL;
@@ -142,12 +150,14 @@ BasicBlock* SuperBlock::bestSuccessor(BasicBlock* currBB,
   }
 
   // if this edge is found in backEdge set, then this edge is a backedge
-  pair<const BasicBlock*, const BasicBlock*> tmpBackEdgeCheck(currBB, bestSuccBB);
+  pair<const BasicBlock*, const BasicBlock*>
+    tmpBackEdgeCheck(currBB, bestSuccBB);
   if (backEdges->find(tmpBackEdgeCheck) != backEdges->end()) {
     return NULL;
   }
 
-  // check if succBB belongs in same loop, if neither is in loop, condition will fail so it's ok
+  // check if succBB belongs in same loop, if neither is in loop, condition
+  // will fail so it's ok
   if (LI->getLoopFor(currBB) != LI->getLoopFor(bestSuccBB)) {
     return NULL;
   }
@@ -166,10 +176,12 @@ BasicBlock* SuperBlock::bestSuccessor(BasicBlock* currBB,
   return bestSuccBB;
 }
 
-BasicBlock* SuperBlock::bestPredecessor(BasicBlock* currBB,
-                                        double& cum_prob,
-                                        set<BasicBlock*>* unvisitedBBs,
-				        set<pair<const BasicBlock*, const BasicBlock*> >* backEdges) {
+BasicBlock*
+SuperBlock::bestPredecessor(BasicBlock* currBB,
+                            double& cum_prob,
+                            set<BasicBlock*>* unvisitedBBs,
+		            set<pair<const BasicBlock*, const BasicBlock*> >*
+                              backEdges) {
   double maxEdgeWeight = 0.0;
   double totalExFreq = PI->getExecutionCount(currBB);
   BasicBlock* bestPredBB = NULL;
@@ -191,7 +203,8 @@ BasicBlock* SuperBlock::bestPredecessor(BasicBlock* currBB,
   }
 
   // if this edge is found in backEdge set, then this edge is a backedge
-  pair<const BasicBlock*, const BasicBlock*> tmpBackEdgeCheck(bestPredBB, currBB);
+  pair<const BasicBlock*, const BasicBlock*>
+    tmpBackEdgeCheck(bestPredBB, currBB);
   if (backEdges->find(tmpBackEdgeCheck) != backEdges->end()) {
     return NULL;
   }
@@ -230,7 +243,7 @@ void SuperBlock::constructSuperBlocks(Function& F) {
     new set<pair<const BasicBlock*, const BasicBlock*> >();
 
   // retrieve all backedges contained in this current function
-  SmallVector<pair<const BasicBlock*, const BasicBlock*>, 32> backEdgesVector; //(F.size());
+  SmallVector<pair<const BasicBlock*, const BasicBlock*>, 32> backEdgesVector;
 
   // transfer everything from backEdgesVector to backEdges
   backEdges->insert(backEdgesVector.begin(), backEdgesVector.end());
@@ -255,10 +268,10 @@ void SuperBlock::constructSuperBlocks(Function& F) {
   }
   
   // traverse each BB in descending order of their execution counts
-  for (map<double, list<BasicBlock*> >::reverse_iterator arg_b = execBBs->rbegin(), arg_e = execBBs->rend();
-       arg_b != arg_e; ++arg_b) {
-    for (list<BasicBlock*>::iterator cur_b = arg_b->second.begin(), cur_e = arg_b->second.end();
-         cur_b != cur_e; ++cur_b) {
+  for (map<double, list<BasicBlock*> >::reverse_iterator arg_b =
+       execBBs->rbegin(), arg_e = execBBs->rend(); arg_b != arg_e; ++arg_b) {
+    for (list<BasicBlock*>::iterator cur_b = arg_b->second.begin(),
+         cur_e = arg_b->second.end(); cur_b != cur_e; ++cur_b) {
       if (unvisitedBBs->find(*cur_b) == unvisitedBBs->end()) {
         continue;
       }
@@ -328,9 +341,10 @@ void SuperBlock::fixSideEntrances() {
   // due to merging of BBs, some superblocks may have 1 BB remaining
   list<map<BasicBlock*, list<BasicBlock*> >::iterator > delSuperBlocks;
 
-  for (map<BasicBlock*, list<BasicBlock*> >::iterator sp = superBlocks.begin(), sp_e = superBlocks.end();
-       sp != sp_e; ++sp) {
-    // we need to keep track of the predecessor of the current basic block being checked
+  for (map<BasicBlock*, list<BasicBlock*> >::iterator sp = superBlocks.begin(),
+       sp_e = superBlocks.end();  sp != sp_e; ++sp) {
+    // we need to keep track of the predecessor of the current basic block
+    // being checked
     BasicBlock* prev = sp->first;
 
     // don't clone basic blocks if the code size threshold is achieved
@@ -339,10 +353,11 @@ void SuperBlock::fixSideEntrances() {
     }
 
     // the first basic block for a superblock need not be duplicated
-    for (list<BasicBlock*>::iterator bb = sp->second.begin(), bb_e = sp->second.end();
-         bb != bb_e; ++bb) {
+    for (list<BasicBlock*>::iterator bb = sp->second.begin(),
+         bb_e = sp->second.end(); bb != bb_e; ++bb) {
       // first, collect all predecessors for this BB
-      // (note: we could not just iterate through as the predecessor set may change
+      // (note: we could not just iterate through as the predecessor set may
+      // change
       list<BasicBlock*> predBBs;
       for (pred_iterator pred = pred_begin(*bb), pred_e = pred_end(*bb);
            pred != pred_e; ++pred) {
@@ -351,17 +366,19 @@ void SuperBlock::fixSideEntrances() {
 
       // now, walk through all predecessors of this current basic block
       BasicBlock* clonedBB = NULL;
-      for (list<BasicBlock*>::iterator pred = predBBs.begin(), pred_e = predBBs.end();
-           pred != pred_e; ++pred) {
-        // if it is not the predecessor of this current basic block present in the superblock,
-        // duplicate!
+      for (list<BasicBlock*>::iterator pred = predBBs.begin(),
+           pred_e = predBBs.end(); pred != pred_e; ++pred) {
+        // if it is not the predecessor of this current basic block present in
+        // the superblock, duplicate!
         if (*pred != prev) {
           // there is no need to clone this BB multiple times
           if (clonedBB == NULL) {
             ValueToValueMapTy vmap;
 
-            // clone this basic block, and place the corresponding code after the last BB of this superblock
-            clonedBB = CloneBasicBlock(*bb, vmap, ".cloned", (*bb)->getParent());
+            // clone this basic block, and place the corresponding code after
+            // the last BB of this superblock
+            clonedBB = CloneBasicBlock(*bb, vmap, ".cloned",
+                                       (*bb)->getParent());
             vmap[*bb] = clonedBB;
 
             /*
@@ -380,9 +397,10 @@ void SuperBlock::fixSideEntrances() {
             currCodeSize += clonedBB->size();
 
             // modify operands in this basic block
-            for (BasicBlock::iterator instr = clonedBB->begin(), instr_e = clonedBB->end();
-                 instr != instr_e; ++instr) {
-              for (unsigned idx = 0, num_ops = instr->getNumOperands(); idx < num_ops; ++idx) {
+            for (BasicBlock::iterator instr = clonedBB->begin(),
+                 instr_e = clonedBB->end(); instr != instr_e; ++instr) {
+              for (unsigned idx = 0, num_ops = instr->getNumOperands();
+                   idx < num_ops; ++idx) {
                 Value* op = instr->getOperand(idx);
                 ValueToValueMapTy::iterator op_it = vmap.find(op);
                 if (op_it != vmap.end()) {
@@ -432,16 +450,18 @@ void SuperBlock::fixSideEntrances() {
   }
 
   // erase some superblocks (which only have 1 BB remaining)
-  for (list<map<BasicBlock*, list<BasicBlock*> >::iterator >::iterator del = delSuperBlocks.begin(),
-         del_e = delSuperBlocks.end(); del != del_e; ++del) {
+  for (list<map<BasicBlock*, list<BasicBlock*> >::iterator >::iterator del =
+       delSuperBlocks.begin(), del_e = delSuperBlocks.end(); del != del_e;
+       ++del) {
     superBlocks.erase(*del);
   }
 }
 
-void SuperBlock::rearrangeCodeLayout(BasicBlock* curBB,
-                                     set<BasicBlock*>* visitedBBs,
-                                     set<BasicBlock*>* placedBBs,
-                                     map<BasicBlock*, BasicBlock*>* revSuperBlocks) {
+void
+SuperBlock::rearrangeCodeLayout(BasicBlock* curBB,
+                                set<BasicBlock*>* visitedBBs,
+                                set<BasicBlock*>* placedBBs,
+                                map<BasicBlock*, BasicBlock*>* revSuperBlocks) {
   // don't pursue a Basic Block that has already been visited
   if (visitedBBs->find(curBB) != visitedBBs->end()) {
     return;
@@ -467,16 +487,17 @@ void SuperBlock::rearrangeCodeLayout(BasicBlock* curBB,
   }
 
   // iterate through the successors in descending order of execution counts
-  for (map<double, list<BasicBlock*> >::reverse_iterator arg = execBBs->rbegin(), arg_e = execBBs->rend();
-       arg != arg_e; ++arg) {
-    for (list<BasicBlock*>::iterator BB = arg->second.begin(), BB_e = arg->second.end();
-         BB != BB_e; ++BB) {
+  for (map<double, list<BasicBlock*> >::reverse_iterator arg =
+       execBBs->rbegin(), arg_e = execBBs->rend(); arg != arg_e; ++arg) {
+    for (list<BasicBlock*>::iterator BB = arg->second.begin(),
+         BB_e = arg->second.end(); BB != BB_e; ++BB) {
       // place this BB after curBB (if it has not already been placed before)
       if (placedBBs->find(*BB) == placedBBs->end()) {
-        // checks to see if curBB belongs to a superblock: we don't want to shove
-        // BB in the middle of this superblock
+        // checks to see if curBB belongs to a superblock: we don't want to
+        // shove BB in the middle of this superblock
         BasicBlock* placeholder;
-        map<BasicBlock*, BasicBlock*>::iterator it = revSuperBlocks->find(curBB);
+        map<BasicBlock*, BasicBlock*>::iterator it =
+          revSuperBlocks->find(curBB);
         if (it == revSuperBlocks->end()) {
           placeholder = curBB;
         } else {
@@ -487,11 +508,13 @@ void SuperBlock::rearrangeCodeLayout(BasicBlock* curBB,
         placedBBs->insert(*BB);
       }
 
-      // if this BB is the head of a superblock, place the tail of the superblock together
+      // if this BB is the head of a superblock, place the tail of the
+      // superblock together
       map<BasicBlock*, list<BasicBlock*> >::iterator it = superBlocks.find(*BB);
       if (it != superBlocks.end()) {
         BasicBlock* cur = *BB;
-        for (list<BasicBlock*>::iterator spBB = it->second.begin(), spBB_e = it->second.end();
+        for (list<BasicBlock*>::iterator spBB = it->second.begin(),
+             spBB_e = it->second.end();
              spBB != spBB_e; ++spBB) {
           (*spBB)->moveAfter(cur);
           placedBBs->insert(*spBB);
@@ -514,15 +537,24 @@ void SuperBlock::printBB(BasicBlock* BB) {
 
 void SuperBlock::printsuperBlocks() {
   unsigned cnt = 0;
-  for (map<BasicBlock*, list<BasicBlock*> >::iterator it_b = superBlocks.begin(), it_e = superBlocks.end();
-       it_b != it_e; ++it_b) {
+  for (map<BasicBlock*, list<BasicBlock*> >::iterator it_b =
+       superBlocks.begin(), it_e = superBlocks.end(); it_b != it_e; ++it_b) {
     errs() << "SuperBlock " << cnt++ << " contains: ";
 
     errs() << ((it_b->first))->getName() << " ";
-    for (list<BasicBlock*>::iterator sp_b = (it_b->second).begin(), sp_e = (it_b->second).end();
-         sp_b != sp_e; ++sp_b) {
+    for (list<BasicBlock*>::iterator sp_b = (it_b->second).begin(),
+         sp_e = (it_b->second).end(); sp_b != sp_e; ++sp_b) {
       errs() << (*sp_b)->getName() << " ";
     }
     errs() << "\n";
   }
 }
+/*
+static void registerSuperblockPass(const PassManagerBuilder &,
+                                   PassManagerBase &PM) {
+  PM.add(new SuperBlock());
+}
+
+static RegisterStandardPasses
+  RegisterMyPass(PassManagerBuilder::EP_EarlyAsPossible,
+                 registerSuperblockPass);*/

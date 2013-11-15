@@ -360,6 +360,7 @@ class LE1KernelEvent
         pthread_mutex_t p_mutex;
         void *p_kernel_args;
         EmbeddedData embeddedData;
+        unsigned disabledCores;
         //static unsigned int addr;
         //std::vector<unsigned> ArgAddrs;
         std::string OriginalSource;

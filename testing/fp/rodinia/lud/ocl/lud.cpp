@@ -40,6 +40,7 @@ static cl_context	    context;
 static cl_command_queue cmd_queue;
 static cl_device_type   device_type;
 static cl_device_id   * device_list;
+static cl_uint          device_id = 0;
 static cl_int           num_devices;
 
 static int initialize(int use_gpu)
@@ -49,26 +50,46 @@ static int initialize(int use_gpu)
 
 	// create OpenCL context
 	cl_platform_id platform_id;
-	if (clGetPlatformIDs(1, &platform_id, NULL) != CL_SUCCESS) { printf("ERROR: clGetPlatformIDs(1,*,0) failed\n"); return -1; }
-	cl_context_properties ctxprop[] = { CL_CONTEXT_PLATFORM, (cl_context_properties)platform_id, 0};
+	if (clGetPlatformIDs(1, &platform_id, NULL) != CL_SUCCESS) {
+          printf("ERROR: clGetPlatformIDs(1,*,0) failed\n"); return -1;
+        }
+	cl_context_properties ctxprop[] = { CL_CONTEXT_PLATFORM,
+                                            (cl_context_properties)platform_id,
+                                            0
+                                          };
 	device_type = use_gpu ? CL_DEVICE_TYPE_ACCELERATOR : CL_DEVICE_TYPE_CPU;
-	context = clCreateContextFromType( ctxprop, device_type, NULL, NULL, NULL );
-	if( !context ) { printf("ERROR: clCreateContextFromType(%s) failed\n", use_gpu ? "GPU" : "CPU"); return -1; }
+	context = clCreateContextFromType( ctxprop, device_type, NULL, NULL,
+                                           NULL );
+	if( !context ) { printf("ERROR: clCreateContextFromType(%s) failed\n",
+                                use_gpu ? "GPU" : "CPU"); return -1; }
 
 	// get the list of GPUs
-	result = clGetContextInfo( context, CL_CONTEXT_DEVICES, 0, NULL, &size );
+	result = clGetContextInfo(context, CL_CONTEXT_DEVICES, 0, NULL, &size);
 	num_devices = (int) (size / sizeof(cl_device_id));
 	printf("num_devices = %d\n", num_devices);
 	
-	if( result != CL_SUCCESS || num_devices < 1 ) { printf("ERROR: clGetContextInfo() failed\n"); return -1; }
+	if( result != CL_SUCCESS || num_devices < 1 ) {
+          printf("ERROR: clGetContextInfo() failed\n"); return -1;
+        }
 	device_list = new cl_device_id[num_devices];
-	if( !device_list ) { printf("ERROR: new cl_device_id[] failed\n"); return -1; }
-	result = clGetContextInfo( context, CL_CONTEXT_DEVICES, size, device_list, NULL );
-	if( result != CL_SUCCESS ) { printf("ERROR: clGetContextInfo() failed\n"); return -1; }
+	if( !device_list ) {
+          printf("ERROR: new cl_device_id[] failed\n");
+          return -1;
+        }
+	result = clGetContextInfo(context, CL_CONTEXT_DEVICES, size,
+                                  device_list, NULL );
+	if( result != CL_SUCCESS ) {
+          printf("ERROR: clGetContextInfo() failed\n");
+          return -1;
+        }
 
 	// create command queue for the first device
-	cmd_queue = clCreateCommandQueue( context, device_list[0], 0, NULL );
-	if( !cmd_queue ) { printf("ERROR: clCreateCommandQueue() failed\n"); return -1; }
+	cmd_queue = clCreateCommandQueue(context, device_list[device_id], 0,
+                                         NULL );
+	if( !cmd_queue ) {
+          printf("ERROR: clCreateCommandQueue() failed\n");
+          return -1;
+        }
 	return 0;
 }
 
@@ -110,7 +131,7 @@ main ( int argc, char *argv[] )
 	float *m, *mm;
 	stopwatch sw;
 	
-	while ((opt = getopt_long(argc, argv, "::vs:i:", 
+	while ((opt = getopt_long(argc, argv, "::vsd:i:", 
                             long_options, &option_index)) != -1 ) {
 		switch(opt){
 			case 'i':
@@ -119,6 +140,10 @@ main ( int argc, char *argv[] )
 			case 'v':
 			do_verify = 1;
 			break;
+                        case 'd':
+                        device_id = atoi(optarg);
+                        printf("Device id = %d\n", device_id);
+                        break;
         case 's':
 			matrix_dim = atoi(optarg);
 			fprintf(stderr, "Currently not supported, use -i instead\n");

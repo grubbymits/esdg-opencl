@@ -24,7 +24,8 @@ using namespace Coal;
 
 unsigned LE1Simulator::iteration = 0;
 
-SimulationStats::SimulationStats(hyperContextT *HyperContext) {
+SimulationStats::SimulationStats(hyperContextT *HyperContext,
+                                 unsigned disabled) {
   TotalCycles = HyperContext->cycleCount;
   Stalls = HyperContext->stallCount;
   NOPs = HyperContext->nopCount;
@@ -34,6 +35,7 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext) {
   BranchesNotTaken = HyperContext->branchNotTaken;
   ControlFlowChange = HyperContext->controlFlowChange;
   MemoryAccessCount = HyperContext->memoryAccessCount;
+  disabledCores = disabled;
 }
 
 SimulationStats::SimulationStats(const SimulationStats &Stats) {
@@ -46,6 +48,7 @@ SimulationStats::SimulationStats(const SimulationStats &Stats) {
   BranchesNotTaken = Stats.BranchesNotTaken;
   ControlFlowChange = Stats.ControlFlowChange;
   MemoryAccessCount = Stats.MemoryAccessCount;
+  disabledCores = Stats.disabledCores;
 }
 
 LE1Simulator::LE1Simulator() {
@@ -173,7 +176,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
 }
 
 // Save the execution statistics and resets the device
-void LE1Simulator::SaveStats() {
+void LE1Simulator::SaveStats(unsigned disabled) {
   // 0 = Single system
     /* system, context, hypercontext, cluster */
     //unsigned char s = 0;
@@ -200,7 +203,7 @@ void LE1Simulator::SaveStats() {
                           + (k * sizeof(hyperContextT)));
 
       // Save the execution statistics
-      SimulationStats NewStat(hypercontext);
+      SimulationStats NewStat(hypercontext, disabled);
       Stats.push_back(NewStat);
 
       memset(hypercontext->S_GPR, 0,
@@ -208,9 +211,6 @@ void LE1Simulator::SaveStats() {
       hypercontext->programCounter = 0;
     }
   }
-
-  UnlockAccess();
-
 }
 
 void LE1Simulator::LockAccess(void) {
@@ -264,7 +264,8 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::Run(const char *iram, const char *dram) {
+bool LE1Simulator::Run(const char *iram, const char *dram,
+                       const unsigned disabled) {
 #ifdef DBG_SIM
   std::cout << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
     << std::endl;
@@ -537,7 +538,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     ++LE1Simulator::iteration;
   }
 
-  SaveStats();
+  SaveStats(disabled);
 
   //pthread_mutex_unlock(&p_simulator_mutex);
 

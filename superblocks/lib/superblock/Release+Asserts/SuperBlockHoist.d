@@ -1,5 +1,5 @@
-/home/sam/src/superblocks/lib/superblock/Release+Asserts/SuperBlockHoist.o \
- /home/sam/src/superblocks/lib/superblock/Release+Asserts/SuperBlockHoist.d: \
+/home/sam/src/esdg-opencl/superblocks/lib/superblock/Release+Asserts/SuperBlockHoist.o \
+ /home/sam/src/esdg-opencl/superblocks/lib/superblock/Release+Asserts/SuperBlockHoist.d: \
  SuperBlockHoist.cpp \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Pass.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Support/Compiler.h \
@@ -67,7 +67,7 @@
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Analysis/Dominators.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/PassManagers.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Support/PrettyStackTrace.h \
- /home/sam/src/superblocks/include/LAMP/LAMPLoadProfile.h \
+ /home/sam/src/esdg-opencl/superblocks/include/LAMP/LAMPLoadProfile.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Instructions.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Support/IntegersSubset.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Constants.h \
@@ -210,7 +210,7 @@
 
 /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Support/PrettyStackTrace.h:
 
-/home/sam/src/superblocks/include/LAMP/LAMPLoadProfile.h:
+/home/sam/src/esdg-opencl/superblocks/include/LAMP/LAMPLoadProfile.h:
 
 /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Instructions.h:
 

@@ -58,8 +58,8 @@ static Coal::LE1Device LE1Devices[TotalLE1Devices] = {
   //Coal::LE1Device("4Context_2wide_2ls.xml", "2w2a1m2ls1b", 4),  // 12
   //Coal::LE1Device("8Context_2wide_2ls.xml", "2w2a1m2ls1b", 8),  // 13
 
-  //Coal::LE1Device("2Context_3wide_2ls.xml", "3w3a1m2ls1b", 2),  // 14
-  //Coal::LE1Device("4Context_3wide_2ls.xml", "3w3a1m2ls1b", 4),  // 15
+  Coal::LE1Device("2Context_3wide_2ls.xml", "3w3a1m2ls1b", 2),  // 14
+  Coal::LE1Device("4Context_3wide_2ls.xml", "3w3a1m2ls1b", 4),  // 15
   Coal::LE1Device("8Context_3wide_2ls.xml", "3w3a1m2ls1b", 8)   // 16
 };
 

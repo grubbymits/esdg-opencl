@@ -10,7 +10,7 @@ LLVM_SRC_ROOT = /home/sam/src/esdg-opencl/llvm-3.2
 LLVM_OBJ_ROOT = /home/sam/src/build-auto-llvm
 
 # Set the directory root of this project's source files
-PROJ_SRC_ROOT := $(subst //,/,/home/sam/src/superblocks)
+PROJ_SRC_ROOT := $(subst //,/,/home/sam/src/esdg-opencl/superblocks)
 
 # Set the root directory of this project's object files
 PROJ_OBJ_ROOT := $(subst //,/,@abs_top_objdir@)

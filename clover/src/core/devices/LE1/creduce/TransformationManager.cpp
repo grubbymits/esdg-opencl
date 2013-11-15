@@ -15,6 +15,7 @@
 #include "../coarsener/SourceRewriter.h"
 #include "TransformationManager.h"
 
+#include <cstddef>
 #include <iostream>
 #include <sstream>
 
@@ -50,13 +51,13 @@ TransformationManager::TransformationsMapPtr;
 
 TransformationManager *TransformationManager::GetInstance(void)
 {
+#ifdef DEBUGCL
+  std::cerr << "TransformationManager::GetInstance" << std::endl;
+#endif
   if (!TransformationManager::TransformationsMapPtr) {
     TransformationManager::TransformationsMapPtr = 
       new std::map<std::string, Transformation *>();
   }
-#ifdef DEBUGCL
-  std::cerr << "TransformationManager::GetInstance" << std::endl;
-#endif
   if (TransformationManager::Instance)
     return TransformationManager::Instance;
 
@@ -209,8 +210,10 @@ void TransformationManager::Finalize(void)
     if ((*I).second != Instance->CurrentTransformationImpl)
       delete (*I).second;
   }
-  if (Instance->TransformationsMapPtr)
+  if (Instance->TransformationsMapPtr) {
+    Instance->TransformationsMapPtr = NULL;
     delete Instance->TransformationsMapPtr;
+  }
 
   if (Instance->ClangInstance)
     delete Instance->ClangInstance;

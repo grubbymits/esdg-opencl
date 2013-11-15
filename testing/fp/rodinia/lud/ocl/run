@@ -1,1 +1,3 @@
-./lud -i ../../data/lud/32.dat
+#!/bin/sh
+echo $0
+./lud -d $1 -i ../../data/lud/32.dat

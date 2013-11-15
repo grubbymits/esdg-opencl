@@ -138,24 +138,39 @@ LE1Device::~LE1Device()
 
     std::cout << "Kernel Stats for " << SMI->first << std::endl;
 
+    unsigned TotalCycles = 0;
+    unsigned TotalStalls = 0;
+    unsigned TotalIdle = 0;
+    unsigned TotalDecodeStalls = 0;
+    unsigned TotalBranchesTaken = 0;
+    unsigned TotalBranchesNotTaken = 0;
+
     unsigned AverageCycles = 0;
     unsigned AverageStalls = 0;
     unsigned AverageIdle = 0;
     unsigned AverageDecodeStalls = 0;
     unsigned AverageBranchesTaken = 0;
     unsigned AverageBranchesNotTaken = 0;
-    unsigned KernelIterations = 0;
 
     for (StatsSet::iterator SI = SMI->second.begin(),
          SE = SMI->second.end(); SI != SE; ++SI) {
       SimulationStats Stats = *SI;
-      AverageCycles += Stats.TotalCycles;
-      AverageStalls += Stats.Stalls;
-      AverageIdle += Stats.IdleCycles;
-      AverageDecodeStalls += Stats.DecodeStalls;
-      AverageBranchesTaken += Stats.BranchesTaken;
-      AverageBranchesNotTaken += Stats.BranchesNotTaken;
-      ++KernelIterations;
+      TotalCycles += Stats.TotalCycles;
+      TotalStalls += Stats.Stalls;
+      TotalIdle += Stats.IdleCycles;
+      TotalDecodeStalls += Stats.DecodeStalls;
+      TotalBranchesTaken += Stats.BranchesTaken;
+      TotalBranchesNotTaken += Stats.BranchesNotTaken;
+
+      AverageCycles += Stats.TotalCycles / (NumCores - Stats.disabledCores);
+      AverageStalls += Stats.Stalls / (NumCores - Stats.disabledCores);
+      AverageIdle += Stats.IdleCycles / (NumCores - Stats.disabledCores);
+      AverageDecodeStalls += Stats.DecodeStalls /
+        (NumCores - Stats.disabledCores);
+      AverageBranchesTaken += Stats.BranchesTaken /
+        (NumCores - Stats.disabledCores);
+      AverageBranchesNotTaken += Stats.BranchesNotTaken /
+        (NumCores - Stats.disabledCores);
     }
 
     //AverageCycles /= KernelIterations;
@@ -175,11 +190,12 @@ LE1Device::~LE1Device()
 
     if(!std::ifstream(filename.c_str())) {
       Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
-        << " Branches Taken, Branches not Taken\n";
+        << " Branches Taken, Branches not Taken, Total Average Cycles\n";
     }
-    Line << CPU << ", " << NumCores << ", " << AverageCycles << ", "
-      << AverageStalls << ", " << AverageDecodeStalls << ", "
-      << AverageBranchesTaken << ", " << AverageBranchesNotTaken << std::endl;
+    Line << CPU << ", " << NumCores << ", " << TotalCycles << ", "
+      << TotalStalls << ", " << TotalDecodeStalls << ", "
+      << TotalBranchesTaken << ", " << TotalBranchesNotTaken << ", "
+      << AverageCycles << std::endl;
 
     std::ofstream Results;
     Results.open(filename.c_str(), std::ios_base::app);

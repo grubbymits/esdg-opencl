@@ -1,5 +1,5 @@
-/home/sam/src/superblocks/lib/superblock/Release+Asserts/myLICM.o \
- /home/sam/src/superblocks/lib/superblock/Release+Asserts/myLICM.d: \
+/home/sam/src/esdg-opencl/superblocks/lib/superblock/Release+Asserts/myLICM.o \
+ /home/sam/src/esdg-opencl/superblocks/lib/superblock/Release+Asserts/myLICM.d: \
  myLICM.cpp \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Transforms/Scalar.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Constants.h \
@@ -77,7 +77,7 @@
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Analysis/ProfileInfo.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Support/Debug.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Support/Format.h \
- /home/sam/src/superblocks/include/LAMP/LAMPLoadProfile.h \
+ /home/sam/src/esdg-opencl/superblocks/include/LAMP/LAMPLoadProfile.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Transforms/Utils/Local.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/IRBuilder.h \
  /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/DataLayout.h \
@@ -242,7 +242,7 @@
 
 /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Support/Format.h:
 
-/home/sam/src/superblocks/include/LAMP/LAMPLoadProfile.h:
+/home/sam/src/esdg-opencl/superblocks/include/LAMP/LAMPLoadProfile.h:
 
 /home/sam/src/esdg-opencl/llvm-3.2/include/llvm/Transforms/Utils/Local.h:
 

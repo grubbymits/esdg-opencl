@@ -458,21 +458,6 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
 #endif
 
   return true;
-
-  /*
-  if (!WriteDataArea())
-    return false;
-
-  std::string assemble = "perl " + LE1Device::ScriptsDir + "secondpass.pl ";
-  assemble.append(CompleteFilename);
-  assemble.append(" -OPC=").append(LE1Device::IncDir + "opcodes.txt");
-
-  if (system(assemble.c_str()) != 0)
-    return false;
-  else {
-    p_event->kernel()->SetBuilt();
-    return true;
-  }*/
 }
 
 
@@ -485,7 +470,7 @@ bool LE1KernelEvent::CompileSource() {
   // TODO This part needs to calculate how many cores to instantiate
   // Impose an upper limit of 12 cores?
   unsigned cores = p_device->numLE1s();
-  unsigned disabledCores = 0;
+  disabledCores = 0;
   unsigned merge_dims[3] = {1, 1, 1};
   unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
 
@@ -761,7 +746,7 @@ bool LE1KernelEvent::run() {
   std::string dram = "binaries/final_" + KernelName + ".data.bin";
   std::string iram = "binaries/final_" + KernelName + ".s.bin";
 
-  wasSuccess = simulator->Run(iram.c_str(), dram.c_str());
+  wasSuccess = simulator->Run(iram.c_str(), dram.c_str(), disabledCores);
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
     simulator->UnlockAccess();
