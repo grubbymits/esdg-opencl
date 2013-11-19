@@ -22,8 +22,6 @@ extern "C" {
 
 using namespace Coal;
 
-unsigned LE1Simulator::iteration = 0;
-
 SimulationStats::SimulationStats(hyperContextT *HyperContext,
                                  unsigned disabled) {
   TotalCycles = HyperContext->cycleCount;
@@ -264,8 +262,12 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::Run(const char *iram, const char *dram,
-                       const unsigned disabled) {
+bool LE1Simulator::RunRTL(const char *iram, const char *dram) {
+  return true;
+}
+
+bool LE1Simulator::RunSim(const char *iram, const char *dram,
+                          const unsigned disabled) {
 #ifdef DBG_SIM
   std::cout << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
     << std::endl;
@@ -523,19 +525,8 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
     }
     std::ostringstream CopyDump;
     CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
-      << "-" << LE1Simulator::iteration<< ".dat";
-
-    // TODO this number must just be left from BFS.
-    if (KernelNumber == 2) {
-      KernelNumber = 0;
-      ++LE1Simulator::iteration;
-    }
+      << ".dat";
     system(CopyDump.str().c_str());
-  }
-
-  if (KernelNumber == 2) {
-    KernelNumber = 0;
-    ++LE1Simulator::iteration;
   }
 
   SaveStats(disabled);
@@ -543,8 +534,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
   //pthread_mutex_unlock(&p_simulator_mutex);
 
 #ifdef DBG_SIM
-  std::cerr << "Finished running simulation. globalS = "
-    << std::hex << globalS << std::endl;
+  std::cerr << "Finished running simulation." << std::endl;
 #endif
   return true;
 }
@@ -621,11 +611,6 @@ bool LE1Simulator::readWordData(unsigned int addr,
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
     << " bytes.\n";
 #endif
-  /*
-  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
-    exit(EXIT_FAILURE);
-  }*/
   unsigned int num = numBytes >> 2;
   unsigned int word = 0;
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {
@@ -640,7 +625,6 @@ bool LE1Simulator::readWordData(unsigned int addr,
     data[i] = word;
   }
 
-  //pthread_mutex_unlock(&p_simulator_mutex);
 #ifdef DBG_SIM
   std::cerr << "Leaving LE1Simulator::readIntData\n";
 #endif

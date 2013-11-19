@@ -53,7 +53,7 @@ typedef std::list<std::pair<clang::SourceLocation, std::string> > StringList;
 class WorkitemCoarsen {
 
 public:
-  WorkitemCoarsen(unsigned x, unsigned y, unsigned z);
+  WorkitemCoarsen(unsigned *dims);
   bool CreateWorkgroup(std::string &Filename, std::string &kernel);
   bool HandleBarriers();
   void DeleteTempFiles();

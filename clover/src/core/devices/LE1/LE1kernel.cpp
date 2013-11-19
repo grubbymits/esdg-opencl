@@ -31,9 +31,9 @@
  */
 
 #include "LE1kernel.h"
-#include "LE1DataPrinter.h"
 #include "LE1device.h"
 #include "LE1buffer.h"
+#include "LE1NDRange.h"
 #include "LE1program.h"
 #include "LE1Simulator.h"
 #include "coarsener/SourceRewriter.h"
@@ -369,6 +369,7 @@ LE1KernelEvent::LE1KernelEvent(LE1Device *device, KernelEvent *event)
 #ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::LE1KernelEvent\n";
 #endif
+  theRange = new LE1NDRange(event, device);
 }
 
 LE1KernelEvent::~LE1KernelEvent()
@@ -380,6 +381,8 @@ LE1KernelEvent::~LE1KernelEvent()
 
     if (p_kernel_args)
         std::free(p_kernel_args);
+
+    delete theRange;
 
 #ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::~LE1KernelEvent\n";
@@ -414,7 +417,7 @@ bool LE1KernelEvent::AllocateBuffers() {
   }
   return true;
 }
-
+/*
 bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   // TODO Create a proper .s file:
 #ifdef DBG_KERNEL
@@ -434,21 +437,6 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   FinalAsmName = "kernel_" + KernelName + ".s";
   CompleteFilename = "final_" + KernelName + ".s";
 
-  //CalculateBufferAddrs();
-
-  /*
-  // Only compile a kernel once
-  if (!p_event->kernel()->isBuilt()) {
-    // FIXME Change this to the kernel specific name
-    //if(!CompileSource("program.bc", filename))
-    if(!CompileSource())
-      return false;
-  }
-  else {
-#ifdef DBG_KERNEL
-    std::cerr << "Program has already been compiled\n";
-#endif
-  }*/
   if(!CompileSource())
     return false;
 
@@ -458,9 +446,9 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
 #endif
 
   return true;
-}
+}*/
 
-
+/*
 bool LE1KernelEvent::CompileSource() {
 #ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::CompileSource for " << KernelName
@@ -511,17 +499,6 @@ bool LE1KernelEvent::CompileSource() {
       }
     }
   }
-
-  /*
-  for(unsigned i = 0; i < p_event->work_dim(); ++i) {
-    merge_dims[i] = p_event->global_work_size(i) / cores;
-    if (p_event->local_work_size(i) != merge_dims[i]) {
-      WorkgroupsPerCore[i] = merge_dims[i] / p_event->local_work_size(i);
-      merge_dims[i] = p_event->local_work_size(i);
-    }
-    if (i != 0)
-      WorkgroupsPerCore[i] *= cores;
-  }*/
 
   // First, write the source string to a file
   std::ofstream SourceFile;
@@ -605,8 +582,9 @@ bool LE1KernelEvent::CompileSource() {
 
   p_event->kernel()->SetBuilt();
   return true;
-}
+}*/
 
+/*
 void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
                                     unsigned *WorkgroupsPerCore,
                                     unsigned disabledCores) {
@@ -710,222 +688,28 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
 #ifdef DBG_KERNEL
   std::cerr << LauncherString << std::endl;
 #endif
-}
+}*/
 
 bool LE1KernelEvent::run() {
 #ifdef DBG_KERNEL
   std::cerr << "Entering LE1KernelEvent::run" << std::endl;
 #endif
+  if (!theRange->CompileSource())
+    return false;
+
  // TODO Use either simulator or hardware? And use variables
  // instead of hard coded parameters
-  bool wasSuccess = false;
-  //char* device_name = const_cast<char*>(p_device->model());
-  LE1Simulator *simulator = p_device->getSimulator();
-  simulator->LockAccess();
-
-  std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
-  system(CopyCommand.c_str());
-  LE1DataPrinter dataPrinter(p_device, embeddedData, p_event,
-                             CompleteFilename.c_str());
-
-  if (!dataPrinter.AppendDataArea()) {
+  if (!theRange->RunSim()) {
     pthread_mutex_unlock(&p_mutex);
-    simulator->UnlockAccess();
     return false;
   }
-
-  std::string assemble = "perl " + LE1Device::ScriptsDir + "secondpass.pl ";
-  assemble.append(CompleteFilename);
-  assemble.append(" -OPC=").append(LE1Device::IncDir + "opcodes.txt");
-
-  if (system(assemble.c_str()) != 0) {
-    simulator->UnlockAccess();
-    return false;
-  }
-
-  std::string dram = "binaries/final_" + KernelName + ".data.bin";
-  std::string iram = "binaries/final_" + KernelName + ".s.bin";
-
-  wasSuccess = simulator->Run(iram.c_str(), dram.c_str(), disabledCores);
-  if (!wasSuccess) {
-    pthread_mutex_unlock(&p_mutex);
-    simulator->UnlockAccess();
-    return false;
-  }
-
-  // If the simulator executes successfully, update the buffers.
-  Kernel* TheKernel = p_event->kernel();
-  for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
-
-    const Kernel::Arg& Arg = TheKernel->arg(i);
-    if ((Arg.kind() == Kernel::Arg::Buffer) &&
-        (Arg.file() != Kernel::Arg::Local)) {
-
-#ifdef DBG_KERNEL
-      std::cerr << "Updating kernel arg " << i << std::endl;
-#endif
-      LE1Buffer* buffer =
-        static_cast<LE1Buffer*>((*(MemObject**)Arg.data())->deviceBuffer(p_device));
-
-      if (buffer->data() == NULL) {
-        std::cerr << "!ERROR : Arg " << i << " buffer data is NULL"
-          << std::endl;
-        return false;
-      }
-
-      unsigned TotalSize = (*(MemObject**)Arg.data())->size();
-      llvm::Type *argType = Arg.type();
-
-      if (argType->isIntegerTy(8)) {
-        simulator->readByteData(buffer->addr(), TotalSize,
-                                (unsigned char*)buffer->data());
-      }
-      else if (argType->isIntegerTy(16)) {
-        simulator->readHalfData(buffer->addr(), TotalSize,
-                                (unsigned short*)buffer->data());
-      }
-      else if (argType->isIntegerTy(32)) {
-        simulator->readWordData(buffer->addr(), TotalSize,
-                                (unsigned*)buffer->data());
-      }
-      else if (argType->getTypeID() == llvm::Type::FloatTyID)
-        simulator->readWordData(buffer->addr(), TotalSize,
-                                (unsigned*)buffer->data());
-
-      // FIXME This will be really slow since it reads an element at a time.
-      else if (argType->isStructTy()) {
-        llvm::StructType* StructArg = static_cast<llvm::StructType*>(argType);
-#ifdef DBG_KERNEL
-        std::cerr << "Arg is Struct with " << StructArg->getNumElements()
-          << " elements" << std::endl;
-#endif
-
-        // Use one call to the simulator to read data if possible
-        llvm::Type *prevElement = StructArg->getElementType(0);
-        bool uniformTypes = true;
-        for (unsigned i = 1; i < StructArg->getNumElements(); ++i) {
-          if (prevElement != StructArg->getElementType(i)) {
-            uniformTypes = false;
-            break;
-          }
-        }
-        if (uniformTypes) {
-#ifdef DBG_KERNEL
-          std::cerr << "Struct contains just one type" << std::endl;
-#endif
-          if (prevElement->isIntegerTy(8))
-            simulator->readByteData(buffer->addr(), TotalSize,
-                                (unsigned char*)buffer->data());
-          else if (prevElement->isIntegerTy(16))
-            simulator->readHalfData(buffer->addr(), TotalSize,
-                                (unsigned short*)buffer->data());
-          else if (prevElement->isIntegerTy(32))
-            simulator->readWordData(buffer->addr(), TotalSize,
-                                (unsigned*)buffer->data());
-          else if (prevElement->isFloatTy())
-            simulator->readWordData(buffer->addr(), TotalSize,
-                                    (unsigned*)buffer->data());
-          else {
-            std::cerr << "!!ERROR: Unhandled struct element type"
-              << std::endl;
-            return false;
-          }
-        }
-        else {
-
-          unsigned finalAddr = buffer->addr() + TotalSize;
-          unsigned readAddr = buffer->addr();
-
-          while (readAddr < finalAddr) {
-
-            // FIXME Is this setup for correct packing? Does +readAddr work??
-            for (llvm::StructType::element_iterator EI
-                 = StructArg->element_begin(), EE = StructArg->element_end();
-                 EI != EE; ++EI) {
-
-              llvm::Type *elementType = *EI;
-
-              if (elementType->isIntegerTy(8)) {
-                simulator->readByteData(readAddr, 1,
-                                    (unsigned char*)buffer->data() + readAddr);
-                ++readAddr;
-              }
-              if (elementType->isIntegerTy(16)) {
-                if (readAddr % 2 != 0)
-                  ++readAddr;
-
-                simulator->readHalfData(readAddr, 2,
-                                    (unsigned short*)buffer->data() + readAddr);
-                readAddr += 2;
-              }
-              if (elementType->isIntegerTy(32)) {
-                if (readAddr % 4 != 0)
-                  readAddr += readAddr % 4;
-
-                simulator->readWordData(readAddr, 4,
-                                      (unsigned*)buffer->data() + readAddr);
-                readAddr += 4;
-              }
-              if (elementType->isFloatTy()) {
-                if (readAddr % 4 != 0)
-                  readAddr += readAddr % 4;
-
-                simulator->readWordData(readAddr, 4,
-                                      (unsigned*)buffer->data() + readAddr);
-                readAddr += 4;
-              }
-            }
-          }
-        }
-      }
-
-      else if (argType->getTypeID() == llvm::Type::VectorTyID) {
-#ifdef DBG_KERNEL
-        std::cerr << "Data is vector type\n";
-#endif
-        llvm::Type* elementType =
-          static_cast<llvm::VectorType*>(Arg.type())->getElementType();
-
-        if (elementType->getTypeID() == llvm::Type::IntegerTyID) {
-#ifdef DBG_KERNEL
-          std::cerr << "Elements are integers\n";
-#endif
-          if (elementType->isIntegerTy(8)) {
-            simulator->readByteData(buffer->addr(), TotalSize,
-                                    (unsigned char*)buffer->data());
-          }
-          else if (elementType->isIntegerTy(16)) {
-            simulator->readHalfData(buffer->addr(), TotalSize,
-                                    (unsigned short*)buffer->data());
-          }
-          else if (elementType->isIntegerTy(32)) {
-            simulator->readWordData(buffer->addr(), TotalSize,
-                                   (unsigned*)buffer->data());
-          }
-        }
-        else {
-          std::cerr << " !!! ERROR - unhandled vector buffer type!!\n";
-          wasSuccess = false;
-          break;
-        }
-      }
-      else {
-        std::cerr << " !!! ERROR - unhandled buffer type!!\n";
-        wasSuccess = false;
-        break;
-      }
-    }
-  }
-
-  p_device->SaveStats(KernelName);
-  simulator->UnlockAccess();
 
   // Release event
   pthread_mutex_unlock(&p_mutex);
 #ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::run" << std::endl;
 #endif
-  return wasSuccess;
+  return true;
 }
 
 bool LE1KernelEvent::reserve()
@@ -978,7 +762,7 @@ void LE1KernelEvent::workGroupFinished()
     std::cerr << "Leaving LE1KernelEvent::workGroupFinished\n";
 #endif
 }
-
+/*
 LE1KernelWorkGroup *LE1KernelEvent::takeInstance()
 {
 #ifdef DBG_KERNEL
@@ -1000,7 +784,7 @@ LE1KernelWorkGroup *LE1KernelEvent::takeInstance()
 #endif
 
     return wg;
-}
+}*/
 
 void *LE1KernelEvent::kernelArgs() const
 {
@@ -1010,253 +794,4 @@ void *LE1KernelEvent::kernelArgs() const
 void LE1KernelEvent::cacheKernelArgs(void *args)
 {
     p_kernel_args = args;
-}
-
-/*
- * LE1KernelWorkGroup
- */
-LE1KernelWorkGroup::LE1KernelWorkGroup(LE1Kernel *kernel, KernelEvent *event,
-                                       LE1KernelEvent *cpu_event,
-                                       const size_t *work_group_index)
-: p_kernel(kernel), p_cpu_event(cpu_event), p_event(event),
-  p_work_dim(event->work_dim()), p_contexts(0), p_stack_size(8192 /* TODO */),
-  p_had_barrier(false)
-{
-#ifdef DBG_KERNEL
-  std::cerr << "Entering LE1KernelWorkGroup::LE1KernelWorkGroup\n";
-#endif
-
-    // Set index
-    std::memcpy(p_index, work_group_index, p_work_dim * sizeof(size_t));
-
-    // Set maxs and global id
-    p_num_work_items = 1;
-
-    for (unsigned int i=0; i<p_work_dim; ++i)
-    {
-        p_max_local_id[i] = event->local_work_size(i) - 1; // 0..n-1, not 1..n
-        p_num_work_items *= event->local_work_size(i);
-
-        // Set global id
-        p_global_id_start_offset[i] = (p_index[i] * event->local_work_size(i))
-                         + event->global_work_offset(i);
-    }
-#ifdef DBG_KERNEL
-  std::cerr << "Leaving LE1KernelWorkGroup::LE1KernelWorkGroup\n";
-#endif
-}
-
-LE1KernelWorkGroup::~LE1KernelWorkGroup()
-{
-#ifdef DBG_KERNEL
-  std::cerr << "Entering LE1KernelWorkGroup::~LE1KernelWorkGroup\n";
-#endif
-    p_cpu_event->workGroupFinished();
-#ifdef DBG_KERNEL
-  std::cerr << "Leaving LE1KernelWorkGroup::~LE1KernelWorkGroup\n";
-#endif
-}
-
-void *LE1KernelWorkGroup::callArgs(std::vector<void *> &locals_to_free)
-{
-#ifdef DBG_KERNEL
-  std::cerr << "Entering LE1KernelWorkGroup::callArgs\n";
-#endif
-    if (p_cpu_event->kernelArgs() && !p_kernel->kernel()->hasLocals())
-    {
-        // We have cached the args and can reuse them
-#ifdef DBG_KERNEL
-      std::cerr << "Leaving callArgs because we have cached the args\n";
-#endif
-        return p_cpu_event->kernelArgs();
-    }
-
-    // We need to create them from scratch
-    void *rs;
-
-    size_t args_size = 0;
-
-    for (unsigned int i=0; i<p_kernel->kernel()->numArgs(); ++i)
-    {
-        const Kernel::Arg &arg = p_kernel->kernel()->arg(i);
-        //llvm::Type* data_type = arg.type();
-        //unsigned width = 0;
-        //if(data_type->isIntegerTy()) {
-        //const llvm::IntegerType* IntTy =
-          // llvm::dyn_cast<llvm::IntegerType>(data_type);
-          //width = IntTy->getBitWidth();
-          //std::cerr << "Width of arg " << i << " is " << width << std::endl;
-        //}
-        LE1Kernel::typeOffset(args_size, arg.valueSize() * arg.vecDim());
-    }
-
-    rs = std::malloc(args_size);
-
-    if (!rs)
-        return NULL;
-
-    size_t arg_offset = 0;
-
-    for (unsigned int i=0; i<p_kernel->kernel()->numArgs(); ++i)
-    {
-        const Kernel::Arg &arg = p_kernel->kernel()->arg(i);
-        size_t size = arg.valueSize() * arg.vecDim();
-        size_t offset = LE1Kernel::typeOffset(arg_offset, size);
-
-        // Where to place the argument
-        unsigned char *target = (unsigned char *)rs;
-        target += offset;
-
-        // We may have to perform some changes in the values (buffers, etc)
-        switch (arg.kind())
-        {
-            case Kernel::Arg::Buffer:
-            {
-                MemObject *buffer = *(MemObject **)arg.data();
-
-                if (arg.file() == Kernel::Arg::Local)
-                {
-                    // Alloc a buffer and pass it to the kernel
-                    void *local_buffer = std::malloc(arg.allocAtKernelRuntime());
-                    locals_to_free.push_back(local_buffer);
-                    *(void **)target = local_buffer;
-                }
-                else
-                {
-                    if (!buffer)
-                    {
-                        // We can do that, just send NULL
-                        *(void **)target = NULL;
-                    }
-                    else
-                    {
-                        // Get the LE1 buffer, allocate it and get its pointer
-                        LE1Buffer *cpubuf =
-                            (LE1Buffer *)buffer->deviceBuffer(p_kernel->device());
-                        void *buf_ptr = 0;
-
-                        buffer->allocate(p_kernel->device());
-                        buf_ptr = cpubuf->data();
-
-                        *(void **)target = buf_ptr;
-                    }
-                }
-
-                break;
-            }
-            case Kernel::Arg::Image2D:
-            case Kernel::Arg::Image3D:
-            {
-                // We need to ensure the image is allocated
-                Image2D *image = *(Image2D **)arg.data();
-                image->allocate(p_kernel->device());
-
-                // Fall through to the memcpy
-            }
-            default:
-                // Simply copy the arg's data into the buffer
-                std::memcpy(target, arg.data(), size);
-                break;
-        }
-    }
-
-    // Cache the arguments if we can do so
-    if (!p_kernel->kernel()->hasLocals())
-        p_cpu_event->cacheKernelArgs(rs);
-
-#ifdef DEBUGCL
-  std::cerr << "Leaving LE1KernelWorkGroup::callArgs\n";
-#endif
-    return rs;
-}
-
-bool LE1KernelWorkGroup::run()
-{
-#ifdef DBG_KERNEL
-  std::cerr << "Entering LE1KernelWorkGroup::run\n";
-#endif
-  /*
-    // Get the kernel function to call
-    std::vector<void *> locals_to_free;
-    llvm::Function *kernel_func = p_kernel->callFunction();
-
-    if (!kernel_func)
-        return false;
-
-    Program *p = (Program *)p_kernel->kernel()->parent();
-    LE1Program *prog = (LE1Program *)(p->deviceDependentProgram(p_kernel->device()));
-
-    p_kernel_func_addr =
-        (void(*)(void *))prog->jit()->getPointerToFunction(kernel_func);
-
-    // Get the arguments
-    p_args = callArgs(locals_to_free);
-
-    // Tell the builtins this thread will run a kernel work group
-    setThreadLocalWorkGroup(this);
-
-    // Initialize the dummy context used by the builtins before a call to barrier()
-    p_current_work_item = 0;
-    p_current_context = &p_dummy_context;
-
-    std::memset(p_dummy_context.local_id, 0, p_work_dim * sizeof(size_t));
-
-    do
-    {
-        // Simply call the "call function", it and the builtins will do the rest
-        p_kernel_func_addr(p_args);
-    } while (!p_had_barrier &&
-             !incVec(p_work_dim, p_dummy_context.local_id, p_max_local_id));
-
-    // If no barrier() call was made, all is fine. If not, only the first
-    // work-item has currently finished. We must let the others run.
-    if (p_had_barrier)
-    {
-        Context *main_context = p_current_context; // After the first swapcontext,
-                                                   // we will not be able to trust
-                                                   // p_current_context anymore.
-
-        // We'll call swapcontext for each remaining work-item. They will
-        // finish, and when they'll do so, this main context will be resumed, so
-        // it's easy (i starts from 1 because the main context already finished)
-        for (unsigned int i=1; i<p_num_work_items; ++i)
-        {
-            Context *ctx = getContextAddr(i);
-            swapcontext(&main_context->context, &ctx->context);
-        }
-    }
-
-    // Free the allocated locals
-    if (p_kernel->kernel()->hasLocals())
-    {
-        for (size_t i=0; i<locals_to_free.size(); ++i)
-        {
-            std::free(locals_to_free[i]);
-        }
-
-        std::free(p_args);
-    }
-    */
-#ifdef DBG_KERNEL
-  std::cerr << "Leaving LE1KernelWorkGroup::run\n";
-#endif
-    return true;
-}
-
-LE1KernelWorkGroup::Context *LE1KernelWorkGroup::getContextAddr(unsigned int index)
-{
-#ifdef DBG_KERNEL
-  std::cerr << "Entering LE1KernelWorkGroup::getContextAddr\n";
-#endif
-    size_t size;
-    char *data = (char *)p_contexts;
-
-    // Each Context in data is an element of size p_stack_size + sizeof(Context)
-    size = p_stack_size + sizeof(Context);
-    size *= index;  // To get an offset
-#ifdef DBG_KERNEL
-    std::cerr << "Leaving LE1KernelWorkGroup::getContextAddr\n";
-#endif
-
-    return (Context *)(data + size); // Pointer to the context
 }

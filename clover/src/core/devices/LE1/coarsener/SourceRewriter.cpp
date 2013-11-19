@@ -36,8 +36,8 @@ typedef std::vector<DeclRefExpr*> DeclRefSet;
 typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 
-WorkitemCoarsen::WorkitemCoarsen(unsigned x, unsigned y, unsigned z) :
-  LocalX(x), LocalY(y), LocalZ(z) {
+WorkitemCoarsen::WorkitemCoarsen(unsigned *dims) :
+  LocalX(dims[0]), LocalY(dims[1]), LocalZ(dims[2]) {
   pthread_mutex_init(&p_inline_mutex, 0);
 }
 

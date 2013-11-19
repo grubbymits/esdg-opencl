@@ -344,14 +344,14 @@ cl_int LE1Device::initEventDeviceData(Event *event)
 
             // Set device-specific data
             LE1KernelEvent *le1_e = new LE1KernelEvent(this, kernelEvent);
-            Program *p = (Program *)kernelEvent->kernel()->parent();
-            LE1Program *prog = (LE1Program *)p->deviceDependentProgram(this);
+            //Program *p = (Program *)kernelEvent->kernel()->parent();
+            //LE1Program *prog = (LE1Program *)p->deviceDependentProgram(this);
 
             if(!le1_e->AllocateBuffers())
               return CL_MEM_OBJECT_ALLOCATION_FAILURE;
 
-            if(!le1_e->createFinalSource(prog))
-              return CL_BUILD_PROGRAM_FAILURE;
+            //if(!le1_e->createFinalSource(prog))
+              //return CL_BUILD_PROGRAM_FAILURE;
 
             kernelEvent->setDeviceData((void *)le1_e);
 

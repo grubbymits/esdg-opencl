@@ -134,7 +134,7 @@ bool LE1PassConfig::addPreSched2() {
 }
 
 bool LE1PassConfig::addPreRegAlloc() {
-  addPass(createLE1BBMerger(getLE1TargetMachine()));
+  //addPass(createLE1BBMerger(getLE1TargetMachine()));
   return false;
 }
 

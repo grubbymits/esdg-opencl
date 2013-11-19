@@ -1,6 +1,8 @@
 #ifndef _LE1Simulator_H
 #define _LE1Simulator_H
 
+#define INSIZZLEAPI
+
 #include <map>
 #include <pthread.h>
 
@@ -36,10 +38,10 @@ namespace Coal {
     bool Initialise(const std::string &Machine);
     void SaveStats(unsigned disabled);
     std::vector<SimulationStats> *GetStats() { return &Stats; }
-    unsigned GetIterations() const { return LE1Simulator::iteration; }
     void ClearStats() { Stats.clear(); }
     int checkStatus(void);
-    bool Run(const char *iram, const char *dram, const unsigned disabled);
+    bool RunSim(const char *iram, const char *dram, const unsigned disabled);
+    bool RunRTL(const char *iram, const char *dram);
     void LockAccess();
     void UnlockAccess();
     bool readByteData(unsigned int addr,
@@ -52,7 +54,6 @@ namespace Coal {
                       unsigned int numBytes,
                       unsigned int* data);
 private:
-  static unsigned iteration;
   bool isInitialised;
   pthread_mutex_t p_simulator_mutex;
   unsigned dram_size;

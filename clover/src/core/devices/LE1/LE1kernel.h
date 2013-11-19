@@ -140,152 +140,6 @@ class LE1Kernel : public DeviceKernel
         pthread_mutex_t p_call_function_mutex;
 };
 
-class LE1KernelEvent;
-
-/**
- * \brief LE1 kernel work-group
- *
- * This class represent a bulk of work-items that will be run. It is the one
- * to actually run the kernel of its elements.
- *
- * \see \ref llvm
- * \nosubgrouping
- */
-class LE1KernelWorkGroup
-{
-    public:
-        /**
-         * \brief Constructor
-         * \param kernel kernel to run
-         * \param event event containing information about the kernel run
-         * \param cpu_event LE1-specific information and cache about \p event
-         * \param work_group_index index of this work-group in the kernel
-         */
-        LE1KernelWorkGroup(LE1Kernel *kernel, KernelEvent *event,
-                           LE1KernelEvent *cpu_event,
-                           const size_t *work_group_index);
-        ~LE1KernelWorkGroup();
-
-        /**
-         * \brief Build a structure of arguments
-         *
-         * As C doesn't support calling functions with variable arguments
-         * unknown at the compilation, this function builds the list of
-         * arguments in memory. This array will then be passed to a LLVM stub
-         * function reading it and passing its values to the actuel kernel.
-         *
-         * \see \ref llvm
-         * \param locals_to_free if this kernel takes \c __local arguments, they
-         *                       must be \c malloc()'ed for every work-group.
-         *                       They are placed in this vector to be
-         *                       \c free()'ed at the end of \c run().
-         * \return address of a memory location containing the arguments
-         */
-        void *callArgs(std::vector<void *> &locals_to_free);
-
-        /**
-         * \brief Run the work-group
-         *
-         * This function is the core of LE1-acceleration. It runs the work-items
-         * of this work-group given the correct arguments.
-         *
-         * \see \ref llvm
-         * \see \ref barrier
-         * \see callArgs()
-         * \return true if success, false in case of an error
-         */
-        bool run();
-
-        /**
-         * \name Native implementation of built-in OpenCL C functions
-         * @{
-         */
-        size_t getGlobalId(cl_uint dimindx) const;
-        cl_uint getWorkDim() const;
-        size_t getGlobalSize(cl_uint dimindx) const;
-        size_t getLocalSize(cl_uint dimindx) const;
-        size_t getLocalID(cl_uint dimindx) const;
-        size_t getNumGroups(cl_uint dimindx) const;
-        size_t getGroupID(cl_uint dimindx) const;
-        size_t getGlobalOffset(cl_uint dimindx) const;
-
-        void barrier(unsigned int flags);
-
-        void *getImageData(Image2D *image, int x, int y, int z) const;
-
-        void writeImage(Image2D *image, int x, int y, int z, float *color) const;
-        void writeImage(Image2D *image, int x, int y, int z, int32_t *color) const;
-        void writeImage(Image2D *image, int x, int y, int z, uint32_t *color) const;
-
-        void readImage(float *result, Image2D *image, int x, int y, int z,
-                       uint32_t sampler) const;
-        void readImage(int32_t *result, Image2D *image, int x, int y, int z,
-                       uint32_t sampler) const;
-        void readImage(uint32_t *result, Image2D *image, int x, int y, int z,
-                       uint32_t sampler) const;
-
-        void readImage(float *result, Image2D *image, float x, float y, float z,
-                       uint32_t sampler) const;
-        void readImage(int32_t *result, Image2D *image, float x, float y, float z,
-                       uint32_t sampler) const;
-        void readImage(uint32_t *result, Image2D *image, float x, float y, float z,
-                       uint32_t sampler) const;
-        /**
-         * @}
-         */
-
-        /**
-         * \brief Function called when a built-in name cannot be found
-         */
-        void builtinNotFound(const std::string &name) const;
-
-    private:
-        template<typename T>
-        void writeImageImpl(Image2D *image, int x, int y, int z, T *color) const;
-        template<typename T>
-        void readImageImplI(T *result, Image2D *image, int x, int y, int z,
-                            uint32_t sampler) const;
-        template<typename T>
-        void readImageImplF(T *result, Image2D *image, float x, float y, float z,
-                            uint32_t sampler) const;
-        template<typename T>
-        void linear3D(T *result, float a, float b, float c,
-                       int i0, int j0, int k0, int i1, int j1, int k1,
-                       Image3D *image) const;
-        template<typename T>
-        void linear2D(T *result, float a, float b, float c, int i0, int j0,
-                      int i1, int j1, Image2D *image) const;
-
-    private:
-        LE1Kernel *p_kernel;
-        LE1KernelEvent *p_cpu_event;
-        KernelEvent *p_event;
-        cl_uint p_work_dim;
-        size_t p_index[MAX_WORK_DIMS],
-               p_max_local_id[MAX_WORK_DIMS],
-               p_global_id_start_offset[MAX_WORK_DIMS];
-
-        void (*p_kernel_func_addr)(void *);
-        void *p_args;
-
-        // Machinery to have barrier() working
-        struct Context
-        {
-            size_t local_id[MAX_WORK_DIMS];
-            ucontext_t context;
-            unsigned int initialized;
-        };
-
-        Context *getContextAddr(unsigned int index);
-
-        Context *p_current_context;
-        Context p_dummy_context;
-        void *p_contexts;
-        size_t p_stack_size;
-        unsigned int p_num_work_items, p_current_work_item;
-        bool p_had_barrier;
-};
-
 /**
  * \brief LE1-specific information about a kernel event
  *
@@ -295,6 +149,7 @@ class LE1KernelWorkGroup
  */
 
 class LE1Buffer;
+class LE1NDRange;
 class LE1Program;
 
 class LE1KernelEvent
@@ -310,9 +165,8 @@ class LE1KernelEvent
         ~LE1KernelEvent();
 
         bool AllocateBuffers();
-        bool createFinalSource(LE1Program *prog);
-        bool CompileSource(void);
-        bool CalculateBufferAddrs(unsigned Addr);
+        //bool createFinalSource(LE1Program *prog);
+        //bool CompileSource(void);
         int checkStatus(void);
         bool run(void);
         /*!< \brief The next Work Group that will execute will be the last.
@@ -322,7 +176,7 @@ class LE1KernelEvent
         bool finished();
         /*!< \brief Must be called exactly one time after reserve().
           Unlocks the event */
-        LE1KernelWorkGroup *takeInstance();
+        //LE1KernelWorkGroup *takeInstance();
 
         /*!< \brief Return the cached kernel arguments */
         void *kernelArgs() const;
@@ -334,10 +188,10 @@ class LE1KernelEvent
         static std::vector<LE1Buffer*> DeviceBuffers;
 
     private:
+        /*
         void CreateLauncher(std::string &LauncherString,
                             unsigned *WorkgroupsPerCore,
                             unsigned disabledCores);
-        /*
         bool WriteDataArea();
         void WriteKernelAttr(std::ostringstream &Output, size_t Attr);
         bool HandleBufferArg(const Kernel::Arg &arg);
@@ -354,6 +208,7 @@ class LE1KernelEvent
     private:
         LE1Device *p_device;
         KernelEvent *p_event;
+        LE1NDRange *theRange;
         size_t p_current_work_group[MAX_WORK_DIMS],
                p_max_work_groups[MAX_WORK_DIMS];
         size_t p_current_wg, p_finished_wg, p_num_wg;
@@ -363,6 +218,7 @@ class LE1KernelEvent
         unsigned disabledCores;
         //static unsigned int addr;
         //std::vector<unsigned> ArgAddrs;
+        /*
         std::string OriginalSource;
         std::string OriginalSourceName;
         std::string KernelName;
@@ -371,7 +227,7 @@ class LE1KernelEvent
         std::string TempAsmName;
         std::string FinalBCName;
         std::string FinalAsmName;
-        std::string CompleteFilename;
+        std::string CompleteFilename;*/
 };
 
 }
