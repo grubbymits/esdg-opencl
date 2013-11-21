@@ -15,7 +15,9 @@
 #include <llvm/Function.h>
 #include <llvm/Type.h>
 #include <llvm/DerivedTypes.h>
+#include <llvm/Transforms/Utils/Cloning.h>
 
+#include <cstdlib>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -34,8 +36,12 @@ LE1NDRange::LE1NDRange(KernelEvent *event, LE1Device *device) {
   LE1Program *prog = (LE1Program *)p->deviceDependentProgram(theDevice);
   OriginalSource = prog->getSource();
 
-  globalWorkSize = new unsigned[3]();
-  localWorkSize = new unsigned[3]();
+  theCompiler = new Compiler(theDevice);
+
+  for (unsigned i = 0; i < 3; ++i) {
+    globalWorkSize[i] = 0;
+    localWorkSize[i] = 0;
+  }
 
   for (unsigned i = 0; i < workDims; ++i) {
     globalWorkSize[i] = event->global_work_size(i);
@@ -63,8 +69,8 @@ LE1NDRange::LE1NDRange(KernelEvent *event, LE1Device *device) {
 }
 
 LE1NDRange::~LE1NDRange() {
-  delete globalWorkSize;
-  delete localWorkSize;
+  //delete globalWorkSize;
+  //delete localWorkSize;
 }
 
 bool LE1NDRange::CompileSource() {
@@ -73,18 +79,18 @@ bool LE1NDRange::CompileSource() {
 #endif
 
   bool previouslyRun = false;
+  bool alreadyCompiled = true;
 
   // Check whether the previous time we ran this, we compiled it for the same
   // work sizes
   if (LE1NDRange::kernelRanges.find(KernelName) !=
       LE1NDRange::kernelRanges.end()) {
-    bool alreadyCompiled = true;
     previouslyRun = true;
-    std::cout << "HAS PREVIOUSLY RUN" << std::endl;
+    std::cout << KernelName << " has previously run" << std::endl;
     unsigned *global = LE1NDRange::kernelRanges[KernelName].first;
     unsigned *local = LE1NDRange::kernelRanges[KernelName].second;
 
-    for (unsigned i = 0; i < 3; ++i) {
+    for (unsigned i = 0; i < workDims; ++i) {
       std::cout << i << ": globalWorkSize = " << globalWorkSize[i]
         << " and localWorkSize = " << localWorkSize[i]
         << ".\nglobal = " << global[i] << " and local = " << local[i]
@@ -95,10 +101,74 @@ bool LE1NDRange::CompileSource() {
       }
     }
 
-    if (alreadyCompiled)
-      return true;
+    //if (alreadyCompiled)
+      //return true;
   }
 
+  if (!alreadyCompiled)
+    CompileKernel();
+
+  //std::string LauncherString;
+  CreateLauncher(); //LauncherString, workgroupsPerCore, disabledCores);
+
+  Compiler MainCompiler(theDevice);
+  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
+    return false;
+
+  llvm::Module *CompleteModule = MainCompiler.LinkModules(MainCompiler.module(),
+                                                          WorkgroupModule);
+
+
+  // Output a single assembly file
+  if(!MainCompiler.CompileToAssembly(TempAsmName,
+                                     CompleteModule))
+    return false;
+
+  std::stringstream pre_asm_command;
+  // TODO Include the script as a char array?
+  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl -syscall "
+    << TempAsmName
+    << " > " << FinalAsmName;
+
+  if (system(pre_asm_command.str().c_str()) != 0) {
+    std::cerr << "LLVM Transform failed\n";
+    return false;
+  }
+
+  if (previouslyRun) {
+    for (unsigned i = 0; i < workDims; ++i) {
+      LE1NDRange::kernelRanges[KernelName].first[i] = globalWorkSize[i];
+      LE1NDRange::kernelRanges[KernelName].second[i] = localWorkSize[i];
+    }
+
+#ifdef DBG_NDRANGE
+    unsigned *global = LE1NDRange::kernelRanges[KernelName].first;
+    unsigned *local = LE1NDRange::kernelRanges[KernelName].second;
+    std::cerr << "Updating previously run global work sizes:" << std::endl;
+    for (unsigned i = 0; i < workDims; ++i)
+      std::cerr << global[i] << std::endl;
+    std::cerr << "Updating previously run local work sizes:" << std::endl;
+    for (unsigned i = 0; i < workDims; ++i)
+      std::cerr << local[i] << std::endl;
+#endif
+  }
+  else {
+    LE1NDRange::kernelRanges.insert(std::make_pair(KernelName,
+                                    std::make_pair(new unsigned[3](),
+                                                   new unsigned[3]())));
+    for (unsigned i = 0; i < workDims; ++i) {
+      LE1NDRange::kernelRanges[KernelName].first[i] = globalWorkSize[i];
+      LE1NDRange::kernelRanges[KernelName].second[i] = localWorkSize[i];
+    }
+  }
+#ifdef DBG_NDRANGE
+  std::cerr << "Leaving LE1NDRange::CompileSource\n";
+#endif
+
+  return true;
+}
+
+bool LE1NDRange::CompileKernel() {
   // TODO This part needs to calculate how many cores to instantiate
   // Impose an upper limit of 12 cores?
   unsigned mergeDims[3] = {1, 1, 1};
@@ -151,6 +221,7 @@ bool LE1NDRange::CompileSource() {
 
   std::string WorkgroupSource = Coarsener.getFinalKernel();
 #ifdef DBG_NDRANGE
+  std::cerr << "Merged Kernel:\n";
   std::cerr << std::endl << WorkgroupSource << std::endl;
 #endif
 
@@ -163,69 +234,24 @@ bool LE1NDRange::CompileSource() {
 
   if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts))
     return false;
-  llvm::Module *WorkgroupModule = LE1Compiler.module();
 
   //LE1Compiler.RunOptimisations(WorkgroupModule);
+  LE1Compiler.ScanForSoftfloat();
 
+  WorkgroupModule = llvm::CloneModule(
+    LE1Compiler.LinkRuntime(LE1Compiler.module()));
 
-#ifdef DBG_NDRANGE
-  std::cerr << "Merged Kernel\n";
-#endif
-
-  //std::string LauncherString;
-  CreateLauncher(); //LauncherString, workgroupsPerCore, disabledCores);
-
-  Compiler MainCompiler(theDevice);
-  if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
-    return false;
-  llvm::Module *MainModule = MainCompiler.module();
-
-  // Link the main module with the coarsened kernel code
-  llvm::Module *CompleteModule =
-    MainCompiler.LinkModules(MainModule, WorkgroupModule);
-
-  MainCompiler.ScanForSoftfloat();
-
-  CompleteModule = MainCompiler.LinkRuntime(CompleteModule);
-
-  //Coarsener.DeleteTempFiles();
-  if (!LE1Compiler.ExtractKernelData(CompleteModule, embeddedData))
+  if (!LE1Compiler.ExtractKernelData(WorkgroupModule, embeddedData))
     return false;
 
 #ifdef DBG_NDRANGE
   std::cerr << "Extracted any embedded data" << std::endl;
 #endif
 
-  // Output a single assembly file
-  if(!MainCompiler.CompileToAssembly(TempAsmName,
-                                     CompleteModule))
-    return false;
-
-  std::stringstream pre_asm_command;
-  // TODO Include the script as a char array
-  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl -syscall "
-    << TempAsmName
-    //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
-    << " > " << FinalAsmName;
-  // FIXME return false?
-  if (system(pre_asm_command.str().c_str()) != 0) {
-    std::cerr << "LLVM Transform failed\n";
-    return false;
-  }
-
-  if (previouslyRun)
-    LE1NDRange::kernelRanges[KernelName] =
-      std::make_pair(globalWorkSize, localWorkSize);
-  else
-    LE1NDRange::kernelRanges.insert(std::make_pair(KernelName,
-                                    std::make_pair(globalWorkSize,
-                                                   localWorkSize)));
-#ifdef DBG_NDRANGE
-  std::cerr << "Leaving LE1NDRange::CompileSource\n";
-#endif
 
   return true;
 }
+
 
 bool LE1NDRange::RunSim() {
 #ifdef DBG_NDRANGE
@@ -263,6 +289,7 @@ bool LE1NDRange::RunSim() {
 }
 
 void LE1NDRange::CreateLauncher(void) {
+  static unsigned counter = 0;
 #ifdef DBG_NDRANGE
   std::cerr << "Entering CreateLauncher with WorkgroupsPerCore = "
     << workgroupsPerCore[0] << ", " << workgroupsPerCore[1] << " and "
@@ -356,6 +383,14 @@ void LE1NDRange::CreateLauncher(void) {
     << "}\n";
 
   LauncherString = launcher.str();
+
+  std::ofstream launcherFile;
+  std::stringstream filename;
+  filename << "launcher_" << counter;
+  launcherFile.open(filename.str().c_str());
+  launcherFile << LauncherString << std::endl;
+  launcherFile.close();
+  ++counter;
 #ifdef DBG_NDRANGE
   std::cerr << LauncherString << std::endl;
 #endif

@@ -16,6 +16,7 @@ namespace Coal {
     bool RunRTL() { return false; }
 
   private:
+    bool CompileKernel();
     void CreateLauncher();
     bool Finalise();
     bool UpdateBuffers();
@@ -29,10 +30,12 @@ namespace Coal {
     unsigned totalCores;
     unsigned disabledCores;
     unsigned workDims;
-    unsigned *globalWorkSize;
-    unsigned *localWorkSize;
+    unsigned globalWorkSize[3];
+    unsigned localWorkSize[3];
     unsigned workgroupsPerCore[3];
 
+    Compiler *kernelCompiler;
+    Compiler *launcherCompiler;
     std::string OriginalSource;
     std::string dram;
     std::string iram;
@@ -45,6 +48,7 @@ namespace Coal {
     std::string FinalAsmName;
     std::string CompleteFilename;
     std::string LauncherString;
+
   };
 }
 
