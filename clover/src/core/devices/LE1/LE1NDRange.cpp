@@ -23,6 +23,8 @@
 
 using namespace Coal;
 
+std::map<std::string, std::pair<unsigned*, unsigned*> > LE1NDRange::kernelRanges;
+
 LE1NDRange::LE1NDRange(KernelEvent *event, LE1Device *device) {
   theDevice = device;
   theKernel = event->kernel();
@@ -31,6 +33,9 @@ LE1NDRange::LE1NDRange(KernelEvent *event, LE1Device *device) {
   Program *p = (Program*)theKernel->parent();
   LE1Program *prog = (LE1Program *)p->deviceDependentProgram(theDevice);
   OriginalSource = prog->getSource();
+
+  globalWorkSize = new unsigned[3]();
+  localWorkSize = new unsigned[3]();
 
   for (unsigned i = 0; i < workDims; ++i) {
     globalWorkSize[i] = event->global_work_size(i);
@@ -57,10 +62,42 @@ LE1NDRange::LE1NDRange(KernelEvent *event, LE1Device *device) {
   iram = "binaries/final_" + KernelName + ".s.bin";
 }
 
+LE1NDRange::~LE1NDRange() {
+  delete globalWorkSize;
+  delete localWorkSize;
+}
+
 bool LE1NDRange::CompileSource() {
 #ifdef DBG_NDRANGE
   std::cerr << "Entering CompileSource for " << KernelName << std::endl;
 #endif
+
+  bool previouslyRun = false;
+
+  // Check whether the previous time we ran this, we compiled it for the same
+  // work sizes
+  if (LE1NDRange::kernelRanges.find(KernelName) !=
+      LE1NDRange::kernelRanges.end()) {
+    bool alreadyCompiled = true;
+    previouslyRun = true;
+    std::cout << "HAS PREVIOUSLY RUN" << std::endl;
+    unsigned *global = LE1NDRange::kernelRanges[KernelName].first;
+    unsigned *local = LE1NDRange::kernelRanges[KernelName].second;
+
+    for (unsigned i = 0; i < 3; ++i) {
+      std::cout << i << ": globalWorkSize = " << globalWorkSize[i]
+        << " and localWorkSize = " << localWorkSize[i]
+        << ".\nglobal = " << global[i] << " and local = " << local[i]
+        << std::endl;
+      if ((global[i] != globalWorkSize[i]) || (local[i] != localWorkSize[i])) {
+        alreadyCompiled = false;
+        break;
+      }
+    }
+
+    if (alreadyCompiled)
+      return true;
+  }
 
   // TODO This part needs to calculate how many cores to instantiate
   // Impose an upper limit of 12 cores?
@@ -176,6 +213,13 @@ bool LE1NDRange::CompileSource() {
     return false;
   }
 
+  if (previouslyRun)
+    LE1NDRange::kernelRanges[KernelName] =
+      std::make_pair(globalWorkSize, localWorkSize);
+  else
+    LE1NDRange::kernelRanges.insert(std::make_pair(KernelName,
+                                    std::make_pair(globalWorkSize,
+                                                   localWorkSize)));
 #ifdef DBG_NDRANGE
   std::cerr << "Leaving LE1NDRange::CompileSource\n";
 #endif

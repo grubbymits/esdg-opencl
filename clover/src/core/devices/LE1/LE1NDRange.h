@@ -10,6 +10,7 @@ namespace Coal {
   class LE1NDRange {
   public:
     LE1NDRange(KernelEvent *event, LE1Device *device);
+    ~LE1NDRange();
     bool CompileSource();
     bool RunSim();
     bool RunRTL() { return false; }
@@ -28,8 +29,8 @@ namespace Coal {
     unsigned totalCores;
     unsigned disabledCores;
     unsigned workDims;
-    unsigned globalWorkSize[3];
-    unsigned localWorkSize[3];
+    unsigned *globalWorkSize;
+    unsigned *localWorkSize;
     unsigned workgroupsPerCore[3];
 
     std::string OriginalSource;
