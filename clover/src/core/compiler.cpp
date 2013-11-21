@@ -633,10 +633,10 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   llvm::InitializeAllTargetMCs();
   llvm::InitializeAllAsmPrinters();
 
-  llvm::PassRegistry &Registry = *llvm::PassRegistry::getPassRegistry();
-  llvm::initializeCore(Registry);
-  llvm::initializeScalarOpts(Registry);
-  llvm::initializeTarget(Registry);
+  //llvm::PassRegistry &Registry = *llvm::PassRegistry::getPassRegistry();
+  //llvm::initializeCore(Registry);
+  //llvm::initializeScalarOpts(Registry);
+  //llvm::initializeTarget(Registry);
 
   std::string Error;
   const llvm::Target *TheTarget = llvm::TargetRegistry::lookupTarget(Triple,
@@ -672,8 +672,8 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   else
     PM.add(new llvm::DataLayout(M));
 
-  PM.add(createIndVarSimplifyPass());
-  PM.add(createLoopUnrollPass(10, 2, 1));
+  //PM.add(createIndVarSimplifyPass());
+  //PM.add(createLoopUnrollPass(10, 2, 1));
 
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
                                                              Error, 0);
