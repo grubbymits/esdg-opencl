@@ -2,6 +2,7 @@
 // We should be able to use this to vectorize some of the kernel loops if we
 // backport the loop vectorizer code, or update the driver to 3.3
 
+/*
 #include "LE1.h"
 #include "LE1TargetMachine.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
@@ -50,3 +51,5 @@ namespace {
   };
 
 } // end anonymous namespace
+
+*/
