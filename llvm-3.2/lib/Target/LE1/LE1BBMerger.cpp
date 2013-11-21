@@ -122,6 +122,7 @@ bool LE1BBMerger::runOnMachineFunction(MachineFunction &MF) {
               // vregD = Opc Cond, TargetBB, Other
               Value *True = NULL;
               Value *False = NULL;
+              /*
               if (Phi->getIncomingBlock(0) == TargetBB) {
                 True = Phi->getIncomingValue(0);
                 False = Phi->getIncomingValue(1);
@@ -130,7 +131,7 @@ bool LE1BBMerger::runOnMachineFunction(MachineFunction &MF) {
                 True = Phi->getIncomingValue(1);
                 False = Phi->getIncomingValue(0);
               }
-              MachineInstr *MI = BuildMI(Opc, 3, DestReg).addReg(CondReg);
+              MachineInstr *MI = BuildMI(Opc, 3, DestReg).addReg(CondReg);*/
 
             }
           }
