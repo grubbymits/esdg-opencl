@@ -555,7 +555,7 @@ bool LE1Simulator::readByteData(unsigned int addr,
       data[i] = (unsigned char) (bytes >> (8 * (3-i)));
   }
   else {
-    unsigned remainingBytes = numBytes - (numBytes % 4);
+    unsigned remainingBytes = numBytes % 4;
     unsigned lastPos = 0;
     for (unsigned i = 0; i < (numBytes - remainingBytes);
          addr = (addr + 4), i += 4) {
