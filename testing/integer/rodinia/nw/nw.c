@@ -196,10 +196,9 @@ int main(int argc, char **argv){
         input_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
 	output_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
 
-        /*        
 	omp_reference = (int *)malloc( max_rows * max_cols * sizeof(int) );
         omp_input_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
-	omp_output_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );*/
+	omp_output_itemsets = (int *)malloc( max_rows * max_cols * sizeof(int) );
 
 	srand(7);
 	
@@ -207,35 +206,35 @@ int main(int argc, char **argv){
 	for (int i = 0 ; i < max_cols; i++){
 		for (int j = 0 ; j < max_rows; j++){
 			input_itemsets[i*max_cols+j] = 0;
-			//omp_input_itemsets[i*max_cols+j] = 0;
+			omp_input_itemsets[i*max_cols+j] = 0;
 		}
 	}
 
 	for( int i=1; i< max_rows ; i++){    //initialize the cols
 	  input_itemsets[i*max_cols] = rand() % 10 + 1;
-	  //omp_input_itemsets[i*max_cols] = input_itemsets[i*max_cols];
+	  omp_input_itemsets[i*max_cols] = input_itemsets[i*max_cols];
 	}
 	
         for( int j=1; j< max_cols ; j++){    //initialize the rows
 	  input_itemsets[j] = rand() % 10 + 1;
-          //omp_input_itemsets[j] = input_itemsets[j];
+          omp_input_itemsets[j] = input_itemsets[j];
 	}
 	
 	for (int i = 1 ; i < max_cols; i++){
 	  for (int j = 1 ; j < max_rows; j++){
 	    reference[i*max_cols+j] = blosum62[input_itemsets[i*max_cols]][input_itemsets[j]];
-	    //omp_reference[i*max_cols+j] =
-              //blosum62[omp_input_itemsets[i*max_cols]][omp_input_itemsets[j]];
+	    omp_reference[i*max_cols+j] =
+              blosum62[omp_input_itemsets[i*max_cols]][omp_input_itemsets[j]];
 	  }
 	}
 
         for( int i = 1; i< max_rows ; i++) {
           input_itemsets[i*max_cols] = -i * penalty;
-          //omp_input_itemsets[i*max_cols] = -i * penalty;
+          omp_input_itemsets[i*max_cols] = -i * penalty;
         }
 	for( int j = 1; j< max_cols ; j++) {
           input_itemsets[j] = -j * penalty;
-          //omp_input_itemsets[j] = -j * penalty;
+          omp_input_itemsets[j] = -j * penalty;
         }
 
 	int sourcesize = 1024*1024;
@@ -418,7 +417,6 @@ int main(int argc, char **argv){
 	printf("Processing top-left matrix\n");
 
     int index = 0;
-    /*
     for( int i = 0 ; i < max_cols-2 ; i++){
 #ifdef OPENMP
 	   omp_set_num_threads(omp_num_threads);
@@ -447,9 +445,9 @@ int main(int argc, char **argv){
 		     omp_input_itemsets[index-max_cols]  - penalty);
 	}
 
-      }*/
+      }
       int *cl_res = malloc(max_rows * sizeof(int));
-      //int *mp_res = malloc(max_rows * sizeof(int));
+      int *mp_res = malloc(max_rows * sizeof(int));
       unsigned res_index = 0;
 #ifdef TRACEBACK
 	
@@ -515,7 +513,6 @@ int main(int argc, char **argv){
 	
         printf("res_index = %d after writing CL results\n", res_index);
         res_index = 0;
-        /*
         fprintf(fpo, "\nprint traceback value from OMP:\n");
 	for (int i = max_rows - 2,  j = max_rows - 2; i>=0, j>=0;){
           int omp_nw, omp_n, omp_w, omp_traceback;
@@ -571,11 +568,10 @@ int main(int argc, char **argv){
 	  {i--; continue;}
 
 	  else ;
-        }*/
+        }
 
 	fclose(fpo);
 
-        /*
         int success = 1;
         for (unsigned i = 0; i < max_rows-1; i++) {
           if (cl_res[i] != mp_res[i]) {
@@ -587,7 +583,7 @@ int main(int argc, char **argv){
         if (success)
           printf("PASS\n");
         else
-          printf("FAIL\n");*/
+          printf("FAIL\n");
 
         /*
         printf("\n--------------------------------------------\n");
@@ -608,10 +604,10 @@ int main(int argc, char **argv){
 	free(reference);
 	free(input_itemsets);
 	free(output_itemsets);
-        //free(omp_reference);
-        //free(omp_input_itemsets);
-        //free(omp_output_itemsets);
-        //free(mp_res);
+        free(omp_reference);
+        free(omp_input_itemsets);
+        free(omp_output_itemsets);
+        free(mp_res);
         free(cl_res);
 	
 }

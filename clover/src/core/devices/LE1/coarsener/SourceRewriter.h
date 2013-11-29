@@ -201,11 +201,8 @@ public:
   ~ThreadSerialiser();
   void RewriteSource();
 
-  //bool VisitForStmt(clang::Stmt *s);
   bool VisitForStmt(clang::Stmt *s);
-  //bool VisitCallExpr(clang::Expr *s);
-  //bool VisitReturnStmt(clang::Stmt *s);
-  bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
+  bool VisitDeclStmt(clang::Stmt *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
   bool VisitUnaryOperator(clang::Expr *expr);
   bool VisitBinaryOperator(clang::Expr *expr);
@@ -231,6 +228,8 @@ private:
   void SearchForIndVars(clang::Stmt *s);
   bool SearchThroughRegions(clang::Stmt *Loop);
   void AssignIndVars(void);
+  bool isThreadDepVar(clang::Decl *decl);
+  bool SearchExpr(clang::Expr *s);
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);
   void ExpandDecl(std::stringstream &NewDecl);
@@ -262,6 +261,7 @@ private:
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
   std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RefAssignments;
   std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > PotentialIndVars;
+  std::map<clang::Decl*, bool> threadDepVars;
 
   std::vector<clang::Decl*> IndVars;
   std::vector<clang::FunctionDecl*> AllFunctions;

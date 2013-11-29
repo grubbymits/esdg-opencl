@@ -771,6 +771,10 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
       break;
     }
   }
+  bool threadDep = true;
+  if (threadDepVars.find(DS->getSingleDecl()) == threadDepVars.end())
+    threadDep = false;
+
   // If it's an induction variable, do not expand it
   if (isIndVar) {
     CreateLocal(InsertLoc, DS, false);
@@ -791,18 +795,19 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
     std::cerr << "address space = " << (int)qualType.getAddressSpace()
       << std::endl;
 #endif
+  bool toExpand = !isVariableLocal & threadDep;
 
-  bool isScalar = CreateLocal(InsertLoc, DS, !isVariableLocal);
+  bool isScalar = CreateLocal(InsertLoc, DS, toExpand);//!isVariableLocal);
 
   // Then the original declaration is turned into a reference, creating a
   // scalar access to a new array if necessary.
   if (isScalar)
-    RemoveScalarDeclStmt(DS, !isVariableLocal);
+    RemoveScalarDeclStmt(DS, toExpand); //!isVariableLocal);
   else
-    RemoveNonScalarDeclStmt(DS, !isVariableLocal);
+    RemoveNonScalarDeclStmt(DS, toExpand); //!isVariableLocal);
 
   // No need to visit its references if it's __local
-  if (isVariableLocal) {
+  if (isVariableLocal || !threadDep) {
 #ifdef DBG_WRKGRP
     std::cerr << "Leaving ScalarExpand" << std::endl;
 #endif
@@ -886,7 +891,6 @@ void WorkitemCoarsen::ThreadSerialiser::RemoveScalarDeclStmt(DeclStmt *DS,
                                                              bool toExpand) {
 #ifdef DBG_WRKGRP
   std::cerr << "Entering RemoveScalarDeclStmt:\n" << std::endl;
-  DS->dumpAll();
 #endif
 
   VarDecl *VD = cast<VarDecl>(DS->getSingleDecl());
@@ -1275,7 +1279,6 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region,
                                                                   Stmt *s) {
 #ifdef DBG_WRKGRP
   std::cerr << "TraverseConditionalRegion" << std::endl;
-  s->dumpAll();
 #endif
   IfStmt *ifStmt = cast<IfStmt>(s);
 
@@ -1470,6 +1473,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
 
 #ifdef DBG_WRKGRP
   std::cerr << "VisitDeclRefExpr for " << VarName << std::endl;
+  expr->dumpAll();
 #endif
 
   // Don't add it if its one of an work-item indexes
@@ -1534,10 +1538,26 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitUnaryOperator(Expr *expr) {
 }
 
 bool WorkitemCoarsen::ThreadSerialiser::VisitBinaryOperator(Expr *expr) {
+#ifdef DBG_WRKGRP
+  std::cerr << "VisitBinaryOperator" << std::endl;
+  expr->dumpAll();
+#endif
   BinaryOperator *BO = cast<BinaryOperator>(expr);
   if (BinaryOperator::isAssignmentOp(BO->getOpcode())) {
     Expr *LHS = BO->getLHS();
+    Expr *RHS = BO->getRHS();
+#ifdef DBG_WRKGRP
+    std::cerr << "BinaryOperator LHS is an Assignment" << std::endl;
+    std::cerr << "LHS = " << std::endl;
+    LHS->dumpAll();
+    std::cerr << std::endl << "RHS = " << std::endl;
+    RHS->dumpAll();
+#endif
+
     if (isa<DeclRefExpr>(LHS)) {
+#ifdef DBG_WRKGRP
+      std::cerr << "LHS is a DeclRefExpr" << std::endl;
+#endif
       DeclRefExpr *ref = cast<DeclRefExpr>(LHS);
       Decl *decl = ref->getDecl();
 
@@ -1549,10 +1569,107 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitBinaryOperator(Expr *expr) {
       else {
         RefAssignments[decl].push_back(ref);
       }
+      if (SearchExpr(RHS)) {
+        if (!isThreadDepVar(ref->getDecl())) {
+#ifdef DBG_WRKGRP
+          std::cerr << "Adding decl to threadDepVars" << std::endl;
+#endif
+          threadDepVars.insert(std::make_pair(ref->getDecl(), true));
+        }
+      }
+    }
+    if (isa<ArraySubscriptExpr>(LHS)) {
+      ArraySubscriptExpr *ASE = cast<ArraySubscriptExpr>(LHS);
+#ifdef DBG_WRKGRP
+      std::cerr << "LHS is an ArraySubscriptExpr" << std::endl;
+      std::cerr << "Base = " << std::endl;
+      ASE->getBase()->dumpAll();
+      std::cerr << "Index = " << std::endl;
+      ASE->getIdx()->dumpAll();
+#endif
+      CastExpr *CE = cast<CastExpr>(ASE->getBase());
+      DeclRefExpr *DRE = cast<DeclRefExpr>(CE->getSubExpr());
+      if (SearchExpr(ASE->getIdx()))
+        if (!isThreadDepVar(DRE->getDecl()))
+          threadDepVars.insert(std::make_pair(DRE->getDecl(), true));
     }
   }
   return true;
 }
+
+inline bool WorkitemCoarsen::ThreadSerialiser::isThreadDepVar(Decl *decl) {
+#ifdef DBG_WRKGRP
+  NamedDecl *ND = cast<NamedDecl>(decl);
+  std::string name = ND->getName().str();
+  std::cerr << name << " isThreadDepVar?";
+#endif
+  if (threadDepVars.find(decl) != threadDepVars.end()) {
+#ifdef DBG_WRKGRP
+    std::cerr << " - yes" << std::endl;
+#endif
+    return true;
+  }
+  else {
+#ifdef DBG_WRKGRP
+    std::cerr << " - no" << std::endl;
+#endif
+    return false;
+  }
+}
+
+bool WorkitemCoarsen::ThreadSerialiser::SearchExpr(Expr *s) {
+#ifdef DBG_WRKGRP
+  std::cerr << "Search Expr" << std::endl;
+#endif
+  if (isa<DeclRefExpr>(s)) {
+    DeclRefExpr *DRE = cast<DeclRefExpr>(s);
+    if (isThreadDepVar(DRE->getDecl()))
+      return true;
+  }
+  else {
+    for (Stmt::child_iterator CI = s->child_begin(), CE = s->child_end();
+         CI != CE; ++CI) {
+      if (SearchExpr(cast<Expr>(*CI)))
+        return true;
+    }
+  }
+
+  return false;
+}
+
+bool WorkitemCoarsen::ThreadSerialiser::VisitDeclStmt(Stmt *s) {
+  DeclStmt *DS = cast<DeclStmt>(s);
+  NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
+  std::string name = ND->getName().str();
+#ifdef DBG_WRKGRP
+  std::cerr << "VisitDeclStmt for " << name << std::endl;
+  s->dumpAll();
+#endif
+  if ((name.compare("__esdg_idx") == 0) ||
+      (name.compare("__esdg_idy") == 0) ||
+      (name.compare("__esdg_idz") == 0)) {
+    if (!isThreadDepVar(ND))
+      threadDepVars.insert(std::make_pair(ND, true));
+#ifdef DBG_WRKGRP
+    std::cerr << "it is thread dependent" << std::endl;
+#endif
+    return true;
+  }
+  if (s->child_begin() != s->child_end()) {
+    if (isa<Expr>(*(s->child_begin()))) {
+      if (SearchExpr(cast<Expr>(*(s->child_begin())))) {
+#ifdef DBG_WRKGRP
+        std::cerr << "Adding " << name << " to threadDepVars" << std::endl;
+#endif
+        if (!isThreadDepVar(ND))
+          threadDepVars.insert(std::make_pair(ND, true));
+      }
+    }
+  }
+  return true;
+}
+
+
 
 //template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitFunctionDecl(FunctionDecl *f) {
