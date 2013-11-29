@@ -36,7 +36,7 @@ LE1NDRange::LE1NDRange(KernelEvent *event, LE1Device *device) {
   LE1Program *prog = (LE1Program *)p->deviceDependentProgram(theDevice);
   OriginalSource = prog->getSource();
 
-  theCompiler = new Compiler(theDevice);
+  //theCompiler = new Compiler(theDevice);
 
   for (unsigned i = 0; i < 3; ++i) {
     globalWorkSize[i] = 0;
@@ -115,6 +115,7 @@ bool LE1NDRange::CompileSource() {
   if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
     return false;
 
+  llvm::Module *WorkgroupModule = MainCompiler.module();
   llvm::Module *CompleteModule = MainCompiler.LinkModules(MainCompiler.module(),
                                                           WorkgroupModule);
 
@@ -238,8 +239,7 @@ bool LE1NDRange::CompileKernel() {
   //LE1Compiler.RunOptimisations(WorkgroupModule);
   LE1Compiler.ScanForSoftfloat();
 
-  WorkgroupModule = llvm::CloneModule(
-    LE1Compiler.LinkRuntime(LE1Compiler.module()));
+  llvm::Module *WorkgroupModule = LE1Compiler.module();
 
   if (!LE1Compiler.ExtractKernelData(WorkgroupModule, embeddedData))
     return false;

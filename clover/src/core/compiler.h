@@ -91,6 +91,8 @@ class Compiler
 
         std::string &getFinalSource() { return FinalSource; }
 
+        bool Validate(std::string &Source);
+
         bool ExpandMacros(const char *filename);
 
         int InlineSource(const char *filename);

@@ -225,6 +225,46 @@ int Compiler::InlineSource(const char *filename) {
   return 0;
 }
 
+bool Compiler::Validate(std::string &Source) {
+#ifdef DBG_COMPILER
+  std::cerr << "Entering Compiler::Validate" << std::endl;
+#endif
+  std::string log;
+  llvm::raw_string_ostream macro_log(log);
+
+  CompilerInstance CI;
+  EmitLLVMOnlyAction act(&llvm::getGlobalContext());
+  CI.getTargetOpts().Triple = Triple;
+  CI.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
+                                   frontend::Angled,
+                                   false, false, false);
+  CI.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR, frontend::Angled,
+                                   false, false, false);
+  CI.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
+  CI.getPreprocessorOpts().Includes.push_back("clc/clc.h");
+  CI.getPreprocessorOpts().addMacroDef(
+    "cl_clang_storage_class_specifiers");
+  CI.getInvocation().setLangDefaults(CI.getLangOpts(), IK_OpenCL);
+
+  CI.getPreprocessorOpts()
+    .addRemappedFile("validate.cl", llvm::MemoryBuffer::getMemBuffer(Source));
+
+  CI.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+      macro_log, &CI.getDiagnosticOpts()));
+
+  if (!CI.ExecuteAction(act)) {
+    std::cerr << "Validate failed:" << std::endl
+      << log;
+    return false;
+  }
+
+#ifdef DBG_COMPILER
+  std::cerr << "Leaving Compiler::Validate successfully" << std::endl;
+#endif
+  return true;
+
+}
+
 bool Compiler::CompileToBitcode(std::string &Source,
                                 clang::InputKind SourceKind,
                                 const std::string &Opts) {

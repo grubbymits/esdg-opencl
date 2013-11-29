@@ -34,8 +34,8 @@ namespace Coal {
     unsigned localWorkSize[3];
     unsigned workgroupsPerCore[3];
 
-    Compiler *kernelCompiler;
-    Compiler *launcherCompiler;
+    //Compiler *kernelCompiler;
+    //Compiler *launcherCompiler;
     std::string OriginalSource;
     std::string dram;
     std::string iram;

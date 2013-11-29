@@ -408,8 +408,9 @@ cl_int Program::build(const char *options,
             //std::string triple = dep.device->getTriple();
             //std::string name = "program.cl";
             //if (!dep.compiler->compile(options ? options : std::string(), buffer))
-            if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL,
-                                          options ? options : std::string()))
+            //if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL,
+              //                            options ? options : std::string()))
+            if (!dep.compiler->Validate(p_source))
             {
                 if (pfn_notify)
                     pfn_notify((cl_program)this, user_data);
