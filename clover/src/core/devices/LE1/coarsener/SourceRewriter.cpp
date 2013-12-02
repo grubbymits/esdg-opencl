@@ -129,7 +129,7 @@ bool WorkitemCoarsen::HandleBarriers() {
 #ifdef DBG_WRKGRP
   std::cerr << "Finalised kernel:\n";
 #endif
-  
+
   std::ofstream final_kernel;
   std::string FinalKernelFilename = "final.";
   FinalKernelFilename.append(OrigFilename);
@@ -1369,29 +1369,6 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
   isFirstLoop = false;
   return true;
 }
-
-// Remove barrier calls and modify calls to kernel builtin functions.
-/*
-bool WorkitemCoarsen::ThreadSerialiser::VisitCallExpr(Expr *s) {
-#ifdef DBG_WRKGRP
-  std::cerr << "VisitCallExpr" << std::endl;
-#endif
-  if (isBarrier(s)) {
-    CallExpr *Call = cast<CallExpr>(s);
-    InsertText(Call->getLocStart(), "//");
-    CloseLoop(Call->getLocEnd().getLocWithOffset(2));
-    OpenLoop(Call->getLocEnd().getLocWithOffset(3));
-  }
-  return true;
-}*/
-/*
-bool WorkitemCoarsen::ThreadSerialiser::VisitReturnStmt(Stmt *s) {
-  //TheRewriter.InsertTextAfter(s->getLocEnd(), OpenWhile.str());
-  //TheRewriter.InsertTextBefore(s->getLocStart(), CloseWhile.str());
-  InsertText(s->getLocStart().getLocWithOffset(-2), CloseWhile.str());
-  InsertText(s->getLocStart().getLocWithOffset(-1), OpenWhile.str());
-  return true;
-}*/
 
 // Create maps of all the references in the tree
 bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
