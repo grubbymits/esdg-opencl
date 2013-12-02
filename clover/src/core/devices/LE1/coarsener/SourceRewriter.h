@@ -202,7 +202,6 @@ public:
   void RewriteSource();
 
   bool VisitForStmt(clang::Stmt *s);
-  bool VisitDeclStmt(clang::Stmt *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
   bool VisitUnaryOperator(clang::Expr *expr);
   bool VisitBinaryOperator(clang::Expr *expr);
@@ -228,8 +227,16 @@ private:
   void SearchForIndVars(clang::Stmt *s);
   bool SearchThroughRegions(clang::Stmt *Loop);
   void AssignIndVars(void);
-  bool isThreadDepVar(clang::Decl *decl);
+
+  bool isVarThreadDep(clang::Decl *decl);
+  void AddDep(clang::Decl *decl);
+  void FindThreadDeps(clang::Stmt *s);
+  void CheckDeclStmtDep(clang::Stmt *s);
+  void CheckUnaryOpDep(clang::Expr *expr);
+  void CheckBinaryOpDep(clang::Expr *expr);
+  void CheckArrayDeps(clang::Expr *expr);
   bool SearchExpr(clang::Expr *s);
+
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);
   void ExpandDecl(std::stringstream &NewDecl);
