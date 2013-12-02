@@ -225,8 +225,8 @@ private:
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
   void SearchForIndVars(clang::Stmt *s);
-  bool SearchThroughRegions(clang::Stmt *Loop);
-  void AssignIndVars(void);
+  bool SearchThroughRegions(clang::Stmt *Region);
+  //void AssignIndVars(void);
 
   bool isVarThreadDep(clang::Decl *decl);
   void AddDep(clang::Decl *decl);
@@ -255,10 +255,10 @@ private:
   void AccessNonScalar(clang::DeclRefExpr *Ref);
 
 private:
-  std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
+  std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedRegions;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
-  std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
+  //std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
 
   std::map<clang::Stmt*, PairedContinueList> ContinueStmts;
   std::map<clang::Stmt*, PairedBreakList> BreakStmts;
