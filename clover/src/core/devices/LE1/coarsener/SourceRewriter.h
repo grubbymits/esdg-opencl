@@ -203,8 +203,8 @@ public:
 
   bool VisitForStmt(clang::Stmt *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
-  bool VisitUnaryOperator(clang::Expr *expr);
-  bool VisitBinaryOperator(clang::Expr *expr);
+  //bool VisitUnaryOperator(clang::Expr *expr);
+  //bool VisitBinaryOperator(clang::Expr *expr);
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
 private:
@@ -266,11 +266,8 @@ private:
 
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
-  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RefAssignments;
-  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > PotentialIndVars;
   std::map<clang::Decl*, bool> threadDepVars;
 
-  std::vector<clang::Decl*> IndVars;
   std::vector<clang::FunctionDecl*> AllFunctions;
   std::vector<clang::FunctionDecl*> CalledFunctions;
 

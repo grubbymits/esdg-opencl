@@ -508,7 +508,7 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
 
   // Then we see which variables are only assigned in loop headers, these
   // are then disabled for expansion, though they can still be made local.
-  AssignIndVars();
+  //AssignIndVars();
 
   // Then we need to find all the variables that we need to replicate.
   std::list<DeclStmt*> Stmts;
@@ -522,34 +522,6 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
     SourceLocation Loc = (*PI).first;
     std::string Text = (*PI).second;
     TheRewriter.InsertText(Loc, Text);
-  }
-}
-
-void WorkitemCoarsen::ThreadSerialiser::AssignIndVars() {
-#ifdef DBG_WRKGRP
-  std::cerr << "AssignIndVars" << std::endl;
-#endif
-
-  for (std::map<Decl*, std::list<DeclRefExpr*> >::iterator MI
-       = PotentialIndVars.begin(), ME = PotentialIndVars.end();
-       MI != ME; ++MI) {
-
-    Decl *decl = MI->first;
-    std::list<DeclRefExpr*> IndVarRefs = MI->second;
-    std::list<DeclRefExpr*> RefAssigns = RefAssignments[decl];
-
-#ifdef DBG_WRKGRP
-    std::cerr << "Var: " << cast<NamedDecl>(decl)->getName().str()
-      << ". IndVarRefs.size = " << IndVarRefs.size() << " and RefAssigns = "
-      << RefAssigns.size() << std::endl;
-#endif
-
-    if (IndVarRefs.size() == RefAssigns.size()) {
-#ifdef DBG_WRKGRP
-      std::cerr << "Found induction variable" << std::endl;
-#endif
-      IndVars.push_back(decl);
-    }
   }
 }
 
@@ -760,26 +732,9 @@ WorkitemCoarsen::ThreadSerialiser::ScalarExpand(SourceLocation InsertLoc,
 #ifdef DBG_WRKGRP
   std::cerr << "Entering ScalarExpand " << pthread_self() << std::endl;
 #endif
-
-  // First check whether the variable is an induction variable which is just
-  // controlling a loop
-  bool isIndVar = false;
-  for (std::vector<Decl*>::iterator DI = IndVars.begin(), DE = IndVars.end();
-       DI != DE; ++DI) {
-    if (*DI == DS->getSingleDecl()) {
-      isIndVar = true;
-      break;
-    }
-  }
   bool threadDep = true;
   if (threadDepVars.find(DS->getSingleDecl()) == threadDepVars.end())
     threadDep = false;
-
-  // If it's an induction variable, do not expand it
-  if (isIndVar) {
-    CreateLocal(InsertLoc, DS, false);
-    return;
-  }
 
   // If the variable is a local variable, we don't need to expand it for
   // each of the work items.
@@ -1178,56 +1133,6 @@ WorkitemCoarsen::ThreadSerialiser::FixReturnsInBarrierAbsence(Stmt *Region,
   //--depth;
 }
 
-void WorkitemCoarsen::ThreadSerialiser::SearchForIndVars(Stmt *s) {
-#ifdef DBG_WRKGRP
-  std::cerr << "SearchForIndVars" << std::endl;
-#endif
-  if (!s)
-    return;
-
-  //for (Stmt::child_iterator CI = s->child_begin(), CE = s->child_end();
-    //   CI != CE; ++CI) {
-    if (isa<BinaryOperator>(s)) {
-      BinaryOperator *BO = cast<BinaryOperator>(s);
-      if (BinaryOperator::isAssignmentOp(BO->getOpcode())) {
-        Expr *LHS = BO->getLHS();
-        if (isa<DeclRefExpr>(LHS)) {
-          DeclRefExpr *ref = cast<DeclRefExpr>(LHS);
-          Decl *decl = ref->getDecl();
-
-          if (PotentialIndVars.find(decl) == PotentialIndVars.end()) {
-            std::list<DeclRefExpr*> RefList;
-            RefList.push_back(ref);
-            PotentialIndVars.insert(std::make_pair(decl, RefList));
-          }
-          else {
-            PotentialIndVars[decl].push_back(ref);
-          }
-        }
-      }
-    }
-    else if (isa<UnaryOperator>(s)) {
-      UnaryOperator *UO = cast<UnaryOperator>(s);
-      for (Stmt::child_iterator UOI = UO->child_begin(), UOE = UO->child_end();
-           UOI != UOE; ++UOI) {
-        if (isa<DeclRefExpr>(*UOI)) {
-          DeclRefExpr *ref = cast<DeclRefExpr>(*UOI);
-          Decl *decl = ref->getDecl();
-
-          if (PotentialIndVars.find(decl) == PotentialIndVars.end()) {
-            std::list<DeclRefExpr*> RefList;
-            RefList.push_back(ref);
-            PotentialIndVars.insert(std::make_pair(decl, RefList));
-          }
-          else {
-            PotentialIndVars[decl].push_back(ref);
-          }
-        }
-      }
-    }
-  //}
-}
-
 void WorkitemCoarsen::ThreadSerialiser::CheckForUnary(Stmt *Region,
                                                       Stmt *Then,
                                                       Stmt *unary) {
@@ -1366,9 +1271,9 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
     else if (isa<ForStmt>(s)) {
       ForStmt *For = cast<ForStmt>(s);
       Body = For->getBody();
-      SearchForIndVars(For->getInit());
-      SearchForIndVars(For->getCond());
-      SearchForIndVars(For->getInc());
+      FindThreadDeps(For->getInit());
+      FindThreadDeps(For->getCond());
+      FindThreadDeps(For->getInc());
     }
     // Iterate through the children of s:
     // - Add DeclStmts to vector
@@ -1532,33 +1437,6 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
   return true;
 }
 
-// We visit unary and binary operators to collect Decls that get assigned, so
-// we can determine possible induction variables. We also collect this data
-// directly from loop headers, if we find that variables are only assigned in
-// the header, then we assume it is an induction variable and doesn't need to
-// be expanded.
-bool WorkitemCoarsen::ThreadSerialiser::VisitUnaryOperator(Expr *expr) {
-  UnaryOperator *UO = cast<UnaryOperator>(expr);
-  for (Stmt::child_iterator CI = UO->child_begin(), CE = UO->child_end();
-       CI != CE; ++CI) {
-
-    if (isa<DeclRefExpr>(*CI)) {
-      DeclRefExpr *ref = cast<DeclRefExpr>(*CI);
-      Decl *decl = ref->getDecl();
-
-      if (RefAssignments.find(decl) == RefAssignments.end()) {
-        std::list<DeclRefExpr*> RefList;
-        RefList.push_back(ref);
-        RefAssignments.insert(std::make_pair(decl, RefList));
-      }
-      else {
-        RefAssignments[decl].push_back(ref);
-      }
-    }
-  }
-  return true;
-}
-
 void WorkitemCoarsen::ThreadSerialiser::CheckUnaryOpDep(Expr *expr) {
 #ifdef DBG_WRKGRP
   std::cerr << "Checking Unary for thread dep" << std::endl;
@@ -1630,34 +1508,6 @@ inline void WorkitemCoarsen::ThreadSerialiser::CheckArrayDeps(Expr *expr) {
   DeclRefExpr *DRE = cast<DeclRefExpr>(CE->getSubExpr());
   if (SearchExpr(ASE->getIdx()))
     AddDep(DRE->getDecl());
-}
-
-bool WorkitemCoarsen::ThreadSerialiser::VisitBinaryOperator(Expr *expr) {
-#ifdef DBG_WRKGRP
-  std::cerr << "VisitBinaryOperator" << std::endl;
-#endif
-  BinaryOperator *BO = cast<BinaryOperator>(expr);
-  if (BinaryOperator::isAssignmentOp(BO->getOpcode())) {
-    Expr *LHS = BO->getLHS();
-
-    if (isa<DeclRefExpr>(LHS)) {
-#ifdef DBG_WRKGRP
-      std::cerr << "LHS is a DeclRefExpr" << std::endl;
-#endif
-      DeclRefExpr *ref = cast<DeclRefExpr>(LHS);
-      Decl *decl = ref->getDecl();
-
-      if (RefAssignments.find(decl) == RefAssignments.end()) {
-        std::list<DeclRefExpr*> RefList;
-        RefList.push_back(ref);
-        RefAssignments.insert(std::make_pair(decl, RefList));
-      }
-      else {
-        RefAssignments[decl].push_back(ref);
-      }
-    }
-  }
-  return true;
 }
 
 inline bool WorkitemCoarsen::ThreadSerialiser::isVarThreadDep(Decl *decl) {
