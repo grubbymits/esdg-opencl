@@ -211,9 +211,9 @@ private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
-  void TraverseRegion(clang::Stmt *s);
-  void TraverseConditionalRegion(clang::Stmt *Region);
-  void CheckForUnary(clang::Stmt *Region,
+  bool TraverseRegion(clang::Stmt *s);
+  bool TraverseConditionalRegion(clang::Stmt *Region);
+  bool CheckForUnary(clang::Stmt *Region,
                      clang::Stmt *unary);
   void HandleNonParallelRegion(clang::Stmt *Region, int depth);
   void FixReturnsInBarrierAbsence(clang::Stmt* Region,
@@ -222,7 +222,7 @@ private:
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
-  void SearchForIndVars(clang::Stmt *s);
+  //void SearchForIndVars(clang::Stmt *s);
   bool SearchThroughRegions(clang::Stmt *Region);
   //void AssignIndVars(void);
 
