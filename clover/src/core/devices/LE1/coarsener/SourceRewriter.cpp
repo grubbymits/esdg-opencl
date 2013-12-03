@@ -1165,7 +1165,13 @@ bool WorkitemCoarsen::ThreadSerialiser::CheckForUnary(Stmt *Region,
   }
   return foundBarrier;
 }
-
+#define BARRIER 1
+#define RETURN  2
+#define BREAK   4
+#define CONTINUE  8
+// Return the code instead of a bool value from CheckUnary. If barrier isnt
+// returned, can we splice the InnerRegions into the region from the
+// conditional.
 inline bool 
 WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region) {
 #ifdef DBG_WRKGRP
