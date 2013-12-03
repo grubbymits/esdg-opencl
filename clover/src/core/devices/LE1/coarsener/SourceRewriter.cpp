@@ -1060,13 +1060,13 @@ WorkitemCoarsen::ThreadSerialiser::FixReturnsInBarrierAbsence(Stmt *Region,
 #endif
 
   // This is a list of return instructions, paired with their conditional stmt.
-  PairedReturnList PRL = ReturnStmts[Region];
+  std::vector<ReturnStmt*> returns = ReturnStmts[Region];
 
   if (depth == 0) {
     // Convert returns in the outer loop to continues.
-    for (PairedReturnList::iterator RLI = PRL.begin(),
-         RLE = PRL.end(); RLI != RLE; ++RLI)
-      InsertText((*RLI).second->getLocStart(), "continue; //");
+    for (std::vector<ReturnStmt*>::iterator RI = returns.begin(),
+         RE = returns.end(); RI != RE; ++RI)
+      InsertText((*RI)->getLocStart(), "continue; //");
   }
   else {
     SourceLocation RegionEnd;
@@ -1077,9 +1077,9 @@ WorkitemCoarsen::ThreadSerialiser::FixReturnsInBarrierAbsence(Stmt *Region,
 
     InsertText(Region->getLocStart(), "bool __kernel_invalid_index = false;");
 
-    for (PairedReturnList::iterator RLI = PRL.begin(),
-         RLE = PRL.end(); RLI != RLE; ++RLI)
-      InsertText((*RLI).second->getLocStart(),
+    for (std::vector<ReturnStmt*>::iterator RI = returns.begin(),
+         RE = returns.end(); RI != RE; ++RI)
+      InsertText((*RI)->getLocStart(),
                  "__kernel_invalid_index = true; break; //");
 
     if (depth > 1)
@@ -1094,107 +1094,6 @@ WorkitemCoarsen::ThreadSerialiser::FixReturnsInBarrierAbsence(Stmt *Region,
   //--depth;
 }
 
-void WorkitemCoarsen::ThreadSerialiser::CheckForUnary(Stmt *Region,
-                                                      Stmt *Then,
-                                                      Stmt *unary) {
-#ifdef DBG_WRKGRP
-  std::cerr << "Entering CheckForUnary" << std::endl;
-#endif
-  if (isa<ContinueStmt>(unary)) {
-    ContinueStmt *CS = cast<ContinueStmt>(unary);
-    std::pair<Stmt*, ContinueStmt*> ContinuePair = std::make_pair(Then, CS);
-    if (ContinueStmts.find(Region) == ContinueStmts.end()) {
-      std::list<std::pair<Stmt*, ContinueStmt*> > NewList;
-      NewList.push_back(ContinuePair);
-      ContinueStmts.insert(std::make_pair(Region, NewList));
-    }
-    else
-      ContinueStmts[Region].push_back(ContinuePair);
-  }
-  if (isa<BreakStmt>(unary)) {
-#ifdef DBG_WRKGRP
-    std::cerr << "Found BreakStmt" << std::endl;
-#endif
-    BreakStmt *BS = cast<BreakStmt>(unary);
-    std::pair<Stmt*, BreakStmt*> BreakPair = std::make_pair(Then, BS);
-    if (BreakStmts.find(Region) == BreakStmts.end()) {
-      std::list<std::pair<Stmt*, BreakStmt*> > NewList;
-      NewList.push_back(BreakPair);
-      BreakStmts.insert(std::make_pair(Region, NewList));
-    }
-    else
-      BreakStmts[Region].push_back(BreakPair);
-  }
-  if (isa<ReturnStmt>(unary)) {
-#ifdef DBG_WRKGRP
-    std::cerr << "Found ReturnStmt" << std::endl;
-#endif
-    ReturnStmt *RS = cast<ReturnStmt>(unary);
-    std::pair<Stmt*, ReturnStmt*> ReturnPair = std::make_pair(Then, RS);
-    if (ReturnStmts.find(Region) == ReturnStmts.end()) {
-      std::list<std::pair<Stmt*, ReturnStmt*> > NewList;
-      NewList.push_back(ReturnPair);
-      ReturnStmts.insert(std::make_pair(Region, NewList));
-    }
-    else
-      ReturnStmts[Region].push_back(ReturnPair);
-  }
-}
-
-void WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region,
-                                                                  Stmt *s) {
-#ifdef DBG_WRKGRP
-  std::cerr << "TraverseConditionalRegion" << std::endl;
-#endif
-  IfStmt *ifStmt = cast<IfStmt>(s);
-
-  Stmt *Then = ifStmt->getThen();
-
-  if (Then->child_begin() == Then->child_end()) {
-    CheckForUnary(Region, ifStmt, Then);
-    return;
-  }
-
-  if (isa<CompoundStmt>(Then)) {
-#ifdef DBG_WRKGRP
-    std::cerr << "if statement body is a CompoundStmt" << std::endl;
-#endif
-
-    CompoundStmt *CS = cast<CompoundStmt>(Then);
-    for (CompoundStmt::body_iterator CI = CS->body_begin(), CE = CS->body_end();
-         CI != CE; ++CI) {
-
-      if (!(*CI))
-        continue;
-
-#ifdef DBG_WRKGRP
-      std::cerr << "iterating through ConditionalRegion" << std::endl;
-#endif
-      CheckForUnary(Region, ifStmt, *CI);
-
-      if (isa<IfStmt>(*CI))
-        TraverseConditionalRegion(Region, *CI);
-      else if (isLoop(*CI))
-        TraverseRegion(*CI);
-      else
-        FindThreadDeps(*CI);
-    }
-  }
-  else {
-    for (Stmt::child_iterator SI = Then->child_begin(), SE = Then->child_end();
-         SI != SE; ++SI) {
-
-      CheckForUnary(Region, ifStmt, *SI);
-      if (isa<IfStmt>(*SI))
-        TraverseConditionalRegion(Region, *SI);
-      else if (isLoop(*SI))
-        TraverseRegion(*SI);
-      else
-        FindThreadDeps(*SI);
-    }
-  }
-}
-
 inline void WorkitemCoarsen::ThreadSerialiser::FindThreadDeps(Stmt *s) {
 #ifdef DBG_WRKGRP
   std::cerr << "FindThreadDeps" << std::endl;
@@ -1207,6 +1106,69 @@ inline void WorkitemCoarsen::ThreadSerialiser::FindThreadDeps(Stmt *s) {
     CheckUnaryOpDep(cast<Expr>(s));
   else if (isa<ArraySubscriptExpr>(s))
     CheckArrayDeps(cast<Expr>(s));
+}
+
+void WorkitemCoarsen::ThreadSerialiser::CheckForUnary(Stmt *Region,
+                                                      Stmt *unary) {
+#ifdef DBG_WRKGRP
+  std::cerr << "Entering CheckForUnary" << std::endl;
+#endif
+  if (isa<ContinueStmt>(unary)) {
+    ContinueStmt *CS = cast<ContinueStmt>(unary);
+    if (ContinueStmts.find(Region) == ContinueStmts.end()) {
+      std::vector<ContinueStmt*> continues;
+      continues.push_back(CS);
+      ContinueStmts.insert(std::make_pair(Region, continues));
+    }
+    else
+      ContinueStmts[Region].push_back(CS);
+  }
+  else if (isa<BreakStmt>(unary)) {
+#ifdef DBG_WRKGRP
+    std::cerr << "Found BreakStmt" << std::endl;
+#endif
+    BreakStmt *BS = cast<BreakStmt>(unary);
+    if (BreakStmts.find(Region) == BreakStmts.end()) {
+      std::vector<BreakStmt*> breaks;
+      breaks.push_back(BS);
+      BreakStmts.insert(std::make_pair(Region, breaks));
+    }
+    else
+      BreakStmts[Region].push_back(BS);
+  }
+  else if (isa<ReturnStmt>(unary)) {
+#ifdef DBG_WRKGRP
+    std::cerr << "Found ReturnStmt" << std::endl;
+#endif
+    ReturnStmt *RS = cast<ReturnStmt>(unary);
+    if (ReturnStmts.find(Region) == ReturnStmts.end()) {
+      std::vector<ReturnStmt*> returns;
+      returns.push_back(RS);
+      ReturnStmts.insert(std::make_pair(Region, returns));
+    }
+    else
+      ReturnStmts[Region].push_back(RS);
+  }
+}
+
+inline void
+WorkitemCoarsen::ThreadSerialiser::TraverseConditionalRegion(Stmt *Region) {
+  IfStmt *ifStmt = cast<IfStmt>(Region);
+  Stmt *Then = ifStmt->getThen();
+  if (Then->child_begin() == Then->child_end()) {
+    CheckForUnary(Region, Then);
+    return;
+  }
+  else
+    TraverseRegion(Then);
+  if (Stmt *Else = ifStmt->getElse()) {
+    if (Else->child_begin() == Else->child_end()) {
+      CheckForUnary(Region, Else);
+      return;
+    }
+    else
+      TraverseRegion(Else);
+  }
 }
 
 // We shall create a map, using the outer loop as the key, to contain all it's
@@ -1255,13 +1217,13 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
       else if (isBarrier(*SI))
         InnerBarriers.push_back(cast<CallExpr>(*SI));
       else if (isa<IfStmt>(*SI))
-        TraverseConditionalRegion(s, *SI);
+        TraverseConditionalRegion(*SI);
+      else
+        CheckForUnary(s, *SI);
 
       FindThreadDeps(*SI);
     }
   }
-  // TODO Probably should just merge this into the code above, unless this needs
-  // to be handled differently because its not a loop..? Can't remember!
   else if (isa<CompoundStmt>(s)) {
     CompoundStmt *CS = cast<CompoundStmt>(s);
     for (CompoundStmt::body_iterator CI = CS->body_begin(), CE = CS->body_end();
@@ -1281,11 +1243,29 @@ void WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *s) {
       else if (isBarrier(*CI))
         InnerBarriers.push_back(cast<CallExpr>(*CI));
       else if (isa<IfStmt>(*CI))
-        TraverseConditionalRegion(s, *CI);
+        TraverseConditionalRegion(*CI);
+      else
+        CheckForUnary(s, *CI);
 
       FindThreadDeps(*CI);
     }
   }
+  else if (s->child_begin() != s->child_end()) {
+    for (Stmt::child_iterator SI = s->child_begin(), SE = s->child_end();
+         SI != SE; ++SI) {
+
+      if (isa<IfStmt>(*SI))
+        TraverseConditionalRegion(*SI);
+      else if (isLoop(*SI) || isa<CompoundStmt>(*SI))
+        TraverseRegion(*SI);
+      else
+        CheckForUnary(s, *SI);
+
+      FindThreadDeps(*SI);
+    }
+  }
+  else
+    CheckForUnary(s, *(s->child_begin()));
 
   // add vectors to the maps, using 's' as the key
   if (!InnerRegions.empty())

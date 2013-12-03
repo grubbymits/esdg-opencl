@@ -21,7 +21,8 @@ public:
             unsigned x, unsigned y, unsigned z);
   virtual ~StmtFixer() { }
   virtual void FixInBarrierPresence(clang::Stmt* Region,
-                                    std::list<std::pair<clang::Stmt*, T> > &PSL,
+                                    //std::list<std::pair<clang::Stmt*, T> > &PSL,
+                                    std::vector<T> &Unaries,
                                     std::vector<clang::CallExpr*> &InnerBarriers,
                                     unsigned depth);
 protected:
@@ -47,7 +48,8 @@ public:
   LocalStmtFixer(std::list<std::pair<clang::SourceLocation, std::string > > *list,
                  unsigned x, unsigned y, unsigned z);
   void FixInBarrierPresence(clang::Stmt *Region,
-                            std::list<std::pair<clang::Stmt*, T> > &PSL,
+                            //std::list<std::pair<clang::Stmt*, T> > &PSL,
+                            std::vector<T> &Unaries,
                             std::vector<clang::CallExpr*> &InnerBarriers,
                             unsigned depth);
 };

@@ -212,10 +212,8 @@ private:
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
   void TraverseRegion(clang::Stmt *s);
-  void TraverseConditionalRegion(clang::Stmt* Region,
-                                 clang::Stmt* s);
+  void TraverseConditionalRegion(clang::Stmt *Region);
   void CheckForUnary(clang::Stmt *Region,
-                     clang::Stmt *Then,
                      clang::Stmt *unary);
   void HandleNonParallelRegion(clang::Stmt *Region, int depth);
   void FixReturnsInBarrierAbsence(clang::Stmt* Region,
@@ -260,9 +258,9 @@ private:
   std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
   //std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
 
-  std::map<clang::Stmt*, PairedContinueList> ContinueStmts;
-  std::map<clang::Stmt*, PairedBreakList> BreakStmts;
-  std::map<clang::Stmt*, PairedReturnList> ReturnStmts;
+  std::map<clang::Stmt*, std::vector<clang::ContinueStmt*> > ContinueStmts;
+  std::map<clang::Stmt*, std::vector<clang::BreakStmt*> > BreakStmts;
+  std::map<clang::Stmt*, std::vector<clang::ReturnStmt*> > ReturnStmts;
 
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
