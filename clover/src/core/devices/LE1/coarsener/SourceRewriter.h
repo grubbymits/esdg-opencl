@@ -233,12 +233,12 @@ private:
 
   bool isVarThreadDep(clang::Decl *decl);
   void AddDep(clang::Decl *decl);
-  void FindThreadDeps(clang::Stmt *s);
-  void CheckDeclStmtDep(clang::Stmt *s);
-  void CheckUnaryOpDep(clang::Expr *expr);
-  void CheckBinaryOpDep(clang::Expr *expr);
-  void CheckArrayDeps(clang::Expr *expr);
-  bool SearchExpr(clang::Expr *s);
+  void FindThreadDeps(clang::Stmt *s, bool depRegion);
+  void CheckDeclStmtDep(clang::Stmt *s, bool depRegion);
+  void CheckUnaryOpDep(clang::Expr *expr, bool depRegion);
+  void CheckBinaryOpDep(clang::Expr *expr, bool depRegion);
+  void CheckArrayDeps(clang::Expr *expr, bool depRegion);
+  bool SearchExpr(clang::Expr *s, bool depRegion);
 
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);
