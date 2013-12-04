@@ -12,15 +12,8 @@ __kernel void dynproc_kernel (int iteration,
                               int border,
                               int HALO,
                               __local int* prev,
-                              __local int* result,
-                              //__global int* outputBuffer,
-                              __global int* breakCounter,
-                              __global int* computedCounter,
-                              __global int* workitemCounter,
-                              __global int* totalWorkitems,
-                              __global bool* validBuffer)
+                              __local int* result)
 {
-	(*totalWorkitems)++;
 	int BLOCK_SIZE = get_local_size(0);
 	int bx = get_group_id(0);
 	int tx = get_local_id(0);
@@ -59,9 +52,6 @@ __kernel void dynproc_kernel (int iteration,
 
 	unsigned global_id = get_global_id(0);
 
-	if (isValid)
-		validBuffer[global_id] = true;
-
 
 	if(IN_RANGE(xidx, 0, cols-1))
 	{
@@ -90,16 +80,6 @@ __kernel void dynproc_kernel (int iteration,
 			int index = cols*(startStep+i)+xidx;
 			result[tx] = shortest + gpuWall[index];
 			
-			// ===================================================================
-			// add debugging info to the debug output buffer...
-			//if (tx==11 && i==0)
-			//{
-				// set bufIndex to what value/range of values you want to know.
-				//int bufIndex = gpuSrc[xidx];
-				// dont touch the line below.
-				//outputBuffer[bufIndex] = 1;
-			//}
-			// ===================================================================
 		}
 
 		barrier(CLK_LOCAL_MEM_FENCE);
@@ -108,7 +88,6 @@ __kernel void dynproc_kernel (int iteration,
 		{
 			// we are on the last iteration, and thus don't need to 
 			// compute for the next step.
-	        breakCounter[get_group_id(0)]++;
 			break;
 		}
 
@@ -116,9 +95,6 @@ __kernel void dynproc_kernel (int iteration,
 		{
 			//Assign the computation range
 			prev[tx] = result[tx];
-			unsigned computedId = get_global_id(0);
-			workitemCounter[computedId]++;
-                        computedCounter[computedId] = get_group_id(0);
 		}
 		barrier(CLK_LOCAL_MEM_FENCE);
 	}

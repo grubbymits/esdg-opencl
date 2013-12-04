@@ -283,6 +283,7 @@ int main(int argc, char** argv)
                 /*
 		clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem),
                                (void*) &d_outputBuffer);*/
+                /*
                 clSetKernelArg(cl.kernel(kn), 11, sizeof(cl_mem),
                                (void*) &d_breakCounterBuffer);
                 clSetKernelArg(cl.kernel(kn), 12, sizeof(cl_mem),
@@ -292,11 +293,12 @@ int main(int argc, char** argv)
                 clSetKernelArg(cl.kernel(kn), 14, sizeof(cl_mem),
                                (void*) &d_totalWorkitemBuffer);
                 clSetKernelArg(cl.kernel(kn), 15, sizeof(cl_mem),
-                               (void*) &d_validBuffer);
+                               (void*) &d_validBuffer);*/
 		cl.launch(kn);
 
         // --------------------------- DEBUG ------------------------------- //
                 std::cout << std::endl;
+                /*
         clEnqueueReadBuffer(cl.q(),
                             d_validBuffer,
                             CL_TRUE,
@@ -356,7 +358,7 @@ int main(int argc, char** argv)
                 << " in group " << h_computedCounterBuffer[id]
                 << std::endl;
 
-          std::cout << std::endl;
+          std::cout << std::endl;*/
 
           /*
           for (unsigned id = 0; id < globalSize; ++id)
@@ -367,6 +369,7 @@ int main(int argc, char** argv)
 
           std::cout << std::endl;*/
 
+          /*
           clEnqueueReadBuffer(cl.q(),
                               d_totalWorkitemBuffer,
                               CL_TRUE,
@@ -380,7 +383,7 @@ int main(int argc, char** argv)
           std::cout << std::endl;
 
           std::cout << "Total workitems so far = " << std::dec
-            << (unsigned) h_totalWorkitemBuffer << std::endl;
+            << (unsigned) h_totalWorkitemBuffer << std::endl; */
         // ------------------------------------------------------------------ //
 
 	}

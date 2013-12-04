@@ -45,10 +45,15 @@ typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 typedef std::map<std::string, NamedDeclSet> NamedDeclSetMap;
 
-typedef std::list<std::pair<clang::Stmt*, clang::ReturnStmt*> > PairedReturnList;
-typedef std::list<std::pair<clang::Stmt*, clang::ContinueStmt*> > PairedContinueList;
-typedef std::list<std::pair<clang::Stmt*, clang::BreakStmt*> > PairedBreakList;
 typedef std::list<std::pair<clang::SourceLocation, std::string> > StringList;
+
+typedef std::list<clang::Stmt*>::iterator region_iterator;
+typedef std::list<clang::CallExpr*>::iterator barrier_iterator;
+typedef std::list<clang::DeclStmt*>::iterator declstmt_iterator;
+typedef std::list<clang::ReturnStmt*>::iterator return_iterator;
+typedef std::list<clang::ContinueStmt*>::iterator continue_iterator;
+typedef std::list<clang::BreakStmt*>::iterator break_iterator;
+typedef std::vector<clang::DeclRefExpr*>::iterator declref_iterator;
 
 class WorkitemCoarsen {
 
@@ -211,10 +216,10 @@ private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
-  bool TraverseRegion(clang::Stmt *s);
-  bool TraverseConditionalRegion(clang::Stmt *Region);
-  bool CheckForUnary(clang::Stmt *Region,
-                     clang::Stmt *unary);
+  unsigned TraverseRegion(clang::Stmt *Parent,
+                          clang::Stmt *Region,
+                          bool isConditional);
+  //bool TraverseConditionalRegion(clang::Stmt *Region);
   void HandleNonParallelRegion(clang::Stmt *Region, int depth);
   void FixReturnsInBarrierAbsence(clang::Stmt* Region,
                                   unsigned depth);
@@ -253,14 +258,12 @@ private:
   void AccessNonScalar(clang::DeclRefExpr *Ref);
 
 private:
-  std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedRegions;
+  std::map<clang::Stmt*, std::list<clang::Stmt*> > NestedRegions;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
-  std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
-  //std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
-
-  std::map<clang::Stmt*, std::vector<clang::ContinueStmt*> > ContinueStmts;
-  std::map<clang::Stmt*, std::vector<clang::BreakStmt*> > BreakStmts;
-  std::map<clang::Stmt*, std::vector<clang::ReturnStmt*> > ReturnStmts;
+  std::map<clang::Stmt*, std::list<clang::CallExpr*> > Barriers;
+  std::map<clang::Stmt*, std::list<clang::ContinueStmt*> > ContinueStmts;
+  std::map<clang::Stmt*, std::list<clang::BreakStmt*> > BreakStmts;
+  std::map<clang::Stmt*, std::list<clang::ReturnStmt*> > ReturnStmts;
 
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;

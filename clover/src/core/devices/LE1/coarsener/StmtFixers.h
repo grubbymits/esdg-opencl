@@ -22,9 +22,8 @@ public:
   virtual ~StmtFixer() { }
   virtual void FixInBarrierPresence(clang::Stmt* Region,
                                     //std::list<std::pair<clang::Stmt*, T> > &PSL,
-                                    std::vector<T> &Unaries,
-                                    std::vector<clang::CallExpr*> &InnerBarriers,
-                                    unsigned depth);
+                                    std::list<T> &Unaries,
+                                    std::list<clang::CallExpr*> &InnerBarriers);
 protected:
   void InsertText(clang::SourceLocation InsertLoc, std::string text) {
     SourceToInsert->push_back(std::make_pair(InsertLoc, text));
@@ -49,9 +48,8 @@ public:
                  unsigned x, unsigned y, unsigned z);
   void FixInBarrierPresence(clang::Stmt *Region,
                             //std::list<std::pair<clang::Stmt*, T> > &PSL,
-                            std::vector<T> &Unaries,
-                            std::vector<clang::CallExpr*> &InnerBarriers,
-                            unsigned depth);
+                            std::list<T> &Unaries,
+                            std::list<clang::CallExpr*> &InnerBarriers);
 };
 
 class ReturnFixer : public StmtFixer<clang::ReturnStmt*> {

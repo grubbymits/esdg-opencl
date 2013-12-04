@@ -147,10 +147,9 @@ ContinueFixer::ContinueFixer(StringList *list,
 // in RewriteSource by appending the appropriate source to the OpenWhile string.
 template <typename T>
 void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
-                                        std::vector<T> &Unaries,
+                                        std::list<T> &Unaries,
                                         //std::list<std::pair<Stmt*, T> > &PSL,
-                                        std::vector<CallExpr*> &InnerBarriers,
-                                        unsigned depth) {
+                                        std::list<CallExpr*> &InnerBarriers) {
 
 #ifdef DBG_WRKGRP
   std::cerr << "Entering FixInBarrierPresence" << std::endl;
@@ -168,7 +167,7 @@ void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
   // total thread valid checks at each barrier location.
   // All the new loops in this region should also check the whether the current
   // thread is valid.
-  for (std::vector<CallExpr*>::iterator CI = InnerBarriers.begin(),
+  for (barrier_iterator CI = InnerBarriers.begin(),
        CE = InnerBarriers.end(); CI != CE; ++CI) {
     InsertText((*CI)->getLocEnd().getLocWithOffset(2), TotalValidCheck);
     InsertText((*CI)->getLocEnd().getLocWithOffset(4), CurrentValidCheck);
@@ -188,7 +187,7 @@ void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
     return;
   }
   // else
-  for (typename std::vector<T>::iterator TI = Unaries.begin(),
+  for (typename std::list<T>::iterator TI = Unaries.begin(),
        TE = Unaries.end(); TI != TE; ++TI) {
 
     T s = *TI; //(*SLI).second;
@@ -198,12 +197,20 @@ void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
 
 template <typename T>
 void LocalStmtFixer<T>::FixInBarrierPresence(Stmt *Region,
-  std::vector<T> &Unaries,
-  std::vector<CallExpr*> &InnerBarriers, unsigned depth) {
+  std::list<T> &Unaries,
+  std::list<CallExpr*> &InnerBarriers) {
 
-  StmtFixer<T>::FixInBarrierPresence(Region, Unaries, InnerBarriers, depth);
+  StmtFixer<T>::FixInBarrierPresence(Region, Unaries, InnerBarriers);
 
+  SourceLocation InsertLoc;
+  if (isa<ForStmt>(Region))
+    InsertLoc = cast<ForStmt>(Region)->getBody()->getLocStart();
+  else if (isa<WhileStmt>(Region))
+    InsertLoc = cast<WhileStmt>(Region)->getBody()->getLocStart();
+
+  this->InsertText(Region->getLocStart(), "{\n");
   this->InsertText(Region->getLocStart(), this->InvalidCounterInit);
   this->InsertText(Region->getLocStart(), this->InvalidArrayInit);
+  this->InsertText(Region->getLocEnd().getLocWithOffset(1), "\n}\n");
 }
 
