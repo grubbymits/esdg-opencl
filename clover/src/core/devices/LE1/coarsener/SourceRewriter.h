@@ -218,7 +218,8 @@ private:
 
   unsigned TraverseRegion(clang::Stmt *Parent,
                           clang::Stmt *Region,
-                          bool isConditional);
+                          bool isConditional,
+                          bool isThreadDep);
   //bool TraverseConditionalRegion(clang::Stmt *Region);
   void HandleNonParallelRegion(clang::Stmt *Region, int depth);
   void FixReturnsInBarrierAbsence(clang::Stmt* Region,
@@ -238,7 +239,7 @@ private:
   void CheckUnaryOpDep(clang::Expr *expr, bool depRegion);
   void CheckBinaryOpDep(clang::Expr *expr, bool depRegion);
   void CheckArrayDeps(clang::Expr *expr, bool depRegion);
-  bool SearchExpr(clang::Expr *s, bool depRegion);
+  bool SearchExpr(clang::Expr *s);
 
   void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
                         clang::Stmt *Loop);

@@ -1136,7 +1136,8 @@ static inline unsigned CheckForUnary(Stmt *Region, Stmt *unary) {
 // conditional regions will pass their parent, as the new parent...
 unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
                                                            Stmt *Region,
-                                                           bool isConditional) {
+                                                           bool isConditional,
+                                                           bool isThreadDep) {
 #ifdef DBG_WRKGRP
   std::cerr << "TraverseRegion";
   if (isConditional)
@@ -1153,17 +1154,19 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
   std::list<BreakStmt*> InnerBreaks;
   std::list<ReturnStmt*> InnerReturns;
 
-  bool isThreadDep = false;
-
   // Check conditional regions. if-statements are first class regions IFF they
   // contain a barrier.
   if (isa<IfStmt>(Region)) {
     IfStmt *ifStmt = cast<IfStmt>(Region);
+    Expr *Cond = ifStmt->getCond();
+    FindThreadDeps(Cond, isThreadDep);
+    isThreadDep |= SearchExpr(Cond);
+
     Stmt *Then = ifStmt->getThen();
-    foundStmts |= TraverseRegion(Parent, Then, true);
+    foundStmts |= TraverseRegion(Parent, Then, true, isThreadDep);
 
     if (Stmt *Else = ifStmt->getElse())
-      foundStmts |= TraverseRegion(Parent, Else, true);
+      foundStmts |= TraverseRegion(Parent, Else, true, isThreadDep);
   }
   // Check through the body of a loop
   else if (isLoop(Region)) {
@@ -1172,9 +1175,14 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
     else if (isa<ForStmt>(Region)) {
       ForStmt *For = cast<ForStmt>(Region);
       Body = For->getBody();
-      FindThreadDeps(For->getInit());
-      FindThreadDeps(For->getCond());
-      FindThreadDeps(For->getInc());
+      if (For != OuterLoop) {
+        FindThreadDeps(For->getInit(), isThreadDep);
+        FindThreadDeps(For->getCond(), isThreadDep);
+        FindThreadDeps(For->getInc(), isThreadDep);
+        //isThreadDep |= SearchExpr(cast<Expr>(For->getInit()));
+        isThreadDep |= SearchExpr(cast<Expr>(For->getCond()));
+        isThreadDep |= SearchExpr(cast<Expr>(For->getInc()));
+      }
     }
     // Iterate through the children of s:
     // - Add DeclStmts to vector
@@ -1185,7 +1193,7 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
 
       if (isLoop(*SI) || isa<CompoundStmt>(*SI)) {
         // Recursively visit the loops from the parent
-        foundStmts |= TraverseRegion(Region, *SI, isConditional);
+        foundStmts |= TraverseRegion(Region, *SI, isConditional, isThreadDep);
         InnerRegions.push_back(*SI);
       }
       else if (isa<DeclStmt>(*SI)) {
@@ -1196,7 +1204,10 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
       else if (isBarrier(*SI))
         InnerBarriers.push_back(cast<CallExpr>(*SI));
       else if (isa<IfStmt>(*SI)) {
-        foundStmts |= TraverseRegion(Region, *SI, true);
+        IfStmt *ifStmt = cast<IfStmt>(*SI);
+        Expr *Cond = ifStmt->getCond();
+        isThreadDep |= SearchExpr(Cond);
+        foundStmts |= TraverseRegion(Region, *SI, true, isThreadDep);
         InnerRegions.push_back(*SI);
       }
       else {
@@ -1228,7 +1239,7 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
 
       if (isLoop(*CI) || isa<CompoundStmt>(*CI)) {
         // Recursively visit the loops from the parent
-        foundStmts |= TraverseRegion(Region, *CI, isConditional);
+        foundStmts |= TraverseRegion(Region, *CI, isConditional, isThreadDep);
         InnerRegions.push_back(*CI);
       }
       else if (isa<DeclStmt>(*CI)) {
@@ -1239,7 +1250,10 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
       else if (isBarrier(*CI))
         InnerBarriers.push_back(cast<CallExpr>(*CI));
       else if (isa<IfStmt>(*CI)) {
-        foundStmts |= TraverseRegion(Region, *CI, true);
+        IfStmt *ifStmt = cast<IfStmt>(*CI);
+        Expr *Cond = ifStmt->getCond();
+        isThreadDep |= SearchExpr(Cond);
+        foundStmts |= TraverseRegion(Region, *CI, true, isThreadDep);
         InnerRegions.push_back(*CI);
       }
       else {
@@ -1267,7 +1281,7 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
          SE = Region->child_end(); SI != SE; ++SI) {
 
       if (isLoop(*SI) || isa<CompoundStmt>(*SI)) {
-        foundStmts |= TraverseRegion(Region, *SI, isConditional);
+        foundStmts |= TraverseRegion(Region, *SI, isConditional, isThreadDep);
         InnerRegions.push_back(*SI);
       }
       else if (isa<DeclStmt>(*SI)) {
@@ -1278,7 +1292,10 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
       else if (isBarrier(*SI))
         InnerBarriers.push_back(cast<CallExpr>(*SI));
       else if (isa<IfStmt>(*SI)) {
-        foundStmts |= TraverseRegion(Region, *SI, true);
+        IfStmt *ifStmt = cast<IfStmt>(*SI);
+        Expr *Cond = ifStmt->getCond();
+        isThreadDep |= SearchExpr(Cond);
+        foundStmts |= TraverseRegion(Region, *SI, true, isThreadDep);
         InnerRegions.push_back(*SI);
       }
       else {
@@ -1386,7 +1403,7 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitForStmt(Stmt *s) {
   ForStmt *For = cast<ForStmt>(s);
 
   if (isFirstLoop) {
-    TraverseRegion(For, For, false);
+    TraverseRegion(For, For, false, false);
     OuterLoop = For;
   }
 
@@ -1467,8 +1484,7 @@ inline bool WorkitemCoarsen::ThreadSerialiser::isVarThreadDep(Decl *decl) {
   }
 }
 
-bool WorkitemCoarsen::ThreadSerialiser::SearchExpr(Expr *s,
-                                                   bool depRegion) {
+bool WorkitemCoarsen::ThreadSerialiser::SearchExpr(Expr *s) {
 #ifdef DBG_WRKGRP
   //std::cerr << "Search Expr" << std::endl;
 #endif
@@ -1492,7 +1508,7 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchExpr(Expr *s,
   else {
     for (Stmt::child_iterator CI = s->child_begin(), CE = s->child_end();
          CI != CE; ++CI) {
-      if (SearchExpr(cast<Expr>(*CI), depRegion))
+      if (SearchExpr(cast<Expr>(*CI)))
         return true;
     }
   }
@@ -1516,7 +1532,7 @@ void WorkitemCoarsen::ThreadSerialiser::CheckUnaryOpDep(Expr *expr,
       DeclRefExpr *ref = cast<DeclRefExpr>(*CI);
       if (depRegion)
         AddDep(ref->getDecl());
-      if (SearchExpr(ref, depRegion)) {
+      if (SearchExpr(ref)) {
         AddDep(ref->getDecl());
       }
     }
@@ -1539,7 +1555,7 @@ void WorkitemCoarsen::ThreadSerialiser::CheckBinaryOpDep(Expr *expr,
       DeclRefExpr *ref = cast<DeclRefExpr>(LHS);
       if (depRegion)
         AddDep(ref->getDecl());
-      if (SearchExpr(RHS, depRegion)) {
+      if (SearchExpr(RHS)) {
         AddDep(ref->getDecl());
       }
     }
@@ -1550,7 +1566,7 @@ void WorkitemCoarsen::ThreadSerialiser::CheckBinaryOpDep(Expr *expr,
         DeclRefExpr *ref = cast<DeclRefExpr>(base);
         if (depRegion)
           AddDep(ref->getDecl());
-        if (SearchExpr(RHS, depRegion))
+        if (SearchExpr(RHS))
           AddDep(ref->getDecl());
       }
     }
@@ -1580,7 +1596,7 @@ inline void WorkitemCoarsen::ThreadSerialiser::CheckArrayDeps(Expr *expr,
   if (depRegion)
     AddDep(DRE->getDecl());
 
-  if (SearchExpr(ASE->getIdx(), depRegion))
+  if (SearchExpr(ASE->getIdx()))
     AddDep(DRE->getDecl());
 }
 
@@ -1599,7 +1615,7 @@ void WorkitemCoarsen::ThreadSerialiser::CheckDeclStmtDep(Stmt *s,
 
   if (s->child_begin() != s->child_end()) {
     if (isa<Expr>(*(s->child_begin()))) {
-      if (SearchExpr(cast<Expr>(*(s->child_begin())), depRegion)) {
+      if (SearchExpr(cast<Expr>(*(s->child_begin())))) {
 #ifdef DBG_WRKGRP
         //std::cerr << "Adding " << name << " to threadDepVars" << std::endl;
 #endif
