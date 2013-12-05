@@ -1142,6 +1142,8 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
   std::cerr << "TraverseRegion";
   if (isConditional)
     std::cerr << " - isConditional";
+  if (isThreadDep)
+    std::cerr << " - isThreadDep";
   std::cerr << std::endl;
 #endif
 
@@ -1175,11 +1177,12 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
     else if (isa<ForStmt>(Region)) {
       ForStmt *For = cast<ForStmt>(Region);
       Body = For->getBody();
-      if (For != OuterLoop) {
+
+      // Don't check for dependencies in the outer thread loop
+      if (Parent != Region) {
         FindThreadDeps(For->getInit(), isThreadDep);
         FindThreadDeps(For->getCond(), isThreadDep);
         FindThreadDeps(For->getInc(), isThreadDep);
-        //isThreadDep |= SearchExpr(cast<Expr>(For->getInit()));
         isThreadDep |= SearchExpr(cast<Expr>(For->getCond()));
         isThreadDep |= SearchExpr(cast<Expr>(For->getInc()));
       }
@@ -1458,7 +1461,8 @@ bool WorkitemCoarsen::ThreadSerialiser::VisitDeclRefExpr(Expr *expr) {
 inline void WorkitemCoarsen::ThreadSerialiser::AddDep(Decl *decl) {
   if (!isVarThreadDep(decl)) {
 #ifdef DBG_WRKGRP
-    //std::cerr << "Adding to thread deps " << std::endl;
+    std::cerr << "Adding " << cast<NamedDecl>(decl)->getName().str() <<
+      " to thread deps " << std::endl;
 #endif
     threadDepVars.insert(std::make_pair(decl, true));
   }
@@ -1519,7 +1523,10 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchExpr(Expr *s) {
 void WorkitemCoarsen::ThreadSerialiser::CheckUnaryOpDep(Expr *expr,
                                                         bool depRegion) {
 #ifdef DBG_WRKGRP
-  //std::cerr << "Checking Unary for thread dep" << std::endl;
+  std::cerr << "Checking Unary for thread dep";
+  if (depRegion)
+    std::cerr << " in a ThreadDep Region";
+  std::cerr << std::endl;
   //expr->dumpAll();
 #endif
   UnaryOperator *UO = cast<UnaryOperator>(expr);
@@ -1544,7 +1551,10 @@ void WorkitemCoarsen::ThreadSerialiser::CheckUnaryOpDep(Expr *expr,
 void WorkitemCoarsen::ThreadSerialiser::CheckBinaryOpDep(Expr *expr,
                                                          bool depRegion) {
 #ifdef DBG_WRKGRP
-  //std::cerr << "Entering CheckBinaryOpDep" << std::endl;
+  std::cerr << "Entering CheckBinaryOpDep";
+  if (depRegion)
+    std::cerr << " in a ThreadDep Region";
+  std::cerr << std::endl;
   //expr->dumpAll();
 #endif
   BinaryOperator *BO = cast<BinaryOperator>(expr);
@@ -1581,7 +1591,10 @@ void WorkitemCoarsen::ThreadSerialiser::CheckBinaryOpDep(Expr *expr,
 inline void WorkitemCoarsen::ThreadSerialiser::CheckArrayDeps(Expr *expr,
                                                               bool depRegion) {
 #ifdef DBG_WRKGRP
-  //std::cerr << "Checking array for deps" << std::endl;
+  std::cerr << "Checking array for deps";
+  if (depRegion)
+    std::cerr << " in a ThreadDep Region";
+  std::cerr << std::endl;
   //expr->dumpAll();
 #endif
   ArraySubscriptExpr *ASE = cast<ArraySubscriptExpr>(expr);
@@ -1606,7 +1619,10 @@ void WorkitemCoarsen::ThreadSerialiser::CheckDeclStmtDep(Stmt *s,
   NamedDecl *ND = cast<NamedDecl>(DS->getSingleDecl());
   std::string name = ND->getName().str();
 #ifdef DBG_WRKGRP
-  //std::cerr << "CheckDeclStmtDep for " << name << std::endl;
+  std::cerr << "CheckDeclStmtDep for " << name;
+  if (depRegion)
+    std::cerr << " in a ThreadDep Region";
+  std::cerr << std::endl;
   //s->dumpAll();
 #endif
 

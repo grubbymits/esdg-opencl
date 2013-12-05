@@ -1,14 +1,13 @@
 // Refer to X86TargetTransformInfo of llvm-3.3 to get implementation details.
 // We should be able to use this to vectorize some of the kernel loops if we
 // backport the loop vectorizer code, or update the driver to 3.3
-
+/*
 #include "LE1.h"
 #include "LE1TargetMachine.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Target/TargetLowering.h"
 #include "llvm/Target/CostTable.h"
-
 using namespace llvm;
 
 namespace llvm {
@@ -50,3 +49,4 @@ namespace {
   };
 
 } // end anonymous namespace
+*/
