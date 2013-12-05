@@ -125,6 +125,8 @@ public:
           }*/
           // Traverse the declaration using our AST visitor.
           Visitor.TraverseDecl(*b);
+          if (isParallel())
+            Visitor.FixReturns();
         }
       }
     }
@@ -134,13 +136,6 @@ public:
   void RewriteSource() {
     Visitor.RewriteSource();
   }
-  /*
-  bool needsScalarFixes() const {
-    return Visitor.needsToFixScalarAccesses();
-  }
-  void FixAllScalarAccesses() {
-    Visitor.FixAllScalarAccesses();
-  }*/
   bool isParallel() const { return Visitor.isParallel(); }
 
 private:
@@ -170,6 +165,7 @@ template <typename T> class ASTVisitorBase :
 public:
   ASTVisitorBase(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
   bool isParallel() const { return !foundBarrier; }
+  virtual void FixReturns() { }
   //virtual bool needsToFixScalarAccesses() const = 0;
   //virtual void FixAllScalarAccesses() = 0;
   virtual void RewriteSource();
@@ -202,6 +198,10 @@ public:
   bool VisitFunctionDecl(clang::FunctionDecl *f);
   bool VisitDeclStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
+  bool VisitReturnStmt(clang::Stmt *s);
+  void FixReturns();
+private:
+  std::vector<clang::Stmt*> ReturnStmts;
 };
 
 class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {

@@ -17,7 +17,7 @@ OPTION(BUILD_SHARED_LIBS "Set to OFF to build static libraries" ON)
 
 Find_Package(LLVM REQUIRED)
 Find_Package(Clang REQUIRED)
-Find_Package(Boost REQUIRED)
+#Find_Package(Boost REQUIRED)
 
 ADD_DEFINITIONS("-DCOAL_BUILD_DIR=\"${CMAKE_BINARY_DIR}\"")
 ADD_DEFINITIONS("-DCOAL_INSTALL_DIR=\"/opt/esdg-opencl/lib\"")

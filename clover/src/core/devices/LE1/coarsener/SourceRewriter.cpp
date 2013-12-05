@@ -330,6 +330,11 @@ bool WorkitemCoarsen::KernelInitialiser::VisitDeclStmt(Stmt *s) {
   return true;
 }
 
+bool WorkitemCoarsen::KernelInitialiser::VisitReturnStmt(Stmt *s) {
+  ReturnStmts.push_back(s);
+  return true;
+}
+
 //template <typename T>
 bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   CallExpr *Call = cast<CallExpr>(s);
@@ -427,6 +432,15 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
   return true;
 }
 
+void WorkitemCoarsen::KernelInitialiser::FixReturns() {
+  if (ReturnStmts.empty())
+    return;
+
+  for (std::vector<Stmt*>::iterator RI = ReturnStmts.begin(),
+       RE = ReturnStmts.end(); RI != RE; ++RI)
+    InsertText((*RI)->getLocStart(), "continue; //");
+}
+
 // ------------------------------------------------------------------------- //
 // --------------------- End of KernelInitialiser -------------------------- //
 // ------------------------------------------------------------------------- //
@@ -477,7 +491,9 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
   : ASTVisitorBase(R, x, y, z) {
 
     isFirstLoop = true;
+    foundBarrier = true;
     numDimensions = 1;
+
     InvalidThreadInit << "bool __kernel_invalid_global_threads[" << x << "]";
     if (y > 1) {
       InvalidThreadInit << "[" << y << "]";
