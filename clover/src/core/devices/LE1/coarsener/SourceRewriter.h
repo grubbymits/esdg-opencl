@@ -88,6 +88,7 @@ public:
     TheConsumer->RewriteSource();
     return TheRewriter.getRewriteBufferFor(SourceMgr->getMainFileID());
   }
+  bool isParallel() const { return TheConsumer->isParallel(); }
 
 private:
 
@@ -140,6 +141,7 @@ public:
   void FixAllScalarAccesses() {
     Visitor.FixAllScalarAccesses();
   }*/
+  bool isParallel() const { return Visitor.isParallel(); }
 
 private:
   std::string KernelName;
@@ -167,6 +169,7 @@ template <typename T> class ASTVisitorBase :
   public clang::RecursiveASTVisitor<T> {
 public:
   ASTVisitorBase(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
+  bool isParallel() const { return !foundBarrier; }
   //virtual bool needsToFixScalarAccesses() const = 0;
   //virtual void FixAllScalarAccesses() = 0;
   virtual void RewriteSource();
@@ -183,6 +186,7 @@ protected:
   unsigned LocalX;
   unsigned LocalY;
   unsigned LocalZ;
+  bool foundBarrier;
   std::stringstream OpenWhile;
   std::stringstream CloseWhile;
   clang::Rewriter &TheRewriter;

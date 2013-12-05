@@ -105,10 +105,18 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
 
   TempFiles.push_back(InitKernelFilename);
 
-  return HandleBarriers();
+  if (!InitCompiler.isParallel())
+    return HandleBarriers();
+  else {
+    FinalKernel = InitKernelSource;
+    return true;
+  }
 }
 
 bool WorkitemCoarsen::HandleBarriers() {
+#ifdef DBG_WRKGRP
+  std::cerr << "HandleBarriers" << std::endl;
+#endif
   OpenCLCompiler<ThreadSerialiser> SerialCompiler(LocalX, LocalY, LocalZ,
                                                   KernelName);
   SerialCompiler.setFile(InitKernelFilename);
@@ -116,8 +124,7 @@ bool WorkitemCoarsen::HandleBarriers() {
 
   const RewriteBuffer *RewriteBuf = SerialCompiler.getRewriteBuf();
   if (RewriteBuf == NULL) {
-    FinalKernel = InitKernelSource;
-    return true;
+    return false;
   }
 
   //std::ofstream final_kernel;
@@ -195,6 +202,7 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
     //CloseWhile << "\n__kernel_local_id[2] = 0;\n";
   }
 
+  foundBarrier = false;
 }
 
 template <typename T>
@@ -413,6 +421,8 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
     InsertText(Call->getLocStart(), local.str());
 
   }
+  else if (isBarrier(Call))
+    foundBarrier = true;
 
   return true;
 }

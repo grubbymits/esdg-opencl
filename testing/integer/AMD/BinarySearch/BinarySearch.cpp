@@ -404,7 +404,8 @@ BinarySearch::runCLKernels(void)
 
 
 
-
+    std::cout << "globalLowerBound = " << globalLowerBound
+      << " and globlUpperBound = " << globalUpperBound << std::endl;
     for(cl_uint i=globalLowerBound; i<= globalUpperBound; i++)
     {
         if(input[i] == findMe)
