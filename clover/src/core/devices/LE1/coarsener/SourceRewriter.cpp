@@ -1198,8 +1198,12 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
   }
   // Check through the body of a loop
   else if (isLoop(Region)) {
-    if (isa<WhileStmt>(Region))
-      Body = (cast<WhileStmt>(Region))->getBody();
+    if (isa<WhileStmt>(Region)) {
+      WhileStmt *While = (cast<WhileStmt>(Region));
+      Body = While->getBody();
+      FindThreadDeps(While->getCond(), isThreadDep);
+      isThreadDep |= SearchExpr(While->getCond());
+    }
     else if (isa<ForStmt>(Region)) {
       ForStmt *For = cast<ForStmt>(Region);
       Body = For->getBody();
@@ -1235,8 +1239,9 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
       else if (isa<IfStmt>(*SI)) {
         IfStmt *ifStmt = cast<IfStmt>(*SI);
         Expr *Cond = ifStmt->getCond();
-        isThreadDep |= SearchExpr(Cond);
-        foundStmts |= TraverseRegion(Region, *SI, true, isThreadDep);
+        //isThreadDep |= SearchExpr(Cond);
+        foundStmts |= TraverseRegion(Region, *SI, true,
+                                     (isThreadDep | SearchExpr(Cond)));
         InnerRegions.push_back(*SI);
       }
       else {
@@ -1281,8 +1286,9 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
       else if (isa<IfStmt>(*CI)) {
         IfStmt *ifStmt = cast<IfStmt>(*CI);
         Expr *Cond = ifStmt->getCond();
-        isThreadDep |= SearchExpr(Cond);
-        foundStmts |= TraverseRegion(Region, *CI, true, isThreadDep);
+        //isThreadDep |= SearchExpr(Cond);
+        foundStmts |= TraverseRegion(Region, *CI, true,
+                                     (isThreadDep | SearchExpr(Cond)));
         InnerRegions.push_back(*CI);
       }
       else {
@@ -1323,8 +1329,9 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
       else if (isa<IfStmt>(*SI)) {
         IfStmt *ifStmt = cast<IfStmt>(*SI);
         Expr *Cond = ifStmt->getCond();
-        isThreadDep |= SearchExpr(Cond);
-        foundStmts |= TraverseRegion(Region, *SI, true, isThreadDep);
+        //isThreadDep |= SearchExpr(Cond);
+        foundStmts |= TraverseRegion(Region, *SI, true,
+                                     (isThreadDep | SearchExpr(Cond)));
         InnerRegions.push_back(*SI);
       }
       else {
