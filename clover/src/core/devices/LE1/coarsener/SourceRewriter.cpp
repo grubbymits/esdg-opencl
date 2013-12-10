@@ -270,6 +270,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
     //TheRewriter.InsertText(FuncBodyStart, FuncBegin.str(), true, true);
     InsertText(FuncBodyStart, FuncBegin.str());
     OpenLoop(FuncBodyStart);
+    InsertText(FuncBody->getLocEnd().getLocWithOffset(-1), "\n__ESDG_END: ;");
     CloseLoop(FuncBody->getLocEnd());
   }
   return true;
@@ -438,7 +439,7 @@ void WorkitemCoarsen::KernelInitialiser::FixReturns() {
 
   for (std::vector<Stmt*>::iterator RI = ReturnStmts.begin(),
        RE = ReturnStmts.end(); RI != RE; ++RI)
-    InsertText((*RI)->getLocStart(), "continue; //");
+    InsertText((*RI)->getLocStart(), "goto __ESDG_END; //");
 }
 
 // ------------------------------------------------------------------------- //
@@ -1369,11 +1370,12 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
   // The if-statement is only classed as a region if it contains a barrier
   // somehow.
   Stmt *InsertRegion = Region;
+  /*
   if (isConditional) {
     if (InnerBarriers.empty())
       if (!(foundStmts & BARRIER))
         InsertRegion = Parent;
-  }
+  }*/
 
 #ifdef DBG_WRKGRP
   if (InsertRegion == Parent)
