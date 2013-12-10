@@ -966,6 +966,45 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region) {
   static int depth = -1;
   ++depth;
 
+  // Loop regions can contain breaks and continues, but these will often be
+  // contained in conditional regions; for this reason we have mapped those
+  // unaries to the loop if the conditional region did not contain a barrier.
+  // if (foundStmts && BARRIER)
+  //    any continue or break statements need to become barriers and the unary
+  //    is executed just once for the whole workgroup.
+  //
+  //  for () {            for () {
+  //    if ()               thread_loop() { }
+  //      break;            if () {
+  //    barrier();            thread_loop() { }
+  //  }                       break;
+  //                        }
+  //                        // barrier()
+  //                        thread_loop() { }
+  //                      }
+  //
+  // This means that conditional regions need to be treated as normal regions
+  // because we need to open and close the thread loop as we would for barriers.
+  // The only difference is that instead of the barrier being removed, we keep
+  // the unary in, but it executes outside of the thread loop. Like we search
+  // for nested barriers, we're going to need to search for nested unaries.
+  // In the example above, the region containing the break is acyclic and does
+  // not contain a barrier - so from this small perspective, nothing has to be
+  // changed. If we tell the child region that its parent is not parallel then
+  // we can do something about it.
+  // SearchThroughRegions(Stmt *Region, bool isParentParallel)
+
+  // return statements are similar, though they do not have to live within a
+  // loop, but they always need to be handled. Return statements are barriers
+  // when:
+  // - if they preceed any barrier calls
+  // - they are in a cyclic region that contains a barrier, like the example
+  //   above.
+  // Maybe easiest to do a comparison on SourceLocations between all returns and
+  // all the barriers, handling returns as necessary and removing them from the
+  // list. Then we can SearchThroughRegions and fix any remaining statements
+  // that weren't simply handled by location.
+
   if (!ReturnStmts[Region].empty())
     returnFixer->FixInBarrierPresence(Region, ReturnStmts[Region],
                                       Barriers[Region]);
@@ -1366,6 +1405,7 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
 #endif
     return foundStmts;
   }
+
 
   // The if-statement is only classed as a region if it contains a barrier
   // somehow.
