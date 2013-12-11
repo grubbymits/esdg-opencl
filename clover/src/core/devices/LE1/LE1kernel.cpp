@@ -686,6 +686,7 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
     else {
       launcher << ");\n";
 
+      /*
       for (unsigned i = 0; i < kernel->numArgs(); ++i) {
         const Kernel::Arg& arg = kernel->arg(i);
         if (arg.file() == Kernel::Arg::Local) {
@@ -693,7 +694,7 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
           launcher << "      reset_local(&BufferArg_" << i << ", "
             << size << ");\n";
         }
-      }
+      }*/
 
       for (unsigned i = 0; i < NestedLoops; ++i)
         launcher << "}\n";
