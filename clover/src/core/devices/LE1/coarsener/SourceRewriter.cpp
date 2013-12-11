@@ -270,8 +270,9 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
     //TheRewriter.InsertText(FuncBodyStart, FuncBegin.str(), true, true);
     InsertText(FuncBodyStart, FuncBegin.str());
     OpenLoop(FuncBodyStart);
-    InsertText(FuncBody->getLocEnd().getLocWithOffset(-1), "\n__ESDG_END: ;");
-    CloseLoop(FuncBody->getLocEnd());
+    std::string finalClose = "\n__ESDG_END: ;";
+    finalClose.append(CloseWhile.str());
+    InsertText(FuncBody->getLocEnd(), finalClose);
   }
   return true;
 }
@@ -521,17 +522,9 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
   std::cerr << "ThreadSerialiser::RewriteSource" << std::endl;
 #endif
 
-    // We may need to insert some variables to track valid local ids.
-    if (!ReturnStmts.empty() && !Barriers.empty()) {
-      InsertText(OuterLoop->getLocStart(), InvalidThreadInit.str());
-      // FIXME This only works for one dimension!
-      OpenWhile << "if (__kernel_invalid_global_threads[__esdg_idx])\n";
-      OpenWhile << "  continue;";
-    }
-
   // Visit all the loops which contain barriers, and create regions that are
   // contained by the multi-level while loops
-  SearchThroughRegions(OuterLoop);
+  SearchThroughRegions(OuterLoop, Barriers.empty());
 
   // Then we see which variables are only assigned in loop headers, these
   // are then disabled for expansion, though they can still be made local.
@@ -958,10 +951,16 @@ WorkitemCoarsen::ThreadSerialiser::GetOffsetOut(SourceLocation Loc) {
 
 // Find out if this loop contains a barrier somehow, it will then
 // HandleBarrierInLoop if it finds something.
-bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region) {
-                                                          //bool isOuterLoop) {
+bool
+WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region,
+                                                        bool isParentParallel) {
 #ifdef DBG_WRKGRP
-  std::cerr << "SearchThroughRegions" << std::endl;
+  std::cerr << "SearchThroughRegions, Parent is ";
+  if (!isParentParallel)
+    std::cerr << "not ";
+  std::cerr << "parallel" << std::endl;
+  if (isa<IfStmt>(Region))
+    std::cerr << "Region is also an IfStmt" << std::endl;
 #endif
   static int depth = -1;
   ++depth;
@@ -990,11 +989,11 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region) {
   // for nested barriers, we're going to need to search for nested unaries.
   // In the example above, the region containing the break is acyclic and does
   // not contain a barrier - so from this small perspective, nothing has to be
-  // changed. If we tell the child region that its parent is not parallel then
-  // we can do something about it.
+  // changed. If we tell the conditional child region that its parent is not
+  // parallel then we can do something about it.
+
   // SearchThroughRegions(Stmt *Region, bool isParentParallel)
-  //  if (!InnerContinues.empty() && (!InnerBarriers.empty() ||
-  //      NestedBarriers != 0 || !isParentParallel))
+  //  if (!InnerContinues.empty() && !InnerBarriers.empty())
   //    FixBarrierContinues(InnerContinues);
   //
   //  if (!InnerReturns.empty() && (!isParentParallel ||
@@ -1012,16 +1011,25 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region) {
   // list. Then we can SearchThroughRegions and fix any remaining statements
   // that weren't simply handled by location.
 
-  if (!ReturnStmts[Region].empty())
-    returnFixer->FixInBarrierPresence(Region, ReturnStmts[Region],
-                                      Barriers[Region]);
-
   if ((NestedRegions[Region].empty()) && (Barriers[Region].empty())) {
-      //ScopedRegions[Loop].empty()) {
 #ifdef DBG_WRKGRP
     std::cerr << "No nested loops and there's no barriers in this one"
       << std::endl;
 #endif
+    if (!isParentParallel && isa<IfStmt>(Region)) {
+#ifdef DBG_WRKGRP
+      std::cerr << "But this is a IfStmt and the parent is not parallel"
+        << std::endl;
+#endif
+      if (!ContinueStmts[Region].empty() || !BreakStmts[Region].empty()) {
+#ifdef DBG_WRKGRP
+        std::cerr << "And the region contains unaries!" << std::endl;
+#endif
+        HandleNonParallelRegion(Region, depth);
+        --depth;
+        return true;
+      }
+    }
     --depth;
     return false;
   }
@@ -1030,15 +1038,13 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region) {
   std::list<Stmt*> InnerRegions = NestedRegions[Region];
   for (region_iterator RI = InnerRegions.begin(),
        RE = InnerRegions.end(); RI != RE; ++RI) {
-    if (SearchThroughRegions(*RI))
+    bool parallelRegion = ((NestedBarriers == 0) &&
+      Barriers[Region].empty());
+    if (SearchThroughRegions(*RI, parallelRegion))
       ++NestedBarriers;
   }
 
   if ((!Barriers[Region].empty()) || (NestedBarriers != 0)) {
-
-    // Appropriately open and close the workgroup loops if its an original loop
-    //if (!isOuterLoop)
-      //ParallelRegions.push_back(Loop);
     HandleNonParallelRegion(Region, depth);
     --depth;
     return true;
@@ -1049,6 +1055,22 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region) {
   }
 }
 
+inline void WorkitemCoarsen::ThreadSerialiser::FixUnary(Stmt *Unary) {
+  unsigned offset = 0;
+  if (isa<BreakStmt>(Unary))
+    offset = 6;
+  else if (isa<ContinueStmt>(Unary))
+    offset = 10;
+
+  CloseLoop(Unary->getLocStart().getLocWithOffset(-1));
+  OpenLoop(Unary->getLocEnd().getLocWithOffset(offset));
+}
+
+inline void WorkitemCoarsen::ThreadSerialiser::FixBarrier(CallExpr *Call) {
+  InsertText(Call->getLocStart(), "//");
+  CloseLoop(Call->getLocEnd().getLocWithOffset(2));
+  OpenLoop(Call->getLocEnd().getLocWithOffset(3));
+}
 
 // Whether a loop contains a barrier, nested or not, we follow these steps:
 // - close the main loop before this loop starts
@@ -1063,31 +1085,51 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
 #endif
   // Remove the barriers of this region
   if (Barriers[Region].size() == 1) {
-    CallExpr *Call = Barriers[Region].front();
-    InsertText(Call->getLocStart(), "//");
-    CloseLoop(Call->getLocEnd().getLocWithOffset(2));
-    OpenLoop(Call->getLocEnd().getLocWithOffset(3));
+    FixBarrier(Barriers[Region].front());
   }
-  else {
+  else if (Barriers[Region].size () > 1) {
     for (barrier_iterator Call = Barriers[Region].begin(),
-       End = Barriers[Region].end(); Call != End; ++Call) {
-      InsertText((*Call)->getLocStart(), "//");
-      CloseLoop((*Call)->getLocEnd().getLocWithOffset(2));
-      OpenLoop((*Call)->getLocEnd().getLocWithOffset(3));
+         End = Barriers[Region].end(); Call != End; ++Call)
+      FixBarrier(*Call);
+  }
+  // Use any continue stmts as fission points too
+  if (!ContinueStmts[Region].empty()) {
+    if (ContinueStmts[Region].size() == 1)
+      FixUnary(ContinueStmts[Region].front());
+    else {
+      for (continue_iterator CI = ContinueStmts[Region].begin(),
+           CE = ContinueStmts[Region].end(); CI != CE; ++CI)
+        FixUnary(*CI);
     }
   }
-
-  //if (!ReturnStmts[Region].empty())
-    //returnFixer->FixInBarrierPresence(Region, ReturnStmts[Region],
-      //                                Barriers[Region]);
-  if (!BreakStmts[Region].empty())
-    breakFixer->FixInBarrierPresence(Region, BreakStmts[Region],
-                                     Barriers[Region]);
+  // As well as any breaks
+  if (!BreakStmts[Region].empty()) {
+    if (BreakStmts[Region].size() == 1)
+      FixUnary(BreakStmts[Region].front());
+    else {
+      for (break_iterator BI = BreakStmts[Region].begin(),
+           BE = BreakStmts[Region].end(); BI != BE; ++BI)
+        FixUnary(*BI);
+    }
+  }
 
   // Insert opening and closing loops for all regions, except the outer loop
   if (depth > (numDimensions - 1)) {
     Stmt *LoopBody = NULL;
-    // Handle any breaks that may be in this loop
+    if (isa<IfStmt>(Region)) {
+      CloseLoop(Region->getLocStart().getLocWithOffset(-1));
+      OpenLoop(Region->getLocEnd().getLocWithOffset(1));
+
+      IfStmt *ifStmt = cast<IfStmt>(Region);
+      OpenLoop(ifStmt->getThen()->getLocStart().getLocWithOffset(1));
+      CloseLoop(ifStmt->getThen()->getLocEnd());
+
+      if (Stmt *Else = ifStmt->getElse()) {
+        OpenLoop(Else->getLocStart().getLocWithOffset(1));
+        CloseLoop(Else->getLocEnd());
+      }
+      return;
+    }
     if (isa<ForStmt>(Region))
       LoopBody = (cast<ForStmt>(Region))->getBody();
     else if (isa<WhileStmt>(Region))
@@ -1185,19 +1227,19 @@ static inline unsigned CheckForUnary(Stmt *Region, Stmt *unary) {
 #endif
   if (isa<ContinueStmt>(unary)) {
 #ifdef DBG_WRKGRP
-    std::cerr << "Found ContinueStmt" << std::endl;
+    std::cerr << "FOUND CONTINUESTMT" << std::endl;
 #endif
     return CONTINUE;
   }
   else if (isa<BreakStmt>(unary)) {
 #ifdef DBG_WRKGRP
-    std::cerr << "Found BreakStmt" << std::endl;
+    std::cerr << "FOUND BREAKSTMT" << std::endl;
 #endif
     return BREAK;
   }
   else if (isa<ReturnStmt>(unary)) {
 #ifdef DBG_WRKGRP
-    std::cerr << "Found ReturnStmt" << std::endl;
+    std::cerr << "FOUND RETURNSTMT" << std::endl;
 #endif
     return RETURN;
   }
@@ -1238,10 +1280,10 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
     isThreadDep |= SearchExpr(Cond);
 
     Stmt *Then = ifStmt->getThen();
-    foundStmts |= TraverseRegion(Parent, Then, true, isThreadDep);
+    foundStmts |= TraverseRegion(Region, Then, true, isThreadDep);
 
     if (Stmt *Else = ifStmt->getElse())
-      foundStmts |= TraverseRegion(Parent, Else, true, isThreadDep);
+      foundStmts |= TraverseRegion(Region, Else, true, isThreadDep);
   }
   // Check through the body of a loop
   else if (isLoop(Region)) {
@@ -1402,78 +1444,46 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
     }
   }
 
-  // foundStmts will now be coded with any important Stmts that live within this
-  // region. If they are no barriers or returns, including nested ones, we do
-  // not care about this region; and so we not add it to our map.
-  if (InnerBarriers.empty() && InnerReturns.empty() && !(foundStmts && BARRIER)
-      && !(foundStmts && RETURN)) {
-#ifdef DBG_WRKGRP
-    std::cerr << "Nothing interesting found in this region" << std::endl;
-#endif
-    return foundStmts;
-  }
+  // If and Else regions are visited from an IfStmt. If the IfStmt is within a
+  // non-parallel region and contains a control-flow stmt, the IfStmt needs to
+  // become a barrier and the bodies need to be put in a loop.
+  // for ()                         for ()
+  //   if ()                          thread_loop() { }
+  //     break;                       if ()
+  //   else                             thread_loop() { }
+  //     something();                   break;
+  //   barrier()                      else
+  //                                    thread_loop() { something() }
+  //                                  thread_loop() { }
+  //                                  // barrier()
+  // When we come to fix this, we can visit the IfStmt knowing that it lives in
+  // a non-parallel region, we will see that the 'Then' contains a break but we
+  // also need to then fix the else. We could do this lazily by:
+  // - closing the loop at the beginning of the IfStmt
+  // - open the loop at the beginning of the Then and the Else
+  // - close the loop at the end of the Then and the Else
+  // - close the loop at the beginning of the unary
+  // - open the loop at the end of the unary
+  // So we need to make any interesting stmts to the actual IfStmt and not the
+  // conditional bodies, and when we come to fix it, we can just check if the
+  // region is an IfStmt
 
+  // Map statements to the region.
+  Stmt *InsertRegion = (isa<IfStmt>(Parent)) ? Parent : Region;
 
-  // The if-statement is only classed as a region if it contains a barrier
-  // somehow.
-  Stmt *InsertRegion = Region;
-  /*
-  if (isConditional) {
-    if (InnerBarriers.empty())
-      if (!(foundStmts & BARRIER))
-        InsertRegion = Parent;
-  }*/
+  if (!InnerContinues.empty())
+    ContinueStmts.insert(std::make_pair(InsertRegion, InnerContinues));
+  if (!InnerBreaks.empty())
+    BreakStmts.insert(std::make_pair(InsertRegion, InnerBreaks));
+  if (!InnerReturns.empty())
+    ReturnStmts.insert(std::make_pair(InsertRegion, InnerReturns));
+  if (!InnerBarriers.empty())
+    Barriers.insert(std::make_pair(InsertRegion, InnerBarriers));
+  if (!InnerDeclStmts.empty())
+    ScopedDeclStmts.insert(std::make_pair(InsertRegion, InnerDeclStmts));
+  if (!InnerRegions.empty())
+    NestedRegions.insert(std::make_pair(InsertRegion, InnerRegions));
 
-#ifdef DBG_WRKGRP
-  if (InsertRegion == Parent)
-    std::cerr << "Mapping important statements to parent region. " << std::endl;
-  else
-     std::cerr << "Mapping important statements to this region. " << std::endl;
-#endif
-  // Map statements to the region. We sometimes splice because conditional
-  // regions will often add their statements to their parent region.
-  if (!InnerContinues.empty()) {
-    if (ContinueStmts.find(InsertRegion) == ContinueStmts.end())
-      ContinueStmts.insert(std::make_pair(InsertRegion, InnerContinues));
-    else
-      ContinueStmts[InsertRegion].splice(ContinueStmts[InsertRegion].end(),
-                                         InnerContinues);
-  }
-  if (!InnerBreaks.empty()) {
-    if (BreakStmts.find(InsertRegion) == BreakStmts.end())
-      BreakStmts.insert(std::make_pair(InsertRegion, InnerBreaks));
-    else
-      BreakStmts[InsertRegion].splice(BreakStmts[InsertRegion].end(),
-                                      InnerBreaks);
-  }
-  if (!InnerReturns.empty()) {
-    if (ReturnStmts.find(InsertRegion) == ReturnStmts.end())
-      ReturnStmts.insert(std::make_pair(InsertRegion, InnerReturns));
-    else
-      ReturnStmts[InsertRegion].splice(ReturnStmts[InsertRegion].end(),
-                                       InnerReturns);
-  }
-  if (!InnerBarriers.empty()) {
-    if (Barriers.find(InsertRegion) == Barriers.end())
-      Barriers.insert(std::make_pair(InsertRegion, InnerBarriers));
-    else
-      Barriers[InsertRegion].splice(Barriers[InsertRegion].end(),
-                                    InnerBarriers);
-  }
-  if (!InnerDeclStmts.empty()) {
-    if (ScopedDeclStmts.find(InsertRegion) == ScopedDeclStmts.end())
-      ScopedDeclStmts.insert(std::make_pair(InsertRegion, InnerDeclStmts));
-    else
-      ScopedDeclStmts[InsertRegion].splice(ScopedDeclStmts[InsertRegion].end(),
-                                           InnerDeclStmts);
-  }
-  if (!InnerRegions.empty()) {
-    if (NestedRegions.find(InsertRegion) == NestedRegions.end())
-      NestedRegions.insert(std::make_pair(InsertRegion, InnerRegions));
-    else
-      NestedRegions[InsertRegion].splice(NestedRegions[InsertRegion].end(),
-                                         InnerRegions);
-  }
   return foundStmts;
 }
 

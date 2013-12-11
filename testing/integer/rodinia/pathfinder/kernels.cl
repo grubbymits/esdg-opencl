@@ -50,9 +50,6 @@ __kernel void dynproc_kernel (int iteration,
 
 	bool isValid = IN_RANGE(tx, validXmin, validXmax);
 
-	unsigned global_id = get_global_id(0);
-
-
 	if(IN_RANGE(xidx, 0, cols-1))
 	{
 

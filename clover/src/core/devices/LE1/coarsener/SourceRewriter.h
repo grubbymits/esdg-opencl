@@ -226,6 +226,8 @@ private:
                           bool isThreadDep);
   //bool TraverseConditionalRegion(clang::Stmt *Region);
   void HandleNonParallelRegion(clang::Stmt *Region, int depth);
+  void FixUnary(clang::Stmt *Unary);
+  void FixBarrier(clang::CallExpr *Call);
   void FixReturnsInBarrierAbsence(clang::Stmt* Region,
                                   unsigned depth);
   //void HandleBreaks(clang::Stmt *Region);
@@ -233,7 +235,8 @@ private:
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
   //void SearchForIndVars(clang::Stmt *s);
-  bool SearchThroughRegions(clang::Stmt *Region);
+  bool SearchThroughRegions(clang::Stmt *Region,
+                            bool isParentParallel);
   //void AssignIndVars(void);
 
   bool isVarThreadDep(clang::Decl *decl);
