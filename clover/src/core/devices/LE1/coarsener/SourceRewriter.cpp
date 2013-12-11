@@ -993,6 +993,13 @@ bool WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region) {
   // changed. If we tell the child region that its parent is not parallel then
   // we can do something about it.
   // SearchThroughRegions(Stmt *Region, bool isParentParallel)
+  //  if (!InnerContinues.empty() && (!InnerBarriers.empty() ||
+  //      NestedBarriers != 0 || !isParentParallel))
+  //    FixBarrierContinues(InnerContinues);
+  //
+  //  if (!InnerReturns.empty() && (!isParentParallel ||
+  //      (isLoop && !InnerBarrier.empty())))
+  //      FixBarrierReturns(InnerReturns);
 
   // return statements are similar, though they do not have to live within a
   // loop, but they always need to be handled. Return statements are barriers
