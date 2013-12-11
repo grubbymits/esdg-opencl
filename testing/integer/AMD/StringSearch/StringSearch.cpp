@@ -267,8 +267,8 @@ int StringSearch::setupCL()
     CHECK_ERROR(retValue, 0, "sampleCommon::buildOpenCLProgram() failed");
 
     // get kernel object handle for a kernel with the given name 
-    kernelLoadBalance = clCreateKernel(program, "StringSearchLoadBalance", &status);
-    CHECK_OPENCL_ERROR(status, "clCreateKernel(StringSearchLoadBalance) failed.");
+    //kernelLoadBalance = clCreateKernel(program, "StringSearchLoadBalance", &status);
+    //CHECK_OPENCL_ERROR(status, "clCreateKernel(StringSearchLoadBalance) failed.");
     kernelNaive = clCreateKernel(program, "StringSearchNaive", &status);
     CHECK_OPENCL_ERROR(status, "clCreateKernel(StringSearchNaive) failed.");
 
@@ -432,14 +432,14 @@ int StringSearch::run()
 
     if (runKernel("Naive-Kernel") != SDK_SUCCESS)
         return SDK_FAILURE;
-    
+   /* 
     if(subStr.length() > 1)
     {
         kernelType = KERNEL_LOADBALANCE;
         kernel = &kernelLoadBalance;
         if (runKernel("LoadBalance-Kernel") != SDK_SUCCESS)
             return SDK_FAILURE;
-    }
+    }*/
     return SDK_SUCCESS;
 }
 
@@ -564,8 +564,8 @@ int StringSearch::cleanup()
     status = clReleaseMemObject(resultBuf);
     CHECK_OPENCL_ERROR(status, "clReleaseMemObject(resultBuf) failed.");
 
-    status = clReleaseKernel(kernelLoadBalance);
-    CHECK_OPENCL_ERROR(status, "clReleaseKernel(kernelLoadBalance) failed.");
+    //status = clReleaseKernel(kernelLoadBalance);
+    //CHECK_OPENCL_ERROR(status, "clReleaseKernel(kernelLoadBalance) failed.");
 
     status = clReleaseProgram(program);
     CHECK_OPENCL_ERROR(status, "clReleaseProgram(program) failed.");

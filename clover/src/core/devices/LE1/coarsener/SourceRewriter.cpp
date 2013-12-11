@@ -1011,6 +1011,15 @@ WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region,
   // list. Then we can SearchThroughRegions and fix any remaining statements
   // that weren't simply handled by location.
 
+  if (!ReturnStmts[Region].empty()) {
+#ifdef DBG_WRKGRP
+    std::cerr << "This region contains returns" << std::endl;
+#endif
+    for (return_iterator RI = ReturnStmts[Region].begin(),
+         RE = ReturnStmts[Region].end(); RI != RE; ++RI)
+      FixUnary(*RI);
+  }
+
   if ((NestedRegions[Region].empty()) && (Barriers[Region].empty())) {
 #ifdef DBG_WRKGRP
     std::cerr << "No nested loops and there's no barriers in this one"
@@ -1038,8 +1047,7 @@ WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region,
   std::list<Stmt*> InnerRegions = NestedRegions[Region];
   for (region_iterator RI = InnerRegions.begin(),
        RE = InnerRegions.end(); RI != RE; ++RI) {
-    bool parallelRegion = ((NestedBarriers == 0) &&
-      Barriers[Region].empty());
+    bool parallelRegion = ((NestedBarriers == 0) && Barriers[Region].empty());
     if (SearchThroughRegions(*RI, parallelRegion))
       ++NestedBarriers;
   }
@@ -1061,6 +1069,8 @@ inline void WorkitemCoarsen::ThreadSerialiser::FixUnary(Stmt *Unary) {
     offset = 6;
   else if (isa<ContinueStmt>(Unary))
     offset = 10;
+  else if (isa<ReturnStmt>(Unary))
+    offset = 7;
 
   CloseLoop(Unary->getLocStart().getLocWithOffset(-1));
   OpenLoop(Unary->getLocEnd().getLocWithOffset(offset));
