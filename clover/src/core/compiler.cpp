@@ -600,6 +600,15 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
 
           theData.addHalfVariable(newGlobal);
         }
+        else if (type->isIntegerTy(8)) {
+          EmbeddedData::GlobalVariable<unsigned char> *newGlobal =
+            new EmbeddedData::GlobalVariable<unsigned char>(name.str());
+
+          for (unsigned i = 0; i < NumElements; ++i)
+            newGlobal->addElement(CDS->getElementAsInteger(i));
+
+          theData.addByteVariable(newGlobal);
+        }
         else {
           std::cerr << "!! ERROR: Unhandled initialised global variable"
             << std::endl;

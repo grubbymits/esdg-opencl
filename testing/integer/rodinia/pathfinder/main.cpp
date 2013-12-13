@@ -56,7 +56,7 @@ void init(int argc, char** argv)
 	}
 	data = new int[rows * cols];
 	wall = new int*[rows];
-        omp_data = new int[rows *cols];
+        omp_data = new int[rows * cols];
 	omp_wall = new int*[rows];
 
 	for (int n = 0; n < rows; n++)
@@ -79,8 +79,8 @@ void init(int argc, char** argv)
                         omp_wall[i][j] = wall[i][j];
 		}
 	}
-        for (int j = 0; j < cols; j++)
-          omp_result[j] = omp_wall[0][j];
+        //for (int j = 0; j < cols; j++)
+          //omp_result[j] = omp_wall[0][j];
 
 #ifdef BENCH_PRINT
 	for (int i = 0; i < rows; i++)
@@ -95,16 +95,21 @@ void init(int argc, char** argv)
 }
 
 void run_omp(void) {
+  printf("run_omp\n");
+  printf("omp_result addr = %x\n", omp_result);
   int *src, *dst, *temp;
   int min;
 
   dst = omp_result;
   src = new int[cols];
+  printf("src addr = %x\n", src);
 
   for (int t = 0; t < rows-1; t++) {
     temp = src;
     src = dst;
     dst = temp;
+    printf("addrs: temp = %x, src = %x, dst = %x\n",
+           temp, src, dst);
     #pragma omp parallel for private(min)
     for(int n = 0; n < cols; n++){
       min = src[n];
@@ -113,6 +118,8 @@ void run_omp(void) {
       if (n < cols-1)
         min = MIN(min, src[n+1]);
       dst[n] = omp_wall[t+1][n]+min;
+      printf("dst[%d] = %d, omp_result[%d] = %d\n", n, dst[n], n,
+             omp_result[n]);
     }
   }
 }
@@ -256,7 +263,12 @@ int main(int argc, char** argv)
 		int theHalo = HALO;
 
 		// Set the kernel arguments.
-                std::cout << "arg0 = " << arg0 << std::endl;
+                std::cout << "iteration = " << arg0 << std::endl;
+                std::cout << "cols = " << cols << std::endl;
+                std::cout << "rows = " << rows << std::endl;
+                std::cout << "borderCols = " << borderCols << std::endl;
+                std::cout << "startStep = " << t << std::endl;
+                std::cout << "HALO = " << theHalo << std::endl;
                 std::cout << "src = " << src << std::endl;
                 std::cout << "final_ret = " << final_ret << std::endl;
 		clSetKernelArg(cl.kernel(kn), 0,  sizeof(cl_int),
@@ -420,6 +432,7 @@ int main(int argc, char** argv)
         int success = 1;
         for (int i = 0; i < cols; i++) {
           if (result[i] != omp_result[i]) {
+            printf("data : %d - ", data[i]);
             printf("FAIL: result[%d] = %d but omp_result[%d] = %d\n",
                   i, result[i], i, omp_result[i]);
             //printf("data = %d, omp_data = %d\n", data[i], omp_data[i]);

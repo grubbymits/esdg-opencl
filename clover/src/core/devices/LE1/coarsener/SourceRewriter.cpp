@@ -1290,7 +1290,26 @@ unsigned WorkitemCoarsen::ThreadSerialiser::TraverseRegion(Stmt *Parent,
     isThreadDep |= SearchExpr(Cond);
 
     Stmt *Then = ifStmt->getThen();
-    foundStmts |= TraverseRegion(Region, Then, true, isThreadDep);
+    if (Then->child_begin() != Then->child_end())
+      foundStmts |= TraverseRegion(Region, Then, true, isThreadDep);
+    else {
+      switch(CheckForUnary(Region, Then)) {
+      default:
+        break;
+      case CONTINUE:
+        InnerContinues.push_back(cast<ContinueStmt>(Then));
+        foundStmts |= CONTINUE;
+        break;
+      case BREAK:
+        InnerBreaks.push_back(cast<BreakStmt>(Then));
+        foundStmts |= BREAK;
+        break;
+      case RETURN:
+        InnerReturns.push_back(cast<ReturnStmt>(Then));
+        foundStmts |= RETURN;
+      }
+      FindThreadDeps(Then, isThreadDep);
+    }
 
     if (Stmt *Else = ifStmt->getElse())
       foundStmts |= TraverseRegion(Region, Else, true, isThreadDep);

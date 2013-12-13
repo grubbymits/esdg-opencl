@@ -56,6 +56,7 @@ LE1Simulator::LE1Simulator() {
   dram_size = 0;
   KernelNumber = 0;
   isInitialised = false;
+  isLLVM = 1;
 }
 
 LE1Simulator::~LE1Simulator() {
