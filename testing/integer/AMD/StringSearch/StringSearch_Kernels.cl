@@ -71,7 +71,11 @@ __kernel void
     // global idx for all work items in a WorkGroup
     uint beginSearchIdx = groupIdx * maxSearchLength;
     uint endSearchIdx = beginSearchIdx + maxSearchLength;
-    if(beginSearchIdx > lastSearchIdx) return;
+
+    if(beginSearchIdx > lastSearchIdx) {
+      return;
+    }
+
     if(endSearchIdx > lastSearchIdx) endSearchIdx = lastSearchIdx;
 
     // Copy the pattern from global to local buffer
@@ -255,7 +259,7 @@ __kernel void
             int pos = stack2[--revStackPos];
             if (compare(text+beginSearchIdx+pos+10, localPattern+10, patternLength-10) == 1)
 #else
-            revStackPos = atomic_dec(&stack1Counter);
+            revStackPos = stack1Counter--; //atomic_dec(&stack1Counter);
             int pos = stack1[--revStackPos];
             if (compare(text+beginSearchIdx+pos+2, localPattern+2, patternLength-2) == 1)
 #endif

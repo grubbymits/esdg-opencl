@@ -963,6 +963,7 @@ WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region,
     std::cerr << "Region is also an IfStmt" << std::endl;
 #endif
   static int depth = -1;
+  bool foundBarrier = false;
   ++depth;
 
   // Loop regions can contain breaks and continues, but these will often be
@@ -1011,15 +1012,6 @@ WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region,
   // list. Then we can SearchThroughRegions and fix any remaining statements
   // that weren't simply handled by location.
 
-  if (!ReturnStmts[Region].empty()) {
-#ifdef DBG_WRKGRP
-    std::cerr << "This region contains returns" << std::endl;
-#endif
-    for (return_iterator RI = ReturnStmts[Region].begin(),
-         RE = ReturnStmts[Region].end(); RI != RE; ++RI)
-      FixUnary(*RI);
-  }
-
   if ((NestedRegions[Region].empty()) && (Barriers[Region].empty())) {
 #ifdef DBG_WRKGRP
     std::cerr << "No nested loops and there's no barriers in this one"
@@ -1030,17 +1022,22 @@ WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region,
       std::cerr << "But this is a IfStmt and the parent is not parallel"
         << std::endl;
 #endif
-      if (!ContinueStmts[Region].empty() || !BreakStmts[Region].empty()) {
+      if (!ContinueStmts[Region].empty() || !BreakStmts[Region].empty() ||
+          !ReturnStmts[Region].empty()) {
 #ifdef DBG_WRKGRP
         std::cerr << "And the region contains unaries!" << std::endl;
 #endif
         HandleNonParallelRegion(Region, depth);
-        --depth;
-        return true;
+        foundBarrier = true;
       }
     }
+    else if (!ReturnStmts[Region].empty()) {
+      HandleNonParallelRegion(Region, depth);
+      foundBarrier = true;
+    }
+
     --depth;
-    return false;
+    return foundBarrier;
   }
 
   unsigned NestedBarriers = 0;
@@ -1052,7 +1049,8 @@ WorkitemCoarsen::ThreadSerialiser::SearchThroughRegions(Stmt *Region,
       ++NestedBarriers;
   }
 
-  if ((!Barriers[Region].empty()) || (NestedBarriers != 0)) {
+  if (!Barriers[Region].empty() || (NestedBarriers != 0) ||
+      !ReturnStmts[Region].empty()) {
     HandleNonParallelRegion(Region, depth);
     --depth;
     return true;
@@ -1094,13 +1092,15 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
   std::cerr << "HandleNonParallelRegion\n";
 #endif
   // Remove the barriers of this region
-  if (Barriers[Region].size() == 1) {
-    FixBarrier(Barriers[Region].front());
-  }
-  else if (Barriers[Region].size () > 1) {
-    for (barrier_iterator Call = Barriers[Region].begin(),
-         End = Barriers[Region].end(); Call != End; ++Call)
-      FixBarrier(*Call);
+  if (!Barriers[Region].empty()) {
+    if (Barriers[Region].size() == 1) {
+      FixBarrier(Barriers[Region].front());
+    }
+    else if (Barriers[Region].size () > 1) {
+      for (barrier_iterator Call = Barriers[Region].begin(),
+           End = Barriers[Region].end(); Call != End; ++Call)
+        FixBarrier(*Call);
+    }
   }
   // Use any continue stmts as fission points too
   if (!ContinueStmts[Region].empty()) {
@@ -1121,6 +1121,14 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
            BE = BreakStmts[Region].end(); BI != BE; ++BI)
         FixUnary(*BI);
     }
+  }
+  if (!ReturnStmts[Region].empty()) {
+#ifdef DBG_WRKGRP
+    std::cerr << "This region contains returns" << std::endl;
+#endif
+    for (return_iterator RI = ReturnStmts[Region].begin(),
+         RE = ReturnStmts[Region].end(); RI != RE; ++RI)
+      FixUnary(*RI);
   }
 
   // Insert opening and closing loops for all regions, except the outer loop

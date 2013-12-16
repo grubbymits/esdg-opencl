@@ -136,8 +136,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     STACK_SIZE = SYS->STACK_SIZE;
     dram_size = ((SYS->DRAM_SHARED_CONFIG >> 8) & 0xFFFF) * 1024;
 #ifdef DBG_SIM
-    std::cerr << "DRAM_SHARED_CONFIG = " << SYS->DRAM_SHARED_CONFIG
-      << std::endl;
+    std::cerr << "dram_size = " << dram_size << std::endl;
 #endif
 
     unsigned int totalHC = 0;
@@ -277,7 +276,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
 
   /* turn printout on */
   PRINT_OUT = 0;
-  bool MEM_DUMP = false;
+  bool MEM_DUMP = true;
 
     /* Load IRAM */
     {
@@ -378,10 +377,15 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
     fseek(data, 0L, SEEK_END);
     DRAMFileSize = ftell(data);
     fseek(data, 0L, SEEK_SET);
+#ifdef DBG_SIM
+    std::cerr << "Machine DRAM = " << dram_size << ", total used = "
+      << DRAMFileSize << std::endl;
+#endif
 
     if(DRAMFileSize > dram_size) {
-      fprintf(stderr, "!!! ERROR DRAM is larger than the size specified !!!\n");
-      fprintf(stderr, "DRAM = %d and fileSize = %d\n", dram_size, DRAMFileSize);
+      std::cout << "!!! ERROR DRAM is larger than the size specified !!!\n"
+        << "DRAM = " << dram_size << " and fileSize = " << DRAMFileSize
+        << std::endl;
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }

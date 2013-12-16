@@ -18,7 +18,6 @@ declare -a benchmarks=(AMD/BinarySearch AMD/StringSearch AMD/BitonicSort AMD/Flo
 for benchmark in ${benchmarks[@]}
 do
   (
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/sam/src/esdg-opencl/testing/integer/AMD/SDKUtil
     cd $benchmark
     make clean
     make

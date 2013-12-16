@@ -212,8 +212,11 @@ int StringSearch::setupCL()
     CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (subStrBuf)");
 
     cl_uint totalSearchPos = textLength - (cl_uint)subStr.length() + 1;
+    std::cout << "totalSearchPos = " << totalSearchPos << std::endl;
     searchLenPerWG = SEARCH_BYTES_PER_WORKITEM * LOCAL_SIZE;
+    std::cout << "searchLenPerWG = " << searchLenPerWG << std::endl;
     workGroupCount = (totalSearchPos + searchLenPerWG - 1) / searchLenPerWG;
+    std::cout << "workGroupCount = " << workGroupCount << std::endl;
 
     resultCountBuf = clCreateBuffer(
         context, 
@@ -493,25 +496,32 @@ int StringSearch::verifyResults()
 {
     // Read Results Count per workGroup
     cl_uint *ptrCountBuff;
-    int status = mapBuffer( resultCountBuf, ptrCountBuff, workGroupCount * sizeof(cl_uint), CL_MAP_READ);
-    CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(resultCountBuf)");
+    int status = mapBuffer( resultCountBuf, ptrCountBuff,
+                            workGroupCount * sizeof(cl_uint), CL_MAP_READ);
+    CHECK_ERROR(status, SDK_SUCCESS,
+                "Failed to map device buffer.(resultCountBuf)");
 
     // Read the result buffer
     cl_uint *ptrBuff;
-    status = mapBuffer( resultBuf, ptrBuff,  (textLength - subStr.length() + 1) * sizeof(cl_uint), CL_MAP_READ);
+    status = mapBuffer( resultBuf, ptrBuff,
+                        (textLength - subStr.length() + 1) * sizeof(cl_uint),
+                        CL_MAP_READ);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(resultBuf)");
 
     cl_uint count = ptrCountBuff[0];
+    std::cout << "count = " << count << std::endl;
+
     for(cl_uint i=1; i<workGroupCount; ++i) {
         cl_uint found = ptrCountBuff[i];
         if(found > 0) {
-            memcpy((ptrBuff + count), (ptrBuff + (i * searchLenPerWG)), found * sizeof(cl_uint));
+            memcpy((ptrBuff + count), (ptrBuff + (i * searchLenPerWG)),
+                   found * sizeof(cl_uint));
             count += found;
         }
     }
     std::sort(ptrBuff, ptrBuff+count);
 
-    if(verify)
+    //if(verify)
     {
         // Rreference implementation on host device
         cpuReferenceImpl();

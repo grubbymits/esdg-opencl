@@ -298,6 +298,17 @@ cl_int LE1Device::initEventDeviceData(Event *event)
             data += e->offset();
 
             e->setPtr((void *)data);
+#ifdef DEBUGCL
+            if (buf->allocated())
+              std::cerr << "Buffer is allocated, ";
+            std::cerr << "addr = " << std::hex << buf->addr() << ", offset = "
+              << e->offset() << std::endl;
+            std::cerr << "data size = " << std::dec << e->buffer()->size()
+              << std::endl;
+            if (e->buffer()->size() == 4)
+              std::cerr << "single word data = " << (unsigned)*data
+                << std::endl;
+#endif
             break;
         }
         case Event::MapImage:

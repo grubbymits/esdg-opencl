@@ -103,6 +103,10 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     << std::endl;
 #endif
 
+  // Align the CurrentAddr
+  while (CurrentAddr % 4)
+    ++CurrentAddr;
+
   // Calculate the address for any embedded data
   for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
        WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
@@ -125,10 +129,19 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     CurrentAddr += (*WI)->getSize();
   }
 
+  // Align the CurrentAddr
+  while (CurrentAddr % 4)
+    ++CurrentAddr;
+
   // Calculate buffer addresses
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
+
     if (arg.kind() == Kernel::Arg::Buffer) {
+      unsigned bytes = arg.type()->getIntegerBitWidth() >> 3;
+      while (CurrentAddr % bytes)
+        ++CurrentAddr;
+
 #ifdef DBG_KERNEL
       std::cerr << "Arg " << i << "'s address being set to "
         << std::hex << CurrentAddr << std::endl;
@@ -150,6 +163,9 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 
   // FIXME Should still check whether DataSize is a legal size
   DataSize = CurrentAddr;
+#ifdef DBG_KERNEL
+  std::cerr << "DataSize = " << DataSize << std::endl;
+#endif
 
 }
 
@@ -158,32 +174,39 @@ bool LE1DataPrinter::AppendDataArea() {
   std::cerr << "Entering LE1DataPrinter::AppendDataArea" << std::endl;
 #endif
 
+  if (DataSize >= LE1Device::MaxGlobalAddr) {
+    std::cerr << "!! ERROR: DataSize is too great, maximum address = "
+      << LE1Device::MaxGlobalAddr << ", but DataSize = " << DataSize
+      << std::endl;
+    return false;
+  }
+
   FinalSource.open(FinalSourceName, std::ios_base::app);
   std::ostringstream Output (std::ostringstream::out);
 
   Output << "##Data Labels" << std::endl;
-  Output << "00000 - work_dim" << std::endl;
-  Output << "00004 - global_size" << std::endl;
-  Output << "00010 - local_size" << std::endl;
-  Output << "0001c - num_groups" << std::endl;
-  Output << "00028 - global_offset" << std::endl;
-  Output << "00034 - num_cores" << std::endl;
-  Output << "00038 - group_id" << std::endl;
+  Output << "000000 - work_dim" << std::endl;
+  Output << "000004 - global_size" << std::endl;
+  Output << "000010 - local_size" << std::endl;
+  Output << "00001c - num_groups" << std::endl;
+  Output << "000028 - global_offset" << std::endl;
+  Output << "000034 - num_cores" << std::endl;
+  Output << "000038 - group_id" << std::endl;
 
   // Print labels for any embedded data
   for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
        WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*WI)->getAddr()
       << " - " << (*WI)->getName() << std::endl;
   }
   for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
        WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*WI)->getAddr()
       << " - " << (*WI)->getName() << std::endl;
   }
   for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
        WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*WI)->getAddr()
       << " - " << (*WI)->getName() << std::endl;
   }
 
@@ -210,7 +233,7 @@ bool LE1DataPrinter::AppendDataArea() {
       std::cerr << "Writing arg " << i << "'s address as " << ArgAddrs[j]
         << std::endl;
 #endif
-      Output << std::hex << std::setw(5) << std::setfill('0') << ArgAddrs[j]
+      Output << std::hex << std::setw(6) << std::setfill('0') << ArgAddrs[j]
         << " - BufferArg_" << std::dec << i << std::endl;
       ++j;
     }
@@ -224,7 +247,7 @@ bool LE1DataPrinter::AppendDataArea() {
   // Size taken by kernel attributes before the argument data
   // FIXME is this size right?
   Output << "##Data Section - " << DataSize << " - Data_align=32" << std::endl;
-  Output << "00000 - " << std::hex << std::setw(8) << std::setfill('0')
+  Output << "000000 - " << std::hex << std::setw(8) << std::setfill('0')
     << p_event->work_dim() << " - "
     << ConvertToBinary(p_event->work_dim())
     << std::endl;
@@ -344,7 +367,7 @@ bool LE1DataPrinter::AppendDataArea() {
 void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
                                      unsigned addr,
                                      size_t attr) {
-  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+  Output << std::hex << std::setw(6) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << attr << " - "
       << ConvertToBinary(attr) << std::endl;
@@ -629,7 +652,7 @@ inline void LE1DataPrinter::PrintLine(unsigned Addr,
   std::ostringstream DataLine(std::ostringstream::out);
 
   // Write the address
-  DataLine << std::hex << std::setw(5) << std::setfill('0')
+  DataLine << std::hex << std::setw(6) << std::setfill('0')
     << (Addr - 4) << " - ";
 
   // Write data in hex
@@ -681,7 +704,7 @@ void LE1DataPrinter::PrintData(const void* data,
       bytes = &bytes[index];
 
       // Write formatted data to stream
-      data_line << std::hex << std::setw(5) << std::setfill('0')
+      data_line << std::hex << std::setw(6) << std::setfill('0')
         << device_mem_ptr << " - ";
       for (unsigned i = 0; i < 4 ; ++i) {
         ConvertToBinary(&binary_string, &bytes[i], sizeof(char));
@@ -697,7 +720,7 @@ void LE1DataPrinter::PrintData(const void* data,
       halves = &halves[index];
 
       // Write formatted data to stream
-      data_line << std::hex << std::setw(5) << std::setfill('0')
+      data_line << std::hex << std::setw(6) << std::setfill('0')
         << device_mem_ptr << " - ";
       for (unsigned i = 0; i < 2; ++i) {
         ConvertToBinary(&binary_string, &halves[i], sizeof(short));
@@ -712,7 +735,7 @@ void LE1DataPrinter::PrintData(const void* data,
       //word = &word[index];
       ConvertToBinary(&binary_string, &word[index], sizeof(int));
       // Write formatted data to stream
-      data_line << std::hex << std::setw(5) << std::setfill('0')
+      data_line << std::hex << std::setw(6) << std::setfill('0')
         << device_mem_ptr << " - ";
       data_line << std::setw(8) << std::setfill('0') << word[index];
       data_line << " - " << binary_string << std::endl;
@@ -745,7 +768,7 @@ void LE1DataPrinter::PrintData(const void* data,
           padded_array[i] = remaining_data[i];
         }
         // Write data to the stream
-        data_line  << std::hex << std::setw(5) << std::setfill('0')
+        data_line  << std::hex << std::setw(6) << std::setfill('0')
           << device_mem_ptr << " - ";
         for(unsigned i = 0; i < 4; ++i) {
           ConvertToBinary(&binary_string, &padded_array[i], sizeof(char));
@@ -766,7 +789,7 @@ void LE1DataPrinter::PrintData(const void* data,
           padded_array[i] = remaining_data[i];
         }
         // Write data to the stream
-        data_line << std::hex << std::setw(5) << device_mem_ptr << " - ";
+        data_line << std::hex << std::setw(6) << device_mem_ptr << " - ";
         for (unsigned i = 0; i < 4; ++i) {
           ConvertToBinary(&binary_string, &padded_array[i], sizeof(short));
           data_line << std::hex << std::setw(4) << std::setfill('0')
