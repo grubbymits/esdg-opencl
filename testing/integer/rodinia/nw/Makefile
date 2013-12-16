@@ -4,7 +4,7 @@ CC = clang
 SRC = nw.c
 LIBS = -L/opt/esdg-opencl/lib -lOpenCL
 INC = -I/opt/esdg-opencl/include/
-CC_FLAGS = -g -DTRACEBACK
+CC_FLAGS = -g
 
 EXE = nw
 

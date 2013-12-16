@@ -138,7 +138,14 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     const Kernel::Arg& arg = TheKernel->arg(i);
 
     if (arg.kind() == Kernel::Arg::Buffer) {
-      unsigned bytes = arg.type()->getIntegerBitWidth() >> 3;
+      llvm::Type *type = arg.type();
+      unsigned bytes = 0;
+      if (type->isIntegerTy(8))
+        bytes = 1;
+      else if (type->isIntegerTy(16))
+        bytes = 2;
+      else
+        bytes = 4;
       while (CurrentAddr % bytes)
         ++CurrentAddr;
 

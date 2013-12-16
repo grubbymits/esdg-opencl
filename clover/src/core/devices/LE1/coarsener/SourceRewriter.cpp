@@ -649,9 +649,13 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
     RegionStart = (cast<ForStmt>(Region))->getBody()->getLocStart();
     RegionEnd = (cast<ForStmt>(Region))->getBody()->getLocEnd();
   }
-  else {
+  else if (isa<CompoundStmt>(Region)) {
     RegionStart = (cast<CompoundStmt>(Region))->getLBracLoc();
     RegionEnd = (cast<CompoundStmt>(Region))->getRBracLoc();
+  }
+  else {
+    RegionStart = Region->getLocStart();
+    RegionEnd = Region->getLocEnd().getLocWithOffset(1);
   }
 
   for (declstmt_iterator DSI = Stmts.begin(), DSE = Stmts.end();

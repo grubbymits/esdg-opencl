@@ -276,7 +276,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
 
   /* turn printout on */
   PRINT_OUT = 0;
-  bool MEM_DUMP = true;
+  bool MEM_DUMP = false;
 
     /* Load IRAM */
     {
