@@ -2,6 +2,6 @@
 (
 for device in `seq 0 20`;
 do
-  ./lud -d $device -i ../../data/lud/32.dat
+  ./lud -d $device -i ../../data/lud/64.dat
 done
 )
