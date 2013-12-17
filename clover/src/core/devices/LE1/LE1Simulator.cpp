@@ -88,6 +88,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     std::cerr << "ERROR: Simulator is already initialised!\n";
     return false;
   }
+  machineModel = Machine;
   /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
@@ -268,7 +269,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
                        const unsigned disabled) {
 #ifdef DBG_SIM
   std::cout << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
-    << std::endl;
+    << std::endl << machineModel << std::endl;
 #endif
 
   //LockAccess();

@@ -53,6 +53,7 @@ namespace Coal {
                       unsigned int* data);
 private:
   static unsigned iteration;
+  std::string machineModel;
   bool isInitialised;
   pthread_mutex_t p_simulator_mutex;
   unsigned dram_size;
