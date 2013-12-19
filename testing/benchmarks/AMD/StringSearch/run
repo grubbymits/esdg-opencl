@@ -1,0 +1,7 @@
+#!/bin/sh
+(
+for device in `seq 0 19`;
+do
+  ./string-search -d $device > output
+done
+)

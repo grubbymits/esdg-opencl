@@ -1,0 +1,4334 @@
+16
+Using Platform 0 	 Device No 0 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 4327
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 50569
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3799
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 44707
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3634
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 40969
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3423
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 35036
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3073
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 29937
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2888
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 25531
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2569
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 21023
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2307
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 17397
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2067
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 13953
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1803
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 10810
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1509
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 7996
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1239
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 5825
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 975
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3899
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 727
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2278
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 451
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_1wide.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1213
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 1 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3476
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 40217
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3051
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 35612
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2930
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 32637
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2754
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 27989
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2478
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 23977
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2323
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 20401
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2069
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 16846
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1858
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 13970
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1667
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 11211
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1452
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 8757
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1219
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 6442
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1001
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 4720
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 789
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3173
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 588
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1877
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 367
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1016
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 2 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3095
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 39660
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2723
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 35147
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2613
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 32186
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2458
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 27592
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2215
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 23607
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2082
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 20137
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1857
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 16583
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1672
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 13735
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1504
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 10980
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1316
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 8588
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1111
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 6311
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 920
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 4601
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 734
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3077
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 558
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1802
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 364
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 950
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 3 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2974
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 35838
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2613
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 31696
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2504
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 29088
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2355
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 24977
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2118
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 21391
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1991
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 18192
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1772
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 15042
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1593
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 12463
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1431
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 9990
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1249
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 7796
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1050
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 5737
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 865
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 4207
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 685
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2820
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 515
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1673
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 327
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 903
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 4 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2907
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 33966
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2560
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 30176
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2429
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 27637
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2294
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 23703
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2055
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 20331
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1947
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 17288
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1728
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 14256
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1556
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 11825
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1397
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 9440
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1226
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 7449
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1028
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 5432
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 851
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3982
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 677
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2688
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 516
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1597
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 333
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_1ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 875
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 5 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3488
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 39959
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3062
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 35385
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2940
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 32439
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2763
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 27818
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2486
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 23831
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2330
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 20278
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2075
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 16744
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1863
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 13887
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1671
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 11145
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1455
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 8706
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1221
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 6404
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1002
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 4693
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 789
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3155
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 587
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1866
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 365
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_2wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1010
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 6 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3075
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 39608
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2704
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 35098
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2595
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 32140
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2441
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 27549
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2199
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 23567
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2067
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 20100
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1843
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 16549
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1659
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 13704
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1492
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 10952
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1305
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 8563
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1101
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 6289
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 911
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 4582
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 726
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3061
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 551
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1789
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 358
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_3wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 940
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 7 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2966
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 35544
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2605
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 31435
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2496
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 28858
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2347
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 24776
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2110
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 21217
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1983
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 18043
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1764
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 14916
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1585
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 12358
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1423
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 9904
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1241
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 7727
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1042
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 5683
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 857
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 4166
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 677
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2790
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 507
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1652
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 319
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_4wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 889
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 8 
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2899
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 33673
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2552
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 29916
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2421
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 27408
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2286
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 23503
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2047
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 20158
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1939
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 17140
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1720
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 14131
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1548
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 11721
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1389
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 9355
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1218
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 7381
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1020
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 5379
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 843
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 3942
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 669
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 2659
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 508
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 1577
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 325
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3272
+Size of bss area : 
+End of memory: 26176
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+Default_5wide_2ls.xml with 0 disabled contexts
+HALT operation received from [0][0][0] at cycle 862
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 9 
+homogeneous system
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 2085
+HALT operation received from [0][0][0] at cycle 2348
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 23989
+HALT operation received from [0][0][0] at cycle 27214
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 1766
+HALT operation received from [0][0][0] at cycle 2134
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 20271
+HALT operation received from [0][0][0] at cycle 25065
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 1445
+HALT operation received from [0][0][0] at cycle 2285
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 16368
+HALT operation received from [0][0][0] at cycle 25225
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 1202
+HALT operation received from [0][0][0] at cycle 2312
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 12494
+HALT operation received from [0][0][0] at cycle 23161
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 913
+HALT operation received from [0][0][0] at cycle 2246
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 9078
+HALT operation received from [0][0][0] at cycle 21473
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 687
+HALT operation received from [0][0][0] at cycle 2282
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 6086
+HALT operation received from [0][0][0] at cycle 20054
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 377
+HALT operation received from [0][0][0] at cycle 2268
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 3424
+HALT operation received from [0][0][0] at cycle 18203
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 2268
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 1205
+HALT operation received from [0][0][0] at cycle 16791
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 2023
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 1120
+HALT operation received from [0][0][0] at cycle 13427
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 1754
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 1035
+HALT operation received from [0][0][0] at cycle 10364
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 1455
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 950
+HALT operation received from [0][0][0] at cycle 7630
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 1180
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 865
+HALT operation received from [0][0][0] at cycle 5539
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 911
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 780
+HALT operation received from [0][0][0] at cycle 3693
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 658
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 695
+HALT operation received from [0][0][0] at cycle 2152
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 102
+HALT operation received from [0][0][0] at cycle 377
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3276
+Size of bss area : 
+End of memory: 26208
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+2Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 610
+HALT operation received from [0][0][0] at cycle 1167
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 10 
+homogeneous system
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 931
+HALT operation received from [0][0][0] at cycle 1217
+HALT operation received from [0][1][0] at cycle 1217
+HALT operation received from [0][2][0] at cycle 1241
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 10807
+HALT operation received from [0][1][0] at cycle 14184
+HALT operation received from [0][0][0] at cycle 14196
+HALT operation received from [0][2][0] at cycle 14197
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 649
+HALT operation received from [0][0][0] at cycle 981
+HALT operation received from [0][2][0] at cycle 1199
+HALT operation received from [0][1][0] at cycle 1239
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 7229
+HALT operation received from [0][0][0] at cycle 12694
+HALT operation received from [0][1][0] at cycle 13510
+HALT operation received from [0][2][0] at cycle 13900
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 356
+HALT operation received from [0][1][0] at cycle 1166
+HALT operation received from [0][2][0] at cycle 1166
+HALT operation received from [0][0][0] at cycle 1205
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 3953
+HALT operation received from [0][0][0] at cycle 13082
+HALT operation received from [0][2][0] at cycle 13136
+HALT operation received from [0][1][0] at cycle 13255
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 1190
+HALT operation received from [0][1][0] at cycle 1194
+HALT operation received from [0][0][0] at cycle 1204
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 830
+HALT operation received from [0][0][0] at cycle 12071
+HALT operation received from [0][1][0] at cycle 12175
+HALT operation received from [0][2][0] at cycle 12264
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 902
+HALT operation received from [0][0][0] at cycle 1166
+HALT operation received from [0][1][0] at cycle 1166
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 814
+HALT operation received from [0][2][0] at cycle 8766
+HALT operation received from [0][1][0] at cycle 11251
+HALT operation received from [0][0][0] at cycle 11280
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 671
+HALT operation received from [0][0][0] at cycle 1184
+HALT operation received from [0][1][0] at cycle 1184
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 798
+HALT operation received from [0][2][0] at cycle 5713
+HALT operation received from [0][1][0] at cycle 10515
+HALT operation received from [0][0][0] at cycle 10570
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 356
+HALT operation received from [0][0][0] at cycle 1172
+HALT operation received from [0][1][0] at cycle 1182
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][3][0] at cycle 782
+HALT operation received from [0][2][0] at cycle 3010
+HALT operation received from [0][0][0] at cycle 9590
+HALT operation received from [0][1][0] at cycle 9617
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][1][0] at cycle 1170
+HALT operation received from [0][0][0] at cycle 1184
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 766
+HALT operation received from [0][3][0] at cycle 766
+HALT operation received from [0][0][0] at cycle 8865
+HALT operation received from [0][1][0] at cycle 8903
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][1][0] at cycle 922
+HALT operation received from [0][0][0] at cycle 1188
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 750
+HALT operation received from [0][3][0] at cycle 750
+HALT operation received from [0][1][0] at cycle 6214
+HALT operation received from [0][0][0] at cycle 8092
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][1][0] at cycle 642
+HALT operation received from [0][0][0] at cycle 1194
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 734
+HALT operation received from [0][3][0] at cycle 734
+HALT operation received from [0][1][0] at cycle 3933
+HALT operation received from [0][0][0] at cycle 7233
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][1][0] at cycle 356
+HALT operation received from [0][0][0] at cycle 1176
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][2][0] at cycle 718
+HALT operation received from [0][3][0] at cycle 718
+HALT operation received from [0][1][0] at cycle 2091
+HALT operation received from [0][0][0] at cycle 6284
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][0][0] at cycle 1168
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 702
+HALT operation received from [0][2][0] at cycle 702
+HALT operation received from [0][3][0] at cycle 702
+HALT operation received from [0][0][0] at cycle 5541
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][0][0] at cycle 900
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 686
+HALT operation received from [0][2][0] at cycle 686
+HALT operation received from [0][3][0] at cycle 686
+HALT operation received from [0][0][0] at cycle 3693
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][0][0] at cycle 642
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 670
+HALT operation received from [0][2][0] at cycle 670
+HALT operation received from [0][3][0] at cycle 670
+HALT operation received from [0][0][0] at cycle 2171
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 84
+HALT operation received from [0][2][0] at cycle 84
+HALT operation received from [0][3][0] at cycle 84
+HALT operation received from [0][0][0] at cycle 356
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3284
+Size of bss area : 
+End of memory: 26272
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+4Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][1][0] at cycle 654
+HALT operation received from [0][2][0] at cycle 654
+HALT operation received from [0][3][0] at cycle 654
+HALT operation received from [0][0][0] at cycle 1225
+The result of matrix m is: 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.62     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62     0.00     0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.25    -1.00     0.48     0.43     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.88    -3.50     1.54    -0.82    -6.52     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    0.62    -2.00     0.38    -0.39    -0.72     0.08     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+    1.25     5.00    -2.31    -1.62    -1.35     0.62     2.94     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50    -0.50    -0.16    -0.55     0.85     0.02    -2.85    -0.37     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -1.12    -2.00     1.56     1.46     0.80    -0.39    -1.80    -0.34    -0.30     0.00     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.50     3.00    -1.12     0.88     5.56    -0.74     1.25     0.56    -0.46    -7.19     0.00     0.00     0.00     0.00     0.00     0.00 
+   -0.25     1.00    -0.15     0.88     2.77    -0.52     1.03     0.52    -0.57    14.10    -1.51     0.00     0.00     0.00     0.00     0.00 
+    1.00    -4.50     1.57     0.24    -1.79     0.37    -1.28     0.33     0.23    13.58    -1.20    -0.23     0.00     0.00     0.00     0.00 
+    0.88    -1.50     0.07    -0.59    -0.26     0.02    -0.48    -0.00     0.22   -24.51     2.96    -0.21    -1.47     0.00     0.00     0.00 
+   -1.00     1.50     0.07     1.90     5.03    -0.71    -0.64    -0.02    -0.26    20.10    -2.34     0.62     0.34    -0.07     0.00     0.00 
+   -0.38    -1.00     0.43     0.55     0.40    -0.11     0.22     0.30    -0.33    -8.14     1.11     0.38    -0.86     0.56     1.44     0.00 
+
+The result of matrix a is: 
+    0.80     0.00    -0.50    -0.50    -0.60    -1.00    -0.60     0.50     0.20     0.70     0.30    -0.50     0.90     0.80    -0.50    -1.00 
+    0.00     0.20    -0.91     0.49    -1.17    -1.12     0.32     0.31     1.12    -0.26     0.39    -0.11     0.76     0.90    -1.31    -0.12 
+    0.00     0.00    -1.86     1.44    -4.59    -4.06     1.86     1.06     3.76    -1.63     0.29    -0.06     1.28     2.95    -4.06    -0.46 
+    0.00     0.00     0.00    -1.12     2.77     2.73    -0.81    -0.00    -0.72    -0.53    -1.20    -0.27    -0.64    -0.99     2.51     0.20 
+    0.00     0.00     0.00     0.00    -0.91    -0.09     0.53     0.38    -1.12     0.07     1.18    -0.85    -0.80    -0.49     0.58     1.06 
+    0.00     0.00     0.00     0.00     0.00     4.01     1.89     1.53    -9.71     0.99     7.06    -6.61    -6.66    -7.09     8.24     8.74 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.63     0.16     0.97    -1.47     0.80    -0.78    -0.72     0.30     0.38     0.20 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -1.26     3.31    -0.79    -8.33     5.78     2.67     3.37    -3.25    -3.95 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     6.73    -4.40    -2.94     0.33    -0.46     2.64    -1.86    -1.53 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.06     1.83    -0.64    -0.10     0.67     1.51     0.45 
+    0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00    15.43    -5.72    -2.82     3.98    11.28     3.23 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -2.67    -5.33    -5.14    -2.06     0.41 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00     0.00     0.00    -3.52    -6.25    -7.41    -0.55 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -5.50    -7.17     1.61 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00    -0.00     0.00     0.00    -0.82    -2.45 
+    0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     0.00     3.33 
+
+The result of array b is: 
+-1.30 0.59 2.05 -2.76 -0.19 -4.43 0.64 -0.36 3.52 1.89 15.33 -1.36 -2.17 -3.42 -0.81 1.33 
+
+The final solution is: 
+-0.40 -0.00 0.70 0.80 -0.40 0.70 -0.40 -1.00 0.90 0.70 0.80 0.40 -0.80 1.00 -0.20 0.40 
+
+Kernel Stats for Fan1
+Kernel Stats for Fan2
+Using Platform 0 	 Device No 11 
+homogeneous system
+	gaussianElim_kernels.cl
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3300
+Size of bss area : 
+End of memory: 26400
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+8Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][7][0] at cycle 348
+HALT operation received from [0][0][0] at cycle 634
+HALT operation received from [0][2][0] at cycle 634
+HALT operation received from [0][1][0] at cycle 645
+HALT operation received from [0][3][0] at cycle 645
+HALT operation received from [0][6][0] at cycle 645
+HALT operation received from [0][4][0] at cycle 647
+HALT operation received from [0][5][0] at cycle 656
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3300
+Size of bss area : 
+End of memory: 26400
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+8Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][7][0] at cycle 4501
+HALT operation received from [0][6][0] at cycle 7581
+HALT operation received from [0][2][0] at cycle 7652
+HALT operation received from [0][5][0] at cycle 7686
+HALT operation received from [0][0][0] at cycle 7727
+HALT operation received from [0][1][0] at cycle 7744
+HALT operation received from [0][4][0] at cycle 7786
+HALT operation received from [0][3][0] at cycle 7807
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3300
+Size of bss area : 
+End of memory: 26400
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan1.s.bin
+binaries/final_Fan1.data.bin
+8Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][7][0] at cycle 76
+HALT operation received from [0][0][0] at cycle 398
+HALT operation received from [0][5][0] at cycle 626
+HALT operation received from [0][4][0] at cycle 635
+HALT operation received from [0][6][0] at cycle 635
+HALT operation received from [0][1][0] at cycle 645
+HALT operation received from [0][2][0] at cycle 645
+HALT operation received from [0][3][0] at cycle 656
+mem align: 0
+dram_base_offset: 0
+Size of data area : 3300
+Size of bss area : 
+End of memory: 26400
+Second Pass Completed
+Entered LE1Simulator::run with:
+binaries/final_Fan2.s.bin
+binaries/final_Fan2.data.bin
+8Context_1wide.xml with 0 disabled contexts
+HALT operation received from [0][7][0] at cycle 1060
+HALT operation received from [0][0][0] at cycle 6453
+HALT operation received from [0][3][0] at cycle 7355
+HALT operation received from [0][2][0] at cycle 7430
+HALT operation received from [0][6][0] at cycle 7434
+HALT operation received from [0][1][0] at cycle 7516
+HALT operation received from [0][4][0] at cycle 7516
+HALT operation received from [0][5][0] at cycle 7659

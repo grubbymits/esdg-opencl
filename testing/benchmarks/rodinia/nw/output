@@ -1,0 +1,5947 @@
+initialize platform with device id = 0
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16718
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 33442
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 50145
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66847
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 83551
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 100254
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 116957
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 133660
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 150363
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 167066
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 183769
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 200472
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 217175
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 233878
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 250581
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 267284
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 247311
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 230826
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 214341
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 197856
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 181371
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 164886
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 148401
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 131916
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 115431
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 98946
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 82461
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 65975
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 49491
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 33006
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16500
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 1
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13740
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 31674
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 47497
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 54934
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79143
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 94966
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 110789
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 126612
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 142435
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 158258
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 174081
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 189904
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 205727
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 221550
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 237373
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 253196
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 216883
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 202426
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 187969
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 173512
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 159055
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 144598
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 130141
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 115684
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 101227
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 86770
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 72313
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 58670
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 43399
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 28942
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 14674
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 2
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13320
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26643
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39953
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 56747
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66573
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79883
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 93193
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 106503
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 119813
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 133123
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 146433
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 159743
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 173053
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 186363
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 199673
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 212983
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 206888
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 193097
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 179306
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 165515
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 151724
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 137933
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 124142
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 110351
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 96560
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 82769
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 68978
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 52603
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 41396
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 27605
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13801
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 3
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12889
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26526
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39777
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51543
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66279
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79530
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 92781
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 106032
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 119283
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 132534
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 145785
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 159036
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 172287
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 185538
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 198789
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 212040
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 198159
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 184950
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 171741
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 158532
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 145323
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 132114
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 118905
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 105696
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 92487
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79278
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66069
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51555
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39651
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26442
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12892
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 4
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13019
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 25874
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 38799
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 52071
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 64649
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 77574
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 90499
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 103424
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 116349
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 129274
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 142199
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 155124
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 168049
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 180974
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 193899
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 206824
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 190674
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 177964
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 165254
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 152544
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 139834
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 127124
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 114414
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 101704
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 88994
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 76284
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 63574
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51459
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 38154
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 25444
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12866
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 5
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13744
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 31648
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 47460
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 54943
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79084
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 94896
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 110708
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 126520
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 142332
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 158144
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 173956
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 189768
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 205580
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 221392
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 237204
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 253016
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 216759
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 202310
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 187861
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 173412
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 158963
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 144514
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 130065
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 115616
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 101167
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 86718
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 72269
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 58663
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 43371
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 28922
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 14674
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 6
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13314
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26629
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39933
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 56716
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66541
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79845
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 93149
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 106453
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 119757
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 133061
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 146365
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 159669
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 172973
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 186277
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 199581
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 212885
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 206811
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 193025
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 179239
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 165453
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 151667
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 137881
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 124095
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 110309
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 96523
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 82737
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 68951
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 52568
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 41379
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 27593
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13796
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 7
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12884
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26502
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39743
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51522
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66225
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79466
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 92707
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 105948
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 119189
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 132430
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 145671
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 158912
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 172153
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 185394
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 198635
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 211876
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 198035
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 184834
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 171633
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 158432
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 145231
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 132030
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 118829
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 105628
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 92427
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79226
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66025
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51526
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39623
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26422
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12885
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 8
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13009
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 25857
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 38775
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 52043
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 64611
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 77529
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 90447
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 103365
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 116283
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 129201
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 142119
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 155037
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 167955
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 180873
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 193791
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 206709
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 190566
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 177863
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 165160
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 152457
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 139754
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 127051
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 114348
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 101645
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 88942
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 76239
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 63536
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51427
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 38130
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 25427
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 531732
+Size of bss area : 
+End of memory: 4253856
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12855
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 9
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16718
+HALT operation received from [0][1][0] at cycle 16718
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 50150
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 33442
+HALT operation received from [0][1][0] at cycle 33442
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 83556
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 50145
+HALT operation received from [0][1][0] at cycle 50145
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 116962
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66847
+HALT operation received from [0][1][0] at cycle 66847
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 150368
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 83551
+HALT operation received from [0][1][0] at cycle 83551
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 183774
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 100254
+HALT operation received from [0][1][0] at cycle 100254
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 217180
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 116957
+HALT operation received from [0][1][0] at cycle 116957
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 250586
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 133660
+HALT operation received from [0][1][0] at cycle 133660
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 247316
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 115431
+HALT operation received from [0][1][0] at cycle 115431
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 214346
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 98946
+HALT operation received from [0][1][0] at cycle 98946
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 181376
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 82461
+HALT operation received from [0][1][0] at cycle 82461
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 148406
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 65975
+HALT operation received from [0][1][0] at cycle 65975
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 115436
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 49491
+HALT operation received from [0][1][0] at cycle 49491
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 82466
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 33006
+HALT operation received from [0][1][0] at cycle 33006
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 49496
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16500
+HALT operation received from [0][1][0] at cycle 16500
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 10
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 10
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+HALT operation received from [0][2][0] at cycle 16722
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16718
+HALT operation received from [0][1][0] at cycle 16718
+HALT operation received from [0][2][0] at cycle 16718
+HALT operation received from [0][3][0] at cycle 16718
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 83556
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33447
+HALT operation received from [0][1][0] at cycle 33447
+HALT operation received from [0][2][0] at cycle 33447
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 116962
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 33442
+HALT operation received from [0][1][0] at cycle 33442
+HALT operation received from [0][2][0] at cycle 33442
+HALT operation received from [0][3][0] at cycle 33442
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 50150
+HALT operation received from [0][1][0] at cycle 50150
+HALT operation received from [0][2][0] at cycle 50150
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 83556
+HALT operation received from [0][1][0] at cycle 83556
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 183774
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 50145
+HALT operation received from [0][1][0] at cycle 50145
+HALT operation received from [0][2][0] at cycle 50145
+HALT operation received from [0][3][0] at cycle 50145
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 217180
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 116962
+HALT operation received from [0][1][0] at cycle 116962
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 83556
+HALT operation received from [0][1][0] at cycle 83556
+HALT operation received from [0][2][0] at cycle 83556
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66847
+HALT operation received from [0][1][0] at cycle 66847
+HALT operation received from [0][2][0] at cycle 66847
+HALT operation received from [0][3][0] at cycle 66847
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 82466
+HALT operation received from [0][1][0] at cycle 82466
+HALT operation received from [0][2][0] at cycle 82466
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 115436
+HALT operation received from [0][1][0] at cycle 115436
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 214346
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 49491
+HALT operation received from [0][1][0] at cycle 49491
+HALT operation received from [0][2][0] at cycle 49491
+HALT operation received from [0][3][0] at cycle 49491
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 181376
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 82466
+HALT operation received from [0][1][0] at cycle 82466
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 49496
+HALT operation received from [0][1][0] at cycle 49496
+HALT operation received from [0][2][0] at cycle 49496
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 33006
+HALT operation received from [0][1][0] at cycle 33006
+HALT operation received from [0][2][0] at cycle 33006
+HALT operation received from [0][3][0] at cycle 33006
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 115436
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33011
+HALT operation received from [0][1][0] at cycle 33011
+HALT operation received from [0][2][0] at cycle 33011
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 82466
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16500
+HALT operation received from [0][1][0] at cycle 16500
+HALT operation received from [0][2][0] at cycle 16500
+HALT operation received from [0][3][0] at cycle 16500
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+HALT operation received from [0][2][0] at cycle 16504
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 10
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 11
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 10
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+HALT operation received from [0][2][0] at cycle 16722
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+HALT operation received from [0][2][0] at cycle 16722
+HALT operation received from [0][3][0] at cycle 16722
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+HALT operation received from [0][2][0] at cycle 16722
+HALT operation received from [0][3][0] at cycle 16722
+HALT operation received from [0][4][0] at cycle 16722
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+HALT operation received from [0][2][0] at cycle 16722
+HALT operation received from [0][3][0] at cycle 16722
+HALT operation received from [0][4][0] at cycle 16722
+HALT operation received from [0][5][0] at cycle 16722
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16722
+HALT operation received from [0][1][0] at cycle 16722
+HALT operation received from [0][2][0] at cycle 16722
+HALT operation received from [0][3][0] at cycle 16722
+HALT operation received from [0][4][0] at cycle 16722
+HALT operation received from [0][5][0] at cycle 16722
+HALT operation received from [0][6][0] at cycle 16722
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16718
+HALT operation received from [0][1][0] at cycle 16718
+HALT operation received from [0][2][0] at cycle 16718
+HALT operation received from [0][3][0] at cycle 16718
+HALT operation received from [0][4][0] at cycle 16718
+HALT operation received from [0][5][0] at cycle 16718
+HALT operation received from [0][6][0] at cycle 16718
+HALT operation received from [0][7][0] at cycle 16718
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 50150
+HALT operation received from [0][1][0] at cycle 50150
+HALT operation received from [0][2][0] at cycle 50150
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33447
+HALT operation received from [0][1][0] at cycle 33447
+HALT operation received from [0][2][0] at cycle 33447
+HALT operation received from [0][3][0] at cycle 33447
+HALT operation received from [0][4][0] at cycle 33447
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 183774
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33447
+HALT operation received from [0][1][0] at cycle 33447
+HALT operation received from [0][2][0] at cycle 33447
+HALT operation received from [0][3][0] at cycle 33447
+HALT operation received from [0][4][0] at cycle 33447
+HALT operation received from [0][5][0] at cycle 33447
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 217180
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33447
+HALT operation received from [0][1][0] at cycle 33447
+HALT operation received from [0][2][0] at cycle 33447
+HALT operation received from [0][3][0] at cycle 33447
+HALT operation received from [0][4][0] at cycle 33447
+HALT operation received from [0][5][0] at cycle 33447
+HALT operation received from [0][6][0] at cycle 33447
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 50150
+HALT operation received from [0][1][0] at cycle 50150
+HALT operation received from [0][2][0] at cycle 50150
+HALT operation received from [0][3][0] at cycle 50150
+HALT operation received from [0][4][0] at cycle 50150
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 33442
+HALT operation received from [0][1][0] at cycle 33442
+HALT operation received from [0][2][0] at cycle 33442
+HALT operation received from [0][3][0] at cycle 33442
+HALT operation received from [0][4][0] at cycle 33442
+HALT operation received from [0][5][0] at cycle 33442
+HALT operation received from [0][6][0] at cycle 33442
+HALT operation received from [0][7][0] at cycle 33442
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 49496
+HALT operation received from [0][1][0] at cycle 49496
+HALT operation received from [0][2][0] at cycle 49496
+HALT operation received from [0][3][0] at cycle 49496
+HALT operation received from [0][4][0] at cycle 49496
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33011
+HALT operation received from [0][1][0] at cycle 33011
+HALT operation received from [0][2][0] at cycle 33011
+HALT operation received from [0][3][0] at cycle 33011
+HALT operation received from [0][4][0] at cycle 33011
+HALT operation received from [0][5][0] at cycle 33011
+HALT operation received from [0][6][0] at cycle 33011
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 214346
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33011
+HALT operation received from [0][1][0] at cycle 33011
+HALT operation received from [0][2][0] at cycle 33011
+HALT operation received from [0][3][0] at cycle 33011
+HALT operation received from [0][4][0] at cycle 33011
+HALT operation received from [0][5][0] at cycle 33011
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 18
+HALT operation received from [0][2][0] at cycle 18
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 181376
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 33011
+HALT operation received from [0][1][0] at cycle 33011
+HALT operation received from [0][2][0] at cycle 33011
+HALT operation received from [0][3][0] at cycle 33011
+HALT operation received from [0][4][0] at cycle 33011
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 18
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 18
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 18
+HALT operation received from [0][0][0] at cycle 49496
+HALT operation received from [0][1][0] at cycle 49496
+HALT operation received from [0][2][0] at cycle 49496
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 16500
+HALT operation received from [0][1][0] at cycle 16500
+HALT operation received from [0][2][0] at cycle 16500
+HALT operation received from [0][3][0] at cycle 16500
+HALT operation received from [0][4][0] at cycle 16500
+HALT operation received from [0][5][0] at cycle 16500
+HALT operation received from [0][6][0] at cycle 16500
+HALT operation received from [0][7][0] at cycle 16500
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+HALT operation received from [0][2][0] at cycle 16504
+HALT operation received from [0][3][0] at cycle 16504
+HALT operation received from [0][4][0] at cycle 16504
+HALT operation received from [0][5][0] at cycle 16504
+HALT operation received from [0][6][0] at cycle 16504
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+HALT operation received from [0][2][0] at cycle 16504
+HALT operation received from [0][3][0] at cycle 16504
+HALT operation received from [0][4][0] at cycle 16504
+HALT operation received from [0][5][0] at cycle 16504
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+HALT operation received from [0][2][0] at cycle 16504
+HALT operation received from [0][3][0] at cycle 16504
+HALT operation received from [0][4][0] at cycle 16504
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+HALT operation received from [0][2][0] at cycle 16504
+HALT operation received from [0][3][0] at cycle 16504
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+HALT operation received from [0][2][0] at cycle 16504
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+HALT operation received from [0][1][0] at cycle 16504
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 10
+HALT operation received from [0][2][0] at cycle 10
+HALT operation received from [0][3][0] at cycle 10
+HALT operation received from [0][4][0] at cycle 10
+HALT operation received from [0][5][0] at cycle 10
+HALT operation received from [0][6][0] at cycle 10
+HALT operation received from [0][7][0] at cycle 10
+HALT operation received from [0][0][0] at cycle 16504
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 12
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13740
+HALT operation received from [0][1][0] at cycle 13740
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 41211
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 31674
+HALT operation received from [0][1][0] at cycle 31674
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 68663
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 47497
+HALT operation received from [0][1][0] at cycle 47497
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 96115
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 54934
+HALT operation received from [0][1][0] at cycle 54934
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 123567
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79143
+HALT operation received from [0][1][0] at cycle 79143
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 151019
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 94966
+HALT operation received from [0][1][0] at cycle 94966
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 178471
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 110789
+HALT operation received from [0][1][0] at cycle 110789
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 205923
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 126612
+HALT operation received from [0][1][0] at cycle 126612
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 219933
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 101227
+HALT operation received from [0][1][0] at cycle 101227
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 190613
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 86770
+HALT operation received from [0][1][0] at cycle 86770
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 161293
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 72313
+HALT operation received from [0][1][0] at cycle 72313
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 131973
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 58670
+HALT operation received from [0][1][0] at cycle 58670
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 102653
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 43399
+HALT operation received from [0][1][0] at cycle 43399
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 73333
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 28942
+HALT operation received from [0][1][0] at cycle 28942
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 44013
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 14674
+HALT operation received from [0][1][0] at cycle 14674
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 13
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 8
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+HALT operation received from [0][2][0] at cycle 13741
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13740
+HALT operation received from [0][1][0] at cycle 13740
+HALT operation received from [0][2][0] at cycle 13740
+HALT operation received from [0][3][0] at cycle 13740
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 68663
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 27485
+HALT operation received from [0][1][0] at cycle 27485
+HALT operation received from [0][2][0] at cycle 27485
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 96115
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 31674
+HALT operation received from [0][1][0] at cycle 31674
+HALT operation received from [0][2][0] at cycle 31674
+HALT operation received from [0][3][0] at cycle 31674
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 41211
+HALT operation received from [0][1][0] at cycle 41211
+HALT operation received from [0][2][0] at cycle 41211
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 68663
+HALT operation received from [0][1][0] at cycle 68663
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 151019
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 47497
+HALT operation received from [0][1][0] at cycle 47497
+HALT operation received from [0][2][0] at cycle 47497
+HALT operation received from [0][3][0] at cycle 47497
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 178471
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 96115
+HALT operation received from [0][1][0] at cycle 96115
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 68663
+HALT operation received from [0][1][0] at cycle 68663
+HALT operation received from [0][2][0] at cycle 68663
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 54934
+HALT operation received from [0][1][0] at cycle 54934
+HALT operation received from [0][2][0] at cycle 54934
+HALT operation received from [0][3][0] at cycle 54934
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 73333
+HALT operation received from [0][1][0] at cycle 73333
+HALT operation received from [0][2][0] at cycle 73333
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 102653
+HALT operation received from [0][1][0] at cycle 102653
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 190613
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 43399
+HALT operation received from [0][1][0] at cycle 43399
+HALT operation received from [0][2][0] at cycle 43399
+HALT operation received from [0][3][0] at cycle 43399
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 161293
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 73333
+HALT operation received from [0][1][0] at cycle 73333
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 44013
+HALT operation received from [0][1][0] at cycle 44013
+HALT operation received from [0][2][0] at cycle 44013
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 28942
+HALT operation received from [0][1][0] at cycle 28942
+HALT operation received from [0][2][0] at cycle 28942
+HALT operation received from [0][3][0] at cycle 28942
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 102653
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 29353
+HALT operation received from [0][1][0] at cycle 29353
+HALT operation received from [0][2][0] at cycle 29353
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 73333
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 14674
+HALT operation received from [0][1][0] at cycle 14674
+HALT operation received from [0][2][0] at cycle 14674
+HALT operation received from [0][3][0] at cycle 14674
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+HALT operation received from [0][2][0] at cycle 14675
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 8
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 14
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 8
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+HALT operation received from [0][2][0] at cycle 13741
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+HALT operation received from [0][2][0] at cycle 13741
+HALT operation received from [0][3][0] at cycle 13741
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+HALT operation received from [0][2][0] at cycle 13741
+HALT operation received from [0][3][0] at cycle 13741
+HALT operation received from [0][4][0] at cycle 13741
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+HALT operation received from [0][2][0] at cycle 13741
+HALT operation received from [0][3][0] at cycle 13741
+HALT operation received from [0][4][0] at cycle 13741
+HALT operation received from [0][5][0] at cycle 13741
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 13741
+HALT operation received from [0][1][0] at cycle 13741
+HALT operation received from [0][2][0] at cycle 13741
+HALT operation received from [0][3][0] at cycle 13741
+HALT operation received from [0][4][0] at cycle 13741
+HALT operation received from [0][5][0] at cycle 13741
+HALT operation received from [0][6][0] at cycle 13741
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13740
+HALT operation received from [0][1][0] at cycle 13740
+HALT operation received from [0][2][0] at cycle 13740
+HALT operation received from [0][3][0] at cycle 13740
+HALT operation received from [0][4][0] at cycle 13740
+HALT operation received from [0][5][0] at cycle 13740
+HALT operation received from [0][6][0] at cycle 13740
+HALT operation received from [0][7][0] at cycle 13740
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][4][0] at cycle 16
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 41211
+HALT operation received from [0][1][0] at cycle 41211
+HALT operation received from [0][2][0] at cycle 41211
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 27485
+HALT operation received from [0][1][0] at cycle 27485
+HALT operation received from [0][2][0] at cycle 27485
+HALT operation received from [0][3][0] at cycle 27485
+HALT operation received from [0][4][0] at cycle 27485
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][4][0] at cycle 16
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 151019
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 27485
+HALT operation received from [0][1][0] at cycle 27485
+HALT operation received from [0][2][0] at cycle 27485
+HALT operation received from [0][3][0] at cycle 27485
+HALT operation received from [0][4][0] at cycle 27485
+HALT operation received from [0][5][0] at cycle 27485
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][4][0] at cycle 16
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 178471
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 27485
+HALT operation received from [0][1][0] at cycle 27485
+HALT operation received from [0][2][0] at cycle 27485
+HALT operation received from [0][3][0] at cycle 27485
+HALT operation received from [0][4][0] at cycle 27485
+HALT operation received from [0][5][0] at cycle 27485
+HALT operation received from [0][6][0] at cycle 27485
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 41211
+HALT operation received from [0][1][0] at cycle 41211
+HALT operation received from [0][2][0] at cycle 41211
+HALT operation received from [0][3][0] at cycle 41211
+HALT operation received from [0][4][0] at cycle 41211
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 31674
+HALT operation received from [0][1][0] at cycle 31674
+HALT operation received from [0][2][0] at cycle 31674
+HALT operation received from [0][3][0] at cycle 31674
+HALT operation received from [0][4][0] at cycle 31674
+HALT operation received from [0][5][0] at cycle 31674
+HALT operation received from [0][6][0] at cycle 31674
+HALT operation received from [0][7][0] at cycle 31674
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 44013
+HALT operation received from [0][1][0] at cycle 44013
+HALT operation received from [0][2][0] at cycle 44013
+HALT operation received from [0][3][0] at cycle 44013
+HALT operation received from [0][4][0] at cycle 44013
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 29353
+HALT operation received from [0][1][0] at cycle 29353
+HALT operation received from [0][2][0] at cycle 29353
+HALT operation received from [0][3][0] at cycle 29353
+HALT operation received from [0][4][0] at cycle 29353
+HALT operation received from [0][5][0] at cycle 29353
+HALT operation received from [0][6][0] at cycle 29353
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][4][0] at cycle 16
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 190613
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 29353
+HALT operation received from [0][1][0] at cycle 29353
+HALT operation received from [0][2][0] at cycle 29353
+HALT operation received from [0][3][0] at cycle 29353
+HALT operation received from [0][4][0] at cycle 29353
+HALT operation received from [0][5][0] at cycle 29353
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 16
+HALT operation received from [0][2][0] at cycle 16
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][4][0] at cycle 16
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 161293
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 29353
+HALT operation received from [0][1][0] at cycle 29353
+HALT operation received from [0][2][0] at cycle 29353
+HALT operation received from [0][3][0] at cycle 29353
+HALT operation received from [0][4][0] at cycle 29353
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 16
+HALT operation received from [0][4][0] at cycle 16
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 16
+HALT operation received from [0][7][0] at cycle 16
+HALT operation received from [0][0][0] at cycle 44013
+HALT operation received from [0][1][0] at cycle 44013
+HALT operation received from [0][2][0] at cycle 44013
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 14674
+HALT operation received from [0][1][0] at cycle 14674
+HALT operation received from [0][2][0] at cycle 14674
+HALT operation received from [0][3][0] at cycle 14674
+HALT operation received from [0][4][0] at cycle 14674
+HALT operation received from [0][5][0] at cycle 14674
+HALT operation received from [0][6][0] at cycle 14674
+HALT operation received from [0][7][0] at cycle 14674
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+HALT operation received from [0][2][0] at cycle 14675
+HALT operation received from [0][3][0] at cycle 14675
+HALT operation received from [0][4][0] at cycle 14675
+HALT operation received from [0][5][0] at cycle 14675
+HALT operation received from [0][6][0] at cycle 14675
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+HALT operation received from [0][2][0] at cycle 14675
+HALT operation received from [0][3][0] at cycle 14675
+HALT operation received from [0][4][0] at cycle 14675
+HALT operation received from [0][5][0] at cycle 14675
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+HALT operation received from [0][2][0] at cycle 14675
+HALT operation received from [0][3][0] at cycle 14675
+HALT operation received from [0][4][0] at cycle 14675
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+HALT operation received from [0][2][0] at cycle 14675
+HALT operation received from [0][3][0] at cycle 14675
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+HALT operation received from [0][2][0] at cycle 14675
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+HALT operation received from [0][1][0] at cycle 14675
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 8
+HALT operation received from [0][2][0] at cycle 8
+HALT operation received from [0][3][0] at cycle 8
+HALT operation received from [0][4][0] at cycle 8
+HALT operation received from [0][5][0] at cycle 8
+HALT operation received from [0][6][0] at cycle 8
+HALT operation received from [0][7][0] at cycle 8
+HALT operation received from [0][0][0] at cycle 14675
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 15
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13320
+HALT operation received from [0][1][0] at cycle 13320
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 42571
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26643
+HALT operation received from [0][1][0] at cycle 26643
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 70933
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39953
+HALT operation received from [0][1][0] at cycle 39953
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 99295
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 56747
+HALT operation received from [0][1][0] at cycle 56747
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 127657
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66573
+HALT operation received from [0][1][0] at cycle 66573
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 156019
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79883
+HALT operation received from [0][1][0] at cycle 79883
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 184381
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 93193
+HALT operation received from [0][1][0] at cycle 93193
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 212743
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 106503
+HALT operation received from [0][1][0] at cycle 106503
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 197203
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 96560
+HALT operation received from [0][1][0] at cycle 96560
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 170913
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 82769
+HALT operation received from [0][1][0] at cycle 82769
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 144623
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 68978
+HALT operation received from [0][1][0] at cycle 68978
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 118333
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 52603
+HALT operation received from [0][1][0] at cycle 52603
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 92043
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 41396
+HALT operation received from [0][1][0] at cycle 41396
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 65753
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 27605
+HALT operation received from [0][1][0] at cycle 27605
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 39463
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13801
+HALT operation received from [0][1][0] at cycle 13801
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 16
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 7
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+HALT operation received from [0][2][0] at cycle 13488
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13320
+HALT operation received from [0][1][0] at cycle 13320
+HALT operation received from [0][2][0] at cycle 13320
+HALT operation received from [0][3][0] at cycle 13320
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 70933
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 28390
+HALT operation received from [0][1][0] at cycle 28390
+HALT operation received from [0][2][0] at cycle 28390
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 99295
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26643
+HALT operation received from [0][1][0] at cycle 26643
+HALT operation received from [0][2][0] at cycle 26643
+HALT operation received from [0][3][0] at cycle 26643
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 42571
+HALT operation received from [0][1][0] at cycle 42571
+HALT operation received from [0][2][0] at cycle 42571
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 70933
+HALT operation received from [0][1][0] at cycle 70933
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 156019
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39953
+HALT operation received from [0][1][0] at cycle 39953
+HALT operation received from [0][2][0] at cycle 39953
+HALT operation received from [0][3][0] at cycle 39953
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 184381
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 99295
+HALT operation received from [0][1][0] at cycle 99295
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 70933
+HALT operation received from [0][1][0] at cycle 70933
+HALT operation received from [0][2][0] at cycle 70933
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 56747
+HALT operation received from [0][1][0] at cycle 56747
+HALT operation received from [0][2][0] at cycle 56747
+HALT operation received from [0][3][0] at cycle 56747
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 65753
+HALT operation received from [0][1][0] at cycle 65753
+HALT operation received from [0][2][0] at cycle 65753
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 92043
+HALT operation received from [0][1][0] at cycle 92043
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 170913
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 41396
+HALT operation received from [0][1][0] at cycle 41396
+HALT operation received from [0][2][0] at cycle 41396
+HALT operation received from [0][3][0] at cycle 41396
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 144623
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 65753
+HALT operation received from [0][1][0] at cycle 65753
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 39463
+HALT operation received from [0][1][0] at cycle 39463
+HALT operation received from [0][2][0] at cycle 39463
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 27605
+HALT operation received from [0][1][0] at cycle 27605
+HALT operation received from [0][2][0] at cycle 27605
+HALT operation received from [0][3][0] at cycle 27605
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 92043
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 26318
+HALT operation received from [0][1][0] at cycle 26318
+HALT operation received from [0][2][0] at cycle 26318
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 65753
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13801
+HALT operation received from [0][1][0] at cycle 13801
+HALT operation received from [0][2][0] at cycle 13801
+HALT operation received from [0][3][0] at cycle 13801
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+HALT operation received from [0][2][0] at cycle 13238
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 538284
+Size of bss area : 
+End of memory: 4306272
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 7
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 17
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 7
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+HALT operation received from [0][2][0] at cycle 13488
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+HALT operation received from [0][2][0] at cycle 13488
+HALT operation received from [0][3][0] at cycle 13488
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+HALT operation received from [0][2][0] at cycle 13488
+HALT operation received from [0][3][0] at cycle 13488
+HALT operation received from [0][4][0] at cycle 13488
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+HALT operation received from [0][2][0] at cycle 13488
+HALT operation received from [0][3][0] at cycle 13488
+HALT operation received from [0][4][0] at cycle 13488
+HALT operation received from [0][5][0] at cycle 13488
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13488
+HALT operation received from [0][1][0] at cycle 13488
+HALT operation received from [0][2][0] at cycle 13488
+HALT operation received from [0][3][0] at cycle 13488
+HALT operation received from [0][4][0] at cycle 13488
+HALT operation received from [0][5][0] at cycle 13488
+HALT operation received from [0][6][0] at cycle 13488
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13320
+HALT operation received from [0][1][0] at cycle 13320
+HALT operation received from [0][2][0] at cycle 13320
+HALT operation received from [0][3][0] at cycle 13320
+HALT operation received from [0][4][0] at cycle 13320
+HALT operation received from [0][5][0] at cycle 13320
+HALT operation received from [0][6][0] at cycle 13320
+HALT operation received from [0][7][0] at cycle 13320
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][4][0] at cycle 14
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 42571
+HALT operation received from [0][1][0] at cycle 42571
+HALT operation received from [0][2][0] at cycle 42571
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 28390
+HALT operation received from [0][1][0] at cycle 28390
+HALT operation received from [0][2][0] at cycle 28390
+HALT operation received from [0][3][0] at cycle 28390
+HALT operation received from [0][4][0] at cycle 28390
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][4][0] at cycle 14
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 156019
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 28390
+HALT operation received from [0][1][0] at cycle 28390
+HALT operation received from [0][2][0] at cycle 28390
+HALT operation received from [0][3][0] at cycle 28390
+HALT operation received from [0][4][0] at cycle 28390
+HALT operation received from [0][5][0] at cycle 28390
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][4][0] at cycle 14
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 184381
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 28390
+HALT operation received from [0][1][0] at cycle 28390
+HALT operation received from [0][2][0] at cycle 28390
+HALT operation received from [0][3][0] at cycle 28390
+HALT operation received from [0][4][0] at cycle 28390
+HALT operation received from [0][5][0] at cycle 28390
+HALT operation received from [0][6][0] at cycle 28390
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 42571
+HALT operation received from [0][1][0] at cycle 42571
+HALT operation received from [0][2][0] at cycle 42571
+HALT operation received from [0][3][0] at cycle 42571
+HALT operation received from [0][4][0] at cycle 42571
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26643
+HALT operation received from [0][1][0] at cycle 26643
+HALT operation received from [0][2][0] at cycle 26643
+HALT operation received from [0][3][0] at cycle 26643
+HALT operation received from [0][4][0] at cycle 26643
+HALT operation received from [0][5][0] at cycle 26643
+HALT operation received from [0][6][0] at cycle 26643
+HALT operation received from [0][7][0] at cycle 26643
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 39463
+HALT operation received from [0][1][0] at cycle 39463
+HALT operation received from [0][2][0] at cycle 39463
+HALT operation received from [0][3][0] at cycle 39463
+HALT operation received from [0][4][0] at cycle 39463
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 26318
+HALT operation received from [0][1][0] at cycle 26318
+HALT operation received from [0][2][0] at cycle 26318
+HALT operation received from [0][3][0] at cycle 26318
+HALT operation received from [0][4][0] at cycle 26318
+HALT operation received from [0][5][0] at cycle 26318
+HALT operation received from [0][6][0] at cycle 26318
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][4][0] at cycle 14
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 170913
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 26318
+HALT operation received from [0][1][0] at cycle 26318
+HALT operation received from [0][2][0] at cycle 26318
+HALT operation received from [0][3][0] at cycle 26318
+HALT operation received from [0][4][0] at cycle 26318
+HALT operation received from [0][5][0] at cycle 26318
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][2][0] at cycle 14
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][4][0] at cycle 14
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 144623
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 26318
+HALT operation received from [0][1][0] at cycle 26318
+HALT operation received from [0][2][0] at cycle 26318
+HALT operation received from [0][3][0] at cycle 26318
+HALT operation received from [0][4][0] at cycle 26318
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 14
+HALT operation received from [0][4][0] at cycle 14
+HALT operation received from [0][5][0] at cycle 14
+HALT operation received from [0][6][0] at cycle 14
+HALT operation received from [0][7][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 39463
+HALT operation received from [0][1][0] at cycle 39463
+HALT operation received from [0][2][0] at cycle 39463
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 13801
+HALT operation received from [0][1][0] at cycle 13801
+HALT operation received from [0][2][0] at cycle 13801
+HALT operation received from [0][3][0] at cycle 13801
+HALT operation received from [0][4][0] at cycle 13801
+HALT operation received from [0][5][0] at cycle 13801
+HALT operation received from [0][6][0] at cycle 13801
+HALT operation received from [0][7][0] at cycle 13801
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+HALT operation received from [0][2][0] at cycle 13238
+HALT operation received from [0][3][0] at cycle 13238
+HALT operation received from [0][4][0] at cycle 13238
+HALT operation received from [0][5][0] at cycle 13238
+HALT operation received from [0][6][0] at cycle 13238
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+HALT operation received from [0][2][0] at cycle 13238
+HALT operation received from [0][3][0] at cycle 13238
+HALT operation received from [0][4][0] at cycle 13238
+HALT operation received from [0][5][0] at cycle 13238
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+HALT operation received from [0][2][0] at cycle 13238
+HALT operation received from [0][3][0] at cycle 13238
+HALT operation received from [0][4][0] at cycle 13238
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+HALT operation received from [0][2][0] at cycle 13238
+HALT operation received from [0][3][0] at cycle 13238
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+HALT operation received from [0][2][0] at cycle 13238
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+HALT operation received from [0][1][0] at cycle 13238
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 547020
+Size of bss area : 
+End of memory: 4376160
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 7
+HALT operation received from [0][2][0] at cycle 7
+HALT operation received from [0][3][0] at cycle 7
+HALT operation received from [0][4][0] at cycle 7
+HALT operation received from [0][5][0] at cycle 7
+HALT operation received from [0][6][0] at cycle 7
+HALT operation received from [0][7][0] at cycle 7
+HALT operation received from [0][0][0] at cycle 13238
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS
+initialize platform with device id = 18
+homogeneous system
+worksize = 256
+Processing upper-left matrix
+Enqueue Kernel 1 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 6
+HALT operation received from [0][0][0] at cycle 12890
+Enqueue Kernel 1 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12889
+HALT operation received from [0][1][0] at cycle 12889
+Enqueue Kernel 1 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 39949
+Enqueue Kernel 1 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26526
+HALT operation received from [0][1][0] at cycle 26526
+Enqueue Kernel 1 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 66563
+Enqueue Kernel 1 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39777
+HALT operation received from [0][1][0] at cycle 39777
+Enqueue Kernel 1 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 93177
+Enqueue Kernel 1 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51543
+HALT operation received from [0][1][0] at cycle 51543
+Enqueue Kernel 1 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 119791
+Enqueue Kernel 1 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66279
+HALT operation received from [0][1][0] at cycle 66279
+Enqueue Kernel 1 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 146405
+Enqueue Kernel 1 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79530
+HALT operation received from [0][1][0] at cycle 79530
+Enqueue Kernel 1 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 173019
+Enqueue Kernel 1 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 92781
+HALT operation received from [0][1][0] at cycle 92781
+Enqueue Kernel 1 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 199633
+Enqueue Kernel 1 with block 16
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 106032
+HALT operation received from [0][1][0] at cycle 106032
+Processing lower-right matrix
+Enqueue Kernel 2 with block 15
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 200158
+Enqueue Kernel 2 with block 14
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 92487
+HALT operation received from [0][1][0] at cycle 92487
+Enqueue Kernel 2 with block 13
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 173474
+Enqueue Kernel 2 with block 12
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 79278
+HALT operation received from [0][1][0] at cycle 79278
+Enqueue Kernel 2 with block 11
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 146790
+Enqueue Kernel 2 with block 10
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 66069
+HALT operation received from [0][1][0] at cycle 66069
+Enqueue Kernel 2 with block 9
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 120106
+Enqueue Kernel 2 with block 8
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 51555
+HALT operation received from [0][1][0] at cycle 51555
+Enqueue Kernel 2 with block 7
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 93422
+Enqueue Kernel 2 with block 6
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 39651
+HALT operation received from [0][1][0] at cycle 39651
+Enqueue Kernel 2 with block 5
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 66738
+Enqueue Kernel 2 with block 4
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 26442
+HALT operation received from [0][1][0] at cycle 26442
+Enqueue Kernel 2 with block 3
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 14
+HALT operation received from [0][0][0] at cycle 40054
+Enqueue Kernel 2 with block 2
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][0][0] at cycle 12892
+HALT operation received from [0][1][0] at cycle 12892
+Enqueue Kernel 2 with block 1
+mem align: 0
+dram_base_offset: 0
+Size of data area : 533916
+Size of bss area : 
+End of memory: 4271328
+Second Pass Completed
+HALT operation received from [0][1][0] at cycle 6
+HALT operation received from [0][0][0] at cycle 12893
+OpenCL Computation Done
+Processing top-left matrix
+Processing bottom-right matrix
+res_index = 266 after writing CL results
+PASS

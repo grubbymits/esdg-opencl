@@ -1,8 +1,0 @@
-#!/bin/sh
-
-(
-for device in `seq 0 20`;
-do
-  ./binary-search -d $device > output
-done
-)

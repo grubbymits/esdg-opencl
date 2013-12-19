@@ -1,0 +1,30 @@
+16,18c16,18
+< int region_size[256];
+< int block_start[256];
+< int block_stop[256];
+---
+> int region_size;
+> int block_start;
+> int block_stop;
+31c31
+< region_size[__esdg_idx] =  ((n / 4) / get_num_groups(0)) * 4;
+---
+> region_size =  ((n / 4) / get_num_groups(0)) * 4;
+34c34
+< block_start[__esdg_idx] =  get_group_id(0) * region_size[__esdg_idx];
+---
+> block_start =  get_group_id(0) * region_size;
+39,40c39,40
+< block_stop[__esdg_idx] =  (get_group_id(0) == get_num_groups(0) - 1) ? 
+<         n : block_start[__esdg_idx] + region_size[__esdg_idx];
+---
+> block_stop =  (get_group_id(0) == get_num_groups(0) - 1) ? 
+>         n : block_start + region_size;
+48c48
+< i[__esdg_idx] =  block_start[__esdg_idx] + tid[__esdg_idx];
+---
+> i[__esdg_idx] =  block_start + tid[__esdg_idx];
+70c70
+<     while (i[__esdg_idx] < block_stop[__esdg_idx])
+---
+>     while (i[__esdg_idx] < block_stop)

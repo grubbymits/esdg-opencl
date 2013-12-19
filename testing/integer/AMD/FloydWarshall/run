@@ -1,7 +1,0 @@
-#!/bin/sh
-(
-for device in `seq 0 20`;
-do
-  ./floyd-warshall -d $device > output
-done
-)

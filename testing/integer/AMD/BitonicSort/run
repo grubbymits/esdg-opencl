@@ -1,7 +1,0 @@
-#!/bin/sh
-(
-for device in `seq 0 20`;
-do
-  ./bitonic-sort -d $device > output
-done
-)

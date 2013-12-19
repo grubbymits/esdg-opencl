@@ -1,0 +1,159 @@
+Reading File
+device id = 0
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 1
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 2
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 3
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 4
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 5
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 6
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 7
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 8
+detect OpenCL devices
+bfs: got context
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 9
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 10
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 11
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 12
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 13
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 14
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 15
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 16
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 17
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 18
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 19
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------
+Reading File
+device id = 20
+detect OpenCL devices
+bfs: got context
+homogeneous system
+---------- SET KERNEL 1 ------------
+---------- INVOKE KERNEL 1 ------------
+Workgroup size 256 and global 4096----------- READ DATA ------------------

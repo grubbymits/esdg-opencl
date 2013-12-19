@@ -269,7 +269,8 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
                        const unsigned disabled) {
 #ifdef DBG_SIM
   std::cout << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
-    << std::endl << machineModel << std::endl;
+    << std::endl << machineModel << " with " << disabled 
+    << " disabled contexts" << std::endl;
 #endif
 
   //LockAccess();

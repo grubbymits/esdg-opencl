@@ -485,10 +485,14 @@ bool LE1KernelEvent::CompileSource() {
 
     unsigned global_work_size = p_event->global_work_size(i);
     unsigned local_work_size = p_event->local_work_size(i);
+#ifdef DBG_KERNEL
+    std::cerr << "Global work size = " << global_work_size
+      << ", Local work size = " << local_work_size << std::endl;
+#endif
 
     if (global_work_size > 1) {
 
-      if (local_work_size > 1) {
+      if (local_work_size >= 1) {
         WorkgroupsPerCore[i] = global_work_size / local_work_size;
         merge_dims[i] = local_work_size;
       }
@@ -529,12 +533,20 @@ bool LE1KernelEvent::CompileSource() {
   SourceFile << OriginalSource << std::endl;
   SourceFile.close();
 
-  // Then pass the file name to workitem coarsener
-  WorkitemCoarsen Coarsener(merge_dims[0], merge_dims[1], merge_dims[2]);
-  if (!Coarsener.CreateWorkgroup(OriginalSourceName, p_event->kernel()->name()))
-    return false;
+  std::string WorkgroupSource;
 
-  std::string WorkgroupSource = Coarsener.getFinalKernel();
+  if ((merge_dims[0] <= 1) && (merge_dims[1] <= 1) && (merge_dims[2] <= 1))
+    WorkgroupSource = OriginalSource;
+  else {
+    // Then pass the file name to workitem coarsener
+    WorkitemCoarsen Coarsener(merge_dims[0], merge_dims[1], merge_dims[2]);
+    if (!Coarsener.CreateWorkgroup(OriginalSourceName,
+                                   p_event->kernel()->name()))
+      return false;
+
+    WorkgroupSource = Coarsener.getFinalKernel();
+  }
+
 #ifdef DBG_KERNEL
   std::cerr << std::endl << WorkgroupSource << std::endl;
 #endif
