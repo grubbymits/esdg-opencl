@@ -1,10 +1,10 @@
 /**********************************************************************
-Copyright ©2013 Advanced Micro Devices, Inc. All rights reserved.
+Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-•   Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-•   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
+•	Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+•	Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -22,202 +22,190 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "CLUtil.hpp"
+#include <SDKCommon.hpp>
+#include <SDKApplication.hpp>
+#include <SDKCommandArgs.hpp>
+#include <SDKFile.hpp>
 
-#define GROUP_SIZE 128
-
-#define SAMPLE_VERSION "AMD-APP-SDK-v2.9.214.1"
-
-using namespace appsdk;
+#define GROUP_SIZE 256
 
 /**
-* NBody
+* NBody 
 * Class implements OpenCL  NBody sample
+* Derived from SDKSample base class
 */
 
-class NBody
+class NBody : public SDKSample
 {
-        cl_double setupTime;                /**< time taken to setup OpenCL resources and building kernel */
-        cl_double kernelTime;               /**< time taken to run kernel and read result back */
+    cl_double setupTime;                /**< time taken to setup OpenCL resources and building kernel */
+    cl_double kernelTime;               /**< time taken to run kernel and read result back */
 
-        cl_float delT;                      /**< dT (timestep) */
-        cl_float espSqr;                    /**< Softening Factor*/
-        cl_float* initPos;                  /**< initial position */
-        cl_float* initVel;                  /**< initial velocity */
-        cl_float* vel;                      /**< Output velocity */
-        cl_context context;                 /**< CL context */
-        cl_device_id *devices;              /**< CL device list */
-        cl_mem particlePos[2];              // positions of particles
-        cl_mem particleVel[2];              // velocity of particles
-        int currentPosBufferIndex;
-        unsigned int currentIterationCL;    // current iteration in the simulation
-        float* mappedPosBuffer;             // mapped pointer of the position buffer
-        int mappedPosBufferIndex;
-        cl_command_queue commandQueue;      /**< CL command queue */
-        cl_program program;                 /**< CL program */
-        cl_kernel kernel;                   /**< CL kernel */
-        size_t groupSize;                   /**< Work-Group size */
+    cl_float delT;                      /**< dT (timestep) */
+    cl_float espSqr;                    /**< Softening Factor*/
+    cl_float* initPos;                  /**< initial position */
+    cl_float* initVel;                  /**< initial velocity */
+    cl_float* vel;                      /**< Output velocity */
+    cl_float* refPos;                   /**< Reference position */
+    cl_float* refVel;                   /**< Reference velocity */
+    cl_context context;                 /**< CL context */
+    cl_device_id *devices;              /**< CL device list */
+    cl_mem currPos;                     /**< Position of partciles */
+    cl_mem currVel;                     /**< Velocity of partciles */
+    cl_mem newPos;                      /**< Position of partciles */
+    cl_mem newVel;                      /**< Velocity of partciles */
+    cl_command_queue commandQueue;      /**< CL command queue */
+    cl_program program;                 /**< CL program */
+    cl_kernel kernel;                   /**< CL kernel */
+    size_t groupSize;                   /**< Work-Group size */
+    cl_int numParticles;
+    int iterations;
+    bool exchange;                                      /** Exchange current pos/vel with new pos/vel */
+    streamsdk::SDKDeviceInfo deviceInfo;                /**< Structure to store device information*/
+    streamsdk::KernelWorkGroupInfo kernelInfo;          /**< Structure to store kernel related info */
 
-        int iterations;
-        SDKDeviceInfo
-        deviceInfo;                /**< Structure to store device information*/
-        KernelWorkGroupInfo
-        kernelInfo;          /**< Structure to store kernel related info */
+private:
 
-        int fpsTimer;
-        int timerNumFrames;
+    float random(float randMax, float randMin);
 
-        SDKTimer *sampleTimer;      /**< SDKTimer object */
+public:
+	bool	isFirstLuanch;
+	cl_event glEvent;
+    /** 
+    * Constructor 
+    * Initialize member variables
+    * @param name name of sample (string)
+    */
+    explicit NBody(std::string name)
+        : SDKSample(name),
+        setupTime(0),
+        kernelTime(0),
+        delT(0.005f),
+        espSqr(500.0f),
+        initPos(NULL),
+        initVel(NULL),
+        vel(NULL),
+        refPos(NULL),
+        refVel(NULL),
+        devices(NULL),
+        groupSize(GROUP_SIZE),
+        iterations(1),
+        exchange(true),
+		isFirstLuanch(true),
+		glEvent(NULL)
+    {
+        numParticles = 1024;
+        verify = true;
+    }
 
-    private:
+    /** 
+    * Constructor 
+    * Initialize member variables
+    * @param name name of sample (const char*)
+    */
+    explicit NBody(const char* name)
+        : SDKSample(name),
+        setupTime(0),
+        kernelTime(0),
+        delT(0.005f),
+        espSqr(500.0f),
+        initPos(NULL),
+        initVel(NULL),
+        vel(NULL),
+        refPos(NULL),
+        refVel(NULL),
+        devices(NULL),
+        groupSize(GROUP_SIZE),
+        iterations(1),
+        exchange(true),
+		isFirstLuanch(true),
+		glEvent(NULL)
+    {
+        numParticles = 1024;
+        verify = true;
+    }
 
-        float random(float randMax, float randMin);
+    ~NBody();
 
-    public:
+    /**
+    * Allocate and initialize host memory array with random values
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int setupNBody();
 
-        CLCommandArgs   *sampleArgs;   /**< CLCommand argument class */
+    /**
+     * Override from SDKSample, Generate binary image of given kernel 
+     * and exit application
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int genBinaryImage();
 
-        cl_int numParticles;
-        bool    isFirstLuanch;
-        cl_event glEvent;
-        /**
-        * Constructor
-        * Initialize member variables
-        */
-        explicit NBody()
-            : setupTime(0),
-              kernelTime(0),
-              delT(0.005f),
-              espSqr(500.0f),
-              initPos(NULL),
-              initVel(NULL),
-              vel(NULL),
-              devices(NULL),
-              groupSize(GROUP_SIZE),
-              iterations(1),
-              currentPosBufferIndex(0),
-              currentIterationCL(0),
-              mappedPosBuffer(NULL),
-              fpsTimer(0),
-              timerNumFrames(0),
-              isFirstLuanch(true),
-              glEvent(NULL)
-        {
-            sampleArgs = new CLCommandArgs();
-            sampleTimer = new SDKTimer();
-            sampleArgs->sampleVerStr = SAMPLE_VERSION;
-            numParticles = 1024;
-        }
+    /**
+    * OpenCL related initialisations. 
+    * Set up Context, Device list, Command Queue, Memory buffers
+    * Build CL kernel program executable
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int setupCL();
 
-        ~NBody();
+    /**
+    * Set values for kernels' arguments
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int setupCLKernels();
 
-        /**
-        * Allocate and initialize host memory array with random values
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int setupNBody();
+    /**
+    * Enqueue calls to the kernels
+    * on to the command queue, wait till end of kernel execution.
+    * Get kernel start and end time if timing is enabled
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int runCLKernels();
 
-        /**
-         * Override from SDKSample, Generate binary image of given kernel
-         * and exit application
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int genBinaryImage();
+    /**
+    * Reference CPU implementation of Binomial Option
+    * for performance comparison
+    */
+    void nBodyCPUReference();
 
-        /**
-        * OpenCL related initialisations.
-        * Set up Context, Device list, Command Queue, Memory buffers
-        * Build CL kernel program executable
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int setupCL();
+    /**
+    * Override from SDKSample. Print sample stats.
+    */
+    void printStats();
 
-        /**
-        * Set values for kernels' arguments
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int setupCLKernels();
+    /**
+    * Override from SDKSample. Initialize 
+    * command line parser, add custom options
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int initialize();
 
-        /**
-        * Enqueue calls to the kernels
-        * on to the command queue, wait till end of kernel execution.
-        * Get kernel start and end time if timing is enabled
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int runCLKernels();
+    /**
+    * Override from SDKSample, adjust width and height 
+    * of execution domain, perform all sample setup
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int setup();
 
-        /**
-        * Reference CPU implementation of Binomial Option
-        * for performance comparison
-        */
-        void nBodyCPUReference(float* currentPos, float* currentVel
-                               , float* newPos, float* newVel);
+    /**
+    * Override from SDKSample
+    * Run OpenCL NBody
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int run();
 
+    /**
+    * Override from SDKSample
+    * Cleanup memory allocations
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int cleanup();
 
-        float* getMappedParticlePositions();
-        void releaseMappedParticlePositions();
-
-        /**
-        * Override from SDKSample. Print sample stats.
-        */
-        void printStats();
-
-        /**
-        * Override from SDKSample. Initialize
-        * command line parser, add custom options
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int initialize();
-
-        /**
-        * Override from SDKSample, adjust width and height
-        * of execution domain, perform all sample setup
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int setup();
-
-        /**
-        * Override from SDKSample
-        * Run OpenCL NBody
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int run();
-
-        /**
-        * Override from SDKSample
-        * Cleanup memory allocations
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int cleanup();
-
-        /**
-        * Override from SDKSample
-        * Verify against reference implementation
-        * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-        */
-        int verifyResults();
-
-
-        // init the timer for FPS calculation
-        void initFPSTimer()
-        {
-            timerNumFrames = 0;
-            fpsTimer = sampleTimer->createTimer();
-            sampleTimer->resetTimer(fpsTimer);
-            sampleTimer->startTimer(fpsTimer);
-        };
-
-        // calculate FPS
-        double getFPS()
-        {
-            sampleTimer->stopTimer(fpsTimer);
-            double elapsedTime = sampleTimer->readTimer(fpsTimer);
-            double fps = timerNumFrames/elapsedTime;
-            timerNumFrames = 0;
-            sampleTimer->resetTimer(fpsTimer);
-            sampleTimer->startTimer(fpsTimer);
-            return fps;
-        };
+    /**
+    * Override from SDKSample
+    * Verify against reference implementation
+    * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+    */
+    int verifyResults();
 };
 
 #endif // NBODY_H_

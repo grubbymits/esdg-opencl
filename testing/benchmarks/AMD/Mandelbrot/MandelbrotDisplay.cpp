@@ -1,10 +1,10 @@
 /**********************************************************************
-Copyright ©2013 Advanced Micro Devices, Inc. All rights reserved.
+Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-•   Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-•   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
+•	Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+•	Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -25,10 +25,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <cstdlib>
 #include <cstdio>
 
-// An instance of the Mandelbrot Class
-Mandelbrot clMandelbrot;
+// An instance of the Mandelbrot Class 
+Mandelbrot clMandelbrot("OpenCL Mandelbrot fractal");
 
-// Window height, Window Width and the pixels to be displayed
+// Window height, Window Width and the pixels to be displayed 
 int width;
 int height;
 unsigned char * output;
@@ -40,7 +40,7 @@ bool panning = false;
 bool zoomIn = false;
 bool zoomOut = false;
 
-// display function
+// display function 
 void
 displayFunc()
 {
@@ -53,7 +53,7 @@ displayFunc()
     }
 }
 
-// idle function
+// idle function 
 void
 idleFunc(void)
 {
@@ -90,58 +90,57 @@ idleFunc(void)
     glutPostRedisplay();
 }
 
-// keyboard function
+// keyboard function 
 void
 keyboardFunc(unsigned char key, int mouseX, int mouseY)
 {
     switch(key)
     {
-        // If the user hits escape or Q, then exit
-    case GLUT_ESCAPE_KEY:
-    case 'q':
-    case 'Q':
-    {
-        cleanup();
-        exit(0);
-        break;
-    }
-    case 'c':
-    {
-        printf("center (%.13f, %.13f), window width %.13f\n", clMandelbrot.getXPos(),
-               clMandelbrot.getYPos(),
-               clMandelbrot.getXStep());
-        break;
-    }
-    case 'i':
-    {
-        cl_uint maxIterations = clMandelbrot.getMaxIterations();
-        maxIterations = ((maxIterations * 2) < MAX_ITER) ? maxIterations * 2 : MAX_ITER;
-        printf("Setting maxIterations to %d\n", maxIterations);
-        clMandelbrot.setMaxIterations(maxIterations);
-        break;
-    }
-    case 'I':
-    {
-        cl_uint maxIterations = clMandelbrot.getMaxIterations();
-        maxIterations = ((maxIterations / 2) > MIN_ITER) ? maxIterations / 2 : MIN_ITER;
-        printf("Setting maxIterations to %d\n", maxIterations);
-        clMandelbrot.setMaxIterations(maxIterations);
-        break;
-    }
-    case 'b':
-    {
-        if (clMandelbrot.getTiming())
-        {
-            clMandelbrot.setBench(1);
-        }
-    }
-    case 'p':
-    {
-        panning = (panning == false)? true : false;
-        break;
-    }
-    default:
-        break;
+        // If the user hits escape or Q, then exit 
+        case GLUT_ESCAPE_KEY:
+        case 'q':
+        case 'Q':
+            {
+                cleanup();
+                exit(0);
+                break;
+            }
+        case 'c':
+            {
+                printf("center (%.13f, %.13f), window width %.13f\n", clMandelbrot.getXPos(), clMandelbrot.getYPos(),
+                                                                      clMandelbrot.getXStep());
+                break;
+            }
+        case 'i':
+            {
+                cl_uint maxIterations = clMandelbrot.getMaxIterations();
+                maxIterations = ((maxIterations * 2) < MAX_ITER) ? maxIterations * 2 : MAX_ITER;
+                printf("Setting maxIterations to %d\n", maxIterations);
+                clMandelbrot.setMaxIterations(maxIterations);
+                break;
+            }
+        case 'I':
+            {
+                cl_uint maxIterations = clMandelbrot.getMaxIterations();
+                maxIterations = ((maxIterations / 2) > MIN_ITER) ? maxIterations / 2 : MIN_ITER;
+                printf("Setting maxIterations to %d\n", maxIterations);
+                clMandelbrot.setMaxIterations(maxIterations);
+                break;
+            }
+        case 'b':
+            {
+                if (clMandelbrot.getTiming())
+                {
+                    clMandelbrot.setBench(1);
+                }
+            }
+        case 'p':
+            {
+                panning = (panning == false)? true : false;
+                break;
+            }
+        default:
+            break;
     }
 }
 
@@ -162,32 +161,32 @@ mouseFunc(int button, int state, int x, int y)
 {
     switch (button)
     {
-    case GLUT_LEFT_BUTTON:
-    {
-        if ((state == GLUT_DOWN) && !zoomOut)
-        {
-            zoomIn = true;
-        }
-        else
-        {
-            zoomIn = false;
-        }
-        break;
-    }
-    case GLUT_RIGHT_BUTTON:
-    {
-        if ((state == GLUT_DOWN) && !zoomIn)
-        {
-            zoomOut = true;
-        }
-        else
-        {
-            zoomOut = false;
-        }
-        break;
-    }
-    default:
-        break;
+        case GLUT_LEFT_BUTTON:
+            {
+                if ((state == GLUT_DOWN) && !zoomOut)
+                {
+                    zoomIn = true;
+                }
+                else
+                {
+                    zoomIn = false;
+                }
+                break;
+            }
+        case GLUT_RIGHT_BUTTON:
+            {
+                if ((state == GLUT_DOWN) && !zoomIn)
+                {
+                    zoomOut = true;
+                }
+                else
+                {
+                    zoomOut = false;
+                }
+                break;
+            }
+        default:
+            break;
     }
     mouseX = x;
     mouseY = y;
@@ -207,7 +206,7 @@ passiveMotionFunc(int x, int y)
     mouseY = y;
 }
 
-// initialise display
+// initalise display 
 void
 initDisplay(int argc, char *argv[])
 {
@@ -215,21 +214,21 @@ initDisplay(int argc, char *argv[])
     initGL();
 }
 
-// initialise glut
+// initalise glut 
 void
 initGlut(int argc, char *argv[])
 {
     /* initialising the window */
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
-
+    
     // Print available keyboard and mouse options.
     printf("\n\tKeyboard Options :\n"
            "\t  'i'  double the number of iterations\n"
            "\t  'I'  halve the number of iterations\n"
            "\t  'b'  benchmark the current frame (when -t is enabled)\n"
            "\t  'c'  print the current center position\n"
-           "\t  'p'  toggle panning\n"
+           "\t  'p'  toggle panning\n" 
            "\n\tMouse Options :\n"
            "\t  Move mouse to pan image\n"
            "\t  Left click to zoom in\n"
@@ -242,7 +241,7 @@ initGlut(int argc, char *argv[])
     glutInitWindowPosition(0,0);
     glutCreateWindow("Mandelbrot Fractal Generator");
 
-    // the various glut callbacks
+    // the various glut callbacks 
     glutDisplayFunc(displayFunc);
     glutIdleFunc(idleFunc);
     glutKeyboardFunc(keyboardFunc);
@@ -252,7 +251,7 @@ initGlut(int argc, char *argv[])
     glutEntryFunc(mouseEntry);
 }
 
-// initialise OpenGL
+// initalise OpenGL 
 void
 initGL(void)
 {
@@ -265,7 +264,7 @@ mainLoopGL(void)
     glutMainLoop();
 }
 
-// free any allocated resources
+// free any allocated resources 
 void
 cleanup(void)
 {
@@ -274,17 +273,15 @@ cleanup(void)
 
 }
 
-int
+int 
 main(int argc, char * argv[])
 {
-    // initialise and run the Mandelbrot kernel
+    // initalise and run the mandelbrot kernel 
     clMandelbrot.initialize();
-    if(clMandelbrot.sampleArgs->parseCommandLine(argc, argv))
-    {
+    if(clMandelbrot.parseCommandLine(argc, argv))
         return SDK_FAILURE;
-    }
 
-    if(clMandelbrot.sampleArgs->isDumpBinaryEnabled())
+    if(clMandelbrot.isDumpBinaryEnabled())
     {
         return clMandelbrot.genBinaryImage();
     }
@@ -292,20 +289,14 @@ main(int argc, char * argv[])
     {
         int returnVal = clMandelbrot.setup();
         if(returnVal != SDK_SUCCESS)
-        {
             return (returnVal == SDK_EXPECTED_FAILURE)? SDK_SUCCESS : SDK_FAILURE;
-        }
 
         if(clMandelbrot.run()!=SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
         if(clMandelbrot.verifyResults()!=SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
 
-        // show window if it is not running in quiet mode
+        // show window if it is not running in quiet mode 
         if(clMandelbrot.showWindow())
         {
             width = clMandelbrot.getWidth();

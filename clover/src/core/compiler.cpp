@@ -318,7 +318,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
   p_compiler.getCodeGenOpts().setInlining(
     clang::CodeGenOptions::OnlyAlwaysInlining);
 
-  p_compiler.getLangOpts().NoBuiltin = false;
+  p_compiler.getLangOpts().NoBuiltin = true;
   p_compiler.getTargetOpts().Triple = Triple;
   p_compiler.getInvocation().setLangDefaults(p_compiler.getLangOpts(),
                                              SourceKind);
@@ -464,12 +464,25 @@ void Compiler::ScanForSoftfloat() {
             break;
           case llvm::Instruction::FPTrunc:
           case llvm::Instruction::FPExt:
-          case llvm::Instruction::FCmp:
           case llvm::Instruction::FRem:
 #ifdef DBG_COMPILER
             std::cerr << "UNHANDLED FP INSTRUCTION: " << I->getOpcodeName()
               << std::endl;
 #endif
+            break;
+          case llvm::Instruction::FCmp:
+          case llvm::Instruction::Select:
+            FuncName = "float32_le";
+            ParamTys.push_back(Int32Ty);
+            ParamTys.push_back(Int32Ty);
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "float32_lt";
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "float32_eq";
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::Call:
             if (isa<llvm::IntrinsicInst>(I)) {

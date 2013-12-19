@@ -35,6 +35,7 @@
 #include "llvm/CodeGen/ValueTypes.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/ErrorHandling.h"
+#include "llvm/Target/TargetLibraryInfo.h"
 
 //#include <iostream>
 
@@ -176,7 +177,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   for (unsigned i = (unsigned)MVT::FIRST_VECTOR_VALUETYPE;
        i <= (unsigned)MVT::LAST_VECTOR_VALUETYPE; ++i) {
     MVT VT((MVT::SimpleValueType)i);
-
     setCondCodeAction(ISD::SETUGT,  VT, Expand);
     setCondCodeAction(ISD::SETUGE,  VT, Expand);
     setCondCodeAction(ISD::SETULT,  VT, Expand);
@@ -186,7 +186,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
     setCondCodeAction(ISD::SETLT,   VT, Expand);
     setCondCodeAction(ISD::SETLE,   VT, Expand);
     setCondCodeAction(ISD::SETEQ,   VT, Expand);
-    //setCondCodeAction(ISD::SETNE,   VT, Expand);
+    setCondCodeAction(ISD::SETNE,   VT, Expand);
   }*/
 
   // LE1 doesn't have extending float->double load/store
@@ -222,8 +222,9 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setLibcallName(RTLIB::SINTTOFP_I32_F32, "_r_ilfloat");
   setOperationAction(ISD::SINT_TO_FP, MVT::i32, Expand);
 
-  //setLibcallName(RTLIB::UINTTOFP_I32_F32, "_r_ufloat");
-  //setOperationAction(ISD::UINT_TO_FP, MVT::i32, Expand);
+  // FIXME - Is this ok? Is sign detected..?
+  setLibcallName(RTLIB::UINTTOFP_I32_F32, "int32_to_float32");
+  setOperationAction(ISD::UINT_TO_FP, MVT::i32, Expand);
 
   setLibcallName(RTLIB::SINTTOFP_I32_F64, "int32_to_float64");
   //setLibcallName(RTLIB::SINTTOFP_I32_F64, "_d_ilfloat");
@@ -283,6 +284,11 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setLibcallName(RTLIB::OLT_F32, "_r_lt");
   setOperationAction(ISD::SETOLT, MVT::f32, Expand);
 
+  // TODO I think that the functions for gt and lt are the same accept for
+  // their NaN handling.
+  setLibcallName(RTLIB::OGT_F32, "float32_lt");
+  setOperationAction(ISD::SETOGT, MVT::f32, Expand);
+
   // FIXME
   //float32_eq_signaling
   //float32_le_quiet
@@ -339,6 +345,11 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setLibcallName(RTLIB::OLT_F64, "float64_lt");
   //setLibcallName(RTLIB::OLT_F64, "_d_lt");
   setOperationAction(ISD::SETOLT, MVT::f64, Expand);
+
+  setOperationAction(LibFunc::exp2,   MVT::f32, Expand);
+  setOperationAction(LibFunc::exp2f,  MVT::f32, Expand);
+  setOperationAction(LibFunc::exp2,   MVT::f64, Expand);
+  setOperationAction(LibFunc::exp2f,  MVT::f64, Expand);
 
   // FIXME
   //float64_eq_signaling

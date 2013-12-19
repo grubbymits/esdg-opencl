@@ -1,10 +1,10 @@
 /**********************************************************************
-Copyright ©2013 Advanced Micro Devices, Inc. All rights reserved.
+Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-•   Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-•   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
+•	Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+•	Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -21,7 +21,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <malloc.h>
 
 
-//  Constants
+//  Constants 
 #define S_LOWER_LIMIT 10.0f
 #define S_UPPER_LIMIT 100.0f
 #define K_LOWER_LIMIT 10.0f
@@ -33,7 +33,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #define SIGMA_LOWER_LIMIT 0.01f
 #define SIGMA_UPPER_LIMIT 0.10f
 
-float
+float 
 BlackScholes::phi(float X)
 {
     float y, absX, t;
@@ -52,14 +52,14 @@ BlackScholes::phi(float X)
 
     y = 1.0f - oneBySqrt2pi * exp(-X * X / 2.0f) *
         t * (c1 +
-             t * (c2 +
-                  t * (c3 +
-                       t * (c4 + t * c5))));
+                t * (c2 +
+                    t * (c3 +
+                        t * (c4 + t * c5))));
 
     return (X < 0) ? (1.0f - y) : y;
 }
 
-void
+void 
 BlackScholes::blackScholesCPU()
 {
     int y;
@@ -72,8 +72,7 @@ BlackScholes::blackScholesCPU()
         float k = K_LOWER_LIMIT * randArray[y] + K_UPPER_LIMIT * (1.0f - randArray[y]);
         float t = T_LOWER_LIMIT * randArray[y] + T_UPPER_LIMIT * (1.0f - randArray[y]);
         float r = R_LOWER_LIMIT * randArray[y] + R_UPPER_LIMIT * (1.0f - randArray[y]);
-        float sigma = SIGMA_LOWER_LIMIT * randArray[y] + SIGMA_UPPER_LIMIT *
-                      (1.0f - randArray[y]);
+        float sigma = SIGMA_LOWER_LIMIT * randArray[y] + SIGMA_UPPER_LIMIT * (1.0f - randArray[y]);
 
         sigmaSqrtT = sigma * sqrt(t);
 
@@ -88,19 +87,17 @@ BlackScholes::blackScholesCPU()
 
 
 
-int
+int 
 BlackScholes::setupBlackScholes()
 {
     int i = 0;
 
     // Calculate width and height from samples
     samples = samples / 4;
-    samples = (samples / GROUP_SIZE)? (samples / GROUP_SIZE) * GROUP_SIZE:
-              GROUP_SIZE;
+    samples = (samples / GROUP_SIZE)? (samples / GROUP_SIZE) * GROUP_SIZE: GROUP_SIZE;
 
     unsigned int tempVar1 = (unsigned int)sqrt((double)samples);
-    tempVar1 = (tempVar1 / GROUP_SIZE)? (tempVar1 / GROUP_SIZE) * GROUP_SIZE:
-               GROUP_SIZE;
+    tempVar1 = (tempVar1 / GROUP_SIZE)? (tempVar1 / GROUP_SIZE) * GROUP_SIZE: GROUP_SIZE;
     samples = tempVar1 * tempVar1;
 
     width = tempVar1;
@@ -114,53 +111,47 @@ BlackScholes::setupBlackScholes()
     randArray = (cl_float*)memalign(16, width * height * sizeof(cl_float4));
 #endif
     CHECK_ALLOCATION(randArray, "Failed to allocate host memory. (randArray)");
-
+    
     for(i = 0; i < width * height * 4; i++)
     {
         randArray[i] = (float)rand() / (float)RAND_MAX;
     }
 
     deviceCallPrice = (cl_float*)malloc(width * height * sizeof(cl_float4));
-    CHECK_ALLOCATION(deviceCallPrice,
-                     "Failed to allocate host memory. (deviceCallPrice)");
+    CHECK_ALLOCATION(deviceCallPrice, "Failed to allocate host memory. (deviceCallPrice)");
     memset(deviceCallPrice, 0, width * height * sizeof(cl_float4));
 
     devicePutPrice = (cl_float*)malloc(width * height * sizeof(cl_float4));
-    CHECK_ALLOCATION(devicePutPrice,
-                     "Failed to allocate host memory. (devicePutPrice)");
+    CHECK_ALLOCATION(devicePutPrice, "Failed to allocate host memory. (devicePutPrice)");   
     memset(devicePutPrice, 0, width * height * sizeof(cl_float4));
 
     hostCallPrice = (cl_float*)malloc(width * height * sizeof(cl_float4));
-    CHECK_ALLOCATION(hostCallPrice,
-                     "Failed to allocate host memory. (hostCallPrice)");
+    CHECK_ALLOCATION(hostCallPrice, "Failed to allocate host memory. (hostCallPrice)");   
     memset(hostCallPrice, 0, width * height * sizeof(cl_float4));
 
     hostPutPrice = (cl_float*)malloc(width * height * sizeof(cl_float4));
-    CHECK_ALLOCATION(hostPutPrice,
-                     "Failed to allocate host memory. (hostPutPrice)");
+    CHECK_ALLOCATION(hostPutPrice, "Failed to allocate host memory. (hostPutPrice)");   
     memset(hostPutPrice, 0, width * height * sizeof(cl_float4));
 
     return SDK_SUCCESS;
 }
 
-int
+int 
 BlackScholes::genBinaryImage()
 {
     /*
      * Have a look at the available platforms and pick either
      * the AMD one if available or a reasonable default.
      */
-
-    bifData binaryData;
+    
+    streamsdk::bifData binaryData;
     binaryData.kernelName = std::string("BlackScholes_Kernels.cl");
     binaryData.flagsStr = std::string("");
-    if(sampleArgs->isComplierFlagsSpecified())
-    {
-        binaryData.flagsFileName = std::string(sampleArgs->flags.c_str());
-    }
+    if(isComplierFlagsSpecified())
+        binaryData.flagsFileName = std::string(flags.c_str());
 
-    binaryData.binaryName = std::string(sampleArgs->dumpBinary.c_str());
-    int status = generateBinaryImage(binaryData);
+    binaryData.binaryName = std::string(dumpBinary.c_str());
+    int status = sampleCommon->generateBinaryImage(binaryData);
     return status;
 }
 
@@ -169,17 +160,17 @@ int
 BlackScholes::setupCL(void)
 {
     cl_int status = 0;
-
+ 
     cl_device_type dType;
-
-    if(sampleArgs->deviceType.compare("cpu") == 0)
+    
+    if(deviceType.compare("cpu") == 0)
     {
         dType = CL_DEVICE_TYPE_CPU;
     }
-    else //deviceType = "gpu"
+    else //deviceType = "gpu" 
     {
-        dType = CL_DEVICE_TYPE_GPU;
-        if(sampleArgs->isThereGPU() == false)
+        dType = CL_DEVICE_TYPE_ACCELERATOR;
+        if(isThereGPU() == false)
         {
             std::cout << "GPU not found. Falling back to CPU device" << std::endl;
             dType = CL_DEVICE_TYPE_CPU;
@@ -192,19 +183,18 @@ BlackScholes::setupCL(void)
      */
 
     cl_platform_id platform = NULL;
-    int retValue = getPlatform(platform, sampleArgs->platformId,
-                               sampleArgs->isPlatformEnabled());
+    int retValue = sampleCommon->getPlatform(platform, platformId, isPlatformEnabled());
     CHECK_ERROR(retValue, SDK_SUCCESS, "BlackScholes::getPlatform() failed");
 
     // Display available devices.
-    retValue = displayDevices(platform, dType);
+    retValue = sampleCommon->displayDevices(platform, dType);
     CHECK_ERROR(retValue, SDK_SUCCESS, "BlackScholes::::displayDevices() failed");
 
     // If we could find our platform, use it. Otherwise use just available platform.
-    cl_context_properties cps[3] =
+    cl_context_properties cps[3] = 
     {
-        CL_CONTEXT_PLATFORM,
-        (cl_context_properties)platform,
+        CL_CONTEXT_PLATFORM, 
+        (cl_context_properties)platform, 
         0
     };
 
@@ -216,91 +206,78 @@ BlackScholes::setupCL(void)
     CHECK_OPENCL_ERROR(status, "clCreateContextFromType failed.");
 
     // getting device on which to run the sample
-    status = getDevices(context, &devices,sampleArgs-> deviceId,
-                        sampleArgs->isDeviceIdEnabled());
-    CHECK_ERROR(status, SDK_SUCCESS, "getDevices() failed");
-
+    status = sampleCommon->getDevices(context, &devices, deviceId, isDeviceIdEnabled());
+    CHECK_ERROR(status, SDK_SUCCESS, "sampleCommon::getDevices() failed");
+    
     {
         // The block is to move the declaration of prop closer to its use
         cl_command_queue_properties prop = 0;
-        commandQueue = clCreateCommandQueue(context,
-                                            devices[sampleArgs->deviceId],
-                                            prop,
+        commandQueue = clCreateCommandQueue(context, 
+                                            devices[deviceId], 
+                                            prop, 
                                             &status);
-        CHECK_OPENCL_ERROR(status, "clCreateCommandQueue failed.");
+       CHECK_OPENCL_ERROR(status, "clCreateCommandQueue failed.");   
     }
     //Set device info of given cl_device_id
-    retValue = deviceInfo.setDeviceInfo(devices[sampleArgs->deviceId]);
+    retValue = deviceInfo.setDeviceInfo(devices[deviceId]);
     CHECK_ERROR(retValue, SDK_SUCCESS, "SDKDeviceInfo::setDeviceInfo() failed");
 
-
+    
     // Set Presistent memory only for AMD platform
     cl_mem_flags inMemFlags = CL_MEM_READ_ONLY;
-    if(sampleArgs->isAmdPlatform())
-    {
-        inMemFlags |= CL_MEM_USE_PERSISTENT_MEM_AMD;
-    }
+    //if(isAmdPlatform())
+      //  inMemFlags |= CL_MEM_USE_PERSISTENT_MEM_AMD;
 
-    randBuf = clCreateBuffer(context,
+    randBuf = clCreateBuffer(context, 
                              inMemFlags,
                              sizeof(cl_float4) * width  * height,
-                             NULL,
+                             NULL, 
                              &status);
-    CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (randBuf)");
+    CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (randBuf)");   
 
-    callPriceBuf = clCreateBuffer(context,
+    callPriceBuf = clCreateBuffer(context, 
                                   CL_MEM_WRITE_ONLY,
                                   sizeof(cl_float4) * width * height,
-                                  NULL,
+                                  NULL, 
                                   &status);
-    CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (callPriceBuf)");
+     CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (callPriceBuf)");
 
-    putPriceBuf = clCreateBuffer(context,
+    putPriceBuf = clCreateBuffer(context, 
                                  CL_MEM_WRITE_ONLY,
                                  sizeof(cl_float4) * width * height,
-                                 NULL,
+                                 NULL, 
                                  &status);
     CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (putPriceBuf)");
 
-    // create a CL program using the kernel source
-    buildProgramData buildData;
+    // create a CL program using the kernel source 
+    streamsdk::buildProgramData buildData;
     buildData.kernelName = std::string("BlackScholes_Kernels.cl");
     buildData.devices = devices;
-    buildData.deviceId = sampleArgs->deviceId;
+    buildData.deviceId = deviceId;
     buildData.flagsStr = std::string("");
-    if(sampleArgs->isLoadBinaryEnabled())
-    {
-        buildData.binaryName = std::string(sampleArgs->loadBinary.c_str());
-    }
+    if(isLoadBinaryEnabled())
+        buildData.binaryName = std::string(loadBinary.c_str());
 
-    if(sampleArgs->isComplierFlagsSpecified())
-    {
-        buildData.flagsFileName = std::string(sampleArgs->flags.c_str());
-    }
+    if(isComplierFlagsSpecified())
+        buildData.flagsFileName = std::string(flags.c_str());
 
-    retValue = buildOpenCLProgram(program, context, buildData);
-    CHECK_ERROR(retValue, SDK_SUCCESS, "buildOpenCLProgram() failed");
+    retValue = sampleCommon->buildOpenCLProgram(program, context, buildData);
+    CHECK_ERROR(retValue, SDK_SUCCESS, "sampleCommon::buildOpenCLProgram() failed");
 
 
-
+ 
     // get a kernel object handle for a kernel with the given name
-    if (useScalarKernel)
-    {
-        kernel = clCreateKernel(program, "blackScholes_scalar", &status);
-    }
-    else
-    {
-        kernel = clCreateKernel(program, "blackScholes", &status);
-    }
+	if (useScalarKernel)
+		kernel = clCreateKernel(program, "blackScholes_scalar", &status);
+	else
+		kernel = clCreateKernel(program, "blackScholes", &status);
     CHECK_OPENCL_ERROR(status, "clCreateKernel failed.(kernel)");
-
-    status = kernelInfo.setKernelWorkGroupInfo(kernel,
-             devices[sampleArgs->deviceId]);
+    
+    status = kernelInfo.setKernelWorkGroupInfo(kernel, devices[deviceId]);
     CHECK_OPENCL_ERROR(status, "kernelInfo.setKernelWorkGroupInfo failed");
 
     // Calculte 2D block size according to required work-group size by kernel
-    kernelInfo.kernelWorkGroupSize = kernelInfo.kernelWorkGroupSize > GROUP_SIZE ?
-                                     GROUP_SIZE : kernelInfo.kernelWorkGroupSize;
+    kernelInfo.kernelWorkGroupSize = kernelInfo.kernelWorkGroupSize > GROUP_SIZE ? GROUP_SIZE : kernelInfo.kernelWorkGroupSize;
     while((blockSizeX * blockSizeY) < kernelInfo.kernelWorkGroupSize)
     {
         bool next = false;
@@ -317,89 +294,85 @@ BlackScholes::setupCL(void)
 
         // Break if no if statement is executed
         if(next == false)
-        {
             break;
-        }
     }
 
     return SDK_SUCCESS;
 }
 
 
-int
+int 
 BlackScholes::runCLKernels(void)
 {
     cl_int   status;
     cl_event ndrEvt;
     size_t globalThreads[2] = {width, height};
-    if (useScalarKernel)
-    {
-        globalThreads[0]*=4;
-    }
+	if (useScalarKernel) {
+		globalThreads[0]*=4;
+	}
     size_t localThreads[2] = {blockSizeX, blockSizeY};
 
 
     if(localThreads[0] > deviceInfo.maxWorkItemSizes[0] ||
-            localThreads[1] > deviceInfo.maxWorkItemSizes[1] ||
-            localThreads[0]*localThreads[1] >
-            deviceInfo.maxWorkGroupSize) //(size_t)blockSizeX * blockSizeY
+       localThreads[1] > deviceInfo.maxWorkItemSizes[1] ||
+       localThreads[0]*localThreads[1] > deviceInfo.maxWorkGroupSize) //(size_t)blockSizeX * blockSizeY
     {
-        std::cout << "Unsupported: Device does not support"
-                  "requested number of work items.";
+        std::cout << "Unsupported: Device does not support" 
+            "requested number of work items.";
         FREE(maxWorkItemSizes);
         return SDK_FAILURE;
     }
-
+    
     cl_event inMapEvt;
     void* mapPtr = clEnqueueMapBuffer(
-                       commandQueue,
-                       randBuf,
-                       CL_FALSE,
-                       CL_MAP_WRITE,
-                       0,
-                       sizeof(cl_float4) * width  * height,
-                       0,
-                       NULL,
-                       &inMapEvt,
-                       &status);
-    CHECK_OPENCL_ERROR(status, "clEnqueueMapBuffer failed. (mapPtr)");
-
+                        commandQueue,
+                        randBuf,
+                        CL_FALSE,
+                        CL_MAP_WRITE,
+                        0,
+                        sizeof(cl_float4) * width  * height,
+                        0,
+                        NULL,
+                        &inMapEvt,
+                        &status);
+    CHECK_OPENCL_ERROR(status, "clEnqueueMapBuffer failed. (mapPtr)");            
+    
     status = clFlush(commandQueue);
-    CHECK_OPENCL_ERROR(status, "clFlush(commandQueue) failed.");
-
-    status = waitForEventAndRelease(&inMapEvt);
+    CHECK_OPENCL_ERROR(status, "clFlush(commandQueue) failed.");            
+    
+    status = sampleCommon->waitForEventAndRelease(&inMapEvt);
     CHECK_ERROR(status, SDK_SUCCESS, "WaitForEventAndRelease(inMapEvt) Failed");
 
     memcpy(mapPtr, randArray, sizeof(cl_float4) * width  * height);
 
     cl_event unmapEvent;
     status = clEnqueueUnmapMemObject(
-                 commandQueue,
-                 randBuf,
-                 mapPtr,
-                 0,
-                 NULL,
-                 &unmapEvent);
+                    commandQueue,
+                    randBuf,
+                    mapPtr,
+                    0,
+                    NULL,
+                    &unmapEvent);
     CHECK_OPENCL_ERROR(status, "clEnqueueUnmapMemObject failed. (randBuf)");
-
+   
     status = clFlush(commandQueue);
     CHECK_OPENCL_ERROR(status, "clFlush failed. (randBuf)");
-
-    status = waitForEventAndRelease(&unmapEvent);
+    
+    status = sampleCommon->waitForEventAndRelease(&unmapEvent);
     CHECK_ERROR(status, SDK_SUCCESS, "WaitForEventAndRelease(unmapEvent) Failed");
 
     // whether sort is to be in increasing order. CL_TRUE implies increasing
-    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&randBuf);
+    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), (void *)&randBuf); 
     CHECK_OPENCL_ERROR(status, "clSetKernelArg failed. (randBuf)");
-
-    int rowStride = useScalarKernel?width*4:width;
+   
+	int rowStride = useScalarKernel?width*4:width;
     status = clSetKernelArg(kernel, 1, sizeof(rowStride), (const void *)&rowStride);
     CHECK_OPENCL_ERROR(status, "clSetKernelArg failed. (width)");
-
+    
 
     status = clSetKernelArg(kernel, 2, sizeof(cl_mem), (void *)&callPriceBuf);
     CHECK_OPENCL_ERROR(status, "clSetKernelArg failed. (callPriceBuf)");
-
+    
     status = clSetKernelArg(kernel, 3, sizeof(cl_mem), (void *)&putPriceBuf);
     CHECK_OPENCL_ERROR(status, "clSetKernelArg failed. (putPriceBuf)");
 
@@ -413,22 +386,22 @@ BlackScholes::runCLKernels(void)
                                     0,
                                     NULL,
                                     &ndrEvt);
-
+    
     CHECK_OPENCL_ERROR(status, "clEnqueueNDRangeKernel failed.");
-
+    
     // wait for the kernel call to finish execution
     status = clFlush(commandQueue);
     CHECK_OPENCL_ERROR(status, "clEnqueueNDRangeKernel failed.");
-
-    status = waitForEventAndRelease(&ndrEvt);
+  
+    status = sampleCommon->waitForEventAndRelease(&ndrEvt);
     CHECK_ERROR(status, SDK_SUCCESS, "WaitForEventAndRelease(ndrEvt) Failed");
 
     cl_event callEvent;
     cl_event putEvent;
 
     // Enqueue the results to application pointer
-    status = clEnqueueReadBuffer(commandQueue,
-                                 callPriceBuf,
+    status = clEnqueueReadBuffer(commandQueue, 
+                                 callPriceBuf, 
                                  CL_FALSE,
                                  0,
                                  width * height * sizeof(cl_float4),
@@ -439,8 +412,8 @@ BlackScholes::runCLKernels(void)
     CHECK_OPENCL_ERROR(status, "clEnqueueReadBuffer failed.");
 
     // Enqueue the results to application pointer
-    status = clEnqueueReadBuffer(commandQueue,
-                                 putPriceBuf,
+    status = clEnqueueReadBuffer(commandQueue, 
+                                 putPriceBuf, 
                                  CL_FALSE,
                                  0,
                                  width * height * sizeof(cl_float4),
@@ -449,32 +422,30 @@ BlackScholes::runCLKernels(void)
                                  NULL,
                                  &putEvent);
     CHECK_OPENCL_ERROR(status, "clEnqueueReadBuffer failed.");
-
+   
     status = clFlush(commandQueue);
     CHECK_OPENCL_ERROR(status, "clFlush(commanQueue) failed.");
-
-    status = waitForEventAndRelease(&callEvent);
+   
+    status = sampleCommon->waitForEventAndRelease(&callEvent);
     CHECK_ERROR(status, SDK_SUCCESS, "WaitForEventAndRelease(callEvent) Failed");
 
-    status = waitForEventAndRelease(&putEvent);
+    status = sampleCommon->waitForEventAndRelease(&putEvent);
     CHECK_ERROR(status, SDK_SUCCESS, "WaitForEventAndRelease(putEvent) Failed");
 
     return SDK_SUCCESS;
 }
 
-int
+int 
 BlackScholes::initialize()
 {
     // Call base class Initialize to get default configuration
-    CHECK_ERROR((sampleArgs->initialize()), SDK_SUCCESS,
-                "OpenCL resource initialization  failed");
-    Option* num_samples = new Option;
-    CHECK_ALLOCATION(num_samples,
-                     "Failed to intialization of class. (num_samples)");
+    CHECK_ERROR((this->SDKSample::initialize()), SDK_SUCCESS, "OpenCL resource initialization  failed");
+    streamsdk::Option* num_samples = new streamsdk::Option;
+    CHECK_ALLOCATION(num_samples, "Failed to intialization of class. (num_samples)");
     num_samples->_sVersion = "x";
     num_samples->_lVersion = "samples";
     num_samples->_description = "Number of samples to be calculated";
-    num_samples->_type = CA_ARG_INT;
+    num_samples->_type = streamsdk::CA_ARG_INT;
     num_samples->_value = &samples;
 
     sampleArgs->AddOption(num_samples);
@@ -482,18 +453,17 @@ BlackScholes::initialize()
     num_samples->_sVersion = "i";
     num_samples->_lVersion = "iterations";
     num_samples->_description = "Number of iterations";
-    num_samples->_type = CA_ARG_INT;
+    num_samples->_type = streamsdk::CA_ARG_INT;
     num_samples->_value = &iterations;
-
+    
     sampleArgs->AddOption(num_samples);
 
     num_samples->_sVersion = "s";
     num_samples->_lVersion = "scalar";
-    num_samples->_description =
-        "Run the scalar kernel instead of the vectoroized kernel";
-    num_samples->_type = CA_NO_ARGUMENT;
+    num_samples->_description = "Run the scalar kernel instead of the vectoroized kernel";
+    num_samples->_type = streamsdk::CA_NO_ARGUMENT;
     num_samples->_value = &useScalarKernel;
-
+    
     sampleArgs->AddOption(num_samples);
 
     delete num_samples;
@@ -501,26 +471,22 @@ BlackScholes::initialize()
     return SDK_SUCCESS;
 }
 
-int
+int 
 BlackScholes::setup()
 {
     if(setupBlackScholes() != SDK_SUCCESS)
-    {
         return SDK_FAILURE;
-    }
 
-    int timer = sampleTimer->createTimer();
-    sampleTimer->resetTimer(timer);
-    sampleTimer->startTimer(timer);
-
+    int timer = sampleCommon->createTimer();
+    sampleCommon->resetTimer(timer);
+    sampleCommon->startTimer(timer);
+    
     if(setupCL() != SDK_SUCCESS)
-    {
         return SDK_FAILURE;
-    }
-    sampleTimer->stopTimer(timer);
-
-    // Compute setup time
-    setupTime = (double)(sampleTimer->readTimer(timer));
+    sampleCommon->stopTimer(timer);
+    
+    // Compute setup time 
+    setupTime = (double)(sampleCommon->readTimer(timer));
 
     return SDK_SUCCESS;
 }
@@ -535,76 +501,70 @@ BlackScholes::run()
     {
         // Arguments are set and execution call is enqueued on command buffer
         if(runCLKernels() != SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
-    }
+      }
+    
+    int timer = sampleCommon->createTimer();
+    sampleCommon->resetTimer(timer);
+    sampleCommon->startTimer(timer);
 
-    int timer = sampleTimer->createTimer();
-    sampleTimer->resetTimer(timer);
-    sampleTimer->startTimer(timer);
-
-    std::cout << "Executing kernel for " << iterations
-              << " iterations" << std::endl;
+    std::cout << "Executing kernel for " << iterations 
+        << " iterations" << std::endl;
     std::cout <<"-------------------------------------------" << std::endl;
 
     for(int i = 0; i < iterations; i++)
     {
         // Arguments are set and execution call is enqueued on command buffer
         if(runCLKernels() != SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
     }
-
-    sampleTimer->stopTimer(timer);
+    
+    sampleCommon->stopTimer(timer);
     // Compute kernel time
-    kernelTime = (double)(sampleTimer->readTimer(timer)) / iterations;
+    kernelTime = (double)(sampleCommon->readTimer(timer)) / iterations;
 
-    if(!sampleArgs->quiet)
+    if(!quiet)
     {
-        printArray<cl_float>("deviceCallPrice",
-                             deviceCallPrice,
-                             width,
-                             1);
+        sampleCommon->printArray<cl_float>("deviceCallPrice",
+                                           deviceCallPrice, 
+                                           width, 
+                                           1);
 
-        printArray<cl_float>("devicePutPrice",
-                             devicePutPrice,
-                             width,
-                             1);
+        sampleCommon->printArray<cl_float>("devicePutPrice", 
+                                           devicePutPrice, 
+                                           width, 
+                                           1);
     }
     return SDK_SUCCESS;
 }
 
-int
+int 
 BlackScholes::verifyResults()
 {
-    if(sampleArgs->verify)
+    if(verify)
     {
         /* reference implementation
          * it overwrites the input array with the output
          */
         blackScholesCPU();
 
-        if(!sampleArgs->quiet)
+        if(!quiet)
         {
-            printArray<cl_float>("hostCallPrice",
-                                 hostCallPrice,
-                                 width,
-                                 1);
+            sampleCommon->printArray<cl_float>("hostCallPrice",
+                                               hostCallPrice, 
+                                               width, 
+                                               1);
 
-            printArray<cl_float>("hostPutPrice",
-                                 hostPutPrice,
-                                 width,
-                                 1);
+            sampleCommon->printArray<cl_float>("hostPutPrice", 
+                                               hostPutPrice, 
+                                               width, 
+                                               1);
         }
 
-
+        
         // compare the call/put price results and see if they match
-        bool callPriceResult = compare(hostCallPrice, deviceCallPrice,
-                                       width * height * 4);
-        bool putPriceResult = compare(hostPutPrice, devicePutPrice, width * height * 4,
-                                      1e-4f);
+        bool callPriceResult = sampleCommon->compare(hostCallPrice, deviceCallPrice, width * height * 4);
+        bool putPriceResult = sampleCommon->compare(hostPutPrice, devicePutPrice, width * height * 4, 1e-4f);
 
         if(!(callPriceResult ? (putPriceResult ? true : false) : false))
         {
@@ -621,44 +581,41 @@ BlackScholes::verifyResults()
     return SDK_SUCCESS;
 }
 
-void
+void 
 BlackScholes::printStats()
 {
+    int actualSamples = width * height * 4;
+    totalTime = setupTime + kernelTime;
 
-    if(sampleArgs->timing)
+    std::string strArray[4] = 
     {
-        int actualSamples = width * height * 4;
-        sampleTimer->totalTime = setupTime + kernelTime;
+        "Option Samples", 
+        "Time(sec)", 
+        "[Transfer+kernel]Time(sec)", 
+        "Options/sec"
+    };
 
-        std::string strArray[4] =
-        {
-            "Option Samples",
-            "Time(sec)",
-            "[Transfer+kernel]Time(sec)",
-            "Options/sec"
-        };
+    std::string stats[4];
+    stats[0] = sampleCommon->toString(actualSamples, std::dec);
+    stats[1] = sampleCommon->toString(totalTime, std::dec);
+    stats[2] = sampleCommon->toString(kernelTime, std::dec);
+    stats[3] = sampleCommon->toString(actualSamples / totalTime, std::dec);
 
-        std::string stats[4];
-        stats[0] = toString(actualSamples, std::dec);
-        stats[1] = toString(sampleTimer->totalTime, std::dec);
-        stats[2] = toString(kernelTime, std::dec);
-        stats[3] = toString(actualSamples / sampleTimer->totalTime, std::dec);
+    this->SDKSample::printStats(strArray, stats, 4);
 
-        printStatistics(strArray, stats, 4);
-
-    }
 }
+
 
 int BlackScholes::cleanup()
 {
-    // Releases OpenCL resources (Context, Memory etc.)
+    // Releases OpenCL resources (Context, Memory etc.) 
     cl_int status;
     status = clReleaseMemObject(randBuf);
     CHECK_OPENCL_ERROR(status, "clReleaseMemObject(randBuf) failed.");
-
+    
     status = clReleaseMemObject(callPriceBuf);
-    CHECK_OPENCL_ERROR(status, "clReleaseMemObject(callPriceBuf) failed.");
-
+    CHECK_OPENCL_ERROR(status, "clReleaseMemObject(callPriceBuf) failed."); 
+    
     status = clReleaseMemObject(putPriceBuf);
     CHECK_OPENCL_ERROR(status, "clReleaseMemObject(callPriceBuf) failed.");
 
@@ -679,9 +636,9 @@ int BlackScholes::cleanup()
 #ifdef _WIN32
     ALIGNED_FREE(randArray);
 #else
-    FREE(randArray);
+        FREE(randArray);
 #endif
-
+    
     FREE(deviceCallPrice);
     FREE(devicePutPrice);
     FREE(hostCallPrice);
@@ -691,25 +648,21 @@ int BlackScholes::cleanup()
     return SDK_SUCCESS;
 }
 
-int
+int 
 main(int argc, char * argv[])
 {
     // Create MonteCalroAsian object
-    BlackScholes clBlackScholes;
-
+    BlackScholes clBlackScholes("Black Scholes OpenCL sample");
+    
     // Initialization
     if(clBlackScholes.initialize() != SDK_SUCCESS)
-    {
         return SDK_FAILURE;
-    }
 
     // Parse command line options
-    if(clBlackScholes.sampleArgs->parseCommandLine(argc, argv))
-    {
+    if(clBlackScholes.parseCommandLine(argc, argv))
         return SDK_FAILURE;
-    }
 
-    if(clBlackScholes.sampleArgs->isDumpBinaryEnabled())
+    if(clBlackScholes.isDumpBinaryEnabled())
     {
         return clBlackScholes.genBinaryImage();
     }
@@ -717,29 +670,21 @@ main(int argc, char * argv[])
     {
         // Setup
         if(clBlackScholes.setup() !=SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
 
-        // Run
+        // Run 
         if(clBlackScholes.run() !=SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
 
         // Verifty
         if(clBlackScholes.verifyResults() !=SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
 
         // Cleanup resources created
         if(clBlackScholes.cleanup() !=SDK_SUCCESS)
-        {
             return SDK_FAILURE;
-        }
 
-        // Print performance statistics
+        // Print performance statistics 
         clBlackScholes.printStats();
     }
 

@@ -474,6 +474,13 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
           return false;
         }
       }
+      else if (elementType->isFloatTy()) {
+        PrintData(Data, Addr, 0, sizeof(int), TotalSize);
+      }
+      else {
+        std::cerr << "!! Unhandled vector element type!" << std::endl;
+        return false;
+      }
     }
     else if (type->getTypeID() == llvm::Type::StructTyID) {
 #ifdef DBG_KERNEL
@@ -797,7 +804,7 @@ void LE1DataPrinter::PrintData(const void* data,
         }
         // Write data to the stream
         data_line << std::hex << std::setw(6) << device_mem_ptr << " - ";
-        for (unsigned i = 0; i < 4; ++i) {
+        for (unsigned i = 0; i < 2; ++i) {
           ConvertToBinary(&binary_string, &padded_array[i], sizeof(short));
           data_line << std::hex << std::setw(4) << std::setfill('0')
             << static_cast<int>(padded_array[0]);

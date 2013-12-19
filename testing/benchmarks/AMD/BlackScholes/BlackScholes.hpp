@@ -1,10 +1,10 @@
 /**********************************************************************
-Copyright ©2013 Advanced Micro Devices, Inc. All rights reserved.
+Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-•   Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-•   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
+•	Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+•	Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -22,176 +22,197 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <SDKCommon.hpp>
+#include <SDKApplication.hpp>
+#include <SDKFile.hpp>
 
-#include "CLUtil.hpp"
-
-#define SAMPLE_VERSION "AMD-APP-SDK-v2.9.214.1"
-
-using namespace appsdk;
 
 #define GROUP_SIZE 256
 /**
- * BlackScholes
+ * BlackScholes 
  * Class implements Black-Scholes implementation for European Options
+ * Derived from SDKSample base class
  */
 
-class BlackScholes
+class BlackScholes : public SDKSample
 {
+    
+    cl_int samples;                 /**< Number of samples */
+    cl_int width;                   /**< width of the execution domain */
+    cl_int height;                  /**< height of the execution domain */
+    cl_float *randArray;            /**< Array of random numbers */
+    size_t maxWorkGroupSize;        /**< Max allowed work-items in a group */
+    size_t *maxWorkItemSizes;       /**< Max work-items sizes in each dimensions */
+    cl_double setupTime;            /**< time taken to setup OpenCL resources and building kernel */
+    cl_double kernelTime;           /**< time taken to run kernel and read result back */
+    cl_float *deviceCallPrice;      /**< Array of call price values */
+    cl_float *devicePutPrice;       /**< Array of put price values */
+    cl_float *hostCallPrice;        /**< Array of call price values */
+    cl_float *hostPutPrice;         /**< Array of put price values */
+    cl_context context;             /**< CL context */
+    cl_device_id *devices;          /**< CL device list */
+    cl_mem randBuf;                 /**< CL memory buffer for randArray */
+    cl_mem callPriceBuf;            /**< CL memory buffer for callPrice */
+    cl_mem putPriceBuf;             /**< CL memroy buffer for putPrice */
+    cl_command_queue commandQueue;  /**< CL command queue */
+    cl_program program;             /**< CL program  */
+    cl_kernel kernel;               /**< CL kernel */
+	bool useScalarKernel;
+    //size_t kernelWorkGroupSize;     /**< Group size returned by kernel */
+    size_t blockSizeX;              /**< block size in x-direction*/
+    size_t blockSizeY;              /**< block size in y-direction*/
+    int iterations;
+    streamsdk::SDKDeviceInfo deviceInfo; /**< Structure to store device information*/
+    streamsdk::KernelWorkGroupInfo kernelInfo; /**< Structure to store KernelworkGroupInfo */
+    
 
-        cl_int samples;                 /**< Number of samples */
-        cl_int width;                   /**< width of the execution domain */
-        cl_int height;                  /**< height of the execution domain */
-        cl_float *randArray;            /**< Array of random numbers */
-        size_t maxWorkGroupSize;        /**< Max allowed work-items in a group */
-        size_t *maxWorkItemSizes;       /**< Max work-items sizes in each dimensions */
-        cl_double setupTime;            /**< time taken to setup OpenCL resources and building kernel */
-        cl_double kernelTime;           /**< time taken to run kernel and read result back */
-        cl_float *deviceCallPrice;      /**< Array of call price values */
-        cl_float *devicePutPrice;       /**< Array of put price values */
-        cl_float *hostCallPrice;        /**< Array of call price values */
-        cl_float *hostPutPrice;         /**< Array of put price values */
-        cl_context context;             /**< CL context */
-        cl_device_id *devices;          /**< CL device list */
-        cl_mem randBuf;                 /**< CL memory buffer for randArray */
-        cl_mem callPriceBuf;            /**< CL memory buffer for callPrice */
-        cl_mem putPriceBuf;             /**< CL memroy buffer for putPrice */
-        cl_command_queue commandQueue;  /**< CL command queue */
-        cl_program program;             /**< CL program  */
-        cl_kernel kernel;               /**< CL kernel */
-        bool useScalarKernel;
-        //size_t kernelWorkGroupSize;   /**< Group size returned by kernel */
-        size_t blockSizeX;              /**< block size in x-direction*/
-        size_t blockSizeY;              /**< block size in y-direction*/
-        int iterations;
-        SDKDeviceInfo deviceInfo;       /**< Structure to store device information*/
-        KernelWorkGroupInfo kernelInfo; /**< Structure to store KernelworkGroupInfo */
-        SDKTimer    *sampleTimer;       /**< SDKTimer object */
+public:
+    /** 
+     * Constructor 
+     * Initialize member variables
+     * @param name name of sample (string)
+     */
+    BlackScholes(std::string name)
+        : SDKSample(name),
+        samples(256 * 256 * 4),
+        blockSizeX(1),
+        blockSizeY(1),
+        setupTime(0),
+        kernelTime(0),
+        randArray(NULL),
+        deviceCallPrice(NULL),
+        devicePutPrice(NULL),
+        hostCallPrice(NULL),
+        hostPutPrice(NULL),
+        devices(NULL),
+        maxWorkItemSizes(NULL),
+        iterations(1),
+		useScalarKernel(false)
+    {
+        width = 64; 
+        height = 64;
+    }
 
-    public:
-
-        CLCommandArgs   *sampleArgs;    /**< CLCommand argument class */
-        /**
-         * Constructor
-         * Initialize member variables
-         */
-        BlackScholes()
-            :samples(256 * 256 * 4),
-             blockSizeX(1),
-             blockSizeY(1),
-             setupTime(0),
-             kernelTime(0),
-             randArray(NULL),
-             deviceCallPrice(NULL),
-             devicePutPrice(NULL),
-             hostCallPrice(NULL),
-             hostPutPrice(NULL),
-             devices(NULL),
-             maxWorkItemSizes(NULL),
-             iterations(1),
-             useScalarKernel(false)
+    /** 
+     * Constructor 
+     * Initialize member variables
+     * @param name name of sample (const char*)
+     */
+    BlackScholes(const char* name)
+        : SDKSample(name),
+        samples(256 * 256 * 4),
+        blockSizeX(1),
+        blockSizeY(1),
+        setupTime(0),
+        kernelTime(0),
+        randArray(NULL),
+        deviceCallPrice(NULL),
+        devicePutPrice(NULL),
+        hostCallPrice(NULL),
+        hostPutPrice(NULL),
+        devices(NULL),
+        maxWorkItemSizes(NULL),
+        iterations(1),
+		useScalarKernel(false)
+    {
+        width = 64; 
+        height = 64;
+    }
+    // destructor 
+    ~BlackScholes()
+    {
+        if(randArray) 
         {
-            width = 64;
-            height = 64;
-            sampleArgs = new CLCommandArgs() ;
-            sampleTimer = new SDKTimer();
-            sampleArgs->sampleVerStr = SAMPLE_VERSION;
-        }
-
-        // destructor
-        ~BlackScholes()
-        {
-            if(randArray)
-            {
-#ifdef _WIN32
+            #ifdef _WIN32
                 ALIGNED_FREE(randArray);
-#else
+            #else
                 FREE(randArray);
-#endif
-            }
-
-            FREE(deviceCallPrice);
-            FREE(devicePutPrice);
-            FREE(hostCallPrice);
-            FREE(hostPutPrice);
-            FREE(devices);
+            #endif
         }
 
-        /**
-         * Allocate and initialize required host memory with appropriate values
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int setupBlackScholes();
+        FREE(deviceCallPrice);
+        FREE(devicePutPrice);
+        FREE(hostCallPrice);
+        FREE(hostPutPrice);
+        FREE(devices);
+    }
 
-        /**
-         * Override from SDKSample, Generate binary image of given kernel
-         * and exit application
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int genBinaryImage();
+    /**
+     * Allocate and initialize required host memory with appropriate values
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int setupBlackScholes();
 
-        /**
-         * OpenCL related initialisations.
-         * Set up Context, Device list, Command Queue, Memory buffers
-         * Build CL kernel program executable
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int setupCL();
+    /**
+     * Override from SDKSample, Generate binary image of given kernel 
+     * and exit application
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int genBinaryImage();
 
-        /**
-         * Set values for kernels' arguments, enqueue calls to the kernels
-         * on to the command queue, wait till end of kernel execution.
-         * Get kernel start and end time if timing is enabled
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int runCLKernels();
+    /**
+     * OpenCL related initialisations. 
+     * Set up Context, Device list, Command Queue, Memory buffers
+     * Build CL kernel program executable
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int setupCL();
 
-        /**
-         * Override from SDKSample. Print sample stats.
-         */
-        void printStats();
+    /**
+     * Set values for kernels' arguments, enqueue calls to the kernels
+     * on to the command queue, wait till end of kernel execution.
+     * Get kernel start and end time if timing is enabled
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int runCLKernels();
 
-        /**
-         * Override from SDKSample. Initialize
-         * command line parser, add custom options
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int initialize();
+    /**
+     * Override from SDKSample. Print sample stats.
+     */
+    void printStats();
 
-        /**
-         * Override from SDKSample, adjust width and height
-         * of execution domain, perform all sample setup
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int setup();
+    /**
+     * Override from SDKSample. Initialize 
+     * command line parser, add custom options
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int initialize();
 
-        /**
-         * Override from SDKSample
-         * Run OpenCL Black-Scholes
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int run();
+    /**
+     * Override from SDKSample, adjust width and height 
+     * of execution domain, perform all sample setup
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int setup();
 
-        /**
-         * Override from SDKSample
-         * Cleanup memory allocations
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int cleanup();
+    /**
+     * Override from SDKSample
+     * Run OpenCL Black-Scholes
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int run();
 
-        /**
-         * Override from SDKSample
-         * Verify against reference implementation
-         * @return SDK_SUCCESS on success and nonzero on failure
-         */
-        int verifyResults();
+    /**
+     * Override from SDKSample
+     * Cleanup memory allocations
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int cleanup();
 
-    private:
+    /**
+     * Override from SDKSample
+     * Verify against reference implementation
+     * @return SDK_SUCCESS on success and nonzero on failure
+     */
+    int verifyResults();
 
-        //  Abromowitz Stegun approxmimation for PHI on the CPU(Cumulative Normal Distribution Function)
-        float phi(float X);
+private:
+    
+    //  Abromowitz Stegun approxmimation for PHI on the CPU(Cumulative Normal Distribution Function)
+    float phi(float X);
 
-        //  CPU version of black scholes
-        void blackScholesCPU();
+    //  CPU version of black scholes
+    void blackScholesCPU();
 
 };
-#endif
+#endif 

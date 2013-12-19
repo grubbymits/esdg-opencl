@@ -136,7 +136,9 @@ LE1Device::~LE1Device()
   for (StatsMap::iterator SMI = ExecutionStats.begin(),
        SME = ExecutionStats.end(); SMI != SME; ++SMI) {
 
-    std::cout << "Kernel Stats for " << SMI->first << std::endl;
+#ifdef DEBUGCL
+    std::cerr << "Kernel Stats for " << SMI->first << std::endl;
+#endif
 
     unsigned TotalCycles = 0;
     unsigned TotalStalls = 0;
@@ -151,6 +153,7 @@ LE1Device::~LE1Device()
     unsigned AverageDecodeStalls = 0;
     unsigned AverageBranchesTaken = 0;
     unsigned AverageBranchesNotTaken = 0;
+    unsigned totalIterations = 0;
 
     for (StatsSet::iterator SI = SMI->second.begin(),
          SE = SMI->second.end(); SI != SE; ++SI) {
@@ -172,6 +175,17 @@ LE1Device::~LE1Device()
       AverageBranchesNotTaken += Stats.BranchesNotTaken /
         (NumCores - Stats.disabledCores);
     }
+
+  /*
+    std::cout << "Total iterations for " << SMI->first << " = "
+      << totalIterations << std::endl;
+
+    AverageCycles /= totalIterations;
+    AverageStalls /= totalIterations;
+    AverageIdle /= totalIterations;
+    AverageDecodeStalls /= totalIterations;
+    AverageBranchesTaken /= totalIterations;
+    AverageBranchesNotTaken /= totalIterations;*/
 
     //AverageCycles /= KernelIterations;
     //AverageIdle /= KernelIterations;

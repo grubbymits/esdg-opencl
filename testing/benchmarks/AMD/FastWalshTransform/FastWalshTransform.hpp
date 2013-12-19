@@ -1,10 +1,10 @@
 /**********************************************************************
-Copyright ©2013 Advanced Micro Devices, Inc. All rights reserved.
+Copyright ©2012 Advanced Micro Devices, Inc. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 
-•   Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-•   Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
+•	Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+•	Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -23,57 +23,47 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-
-#include "CLUtil.hpp"
-
-#define SAMPLE_VERSION "AMD-APP-SDK-v2.9.214.1"
-
-using namespace appsdk;
+#include <SDKCommon.hpp>
+#include <SDKApplication.hpp>
+#include <SDKCommandArgs.hpp>
+#include <SDKFile.hpp>
 
 /**
- * FastWalshTransform
+ * FastWalshTransform 
  * Class implements OpenCL FastWalsh Transform sample
-
+ * Derived from SDKSample base class
  */
 
-class FastWalshTransform
+class FastWalshTransform : public SDKSample
 {
-        cl_uint
-        seed;       /**< Seed value for random number generation */
-        cl_double           setupTime;       /**< Time for setting up OpenCL */
-        cl_double     totalKernelTime;       /**< Time for kernel execution */
-        cl_double    totalProgramTime;       /**< Time for program execution */
-        cl_double referenceKernelTime;       /**< Time for reference implementation */
-        cl_int                 length;       /**< Length of the input array */
-        cl_float               *input;       /**< Input array */
-        cl_float              *output;       /**< Ouput array */
-        cl_float
-        *verificationInput;       /**< Input array for reference implementation */
-        cl_context            context;       /**< CL context */
-        cl_device_id         *devices;       /**< CL device list */
-        cl_mem            inputBuffer;       /**< CL memory buffer */
-        cl_mem           outputBuffer;       /**< CL memory buffer */
-        cl_command_queue commandQueue;       /**< CL command queue */
-        cl_program            program;       /**< CL program  */
-        cl_kernel              kernel;       /**< CL kernel */
-        int
-        iterations;       /**< Number of iterations for kernel execution */
-        SDKDeviceInfo deviceInfo;        /**< Structure to store device information*/
-        KernelWorkGroupInfo
-        kernelInfo; /**< Class object to hold KernelWorkgroup Info */
+    cl_uint                  seed;       /**< Seed value for random number generation */
+    cl_double           setupTime;       /**< Time for setting up OpenCL */
+    cl_double     totalKernelTime;       /**< Time for kernel execution */
+    cl_double    totalProgramTime;       /**< Time for program execution */
+    cl_double referenceKernelTime;       /**< Time for reference implementation */
+    cl_int                 length;       /**< Length of the input array */
+    cl_float               *input;       /**< Input array */
+    cl_float              *output;       /**< Ouput array */
+    cl_float   *verificationInput;       /**< Input array for reference implementation */
+    cl_context            context;       /**< CL context */
+    cl_device_id         *devices;       /**< CL device list */
+    cl_mem            inputBuffer;       /**< CL memory buffer */
+    cl_mem           outputBuffer;       /**< CL memory buffer */
+    cl_command_queue commandQueue;       /**< CL command queue */
+    cl_program            program;       /**< CL program  */
+    cl_kernel              kernel;       /**< CL kernel */
+    int                iterations;       /**< Number of iterations for kernel execution */
+    streamsdk::SDKDeviceInfo deviceInfo;        /**< Structure to store device information*/
+    streamsdk::KernelWorkGroupInfo kernelInfo; /**< Class object to hold KernelWorkgroup Info */
 
-        SDKTimer    *sampleTimer;      /**< SDKTimer object */
-
-    public:
-
-        CLCommandArgs   *sampleArgs;   /**< CLCommand argument class */
-        /**
-         * Constructor
-         * Initialize member variables
-         * @param name name of sample (string)
-         */
-        FastWalshTransform()
-        {
+public:
+    /** 
+     * Constructor 
+     * Initialize member variables
+     * @param name name of sample (string)
+     */
+    FastWalshTransform(std::string name)
+        : SDKSample(name){
             seed = 123;
             length = 1024;
             input = NULL;
@@ -81,89 +71,105 @@ class FastWalshTransform
             setupTime = 0;
             totalKernelTime = 0;
             iterations = 1;
-            sampleArgs = new CLCommandArgs() ;
-            sampleTimer = new SDKTimer();
-            sampleArgs->sampleVerStr = SAMPLE_VERSION;
+            verify = true;
+            deviceId = device;
         }
 
+    /**
+     * Constructor 
+     * Initialize member variables
+     * @param name name of sample (const char*)
+     */
+    FastWalshTransform(const char* name)
+        : SDKSample(name){
+            seed = 123;
+            length = 1024;
+            input = NULL;
+            verificationInput = NULL;
+            setupTime = 0;
+            totalKernelTime = 0;
+            iterations = 1;
+            verify = true;
+            deviceId = device;
+        }
 
-        /**
-         * Allocate and initialize host memory array with random values
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int setupFastWalshTransform();
+    /**
+     * Allocate and initialize host memory array with random values
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int setupFastWalshTransform();
 
-        /**
-         * Override from SDKSample, Generate binary image of given kernel
-         * and exit application
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int genBinaryImage();
+    /**
+     * Override from SDKSample, Generate binary image of given kernel 
+     * and exit application
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int genBinaryImage();
 
-        /**
-         * OpenCL related initialisations.
-         * Set up Context, Device list, Command Queue, Memory buffers
-         * Build CL kernel program executable
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int setupCL();
+    /**
+     * OpenCL related initialisations. 
+     * Set up Context, Device list, Command Queue, Memory buffers
+     * Build CL kernel program executable
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int setupCL();
 
-        /**
-         * Set values for kernels' arguments, enqueue calls to the kernels
-         * on to the command queue, wait till end of kernel execution.
-         * Get kernel start and end time if timing is enabled
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int runCLKernels();
+    /**
+     * Set values for kernels' arguments, enqueue calls to the kernels
+     * on to the command queue, wait till end of kernel execution.
+     * Get kernel start and end time if timing is enabled
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int runCLKernels();
 
-        /**
-         * Reference CPU implementation of inplace FastWalsh Transform
-         * for performance comparison
-         * @param input input array which also stores the output
-         * @param length length of the array
-         */
-        void fastWalshTransformCPUReference(
-            cl_float * input,
-            const cl_uint length);
+    /**
+     * Reference CPU implementation of inplace FastWalsh Transform
+     * for performance comparison 
+     * @param input input array which also stores the output 
+     * @param length length of the array
+     */
+    void fastWalshTransformCPUReference(
+        cl_float * input, 
+        const cl_uint length);
 
-        /**
-         * Override from SDKSample. Print sample stats.
-         */
-        void printStats();
+    /**
+     * Override from SDKSample. Print sample stats.
+     */
+    void printStats();
 
-        /**
-         * Override from SDKSample. Initialize
-         * command line parser, add custom options
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int initialize();
+    /**
+     * Override from SDKSample. Initialize 
+     * command line parser, add custom options
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int initialize();
 
-        /**
-         * Override from SDKSample, adjust width and height
-         * of execution domain, perform all sample setup
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int setup();
+    /**
+     * Override from SDKSample, adjust width and height 
+     * of execution domain, perform all sample setup
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int setup();
 
-        /**
-         * Override from SDKSample
-         * Run OpenCL FastWalsh Transform
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int run();
+    /**
+     * Override from SDKSample
+     * Run OpenCL FastWalsh Transform 
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int run();
 
-        /**
-         * Override from SDKSample
-         * Cleanup memory allocations
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int cleanup();
+    /**
+     * Override from SDKSample
+     * Cleanup memory allocations
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int cleanup();
 
-        /**
-         * Override from SDKSample
-         * Verify against reference implementation
-         * @return SDK_SUCCESS on success and SDK_FAILURE on failure
-         */
-        int verifyResults();
+    /**
+     * Override from SDKSample
+     * Verify against reference implementation
+     * @return SDK_SUCCESS on success and SDK_FAILURE on failure
+     */
+    int verifyResults();
 };
 #endif

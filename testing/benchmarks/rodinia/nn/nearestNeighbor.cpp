@@ -63,7 +63,7 @@ float *OpenClFindNearestNeighbors(
         cl_int status;
         cl_program cl_NN_program;
         cl_NN_program = cl_compileProgram(
-            (char *)"nearestNeighbor_kernel.cl",NULL);
+            (char *)"NearestNeighbor.cl",NULL);
        
         NN_kernel = clCreateKernel(
             cl_NN_program, "NearestNeighbor", &status);

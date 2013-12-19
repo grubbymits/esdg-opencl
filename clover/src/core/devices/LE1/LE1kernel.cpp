@@ -552,7 +552,8 @@ bool LE1KernelEvent::CompileSource() {
 #endif
 
   Compiler LE1Compiler(p_device);
-  std::string Opts = "-funroll-loops ";
+  std::string Opts = "-fno-builtin ";
+  Opts.append("-funroll-loops ");
   Opts.append("-mllvm -unroll-threshold=10 ");
   //Opts.append("-mllvm -unroll-count=2 ");
   Opts.append("-mllvm -unroll-allow-partial ");
@@ -915,6 +916,10 @@ bool LE1KernelEvent::run() {
             simulator->readWordData(buffer->addr(), TotalSize,
                                    (unsigned*)buffer->data());
           }
+        }
+        else if (elementType->isFloatTy()) {
+          simulator->readWordData(buffer->addr(), TotalSize,
+                                  (unsigned*)buffer->data());
         }
         else {
           std::cerr << " !!! ERROR - unhandled vector buffer type!!\n";
