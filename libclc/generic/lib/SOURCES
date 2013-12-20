@@ -11,5 +11,7 @@ integer/sub_sat.ll
 integer/sub_sat_impl.ll
 math/hypot.cl
 math/mad.cl
+math/libm/w_pow.c
+math/libm/w_exp2.c
 relational/any.cl
 softfloat/softfloat.c
