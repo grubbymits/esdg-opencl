@@ -72,7 +72,7 @@ public:
             totalKernelTime = 0;
             iterations = 1;
             verify = true;
-            deviceId = device;
+            //deviceId = device;
         }
 
     /**
@@ -90,7 +90,7 @@ public:
             totalKernelTime = 0;
             iterations = 1;
             verify = true;
-            deviceId = device;
+            //deviceId = device;
         }
 
     /**
