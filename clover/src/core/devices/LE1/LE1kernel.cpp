@@ -485,10 +485,6 @@ bool LE1KernelEvent::CompileSource() {
 
     unsigned global_work_size = p_event->global_work_size(i);
     unsigned local_work_size = p_event->local_work_size(i);
-#ifdef DBG_KERNEL
-    std::cerr << "Global work size = " << global_work_size
-      << ", Local work size = " << local_work_size << std::endl;
-#endif
 
     if (global_work_size > 1) {
 
@@ -514,6 +510,12 @@ bool LE1KernelEvent::CompileSource() {
           WorkgroupsPerCore[i] /= cores;
       }
     }
+#ifdef DBG_KERNEL
+    std::cout << "Global work size = " << global_work_size
+      << ", Local work size = " << local_work_size << std::endl;
+    std::cout << "WorkgroupsPerCore = " << WorkgroupsPerCore[i]
+      << std::endl;
+#endif
   }
 
   /*
@@ -722,7 +724,8 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
 
   LauncherString = launcher.str();
 #ifdef DBG_KERNEL
-  std::cerr << LauncherString << std::endl;
+  //std::cerr << LauncherString << std::endl;
+  std::cout << LauncherString << std::endl;
 #endif
 }
 
