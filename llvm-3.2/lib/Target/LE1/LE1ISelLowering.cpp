@@ -289,6 +289,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setLibcallName(RTLIB::OGT_F32, "float32_lt");
   setOperationAction(ISD::SETOGT, MVT::f32, Expand);
 
+  setLibcallName(RTLIB::UO_F32,  "float32_is_signaling_nan");
+
   // FIXME
   //float32_eq_signaling
   //float32_le_quiet

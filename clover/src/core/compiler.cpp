@@ -472,9 +472,12 @@ void Compiler::ScanForSoftfloat() {
             break;
           case llvm::Instruction::FCmp:
           case llvm::Instruction::Select:
+            ParamTys.push_back(Int32Ty);
+            FuncName = "float32_is_signaling_nan";
+            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            ParamTys.push_back(Int32Ty);
             FuncName = "float32_le";
-            ParamTys.push_back(Int32Ty);
-            ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             FuncName = "float32_lt";
@@ -505,6 +508,13 @@ void Compiler::ScanForSoftfloat() {
                 p_module->getOrInsertFunction(FuncName, FuncType);
 
                 FuncName = "float32_add";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                break;
+              case Intrinsic::cos:
+              case Intrinsic::log2:
+                FuncName = "float32_is_signaling_nan";
+                ParamTys.push_back(Int32Ty);
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
               }

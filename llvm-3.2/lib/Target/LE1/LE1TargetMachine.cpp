@@ -120,7 +120,7 @@ bool LE1PassConfig::addPreISel() {
   addPass(createLoopSimplifyPass());
   addPass(createLoopRotatePass());
   addPass(createLoopUnswitchPass());
-  addPass(createLoopUnrollPass(10, 2, 1));
+  //addPass(createLoopUnrollPass(10, 2, 1));
   return true;
 }
 
