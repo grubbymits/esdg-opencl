@@ -516,6 +516,13 @@ void Compiler::ScanForSoftfloat() {
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "float32_le";
+                ParamTys.push_back(Int32Ty);
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "float32_lt";
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
               }
             }

@@ -76,11 +76,20 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
         int FI = MI->getOperand(2).getImm();
 
 
+        MII = MBB->erase(MI);
+        // These pseudo insts do not seem to get eliminated, so sometimes
+        // it's necessary to delete them here
+        if (MII->getOpcode() == LE1::STW_PRED) {
+          int SrcReg2 = MII->getOperand(0).getReg();
+          unsigned FP2 = MII->getOperand(1).getReg();
+          int FI2 = MII->getOperand(2).getImm();
+          if ( (SrcReg == SrcReg2) && (FP == FP2) && (FI == FI2))
+            MII = MBB->erase(MII);
+        }
         BuildMI(*MBB, MII, DL, TII->get(LE1::MFB), TmpReg)
           .addReg(SrcReg);
         BuildMI(*MBB, MII, DL, TII->get(LE1::STW)).addReg(TmpReg)
                 .addReg(FP).addImm(FI);
-        MII = MBB->erase(MI);
       }
       else if(Opc == LE1::LDW_PRED) {
 
@@ -93,12 +102,18 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
         assert(FP == TM.getRegisterInfo()->getFrameRegister(MF) &&
                "Not a Frame Pointer");
         assert(MI->getOperand(2).isImm() && "Not a Frame Index");
-        unsigned FI = MI->getOperand(2).getImm();
+        int FI = MI->getOperand(2).getImm();
 
+        MII = MBB->erase(MI);
+        if (MII->getOpcode() == LE1::STW_PRED) {
+          int SrcReg = MII->getOperand(0).getReg();
+          int FI2 = MII->getOperand(2).getImm();
+          if ((SrcReg == DstReg) && (FI == FI2))
+            MII = MBB->erase(MII);
+        }
         BuildMI(*MBB, MII, DL, TII->get(LE1::LDW), TmpReg)
                 .addReg(FP).addImm(FI);
         BuildMI(*MBB, MII, DL, TII->get(LE1::MTB), DstReg).addReg(TmpReg);
-        MII = MBB->erase(MI);
       }
     }
   }

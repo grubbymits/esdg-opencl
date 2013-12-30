@@ -20,8 +20,10 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #ifdef linux
 # define GL_GLEXT_PROTOTYPES
 #endif // !linux
+#ifdef DISPLAY
 #include <GL/glew.h>
 #include <GL/glut.h>
+#endif
 #include <cstdlib>
 #include <cstdio>
 
@@ -41,6 +43,7 @@ bool zoomIn = false;
 bool zoomOut = false;
 
 // display function 
+#ifdef DISPLAY
 void
 displayFunc()
 {
@@ -263,6 +266,7 @@ mainLoopGL(void)
 {
     glutMainLoop();
 }
+#endif // DISPLAY
 
 // free any allocated resources 
 void
@@ -296,6 +300,7 @@ main(int argc, char * argv[])
         if(clMandelbrot.verifyResults()!=SDK_SUCCESS)
             return SDK_FAILURE;
 
+#ifdef DISPLAY
         // show window if it is not running in quiet mode 
         if(clMandelbrot.showWindow())
         {
@@ -306,6 +311,7 @@ main(int argc, char * argv[])
             initDisplay(argc, argv);
             mainLoopGL();
         }
+#endif
         cleanup();
     }
     return SDK_SUCCESS;

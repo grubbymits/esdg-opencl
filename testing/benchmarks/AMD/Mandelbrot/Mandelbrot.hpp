@@ -121,6 +121,7 @@ public:
             benched = 0;
             enableDouble = false;
             enableFMA = false;
+            verify = true;
         }
 
     /** 
@@ -151,6 +152,7 @@ public:
             benched = 0;
             enableDouble = false;
             enableFMA = false;
+            verify = true;
         }
 
     /**

@@ -91,7 +91,7 @@ public:
   virtual void addMachineSSAOptimization();
   virtual bool addPreSched2();
   virtual bool addPreRegAlloc();
-  //virtual bool addPostRegAlloc();
+  virtual bool addPostRegAlloc();
   virtual bool addPreEmitPass();
 };
 } // namespace
@@ -113,6 +113,7 @@ bool LE1PassConfig::addPreISel() {
   addPass(createPromoteMemoryToRegisterPass());
   addPass(createConstantPropagationPass());
   addPass(createCFGSimplificationPass());
+  addPass(createDeadCodeEliminationPass());
   addPass(createBlockPlacementPass());
   addPass(createDeadStoreEliminationPass());
   addPass(createConstantPropagationPass());
@@ -138,11 +139,10 @@ bool LE1PassConfig::addPreRegAlloc() {
   return false;
 }
 
-/*
 bool LE1PassConfig::addPostRegAlloc() {
-  addPass(createDeadCodeEliminationPass());
+  addPass(&DeadMachineInstructionElimID);
   return true;
-}*/
+}
 
 bool LE1PassConfig::addPreEmitPass()
 {
