@@ -428,21 +428,24 @@ void Compiler::ScanForSoftfloat() {
 #endif
             break;
           case llvm::Instruction::FAdd:
-            FuncName = "float32_add";
+            //FuncName = "float32_add";
+            FuncName = "__addsf3";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FSub:
-            FuncName = "float32_sub";
+            //FuncName = "float32_sub";
+            FuncName = "__subsf3";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FMul:
-            FuncName = "float32_mul";
+            //FuncName = "float32_mul";
+            FuncName = "__mulsf3";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
@@ -457,7 +460,7 @@ void Compiler::ScanForSoftfloat() {
             break;
           case llvm::Instruction::UIToFP:
           case llvm::Instruction::SIToFP:
-            FuncName = "int32_to_float32";
+            FuncName = "__fixunssfsi";
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
@@ -473,17 +476,17 @@ void Compiler::ScanForSoftfloat() {
           case llvm::Instruction::FCmp:
           case llvm::Instruction::Select:
             ParamTys.push_back(Int32Ty);
-            FuncName = "float32_is_signaling_nan";
+            FuncName = "__floatsisf";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             ParamTys.push_back(Int32Ty);
-            FuncName = "float32_le";
+            FuncName = "__unordsf2";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
-            FuncName = "float32_lt";
+            FuncName = "__lesf2";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
-            FuncName = "float32_eq";
+            FuncName = "__gtsf2";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
@@ -501,26 +504,29 @@ void Compiler::ScanForSoftfloat() {
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
               case Intrinsic::fmuladd:
-                FuncName = "float32_mul";
+                FuncName = "__mulsf3";
                 ParamTys.push_back(Int32Ty);
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
 
-                FuncName = "float32_add";
+                FuncName = "__addsf3";
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
               case Intrinsic::cos:
               case Intrinsic::log2:
-                FuncName = "float32_is_signaling_nan";
+                FuncName = "__floatsisf";
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
-                FuncName = "float32_le";
+                FuncName = "__unordsf2";
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__lesf2";
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
-                FuncName = "float32_lt";
+                FuncName = "__gtsf2";
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
@@ -567,86 +573,12 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
 
     if (GV->hasInitializer()) {
       Constant *C = GV->getInitializer();
-      unsigned NumOps = C->getNumOperands();
 #ifdef DBG_COMPILER
-      std::cerr << "Global variable " << name.str() << " has " << NumOps
-        << " values" << std::endl;
+      std::cerr << "Global variable " << name.str() << std::endl;
 #endif
-      if (isa<ConstantInt>(C)) {
-        ConstantInt *CI = cast<ConstantInt>(C);
-#ifdef DBG_COMPILER
-        std::cerr << "global is a ConstantInt" << std::endl;
-#endif
-        llvm::Type *type = CI->getType();
-        if (type->isIntegerTy(32)) {
-
-          EmbeddedData::GlobalVariable<unsigned> *newGlobal =
-            new EmbeddedData::GlobalVariable<unsigned>(name.str());
-
-          newGlobal->addElement(CI->getZExtValue());
-          theData.addWordVariable(newGlobal);
-        }
-        else {
-          std::cerr << "!!ERROR: Unhandled ConstantInt initialiser"
-            << std::endl;
-          return false;
-        }
-      }
-      else if (isa<ConstantArray>(C)) {
-#ifdef DBG_COMPILER
-         std::cerr << "!!ERROR: global is a ConstantArray and not handled"
-           << std::endl;
-         return false;
-#endif
-      }
-      else if (isa<ConstantDataSequential>(C)) {
-        ConstantDataSequential *CDS = cast<ConstantDataSequential>(C);
-        unsigned NumElements = CDS->getNumElements();
-        llvm::Type *type = CDS->getElementType();
-
-#ifdef DBG_COMPILER
-        std::cerr << "global is a ConstantDataSequential with "
-          << NumElements << " elements:" << std::endl;
-        for (unsigned i = 0; i < NumElements; ++i)
-          std::cerr << CDS->getElementAsInteger(i) << std::endl;
-#endif
-
-        if (type->isIntegerTy(32)) {
-
-          EmbeddedData::GlobalVariable<unsigned> *newGlobal =
-            new EmbeddedData::GlobalVariable<unsigned>(name.str());
-
-          for (unsigned i = 0; i < NumElements; ++i)
-            newGlobal->addElement(CDS->getElementAsInteger(i));
-
-          theData.addWordVariable(newGlobal);
-        }
-        else if (type->isIntegerTy(16)) {
-          EmbeddedData::GlobalVariable<unsigned short> *newGlobal =
-            new EmbeddedData::GlobalVariable<unsigned short>(name.str());
-
-          for (unsigned i = 0; i < NumElements; ++i)
-            newGlobal->addElement(CDS->getElementAsInteger(i));
-
-          theData.addHalfVariable(newGlobal);
-        }
-        else if (type->isIntegerTy(8)) {
-          EmbeddedData::GlobalVariable<unsigned char> *newGlobal =
-            new EmbeddedData::GlobalVariable<unsigned char>(name.str());
-
-          for (unsigned i = 0; i < NumElements; ++i)
-            newGlobal->addElement(CDS->getElementAsInteger(i));
-
-          theData.addByteVariable(newGlobal);
-        }
-        else {
-          std::cerr << "!! ERROR: Unhandled initialised global variable"
-            << std::endl;
-          return false;
-        }
-      }
-      else {
-        std::cerr << "!! ERROR: Unhandled initialised global variable"
+      bool success = theData.AddVariable(C, name.str());
+      if (!success) {
+        std::cerr << "!!ERROR: Extraction of global variable failed!"
           << std::endl;
         return false;
       }
@@ -686,6 +618,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   }
 
   llvm::TargetOptions Options;
+  Options.DisableTailCalls = 1;
   std::string FeatureSet;
   std::auto_ptr<llvm::TargetMachine>
     target(TheTarget->createTargetMachine(Triple,

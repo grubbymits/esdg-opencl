@@ -54,7 +54,7 @@ b.rule("LLVM_AS", "%s -o $out $in" % os.path.join(llvm_bindir, "llvm-as"),
        'LLVM-AS $out')
 b.rule("LLVM_LINK", command = llvm_link + " -o $out $in",
        description = 'LLVM-LINK $out')
-b.rule("OPT", command = llvm_opt + " -O3 -o $out $in",
+b.rule("OPT", command = llvm_opt + " -targetlibinfo -no-aa -tbaa -basicaa -globalopt -ipsccp -deadargelim -instcombine -simplifycfg -basiccg -prune-eh -inline -functionattrs -argpromotion -sroa -domtree -early-cse -simplify-libcalls -lazy-value-info -jump-threading -correlated-propagation -simplifycfg -instcombine -simplifycfg -reassociate -domtree -loops -loop-simplify -lcssa -loop-rotate -licm -lcssa -loop-unswitch -instcombine -scalar-evolution -loop-simplify -lcssa -indvars -loop-idiom -loop-deletion -loop-unroll -memdep -gvn -memdep -memcpyopt -sccp -instcombine -lazy-value-info -jump-threading -correlated-propagation -domtree -memdep -dse -adce -simplifycfg -instcombine -strip-dead-prototypes -globaldce -constmerge -preverify -domtree -verify -o $out $in",
        description = 'OPT $out')
 
 c_compiler_rule(b, "LLVM_TOOL_CXX", 'CXX', 'c++', llvm_cxxflags)
@@ -92,6 +92,7 @@ for target in targets:
 
   incdirs = filter(os.path.isdir,
                [os.path.join(srcdir, subdir, 'include') for subdir in subdirs])
+  incdirs.append("/usr/include/x86_64-linux-gnu")
   libdirs = filter(lambda d: os.path.isfile(os.path.join(d, 'SOURCES')),
                    [os.path.join(srcdir, subdir, 'lib') for subdir in subdirs])
 
@@ -124,6 +125,7 @@ for target in targets:
         else:
           b.build(obj, clang_bc_rule, src_file)
 
+  objects.append("generic/lib/newlib/libm/newlib.bc")
   builtins_link_bc = os.path.join(target, 'lib', 'builtins.link.bc')
   builtins_opt_bc = os.path.join(target, 'lib', 'builtins.opt.bc')
   builtins_bc = os.path.join(target, 'lib', 'builtins.bc')

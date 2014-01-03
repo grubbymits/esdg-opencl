@@ -6,6 +6,14 @@
 #include <iostream>
 #include <vector>
 
+namespace llvm {
+  class Constant;
+  class ConstantInt;
+  class ConstantFP;
+  class ConstantArray;
+  class ConstantDataSequential;
+}
+
 namespace Coal {
 
   class EmbeddedData;
@@ -22,6 +30,12 @@ public:
     GlobalVariable(std::string ref) {
       name = ref;
     }
+    bool InsertData(llvm::Constant *C);
+    void AddFPElement(llvm::ConstantFP *CFP);
+    void AddIntElement(llvm::ConstantInt *CI);
+    bool AddElements(llvm::ConstantArray *CA);
+    bool AddElements(llvm::ConstantDataSequential *CDS);
+
     inline void addElement(T element) {
       dataSet.push_back(element);
     }
@@ -71,6 +85,7 @@ public:
     const_byte_iterator;
 
 public:
+  bool AddVariable(llvm::Constant *C, std::string &name);
 
   bool isEmpty() {
     return (globalWords.empty() && globalHalves.empty() && globalBytes.empty());
@@ -101,6 +116,9 @@ public:
 private:
   unsigned totalSize;
 
+  GlobalVariable<unsigned> *newWordVariable;
+  GlobalVariable<unsigned short> *newHalfVariable;
+  GlobalVariable<unsigned char> *newByteVariable;
   std::vector<GlobalVariable<unsigned>*> globalWords;
   std::vector<GlobalVariable<unsigned short>*> globalHalves;
   std::vector<GlobalVariable<unsigned char>*> globalBytes;

@@ -560,6 +560,7 @@ bool LE1KernelEvent::CompileSource() {
   //Opts.append("-mllvm -unroll-count=2 ");
   Opts.append("-mllvm -unroll-allow-partial ");
   Opts.append("-mllvm -unroll-runtime ");
+  Opts.append("-mllvm -disable-tail-calls ");
 
   if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts))
     return false;

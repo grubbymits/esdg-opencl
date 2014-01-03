@@ -216,6 +216,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setOperationAction(ISD::SDIV, MVT::i32, Expand);
   //setOperationAction(ISD::UDIV, MVT::i32, Expand);
 
+    /*
   // Softfloat Floating Point Library Calls
   // Integer to Float conversions
   setLibcallName(RTLIB::SINTTOFP_I32_F32, "int32_to_float32");
@@ -352,6 +353,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(LibFunc::exp2f,  MVT::f32, Expand);
   setOperationAction(LibFunc::exp2,   MVT::f64, Expand);
   setOperationAction(LibFunc::exp2f,  MVT::f64, Expand);
+  */
 
   // FIXME
   //float64_eq_signaling
@@ -1444,6 +1446,8 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
   bool &isTailCall                      = CLI.IsTailCall;
   CallingConv::ID CallConv              = CLI.CallConv;
   bool isVarArg                         = CLI.IsVarArg;
+
+  isTailCall = false;
 
   MachineFunction &MF = DAG.getMachineFunction();
   MachineFrameInfo *MFI = MF.getFrameInfo();

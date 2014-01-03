@@ -1,3 +1,4 @@
+#include "llvm/Attributes.h"
 #include "llvm/ADT/OwningPtr.h"
 #include "llvm/Bitcode/ReaderWriter.h"
 #include "llvm/Function.h"
@@ -48,8 +49,10 @@ int main(int argc, char **argv) {
 
   // Set linkage of every external definition to linkonce_odr.
   for (Module::iterator i = M->begin(), e = M->end(); i != e; ++i) {
-    if (!i->isDeclaration() && i->getLinkage() == GlobalValue::ExternalLinkage)
+    if (!i->isDeclaration() && i->getLinkage() == GlobalValue::ExternalLinkage) {
       i->setLinkage(GlobalValue::LinkOnceODRLinkage);
+      //i->addFnAttr(Attributes::AlwaysInline);
+    }
   }
 
   for (Module::global_iterator i = M->global_begin(), e = M->global_end();
