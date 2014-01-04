@@ -342,7 +342,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
     //PrevKernels.push_back(name);
 #ifdef DBG_COMPILER
-  p_module->dump();
+  //p_module->dump();
   std::cerr << "Leaving Compiler::CompileToBitcode\n";
 #endif
     return true;
@@ -386,7 +386,7 @@ llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
 void Compiler::ScanForSoftfloat() {
 #ifdef DBG_COMPILER
   std::cerr << "Compiler::ScanForSoftFloat" << std::endl << std::endl;
-  p_module->dump();
+  //p_module->dump();
   std::cerr << std::endl;
 #endif
   for (llvm::Module::iterator FI = p_module->begin(),

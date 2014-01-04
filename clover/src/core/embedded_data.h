@@ -85,7 +85,7 @@ public:
     const_byte_iterator;
 
 public:
-  bool AddVariable(llvm::Constant *C, std::string &name);
+  bool AddVariable(llvm::Constant *C, std::string name);
 
   bool isEmpty() {
     return (globalWords.empty() && globalHalves.empty() && globalBytes.empty());

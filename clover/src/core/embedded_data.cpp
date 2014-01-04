@@ -45,12 +45,12 @@ bool EmbeddedData::GlobalVariable<T>::AddElements(ConstantArray *CA) {
 
   if (type->isFloatTy()) {
     for (unsigned i = 0; i < numElements; ++i)
-      this->addFPElement(cast<ConstantFP>(CA->getAggregateElement(i)));
+      this->AddFPElement(cast<ConstantFP>(CA->getAggregateElement(i)));
     success = true;
   }
   else if (type->isIntegerTy()) {
     for (unsigned i = 0; i < numElements; ++i)
-      this->addIntElement(cast<ConstantInt>(CA->getAggregateElement(i)));
+      this->AddIntElement(cast<ConstantInt>(CA->getAggregateElement(i)));
     success = true;
   }
   else
@@ -61,17 +61,22 @@ bool EmbeddedData::GlobalVariable<T>::AddElements(ConstantArray *CA) {
 
 // Think this will handle ConstantDataArrays and ConstantDataVectors
 template <typename T>
-void EmbeddedData::GlobalVariable<T>::AddElements(ConstantDataSequential *CDS) {
-  bool success = false;
+bool EmbeddedData::GlobalVariable<T>::AddElements(ConstantDataSequential *CDS) {
+  unsigned numElements = CDS->getNumElements();
   llvm::Type *type = CDS->getElementType();
 
-  if (type->isIntegerTy || type->isFloatTy()) {
-    unsigned numElements = CDS->getNumElements();
+  if (type->isIntegerTy()) {
     for (unsigned i = 0; i < numElements; ++i)
       addElement(CDS->getElementAsInteger(i));
-    success = true;
+    return true;
   }
-  return success;
+  else if (type->isFloatTy()) {
+    for (unsigned i = 0; i < numElements; ++i)
+      addElement(CDS->getElementAsFloat(i));
+    return true;
+  }
+  else
+    return false;
 }
 
 inline static unsigned getWidth(llvm::Type *type) {
@@ -84,7 +89,10 @@ inline static unsigned getWidth(llvm::Type *type) {
   return 8;
 }
 
-bool EmbeddedData::AddVariable(Constant *C, std::string &name) {
+bool EmbeddedData::AddVariable(Constant *C, std::string name) {
+#ifdef DBG_COMPILER
+  std::cerr << "EmbeddedData::AddVariable" << std::endl;
+#endif
   unsigned bitWidth = 0;
   bool success = true;
   llvm::Type *type;
