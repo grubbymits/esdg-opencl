@@ -515,8 +515,14 @@ void Compiler::ScanForSoftfloat() {
                 break;
               case Intrinsic::cos:
               case Intrinsic::log2:
-                FuncName = "__floatsisf";
                 ParamTys.push_back(Int32Ty);
+                FuncName = "cosf";
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "log2f";
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__floatsisf";
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 FuncName = "__unordsf2";

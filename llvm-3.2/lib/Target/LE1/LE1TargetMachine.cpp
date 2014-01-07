@@ -45,7 +45,7 @@ LE1TargetMachine(const Target &T, StringRef TT,
                   Reloc::Model RM, CodeModel::Model CM,
                   CodeGenOpt::Level OL):
   LLVMTargetMachine(T, TT, CPU, FS, Options, RM, CM, OL),
-  DL("E-p:32:32:32-i8:8:32-i16:16:32-i64:64:64-n32"),
+  DL("E-p:32:32:32-S32-i8:8-i16:16:-i32:32:32-i64:64:64-n32-a:0:32"),
   Subtarget(TT, CPU, FS),
   InstrInfo(Subtarget),
   TLInfo(*this), TSInfo(*this),

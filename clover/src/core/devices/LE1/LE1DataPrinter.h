@@ -41,6 +41,9 @@ private:
                        const void *Data,
                        unsigned Addr,
                        unsigned TotalSize);
+  void WriteStructData(llvm::ConstantStruct* const* CSArray,
+                       unsigned numElements,
+                       unsigned addr);
   void PrintSingleElement(const void *Data,
                           unsigned Addr,
                           unsigned *Offset,

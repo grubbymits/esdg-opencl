@@ -33,14 +33,6 @@ public:
       name = ref;
     }
     bool InsertData(llvm::Constant *C);
-    void AddFPElement(llvm::ConstantFP *CFP);
-    void AddIntElement(llvm::ConstantInt *CI);
-    bool AddElements(llvm::ConstantArray *CA);
-    bool AddElements(llvm::ConstantDataSequential *CDS);
-
-    inline void addElement(T element) {
-      dataSet.push_back(element);
-    }
 
     void setAddr(unsigned addr) {
       varAddr = addr;
@@ -60,9 +52,19 @@ public:
       return name;
     }
 
-    const T* getData() {
+    const T* getData() const {
       return dataSet.data();
     }
+
+  protected:
+    virtual inline void AddElement(T element) {
+      dataSet.push_back(element);
+    }
+  private:
+    bool AddElements(llvm::ConstantArray *CA);
+    bool AddElements(llvm::ConstantDataSequential *CDS);
+    void AddFPElement(llvm::ConstantFP *CFP);
+    void AddIntElement(llvm::ConstantInt *CI);
 
   protected:
     std::string name;
@@ -72,13 +74,21 @@ public:
 
   };
 
-  template <typename T> class GlobalStructVariable : public GlobalVariable<T> {
+  class GlobalStructVariable : public GlobalVariable<llvm::ConstantStruct*> {
   public:
     GlobalStructVariable(std::string ref, llvm::StructType *type) :
-      GlobalVariable<T>(ref), sType(type) { }
+      GlobalVariable<llvm::ConstantStruct*>(ref), sType(type) { }
 
+    bool AddElements(llvm::ConstantArray *CA);
+    inline void AddElement(llvm::ConstantStruct *element) {
+      this->dataSet.push_back(element);
+    }
+    unsigned getNumElements() {
+      return this->dataSet.size();
+    }
     unsigned getSize();
   private:
+    std::string name;
     llvm::StructType *sType;
 
   };
@@ -96,6 +106,8 @@ public:
     const_half_iterator;
   typedef typename std::vector<GlobalVariable<unsigned char>*>::const_iterator
     const_byte_iterator;
+  typedef typename std::vector<GlobalStructVariable*>::const_iterator
+    const_struct_iterator;
 
 public:
   bool AddVariable(llvm::Constant *C, std::string name);
@@ -117,6 +129,11 @@ public:
     return &globalBytes;
   }
 
+  const std::vector<GlobalStructVariable*>* getStructs()
+    const {
+      return &globalStructs;
+    }
+
 private:
   bool AddStructVariable(llvm::Constant *C, std::string &name);
 
@@ -129,7 +146,7 @@ private:
   void addWordVariable(GlobalVariable<unsigned> *var) {
     globalWords.push_back(var);
   }
-  void addStructVariable(GlobalStructVariable<llvm::ConstantStruct*> *var) {
+  void addStructVariable(GlobalStructVariable *var) {
     globalStructs.push_back(var);
   }
 
@@ -139,11 +156,11 @@ private:
   GlobalVariable<unsigned> *newWordVariable;
   GlobalVariable<unsigned short> *newHalfVariable;
   GlobalVariable<unsigned char> *newByteVariable;
-  GlobalStructVariable<llvm::ConstantStruct*> *newStructVariable;
+  GlobalStructVariable *newStructVariable;
   std::vector<GlobalVariable<unsigned>*> globalWords;
   std::vector<GlobalVariable<unsigned short>*> globalHalves;
   std::vector<GlobalVariable<unsigned char>*> globalBytes;
-  std::vector<GlobalStructVariable<llvm::ConstantStruct*> > globalStructs;
+  std::vector<GlobalStructVariable*> globalStructs;
 };
 
 }

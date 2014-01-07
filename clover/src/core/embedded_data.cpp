@@ -7,12 +7,12 @@ using namespace llvm;
 
 template <typename T> inline void
 EmbeddedData::GlobalVariable<T>::AddFPElement(llvm::ConstantFP *CFP) {
-  this->addElement(CFP->getValueAPF().convertToFloat());
+  this->AddElement(CFP->getValueAPF().convertToFloat());
 }
 
 template <typename T> inline void
 EmbeddedData::GlobalVariable<T>::AddIntElement(llvm::ConstantInt *CI) {
-  this->addElement(CI->getZExtValue());
+  this->AddElement(CI->getZExtValue());
 }
 
 template <typename T>
@@ -53,10 +53,6 @@ bool EmbeddedData::GlobalVariable<T>::AddElements(ConstantArray *CA) {
       this->AddIntElement(cast<ConstantInt>(CA->getAggregateElement(i)));
     success = true;
   }
-  else if (type->isStructTy()) {
-    for (unsigned i = 0; i < numElements; ++i)
-      this->AddElement(cast<ConstantStruct>(CA->getAggregateElement(i)));
-  }
   else {
     std::cerr << "Unhandled ConstantArray type - ";
     if (type->isVectorTy())
@@ -76,16 +72,83 @@ bool EmbeddedData::GlobalVariable<T>::AddElements(ConstantDataSequential *CDS) {
 
   if (type->isIntegerTy()) {
     for (unsigned i = 0; i < numElements; ++i)
-      addElement(CDS->getElementAsInteger(i));
+      AddElement(CDS->getElementAsInteger(i));
     return true;
   }
   else if (type->isFloatTy()) {
     for (unsigned i = 0; i < numElements; ++i)
-      addElement(CDS->getElementAsFloat(i));
+      AddElement(CDS->getElementAsFloat(i));
     return true;
   }
   else
     return false;
+}
+
+bool EmbeddedData::GlobalStructVariable::AddElements(
+  llvm::ConstantArray *CA) {
+  unsigned numElements = CA->getType()->getNumElements();
+  for (unsigned i = 0; i < numElements; ++i) {
+    ConstantStruct *element =
+      (cast<ConstantStruct>(CA->getAggregateElement(i)));
+    this->AddElement(element);
+  }
+  return true;
+}
+
+unsigned EmbeddedData::GlobalStructVariable::getSize() {
+  // const TargetData *TD = TM.getTargetData();
+  // unsigned size = TD->getTypeAllocSize(sType);
+  unsigned numElements = sType->getNumElements();
+  unsigned *elementBytes = new unsigned[numElements];
+  ConstantStruct *CS = this->dataSet.front();
+
+  for (unsigned i = 0; i < numElements; ++i) {
+    llvm::Type *type = CS->getAggregateElement(i)->getType();
+    if (type->isFloatTy() || type->isIntegerTy(32))
+      elementBytes[i] = 4;
+    else if (type->isIntegerTy(16))
+      elementBytes[i] = 2;
+    else if (type->isIntegerTy(8))
+      elementBytes[i] = 1;
+    else {
+      std::cerr << "Unhandled type when calculating GlobalStructVariable size"
+        << std::endl;
+      return -1;
+    }
+  }
+  unsigned elementSize = elementBytes[0];
+  for (unsigned i = 1; i < numElements; ++i) {
+    if (elementBytes[i] == 4) {
+      do {
+        ++elementSize;
+      } while (elementSize % 4);
+      elementSize += 4;
+    }
+    if (elementBytes[i] == 2) {
+      do {
+        ++elementSize;
+      } while (elementSize % 2);
+      elementSize += 2;
+    }
+    else
+      ++elementSize;
+  }
+  // FIXME Not sure how llvm will actually pack instances of structs. I have set
+  // aggregate alignment to 32-bit in our backend.
+  //  struct {
+  //    int;
+  //    int;
+  //    char;
+  //  }
+  //  struct {
+  //    short;
+  //    int;
+  //    short;
+  //  }
+  if (numElements > 1) {
+    elementSize += (elementBytes[numElements-1] + elementBytes[0]) % 4;
+  }
+  return elementSize * this->dataSet.size();
 }
 
 inline static unsigned getWidth(llvm::Type *type) {
@@ -136,7 +199,8 @@ bool EmbeddedData::AddVariable(Constant *C, std::string name) {
     type = (cast<ConstantDataSequential>(C))->getElementType();
     bitWidth = getWidth(type);
   }
-  // ConstantStruct
+  else if (isa<ConstantStruct>(C))
+    return AddStructVariable(C, name);
   // ConstantVector
   // ConstantExpr
   else {
@@ -174,23 +238,30 @@ bool EmbeddedData::AddStructVariable(Constant *C, std::string &name) {
   ConstantStruct *CS = NULL;
   bool success = false;
 
-  if (isa<ConstantStruct>(C))
+  if (isa<ConstantStruct>(C)) {
     CS = cast<ConstantStruct>(C);
+    StructType *sType = CS->getType();
+    newStructVariable = new GlobalStructVariable(name, sType);
+    newStructVariable->AddElement(CS);
+    success = true;
+  }
   else if (isa<ConstantArray>(C)) {
     ConstantArray *CA = cast<ConstantArray>(C);
     CS = cast<ConstantStruct>(CA->getAggregateElement(unsigned(0)));
+    StructType *sType = CS->getType();
+    newStructVariable = new GlobalStructVariable(name, sType);
+    success = newStructVariable->AddElements(CA);
   }
   else {
     std::cerr << "Unhandled container of ConstantStruct" << std::endl;
     return false;
   }
-  StructType *sType = CS->getType();
-  newStructVariable = new GlobalStructVariable<ConstructStruct*>(name, sType);
-  success = newStructVariable->InsertData(C);
   if (success)
     addStructVariable(newStructVariable);
+
   return success;
 }
+
 
 unsigned EmbeddedData::getTotalSize() {
 

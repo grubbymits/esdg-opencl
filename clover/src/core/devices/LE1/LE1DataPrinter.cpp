@@ -7,6 +7,7 @@
 #include "../../kernel.h"
 #include "../../memobject.h"
 
+#include <llvm/Constants.h>
 #include <llvm/Type.h>
 #include <llvm/DerivedTypes.h>
 
@@ -14,6 +15,7 @@
 #include <iostream>
 
 using namespace Coal;
+using namespace llvm;
 
 static std::string ConvertToBinary(unsigned int value) {
   std::string binary_string;
@@ -133,6 +135,16 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
   while (CurrentAddr % 4)
     ++CurrentAddr;
 
+  for (EmbeddedData::const_struct_iterator
+       SI = embeddedData.getStructs()->begin(),
+       SE = embeddedData.getStructs()->end(); SI != SE; ++SI) {
+    (*SI)->setAddr(CurrentAddr);
+    CurrentAddr += (*SI)->getSize();
+  }
+
+  while (CurrentAddr % 4)
+    ++CurrentAddr;
+
   // Calculate buffer addresses
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
@@ -215,6 +227,12 @@ bool LE1DataPrinter::AppendDataArea() {
        WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
     Output << std::hex << std::setw(6) << std::setfill('0') << (*WI)->getAddr()
       << " - " << (*WI)->getName() << std::endl;
+  }
+  for (EmbeddedData::const_struct_iterator I =
+       embeddedData.getStructs()->begin(), E = embeddedData.getStructs()->end();
+       I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
   }
 
   // Print labels for buffers
@@ -346,6 +364,15 @@ bool LE1DataPrinter::AppendDataArea() {
     size_t totalBytes = (*WI)->getSize();
     const unsigned char* data = (*WI)->getData();
     PrintData(data, PrintAddr, 0, sizeof(char), totalBytes);
+    PrintAddr += totalBytes;
+  }
+  for (EmbeddedData::const_struct_iterator
+       I = embeddedData.getStructs()->begin(),
+       E = embeddedData.getStructs()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    llvm::ConstantStruct* const *CS = (*I)->getData();
+    unsigned numElements = (*I)->getNumElements();
+    WriteStructData(CS, numElements, PrintAddr);
     PrintAddr += totalBytes;
   }
 
@@ -546,6 +573,56 @@ void LE1DataPrinter::WriteStructData(llvm::StructType *StructArg,
       else if (ElementType->isFloatTy())
         PrintSingleElement(Data, Addr, &DataWritten, sizeof(float));
     }
+  }
+}
+
+void LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
+                                     unsigned numElements,
+                                     unsigned addr) {
+  llvm::StructType *type = CSArray[0]->getType();
+  unsigned numFields = type->getNumElements();
+
+  for (unsigned element = 0; element < numElements; ++element) {
+    llvm::ConstantStruct *CS = CSArray[element];
+
+  // We just reset this value after each call to PrintSingle since it's
+  // supposed to be used as a offset into a big lump of data. Hopefully
+  // increasing the base address should work to maintain addresses.
+  unsigned dataWritten = 0;
+
+  for (unsigned i = 0; i < numFields; ++i) {
+    llvm::Type *elementType = type->getTypeAtIndex(i);
+
+    if (elementType->getTypeID() == llvm::Type::IntegerTyID) {
+      llvm::ConstantInt *CI =
+        llvm::cast<llvm::ConstantInt>(CS->getAggregateElement(i));
+      if (elementType->isIntegerTy(32)) {
+        unsigned data = CI->getZExtValue();
+        PrintSingleElement(&data, addr, &dataWritten, sizeof(int));
+        addr += dataWritten;
+        dataWritten = 0;
+      }
+      else if (elementType->isIntegerTy(16)) {
+        unsigned short data = CI->getZExtValue();
+        PrintSingleElement(&data, addr, &dataWritten, sizeof(short));
+        addr += dataWritten;
+        dataWritten = 0;
+      }
+      else if (elementType->isIntegerTy(8)) {
+        unsigned char data = CI->getZExtValue();
+        PrintSingleElement(&data, addr, &dataWritten, sizeof(char));
+        addr += dataWritten;
+        dataWritten = 0;
+      }
+    }
+    else if (elementType->isFloatTy()) {
+      ConstantFP *CFP = cast<ConstantFP>(CS->getAggregateElement(i));
+      float data = CFP->getValueAPF().convertToFloat();
+      PrintSingleElement(&data, addr, &dataWritten, sizeof(float));
+      addr += dataWritten;
+      dataWritten = 0;
+    }
+  }
   }
 }
 
