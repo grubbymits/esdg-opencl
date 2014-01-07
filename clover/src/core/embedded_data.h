@@ -12,6 +12,8 @@ namespace llvm {
   class ConstantFP;
   class ConstantArray;
   class ConstantDataSequential;
+  class ConstantStruct;
+  class StructType;
 }
 
 namespace Coal {
@@ -44,7 +46,7 @@ public:
       varAddr = addr;
     }
 
-    unsigned getSize() {
+    virtual unsigned getSize() {
       totalSize = dataSet.size() * sizeof(T);
       totalSize += totalSize % 4;
       return totalSize;
@@ -62,11 +64,22 @@ public:
       return dataSet.data();
     }
 
-  private:
+  protected:
     std::string name;
     unsigned varAddr;
     std::vector<T> dataSet;
     unsigned totalSize;
+
+  };
+
+  template <typename T> class GlobalStructVariable : public GlobalVariable<T> {
+  public:
+    GlobalStructVariable(std::string ref, llvm::StructType *type) :
+      GlobalVariable<T>(ref), sType(type) { }
+
+    unsigned getSize();
+  private:
+    llvm::StructType *sType;
 
   };
 
@@ -90,15 +103,6 @@ public:
   bool isEmpty() {
     return (globalWords.empty() && globalHalves.empty() && globalBytes.empty());
   }
-  void addByteVariable(GlobalVariable<unsigned char> *var) {
-    globalBytes.push_back(var);
-  }
-  void addHalfVariable(GlobalVariable<unsigned short> *var) {
-    globalHalves.push_back(var);
-  }
-  void addWordVariable(GlobalVariable<unsigned> *var) {
-    globalWords.push_back(var);
-  }
   unsigned getTotalSize();
 
   const std::vector<GlobalVariable<unsigned>*>* getWords() const {
@@ -114,14 +118,32 @@ public:
   }
 
 private:
+  bool AddStructVariable(llvm::Constant *C, std::string &name);
+
+  void addByteVariable(GlobalVariable<unsigned char> *var) {
+    globalBytes.push_back(var);
+  }
+  void addHalfVariable(GlobalVariable<unsigned short> *var) {
+    globalHalves.push_back(var);
+  }
+  void addWordVariable(GlobalVariable<unsigned> *var) {
+    globalWords.push_back(var);
+  }
+  void addStructVariable(GlobalStructVariable<llvm::ConstantStruct*> *var) {
+    globalStructs.push_back(var);
+  }
+
+private:
   unsigned totalSize;
 
   GlobalVariable<unsigned> *newWordVariable;
   GlobalVariable<unsigned short> *newHalfVariable;
   GlobalVariable<unsigned char> *newByteVariable;
+  GlobalStructVariable<llvm::ConstantStruct*> *newStructVariable;
   std::vector<GlobalVariable<unsigned>*> globalWords;
   std::vector<GlobalVariable<unsigned short>*> globalHalves;
   std::vector<GlobalVariable<unsigned char>*> globalBytes;
+  std::vector<GlobalStructVariable<llvm::ConstantStruct*> > globalStructs;
 };
 
 }

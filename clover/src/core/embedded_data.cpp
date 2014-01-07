@@ -53,8 +53,17 @@ bool EmbeddedData::GlobalVariable<T>::AddElements(ConstantArray *CA) {
       this->AddIntElement(cast<ConstantInt>(CA->getAggregateElement(i)));
     success = true;
   }
-  else
-    std::cerr << "Unhandled ConstantArray type" << std::endl;
+  else if (type->isStructTy()) {
+    for (unsigned i = 0; i < numElements; ++i)
+      this->AddElement(cast<ConstantStruct>(CA->getAggregateElement(i)));
+  }
+  else {
+    std::cerr << "Unhandled ConstantArray type - ";
+    if (type->isVectorTy())
+      std::cerr << "vector" << std::endl;
+    else
+      std::cerr << std::endl;
+  }
 
   return success;
 }
@@ -115,6 +124,9 @@ bool EmbeddedData::AddVariable(Constant *C, std::string name) {
   std::cerr << "Global is ConstantArray" << std::endl;
 #endif
     type = (cast<ConstantArray>(C))->getType()->getElementType();
+    if (type->isStructTy()) {
+      return AddStructVariable(C, name);
+    }
     bitWidth = getWidth(type);
   }
   else if (isa<ConstantDataSequential>(C)) {
@@ -152,6 +164,31 @@ bool EmbeddedData::AddVariable(Constant *C, std::string name) {
     break;
   }
 
+  return success;
+}
+
+bool EmbeddedData::AddStructVariable(Constant *C, std::string &name) {
+#ifdef DBG_COMPILER
+  std::cerr << "Elements are Struct" << std::endl;
+#endif
+  ConstantStruct *CS = NULL;
+  bool success = false;
+
+  if (isa<ConstantStruct>(C))
+    CS = cast<ConstantStruct>(C);
+  else if (isa<ConstantArray>(C)) {
+    ConstantArray *CA = cast<ConstantArray>(C);
+    CS = cast<ConstantStruct>(CA->getAggregateElement(unsigned(0)));
+  }
+  else {
+    std::cerr << "Unhandled container of ConstantStruct" << std::endl;
+    return false;
+  }
+  StructType *sType = CS->getType();
+  newStructVariable = new GlobalStructVariable<ConstructStruct*>(name, sType);
+  success = newStructVariable->InsertData(C);
+  if (success)
+    addStructVariable(newStructVariable);
   return success;
 }
 
