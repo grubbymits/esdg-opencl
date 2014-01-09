@@ -24,4 +24,4 @@ string.bc: $(LIBC_SRC)
 	$(CC) $(CFLAGS) $(INC) $< -o $@
 
 clean:
-	rm common/*.o math/*.o math.bc common.bc newlib.bc
+	rm libm/common/*.o libm/math/*.o math.bc common.bc newlib.bc

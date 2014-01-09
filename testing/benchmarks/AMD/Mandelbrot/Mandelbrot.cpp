@@ -1557,7 +1557,7 @@ int Mandelbrot::verifyResults()
         }
         else
         {
-            std::cout<<"Failed\n" << std::endl;
+            std::cout<<"Failed: ratio = " << ratio << std::endl;
             return SDK_FAILURE;
         }
 

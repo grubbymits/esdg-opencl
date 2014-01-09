@@ -372,8 +372,10 @@ bool LE1DataPrinter::AppendDataArea() {
     size_t totalBytes = (*I)->getSize();
     llvm::ConstantStruct* const *CS = (*I)->getData();
     unsigned numElements = (*I)->getNumElements();
-    if (!WriteStructData(CS, numElements, PrintAddr))
+    if (!WriteStructData(CS, numElements, PrintAddr)) {
+      std::cerr << "Failed for " << (*I)->getName() << std::endl;
       return false;
+    }
     PrintAddr += totalBytes;
   }
 
@@ -589,45 +591,72 @@ bool LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
   // We just reset this value after each call to PrintSingle since it's
   // supposed to be used as a offset into a big lump of data. Hopefully
   // increasing the base address should work to maintain addresses.
-  unsigned dataWritten = 0;
-
-  for (unsigned i = 0; i < numFields; ++i) {
-    llvm::Type *elementType = type->getTypeAtIndex(i);
-
-    if (elementType->getTypeID() == llvm::Type::IntegerTyID) {
-      llvm::ConstantInt *CI =
-        llvm::cast<llvm::ConstantInt>(CS->getAggregateElement(i));
-      if (elementType->isIntegerTy(32)) {
-        unsigned data = CI->getZExtValue();
-        PrintSingleElement(&data, addr, &dataWritten, sizeof(int));
-        addr += dataWritten;
-        dataWritten = 0;
-      }
-      else if (elementType->isIntegerTy(16)) {
-        unsigned short data = CI->getZExtValue();
-        PrintSingleElement(&data, addr, &dataWritten, sizeof(short));
-        addr += dataWritten;
-        dataWritten = 0;
-      }
-      else if (elementType->isIntegerTy(8)) {
-        unsigned char data = CI->getZExtValue();
-        PrintSingleElement(&data, addr, &dataWritten, sizeof(char));
-        addr += dataWritten;
-        dataWritten = 0;
-      }
-    }
-    else if (elementType->isFloatTy()) {
-      ConstantFP *CFP = cast<ConstantFP>(CS->getAggregateElement(i));
-      float data = CFP->getValueAPF().convertToFloat();
-      PrintSingleElement(&data, addr, &dataWritten, sizeof(float));
-      addr += dataWritten;
-      dataWritten = 0;
-    }
-    else {
-      std::cerr << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
-      return false;
+    for (unsigned i = 0; i < numFields; ++i) {
+      llvm::Type *fieldType = type->getTypeAtIndex(i);
+      if (!WriteField(CS->getAggregateElement(i), fieldType, &addr))
+        return false;
     }
   }
+  return true;
+}
+
+bool LE1DataPrinter::WriteField(llvm::Constant *C, llvm::Type *fieldType,
+                                unsigned *addr) {
+  unsigned dataWritten = 0;
+
+  if (fieldType->getTypeID() == llvm::Type::IntegerTyID) {
+    llvm::ConstantInt *CI = llvm::cast<llvm::ConstantInt>(C);
+    if (fieldType->isIntegerTy(32)) {
+      unsigned data = CI->getZExtValue();
+      PrintSingleElement(&data, *addr, &dataWritten, sizeof(int));
+      *addr += dataWritten;
+      dataWritten = 0;
+    }
+    else if (fieldType->isIntegerTy(16)) {
+      unsigned short data = CI->getZExtValue();
+      PrintSingleElement(&data, *addr, &dataWritten, sizeof(short));
+      *addr += dataWritten;
+      dataWritten = 0;
+    }
+    else if (fieldType->isIntegerTy(8)) {
+      unsigned char data = 0;
+      if (!isa<UndefValue>(CI))
+        data = CI->getZExtValue();
+      PrintSingleElement(&data, *addr, &dataWritten, sizeof(char));
+      *addr += dataWritten;
+      dataWritten = 0;
+    }
+  }
+  else if (fieldType->isFloatTy()) {
+    ConstantFP *CFP = cast<ConstantFP>(C);
+    float data = CFP->getValueAPF().convertToFloat();
+    PrintSingleElement(&data, *addr, &dataWritten, sizeof(float));
+    *addr += dataWritten;
+    dataWritten = 0;
+  }
+  else if (fieldType->isArrayTy()) {
+    ConstantArray *CA = cast<ConstantArray>(C);
+    llvm::ArrayType *arrayType = CA->getType();
+    llvm::Type *elementType = arrayType->getElementType();
+    unsigned numArrayElements = arrayType->getNumElements();
+    for (unsigned i = 0; i < numArrayElements; ++i) {
+      if (!WriteField(CA->getAggregateElement(i), elementType, addr))
+        return false;
+    }
+  }
+  else if (fieldType->isStructTy()) {
+    ConstantStruct *CS = cast<ConstantStruct>(C);
+    llvm::StructType *structType = CS->getType();
+    unsigned numFields = structType->getNumElements();
+    for (unsigned i = 0; i < numFields; ++i) {
+      llvm::Type *type = structType->getTypeAtIndex(i);
+      if (!WriteField(CS->getAggregateElement(i), type, addr))
+        return false;
+    }
+  }
+  else {
+    std::cerr << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
+    return false;
   }
   return true;
 }

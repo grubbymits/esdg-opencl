@@ -379,6 +379,11 @@ llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
     return NULL;
   }
 
+#ifdef DBG_COMPILER
+  std::string error;
+  llvm::raw_fd_ostream bytecode("final.bc", error);
+  llvm::WriteBitcodeToFile(ld.getModule(), bytecode);
+#endif
   return ld.releaseModule();
 
 }
@@ -386,7 +391,6 @@ llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
 void Compiler::ScanForSoftfloat() {
 #ifdef DBG_COMPILER
   std::cerr << "Compiler::ScanForSoftFloat" << std::endl << std::endl;
-  //p_module->dump();
   std::cerr << std::endl;
 #endif
   for (llvm::Module::iterator FI = p_module->begin(),
@@ -413,22 +417,24 @@ void Compiler::ScanForSoftfloat() {
         std::vector<llvm::Type*> ParamTys;
         llvm::Type *Int32Ty =
           llvm::Type::getInt32Ty(p_module->getContext());
+        llvm::Type *Float32Ty =
+          llvm::Type::getFloatTy(p_module->getContext());
         llvm::Attributes Attrs;
           //= llvm::Attributes::get(CGM.getLLVMContext(),
             //                      llvm::Attributes::NoUnwind);
 
-        if (II->getType()->getTypeID() == llvm::Type::FloatTyID) {
-          std::cerr << "Found FP instruction" << std::endl;
+        //if (II->getType()->getTypeID() == llvm::Type::FloatTyID) {
+          //std::cerr << "Found FP instruction" << std::endl;
 
           switch(I->getOpcode()) {
           default:
 #ifdef DBG_COMPILER
-            std::cerr << "UNHANDLED FP INSTRUCTION: " << I->getOpcodeName()
-              << std::endl;
+            if (II->getType()->getTypeID() == llvm::Type::FloatTyID)
+              std::cerr << "UNHANDLED FP INSTRUCTION: " << I->getOpcodeName()
+                << std::endl;
 #endif
             break;
           case llvm::Instruction::FAdd:
-            //FuncName = "float32_add";
             FuncName = "__addsf3";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
@@ -436,7 +442,6 @@ void Compiler::ScanForSoftfloat() {
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FSub:
-            //FuncName = "float32_sub";
             FuncName = "__subsf3";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
@@ -444,7 +449,6 @@ void Compiler::ScanForSoftfloat() {
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FMul:
-            //FuncName = "float32_mul";
             FuncName = "__mulsf3";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
@@ -463,6 +467,8 @@ void Compiler::ScanForSoftfloat() {
             ParamTys.push_back(Int32Ty);
             FuncName = "__fixunssfsi";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "__floatunsisf";
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FPTrunc:
@@ -504,7 +510,16 @@ void Compiler::ScanForSoftfloat() {
               default:
                 break;
               case Intrinsic::sqrt:
-                FuncName = "float32_sqrt";
+                FuncName = "sqrtf";
+#ifdef DBG_COMPILER
+                std::cerr << "Intrinsic::sqrt" << std::endl;
+#endif
+                ParamTys.push_back(Float32Ty);
+                FuncType = llvm::FunctionType::get(Float32Ty, ParamTys, false);
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                break;
+              case Intrinsic::exp2:
+                FuncName = "exp2f";
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
@@ -563,12 +578,6 @@ void Compiler::ScanForSoftfloat() {
               }
             }
             break;
-          }
-        }
-        else {
-          switch(I->getOpcode()) {
-          default:
-            break;
           case llvm::Instruction::FPToSI:
           case llvm::Instruction::FPToUI:
             ParamTys.push_back(Int32Ty);
@@ -576,7 +585,6 @@ void Compiler::ScanForSoftfloat() {
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
-          }
         }
       }
     }
@@ -597,6 +605,8 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData *theData) {
 #ifdef DBG_COMPILER
     std::cerr << "GV = " << name.str() << std::endl;
 #endif
+    if (GV->getNumUses() == 0)
+      continue;
 
     if (isa<Function>(GV))
       continue;

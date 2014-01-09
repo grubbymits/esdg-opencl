@@ -44,6 +44,9 @@ private:
   bool WriteStructData(llvm::ConstantStruct* const* CSArray,
                        unsigned numElements,
                        unsigned addr);
+  bool WriteField(llvm::Constant *C,
+                  llvm::Type *fieldType,
+                  unsigned *addr);
   void PrintSingleElement(const void *Data,
                           unsigned Addr,
                           unsigned *Offset,

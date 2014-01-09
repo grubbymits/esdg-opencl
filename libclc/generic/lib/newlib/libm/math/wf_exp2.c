@@ -30,7 +30,7 @@
 {
   return powf(2.0, x);
 }
-
+/*
 #ifdef _DOUBLE_IS_32BITS
 
 #ifdef __STDC__
@@ -43,4 +43,6 @@
 	return (double) exp2f((float) x);
 }
 
-#endif /* defined(_DOUBLE_IS_32BITS) */
+#endif
+*/
+

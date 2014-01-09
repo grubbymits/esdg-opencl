@@ -461,6 +461,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::INTRINSIC_W_CHAIN, MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
 
+  setOperationAction(ISD::FSQRT, MVT::f32, Expand);
+
   // FIXME don't know what this should be
   setMinFunctionAlignment(2);
 

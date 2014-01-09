@@ -57,8 +57,9 @@ int main(int argc, char **argv) {
 
   for (Module::global_iterator i = M->global_begin(), e = M->global_end();
        i != e; ++i) {
-    if (!i->isDeclaration() && i->getLinkage() == GlobalValue::ExternalLinkage)
-      i->setLinkage(GlobalValue::LinkOnceODRLinkage);
+    if (!i->isDeclaration() && i->getLinkage() == GlobalValue::ExternalLinkage) {
+      i->setLinkage(GlobalValue::LinkOnceAnyLinkage);
+    }
   }
 
   if (OutputFilename.empty()) {

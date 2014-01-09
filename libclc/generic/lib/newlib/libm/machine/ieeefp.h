@@ -108,7 +108,7 @@
 #endif
 
 #ifdef __LE1__
-#define __IEEE_BIG_ENDIAN
+#define _IEEE_LIBM
 #endif
 
 #ifdef __sparc__
