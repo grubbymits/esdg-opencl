@@ -22,7 +22,7 @@ namespace Coal {
 class LE1DataPrinter {
 public:
   LE1DataPrinter(LE1Device *device,
-                 EmbeddedData &data,
+                 EmbeddedData *data,
                  KernelEvent *event,
                  const char* sourceName);
   bool AppendDataArea();
@@ -41,7 +41,7 @@ private:
                        const void *Data,
                        unsigned Addr,
                        unsigned TotalSize);
-  void WriteStructData(llvm::ConstantStruct* const* CSArray,
+  bool WriteStructData(llvm::ConstantStruct* const* CSArray,
                        unsigned numElements,
                        unsigned addr);
   void PrintSingleElement(const void *Data,
@@ -54,7 +54,7 @@ private:
   private:
     KernelEvent *p_event;
     LE1Device *TheDevice;
-    EmbeddedData embeddedData;
+    EmbeddedData *embeddedData;
     unsigned NumCores;
     Kernel *TheKernel;
     std::vector<unsigned> ArgAddrs;

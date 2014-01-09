@@ -125,7 +125,7 @@ for target in targets:
         else:
           b.build(obj, clang_bc_rule, src_file)
 
-  objects.append("generic/lib/newlib/libm/newlib.bc")
+  objects.append("generic/lib/newlib/newlib.bc")
   builtins_link_bc = os.path.join(target, 'lib', 'builtins.link.bc')
   builtins_opt_bc = os.path.join(target, 'lib', 'builtins.opt.bc')
   builtins_bc = os.path.join(target, 'lib', 'builtins.bc')

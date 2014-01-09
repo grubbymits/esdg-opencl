@@ -87,7 +87,7 @@ class Compiler
 
         llvm::Module *LinkRuntime(llvm::Module *M);
 
-        bool ExtractKernelData(llvm::Module *M, EmbeddedData &theData);
+        bool ExtractKernelData(llvm::Module *M, EmbeddedData *theData);
 
         std::string &getFinalSource() { return FinalSource; }
 

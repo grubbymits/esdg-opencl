@@ -366,6 +366,7 @@ LE1KernelEvent::LE1KernelEvent(LE1Device *device, KernelEvent *event)
 
         p_num_wg *= p_max_work_groups[i] + 1;
     }
+    embeddedData = new EmbeddedData(device);
 #ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::LE1KernelEvent\n";
 #endif
@@ -380,6 +381,8 @@ LE1KernelEvent::~LE1KernelEvent()
 
     if (p_kernel_args)
         std::free(p_kernel_args);
+
+    delete embeddedData;
 
 #ifdef DBG_KERNEL
   std::cerr << "Leaving LE1KernelEvent::~LE1KernelEvent\n";

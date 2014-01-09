@@ -79,7 +79,7 @@ static void ConvertToBinary(std::string *binary_string,
 }
 
 LE1DataPrinter::LE1DataPrinter(LE1Device *device,
-                               EmbeddedData &data,
+                               EmbeddedData *data,
                                KernelEvent *event,
                                const char* sourceName) {
   p_event = event;
@@ -101,7 +101,7 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 
   // Place the embedded data before the buffers.
 #ifdef DBG_KERNEL
-  std::cerr << "Size of embedded data = " << embeddedData.getTotalSize()
+  std::cerr << "Size of embedded data = " << embeddedData->getTotalSize()
     << std::endl;
 #endif
 
@@ -110,25 +110,25 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     ++CurrentAddr;
 
   // Calculate the address for any embedded data
-  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
-       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
+  for (EmbeddedData::const_word_iterator I = embeddedData->getWords()->begin(),
+       E = embeddedData->getWords()->end(); I != E; ++I) {
 
-    (*WI)->setAddr(CurrentAddr);
-    CurrentAddr += (*WI)->getSize();
+    (*I)->setAddr(CurrentAddr);
+    CurrentAddr += (*I)->getSize();
   }
 
-  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
-       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
+  for (EmbeddedData::const_half_iterator I = embeddedData->getHalves()->begin(),
+       E = embeddedData->getHalves()->end(); I != E; ++I) {
 
-    (*WI)->setAddr(CurrentAddr);
-    CurrentAddr += (*WI)->getSize();
+    (*I)->setAddr(CurrentAddr);
+    CurrentAddr += (*I)->getSize();
   }
 
-  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
-       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
+  for (EmbeddedData::const_byte_iterator I = embeddedData->getBytes()->begin(),
+       E = embeddedData->getBytes()->end(); I != E; ++I) {
 
-    (*WI)->setAddr(CurrentAddr);
-    CurrentAddr += (*WI)->getSize();
+    (*I)->setAddr(CurrentAddr);
+    CurrentAddr += (*I)->getSize();
   }
 
   // Align the CurrentAddr
@@ -136,8 +136,8 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
     ++CurrentAddr;
 
   for (EmbeddedData::const_struct_iterator
-       SI = embeddedData.getStructs()->begin(),
-       SE = embeddedData.getStructs()->end(); SI != SE; ++SI) {
+       SI = embeddedData->getStructs()->begin(),
+       SE = embeddedData->getStructs()->end(); SI != SE; ++SI) {
     (*SI)->setAddr(CurrentAddr);
     CurrentAddr += (*SI)->getSize();
   }
@@ -213,24 +213,24 @@ bool LE1DataPrinter::AppendDataArea() {
   Output << "000038 - group_id" << std::endl;
 
   // Print labels for any embedded data
-  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
-       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(6) << std::setfill('0') << (*WI)->getAddr()
-      << " - " << (*WI)->getName() << std::endl;
+  for (EmbeddedData::const_word_iterator I = embeddedData->getWords()->begin(),
+       E = embeddedData->getWords()->end(); I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
   }
-  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
-       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(6) << std::setfill('0') << (*WI)->getAddr()
-      << " - " << (*WI)->getName() << std::endl;
+  for (EmbeddedData::const_half_iterator I = embeddedData->getHalves()->begin(),
+       E = embeddedData->getHalves()->end(); I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
   }
-  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
-       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(6) << std::setfill('0') << (*WI)->getAddr()
-      << " - " << (*WI)->getName() << std::endl;
+  for (EmbeddedData::const_byte_iterator I = embeddedData->getBytes()->begin(),
+       E = embeddedData->getBytes()->end(); I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
   }
   for (EmbeddedData::const_struct_iterator I =
-       embeddedData.getStructs()->begin(), E = embeddedData.getStructs()->end();
-       I != E; ++I) {
+       embeddedData->getStructs()->begin(),
+       E = embeddedData->getStructs()->end(); I != E; ++I) {
     Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
       << " - " << (*I)->getName() << std::endl;
   }
@@ -343,36 +343,37 @@ bool LE1DataPrinter::AppendDataArea() {
   FinalSource.close();
 
   // Print Embedded Data
-  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
-       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
-    size_t totalBytes = (*WI)->getSize();
-    const unsigned* data = (*WI)->getData();
+  for (EmbeddedData::const_word_iterator I = embeddedData->getWords()->begin(),
+       E = embeddedData->getWords()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    const unsigned* data = (*I)->getData();
     PrintData(data, PrintAddr, 0, sizeof(int), totalBytes);
     PrintAddr += totalBytes;
   }
 
-  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
-       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
-    size_t totalBytes = (*WI)->getSize();
-    const unsigned short* data = (*WI)->getData();
+  for (EmbeddedData::const_half_iterator I = embeddedData->getHalves()->begin(),
+       E = embeddedData->getHalves()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    const unsigned short* data = (*I)->getData();
     PrintData(data, PrintAddr, 0, sizeof(short), totalBytes);
     PrintAddr += totalBytes;
   }
 
-  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
-       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
-    size_t totalBytes = (*WI)->getSize();
-    const unsigned char* data = (*WI)->getData();
+  for (EmbeddedData::const_byte_iterator I = embeddedData->getBytes()->begin(),
+       E = embeddedData->getBytes()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    const unsigned char* data = (*I)->getData();
     PrintData(data, PrintAddr, 0, sizeof(char), totalBytes);
     PrintAddr += totalBytes;
   }
   for (EmbeddedData::const_struct_iterator
-       I = embeddedData.getStructs()->begin(),
-       E = embeddedData.getStructs()->end(); I != E; ++I) {
+       I = embeddedData->getStructs()->begin(),
+       E = embeddedData->getStructs()->end(); I != E; ++I) {
     size_t totalBytes = (*I)->getSize();
     llvm::ConstantStruct* const *CS = (*I)->getData();
     unsigned numElements = (*I)->getNumElements();
-    WriteStructData(CS, numElements, PrintAddr);
+    if (!WriteStructData(CS, numElements, PrintAddr))
+      return false;
     PrintAddr += totalBytes;
   }
 
@@ -576,7 +577,7 @@ void LE1DataPrinter::WriteStructData(llvm::StructType *StructArg,
   }
 }
 
-void LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
+bool LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
                                      unsigned numElements,
                                      unsigned addr) {
   llvm::StructType *type = CSArray[0]->getType();
@@ -622,8 +623,13 @@ void LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
       addr += dataWritten;
       dataWritten = 0;
     }
+    else {
+      std::cerr << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
+      return false;
+    }
   }
   }
+  return true;
 }
 
 // This function is used for writing elements of a structure. It takes single

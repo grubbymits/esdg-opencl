@@ -452,7 +452,7 @@ void Compiler::ScanForSoftfloat() {
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FDiv:
-            FuncName = "float32_div";
+            FuncName = "__divsf3";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
@@ -460,8 +460,8 @@ void Compiler::ScanForSoftfloat() {
             break;
           case llvm::Instruction::UIToFP:
           case llvm::Instruction::SIToFP:
-            FuncName = "__fixunssfsi";
             ParamTys.push_back(Int32Ty);
+            FuncName = "__fixunssfsi";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
@@ -484,10 +484,16 @@ void Compiler::ScanForSoftfloat() {
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             FuncName = "__lesf2";
-            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             FuncName = "__gtsf2";
-            FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "__ltsf2";
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "__gesf2";
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "__eqsf2";
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "__nesf2";
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::Call:
@@ -509,7 +515,6 @@ void Compiler::ScanForSoftfloat() {
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
-
                 FuncName = "__addsf3";
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
@@ -520,20 +525,39 @@ void Compiler::ScanForSoftfloat() {
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 FuncName = "log2f";
-                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 FuncName = "__floatsisf";
-                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 FuncName = "__unordsf2";
-                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
-                FuncName = "__lesf2";
+                FuncName = "__fixsfsi";
+                p_module->getOrInsertFunction(FuncName, FuncType);
                 ParamTys.push_back(Int32Ty);
-                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                FuncName = "__lesf2";
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 FuncName = "__gtsf2";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__gesf2";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__ltsf2";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__eqsf2";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__nesf2";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__divsf3";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                FuncName = "memset";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                break;
+              case Intrinsic::memset:
+                ParamTys.push_back(Int32Ty);
+                ParamTys.push_back(Int32Ty);
+                ParamTys.push_back(Int32Ty);
+                FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
+                FuncName = "memset";
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
               }
@@ -547,8 +571,8 @@ void Compiler::ScanForSoftfloat() {
             break;
           case llvm::Instruction::FPToSI:
           case llvm::Instruction::FPToUI:
-            FuncName = "float32_to_int32";
             ParamTys.push_back(Int32Ty);
+            FuncName = "__fixsfsi";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
@@ -559,7 +583,7 @@ void Compiler::ScanForSoftfloat() {
   }
 }
 
-bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
+bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData *theData) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering Compiler::ExtractKernelData" << std::endl;
 #endif
@@ -582,7 +606,7 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData &theData) {
 #ifdef DBG_COMPILER
       std::cerr << "Global variable " << name.str() << std::endl;
 #endif
-      bool success = theData.AddVariable(C, name.str());
+      bool success = theData->AddVariable(C, name.str());
       if (!success) {
         std::cerr << "!!ERROR: Extraction of global variable failed!"
           << std::endl;

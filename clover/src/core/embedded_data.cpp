@@ -1,6 +1,11 @@
+#include "deviceinterface.h"
 #include "embedded_data.h"
 #include <llvm/Constants.h>
 #include <llvm/DerivedTypes.h>
+#include <llvm/DataLayout.h>
+#include <llvm/Support/TargetRegistry.h>
+#include <llvm/Support/TargetSelect.h>
+#include <llvm/Target/TargetMachine.h>
 
 using namespace Coal;
 using namespace llvm;
@@ -96,8 +101,27 @@ bool EmbeddedData::GlobalStructVariable::AddElements(
 }
 
 unsigned EmbeddedData::GlobalStructVariable::getSize() {
-  // const TargetData *TD = TM.getTargetData();
-  // unsigned size = TD->getTypeAllocSize(sType);
+  llvm::InitializeAllTargets();
+  std::string Error;
+  std::string Triple = device->getTriple();
+  const llvm::Target *theTarget = llvm::TargetRegistry::lookupTarget(Triple,
+                                                                     Error);
+  llvm::TargetOptions Options;
+  std::string FeatureSet;
+  std::auto_ptr<llvm::TargetMachine>
+    target(theTarget->createTargetMachine(Triple,
+                                          device->getCPU(),
+                                          FeatureSet,
+                                          Options,
+                                          llvm::Reloc::Static,
+                                          llvm::CodeModel::Default,
+                                          llvm::CodeGenOpt::Default));
+  llvm::TargetMachine &TM = *target.get();
+  const DataLayout *TD = TM.getDataLayout();
+  unsigned size = TD->getTypeAllocSizeInBits(sType) >> 3;
+  return size * dataSet.size();
+
+  // ------------------------------------------------------------------------ //
   unsigned numElements = sType->getNumElements();
   unsigned *elementBytes = new unsigned[numElements];
   ConstantStruct *CS = this->dataSet.front();
@@ -241,7 +265,7 @@ bool EmbeddedData::AddStructVariable(Constant *C, std::string &name) {
   if (isa<ConstantStruct>(C)) {
     CS = cast<ConstantStruct>(C);
     StructType *sType = CS->getType();
-    newStructVariable = new GlobalStructVariable(name, sType);
+    newStructVariable = new GlobalStructVariable(name, sType, device);
     newStructVariable->AddElement(CS);
     success = true;
   }
@@ -249,7 +273,7 @@ bool EmbeddedData::AddStructVariable(Constant *C, std::string &name) {
     ConstantArray *CA = cast<ConstantArray>(C);
     CS = cast<ConstantStruct>(CA->getAggregateElement(unsigned(0)));
     StructType *sType = CS->getType();
-    newStructVariable = new GlobalStructVariable(name, sType);
+    newStructVariable = new GlobalStructVariable(name, sType, device);
     success = newStructVariable->AddElements(CA);
   }
   else {
@@ -278,6 +302,10 @@ unsigned EmbeddedData::getTotalSize() {
   for (byte_iterator BI = globalBytes.begin(), BE = globalBytes.end();
        BI != BE; ++BI)
     totalSize += (*BI)->getSize();
+
+  for (const_struct_iterator I = globalStructs.begin(), E = globalStructs.end();
+       I != E; ++I)
+    totalSize += (*I)->getSize();
 
   return totalSize;
 }

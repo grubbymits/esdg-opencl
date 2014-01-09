@@ -17,6 +17,7 @@ namespace llvm {
 }
 
 namespace Coal {
+  class DeviceInterface;
 
   class EmbeddedData;
 
@@ -76,8 +77,9 @@ public:
 
   class GlobalStructVariable : public GlobalVariable<llvm::ConstantStruct*> {
   public:
-    GlobalStructVariable(std::string ref, llvm::StructType *type) :
-      GlobalVariable<llvm::ConstantStruct*>(ref), sType(type) { }
+    GlobalStructVariable(std::string ref, llvm::StructType *type,
+                         DeviceInterface *di) :
+      GlobalVariable<llvm::ConstantStruct*>(ref), sType(type), device(di) { }
 
     bool AddElements(llvm::ConstantArray *CA);
     inline void AddElement(llvm::ConstantStruct *element) {
@@ -90,6 +92,7 @@ public:
   private:
     std::string name;
     llvm::StructType *sType;
+    DeviceInterface *device;
 
   };
 
@@ -110,6 +113,8 @@ public:
     const_struct_iterator;
 
 public:
+  EmbeddedData(DeviceInterface *di) : device(di) { }
+
   bool AddVariable(llvm::Constant *C, std::string name);
 
   bool isEmpty() {
@@ -152,6 +157,7 @@ private:
 
 private:
   unsigned totalSize;
+  DeviceInterface *device;
 
   GlobalVariable<unsigned> *newWordVariable;
   GlobalVariable<unsigned short> *newHalfVariable;

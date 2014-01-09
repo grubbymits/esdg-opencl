@@ -359,7 +359,7 @@ class LE1KernelEvent
         size_t p_current_wg, p_finished_wg, p_num_wg;
         pthread_mutex_t p_mutex;
         void *p_kernel_args;
-        EmbeddedData embeddedData;
+        EmbeddedData *embeddedData;
         unsigned disabledCores;
         //static unsigned int addr;
         //std::vector<unsigned> ArgAddrs;
