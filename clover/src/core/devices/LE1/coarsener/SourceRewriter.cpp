@@ -374,7 +374,7 @@ bool WorkitemCoarsen::KernelInitialiser::VisitCallExpr(Expr *s) {
     default:
       break;
     case 0:
-      GlobalId << "__builtin_le1_read_group_id_0() * " << LocalX
+      GlobalId << "get_group_id(0) * " << LocalX
         << " + __esdg_idx;//"; //__kernel_local_id[0];//";
       break;
     case 1:
@@ -467,9 +467,6 @@ void WorkitemCoarsen::KernelInitialiser::FixReturns() {
 // else return false;
 
 static bool isWorkgroupLoop(ForStmt *s) {
-#ifdef DBG_WRKGRP
-  std::cerr << "isWorkgroupLoop" << std::endl;
-#endif
   Stmt *init = s->getInit();
   for (Stmt::child_iterator SI = init->child_begin(), SE = init->child_end();
        SI != SE; ++SI) {
@@ -676,8 +673,12 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
       if ((RegionStart < RefLoc) && (RefLoc < RegionEnd)) {
         SourceLocation InsertLoc = DeclParents[(*RI)->getDecl()]->getLocStart();
         if (isa<ForStmt>(Region)) {
-          if (isWorkgroupLoop(cast<ForStmt>(Region)))
-            InsertLoc = FuncBodyStart;
+          if (isWorkgroupLoop(cast<ForStmt>(Region))) {
+#ifdef DBG_WRKGRP
+            std::cerr << "isWorkgroupLoop" << std::endl;
+#endif
+            InsertLoc = OuterLoop->getLocStart().getLocWithOffset(-1);
+          }
         }
         ScalarExpand(InsertLoc, *DSI);
         DSI = Stmts.erase(DSI);

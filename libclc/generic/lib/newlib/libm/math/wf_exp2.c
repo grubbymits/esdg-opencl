@@ -28,7 +28,7 @@
 	float x;
 #endif
 {
-  return powf(2.0, x);
+  return __ieee754_powf(2.0, x); //powf(2.0, x);
 }
 /*
 #ifdef _DOUBLE_IS_32BITS

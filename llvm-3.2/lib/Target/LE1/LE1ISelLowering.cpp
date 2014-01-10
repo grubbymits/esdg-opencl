@@ -173,7 +173,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   // Handle Vectors Comparisons
   // FIXME This screws with legalisation of boolean SetCC? Bug?
-  /*
   for (unsigned i = (unsigned)MVT::FIRST_VECTOR_VALUETYPE;
        i <= (unsigned)MVT::LAST_VECTOR_VALUETYPE; ++i) {
     MVT VT((MVT::SimpleValueType)i);
@@ -187,7 +186,14 @@ LE1TargetLowering(LE1TargetMachine &TM)
     setCondCodeAction(ISD::SETLE,   VT, Expand);
     setCondCodeAction(ISD::SETEQ,   VT, Expand);
     setCondCodeAction(ISD::SETNE,   VT, Expand);
-  }*/
+    setCondCodeAction(ISD::SETOEQ,  VT, Expand);
+    setCondCodeAction(ISD::SETUEQ,  VT, Expand);
+    setCondCodeAction(ISD::SETOGE,  VT, Expand);
+    setCondCodeAction(ISD::SETOGT,  VT, Expand);
+    setCondCodeAction(ISD::SETOLT,  VT, Expand);
+    setCondCodeAction(ISD::SETOLE,  VT, Expand);
+    setOperationAction(ISD::SETCC,   VT, Expand);
+  }
 
   // LE1 doesn't have extending float->double load/store
   //setLoadExtAction(ISD::EXTLOAD, MVT::f32, Expand);
@@ -474,7 +480,10 @@ LE1TargetLowering(LE1TargetMachine &TM)
 }
 
 EVT LE1TargetLowering::getSetCCResultType(EVT VT) const {
-  return MVT::i1;
+  if (!VT.isVector())
+    return MVT::i1;
+  else
+    return VT;
 }
 
 SDValue LE1TargetLowering::
@@ -497,6 +506,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
     case ISD::SREM:               return LowerSREM(Op, DAG);
     case ISD::UREM:               return LowerUREM(Op, DAG);
     case ISD::VASTART:            return LowerVASTART(Op, DAG);
+    case ISD::SETCC:
     case ISD::SETNE:              return LowerSETCC(Op, DAG);
     //case ISD::EXTLOAD:
     //case ISD::ZEXTLOAD:
@@ -905,15 +915,39 @@ DivStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
 
 SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
                                       SelectionDAG &DAG) const {
-  //std::cout << "LowerSETCC\n";
+  std::cerr << "LowerSETCC\n";
   SDValue LHS = Op.getOperand(1);
   SDValue RHS = Op.getOperand(2);
   DebugLoc dl = Op.getDebugLoc();
   SDNode* Node = Op.getNode();
   ISD::CondCode CC = cast<CondCodeSDNode>(Node->getOperand(2))->get();
 
-    SDValue LHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), LHS);
-    SDValue RHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), RHS);
+  /*
+  // XOR on vector and scalar input
+  if (!LHS.getValueType().isVector() != !RHS.getValueType().isVector()) {
+    SDValue vector;
+    SDValue scalar;
+    if (LHS.getValueType().isVector()) {
+      vector = LHS;
+      scalar = RHS;
+    }
+    else {
+      vector = RHS;
+      scalar = LHS;
+    }
+    EVT vectorType = vector.getValueType();
+    unsigned numElements = vectorType.getVectorNumElements();
+    SDValue *newVector = new SDValue[numElements];
+    for (unsigned i = 0; i < numElements; ++i)
+      newVector[i] = scalar;
+    SDValue buildVector = DAG.getNode(ISD::BUILD_VECTOR, dl, vectorType,
+                                      newVector, numElements);
+
+    return DAG.getSetCC(dl, MVT::i1, buildVector, vector, CC);
+  }*/
+
+  SDValue LHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), LHS);
+  SDValue RHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), RHS);
 
   return DAG.getSetCC(dl, MVT::i1, LHSz, RHSz, CC);
 }
