@@ -264,13 +264,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setLibcallName(RTLIB::SUB_F32, "_r_sub");
   setOperationAction(ISD::FSUB, MVT::f32, Expand);
 
-  setLibcallName(RTLIB::MUL_F32, "float32_mul");
-  //setLibcallName(RTLIB::MUL_F32, "_r_mul");
-  setOperationAction(ISD::FMUL, MVT::f32, Expand);
 
-  setLibcallName(RTLIB::DIV_F32, "float32_div");
-  //setLibcallName(RTLIB::DIV_F32, "_r_div");
-  setOperationAction(ISD::FDIV, MVT::f32, Expand);
+
 
   setLibcallName(RTLIB::REM_F32, "float32_rem");
   setOperationAction(ISD::SREM, MVT::f32, Expand);
@@ -360,6 +355,10 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(LibFunc::exp2,   MVT::f64, Expand);
   setOperationAction(LibFunc::exp2f,  MVT::f64, Expand);
   */
+  setLibcallName(RTLIB::MUL_F32, "float32_mul");
+  setOperationAction(ISD::FMUL, MVT::f32, Expand);
+  setLibcallName(RTLIB::DIV_F32, "float32_div");
+  setOperationAction(ISD::FDIV, MVT::f32, Expand);
 
   // FIXME
   //float64_eq_signaling

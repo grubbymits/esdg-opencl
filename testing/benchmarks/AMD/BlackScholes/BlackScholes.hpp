@@ -91,6 +91,7 @@ public:
     {
         width = 64; 
         height = 64;
+        verify = true;
     }
 
     /** 
@@ -117,6 +118,7 @@ public:
     {
         width = 64; 
         height = 64;
+        verify = true;
     }
     // destructor 
     ~BlackScholes()

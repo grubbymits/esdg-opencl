@@ -449,14 +449,15 @@ void Compiler::ScanForSoftfloat() {
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FMul:
-            FuncName = "__mulsf3";
+            //FuncName = "__mulsf3";
+            FuncName = "float32_mul";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FDiv:
-            FuncName = "__divsf3";
+            FuncName = "float32_div";
             ParamTys.push_back(Int32Ty);
             ParamTys.push_back(Int32Ty);
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
@@ -525,7 +526,8 @@ void Compiler::ScanForSoftfloat() {
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
               case Intrinsic::fmuladd:
-                FuncName = "__mulsf3";
+                //FuncName = "__mulsf3";
+                FuncName = "float32_mul";
                 ParamTys.push_back(Int32Ty);
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
@@ -560,7 +562,7 @@ void Compiler::ScanForSoftfloat() {
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 FuncName = "__nesf2";
                 p_module->getOrInsertFunction(FuncName, FuncType);
-                FuncName = "__divsf3";
+                FuncName = "float32_div";
                 p_module->getOrInsertFunction(FuncName, FuncType);
                 ParamTys.push_back(Int32Ty);
                 FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);

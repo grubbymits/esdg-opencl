@@ -729,7 +729,7 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
   LauncherString = launcher.str();
 #ifdef DBG_KERNEL
   //std::cerr << LauncherString << std::endl;
-  std::cout << LauncherString << std::endl;
+  std::cerr << LauncherString << std::endl;
 #endif
 }
 

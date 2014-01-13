@@ -13,6 +13,7 @@ integer/sub_sat_impl.ll
 math/hypot.cl
 math/mad.cl
 relational/any.cl
+softfloat/softfloat.c
 compiler-rt/absvdi2.c
 compiler-rt/absvsi2.c
 compiler-rt/absvti2.c

@@ -1,8 +1,10 @@
 #!/bin/sh
 
 (
-for device in `seq 0 19`;
+for device in `seq 0 3`;
 do
   ./nbody -d $device
+  cp final.nbody_sim.cl final.nbody_sim$device.cl 
+  cp final_nbody_sim.s final_nbody_sim$device.s
 done
 )

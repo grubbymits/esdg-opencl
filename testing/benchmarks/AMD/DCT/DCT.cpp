@@ -561,6 +561,9 @@ int DCT::verifyResults()
         else
         {
             std::cout<<"Failed\n" << std::endl;
+            sampleCommon->printArray<cl_float>("Verification Output",
+                                               verificationOutput,
+                                               width, 1);
             return SDK_FAILURE;
         }
     }

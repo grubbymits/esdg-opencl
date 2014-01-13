@@ -467,6 +467,7 @@ void WorkitemCoarsen::KernelInitialiser::FixReturns() {
 // else return false;
 
 static bool isWorkgroupLoop(ForStmt *s) {
+  bool isWorkgroup = false;
   Stmt *init = s->getInit();
   for (Stmt::child_iterator SI = init->child_begin(), SE = init->child_end();
        SI != SE; ++SI) {
@@ -474,13 +475,16 @@ static bool isWorkgroupLoop(ForStmt *s) {
       DeclRefExpr *expr = cast<DeclRefExpr>(*SI);
       NamedDecl *ND = cast<NamedDecl>(expr->getDecl());
       std::string name = ND->getName().str();
-
-      return (name.compare("esdg_idx") ||
-              name.compare("esdg_idy") ||
-              name.compare("esdg_idz"));
+      isWorkgroup |= (name.compare("__esdg_idx") ||
+                      name.compare("__esdg_idy") ||
+                      name.compare("__esdg_idz"));
     }
   }
-  return false;
+#ifdef DBG_WRKGRP
+  if (isWorkgroup)
+    std::cerr << "Region is a workgroup loop" << std::endl;
+#endif
+  return isWorkgroup;
 }
 
 WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
@@ -616,12 +620,14 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
         if ((BarrierLoc < RefLoc) && (DeclLoc < BarrierLoc)) {
           SourceLocation InsertLoc;
           if (isa<ForStmt>(Region)) {
-            if (isWorkgroupLoop(cast<ForStmt>(Region)))
+            if (isWorkgroupLoop(cast<ForStmt>(Region))) {
               InsertLoc = FuncBodyStart;
+            }
             else
               InsertLoc = Region->getLocStart();
           }
           ScalarExpand(InsertLoc, *DSI);
+          DSI = Stmts.erase(DSI);
           hasExpanded= true;
           break;
         }
@@ -670,16 +676,19 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
          RI != RE; ++RI) {
 
       SourceLocation RefLoc = (*RI)->getLocStart();
+
       if ((RegionStart < RefLoc) && (RefLoc < RegionEnd)) {
         SourceLocation InsertLoc = DeclParents[(*RI)->getDecl()]->getLocStart();
         if (isa<ForStmt>(Region)) {
           if (isWorkgroupLoop(cast<ForStmt>(Region))) {
-#ifdef DBG_WRKGRP
-            std::cerr << "isWorkgroupLoop" << std::endl;
-#endif
-            InsertLoc = OuterLoop->getLocStart().getLocWithOffset(-1);
+            InsertLoc = FuncBodyStart;
           }
         }
+        if (isa<ForStmt>(DeclParents[(*RI)->getDecl()])) {
+          if (isWorkgroupLoop(cast<ForStmt>(DeclParents[(*RI)->getDecl()])))
+            InsertLoc = FuncBodyStart;
+        }
+
         ScalarExpand(InsertLoc, *DSI);
         DSI = Stmts.erase(DSI);
         hasExpanded = true;
@@ -820,7 +829,7 @@ bool WorkitemCoarsen::ThreadSerialiser::CreateLocal(SourceLocation InsertLoc,
   InsertText(InsertLoc, NewDecl.str());
 
 #ifdef DBG_WRKGRP
-  //std::cerr << "Leaving CreateLocal" << std::endl;
+  std::cerr << "Created local: " << NewDecl.str() << std::endl;
 #endif
 
   return isScalar;

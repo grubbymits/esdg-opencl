@@ -1525,6 +1525,7 @@ int Mandelbrot::verifyResults()
                 temp_ver.num = verificationOutput[j * width + i];
                 temp_out.num = output[j * width + i];
 
+
                 unsigned char threshold = 2;
 
                 if( ((temp_ver.ch.s0 - temp_out.ch.s0) > threshold) ||
@@ -1540,6 +1541,16 @@ int Mandelbrot::verifyResults()
                     ((temp_out.ch.s3 - temp_ver.ch.s3) > threshold))
                 {
                     counter++;
+                  std::cout << "temp_ver : "
+                  << (unsigned)temp_ver.ch.s0
+                  << ", " << (unsigned)temp_ver.ch.s1
+                  << ", " << (unsigned)temp_ver.ch.s2
+                  << ", " << (unsigned)temp_ver.ch.s3
+                  << "  | temp_out : "
+                  << (unsigned)temp_out.ch.s0
+                  << ", " << (unsigned)temp_out.ch.s1
+                  << ", " << (unsigned)temp_out.ch.s2
+                  << ", " << (unsigned)temp_out.ch.s3 << std::endl;
                 }
 
             }
