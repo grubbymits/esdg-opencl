@@ -127,6 +127,8 @@ void OpenCL::buildSource(const char *filename)
 	fread(source_str, 1, source_size, theFile);
 	fclose(theFile);
 
+        std::cout << source_str << std::endl;
+
 	// Create a program from the kernel source.
 	program = clCreateProgramWithSource(context,
 	                                    1,

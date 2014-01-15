@@ -335,6 +335,8 @@ bool Compiler::CompileToBitcode(std::string &Source,
 #ifdef DBG_COMPILER
     std::cerr << "Compilation Failed\n";
     std::cerr << log;
+    std::cerr << "temp file:" << std::endl
+      << Source << std::endl;
 #endif
     return false;
   }

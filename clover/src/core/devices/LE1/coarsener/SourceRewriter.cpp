@@ -466,18 +466,20 @@ void WorkitemCoarsen::KernelInitialiser::FixReturns() {
 //    return true;
 // else return false;
 
-static bool isWorkgroupLoop(ForStmt *s) {
+static bool isWorkgroupLoop(Stmt *s) {
   bool isWorkgroup = false;
-  Stmt *init = s->getInit();
-  for (Stmt::child_iterator SI = init->child_begin(), SE = init->child_end();
-       SI != SE; ++SI) {
-    if (isa<DeclRefExpr>(*SI)) {
-      DeclRefExpr *expr = cast<DeclRefExpr>(*SI);
-      NamedDecl *ND = cast<NamedDecl>(expr->getDecl());
-      std::string name = ND->getName().str();
-      isWorkgroup |= (name.compare("__esdg_idx") ||
-                      name.compare("__esdg_idy") ||
-                      name.compare("__esdg_idz"));
+  if (isa<ForStmt>(s)) {
+    Stmt *init = (cast<ForStmt>(s))->getInit();
+    for (Stmt::child_iterator SI = init->child_begin(), SE = init->child_end();
+         SI != SE; ++SI) {
+      if (isa<DeclRefExpr>(*SI)) {
+        DeclRefExpr *expr = cast<DeclRefExpr>(*SI);
+        NamedDecl *ND = cast<NamedDecl>(expr->getDecl());
+        std::string name = ND->getName().str();
+        isWorkgroup |= (name.compare("__esdg_idx") ||
+                        name.compare("__esdg_idy") ||
+                        name.compare("__esdg_idz"));
+      }
     }
   }
 #ifdef DBG_WRKGRP
@@ -533,7 +535,8 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
 
   // Then we need to find all the variables that we need to replicate.
   std::list<DeclStmt*> Stmts;
-  FindRefsToExpand(Stmts, OuterLoop);
+  //FindRefsToExpand(Stmts, OuterLoop);
+  FindRefsToExpand();
 
   // Once we have decided all the text we need to insert, sort it and write it
   SourceToInsert.sort(SortLocations);
@@ -546,6 +549,69 @@ void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
   }
 }
 
+void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand() {
+#ifdef DBG_WRKGRP
+  std::cerr << "FindRefsToExpand" << std::endl;
+#endif
+  // Iterate through all Regions
+  for (std::map<Stmt*, std::list<DeclStmt*> >::iterator I
+       = ScopedDeclStmts.begin(), E = ScopedDeclStmts.end();
+       I != E; ++I) {
+    Stmt *Region = (*I).first;
+    std::list<DeclStmt*> declStmts = (*I).second;
+
+    // Iterate through all the variable declarations
+    for (declstmt_iterator DSI = declStmts.begin(), DSE = declStmts.end();
+         DSI != DSE; ++DSI) {
+
+      Decl *decl = (*DSI)->getSingleDecl();
+#ifdef DBG_WRKGRP
+      std::cerr << "Variable: " << (cast<NamedDecl>(decl))->getName().str()
+        << std::endl;
+#endif
+
+      SourceLocation declLoc = (*DSI)->getLocStart();
+      std::vector<DeclRefExpr*> declRefs = AllRefs[decl];
+
+      // And all their references
+      for (declref_iterator DRI = declRefs.begin(), DRE = declRefs.end();
+           DRI != DRE; ++DRI) {
+
+        bool hasExpanded = false;
+        SourceLocation refLoc = (*DRI)->getLocStart();
+
+        // Compare declaration locations and their references with fission
+        // locations
+        for (std::vector<SourceLocation>::iterator SI = FissionLocs.begin(),
+             SE = FissionLocs.end(); SI != SE; ++SI) {
+
+          SourceLocation fissionLoc = (*SI);
+
+          // skip fission points before the declaration
+          if (fissionLoc < declLoc)
+            continue;
+
+          if (fissionLoc < refLoc) {
+            SourceLocation InsertLoc = Region->getLocStart();
+            if (isWorkgroupLoop(Region))
+              InsertLoc = FuncBodyStart;
+
+#ifdef DBG_WRKGRP
+            std::cerr << "Fission location between declaration and reference"
+              << std::endl;
+#endif
+            ScalarExpand(InsertLoc, *DSI);
+            hasExpanded = true;
+            break;
+          }
+        }
+        if (hasExpanded)
+          break;
+      }
+    }
+  }
+}
+/*
 void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
   std::list<DeclStmt*> &Stmts, Stmt *Region) {
 
@@ -702,7 +768,7 @@ void WorkitemCoarsen::ThreadSerialiser::FindRefsToExpand(
   std::cerr << "Exit FindRefsToExpand" << std::endl;
 #endif
 
-}
+}*/
 
 inline void
 WorkitemCoarsen::ThreadSerialiser::ExpandDecl(std::stringstream &NewDecl) {
@@ -1086,12 +1152,14 @@ inline void WorkitemCoarsen::ThreadSerialiser::FixUnary(Stmt *Unary) {
 
   CloseLoop(Unary->getLocStart().getLocWithOffset(-1));
   OpenLoop(Unary->getLocEnd().getLocWithOffset(offset));
+  FissionLocs.push_back(Unary->getLocStart());
 }
 
 inline void WorkitemCoarsen::ThreadSerialiser::FixBarrier(CallExpr *Call) {
   InsertText(Call->getLocStart(), "//");
   CloseLoop(Call->getLocEnd().getLocWithOffset(2));
   OpenLoop(Call->getLocEnd().getLocWithOffset(3));
+  FissionLocs.push_back(Call->getLocStart());
 }
 
 // Whether a loop contains a barrier, nested or not, we follow these steps:
@@ -1147,6 +1215,8 @@ void WorkitemCoarsen::ThreadSerialiser::HandleNonParallelRegion(Stmt *Region,
 
   // Insert opening and closing loops for all regions, except the outer loop
   if (depth > (numDimensions - 1)) {
+    FissionLocs.push_back(Region->getLocStart());
+
     Stmt *LoopBody = NULL;
     if (isa<IfStmt>(Region)) {
       CloseLoop(Region->getLocStart().getLocWithOffset(-1));

@@ -276,6 +276,9 @@ cl_int Program::loadSources(cl_uint count, const char **strings,
 {
 #ifdef DEBUGCL
   std::cerr << "Entering Program::loadSources\n";
+  for (unsigned i = 0; i < count; ++i)
+    std::cerr << strings[i];
+  std::cerr << std::endl << "end of raw source data" << std::endl;
 #endif
     //p_source = std::string(embed_stdlib_h);
 
@@ -307,6 +310,7 @@ cl_int Program::loadSources(cl_uint count, const char **strings,
     p_type = Source;
     p_state = Loaded;
 #ifdef DEBUGCL
+  std::cerr << p_source << std::endl;
   std::cerr << "Leaving Program::loadSources" << std::endl;
 #endif
 

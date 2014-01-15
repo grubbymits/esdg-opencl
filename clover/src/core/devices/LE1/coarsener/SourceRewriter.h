@@ -248,8 +248,9 @@ private:
   void CheckArrayDeps(clang::Expr *expr, bool depRegion);
   bool SearchExpr(clang::Expr *s);
 
-  void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
-                        clang::Stmt *Loop);
+  //void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
+    //                    clang::Stmt *Loop);
+  void FindRefsToExpand(void);
   void ExpandDecl(std::stringstream &NewDecl);
   void ExpandRef(std::stringstream &NewRef);
   void ScalarExpand(clang::SourceLocation InsertLoc,
@@ -280,6 +281,7 @@ private:
   std::vector<clang::FunctionDecl*> AllFunctions;
   std::vector<clang::FunctionDecl*> CalledFunctions;
 
+  std::vector<clang::SourceLocation> FissionLocs;
 
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;

@@ -250,4 +250,3 @@ bottom_scan(__global const FPTYPE * in,
         i += get_local_size(0);
     }
 }
-

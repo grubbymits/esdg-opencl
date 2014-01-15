@@ -11,9 +11,9 @@ __kernel void Fan1(__global float *m_dev,
                   __global float *b_dev,
                   const int size,
                   const int t) {  unsigned __esdg_idx = 0;
-for (__esdg_idx = 0; __esdg_idx < 2; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 16; ++__esdg_idx) {
 
-    int globalId = __builtin_le1_read_group_id_0() * 2 + __esdg_idx;//get_global_id(0);
+    int globalId = get_group_id(0) * 16 + __esdg_idx;//get_global_id(0);
                               
     if (globalId < size-1-t) {
          *(m_dev + size * (globalId + t + 1)+t) = *(a_dev + size * (globalId + t + 1) + t) / *(a_dev + size * t + t);    

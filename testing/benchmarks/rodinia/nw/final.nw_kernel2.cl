@@ -35,22 +35,15 @@ nw_kernel2(__global int  * reference_d,
            int offset_r,
            int offset_c
     )
-{ int bx;
-int base;
-int b_index_x;
-int b_index_y;
+{ int tx[16];
 int index[16];
 int index_n[16];
 int index_w;
-int index_nw;
   unsigned __esdg_idx = 0;
-int tx[16];
 for (__esdg_idx = 0; __esdg_idx < 16; ++__esdg_idx) {
  
 
-	//int bx =
-
-bx =  get_group_id(0);	
+	int bx = get_group_id(0);	
 	//int bx = get_global_id(0)/BLOCK_SIZE;
    
     // Thread index
@@ -59,16 +52,10 @@ bx =  get_group_id(0);
 tx[__esdg_idx] =  __esdg_idx;
     
     // Base elements
-    //int base =
-
-base =  offset_r * cols + offset_c;
+    int base = offset_r * cols + offset_c;
     
-    //int b_index_x =
-
-b_index_x =  bx + block_width - blk  ;
-	//int b_index_y =
-
-b_index_y =  block_width - bx -1;
+    int b_index_x = bx + block_width - blk  ;
+	int b_index_y = block_width - bx -1;
 	
 	
 	//int index   =  
@@ -80,9 +67,7 @@ index_n[__esdg_idx] =  base + cols *  16 /*BLOCK_SIZE*/ * b_index_y +  16 /*BLOC
 	//int index_w   =
 
 index_w =  base + cols *  16 /*BLOCK_SIZE*/ * b_index_y +  16 /*BLOCK_SIZE*/ * b_index_x + ( cols );
-	//int index_nw = 
-
-index_nw =  base + cols *  16 /*BLOCK_SIZE*/ * b_index_y +  16 /*BLOCK_SIZE*/ * b_index_x;
+	int index_nw =  base + cols *  16 /*BLOCK_SIZE*/ * b_index_y +  16 /*BLOCK_SIZE*/ * b_index_x;
     
 	if (tx[__esdg_idx] == 0)
 		 input_itemsets_l [ 0 + tx[__esdg_idx] * ( 16 + 1 ) ] /*SCORE*/ /*(tx, 0)*/ = input_itemsets_d[index_nw];

@@ -13,7 +13,7 @@ OpenCL::getDevices
   EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
 Using the default platform (platform 0)...
 
-=== 21 OpenCL device(s) found on platform:
+=== 20 OpenCL device(s) found on platform:
   -- 0 --
   DEVICE_NAME = LE1
   DEVICE_VENDOR = ESDG
@@ -28,7 +28,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
+  DEVICE_MAX_COMPUTE_UNITS = 2
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -37,7 +37,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
+  DEVICE_MAX_COMPUTE_UNITS = 4
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -46,7 +46,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
+  DEVICE_MAX_COMPUTE_UNITS = 8
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -55,7 +55,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
+  DEVICE_MAX_COMPUTE_UNITS = 16
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -73,7 +73,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
+  DEVICE_MAX_COMPUTE_UNITS = 2
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -82,7 +82,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
+  DEVICE_MAX_COMPUTE_UNITS = 4
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -91,7 +91,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
+  DEVICE_MAX_COMPUTE_UNITS = 8
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -100,7 +100,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
+  DEVICE_MAX_COMPUTE_UNITS = 16
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -109,7 +109,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
+  DEVICE_MAX_COMPUTE_UNITS = 1
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -118,7 +118,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
+  DEVICE_MAX_COMPUTE_UNITS = 2
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -127,7 +127,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
+  DEVICE_MAX_COMPUTE_UNITS = 4
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -136,7 +136,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
+  DEVICE_MAX_COMPUTE_UNITS = 8
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -145,7 +145,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
+  DEVICE_MAX_COMPUTE_UNITS = 16
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -154,7 +154,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
+  DEVICE_MAX_COMPUTE_UNITS = 1
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -163,7 +163,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
+  DEVICE_MAX_COMPUTE_UNITS = 2
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -172,7 +172,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
+  DEVICE_MAX_COMPUTE_UNITS = 4
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -181,7 +181,7 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
+  DEVICE_MAX_COMPUTE_UNITS = 8
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
@@ -190,21 +190,268 @@ Using the default platform (platform 0)...
   DEVICE_VENDOR = ESDG
   DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
   DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
+  DEVICE_MAX_COMPUTE_UNITS = 16
   DEVICE_MAX_CLOCK_FREQUENCY = 0
   DEVICE_GLOBAL_MEM_SIZE = 1073741824
   CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
 
 OpenCL::buildKernel
+#define FPTYPE int
+#define FPVECTYPE uint4
+
+#pragma OPENCL EXTENSION cl_khr_byte_addressable_store : enable 
+
+
+// Compute a per block histogram of the occurrences of each
+// digit, using a 4-bit radix (i.e. 16 possible digits).
+__kernel void
+reduce(__global const FPTYPE * in, 
+       __global FPTYPE * isums, 
+       const int n,
+       __local FPTYPE * lmem,
+       const int shift) 
+{
+    // First, calculate the bounds of the region of the array 
+    // that this block will sum.  We need these regions to match
+    // perfectly with those in the bottom-level scan, so we index
+    // as if vector types of length 4 were in use.  This prevents
+    // errors due to slightly misaligned regions.
+    int region_size = ((n / 4) / get_num_groups(0)) * 4;
+    int block_start = get_group_id(0) * region_size;
+
+    // Give the last block any extra elements
+    int block_stop  = (get_group_id(0) == get_num_groups(0) - 1) ? 
+        n : block_start + region_size;
+
+    // Calculate starting index for this thread/work item
+    int tid = get_local_id(0);
+    int i = block_start + tid;
+    
+    // The per thread histogram, initially 0's.
+    int digit_counts[16] = { 0, 0, 0, 0, 0, 0, 0, 0,
+                             0, 0, 0, 0, 0, 0, 0, 0 };
+
+    // Reduce multiple elements per thread
+    while (i < block_stop)
+    {
+        // This statement 
+        // 1) Loads the value in from global memory
+        // 2) Shifts to the right to have the 4 bits of interest
+        //    in the least significant places
+        // 3) Masks any more significant bits away. This leaves us
+        // with the relevant digit (which is also the index into the
+        // histogram). Next increment the histogram to count this occurrence.
+        digit_counts[(in[i] >> shift) & 0xFU]++;
+        i += get_local_size(0);
+    }
+    
+    for (int d = 0; d < 16; d++)
+    {
+        // Load this thread's sum into local/shared memory
+        lmem[tid] = digit_counts[d];
+        barrier(CLK_LOCAL_MEM_FENCE);
+
+        // Reduce the contents of shared/local memory
+        for (unsigned int s = get_local_size(0) / 2; s > 0; s >>= 1)
+        {
+            if (tid < s)
+            {
+                lmem[tid] += lmem[tid + s];
+            }
+            barrier(CLK_LOCAL_MEM_FENCE);
+        }
+
+        // Write result for this block to global memory
+        if (tid == 0)
+        {
+            isums[(d * get_num_groups(0)) + get_group_id(0)] = lmem[0];
+        }
+    }
+}
+
+// This kernel scans the contents of local memory using a work
+// inefficient, but highly parallel Kogge-Stone style scan.
+// Set exclusive to 1 for an exclusive scan or 0 for an inclusive scan
+inline FPTYPE scanLocalMem(FPTYPE val_arg, __local FPTYPE* lmem_arg, int exclusive){
+    // Set first half of local memory to zero to make room for scanning
+    int idx = get_local_id(0);
+    lmem_arg[idx] = 0;
+    
+    // Set second half to block sums from global memory, but don't go out
+    // of bounds
+    idx += get_local_size(0);
+    lmem_arg[idx] = val_arg;
+    barrier(CLK_LOCAL_MEM_FENCE);
+    
+    // Now, perform Kogge-Stone scan
+    FPTYPE t;
+    for (int i = 1; i < get_local_size(0); i *= 2)
+    {
+        t = lmem_arg[idx -  i]; barrier(CLK_LOCAL_MEM_FENCE);
+        lmem_arg[idx] += t;     barrier(CLK_LOCAL_MEM_FENCE);
+    }
+    return lmem_arg[idx-exclusive];
+}
+
+// This single group kernel takes the per block histograms
+// from the reduction and performs an exclusive scan on them.
+__kernel void
+top_scan(__global FPTYPE * isums, 
+         const int n,
+         __local FPTYPE * lmem)
+{
+    __local int s_seed;
+    s_seed = 0; barrier(CLK_LOCAL_MEM_FENCE);
+    
+    // Decide if this is the last thread that needs to 
+    // propagate the seed value
+    int last_thread = (get_local_id(0) < n &&
+                      (get_local_id(0)+1) == n) ? 1 : 0;
+
+    for (int d = 0; d < 16; d++)
+    {
+        FPTYPE val = 0;
+        // Load each block's count for digit d
+        if (get_local_id(0) < n)
+        {
+            val = isums[(n * d) + get_local_id(0)];
+        }
+        // Exclusive scan the counts in local memory
+        FPTYPE res = scanLocalMem(val, lmem, 1);
+        // Write scanned value out to global
+        if (get_local_id(0) < n)
+        {
+            isums[(n * d) + get_local_id(0)] = res + s_seed;
+        }
+        
+        if (last_thread) 
+        {
+            s_seed += res + val;
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+    }
+}
+
+
+__kernel void 
+bottom_scan(__global const FPTYPE * in,
+            __global const FPTYPE * isums,
+            __global FPTYPE * out,
+            const int n,
+            __local FPTYPE * lmem,
+            const int shift)
+{
+    // Use local memory to cache the scanned seeds
+    __local FPTYPE l_scanned_seeds[16];
+    
+    // Keep a shared histogram of all instances seen by the current
+    // block
+    __local FPTYPE l_block_counts[16];
+    
+    // Keep a private histogram as well
+    __private int histogram[16] = { 0, 0, 0, 0, 0, 0, 0, 0,
+                          0, 0, 0, 0, 0, 0, 0, 0  };
+
+    // Prepare for reading 4-element vectors
+    // Assume n is divisible by 4
+    __global FPVECTYPE *in4  = (__global FPVECTYPE*) in;
+    __global FPVECTYPE *out4 = (__global FPVECTYPE*) out;
+    int n4 = n / 4; //vector type is 4 wide
+    
+    int region_size = n4 / get_num_groups(0);
+    int block_start = get_group_id(0) * region_size;
+    // Give the last block any extra elements
+    int block_stop  = (get_group_id(0) == get_num_groups(0) - 1) ? 
+        n4 : block_start + region_size;
+
+    // Calculate starting index for this thread/work item
+    int i = block_start + get_local_id(0);
+    int window = block_start;
+
+    // Set the histogram in local memory to zero
+    // and read in the scanned seeds from gmem
+    if (get_local_id(0) < 16)
+    {
+        l_block_counts[get_local_id(0)] = 0;
+        l_scanned_seeds[get_local_id(0)] = 
+            isums[(get_local_id(0)*get_num_groups(0))+get_group_id(0)];
+    }
+    barrier(CLK_LOCAL_MEM_FENCE);
+
+    // Scan multiple elements per thread
+    while (window < block_stop)
+    {
+        // Reset histogram
+        for (int q = 0; q < 16; q++) histogram[q] = 0;
+        FPVECTYPE val_4;
+        FPVECTYPE key_4;        
+
+        if (i < block_stop) // Make sure we don't read out of bounds
+        {
+            val_4 = in4[i];
+            
+            // Mask the keys to get the appropriate digit
+            key_4.x = (val_4.x >> shift) & 0xFU;
+            key_4.y = (val_4.y >> shift) & 0xFU;
+            key_4.z = (val_4.z >> shift) & 0xFU;
+            key_4.w = (val_4.w >> shift) & 0xFU;
+            
+            // Update the histogram
+            histogram[key_4.x]++;
+            histogram[key_4.y]++;
+            histogram[key_4.z]++;
+            histogram[key_4.w]++;
+        } 
+                
+        // Scan the digit counts in local memory
+        for (int digit = 0; digit < 16; digit++)
+        {
+            histogram[digit] = scanLocalMem(histogram[digit], lmem, 1);
+            barrier(CLK_LOCAL_MEM_FENCE);
+        }
+
+        if (i < block_stop) // Make sure we don't write out of bounds
+        {
+            int address;
+            address = histogram[key_4.x] + l_scanned_seeds[key_4.x] + l_block_counts[key_4.x];
+            out[address] = val_4.x;
+            histogram[key_4.x]++;
+            
+            address = histogram[key_4.y] + l_scanned_seeds[key_4.y] + l_block_counts[key_4.y];
+            out[address] = val_4.y;
+            histogram[key_4.y]++;
+            
+            address = histogram[key_4.z] + l_scanned_seeds[key_4.z] + l_block_counts[key_4.z];
+            out[address] = val_4.z;
+            histogram[key_4.z]++;
+            
+            address = histogram[key_4.w] + l_scanned_seeds[key_4.w] + l_block_counts[key_4.w];
+            out[address] = val_4.w;
+            histogram[key_4.w]++;
+        }
+                
+        // Before proceeding, make sure everyone has finished their current
+        // indexing computations.
+        barrier(CLK_LOCAL_MEM_FENCE);
+        // Now update the seed array.
+        if (get_local_id(0) == get_local_size(0)-1)
+        {
+            for (int q = 0; q < 16; q++)
+            {
+                 l_block_counts[q] += histogram[q];
+            }
+        }
+        barrier(CLK_LOCAL_MEM_FENCE);
+        
+        // Advance window
+        window += get_local_size(0);
+        i += get_local_size(0);
+    }
+}
+			<ISSUE_WIá8
+
+Error at clBuildProgram! Error code -11
+
 
 *************************************************
 ***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
@@ -216,2933 +463,3 @@ OpenCL::buildKernel
 *************************************************
 
 
-Max local threads is 256. Using 18 for local work size. 
-Max local threads is 256. Using 18 for local work size. 
-Max local threads is 256. Using 18 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 3702661
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1479732
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 2 for local work size. 
-Max local threads is 256. Using 2 for local work size. 
-Max local threads is 256. Using 2 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 3000063
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1261998
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 197 for local work size. 
-Max local threads is 256. Using 197 for local work size. 
-Max local threads is 256. Using 197 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 3198388
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 990985
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 2 for local work size. 
-Max local threads is 256. Using 2 for local work size. 
-Max local threads is 256. Using 2 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 2930114
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1105158
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 94 for local work size. 
-Max local threads is 256. Using 94 for local work size. 
-Max local threads is 256. Using 94 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 3231210
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1039747
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 10 for local work size. 
-Max local threads is 256. Using 10 for local work size. 
-Max local threads is 256. Using 10 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 3016443
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1237421
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 213 for local work size. 
-Max local threads is 256. Using 213 for local work size. 
-Max local threads is 256. Using 213 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 3188146
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 954120
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 14 for local work size. 
-Max local threads is 256. Using 14 for local work size. 
-Max local threads is 256. Using 14 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 2954686
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1072388
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 70 for local work size. 
-Max local threads is 256. Using 70 for local work size. 
-Max local threads is 256. Using 70 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 10888
-Size of bss area : 
-End of memory: 87104
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 3184102
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 3720
-Size of bss area : 
-End of memory: 29760
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1002881
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-homogeneous system
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 10 for local work size. 
-Max local threads is 256. Using 10 for local work size. 
-Max local threads is 256. Using 10 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 11916
-Size of bss area : 
-End of memory: 95328
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1851344
-HALT operation received from [0][1][0] at cycle 1851344
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 5772
-Size of bss area : 
-End of memory: 46176
-Second Pass Completed
-HALT operation received from [0][1][0] at cycle 10
-HALT operation received from [0][0][0] at cycle 1479736
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-homogeneous system
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 86 for local work size. 
-Max local threads is 256. Using 86 for local work size. 
-Max local threads is 256. Using 86 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 13972
-Size of bss area : 
-End of memory: 111776
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 925687
-HALT operation received from [0][1][0] at cycle 925687
-HALT operation received from [0][2][0] at cycle 925687
-HALT operation received from [0][3][0] at cycle 925687
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 9876
-Size of bss area : 
-End of memory: 79008
-Second Pass Completed
-HALT operation received from [0][1][0] at cycle 10
-HALT operation received from [0][2][0] at cycle 10
-HALT operation received from [0][3][0] at cycle 10
-HALT operation received from [0][0][0] at cycle 1479736
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-homogeneous system
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 70 for local work size. 
-Max local threads is 256. Using 70 for local work size. 
-Max local threads is 256. Using 70 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 18084
-Size of bss area : 
-End of memory: 144672
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 462840
-HALT operation received from [0][1][0] at cycle 462840
-HALT operation received from [0][2][0] at cycle 462840
-HALT operation received from [0][3][0] at cycle 462840
-HALT operation received from [0][4][0] at cycle 462840
-HALT operation received from [0][5][0] at cycle 462840
-HALT operation received from [0][6][0] at cycle 462840
-HALT operation received from [0][7][0] at cycle 462840
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 18084
-Size of bss area : 
-End of memory: 144672
-Second Pass Completed
-HALT operation received from [0][1][0] at cycle 10
-HALT operation received from [0][2][0] at cycle 10
-HALT operation received from [0][3][0] at cycle 10
-HALT operation received from [0][4][0] at cycle 10
-HALT operation received from [0][5][0] at cycle 10
-HALT operation received from [0][6][0] at cycle 10
-HALT operation received from [0][7][0] at cycle 10
-HALT operation received from [0][0][0] at cycle 1479736
-RUN BOTTOM_SCAN
-
-
-OpenCL
-
-OpenCL::getDevices
-
-=== 1 OpenCL platform(s) found: ===
-  -- 0 --
-  PROFILE = FULL_PROFILE
-  VERSION = OpenCL 1.1 MESA 0.1.0
-  NAME = Default
-  VENDOR = Mesa
-  EXTENSIONS = cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics
-Using the default platform (platform 0)...
-
-=== 21 OpenCL device(s) found on platform:
-  -- 0 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 1 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 2 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 3 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 4 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 5 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 6 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 7 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 8 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 1
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 9 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 10 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 11 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 12 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 13 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 14 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 15 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 16 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 17 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 18 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 2
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 19 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 4
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-  -- 20 --
-  DEVICE_NAME = LE1
-  DEVICE_VENDOR = ESDG
-  DEVICE_VERSION = OpenCL 1.1 ESDG- 0.1.0
-  DRIVER_VERSION = 0.1.0
-  DEVICE_MAX_COMPUTE_UNITS = 8
-  DEVICE_MAX_CLOCK_FREQUENCY = 0
-  DEVICE_GLOBAL_MEM_SIZE = 1073741824
-  CL_DEVICE_LOCAL_MEM_SIZE = 1073741824
-
-homogeneous system
-OpenCL::buildKernel
-
-*************************************************
-***   OUTPUT FROM COMPILING THE KERNEL FILE   ***
-*************************************************
-
-
-*************************************************
-*** END OUTPUT FROM COMPILING THE KERNEL FILE ***
-*************************************************
-
-
-Max local threads is 256. Using 233 for local work size. 
-Max local threads is 256. Using 233 for local work size. 
-Max local threads is 256. Using 233 for local work size. 
-Initializing host memory.
-Copying input data to device.
-RUN REDUCE
-mem align: 0
-dram_base_offset: 0
-Size of data area : 11916
-Size of bss area : 
-End of memory: 95328
-Second Pass Completed
-HALT operation received from [0][0][0] at cycle 1765143
-HALT operation received from [0][1][0] at cycle 1765143
-RUN TOP_SCAN
-mem align: 0
-dram_base_offset: 0
-Size of data area : 5772
-Size of bss area : 
-End of memory: 46176
-Second Pass Completed
-HALT operation received from [0][1][0] at cycle 8
-HALT operation received from [0][0][0] at cycle 1262000
-RUN BOTTOM_SCAN
