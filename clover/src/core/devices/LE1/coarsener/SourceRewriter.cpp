@@ -176,7 +176,7 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
     OpenWhile << "for (__esdg_idy = 0; __esdg_idy < " << LocalY
       << "; ++__esdg_idy) {\n";
   }
-  if (LocalX > 1) {
+  if (LocalX > 0) {
     //OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
     OpenWhile << "for (__esdg_idx = 0; __esdg_idx < " << LocalX
       << "; ++__esdg_idx) {\n";
@@ -498,13 +498,18 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
     isFirstLoop = true;
     foundBarrier = true;
     numDimensions = 1;
+    if (y)
+      ++numDimensions;
+    if (z)
+      ++numDimensions;
+    /*
 
     InvalidThreadInit << "bool __kernel_invalid_global_threads[" << x << "]";
-    if (y > 1) {
+    if (y > 0) {
       InvalidThreadInit << "[" << y << "]";
       ++numDimensions;
     }
-    if (z > 1) {
+    if (z > 0) {
       InvalidThreadInit << "[" << z << "]";
       ++numDimensions;
     }
@@ -513,11 +518,12 @@ WorkitemCoarsen::ThreadSerialiser::ThreadSerialiser(Rewriter &R,
       << std::endl;
     returnFixer = new ReturnFixer(&SourceToInsert, x, y, z);
     breakFixer = new BreakFixer(&SourceToInsert, x, y, z);
+    */
 }
 
 WorkitemCoarsen::ThreadSerialiser::~ThreadSerialiser() {
-  delete returnFixer;
-  delete breakFixer;
+  //delete returnFixer;
+  //delete breakFixer;
 }
 
 void WorkitemCoarsen::ThreadSerialiser::RewriteSource() {
@@ -777,9 +783,9 @@ WorkitemCoarsen::ThreadSerialiser::ExpandDecl(std::stringstream &NewDecl) {
 #endif
   if (LocalX != 0)
     NewDecl << "[" << LocalX << "]";
-  if (LocalY > 1)
+  if (LocalY > 0)
     NewDecl << "[" << LocalY << "]";
-  if (LocalZ > 1)
+  if (LocalZ > 0)
     NewDecl << "[" << LocalZ << "]";
 }
 
@@ -790,9 +796,9 @@ WorkitemCoarsen::ThreadSerialiser::ExpandRef(std::stringstream &NewRef) {
 #endif
   if (LocalX != 0)
     NewRef << "[__esdg_idx]"; //"[__kernel_local_id[0]]";
-  if (LocalY > 1)
+  if (LocalY > 0)
     NewRef << "[__esdg_idy]"; //"[__kernel_local_id[1]]";
-  if (LocalZ > 1)
+  if (LocalZ > 0)
     NewRef << "[__esdg_idz]"; //"[__kernel_local_id[2]]";
 }
 

@@ -638,7 +638,12 @@ int RadixSort::runFixOffsetKernel()
 		0,
 		NULL,
 		&ndrEvt);
+        if (status != CL_SUCCESS) {
+          std::cout << "scanArrayKerneldim2 - clEnqueueNDRangeKernel failed" << std::endl;
+          exit(-1);
+        }
 	CHECK_OPENCL_ERROR(status, "clEnqueueNDRangeKernel failed.");
+
 
 	status = clFlush(commandQueue);
 	CHECK_OPENCL_ERROR(status, "clFlush failed.");
