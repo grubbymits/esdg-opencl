@@ -125,6 +125,7 @@ public:
         byteRWSupport(true),
         iterations(1)
     {
+      verify = true;
     }
 
     /** 
@@ -146,6 +147,7 @@ public:
         byteRWSupport(true),
         iterations(1)
     {
+      verify = true;
     }
 
     ~RadixSort()

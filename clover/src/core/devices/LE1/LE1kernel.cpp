@@ -474,7 +474,7 @@ bool LE1KernelEvent::CompileSource() {
   // Impose an upper limit of 12 cores?
   unsigned cores = p_device->numLE1s();
   disabledCores = 0;
-  unsigned merge_dims[3] = {1, 1, 1};
+  unsigned merge_dims[3] = {1, 0, 0};
   unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
 
   // Local size may have been set by user, especially in the presence of

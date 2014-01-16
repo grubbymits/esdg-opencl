@@ -11,7 +11,7 @@ utils/prepare-builtins.o: ./utils/prepare-builtins.cpp
 
 utils/prepare-builtins: utils/prepare-builtins.o
 	@echo LINK utils/prepare-builtins
-	$(Verb) c++ -o utils/prepare-builtins utils/prepare-builtins.o -L/opt/esdg-opencl/lib -lLLVMBitWriter -lLLVMBitReader -lLLVMCore -lLLVMSupport -lpthread -ldl
+	$(Verb) c++ -o utils/prepare-builtins utils/prepare-builtins.o -L/opt/esdg-opencl/lib -lpthread -lLLVMBitWriter -lLLVMBitReader -lLLVMCore -lLLVMSupport -ldl
 
 le1-llvm-none/lib/synchronization/barrier.cl.bc: ./le1/lib/synchronization/barrier.cl
 	@echo LLVM-CC le1-llvm-none/lib/synchronization/barrier.cl.bc

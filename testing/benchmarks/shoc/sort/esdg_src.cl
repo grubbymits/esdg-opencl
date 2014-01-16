@@ -283,4 +283,3 @@ bottom_scan(__global const  int /*FPTYPE*/ * in,
         i += get_local_size(0);
     }
 }
-

@@ -166,12 +166,12 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
     : LocalX(x), LocalY(y), LocalZ(z), TheRewriter(R) {
 
   OpenWhile << "\n";
-  if (LocalZ > 1) {
+  if (LocalZ > 0) {
     //OpenWhile  << "while (__kernel_local_id[2] < " << LocalZ << ") {\n";
     OpenWhile << "for (__esdg_idz = 0; __esdg_idz < " << LocalZ
       << "; ++__esdg_idz) {\n";
   }
-  if (LocalY > 1) {
+  if (LocalY > 0) {
     //OpenWhile << "while (__kernel_local_id[1] < " << LocalY << ") {\n";
     OpenWhile << "for (__esdg_idy = 0; __esdg_idy < " << LocalY
       << "; ++__esdg_idy) {\n";
@@ -186,17 +186,17 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
   // variable. The variable should have only been expanded because we select
   // the variables very, very lazily. The loop would contain a barrier of sorts
   // and a barrier cannot be executed because of a thread local variable...
-  if (LocalX > 1) {
+  if (LocalX > 0) {
     //CloseWhile << "\n__kernel_local_id[0]++;\n";
     CloseWhile  << "\n} __esdg_idx = 0;\n";
     //CloseWhile << "__kernel_local_id[0] = 0;\n";
   }
-  if (LocalY > 1) {
+  if (LocalY > 0) {
     //CloseWhile << " __kernel_local_id[1]++;\n";
     CloseWhile << "\n} __esdg_idy = 0;\n";
     //CloseWhile << "__kernel_local_id[1] = 0;\n";
   }
-  if (LocalZ > 1) {
+  if (LocalZ > 0) {
     //CloseWhile << "__kernel_local_id[2]++;\n";
     CloseWhile << "\n} __esdg_idz = 0;\n";
     //CloseWhile << "\n__kernel_local_id[2] = 0;\n";
@@ -253,9 +253,9 @@ bool WorkitemCoarsen::KernelInitialiser::VisitFunctionDecl(FunctionDecl *f) {
 
     std::stringstream FuncBegin;
     FuncBegin << "  unsigned __esdg_idx = 0;";
-    if (LocalY > 1)
+    if (LocalY > 0)
       FuncBegin << "  unsigned __esdg_idy = 0;";
-    if (LocalZ > 1)
+    if (LocalZ > 0)
       FuncBegin << "  unsigned __esdg_idz = 0;";
 
     /*

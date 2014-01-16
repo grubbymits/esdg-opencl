@@ -54,7 +54,7 @@ void histogram(__global const uint* unsortedData,
     /* Calculate thread-histograms */
       uint value = unsortedData[globalId];
         value = (value >> shiftCount) & 0xFFU;
-        atomic_inc(sharedArray+value);
+        (*(sharedArray+value))++; //atomic_inc(sharedArray+value);
     
     
     barrier(CLK_LOCAL_MEM_FENCE);
