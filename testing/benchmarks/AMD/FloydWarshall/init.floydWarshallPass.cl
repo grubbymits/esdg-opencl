@@ -55,7 +55,7 @@ void floydWarshallPass(__global uint * pathDistanceBuffer,
   unsigned __esdg_idx = 0;  unsigned __esdg_idy = 0;
 for (__esdg_idy = 0; __esdg_idy < 16; ++__esdg_idy) {
 for (__esdg_idx = 0; __esdg_idx < 16; ++__esdg_idx) {
-    int xValue = __builtin_le1_read_group_id_0() * 16 + __esdg_idx;//get_global_id(0);
+    int xValue = get_group_id(0) * 16 + __esdg_idx;//get_global_id(0);
     int yValue = get_group_id(1) * 16 + __esdg_idy;//get_global_id(1);
 
     int k = pass;

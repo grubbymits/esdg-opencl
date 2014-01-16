@@ -520,6 +520,10 @@ void Compiler::ScanForSoftfloat() {
                 ParamTys.push_back(Float32Ty);
                 FuncType = llvm::FunctionType::get(Float32Ty, ParamTys, false);
                 p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__unordsf2";
+                p_module->getOrInsertFunction(FuncName, FuncType);
+                FuncName = "__gesf2";
+                p_module->getOrInsertFunction(FuncName, FuncType);
                 break;
               case Intrinsic::exp2:
                 FuncName = "exp2f";

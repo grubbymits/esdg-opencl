@@ -7,4 +7,4 @@ nbody: NBody.cpp
 	$(CXX) $(CXXFLAGS) $(INC) $< $(LIBS) -o $@
 
 clean: NBody.cpp
-	rm -rf nbody *.s *.bc binaries microblaze *.dat *.csv *.tmp* init.*
+	rm -rf nbody *.s *.bc binaries microblaze *.dat *.csv *.tmp* init.* final.* final_*.txt

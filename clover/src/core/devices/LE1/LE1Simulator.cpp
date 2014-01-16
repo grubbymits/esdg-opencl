@@ -268,11 +268,15 @@ int LE1Simulator::checkStatus(void) {
 bool LE1Simulator::Run(const char *iram, const char *dram,
                        const unsigned disabled) {
 #ifdef DBG_SIM
-  std::cout << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
+  std::cerr << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
     << std::endl << machineModel << " with " << disabled 
     << " disabled contexts" << std::endl;
 #endif
-
+#ifdef DBG_OUTPUT
+  std::cout << "Run Simulation with:\n  " << iram << "  " << std::endl
+    << "  " << dram << "  " << std::endl << "  " << machineModel << " with "
+    << disabled << " disabled contexts" << std::endl;
+#endif
   //LockAccess();
   ++KernelNumber;
 
@@ -550,8 +554,11 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
   //pthread_mutex_unlock(&p_simulator_mutex);
 
 #ifdef DBG_SIM
-  std::cerr << "Finished running simulation. globalS = "
-    << std::hex << globalS << std::endl;
+  std::cerr << "Finished running simulation." << std::endl;
+#endif
+#ifdef DBG_OUTPUT
+  std::cout << " -------------------------------------------------------- "
+    << std::endl;
 #endif
   return true;
 }

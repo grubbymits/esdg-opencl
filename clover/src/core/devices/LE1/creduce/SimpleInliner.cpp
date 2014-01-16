@@ -306,7 +306,6 @@ bool SimpleInliner::isValidArgExpr(const Expr *E)
 {
 #ifdef DEBUGCL
   std::cerr << "isValidArgExpr??" << std::endl;
-  E->dumpAll();
 #endif
   TransAssert(E && "NULL Expr!");
   switch(E->getStmtClass()) {

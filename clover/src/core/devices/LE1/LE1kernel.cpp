@@ -476,6 +476,8 @@ bool LE1KernelEvent::CompileSource() {
   disabledCores = 0;
   unsigned merge_dims[3] = {1, 0, 0};
   unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
+  unsigned workgroups[3] = {0};
+  unsigned totalWorkgroups = 1;
 
   // Local size may have been set by user, especially in the presence of
   // barriers, so we need to take that into consideration. If the user didn't
@@ -483,6 +485,11 @@ bool LE1KernelEvent::CompileSource() {
   // can adjust the launcher to work with several workgroups in this case.
   // Here we also choose to disable some cores if the data set sizes do not fit
   // properly onto the current configuration.
+#ifdef DBG_OUTPUT
+  std::cout << "Device: " << p_device->numLE1s() << " core "
+    << p_device->target() << std::endl;
+  std::cout << "Compiling kernel: " << KernelName << std::endl << std::endl;
+#endif
 
   for (unsigned i = 0; i < p_event->work_dim(); ++i) {
 
@@ -499,6 +506,10 @@ bool LE1KernelEvent::CompileSource() {
         merge_dims[i] = global_work_size / local_work_size;
         WorkgroupsPerCore[i] = global_work_size / merge_dims[i];
       }
+      // ------------------------------------
+      workgroups[i] = WorkgroupsPerCore[i];
+      totalWorkgroups *= workgroups[i];
+      // ------------------------------------
 
       if (i == 0) {
         if (WorkgroupsPerCore[i] % cores != 0) {
@@ -513,10 +524,11 @@ bool LE1KernelEvent::CompileSource() {
           WorkgroupsPerCore[i] /= cores;
       }
     }
-#ifdef DBG_KERNEL
-    std::cout << "Global work size = " << global_work_size
-      << ", Local work size = " << local_work_size << std::endl;
-    std::cout << "WorkgroupsPerCore = " << WorkgroupsPerCore[i]
+#ifdef DBG_OUTPUT
+    std::cout << "Dimension " << i << ": Global work size = "
+      << global_work_size << ", Local work size = "
+      << local_work_size
+      << ", therefore WorkgroupsPerCore = " << WorkgroupsPerCore[i]
       << std::endl;
 #endif
   }
@@ -577,7 +589,8 @@ bool LE1KernelEvent::CompileSource() {
 #endif
 
   std::string LauncherString;
-  CreateLauncher(LauncherString, WorkgroupsPerCore, disabledCores);
+  //CreateLauncher(LauncherString, WorkgroupsPerCore, disabledCores);
+  CreateLauncher(LauncherString, workgroups, totalWorkgroups);
 
   Compiler MainCompiler(p_device);
   if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
@@ -627,14 +640,16 @@ bool LE1KernelEvent::CompileSource() {
 }
 
 void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
-                                    unsigned *WorkgroupsPerCore,
-                                    unsigned disabledCores) {
+                                    unsigned *workgroups,
+                                    unsigned totalWorkgroups) {
+                                    //unsigned *WorkgroupsPerCore,
+                                    //unsigned disabledCores) {
 
 #ifdef DBG_KERNEL
-  std::cerr << "Entering CreateLauncher with WorkgroupsPerCore = "
-    << WorkgroupsPerCore[0] << ", " << WorkgroupsPerCore[1] << " and "
-    << WorkgroupsPerCore[2] << std::endl
-    << "Number of disabled cores = " << disabledCores << std::endl;
+  //std::cerr << "Entering CreateLauncher with WorkgroupsPerCore = "
+    //<< WorkgroupsPerCore[0] << ", " << WorkgroupsPerCore[1] << " and "
+    //<< WorkgroupsPerCore[2] << std::endl
+    //<< "Number of disabled cores = " << disabledCores << std::endl;
 #endif
 
   // Calculate the addresses in global memory where the arguments will be stored
@@ -650,11 +665,60 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
     }
   }
 
-  launcher << "\nvoid reset_local(int *buffer, int size);\n\n";
+  //launcher << "\nvoid reset_local(int *buffer, int size);\n\n";
 
   // Create a main function to the launcher for the kernel
-  launcher << "int main(void) {\n";
+  launcher << "int main(void) {\n"
+   << "  int id = __builtin_le1_read_cpuid();\n"
+   << "  int num_cores = " << totalCores << ";\n"
+   << "  int total_workgroups = " << totalWorkgroups << ";\n"
+   << "  int workgroupX = " << workgroups[0] << ";\n"
+   << "  int workgroupY = " << workgroups[1] << ";\n"
+   << "  int x = 0;\n"
+   << "  int y = 0;\n"
+   << "  if (id >= total_workgroups)\n"
+   << "    return 0;\n\n"
+   << "  while (id < total_workgroups) {\n"
+   << "    x = id;\n"
+   << "    if (x >= workgroupX) {\n"
+   << "      x = x % workgroupX;\n"
+   << "      y += x / workgroupX;\n"
+   << "    }\n"
+   << "    if (y >= workgroupY)\n"
+   << "      return 0;\n\n"
+   << "    __builtin_le1_set_group_id_1(y);\n"
+   << "    __builtin_le1_set_group_id_0(x);\n"
+   << "    " << KernelName << "(";
+  for (unsigned i = 0; i < kernel->numArgs(); ++i) {
+    const Kernel::Arg& arg = kernel->arg(i);
+    // Local
+    if ((arg.kind() == Kernel::Arg::Buffer) &&
+        arg.allocAtKernelRuntime()) {
+      // We're defining the pointers as ints, so divide
+      // FIXME what if the size isn't divisible by four?
+      unsigned size = arg.allocAtKernelRuntime() / 4;
+      launcher << "(&BufferArg_" << i << " + (__builtin_le1_read_cpuid() * "
+        << size << "))";
+    }
+    // Global and local
+    else if (arg.kind() == Kernel::Arg::Buffer)
+      launcher << "&BufferArg_" << i;
+    // Private
+    else {
+      void *ArgData = const_cast<void*>(arg.data());
+      launcher << *(static_cast<unsigned*>(ArgData));
+    }
+    if (i < (kernel->numArgs()-1))
+      launcher << ", ";
+    else
+      launcher << ");\n";
+  }
+  launcher << "    id += num_cores;\n"
+   << "  }\n"
+   << "  return id;\n"
+   << "}\n";
 
+  /*
   if (disabledCores)
     launcher << "  if (__builtin_le1_read_cpuid() > "
       << (totalCores - disabledCores - 1) << ") return 0;\n" << std::endl;
@@ -705,16 +769,6 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
     else {
       launcher << ");\n";
 
-      /*
-      for (unsigned i = 0; i < kernel->numArgs(); ++i) {
-        const Kernel::Arg& arg = kernel->arg(i);
-        if (arg.file() == Kernel::Arg::Local) {
-          unsigned size = arg.allocAtKernelRuntime() / 4;
-          launcher << "      reset_local(&BufferArg_" << i << ", "
-            << size << ");\n";
-        }
-      }*/
-
       for (unsigned i = 0; i < NestedLoops; ++i)
         launcher << "}\n";
       launcher << "return 0;\n}";
@@ -725,11 +779,13 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
     << "  for (unsigned id = 0; id < size; ++id)\n"
     << "    buffer[id] = 0;\n"
     << "}\n";
+  */
 
   LauncherString = launcher.str();
-#ifdef DBG_KERNEL
+#ifdef DBG_OUTPUT
+  std::cout << "\nKernel launcher function:" << std::endl;
   //std::cerr << LauncherString << std::endl;
-  std::cerr << LauncherString << std::endl;
+  std::cout << LauncherString << std::endl;
 #endif
 }
 

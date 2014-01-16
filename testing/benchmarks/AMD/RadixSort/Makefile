@@ -5,3 +5,6 @@ LIBS = -L/opt/esdg-opencl/lib -lOpenCL -L../SDKUtil -lSDKUtil
 
 radix-sort: RadixSort.cpp
 	$(CXX) $(CXXFLAGS) $(INC) $< $(LIBS) -o $@
+
+clean: RadixSort.cpp
+	rm -rf radix-sort *.s *.bc binaries microblaze *.dat *.csv *.tmp* init.*

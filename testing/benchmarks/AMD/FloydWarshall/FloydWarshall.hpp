@@ -85,6 +85,7 @@ public:
             totalKernelTime = 0;
             iterations = 1;
             blockSize = 16;
+            verify = true;
         }
 
     /** 
@@ -104,6 +105,7 @@ public:
             totalKernelTime = 0;
             iterations = 1;
             blockSize = 16;
+            verify = true;
         }
 
     /**
