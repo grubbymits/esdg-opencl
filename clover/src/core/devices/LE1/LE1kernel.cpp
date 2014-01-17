@@ -681,7 +681,7 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
    << "  while (id < total_workgroups) {\n"
    << "    x = id;\n"
    << "    if (x >= workgroupX) {\n"
-   << "      y += x / workgroupX;\n"
+   << "      y = x / workgroupX;\n"
    << "      x = x % workgroupX;\n"
    << "    }\n"
    << "    if (y >= workgroupY)\n"
