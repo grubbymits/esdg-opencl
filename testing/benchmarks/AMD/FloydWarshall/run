@@ -2,6 +2,6 @@
 (
 for device in `seq 0 19`;
 do
-  ./floyd-warshall -d $device > output
+  ./floyd-warshall -d $device
 done
 )

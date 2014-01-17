@@ -31,7 +31,7 @@ binarySearch(        __global uint4 * outputArray,
 {
   unsigned __esdg_idx = 0;
 for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
-    unsigned int tid = __builtin_le1_read_group_id_0() * 256 + __esdg_idx;//get_global_id(0);
+    unsigned int tid = get_group_id(0) * 256 + __esdg_idx;//get_global_id(0);
 
     /* Then we find the elements  for this thread */
     uint2 element = sortedArray[tid];

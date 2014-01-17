@@ -661,21 +661,19 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
     const Kernel::Arg& arg = kernel->arg(i);
     if (arg.kind() == Kernel::Arg::Buffer) {
       launcher << "extern int BufferArg_" << i << ";" << std::endl;
-      //++j;
     }
   }
 
-  //launcher << "\nvoid reset_local(int *buffer, int size);\n\n";
-
   // Create a main function to the launcher for the kernel
   launcher << "int main(void) {\n"
-   << "  int id = __builtin_le1_read_cpuid();\n"
+    << "  int id = 0;\n"
    << "  int num_cores = " << totalCores << ";\n"
    << "  int total_workgroups = " << totalWorkgroups << ";\n"
    << "  int workgroupX = " << workgroups[0] << ";\n"
    << "  int workgroupY = " << workgroups[1] << ";\n"
    << "  int x = 0;\n"
    << "  int y = 0;\n"
+   << "  id = __builtin_le1_read_cpuid();\n\n"
    << "  if (id >= total_workgroups)\n"
    << "    return 0;\n\n"
    << "  while (id < total_workgroups) {\n"

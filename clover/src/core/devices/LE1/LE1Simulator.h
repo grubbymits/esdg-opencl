@@ -11,7 +11,7 @@ extern "C" { struct hyperContextT; }
 namespace Coal {
 
   struct SimulationStats {
-    SimulationStats(hyperContextT *HyperContext, const unsigned disabled);
+    SimulationStats(hyperContextT *HyperContext);
     SimulationStats(const SimulationStats &Stats);
     unsigned long TotalCycles;
     unsigned long Stalls;
@@ -22,11 +22,12 @@ namespace Coal {
     unsigned long BranchesNotTaken;
     unsigned long ControlFlowChange;
     unsigned long MemoryAccessCount;
-    unsigned disabledCores;
+    //unsigned disabledCores;
   };
 
-  typedef std::vector<SimulationStats> StatsSet;
-  typedef std::map<std::string, StatsSet> StatsMap;
+  typedef std::vector<SimulationStats> StatVector;
+  typedef std::pair<unsigned, StatVector> CompleteSet;
+  typedef std::map<std::string, CompleteSet> StatsMap;
 
   class LE1Simulator {
 
@@ -39,7 +40,7 @@ namespace Coal {
     unsigned GetIterations() const { return LE1Simulator::iteration; }
     void ClearStats() { Stats.clear(); }
     int checkStatus(void);
-    bool Run(const char *iram, const char *dram, const unsigned disabled);
+    bool Run(const char *iram, const char *dram);//, const unsigned disabled);
     void LockAccess();
     void UnlockAccess();
     bool readByteData(unsigned int addr,

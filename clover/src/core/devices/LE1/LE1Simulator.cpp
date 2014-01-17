@@ -24,8 +24,8 @@ using namespace Coal;
 
 unsigned LE1Simulator::iteration = 0;
 
-SimulationStats::SimulationStats(hyperContextT *HyperContext,
-                                 unsigned disabled) {
+SimulationStats::SimulationStats(hyperContextT *HyperContext) {
+                                 //unsigned disabled) {
   TotalCycles = HyperContext->cycleCount;
   Stalls = HyperContext->stallCount;
   NOPs = HyperContext->nopCount;
@@ -35,7 +35,7 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext,
   BranchesNotTaken = HyperContext->branchNotTaken;
   ControlFlowChange = HyperContext->controlFlowChange;
   MemoryAccessCount = HyperContext->memoryAccessCount;
-  disabledCores = disabled;
+  //disabledCores = disabled;
 }
 
 SimulationStats::SimulationStats(const SimulationStats &Stats) {
@@ -48,7 +48,7 @@ SimulationStats::SimulationStats(const SimulationStats &Stats) {
   BranchesNotTaken = Stats.BranchesNotTaken;
   ControlFlowChange = Stats.ControlFlowChange;
   MemoryAccessCount = Stats.MemoryAccessCount;
-  disabledCores = Stats.disabledCores;
+  //disabledCores = Stats.disabledCores;
 }
 
 LE1Simulator::LE1Simulator() {
@@ -177,7 +177,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
 }
 
 // Save the execution statistics and resets the device
-void LE1Simulator::SaveStats(unsigned disabled) {
+void LE1Simulator::SaveStats(unsigned cycles) {
   // 0 = Single system
     /* system, context, hypercontext, cluster */
     //unsigned char s = 0;
@@ -212,6 +212,7 @@ void LE1Simulator::SaveStats(unsigned disabled) {
       hypercontext->programCounter = 0;
     }
   }
+  // pair cycles with StatVector
 }
 
 void LE1Simulator::LockAccess(void) {
@@ -495,9 +496,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
 
   //extern unsigned long long cycleCount;
   /* Clock */
+  cycleCount = 0;
   {
     unsigned int vt_ctrl;
-    cycleCount = 0;
     while(checkStatus()) {
       galaxyConfigT *g = NULL;
       gTracePacketT gTracePacket;
@@ -523,6 +524,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
       //printf("vt_ctrl = %d\n", vt_ctrl);
       ++cycleCount;
     }
+#ifdef DBG_OUTPUT
+    std::cout << "Cycle count = " << cycleCount << std::endl;
+#endif
   }
 
   // Debugging information
@@ -549,7 +553,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
     ++LE1Simulator::iteration;
   }
 
-  SaveStats(disabled);
+  SaveStats(cycleCount);
 
   //pthread_mutex_unlock(&p_simulator_mutex);
 
