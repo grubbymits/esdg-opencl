@@ -1,0 +1,523 @@
+Device id = 15
+Reading matrix from file ../../data/lud/64.dat
+num_devices = 20
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_diagonal
+
+Dimension 0: Global work size = 16, Local work size = 16
+Dimension 1: Global work size = 1, Local work size = 1
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_diagonal(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), 64, 0);
+    id += num_cores;
+  }
+  return id;
+}
+
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_perimeter
+
+Dimension 0: Global work size = 96, Local work size = 32
+Dimension 1: Global work size = 1, Local work size = 1
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+extern int BufferArg_3;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 3;
+  int workgroupX = 3;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_perimeter(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_2 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_3 + (__builtin_le1_read_cpuid() * 256)), 64, 0);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 18504
+Size of bss area : 
+End of memory: 148032
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_diagonal.s.bin  
+  binaries/final_lud_diagonal.data.bin  
+  Default_4wide_1ls.xml
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_internal
+
+Dimension 0: Global work size = 48, Local work size = 16
+Dimension 1: Global work size = 48, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 9;
+  int workgroupX = 3;
+  int workgroupY = 3;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_internal(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_2 + (__builtin_le1_read_cpuid() * 256)), 64, 0);
+    id += num_cores;
+  }
+  return id;
+}
+
+HALT operation received from [0][0][0] at cycle 207597
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 1
+Total cycles = 207598
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_diagonal
+
+Dimension 0: Global work size = 16, Local work size = 16
+Dimension 1: Global work size = 1, Local work size = 1
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_diagonal(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), 64, 16);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 20552
+Size of bss area : 
+End of memory: 164416
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_perimeter.s.bin  
+  binaries/final_lud_perimeter.data.bin  
+  Default_4wide_1ls.xml
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_perimeter
+
+Dimension 0: Global work size = 64, Local work size = 32
+Dimension 1: Global work size = 1, Local work size = 1
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+extern int BufferArg_3;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 2;
+  int workgroupX = 2;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_perimeter(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_2 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_3 + (__builtin_le1_read_cpuid() * 256)), 64, 16);
+    id += num_cores;
+  }
+  return id;
+}
+
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_internal
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_internal(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_2 + (__builtin_le1_read_cpuid() * 256)), 64, 16);
+    id += num_cores;
+  }
+  return id;
+}
+
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_diagonal
+
+Dimension 0: Global work size = 16, Local work size = 16
+Dimension 1: Global work size = 1, Local work size = 1
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_diagonal(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), 64, 32);
+    id += num_cores;
+  }
+  return id;
+}
+
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_perimeter
+
+Dimension 0: Global work size = 32, Local work size = 32
+Dimension 1: Global work size = 1, Local work size = 1
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+extern int BufferArg_3;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_perimeter(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_2 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_3 + (__builtin_le1_read_cpuid() * 256)), 64, 32);
+    id += num_cores;
+  }
+  return id;
+}
+
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_internal
+
+Dimension 0: Global work size = 16, Local work size = 16
+Dimension 1: Global work size = 16, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 1;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_internal(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), (&BufferArg_2 + (__builtin_le1_read_cpuid() * 256)), 64, 32);
+    id += num_cores;
+  }
+  return id;
+}
+
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: lud_diagonal
+
+Dimension 0: Global work size = 16, Local work size = 16
+Dimension 1: Global work size = 1, Local work size = 1
+HALT operation received from [0][0][0] at cycle 1804137
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 1
+Total cycles = 1804138
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    lud_diagonal(&BufferArg_0, (&BufferArg_1 + (__builtin_le1_read_cpuid() * 256)), 64, 48);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 19528
+Size of bss area : 
+End of memory: 156224
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_internal.s.bin  
+  binaries/final_lud_internal.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 537790
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 1
+Total cycles = 537791
+mem align: 0
+dram_base_offset: 0
+Size of data area : 18504
+Size of bss area : 
+End of memory: 148032
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_diagonal.s.bin  
+  binaries/final_lud_diagonal.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 215580
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 2
+Total cycles = 423179
+mem align: 0
+dram_base_offset: 0
+Size of data area : 20552
+Size of bss area : 
+End of memory: 164416
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_perimeter.s.bin  
+  binaries/final_lud_perimeter.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 587461
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 2
+Total cycles = 2391600
+mem align: 0
+dram_base_offset: 0
+Size of data area : 19528
+Size of bss area : 
+End of memory: 156224
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_internal.s.bin  
+  binaries/final_lud_internal.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 550156
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 2
+Total cycles = 1087948
+mem align: 0
+dram_base_offset: 0
+Size of data area : 18504
+Size of bss area : 
+End of memory: 148032
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_diagonal.s.bin  
+  binaries/final_lud_diagonal.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 103860
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 3
+Total cycles = 527040
+mem align: 0
+dram_base_offset: 0
+Size of data area : 20552
+Size of bss area : 
+End of memory: 164416
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_perimeter.s.bin  
+  binaries/final_lud_perimeter.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 580848
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 3
+Total cycles = 2972449
+mem align: 0
+dram_base_offset: 0
+Size of data area : 19528
+Size of bss area : 
+End of memory: 156224
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_internal.s.bin  
+  binaries/final_lud_internal.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 538789
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 3
+Total cycles = 1626738
+mem align: 0
+dram_base_offset: 0
+Size of data area : 18504
+Size of bss area : 
+End of memory: 148032
+Second Pass Completed
+Run Simulation with:
+  binaries/final_lud_diagonal.s.bin  
+  binaries/final_lud_diagonal.data.bin  
+  Default_4wide_1ls.xml
+HALT operation received from [0][0][0] at cycle 103960
+ -------------------------------------------------------- 
+Device::SaveStats
+Iteration = 4
+Total cycles = 631001
+Time consumed(ms): 7971.159000

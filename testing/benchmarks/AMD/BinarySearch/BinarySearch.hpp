@@ -75,9 +75,9 @@ public:
             input = NULL;
             output = NULL;
             verificationInput = NULL;
-            findMe = 5;
-            numSubdivisions = 8;        /**< 8-ary Search by Default */
-            length = 512;
+            findMe = 20000;
+            numSubdivisions = 512;        /**< 8-ary Search by Default */
+            length = 131072;
             setupTime = 0;
             totalKernelTime = 0;
             iterations = 1;
@@ -96,9 +96,9 @@ public:
             input = NULL;
             output = NULL;
             verificationInput = NULL;
-            findMe = 5;
-            numSubdivisions = 8;      /**< Binary Search by Default */
-            length = 512;
+            findMe = 20000;
+            numSubdivisions = 512;      /**< Binary Search by Default */
+            length = 131072;
             setupTime = 0;
             totalKernelTime = 0;
             iterations = 1;

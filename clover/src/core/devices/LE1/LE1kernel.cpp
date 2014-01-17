@@ -527,9 +527,7 @@ bool LE1KernelEvent::CompileSource() {
 #ifdef DBG_OUTPUT
     std::cout << "Dimension " << i << ": Global work size = "
       << global_work_size << ", Local work size = "
-      << local_work_size
-      << ", therefore WorkgroupsPerCore = " << WorkgroupsPerCore[i]
-      << std::endl;
+      << local_work_size << std::endl;
 #endif
   }
 
@@ -569,7 +567,8 @@ bool LE1KernelEvent::CompileSource() {
 #endif
 
   Compiler LE1Compiler(p_device);
-  std::string Opts = "-fno-builtin ";
+  std::string Opts = "-O3 ";
+  Opts.append("-fno-builtin ");
   Opts.append("-funroll-loops ");
   Opts.append("-mllvm -unroll-threshold=10 ");
   //Opts.append("-mllvm -unroll-count=2 ");
@@ -674,15 +673,15 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
    << "  int x = 0;\n"
    << "  int y = 0;\n"
    << "  id = __builtin_le1_read_cpuid();\n\n"
-   << "  if (id >= total_workgroups)\n"
-   << "    return 0;\n\n"
+   //<< "  if (id >= total_workgroups)\n"
+   //<< "    return 0;\n\n"
    << "  while (id < total_workgroups) {\n"
    << "    x = id;\n"
    << "    if (x >= workgroupX) {\n"
    << "      y = x / workgroupX;\n"
    << "      x = x % workgroupX;\n"
    << "    }\n"
-   << "    if (y >= workgroupY)\n"
+   << "    if (y > workgroupY)\n"
    << "      return 0;\n\n"
    << "    __builtin_le1_set_group_id_1(y);\n"
    << "    __builtin_le1_set_group_id_0(x);\n"
@@ -821,7 +820,7 @@ bool LE1KernelEvent::run() {
   std::string dram = "binaries/final_" + KernelName + ".data.bin";
   std::string iram = "binaries/final_" + KernelName + ".s.bin";
 
-  wasSuccess = simulator->Run(iram.c_str(), dram.c_str(), disabledCores);
+  wasSuccess = simulator->Run(iram.c_str(), dram.c_str());//, disabledCores);
   if (!wasSuccess) {
     pthread_mutex_unlock(&p_mutex);
     simulator->UnlockAccess();

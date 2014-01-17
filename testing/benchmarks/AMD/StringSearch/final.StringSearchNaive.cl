@@ -58,14 +58,14 @@ __kernel void
       __global int* resultCountPerWG,
       const uint maxSearchLength,
       __local uchar* localPattern)
-{ int localIdx[256];
+{ uint groupSuccessCounter;
+int localIdx[256];
 int localSize;
 int groupIdx;
 uint lastSearchIdx;
+uint beginSearchIdx;
 uint endSearchIdx;
   unsigned __esdg_idx = 0;
-uint groupSuccessCounter;
-uint beginSearchIdx;
 for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
  
     

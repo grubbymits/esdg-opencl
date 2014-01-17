@@ -7,7 +7,7 @@
 #   - nn
 
 # Each directory will contain a script to iterate through all the devices
-declare -a benchmarks=(rodinia/gaussian rodinia/lud rodinia/nn
+declare -a benchmarks=(rodinia/gaussian rodinia/lud/ocl rodinia/nn
                        AMD/FastWalshTransform AMD/NBody);
 
 for benchmark in ${benchmarks[@]}

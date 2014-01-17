@@ -26,6 +26,7 @@ int BinarySearch::setupBinarySearch()
     // allocate and init memory used by host
     cl_uint max = length * 20;
     cl_uint inputSizeBytes = length *  sizeof(cl_uint);
+    std::cout << "inputSizeBytes = " << inputSizeBytes << std::endl;
 
 	int status = mapBuffer( inputBuffer, input, inputSizeBytes, CL_MAP_WRITE);
     CHECK_ERROR(status, SDK_SUCCESS, "Failed to map device buffer.(inputBuffer in setupBinarySearch)");
@@ -179,15 +180,21 @@ BinarySearch::setupCL(void)
         CHECK_OPENCL_ERROR( status, "clCreateCommandQueue failed.");
     }
 	
-	localThreads[0] = 256;
+    localThreads[0] = 128;
     numSubdivisions = length / (cl_uint)localThreads[0];
+    std::cout << "length = " << length << ", localThreads = "
+      << localThreads[0] << " so numSubdivisions = " << numSubdivisions
+      << std::endl;
 
     if(numSubdivisions < localThreads[0])
     {
         numSubdivisions = (cl_uint)localThreads[0];
     }
- 
-	inlength = numSubdivisions*2*sizeof(cl_uint);
+
+    std::cout << "numSubdivisions = " << numSubdivisions << std::endl; 
+	//inlength = numSubdivisions*2*sizeof(cl_uint);
+    inlength = length * sizeof(cl_uint);
+        std::cout << "inlength = " << inlength << std::endl;
 
 	inputBuffer = clCreateBuffer(
 					context, 
@@ -246,7 +253,7 @@ BinarySearch::runCLKernels(void)
             std::cout << "Out of Resources!" << std::endl;
             std::cout << "Group Size specified : " << localThreads[0] << std::endl;
             std::cout << "Max Group Size supported on the kernel : " 
-                << kernelInfo.kernelWorkGroupSize << std::endl;
+             << kernelInfo.kernelWorkGroupSize << std::endl;
             std::cout << "Changing the group size to " 
                 << kernelInfo.kernelWorkGroupSize << std::endl;
         }

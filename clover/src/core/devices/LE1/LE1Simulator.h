@@ -26,8 +26,8 @@ namespace Coal {
   };
 
   typedef std::vector<SimulationStats> StatVector;
-  typedef std::pair<unsigned, StatVector> CompleteSet;
-  typedef std::map<std::string, CompleteSet> StatsMap;
+  typedef std::pair<unsigned, StatVector> StatSet;
+  typedef std::map<std::string, std::pair<unsigned, StatSet> > StatsMap;
 
   class LE1Simulator {
 
@@ -36,9 +36,14 @@ namespace Coal {
     ~LE1Simulator();
     bool Initialise(const std::string &Machine);
     void SaveStats(unsigned disabled);
-    std::vector<SimulationStats> *GetStats() { return &Stats; }
+    //std::vector<SimulationStats> *GetStats() { return &Stats; }
+    StatSet *GetStats() { return statSet; }
     unsigned GetIterations() const { return LE1Simulator::iteration; }
-    void ClearStats() { Stats.clear(); }
+    void ClearStats() {
+      statVector.clear();
+      if (statSet)
+        delete statSet;
+    }
     int checkStatus(void);
     bool Run(const char *iram, const char *dram);//, const unsigned disabled);
     void LockAccess();
@@ -63,11 +68,12 @@ private:
   unsigned KernelNumber;
   systemConfig *SYS;
   systemT *LE1System;
-  StatsSet Stats;
+  StatVector statVector;
+  StatSet *statSet;
   };
 
-  typedef std::vector<SimulationStats> StatsSet;
-  typedef std::map<std::string, StatsSet> StatsMap;
+  //typedef std::vector<SimulationStats> StatsSet;
+  //typedef std::map<std::string, StatsSet> StatsMap;
 }
 
 #endif

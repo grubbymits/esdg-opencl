@@ -147,16 +147,14 @@ LE1Device::~LE1Device()
     unsigned TotalBranchesTaken = 0;
     unsigned TotalBranchesNotTaken = 0;
 
-    unsigned AverageCycles = 0;
-    unsigned AverageStalls = 0;
-    unsigned AverageIdle = 0;
-    unsigned AverageDecodeStalls = 0;
-    unsigned AverageBranchesTaken = 0;
-    unsigned AverageBranchesNotTaken = 0;
-    unsigned totalIterations = 0;
+    StatSet statSet = SMI->second.second;
+    StatVector statVector = statSet.second;
+    unsigned numIterations = SMI->second.first;
+    unsigned completionCycles = statSet.first;
 
-    for (StatsSet::iterator SI = SMI->second.begin(),
-         SE = SMI->second.end(); SI != SE; ++SI) {
+    for (StatVector::iterator SI = statVector.begin(),
+         SE = statVector.end(); SI != SE; ++SI) {
+
       SimulationStats Stats = *SI;
       TotalCycles += Stats.TotalCycles;
       TotalStalls += Stats.Stalls;
@@ -164,35 +162,7 @@ LE1Device::~LE1Device()
       TotalDecodeStalls += Stats.DecodeStalls;
       TotalBranchesTaken += Stats.BranchesTaken;
       TotalBranchesNotTaken += Stats.BranchesNotTaken;
-
-      AverageCycles += Stats.TotalCycles / (NumCores - Stats.disabledCores);
-      AverageStalls += Stats.Stalls / (NumCores - Stats.disabledCores);
-      AverageIdle += Stats.IdleCycles / (NumCores - Stats.disabledCores);
-      AverageDecodeStalls += Stats.DecodeStalls /
-        (NumCores - Stats.disabledCores);
-      AverageBranchesTaken += Stats.BranchesTaken /
-        (NumCores - Stats.disabledCores);
-      AverageBranchesNotTaken += Stats.BranchesNotTaken /
-        (NumCores - Stats.disabledCores);
     }
-
-  /*
-    std::cout << "Total iterations for " << SMI->first << " = "
-      << totalIterations << std::endl;
-
-    AverageCycles /= totalIterations;
-    AverageStalls /= totalIterations;
-    AverageIdle /= totalIterations;
-    AverageDecodeStalls /= totalIterations;
-    AverageBranchesTaken /= totalIterations;
-    AverageBranchesNotTaken /= totalIterations;*/
-
-    //AverageCycles /= KernelIterations;
-    //AverageIdle /= KernelIterations;
-    //AverageDecodeStalls /= KernelIterations;
-    //AverageStalls /= KernelIterations;
-    //AverageBranchesTaken /= KernelIterations;
-    //AverageBranchesNotTaken /= KernelIterations;
 
     // Write results to a CSV file
     // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
@@ -204,12 +174,16 @@ LE1Device::~LE1Device()
 
     if(!std::ifstream(filename.c_str())) {
       Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
-        << " Branches Taken, Branches not Taken, Total Average Cycles\n";
+        << " Branches Taken, Branches not Taken, Cycle to complete, Iterations"
+        << ", Average Cycles"
+        << std::endl;
     }
     Line << CPU << ", " << NumCores << ", " << TotalCycles << ", "
       << TotalStalls << ", " << TotalDecodeStalls << ", "
       << TotalBranchesTaken << ", " << TotalBranchesNotTaken << ", "
-      << AverageCycles << std::endl;
+      << completionCycles << ", " << numIterations << ", "
+      << completionCycles / numIterations
+      << std::endl;
 
     std::ofstream Results;
     Results.open(filename.c_str(), std::ios_base::app);
@@ -261,15 +235,25 @@ void LE1Device::incrGlobalBaseAddr(unsigned mem_incr) {
 }
 
 void LE1Device::SaveStats(std::string &Kernel) {
-  StatsSet *NewStats = Simulator->GetStats();
+  StatSet *NewStats = Simulator->GetStats();
 
   if (ExecutionStats.find(Kernel) == ExecutionStats.end()) {
-    ExecutionStats.insert(std::make_pair(Kernel, *NewStats));
+    ExecutionStats.insert(std::make_pair(Kernel, std::make_pair(1, *NewStats)));
   }
   else {
-    StatsSet OldSet = ExecutionStats[Kernel];
-    OldSet.insert(OldSet.end(), NewStats->begin(), NewStats->end());
+    StatSet *OldSet = &(ExecutionStats[Kernel].second);
+    OldSet->second.insert(OldSet->second.end(), NewStats->second.begin(),
+                         NewStats->second.end());
+    // Increment the number of times this kernel has run, and the total cycles
+    OldSet->first += NewStats->first;
+    ExecutionStats[Kernel].first++;
   }
+#ifdef DBG_OUTPUT
+  std::cout << "Device::SaveStats" << std::endl;
+  std::cout << "Iteration = " << ExecutionStats[Kernel].first << std::endl;
+  std::cout << "Total cycles = " << ExecutionStats[Kernel].second.first
+    << std::endl;
+#endif
 
   Simulator->ClearStats();
 }

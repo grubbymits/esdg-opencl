@@ -3,6 +3,6 @@
 (
 for device in `seq 0 19`;
 do
-  ./fast-walsh -d $device > output
+  ./fast-walsh -d $device
 done
 )

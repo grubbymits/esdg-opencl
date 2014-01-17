@@ -13,7 +13,8 @@
 #   - sort
 
 # Each directory will contain a script to iterate through all the devices
-declare -a benchmarks=(AMD/BinarySearch AMD/StringSearch AMD/BitonicSort AMD/FloydWarshall'rodinia/bfs rodinia/nw shoc/sort');
+declare -a benchmarks=(AMD/BinarySearch AMD/StringSearch AMD/BitonicSort AMD/FloydWarshall AMD/RadixSort
+rodinia/bfs rodinia/nw shoc/sort);
 
 for benchmark in ${benchmarks[@]}
 do

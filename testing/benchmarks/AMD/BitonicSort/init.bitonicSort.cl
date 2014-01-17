@@ -47,7 +47,7 @@ void bitonicSort(uint * restrict theArray,
   unsigned __esdg_idx = 0;
 for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
     uint sortIncreasing = direction;
-    uint threadId = __builtin_le1_read_group_id_0() * 256 + __esdg_idx;//get_global_id(0);
+    uint threadId = get_group_id(0) * 256 + __esdg_idx;//get_global_id(0);
     
     uint pairDistance = 1 << (stage - passOfStage);
     uint blockWidth   = 2 * pairDistance;

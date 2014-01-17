@@ -2,6 +2,6 @@
 (
 for device in `seq 0 19`;
 do
-  ./nn filelist -r 5 -lat 30 -lng 90 -p 0 -d $device > output
+  ./nn filelist -r 5 -lat 30 -lng 90 -p 0 -d $device
 done
 )

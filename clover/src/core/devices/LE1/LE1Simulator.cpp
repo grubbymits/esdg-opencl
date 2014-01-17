@@ -204,8 +204,8 @@ void LE1Simulator::SaveStats(unsigned cycles) {
                           + (k * sizeof(hyperContextT)));
 
       // Save the execution statistics
-      SimulationStats NewStat(hypercontext, disabled);
-      Stats.push_back(NewStat);
+      SimulationStats NewStat(hypercontext); //, disabled);
+      statVector.push_back(NewStat);
 
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));
@@ -213,6 +213,7 @@ void LE1Simulator::SaveStats(unsigned cycles) {
     }
   }
   // pair cycles with StatVector
+  statSet = new std::pair<unsigned, StatVector>(cycles, statVector);
 }
 
 void LE1Simulator::LockAccess(void) {
@@ -266,17 +267,15 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::Run(const char *iram, const char *dram,
-                       const unsigned disabled) {
+bool LE1Simulator::Run(const char *iram, const char *dram) {
+                       //const unsigned disabled) {
 #ifdef DBG_SIM
   std::cerr << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
-    << std::endl << machineModel << " with " << disabled 
-    << " disabled contexts" << std::endl;
+    << std::endl << machineModel << std::endl;
 #endif
 #ifdef DBG_OUTPUT
   std::cout << "Run Simulation with:\n  " << iram << "  " << std::endl
-    << "  " << dram << "  " << std::endl << "  " << machineModel << " with "
-    << disabled << " disabled contexts" << std::endl;
+    << "  " << dram << "  " << std::endl << "  " << machineModel << std::endl;
 #endif
   //LockAccess();
   ++KernelNumber;
@@ -524,9 +523,6 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
       //printf("vt_ctrl = %d\n", vt_ctrl);
       ++cycleCount;
     }
-#ifdef DBG_OUTPUT
-    std::cout << "Cycle count = " << cycleCount << std::endl;
-#endif
   }
 
   // Debugging information

@@ -30,8 +30,8 @@ binarySearch(        __global uint4 * outputArray,
              const   unsigned int findMe)
 {
   unsigned __esdg_idx = 0;
-for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
-    unsigned int tid = get_group_id(0) * 256 + __esdg_idx;//get_global_id(0);
+for (__esdg_idx = 0; __esdg_idx < 128; ++__esdg_idx) {
+    unsigned int tid = get_group_id(0) * 128 + __esdg_idx;//get_global_id(0);
 
     /* Then we find the elements  for this thread */
     uint2 element = sortedArray[tid];

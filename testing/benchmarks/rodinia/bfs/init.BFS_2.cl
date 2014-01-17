@@ -20,7 +20,7 @@ __kernel void BFS_2(__global char* restrict g_graph_mask,
 		    const  int no_of_nodes) {  unsigned __esdg_idx = 0;
 for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
 
-  int tid = __builtin_le1_read_group_id_0() * 256 + __esdg_idx;//get_global_id(0);
+  int tid = get_group_id(0) * 256 + __esdg_idx;//get_global_id(0);
   if( tid<no_of_nodes && g_updating_graph_mask[tid]){
 
     g_graph_mask[tid]=true;
