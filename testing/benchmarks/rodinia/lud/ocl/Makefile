@@ -3,7 +3,7 @@ CC = clang++
 
 SRC = lud.cpp ../common/common.c
 LIBS = -L/opt/esdg-opencl/lib -lOpenCL
-INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/ -I../common/
+INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/ -I/usr/include/x86_64-linux-gnu/c++/4.8/ -I../common/
 CC_FLAGS = -g
 
 EXE = lud
