@@ -165,6 +165,9 @@ lud_verify(float *m, float *lu, int matrix_dim){
   for (i=0; i<matrix_dim; i++){
     for (j=0; j<matrix_dim;j++){
         printf("%f ", tmp[i*matrix_dim+j]);
+        if (tmp[i*matrix_dim+j] != lu[i*matrix_dim+j])
+          printf("ERROR: %f != %f at %d\n", tmp[i*matrix_dim+j],
+                 lu[i*matrix_dim+j], (i*matrix_dim+j));
     }
     printf("\n");
   }
