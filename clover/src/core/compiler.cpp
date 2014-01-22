@@ -482,8 +482,10 @@ void Compiler::ScanForSoftfloat() {
               << std::endl;
 #endif
             break;
-          case llvm::Instruction::FCmp:
           case llvm::Instruction::Select:
+            if (II->getType()->getTypeID() != llvm::Type::FloatTyID)
+              break;
+          case llvm::Instruction::FCmp:
             ParamTys.push_back(Int32Ty);
             FuncName = "__floatsisf";
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);

@@ -48,8 +48,8 @@ Run Simulation with:
   binaries/final_NearestNeighbor.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 36052434
+Simulation finished, cycleCount = 36052435
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 36052435
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -109,8 +109,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 18003973
 HALT operation received from [0][0][0] at cycle 18048560
+Simulation finished, cycleCount = 18048561
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 18048561
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -172,8 +172,8 @@ HALT operation received from [0][3][0] at cycle 8981279
 HALT operation received from [0][2][0] at cycle 9022781
 HALT operation received from [0][1][0] at cycle 9023636
 HALT operation received from [0][0][0] at cycle 9025011
+Simulation finished, cycleCount = 9025012
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 9025012
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -239,8 +239,8 @@ HALT operation received from [0][5][0] at cycle 4511066
 HALT operation received from [0][4][0] at cycle 4511802
 HALT operation received from [0][3][0] at cycle 4512985
 HALT operation received from [0][1][0] at cycle 4514170
+Simulation finished, cycleCount = 4514171
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 4514171
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -314,8 +314,8 @@ HALT operation received from [0][0][0] at cycle 2256535
 HALT operation received from [0][2][0] at cycle 2256796
 HALT operation received from [0][3][0] at cycle 2257461
 HALT operation received from [0][7][0] at cycle 2258550
+Simulation finished, cycleCount = 2258551
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 2258551
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -373,8 +373,8 @@ Run Simulation with:
   binaries/final_NearestNeighbor.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 29650727
+Simulation finished, cycleCount = 29650728
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 29650728
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -432,12 +432,12 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   2Context_2wide.xml
-HALT operation received from [0][1][0] at cycle 15087815
-HALT operation received from [0][0][0] at cycle 15125268
+HALT operation received from [0][1][0] at cycle 14807036
+HALT operation received from [0][0][0] at cycle 14843776
+Simulation finished, cycleCount = 14843777
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 15125269
+Total cycles = 14843777
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -493,14 +493,14 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   4Context_2wide.xml
-HALT operation received from [0][3][0] at cycle 7526359
-HALT operation received from [0][2][0] at cycle 7561529
-HALT operation received from [0][1][0] at cycle 7562051
-HALT operation received from [0][0][0] at cycle 7563290
+HALT operation received from [0][3][0] at cycle 7386572
+HALT operation received from [0][2][0] at cycle 7420537
+HALT operation received from [0][1][0] at cycle 7421279
+HALT operation received from [0][0][0] at cycle 7422570
+Simulation finished, cycleCount = 7422571
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 7563291
+Total cycles = 7422571
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -556,18 +556,18 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   8Context_2wide.xml
-HALT operation received from [0][7][0] at cycle 3746269
-HALT operation received from [0][2][0] at cycle 3780153
-HALT operation received from [0][6][0] at cycle 3780163
-HALT operation received from [0][0][0] at cycle 3780411
-HALT operation received from [0][5][0] at cycle 3780609
-HALT operation received from [0][4][0] at cycle 3780993
-HALT operation received from [0][3][0] at cycle 3781971
-HALT operation received from [0][1][0] at cycle 3782952
+HALT operation received from [0][7][0] at cycle 3676742
+HALT operation received from [0][2][0] at cycle 3709655
+HALT operation received from [0][5][0] at cycle 3709853
+HALT operation received from [0][0][0] at cycle 3709859
+HALT operation received from [0][6][0] at cycle 3709903
+HALT operation received from [0][4][0] at cycle 3710757
+HALT operation received from [0][3][0] at cycle 3711697
+HALT operation received from [0][1][0] at cycle 3712784
+Simulation finished, cycleCount = 3712785
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 3782953
+Total cycles = 3712785
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -623,26 +623,26 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   16Context_2wide.xml
-HALT operation received from [0][15][0] at cycle 1855681
-HALT operation received from [0][5][0] at cycle 1889229
-HALT operation received from [0][13][0] at cycle 1889245
-HALT operation received from [0][1][0] at cycle 1889249
-HALT operation received from [0][6][0] at cycle 1889283
-HALT operation received from [0][10][0] at cycle 1890185
-HALT operation received from [0][12][0] at cycle 1890398
-HALT operation received from [0][8][0] at cycle 1890481
-HALT operation received from [0][11][0] at cycle 1890497
-HALT operation received from [0][9][0] at cycle 1890585
-HALT operation received from [0][14][0] at cycle 1890661
-HALT operation received from [0][4][0] at cycle 1890997
-HALT operation received from [0][2][0] at cycle 1891227
-HALT operation received from [0][0][0] at cycle 1891235
-HALT operation received from [0][3][0] at cycle 1891798
-HALT operation received from [0][7][0] at cycle 1892761
+HALT operation received from [0][15][0] at cycle 1821303
+HALT operation received from [0][5][0] at cycle 1853993
+HALT operation received from [0][6][0] at cycle 1854081
+HALT operation received from [0][13][0] at cycle 1854131
+HALT operation received from [0][1][0] at cycle 1854171
+HALT operation received from [0][10][0] at cycle 1854803
+HALT operation received from [0][11][0] at cycle 1855123
+HALT operation received from [0][12][0] at cycle 1855267
+HALT operation received from [0][9][0] at cycle 1855336
+HALT operation received from [0][8][0] at cycle 1855494
+HALT operation received from [0][14][0] at cycle 1855512
+HALT operation received from [0][4][0] at cycle 1855735
+HALT operation received from [0][0][0] at cycle 1855761
+HALT operation received from [0][2][0] at cycle 1856164
+HALT operation received from [0][3][0] at cycle 1856693
+HALT operation received from [0][7][0] at cycle 1857689
+Simulation finished, cycleCount = 1857690
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 1892762
+Total cycles = 1857690
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -698,8 +698,8 @@ Run Simulation with:
   binaries/final_NearestNeighbor.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 27840263
+Simulation finished, cycleCount = 27840264
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 27840264
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -757,12 +757,12 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   2Context_3wide.xml
-HALT operation received from [0][1][0] at cycle 13924230
-HALT operation received from [0][0][0] at cycle 13958873
+HALT operation received from [0][1][0] at cycle 13902874
+HALT operation received from [0][0][0] at cycle 13937465
+Simulation finished, cycleCount = 13937466
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 13958874
+Total cycles = 13937466
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -818,14 +818,14 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   4Context_3wide.xml
-HALT operation received from [0][3][0] at cycle 6946107
-HALT operation received from [0][2][0] at cycle 6978189
-HALT operation received from [0][1][0] at cycle 6978836
-HALT operation received from [0][0][0] at cycle 6980103
+HALT operation received from [0][3][0] at cycle 6935455
+HALT operation received from [0][2][0] at cycle 6967485
+HALT operation received from [0][1][0] at cycle 6968132
+HALT operation received from [0][0][0] at cycle 6969399
+Simulation finished, cycleCount = 6969400
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 6980104
+Total cycles = 6969400
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -881,18 +881,18 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   8Context_3wide.xml
-HALT operation received from [0][7][0] at cycle 3457626
-HALT operation received from [0][2][0] at cycle 3488514
-HALT operation received from [0][6][0] at cycle 3488547
-HALT operation received from [0][0][0] at cycle 3488784
-HALT operation received from [0][5][0] at cycle 3488951
-HALT operation received from [0][4][0] at cycle 3489304
-HALT operation received from [0][3][0] at cycle 3490388
-HALT operation received from [0][1][0] at cycle 3491385
+HALT operation received from [0][7][0] at cycle 3452326
+HALT operation received from [0][2][0] at cycle 3483162
+HALT operation received from [0][6][0] at cycle 3483195
+HALT operation received from [0][0][0] at cycle 3483432
+HALT operation received from [0][5][0] at cycle 3483599
+HALT operation received from [0][4][0] at cycle 3483952
+HALT operation received from [0][3][0] at cycle 3485036
+HALT operation received from [0][1][0] at cycle 3486033
+Simulation finished, cycleCount = 3486034
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 3491386
+Total cycles = 3486034
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -948,26 +948,26 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   16Context_3wide.xml
-HALT operation received from [0][15][0] at cycle 1712820
-HALT operation received from [0][5][0] at cycle 1743260
-HALT operation received from [0][1][0] at cycle 1743381
-HALT operation received from [0][6][0] at cycle 1743393
-HALT operation received from [0][13][0] at cycle 1743432
-HALT operation received from [0][10][0] at cycle 1744379
-HALT operation received from [0][12][0] at cycle 1744547
-HALT operation received from [0][11][0] at cycle 1744638
-HALT operation received from [0][8][0] at cycle 1744679
-HALT operation received from [0][9][0] at cycle 1744691
-HALT operation received from [0][14][0] at cycle 1744872
-HALT operation received from [0][4][0] at cycle 1745320
-HALT operation received from [0][2][0] at cycle 1745368
-HALT operation received from [0][0][0] at cycle 1745469
-HALT operation received from [0][3][0] at cycle 1746083
-HALT operation received from [0][7][0] at cycle 1747061
+HALT operation received from [0][15][0] at cycle 1710196
+HALT operation received from [0][5][0] at cycle 1740584
+HALT operation received from [0][1][0] at cycle 1740705
+HALT operation received from [0][6][0] at cycle 1740717
+HALT operation received from [0][13][0] at cycle 1740756
+HALT operation received from [0][10][0] at cycle 1741703
+HALT operation received from [0][12][0] at cycle 1741871
+HALT operation received from [0][11][0] at cycle 1741962
+HALT operation received from [0][8][0] at cycle 1742003
+HALT operation received from [0][9][0] at cycle 1742015
+HALT operation received from [0][14][0] at cycle 1742196
+HALT operation received from [0][4][0] at cycle 1742644
+HALT operation received from [0][2][0] at cycle 1742692
+HALT operation received from [0][0][0] at cycle 1742793
+HALT operation received from [0][3][0] at cycle 1743407
+HALT operation received from [0][7][0] at cycle 1744385
+Simulation finished, cycleCount = 1744386
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 1747062
+Total cycles = 1744386
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -1023,8 +1023,8 @@ Run Simulation with:
   binaries/final_NearestNeighbor.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 26357332
+Simulation finished, cycleCount = 26357333
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 26357333
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
@@ -1082,12 +1082,12 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 13141073
-HALT operation received from [0][0][0] at cycle 13173570
+HALT operation received from [0][1][0] at cycle 13162429
+HALT operation received from [0][0][0] at cycle 13194978
+Simulation finished, cycleCount = 13194979
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 13173571
+Total cycles = 13194979
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -1143,14 +1143,14 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   4Context_4wide.xml
-HALT operation received from [0][3][0] at cycle 6555200
-HALT operation received from [0][2][0] at cycle 6585937
-HALT operation received from [0][1][0] at cycle 6586390
-HALT operation received from [0][0][0] at cycle 6587244
+HALT operation received from [0][3][0] at cycle 6565852
+HALT operation received from [0][2][0] at cycle 6596641
+HALT operation received from [0][1][0] at cycle 6597094
+HALT operation received from [0][0][0] at cycle 6597948
+Simulation finished, cycleCount = 6597949
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 6587245
+Total cycles = 6597949
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -1206,18 +1206,18 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   8Context_4wide.xml
-HALT operation received from [0][7][0] at cycle 3262916
-HALT operation received from [0][6][0] at cycle 3292348
-HALT operation received from [0][2][0] at cycle 3292403
-HALT operation received from [0][0][0] at cycle 3292488
-HALT operation received from [0][5][0] at cycle 3292772
-HALT operation received from [0][4][0] at cycle 3293229
-HALT operation received from [0][3][0] at cycle 3294051
-HALT operation received from [0][1][0] at cycle 3294820
+HALT operation received from [0][7][0] at cycle 3268216
+HALT operation received from [0][6][0] at cycle 3297700
+HALT operation received from [0][2][0] at cycle 3297755
+HALT operation received from [0][0][0] at cycle 3297840
+HALT operation received from [0][5][0] at cycle 3298124
+HALT operation received from [0][4][0] at cycle 3298581
+HALT operation received from [0][3][0] at cycle 3299403
+HALT operation received from [0][1][0] at cycle 3300172
+Simulation finished, cycleCount = 3300173
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 3294821
+Total cycles = 3300173
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
@@ -1273,26 +1273,26 @@ Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
   16Context_4wide.xml
-HALT operation received from [0][15][0] at cycle 1616290
-HALT operation received from [0][5][0] at cycle 1645434
-HALT operation received from [0][13][0] at cycle 1645441
-HALT operation received from [0][1][0] at cycle 1645477
-HALT operation received from [0][6][0] at cycle 1645537
-HALT operation received from [0][10][0] at cycle 1646287
-HALT operation received from [0][12][0] at cycle 1646425
-HALT operation received from [0][11][0] at cycle 1646549
-HALT operation received from [0][8][0] at cycle 1646602
-HALT operation received from [0][14][0] at cycle 1646690
-HALT operation received from [0][9][0] at cycle 1646691
-HALT operation received from [0][4][0] at cycle 1647033
-HALT operation received from [0][0][0] at cycle 1647075
-HALT operation received from [0][2][0] at cycle 1647207
-HALT operation received from [0][3][0] at cycle 1647677
-HALT operation received from [0][7][0] at cycle 1648578
+HALT operation received from [0][15][0] at cycle 1618914
+HALT operation received from [0][5][0] at cycle 1648110
+HALT operation received from [0][13][0] at cycle 1648117
+HALT operation received from [0][1][0] at cycle 1648153
+HALT operation received from [0][6][0] at cycle 1648213
+HALT operation received from [0][10][0] at cycle 1648963
+HALT operation received from [0][12][0] at cycle 1649101
+HALT operation received from [0][11][0] at cycle 1649225
+HALT operation received from [0][8][0] at cycle 1649278
+HALT operation received from [0][14][0] at cycle 1649366
+HALT operation received from [0][9][0] at cycle 1649367
+HALT operation received from [0][4][0] at cycle 1649709
+HALT operation received from [0][0][0] at cycle 1649751
+HALT operation received from [0][2][0] at cycle 1649883
+HALT operation received from [0][3][0] at cycle 1650353
+HALT operation received from [0][7][0] at cycle 1651254
+Simulation finished, cycleCount = 1651255
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 1648579
+Total cycles = 1651255
 1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
 1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
 1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515

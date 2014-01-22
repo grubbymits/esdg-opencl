@@ -175,14 +175,15 @@ LE1Device::~LE1Device()
     if(!std::ifstream(filename.c_str())) {
       Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
         << " Branches Taken, Branches not Taken, Cycle to complete, Iterations"
-        << ", Average Cycles"
+        << ", Average Cycles, Average Decode"
         << std::endl;
     }
     Line << CPU << ", " << NumCores << ", " << TotalCycles << ", "
       << TotalStalls << ", " << TotalDecodeStalls << ", "
       << TotalBranchesTaken << ", " << TotalBranchesNotTaken << ", "
       << completionCycles << ", " << numIterations << ", "
-      << completionCycles / numIterations
+      << completionCycles / numIterations << ", "
+      << TotalDecodeStalls / numIterations
       << std::endl;
 
     std::ofstream Results;
@@ -249,7 +250,6 @@ void LE1Device::SaveStats(std::string &Kernel) {
     ExecutionStats[Kernel].first++;
   }
 #ifdef DBG_OUTPUT
-  std::cout << "Device::SaveStats" << std::endl;
   std::cout << "Iteration = " << ExecutionStats[Kernel].first << std::endl;
   std::cout << "Total cycles = " << ExecutionStats[Kernel].second.first
     << std::endl;

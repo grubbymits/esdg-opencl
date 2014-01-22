@@ -63,3 +63,23 @@ __kernel void NearestNeighbor(__global LatLong *d_locations,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

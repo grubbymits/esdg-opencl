@@ -56,8 +56,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 45888
+Simulation finished, cycleCount = 45889
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 45889
 ---------- SET KERNEL 2 ------------
@@ -111,8 +111,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 45782
+Simulation finished, cycleCount = 45783
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 45783
 ----------- READ DATA ------------------
@@ -171,8 +171,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 46918
+Simulation finished, cycleCount = 46919
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 92808
 ---------- SET KERNEL 2 ------------
@@ -226,8 +226,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 46232
+Simulation finished, cycleCount = 46233
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 92016
 ----------- READ DATA ------------------
@@ -286,8 +286,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 52884
+Simulation finished, cycleCount = 52885
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 145693
 ---------- SET KERNEL 2 ------------
@@ -341,8 +341,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 48752
+Simulation finished, cycleCount = 48753
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 140769
 ----------- READ DATA ------------------
@@ -401,8 +401,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 84671
+Simulation finished, cycleCount = 84672
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 230365
 ---------- SET KERNEL 2 ------------
@@ -456,8 +456,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 58796
+Simulation finished, cycleCount = 58797
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 199566
 ----------- READ DATA ------------------
@@ -516,8 +516,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 184012
+Simulation finished, cycleCount = 184013
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 414378
 ---------- SET KERNEL 2 ------------
@@ -571,8 +571,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 63530
+Simulation finished, cycleCount = 63531
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 263097
 ----------- READ DATA ------------------
@@ -631,8 +631,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 173294
+Simulation finished, cycleCount = 173295
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 587673
 ---------- SET KERNEL 2 ------------
@@ -686,8 +686,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 47897
+Simulation finished, cycleCount = 47898
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 310995
 ----------- READ DATA ------------------
@@ -746,8 +746,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 55922
+Simulation finished, cycleCount = 55923
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 643596
 ---------- SET KERNEL 2 ------------
@@ -801,8 +801,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 45710
+Simulation finished, cycleCount = 45711
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 356706
 ----------- READ DATA ------------------
@@ -861,8 +861,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 45755
+Simulation finished, cycleCount = 45756
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 689352
 ---------- SET KERNEL 2 ------------
@@ -916,8 +916,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 45692
+Simulation finished, cycleCount = 45693
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 402399
 ----------- READ DATA ------------------
@@ -984,8 +984,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 22869
 HALT operation received from [0][0][0] at cycle 23049
+Simulation finished, cycleCount = 23050
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 23050
 ---------- SET KERNEL 2 ------------
@@ -1040,8 +1040,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 22897
 HALT operation received from [0][0][0] at cycle 22915
+Simulation finished, cycleCount = 22916
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 22916
 ----------- READ DATA ------------------
@@ -1101,8 +1101,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 23319
 HALT operation received from [0][0][0] at cycle 23629
+Simulation finished, cycleCount = 23630
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 46680
 ---------- SET KERNEL 2 ------------
@@ -1157,8 +1157,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 23104
 HALT operation received from [0][0][0] at cycle 23158
+Simulation finished, cycleCount = 23159
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 46075
 ----------- READ DATA ------------------
@@ -1218,8 +1218,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 26145
 HALT operation received from [0][0][0] at cycle 26769
+Simulation finished, cycleCount = 26770
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 73450
 ---------- SET KERNEL 2 ------------
@@ -1274,8 +1274,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 24274
 HALT operation received from [0][0][0] at cycle 24508
+Simulation finished, cycleCount = 24509
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 70584
 ----------- READ DATA ------------------
@@ -1335,8 +1335,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 40965
 HALT operation received from [0][0][0] at cycle 43736
+Simulation finished, cycleCount = 43737
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 117187
 ---------- SET KERNEL 2 ------------
@@ -1391,8 +1391,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 29341
 HALT operation received from [0][1][0] at cycle 29485
+Simulation finished, cycleCount = 29486
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 100070
 ----------- READ DATA ------------------
@@ -1452,8 +1452,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 91054
 HALT operation received from [0][1][0] at cycle 92988
+Simulation finished, cycleCount = 92989
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 210176
 ---------- SET KERNEL 2 ------------
@@ -1508,8 +1508,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 31735
 HALT operation received from [0][1][0] at cycle 31825
+Simulation finished, cycleCount = 31826
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 131896
 ----------- READ DATA ------------------
@@ -1569,8 +1569,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 86558
 HALT operation received from [0][0][0] at cycle 86766
+Simulation finished, cycleCount = 86767
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 296943
 ---------- SET KERNEL 2 ------------
@@ -1625,8 +1625,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 23923
 HALT operation received from [0][1][0] at cycle 24004
+Simulation finished, cycleCount = 24005
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 155901
 ----------- READ DATA ------------------
@@ -1686,8 +1686,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 27827
 HALT operation received from [0][1][0] at cycle 28125
+Simulation finished, cycleCount = 28126
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 325069
 ---------- SET KERNEL 2 ------------
@@ -1742,8 +1742,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 22870
 HALT operation received from [0][1][0] at cycle 22870
+Simulation finished, cycleCount = 22871
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 178772
 ----------- READ DATA ------------------
@@ -1803,8 +1803,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 22888
 HALT operation received from [0][0][0] at cycle 22897
+Simulation finished, cycleCount = 22898
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 347967
 ---------- SET KERNEL 2 ------------
@@ -1859,8 +1859,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 22861
 HALT operation received from [0][1][0] at cycle 22861
+Simulation finished, cycleCount = 22862
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 201634
 ----------- READ DATA ------------------
@@ -1929,8 +1929,8 @@ HALT operation received from [0][1][0] at cycle 11445
 HALT operation received from [0][2][0] at cycle 11445
 HALT operation received from [0][3][0] at cycle 11445
 HALT operation received from [0][0][0] at cycle 11625
+Simulation finished, cycleCount = 11626
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 11626
 ---------- SET KERNEL 2 ------------
@@ -1987,8 +1987,8 @@ HALT operation received from [0][3][0] at cycle 11450
 HALT operation received from [0][0][0] at cycle 11468
 HALT operation received from [0][1][0] at cycle 11468
 HALT operation received from [0][2][0] at cycle 11468
+Simulation finished, cycleCount = 11469
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 11469
 ----------- READ DATA ------------------
@@ -2050,8 +2050,8 @@ HALT operation received from [0][3][0] at cycle 11600
 HALT operation received from [0][1][0] at cycle 11740
 HALT operation received from [0][0][0] at cycle 11774
 HALT operation received from [0][2][0] at cycle 11876
+Simulation finished, cycleCount = 11877
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 23503
 ---------- SET KERNEL 2 ------------
@@ -2108,8 +2108,8 @@ HALT operation received from [0][3][0] at cycle 11558
 HALT operation received from [0][1][0] at cycle 11567
 HALT operation received from [0][2][0] at cycle 11585
 HALT operation received from [0][0][0] at cycle 11594
+Simulation finished, cycleCount = 11595
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 23064
 ----------- READ DATA ------------------
@@ -2171,8 +2171,8 @@ HALT operation received from [0][1][0] at cycle 13012
 HALT operation received from [0][3][0] at cycle 13154
 HALT operation received from [0][2][0] at cycle 13211
 HALT operation received from [0][0][0] at cycle 13579
+Simulation finished, cycleCount = 13580
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 37083
 ---------- SET KERNEL 2 ------------
@@ -2229,8 +2229,8 @@ HALT operation received from [0][1][0] at cycle 12107
 HALT operation received from [0][0][0] at cycle 12116
 HALT operation received from [0][3][0] at cycle 12188
 HALT operation received from [0][2][0] at cycle 12413
+Simulation finished, cycleCount = 12414
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 35478
 ----------- READ DATA ------------------
@@ -2292,8 +2292,8 @@ HALT operation received from [0][0][0] at cycle 19967
 HALT operation received from [0][1][0] at cycle 20099
 HALT operation received from [0][3][0] at cycle 20887
 HALT operation received from [0][2][0] at cycle 23790
+Simulation finished, cycleCount = 23791
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 60874
 ---------- SET KERNEL 2 ------------
@@ -2350,8 +2350,8 @@ HALT operation received from [0][2][0] at cycle 14537
 HALT operation received from [0][3][0] at cycle 14690
 HALT operation received from [0][1][0] at cycle 14816
 HALT operation received from [0][0][0] at cycle 14825
+Simulation finished, cycleCount = 14826
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 50304
 ----------- READ DATA ------------------
@@ -2413,8 +2413,8 @@ HALT operation received from [0][2][0] at cycle 44054
 HALT operation received from [0][3][0] at cycle 46024
 HALT operation received from [0][1][0] at cycle 46985
 HALT operation received from [0][0][0] at cycle 47021
+Simulation finished, cycleCount = 47022
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 107896
 ---------- SET KERNEL 2 ------------
@@ -2471,8 +2471,8 @@ HALT operation received from [0][2][0] at cycle 15842
 HALT operation received from [0][3][0] at cycle 15869
 HALT operation received from [0][0][0] at cycle 15914
 HALT operation received from [0][1][0] at cycle 15977
+Simulation finished, cycleCount = 15978
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 66282
 ----------- READ DATA ------------------
@@ -2534,8 +2534,8 @@ HALT operation received from [0][2][0] at cycle 42770
 HALT operation received from [0][3][0] at cycle 43240
 HALT operation received from [0][1][0] at cycle 43339
 HALT operation received from [0][0][0] at cycle 44017
+Simulation finished, cycleCount = 44018
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 151914
 ---------- SET KERNEL 2 ------------
@@ -2592,8 +2592,8 @@ HALT operation received from [0][1][0] at cycle 11918
 HALT operation received from [0][0][0] at cycle 11936
 HALT operation received from [0][2][0] at cycle 12008
 HALT operation received from [0][3][0] at cycle 12107
+Simulation finished, cycleCount = 12108
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 78390
 ----------- READ DATA ------------------
@@ -2655,8 +2655,8 @@ HALT operation received from [0][1][0] at cycle 13622
 HALT operation received from [0][0][0] at cycle 13839
 HALT operation received from [0][2][0] at cycle 14009
 HALT operation received from [0][3][0] at cycle 14524
+Simulation finished, cycleCount = 14525
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 166439
 ---------- SET KERNEL 2 ------------
@@ -2713,8 +2713,8 @@ HALT operation received from [0][0][0] at cycle 11441
 HALT operation received from [0][3][0] at cycle 11441
 HALT operation received from [0][1][0] at cycle 11450
 HALT operation received from [0][2][0] at cycle 11450
+Simulation finished, cycleCount = 11451
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 89841
 ----------- READ DATA ------------------
@@ -2776,8 +2776,8 @@ HALT operation received from [0][0][0] at cycle 11445
 HALT operation received from [0][3][0] at cycle 11445
 HALT operation received from [0][1][0] at cycle 11464
 HALT operation received from [0][2][0] at cycle 11473
+Simulation finished, cycleCount = 11474
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 177913
 ---------- SET KERNEL 2 ------------
@@ -2834,8 +2834,8 @@ HALT operation received from [0][0][0] at cycle 11441
 HALT operation received from [0][1][0] at cycle 11441
 HALT operation received from [0][2][0] at cycle 11441
 HALT operation received from [0][3][0] at cycle 11441
+Simulation finished, cycleCount = 11442
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 101283
 ----------- READ DATA ------------------
@@ -2908,8 +2908,8 @@ HALT operation received from [0][5][0] at cycle 5733
 HALT operation received from [0][6][0] at cycle 5733
 HALT operation received from [0][7][0] at cycle 5733
 HALT operation received from [0][0][0] at cycle 5913
+Simulation finished, cycleCount = 5914
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5914
 ---------- SET KERNEL 2 ------------
@@ -2970,8 +2970,8 @@ HALT operation received from [0][7][0] at cycle 5740
 HALT operation received from [0][0][0] at cycle 5749
 HALT operation received from [0][1][0] at cycle 5749
 HALT operation received from [0][6][0] at cycle 5749
+Simulation finished, cycleCount = 5750
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5750
 ----------- READ DATA ------------------
@@ -3037,8 +3037,8 @@ HALT operation received from [0][2][0] at cycle 5922
 HALT operation received from [0][1][0] at cycle 5941
 HALT operation received from [0][0][0] at cycle 5958
 HALT operation received from [0][6][0] at cycle 5975
+Simulation finished, cycleCount = 5976
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 11890
 ---------- SET KERNEL 2 ------------
@@ -3099,8 +3099,8 @@ HALT operation received from [0][3][0] at cycle 5794
 HALT operation received from [0][5][0] at cycle 5794
 HALT operation received from [0][4][0] at cycle 5821
 HALT operation received from [0][6][0] at cycle 5821
+Simulation finished, cycleCount = 5822
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 11572
 ----------- READ DATA ------------------
@@ -3166,8 +3166,8 @@ HALT operation received from [0][0][0] at cycle 6674
 HALT operation received from [0][3][0] at cycle 6682
 HALT operation received from [0][6][0] at cycle 6858
 HALT operation received from [0][4][0] at cycle 6926
+Simulation finished, cycleCount = 6927
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 18817
 ---------- SET KERNEL 2 ------------
@@ -3228,8 +3228,8 @@ HALT operation received from [0][1][0] at cycle 6100
 HALT operation received from [0][3][0] at cycle 6118
 HALT operation received from [0][6][0] at cycle 6208
 HALT operation received from [0][2][0] at cycle 6226
+Simulation finished, cycleCount = 6227
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 17799
 ----------- READ DATA ------------------
@@ -3295,8 +3295,8 @@ HALT operation received from [0][7][0] at cycle 10420
 HALT operation received from [0][3][0] at cycle 10488
 HALT operation received from [0][2][0] at cycle 11776
 HALT operation received from [0][6][0] at cycle 12035
+Simulation finished, cycleCount = 12036
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 30853
 ---------- SET KERNEL 2 ------------
@@ -3357,8 +3357,8 @@ HALT operation received from [0][5][0] at cycle 7387
 HALT operation received from [0][3][0] at cycle 7414
 HALT operation received from [0][1][0] at cycle 7450
 HALT operation received from [0][4][0] at cycle 7504
+Simulation finished, cycleCount = 7505
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 25304
 ----------- READ DATA ------------------
@@ -3424,8 +3424,8 @@ HALT operation received from [0][0][0] at cycle 23145
 HALT operation received from [0][3][0] at cycle 23182
 HALT operation received from [0][4][0] at cycle 23897
 HALT operation received from [0][1][0] at cycle 23997
+Simulation finished, cycleCount = 23998
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 54851
 ---------- SET KERNEL 2 ------------
@@ -3486,8 +3486,8 @@ HALT operation received from [0][6][0] at cycle 7936
 HALT operation received from [0][7][0] at cycle 7981
 HALT operation received from [0][0][0] at cycle 8026
 HALT operation received from [0][5][0] at cycle 8116
+Simulation finished, cycleCount = 8117
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 33421
 ----------- READ DATA ------------------
@@ -3553,8 +3553,8 @@ HALT operation received from [0][4][0] at cycle 21611
 HALT operation received from [0][7][0] at cycle 21900
 HALT operation received from [0][0][0] at cycle 22427
 HALT operation received from [0][5][0] at cycle 22495
+Simulation finished, cycleCount = 22496
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 77347
 ---------- SET KERNEL 2 ------------
@@ -3615,8 +3615,8 @@ HALT operation received from [0][1][0] at cycle 6010
 HALT operation received from [0][3][0] at cycle 6028
 HALT operation received from [0][6][0] at cycle 6028
 HALT operation received from [0][7][0] at cycle 6100
+Simulation finished, cycleCount = 6101
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 39522
 ----------- READ DATA ------------------
@@ -3682,8 +3682,8 @@ HALT operation received from [0][1][0] at cycle 7006
 HALT operation received from [0][6][0] at cycle 7133
 HALT operation received from [0][3][0] at cycle 7169
 HALT operation received from [0][7][0] at cycle 7376
+Simulation finished, cycleCount = 7377
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 84724
 ---------- SET KERNEL 2 ------------
@@ -3744,8 +3744,8 @@ HALT operation received from [0][6][0] at cycle 5731
 HALT operation received from [0][7][0] at cycle 5731
 HALT operation received from [0][1][0] at cycle 5740
 HALT operation received from [0][2][0] at cycle 5740
+Simulation finished, cycleCount = 5741
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 45263
 ----------- READ DATA ------------------
@@ -3811,8 +3811,8 @@ HALT operation received from [0][6][0] at cycle 5733
 HALT operation received from [0][7][0] at cycle 5733
 HALT operation received from [0][1][0] at cycle 5752
 HALT operation received from [0][2][0] at cycle 5761
+Simulation finished, cycleCount = 5762
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 90486
 ---------- SET KERNEL 2 ------------
@@ -3873,8 +3873,8 @@ HALT operation received from [0][4][0] at cycle 5731
 HALT operation received from [0][5][0] at cycle 5731
 HALT operation received from [0][6][0] at cycle 5731
 HALT operation received from [0][7][0] at cycle 5731
+Simulation finished, cycleCount = 5732
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 50995
 ----------- READ DATA ------------------
@@ -3955,8 +3955,8 @@ HALT operation received from [0][13][0] at cycle 2881
 HALT operation received from [0][14][0] at cycle 2881
 HALT operation received from [0][15][0] at cycle 2881
 HALT operation received from [0][0][0] at cycle 3061
+Simulation finished, cycleCount = 3062
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 3062
 ---------- SET KERNEL 2 ------------
@@ -4025,8 +4025,8 @@ HALT operation received from [0][8][0] at cycle 2889
 HALT operation received from [0][14][0] at cycle 2889
 HALT operation received from [0][15][0] at cycle 2889
 HALT operation received from [0][9][0] at cycle 2898
+Simulation finished, cycleCount = 2899
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 2899
 ----------- READ DATA ------------------
@@ -4100,8 +4100,8 @@ HALT operation received from [0][6][0] at cycle 3036
 HALT operation received from [0][15][0] at cycle 3036
 HALT operation received from [0][2][0] at cycle 3070
 HALT operation received from [0][9][0] at cycle 3089
+Simulation finished, cycleCount = 3090
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 6152
 ---------- SET KERNEL 2 ------------
@@ -4170,8 +4170,8 @@ HALT operation received from [0][3][0] at cycle 2934
 HALT operation received from [0][6][0] at cycle 2934
 HALT operation received from [0][8][0] at cycle 2934
 HALT operation received from [0][12][0] at cycle 2943
+Simulation finished, cycleCount = 2944
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 5843
 ----------- READ DATA ------------------
@@ -4245,8 +4245,8 @@ HALT operation received from [0][6][0] at cycle 3573
 HALT operation received from [0][8][0] at cycle 3633
 HALT operation received from [0][3][0] at cycle 3641
 HALT operation received from [0][12][0] at cycle 3711
+Simulation finished, cycleCount = 3712
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 9864
 ---------- SET KERNEL 2 ------------
@@ -4315,8 +4315,8 @@ HALT operation received from [0][6][0] at cycle 3114
 HALT operation received from [0][10][0] at cycle 3123
 HALT operation received from [0][14][0] at cycle 3123
 HALT operation received from [0][2][0] at cycle 3132
+Simulation finished, cycleCount = 3133
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 8976
 ----------- READ DATA ------------------
@@ -4390,8 +4390,8 @@ HALT operation received from [0][10][0] at cycle 5822
 HALT operation received from [0][6][0] at cycle 5906
 HALT operation received from [0][2][0] at cycle 5983
 HALT operation received from [0][14][0] at cycle 6158
+Simulation finished, cycleCount = 6159
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 16023
 ---------- SET KERNEL 2 ------------
@@ -4460,8 +4460,8 @@ HALT operation received from [0][5][0] at cycle 3771
 HALT operation received from [0][11][0] at cycle 3771
 HALT operation received from [0][1][0] at cycle 3789
 HALT operation received from [0][4][0] at cycle 3843
+Simulation finished, cycleCount = 3844
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 12820
 ----------- READ DATA ------------------
@@ -4535,8 +4535,8 @@ HALT operation received from [0][2][0] at cycle 12185
 HALT operation received from [0][11][0] at cycle 12301
 HALT operation received from [0][1][0] at cycle 12748
 HALT operation received from [0][4][0] at cycle 13041
+Simulation finished, cycleCount = 13042
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 29065
 ---------- SET KERNEL 2 ------------
@@ -4605,8 +4605,8 @@ HALT operation received from [0][7][0] at cycle 4023
 HALT operation received from [0][0][0] at cycle 4050
 HALT operation received from [0][10][0] at cycle 4077
 HALT operation received from [0][13][0] at cycle 4122
+Simulation finished, cycleCount = 4123
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 16943
 ----------- READ DATA ------------------
@@ -4680,8 +4680,8 @@ HALT operation received from [0][7][0] at cycle 11073
 HALT operation received from [0][10][0] at cycle 11381
 HALT operation received from [0][0][0] at cycle 11478
 HALT operation received from [0][13][0] at cycle 11814
+Simulation finished, cycleCount = 11815
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 40880
 ---------- SET KERNEL 2 ------------
@@ -4750,8 +4750,8 @@ HALT operation received from [0][11][0] at cycle 3033
 HALT operation received from [0][14][0] at cycle 3033
 HALT operation received from [0][15][0] at cycle 3051
 HALT operation received from [0][7][0] at cycle 3078
+Simulation finished, cycleCount = 3079
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 20022
 ----------- READ DATA ------------------
@@ -4825,8 +4825,8 @@ HALT operation received from [0][11][0] at cycle 3608
 HALT operation received from [0][12][0] at cycle 3634
 HALT operation received from [0][15][0] at cycle 3683
 HALT operation received from [0][7][0] at cycle 3722
+Simulation finished, cycleCount = 3723
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 44603
 ---------- SET KERNEL 2 ------------
@@ -4895,8 +4895,8 @@ HALT operation received from [0][14][0] at cycle 2880
 HALT operation received from [0][15][0] at cycle 2880
 HALT operation received from [0][9][0] at cycle 2889
 HALT operation received from [0][10][0] at cycle 2889
+Simulation finished, cycleCount = 2890
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 22912
 ----------- READ DATA ------------------
@@ -4970,8 +4970,8 @@ HALT operation received from [0][14][0] at cycle 2881
 HALT operation received from [0][15][0] at cycle 2881
 HALT operation received from [0][9][0] at cycle 2900
 HALT operation received from [0][10][0] at cycle 2909
+Simulation finished, cycleCount = 2910
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 47513
 ---------- SET KERNEL 2 ------------
@@ -5040,8 +5040,8 @@ HALT operation received from [0][12][0] at cycle 2880
 HALT operation received from [0][13][0] at cycle 2880
 HALT operation received from [0][14][0] at cycle 2880
 HALT operation received from [0][15][0] at cycle 2880
+Simulation finished, cycleCount = 2881
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 25793
 ----------- READ DATA ------------------
@@ -5106,8 +5106,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41641
+Simulation finished, cycleCount = 41642
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 41642
 ---------- SET KERNEL 2 ------------
@@ -5161,8 +5161,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45627
+Simulation finished, cycleCount = 45628
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 45628
 ----------- READ DATA ------------------
@@ -5221,8 +5221,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 42553
+Simulation finished, cycleCount = 42554
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 84196
 ---------- SET KERNEL 2 ------------
@@ -5276,8 +5276,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 46027
+Simulation finished, cycleCount = 46028
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 91656
 ----------- READ DATA ------------------
@@ -5336,8 +5336,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 47831
+Simulation finished, cycleCount = 47832
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 132028
 ---------- SET KERNEL 2 ------------
@@ -5391,8 +5391,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 48267
+Simulation finished, cycleCount = 48268
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 139924
 ----------- READ DATA ------------------
@@ -5451,8 +5451,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 76120
+Simulation finished, cycleCount = 76121
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 208149
 ---------- SET KERNEL 2 ------------
@@ -5506,8 +5506,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 57195
+Simulation finished, cycleCount = 57196
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 197120
 ----------- READ DATA ------------------
@@ -5566,8 +5566,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 167557
+Simulation finished, cycleCount = 167558
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 375707
 ---------- SET KERNEL 2 ------------
@@ -5621,8 +5621,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 61403
+Simulation finished, cycleCount = 61404
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 258524
 ----------- READ DATA ------------------
@@ -5681,8 +5681,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 163539
+Simulation finished, cycleCount = 163540
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 539247
 ---------- SET KERNEL 2 ------------
@@ -5736,8 +5736,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 47507
+Simulation finished, cycleCount = 47508
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 306032
 ----------- READ DATA ------------------
@@ -5796,8 +5796,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 51201
+Simulation finished, cycleCount = 51202
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 590449
 ---------- SET KERNEL 2 ------------
@@ -5851,8 +5851,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45563
+Simulation finished, cycleCount = 45564
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 351596
 ----------- READ DATA ------------------
@@ -5911,8 +5911,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41526
+Simulation finished, cycleCount = 41527
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 631976
 ---------- SET KERNEL 2 ------------
@@ -5966,8 +5966,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45547
+Simulation finished, cycleCount = 45548
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 397144
 ----------- READ DATA ------------------
@@ -6034,8 +6034,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 22787
 HALT operation received from [0][0][0] at cycle 22967
+Simulation finished, cycleCount = 22968
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 22968
 ---------- SET KERNEL 2 ------------
@@ -6090,8 +6090,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 20775
 HALT operation received from [0][0][0] at cycle 20789
+Simulation finished, cycleCount = 20790
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 20790
 ----------- READ DATA ------------------
@@ -6151,8 +6151,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 23237
 HALT operation received from [0][0][0] at cycle 23547
+Simulation finished, cycleCount = 23548
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 46516
 ---------- SET KERNEL 2 ------------
@@ -6207,8 +6207,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 20936
 HALT operation received from [0][0][0] at cycle 20978
+Simulation finished, cycleCount = 20979
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 41769
 ----------- READ DATA ------------------
@@ -6268,8 +6268,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 26063
 HALT operation received from [0][0][0] at cycle 26687
+Simulation finished, cycleCount = 26688
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 73204
 ---------- SET KERNEL 2 ------------
@@ -6324,8 +6324,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 21846
 HALT operation received from [0][0][0] at cycle 22028
+Simulation finished, cycleCount = 22029
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 63798
 ----------- READ DATA ------------------
@@ -6385,8 +6385,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 40883
 HALT operation received from [0][0][0] at cycle 43654
+Simulation finished, cycleCount = 43655
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 116859
 ---------- SET KERNEL 2 ------------
@@ -6441,8 +6441,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 25787
 HALT operation received from [0][1][0] at cycle 25899
+Simulation finished, cycleCount = 25900
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 89698
 ----------- READ DATA ------------------
@@ -6502,8 +6502,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 90972
 HALT operation received from [0][1][0] at cycle 92906
+Simulation finished, cycleCount = 92907
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 209766
 ---------- SET KERNEL 2 ------------
@@ -6558,8 +6558,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 27649
 HALT operation received from [0][1][0] at cycle 27719
+Simulation finished, cycleCount = 27720
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 117418
 ----------- READ DATA ------------------
@@ -6619,8 +6619,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 86476
 HALT operation received from [0][0][0] at cycle 86684
+Simulation finished, cycleCount = 86685
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 296451
 ---------- SET KERNEL 2 ------------
@@ -6675,8 +6675,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 21573
 HALT operation received from [0][1][0] at cycle 21636
+Simulation finished, cycleCount = 21637
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 139055
 ----------- READ DATA ------------------
@@ -6736,8 +6736,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 27745
 HALT operation received from [0][1][0] at cycle 28043
+Simulation finished, cycleCount = 28044
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 324495
 ---------- SET KERNEL 2 ------------
@@ -6792,8 +6792,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 20754
 HALT operation received from [0][1][0] at cycle 20754
+Simulation finished, cycleCount = 20755
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 159810
 ----------- READ DATA ------------------
@@ -6853,8 +6853,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 22806
 HALT operation received from [0][0][0] at cycle 22815
+Simulation finished, cycleCount = 22816
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 347311
 ---------- SET KERNEL 2 ------------
@@ -6909,8 +6909,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 20747
 HALT operation received from [0][1][0] at cycle 20747
+Simulation finished, cycleCount = 20748
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 180558
 ----------- READ DATA ------------------
@@ -6979,8 +6979,8 @@ HALT operation received from [0][1][0] at cycle 11403
 HALT operation received from [0][2][0] at cycle 11403
 HALT operation received from [0][3][0] at cycle 11403
 HALT operation received from [0][0][0] at cycle 11583
+Simulation finished, cycleCount = 11584
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 11584
 ---------- SET KERNEL 2 ------------
@@ -7037,8 +7037,8 @@ HALT operation received from [0][3][0] at cycle 10390
 HALT operation received from [0][0][0] at cycle 10404
 HALT operation received from [0][1][0] at cycle 10404
 HALT operation received from [0][2][0] at cycle 10404
+Simulation finished, cycleCount = 10405
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 10405
 ----------- READ DATA ------------------
@@ -7100,8 +7100,8 @@ HALT operation received from [0][3][0] at cycle 11558
 HALT operation received from [0][1][0] at cycle 11698
 HALT operation received from [0][0][0] at cycle 11732
 HALT operation received from [0][2][0] at cycle 11834
+Simulation finished, cycleCount = 11835
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 23419
 ---------- SET KERNEL 2 ------------
@@ -7158,8 +7158,8 @@ HALT operation received from [0][3][0] at cycle 10474
 HALT operation received from [0][1][0] at cycle 10481
 HALT operation received from [0][2][0] at cycle 10495
 HALT operation received from [0][0][0] at cycle 10502
+Simulation finished, cycleCount = 10503
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 20908
 ----------- READ DATA ------------------
@@ -7221,8 +7221,8 @@ HALT operation received from [0][1][0] at cycle 12970
 HALT operation received from [0][3][0] at cycle 13112
 HALT operation received from [0][2][0] at cycle 13169
 HALT operation received from [0][0][0] at cycle 13537
+Simulation finished, cycleCount = 13538
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 36957
 ---------- SET KERNEL 2 ------------
@@ -7279,8 +7279,8 @@ HALT operation received from [0][1][0] at cycle 10901
 HALT operation received from [0][0][0] at cycle 10908
 HALT operation received from [0][3][0] at cycle 10964
 HALT operation received from [0][2][0] at cycle 11139
+Simulation finished, cycleCount = 11140
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 32048
 ----------- READ DATA ------------------
@@ -7342,8 +7342,8 @@ HALT operation received from [0][0][0] at cycle 19925
 HALT operation received from [0][1][0] at cycle 20057
 HALT operation received from [0][3][0] at cycle 20845
 HALT operation received from [0][2][0] at cycle 23748
+Simulation finished, cycleCount = 23749
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 60706
 ---------- SET KERNEL 2 ------------
@@ -7400,8 +7400,8 @@ HALT operation received from [0][2][0] at cycle 12791
 HALT operation received from [0][3][0] at cycle 12910
 HALT operation received from [0][1][0] at cycle 13008
 HALT operation received from [0][0][0] at cycle 13015
+Simulation finished, cycleCount = 13016
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 45064
 ----------- READ DATA ------------------
@@ -7463,8 +7463,8 @@ HALT operation received from [0][2][0] at cycle 44012
 HALT operation received from [0][3][0] at cycle 45982
 HALT operation received from [0][1][0] at cycle 46943
 HALT operation received from [0][0][0] at cycle 46979
+Simulation finished, cycleCount = 46980
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 107686
 ---------- SET KERNEL 2 ------------
@@ -7521,8 +7521,8 @@ HALT operation received from [0][2][0] at cycle 13806
 HALT operation received from [0][3][0] at cycle 13827
 HALT operation received from [0][0][0] at cycle 13862
 HALT operation received from [0][1][0] at cycle 13911
+Simulation finished, cycleCount = 13912
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 58976
 ----------- READ DATA ------------------
@@ -7584,8 +7584,8 @@ HALT operation received from [0][2][0] at cycle 42728
 HALT operation received from [0][3][0] at cycle 43198
 HALT operation received from [0][1][0] at cycle 43297
 HALT operation received from [0][0][0] at cycle 43975
+Simulation finished, cycleCount = 43976
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 151662
 ---------- SET KERNEL 2 ------------
@@ -7642,8 +7642,8 @@ HALT operation received from [0][1][0] at cycle 10754
 HALT operation received from [0][0][0] at cycle 10768
 HALT operation received from [0][2][0] at cycle 10824
 HALT operation received from [0][3][0] at cycle 10901
+Simulation finished, cycleCount = 10902
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 69878
 ----------- READ DATA ------------------
@@ -7705,8 +7705,8 @@ HALT operation received from [0][1][0] at cycle 13580
 HALT operation received from [0][0][0] at cycle 13797
 HALT operation received from [0][2][0] at cycle 13967
 HALT operation received from [0][3][0] at cycle 14482
+Simulation finished, cycleCount = 14483
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 166145
 ---------- SET KERNEL 2 ------------
@@ -7763,8 +7763,8 @@ HALT operation received from [0][0][0] at cycle 10383
 HALT operation received from [0][3][0] at cycle 10383
 HALT operation received from [0][1][0] at cycle 10390
 HALT operation received from [0][2][0] at cycle 10390
+Simulation finished, cycleCount = 10391
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 80269
 ----------- READ DATA ------------------
@@ -7826,8 +7826,8 @@ HALT operation received from [0][0][0] at cycle 11403
 HALT operation received from [0][3][0] at cycle 11403
 HALT operation received from [0][1][0] at cycle 11422
 HALT operation received from [0][2][0] at cycle 11431
+Simulation finished, cycleCount = 11432
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 177577
 ---------- SET KERNEL 2 ------------
@@ -7884,8 +7884,8 @@ HALT operation received from [0][0][0] at cycle 10383
 HALT operation received from [0][1][0] at cycle 10383
 HALT operation received from [0][2][0] at cycle 10383
 HALT operation received from [0][3][0] at cycle 10383
+Simulation finished, cycleCount = 10384
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 90653
 ----------- READ DATA ------------------
@@ -7958,8 +7958,8 @@ HALT operation received from [0][5][0] at cycle 5711
 HALT operation received from [0][6][0] at cycle 5711
 HALT operation received from [0][7][0] at cycle 5711
 HALT operation received from [0][0][0] at cycle 5891
+Simulation finished, cycleCount = 5892
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5892
 ---------- SET KERNEL 2 ------------
@@ -8020,8 +8020,8 @@ HALT operation received from [0][7][0] at cycle 5208
 HALT operation received from [0][0][0] at cycle 5215
 HALT operation received from [0][1][0] at cycle 5215
 HALT operation received from [0][6][0] at cycle 5215
+Simulation finished, cycleCount = 5216
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5216
 ----------- READ DATA ------------------
@@ -8087,8 +8087,8 @@ HALT operation received from [0][2][0] at cycle 5900
 HALT operation received from [0][1][0] at cycle 5919
 HALT operation received from [0][0][0] at cycle 5936
 HALT operation received from [0][6][0] at cycle 5953
+Simulation finished, cycleCount = 5954
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 11846
 ---------- SET KERNEL 2 ------------
@@ -8149,8 +8149,8 @@ HALT operation received from [0][3][0] at cycle 5250
 HALT operation received from [0][5][0] at cycle 5250
 HALT operation received from [0][4][0] at cycle 5271
 HALT operation received from [0][6][0] at cycle 5271
+Simulation finished, cycleCount = 5272
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 10488
 ----------- READ DATA ------------------
@@ -8216,8 +8216,8 @@ HALT operation received from [0][0][0] at cycle 6652
 HALT operation received from [0][3][0] at cycle 6660
 HALT operation received from [0][6][0] at cycle 6836
 HALT operation received from [0][4][0] at cycle 6904
+Simulation finished, cycleCount = 6905
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 18751
 ---------- SET KERNEL 2 ------------
@@ -8278,8 +8278,8 @@ HALT operation received from [0][1][0] at cycle 5488
 HALT operation received from [0][3][0] at cycle 5502
 HALT operation received from [0][6][0] at cycle 5572
 HALT operation received from [0][2][0] at cycle 5586
+Simulation finished, cycleCount = 5587
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 16075
 ----------- READ DATA ------------------
@@ -8345,8 +8345,8 @@ HALT operation received from [0][7][0] at cycle 10398
 HALT operation received from [0][3][0] at cycle 10466
 HALT operation received from [0][2][0] at cycle 11754
 HALT operation received from [0][6][0] at cycle 12013
+Simulation finished, cycleCount = 12014
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 30765
 ---------- SET KERNEL 2 ------------
@@ -8407,8 +8407,8 @@ HALT operation received from [0][5][0] at cycle 6489
 HALT operation received from [0][3][0] at cycle 6510
 HALT operation received from [0][1][0] at cycle 6538
 HALT operation received from [0][4][0] at cycle 6580
+Simulation finished, cycleCount = 6581
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 22656
 ----------- READ DATA ------------------
@@ -8474,8 +8474,8 @@ HALT operation received from [0][0][0] at cycle 23123
 HALT operation received from [0][3][0] at cycle 23160
 HALT operation received from [0][4][0] at cycle 23875
 HALT operation received from [0][1][0] at cycle 23975
+Simulation finished, cycleCount = 23976
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 54741
 ---------- SET KERNEL 2 ------------
@@ -8536,8 +8536,8 @@ HALT operation received from [0][6][0] at cycle 6916
 HALT operation received from [0][7][0] at cycle 6951
 HALT operation received from [0][0][0] at cycle 6986
 HALT operation received from [0][5][0] at cycle 7056
+Simulation finished, cycleCount = 7057
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 29713
 ----------- READ DATA ------------------
@@ -8603,8 +8603,8 @@ HALT operation received from [0][4][0] at cycle 21589
 HALT operation received from [0][7][0] at cycle 21878
 HALT operation received from [0][0][0] at cycle 22405
 HALT operation received from [0][5][0] at cycle 22473
+Simulation finished, cycleCount = 22474
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 77215
 ---------- SET KERNEL 2 ------------
@@ -8665,8 +8665,8 @@ HALT operation received from [0][1][0] at cycle 5418
 HALT operation received from [0][3][0] at cycle 5432
 HALT operation received from [0][6][0] at cycle 5432
 HALT operation received from [0][7][0] at cycle 5488
+Simulation finished, cycleCount = 5489
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 35202
 ----------- READ DATA ------------------
@@ -8732,8 +8732,8 @@ HALT operation received from [0][1][0] at cycle 6984
 HALT operation received from [0][6][0] at cycle 7111
 HALT operation received from [0][3][0] at cycle 7147
 HALT operation received from [0][7][0] at cycle 7354
+Simulation finished, cycleCount = 7355
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 84570
 ---------- SET KERNEL 2 ------------
@@ -8794,8 +8794,8 @@ HALT operation received from [0][6][0] at cycle 5201
 HALT operation received from [0][7][0] at cycle 5201
 HALT operation received from [0][1][0] at cycle 5208
 HALT operation received from [0][2][0] at cycle 5208
+Simulation finished, cycleCount = 5209
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 40411
 ----------- READ DATA ------------------
@@ -8861,8 +8861,8 @@ HALT operation received from [0][6][0] at cycle 5711
 HALT operation received from [0][7][0] at cycle 5711
 HALT operation received from [0][1][0] at cycle 5730
 HALT operation received from [0][2][0] at cycle 5739
+Simulation finished, cycleCount = 5740
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 90310
 ---------- SET KERNEL 2 ------------
@@ -8923,8 +8923,8 @@ HALT operation received from [0][4][0] at cycle 5201
 HALT operation received from [0][5][0] at cycle 5201
 HALT operation received from [0][6][0] at cycle 5201
 HALT operation received from [0][7][0] at cycle 5201
+Simulation finished, cycleCount = 5202
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 45613
 ----------- READ DATA ------------------
@@ -9005,8 +9005,8 @@ HALT operation received from [0][13][0] at cycle 2867
 HALT operation received from [0][14][0] at cycle 2867
 HALT operation received from [0][15][0] at cycle 2867
 HALT operation received from [0][0][0] at cycle 3047
+Simulation finished, cycleCount = 3048
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 3048
 ---------- SET KERNEL 2 ------------
@@ -9075,8 +9075,8 @@ HALT operation received from [0][8][0] at cycle 2620
 HALT operation received from [0][14][0] at cycle 2620
 HALT operation received from [0][15][0] at cycle 2620
 HALT operation received from [0][9][0] at cycle 2627
+Simulation finished, cycleCount = 2628
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 2628
 ----------- READ DATA ------------------
@@ -9150,8 +9150,8 @@ HALT operation received from [0][6][0] at cycle 3022
 HALT operation received from [0][15][0] at cycle 3022
 HALT operation received from [0][2][0] at cycle 3056
 HALT operation received from [0][9][0] at cycle 3075
+Simulation finished, cycleCount = 3076
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 6124
 ---------- SET KERNEL 2 ------------
@@ -9220,8 +9220,8 @@ HALT operation received from [0][3][0] at cycle 2655
 HALT operation received from [0][6][0] at cycle 2655
 HALT operation received from [0][8][0] at cycle 2655
 HALT operation received from [0][12][0] at cycle 2662
+Simulation finished, cycleCount = 2663
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 5291
 ----------- READ DATA ------------------
@@ -9295,8 +9295,8 @@ HALT operation received from [0][6][0] at cycle 3559
 HALT operation received from [0][8][0] at cycle 3619
 HALT operation received from [0][3][0] at cycle 3627
 HALT operation received from [0][12][0] at cycle 3697
+Simulation finished, cycleCount = 3698
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 9822
 ---------- SET KERNEL 2 ------------
@@ -9365,8 +9365,8 @@ HALT operation received from [0][6][0] at cycle 2795
 HALT operation received from [0][10][0] at cycle 2802
 HALT operation received from [0][14][0] at cycle 2802
 HALT operation received from [0][2][0] at cycle 2809
+Simulation finished, cycleCount = 2810
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 8101
 ----------- READ DATA ------------------
@@ -9440,8 +9440,8 @@ HALT operation received from [0][10][0] at cycle 5808
 HALT operation received from [0][6][0] at cycle 5892
 HALT operation received from [0][2][0] at cycle 5969
 HALT operation received from [0][14][0] at cycle 6144
+Simulation finished, cycleCount = 6145
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 15967
 ---------- SET KERNEL 2 ------------
@@ -9510,8 +9510,8 @@ HALT operation received from [0][5][0] at cycle 3306
 HALT operation received from [0][11][0] at cycle 3306
 HALT operation received from [0][1][0] at cycle 3320
 HALT operation received from [0][4][0] at cycle 3362
+Simulation finished, cycleCount = 3363
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 11464
 ----------- READ DATA ------------------
@@ -9585,8 +9585,8 @@ HALT operation received from [0][2][0] at cycle 12171
 HALT operation received from [0][11][0] at cycle 12287
 HALT operation received from [0][1][0] at cycle 12734
 HALT operation received from [0][4][0] at cycle 13027
+Simulation finished, cycleCount = 13028
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 28995
 ---------- SET KERNEL 2 ------------
@@ -9655,8 +9655,8 @@ HALT operation received from [0][7][0] at cycle 3502
 HALT operation received from [0][0][0] at cycle 3523
 HALT operation received from [0][10][0] at cycle 3544
 HALT operation received from [0][13][0] at cycle 3579
+Simulation finished, cycleCount = 3580
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 15044
 ----------- READ DATA ------------------
@@ -9730,8 +9730,8 @@ HALT operation received from [0][7][0] at cycle 11059
 HALT operation received from [0][10][0] at cycle 11367
 HALT operation received from [0][0][0] at cycle 11464
 HALT operation received from [0][13][0] at cycle 11800
+Simulation finished, cycleCount = 11801
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 40796
 ---------- SET KERNEL 2 ------------
@@ -9800,8 +9800,8 @@ HALT operation received from [0][11][0] at cycle 2732
 HALT operation received from [0][14][0] at cycle 2732
 HALT operation received from [0][15][0] at cycle 2746
 HALT operation received from [0][7][0] at cycle 2767
+Simulation finished, cycleCount = 2768
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 17812
 ----------- READ DATA ------------------
@@ -9875,8 +9875,8 @@ HALT operation received from [0][11][0] at cycle 3594
 HALT operation received from [0][12][0] at cycle 3620
 HALT operation received from [0][15][0] at cycle 3669
 HALT operation received from [0][7][0] at cycle 3708
+Simulation finished, cycleCount = 3709
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 44505
 ---------- SET KERNEL 2 ------------
@@ -9945,8 +9945,8 @@ HALT operation received from [0][14][0] at cycle 2613
 HALT operation received from [0][15][0] at cycle 2613
 HALT operation received from [0][9][0] at cycle 2620
 HALT operation received from [0][10][0] at cycle 2620
+Simulation finished, cycleCount = 2621
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 20433
 ----------- READ DATA ------------------
@@ -10020,8 +10020,8 @@ HALT operation received from [0][14][0] at cycle 2867
 HALT operation received from [0][15][0] at cycle 2867
 HALT operation received from [0][9][0] at cycle 2886
 HALT operation received from [0][10][0] at cycle 2895
+Simulation finished, cycleCount = 2896
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 47401
 ---------- SET KERNEL 2 ------------
@@ -10090,8 +10090,8 @@ HALT operation received from [0][12][0] at cycle 2613
 HALT operation received from [0][13][0] at cycle 2613
 HALT operation received from [0][14][0] at cycle 2613
 HALT operation received from [0][15][0] at cycle 2613
+Simulation finished, cycleCount = 2614
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 23047
 ----------- READ DATA ------------------
@@ -10156,8 +10156,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45645
+Simulation finished, cycleCount = 45646
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 45646
 ---------- SET KERNEL 2 ------------
@@ -10211,8 +10211,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41487
+Simulation finished, cycleCount = 41488
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 41488
 ----------- READ DATA ------------------
@@ -10271,8 +10271,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 46516
+Simulation finished, cycleCount = 46517
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 92163
 ---------- SET KERNEL 2 ------------
@@ -10326,8 +10326,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41837
+Simulation finished, cycleCount = 41838
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 83326
 ----------- READ DATA ------------------
@@ -10386,8 +10386,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 51550
+Simulation finished, cycleCount = 51551
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 143714
 ---------- SET KERNEL 2 ------------
@@ -10441,8 +10441,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 43797
+Simulation finished, cycleCount = 43798
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 127124
 ----------- READ DATA ------------------
@@ -10501,8 +10501,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 78650
+Simulation finished, cycleCount = 78651
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 222365
 ---------- SET KERNEL 2 ------------
@@ -10556,8 +10556,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 51609
+Simulation finished, cycleCount = 51610
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 178734
 ----------- READ DATA ------------------
@@ -10616,8 +10616,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 168367
+Simulation finished, cycleCount = 168368
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 390733
 ---------- SET KERNEL 2 ------------
@@ -10671,8 +10671,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 55291
+Simulation finished, cycleCount = 55292
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 234026
 ----------- READ DATA ------------------
@@ -10731,8 +10731,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 168751
+Simulation finished, cycleCount = 168752
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 559485
 ---------- SET KERNEL 2 ------------
@@ -10786,8 +10786,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 43132
+Simulation finished, cycleCount = 43133
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 277159
 ----------- READ DATA ------------------
@@ -10846,8 +10846,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 55456
+Simulation finished, cycleCount = 55457
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 614942
 ---------- SET KERNEL 2 ------------
@@ -10901,8 +10901,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41431
+Simulation finished, cycleCount = 41432
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 318591
 ----------- READ DATA ------------------
@@ -10961,8 +10961,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45541
+Simulation finished, cycleCount = 45542
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 660484
 ---------- SET KERNEL 2 ------------
@@ -11016,8 +11016,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41417
+Simulation finished, cycleCount = 41418
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 360009
 ----------- READ DATA ------------------
@@ -11084,8 +11084,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 22761
 HALT operation received from [0][0][0] at cycle 22910
+Simulation finished, cycleCount = 22911
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 22911
 ---------- SET KERNEL 2 ------------
@@ -11140,8 +11140,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 20750
 HALT operation received from [0][0][0] at cycle 20764
+Simulation finished, cycleCount = 20765
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 20765
 ----------- READ DATA ------------------
@@ -11201,8 +11201,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 23141
 HALT operation received from [0][0][0] at cycle 23401
+Simulation finished, cycleCount = 23402
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 46313
 ---------- SET KERNEL 2 ------------
@@ -11257,8 +11257,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 20911
 HALT operation received from [0][0][0] at cycle 20953
+Simulation finished, cycleCount = 20954
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 41719
 ----------- READ DATA ------------------
@@ -11318,8 +11318,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 25524
 HALT operation received from [0][0][0] at cycle 26052
+Simulation finished, cycleCount = 26053
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 72366
 ---------- SET KERNEL 2 ------------
@@ -11374,8 +11374,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 21821
 HALT operation received from [0][0][0] at cycle 22003
+Simulation finished, cycleCount = 22004
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 63723
 ----------- READ DATA ------------------
@@ -11435,8 +11435,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 38141
 HALT operation received from [0][0][0] at cycle 40535
+Simulation finished, cycleCount = 40536
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 112902
 ---------- SET KERNEL 2 ------------
@@ -11491,8 +11491,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 25762
 HALT operation received from [0][1][0] at cycle 25874
+Simulation finished, cycleCount = 25875
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 89598
 ----------- READ DATA ------------------
@@ -11552,8 +11552,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 83344
 HALT operation received from [0][1][0] at cycle 85049
+Simulation finished, cycleCount = 85050
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 197952
 ---------- SET KERNEL 2 ------------
@@ -11608,8 +11608,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 27624
 HALT operation received from [0][1][0] at cycle 27694
+Simulation finished, cycleCount = 27695
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 117293
 ----------- READ DATA ------------------
@@ -11669,8 +11669,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 84290
 HALT operation received from [0][0][0] at cycle 84487
+Simulation finished, cycleCount = 84488
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 282440
 ---------- SET KERNEL 2 ------------
@@ -11725,8 +11725,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 21548
 HALT operation received from [0][1][0] at cycle 21611
+Simulation finished, cycleCount = 21612
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 138905
 ----------- READ DATA ------------------
@@ -11786,8 +11786,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 27595
 HALT operation received from [0][1][0] at cycle 27887
+Simulation finished, cycleCount = 27888
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 310328
 ---------- SET KERNEL 2 ------------
@@ -11842,8 +11842,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 20729
 HALT operation received from [0][1][0] at cycle 20729
+Simulation finished, cycleCount = 20730
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 159635
 ----------- READ DATA ------------------
@@ -11903,8 +11903,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 22779
 HALT operation received from [0][0][0] at cycle 22788
+Simulation finished, cycleCount = 22789
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 333117
 ---------- SET KERNEL 2 ------------
@@ -11959,8 +11959,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 20722
 HALT operation received from [0][1][0] at cycle 20722
+Simulation finished, cycleCount = 20723
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 180358
 ----------- READ DATA ------------------
@@ -12029,8 +12029,8 @@ HALT operation received from [0][1][0] at cycle 11389
 HALT operation received from [0][2][0] at cycle 11389
 HALT operation received from [0][3][0] at cycle 11389
 HALT operation received from [0][0][0] at cycle 11538
+Simulation finished, cycleCount = 11539
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 11539
 ---------- SET KERNEL 2 ------------
@@ -12087,8 +12087,8 @@ HALT operation received from [0][3][0] at cycle 10377
 HALT operation received from [0][0][0] at cycle 10391
 HALT operation received from [0][1][0] at cycle 10391
 HALT operation received from [0][2][0] at cycle 10391
+Simulation finished, cycleCount = 10392
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 10392
 ----------- READ DATA ------------------
@@ -12150,8 +12150,8 @@ HALT operation received from [0][3][0] at cycle 11519
 HALT operation received from [0][1][0] at cycle 11639
 HALT operation received from [0][0][0] at cycle 11667
 HALT operation received from [0][2][0] at cycle 11751
+Simulation finished, cycleCount = 11752
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 23291
 ---------- SET KERNEL 2 ------------
@@ -12208,8 +12208,8 @@ HALT operation received from [0][3][0] at cycle 10461
 HALT operation received from [0][1][0] at cycle 10468
 HALT operation received from [0][2][0] at cycle 10482
 HALT operation received from [0][0][0] at cycle 10489
+Simulation finished, cycleCount = 10490
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 20882
 ----------- READ DATA ------------------
@@ -12271,8 +12271,8 @@ HALT operation received from [0][1][0] at cycle 12714
 HALT operation received from [0][3][0] at cycle 12827
 HALT operation received from [0][2][0] at cycle 12881
 HALT operation received from [0][0][0] at cycle 13188
+Simulation finished, cycleCount = 13189
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 36480
 ---------- SET KERNEL 2 ------------
@@ -12329,8 +12329,8 @@ HALT operation received from [0][1][0] at cycle 10888
 HALT operation received from [0][0][0] at cycle 10895
 HALT operation received from [0][3][0] at cycle 10951
 HALT operation received from [0][2][0] at cycle 11126
+Simulation finished, cycleCount = 11127
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 32009
 ----------- READ DATA ------------------
@@ -12392,8 +12392,8 @@ HALT operation received from [0][0][0] at cycle 18663
 HALT operation received from [0][1][0] at cycle 18736
 HALT operation received from [0][3][0] at cycle 19422
 HALT operation received from [0][2][0] at cycle 21889
+Simulation finished, cycleCount = 21890
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 58370
 ---------- SET KERNEL 2 ------------
@@ -12450,8 +12450,8 @@ HALT operation received from [0][2][0] at cycle 12778
 HALT operation received from [0][3][0] at cycle 12897
 HALT operation received from [0][1][0] at cycle 12995
 HALT operation received from [0][0][0] at cycle 13002
+Simulation finished, cycleCount = 13003
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 45012
 ----------- READ DATA ------------------
@@ -12513,8 +12513,8 @@ HALT operation received from [0][2][0] at cycle 40360
 HALT operation received from [0][3][0] at cycle 42151
 HALT operation received from [0][1][0] at cycle 42915
 HALT operation received from [0][0][0] at cycle 43001
+Simulation finished, cycleCount = 43002
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 101372
 ---------- SET KERNEL 2 ------------
@@ -12571,8 +12571,8 @@ HALT operation received from [0][2][0] at cycle 13793
 HALT operation received from [0][3][0] at cycle 13814
 HALT operation received from [0][0][0] at cycle 13849
 HALT operation received from [0][1][0] at cycle 13898
+Simulation finished, cycleCount = 13899
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 58911
 ----------- READ DATA ------------------
@@ -12634,8 +12634,8 @@ HALT operation received from [0][2][0] at cycle 41637
 HALT operation received from [0][3][0] at cycle 42101
 HALT operation received from [0][1][0] at cycle 42206
 HALT operation received from [0][0][0] at cycle 42867
+Simulation finished, cycleCount = 42868
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 144240
 ---------- SET KERNEL 2 ------------
@@ -12692,8 +12692,8 @@ HALT operation received from [0][1][0] at cycle 10741
 HALT operation received from [0][0][0] at cycle 10755
 HALT operation received from [0][2][0] at cycle 10811
 HALT operation received from [0][3][0] at cycle 10888
+Simulation finished, cycleCount = 10889
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 69800
 ----------- READ DATA ------------------
@@ -12755,8 +12755,8 @@ HALT operation received from [0][1][0] at cycle 13513
 HALT operation received from [0][0][0] at cycle 13725
 HALT operation received from [0][2][0] at cycle 13887
 HALT operation received from [0][3][0] at cycle 14391
+Simulation finished, cycleCount = 14392
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 158632
 ---------- SET KERNEL 2 ------------
@@ -12813,8 +12813,8 @@ HALT operation received from [0][0][0] at cycle 10370
 HALT operation received from [0][3][0] at cycle 10370
 HALT operation received from [0][1][0] at cycle 10377
 HALT operation received from [0][2][0] at cycle 10377
+Simulation finished, cycleCount = 10378
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 80178
 ----------- READ DATA ------------------
@@ -12876,8 +12876,8 @@ HALT operation received from [0][0][0] at cycle 11389
 HALT operation received from [0][3][0] at cycle 11389
 HALT operation received from [0][1][0] at cycle 11407
 HALT operation received from [0][2][0] at cycle 11416
+Simulation finished, cycleCount = 11417
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 170049
 ---------- SET KERNEL 2 ------------
@@ -12934,8 +12934,8 @@ HALT operation received from [0][0][0] at cycle 10370
 HALT operation received from [0][1][0] at cycle 10370
 HALT operation received from [0][2][0] at cycle 10370
 HALT operation received from [0][3][0] at cycle 10370
+Simulation finished, cycleCount = 10371
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 90549
 ----------- READ DATA ------------------
@@ -13008,8 +13008,8 @@ HALT operation received from [0][5][0] at cycle 5703
 HALT operation received from [0][6][0] at cycle 5703
 HALT operation received from [0][7][0] at cycle 5703
 HALT operation received from [0][0][0] at cycle 5852
+Simulation finished, cycleCount = 5853
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5853
 ---------- SET KERNEL 2 ------------
@@ -13070,8 +13070,8 @@ HALT operation received from [0][7][0] at cycle 5201
 HALT operation received from [0][0][0] at cycle 5208
 HALT operation received from [0][1][0] at cycle 5208
 HALT operation received from [0][6][0] at cycle 5208
+Simulation finished, cycleCount = 5209
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5209
 ----------- READ DATA ------------------
@@ -13137,8 +13137,8 @@ HALT operation received from [0][2][0] at cycle 5861
 HALT operation received from [0][1][0] at cycle 5879
 HALT operation received from [0][0][0] at cycle 5893
 HALT operation received from [0][6][0] at cycle 5907
+Simulation finished, cycleCount = 5908
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 11761
 ---------- SET KERNEL 2 ------------
@@ -13199,8 +13199,8 @@ HALT operation received from [0][3][0] at cycle 5243
 HALT operation received from [0][5][0] at cycle 5243
 HALT operation received from [0][4][0] at cycle 5264
 HALT operation received from [0][6][0] at cycle 5264
+Simulation finished, cycleCount = 5265
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 10474
 ----------- READ DATA ------------------
@@ -13266,8 +13266,8 @@ HALT operation received from [0][0][0] at cycle 6496
 HALT operation received from [0][3][0] at cycle 6501
 HALT operation received from [0][6][0] at cycle 6653
 HALT operation received from [0][4][0] at cycle 6709
+Simulation finished, cycleCount = 6710
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 18471
 ---------- SET KERNEL 2 ------------
@@ -13328,8 +13328,8 @@ HALT operation received from [0][1][0] at cycle 5481
 HALT operation received from [0][3][0] at cycle 5495
 HALT operation received from [0][6][0] at cycle 5565
 HALT operation received from [0][2][0] at cycle 5579
+Simulation finished, cycleCount = 5580
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 16054
 ----------- READ DATA ------------------
@@ -13395,8 +13395,8 @@ HALT operation received from [0][7][0] at cycle 9684
 HALT operation received from [0][3][0] at cycle 9755
 HALT operation received from [0][2][0] at cycle 10836
 HALT operation received from [0][6][0] at cycle 11070
+Simulation finished, cycleCount = 11071
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 29542
 ---------- SET KERNEL 2 ------------
@@ -13457,8 +13457,8 @@ HALT operation received from [0][5][0] at cycle 6482
 HALT operation received from [0][3][0] at cycle 6503
 HALT operation received from [0][1][0] at cycle 6531
 HALT operation received from [0][4][0] at cycle 6573
+Simulation finished, cycleCount = 6574
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 22628
 ----------- READ DATA ------------------
@@ -13524,8 +13524,8 @@ HALT operation received from [0][0][0] at cycle 21121
 HALT operation received from [0][3][0] at cycle 21237
 HALT operation received from [0][1][0] at cycle 21889
 HALT operation received from [0][4][0] at cycle 21897
+Simulation finished, cycleCount = 21898
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 51440
 ---------- SET KERNEL 2 ------------
@@ -13586,8 +13586,8 @@ HALT operation received from [0][6][0] at cycle 6909
 HALT operation received from [0][7][0] at cycle 6944
 HALT operation received from [0][0][0] at cycle 6979
 HALT operation received from [0][5][0] at cycle 7049
+Simulation finished, cycleCount = 7050
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 29678
 ----------- READ DATA ------------------
@@ -13653,8 +13653,8 @@ HALT operation received from [0][4][0] at cycle 21051
 HALT operation received from [0][7][0] at cycle 21311
 HALT operation received from [0][0][0] at cycle 21833
 HALT operation received from [0][5][0] at cycle 21903
+Simulation finished, cycleCount = 21904
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 73344
 ---------- SET KERNEL 2 ------------
@@ -13715,8 +13715,8 @@ HALT operation received from [0][1][0] at cycle 5411
 HALT operation received from [0][3][0] at cycle 5425
 HALT operation received from [0][6][0] at cycle 5425
 HALT operation received from [0][7][0] at cycle 5481
+Simulation finished, cycleCount = 5482
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 35160
 ----------- READ DATA ------------------
@@ -13782,8 +13782,8 @@ HALT operation received from [0][1][0] at cycle 6945
 HALT operation received from [0][6][0] at cycle 7067
 HALT operation received from [0][3][0] at cycle 7103
 HALT operation received from [0][7][0] at cycle 7305
+Simulation finished, cycleCount = 7306
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 80650
 ---------- SET KERNEL 2 ------------
@@ -13844,8 +13844,8 @@ HALT operation received from [0][6][0] at cycle 5194
 HALT operation received from [0][7][0] at cycle 5194
 HALT operation received from [0][1][0] at cycle 5201
 HALT operation received from [0][2][0] at cycle 5201
+Simulation finished, cycleCount = 5202
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 40362
 ----------- READ DATA ------------------
@@ -13911,8 +13911,8 @@ HALT operation received from [0][6][0] at cycle 5703
 HALT operation received from [0][7][0] at cycle 5703
 HALT operation received from [0][1][0] at cycle 5721
 HALT operation received from [0][2][0] at cycle 5730
+Simulation finished, cycleCount = 5731
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 86381
 ---------- SET KERNEL 2 ------------
@@ -13973,8 +13973,8 @@ HALT operation received from [0][4][0] at cycle 5194
 HALT operation received from [0][5][0] at cycle 5194
 HALT operation received from [0][6][0] at cycle 5194
 HALT operation received from [0][7][0] at cycle 5194
+Simulation finished, cycleCount = 5195
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 45557
 ----------- READ DATA ------------------
@@ -14055,8 +14055,8 @@ HALT operation received from [0][13][0] at cycle 2606
 HALT operation received from [0][14][0] at cycle 2606
 HALT operation received from [0][15][0] at cycle 2606
 HALT operation received from [0][0][0] at cycle 2775
+Simulation finished, cycleCount = 2776
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 2776
 ---------- SET KERNEL 2 ------------
@@ -14125,8 +14125,8 @@ HALT operation received from [0][8][0] at cycle 2867
 HALT operation received from [0][14][0] at cycle 2867
 HALT operation received from [0][15][0] at cycle 2867
 HALT operation received from [0][9][0] at cycle 2872
+Simulation finished, cycleCount = 2873
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 2873
 ----------- READ DATA ------------------
@@ -14200,8 +14200,8 @@ HALT operation received from [0][6][0] at cycle 2752
 HALT operation received from [0][15][0] at cycle 2752
 HALT operation received from [0][2][0] at cycle 2784
 HALT operation received from [0][9][0] at cycle 2802
+Simulation finished, cycleCount = 2803
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 5579
 ---------- SET KERNEL 2 ------------
@@ -14270,8 +14270,8 @@ HALT operation received from [0][3][0] at cycle 2892
 HALT operation received from [0][6][0] at cycle 2892
 HALT operation received from [0][8][0] at cycle 2892
 HALT operation received from [0][12][0] at cycle 2897
+Simulation finished, cycleCount = 2898
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 5771
 ----------- READ DATA ------------------
@@ -14345,8 +14345,8 @@ HALT operation received from [0][6][0] at cycle 3258
 HALT operation received from [0][8][0] at cycle 3315
 HALT operation received from [0][3][0] at cycle 3322
 HALT operation received from [0][12][0] at cycle 3388
+Simulation finished, cycleCount = 3389
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 8968
 ---------- SET KERNEL 2 ------------
@@ -14415,8 +14415,8 @@ HALT operation received from [0][6][0] at cycle 2992
 HALT operation received from [0][10][0] at cycle 2997
 HALT operation received from [0][14][0] at cycle 2997
 HALT operation received from [0][2][0] at cycle 3002
+Simulation finished, cycleCount = 3003
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 8774
 ----------- READ DATA ------------------
@@ -14490,8 +14490,8 @@ HALT operation received from [0][10][0] at cycle 5383
 HALT operation received from [0][6][0] at cycle 5463
 HALT operation received from [0][2][0] at cycle 5532
 HALT operation received from [0][14][0] at cycle 5704
+Simulation finished, cycleCount = 5705
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 14673
 ---------- SET KERNEL 2 ------------
@@ -14560,8 +14560,8 @@ HALT operation received from [0][5][0] at cycle 3357
 HALT operation received from [0][11][0] at cycle 3357
 HALT operation received from [0][1][0] at cycle 3367
 HALT operation received from [0][4][0] at cycle 3397
+Simulation finished, cycleCount = 3398
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 12172
 ----------- READ DATA ------------------
@@ -14635,8 +14635,8 @@ HALT operation received from [0][2][0] at cycle 11505
 HALT operation received from [0][11][0] at cycle 11618
 HALT operation received from [0][1][0] at cycle 12022
 HALT operation received from [0][4][0] at cycle 12317
+Simulation finished, cycleCount = 12318
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 26991
 ---------- SET KERNEL 2 ------------
@@ -14705,8 +14705,8 @@ HALT operation received from [0][7][0] at cycle 3497
 HALT operation received from [0][0][0] at cycle 3512
 HALT operation received from [0][10][0] at cycle 3527
 HALT operation received from [0][13][0] at cycle 3552
+Simulation finished, cycleCount = 3553
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 15725
 ----------- READ DATA ------------------
@@ -14780,8 +14780,8 @@ HALT operation received from [0][7][0] at cycle 10618
 HALT operation received from [0][10][0] at cycle 10916
 HALT operation received from [0][0][0] at cycle 11017
 HALT operation received from [0][13][0] at cycle 11349
+Simulation finished, cycleCount = 11350
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 38341
 ---------- SET KERNEL 2 ------------
@@ -14850,8 +14850,8 @@ HALT operation received from [0][11][0] at cycle 2947
 HALT operation received from [0][14][0] at cycle 2947
 HALT operation received from [0][15][0] at cycle 2957
 HALT operation received from [0][7][0] at cycle 2972
+Simulation finished, cycleCount = 2973
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 18698
 ----------- READ DATA ------------------
@@ -14925,8 +14925,8 @@ HALT operation received from [0][11][0] at cycle 3315
 HALT operation received from [0][12][0] at cycle 3342
 HALT operation received from [0][15][0] at cycle 3389
 HALT operation received from [0][7][0] at cycle 3425
+Simulation finished, cycleCount = 3426
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 41767
 ---------- SET KERNEL 2 ------------
@@ -14995,8 +14995,8 @@ HALT operation received from [0][14][0] at cycle 2862
 HALT operation received from [0][15][0] at cycle 2862
 HALT operation received from [0][9][0] at cycle 2867
 HALT operation received from [0][10][0] at cycle 2867
+Simulation finished, cycleCount = 2868
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 21566
 ----------- READ DATA ------------------
@@ -15070,8 +15070,8 @@ HALT operation received from [0][14][0] at cycle 2606
 HALT operation received from [0][15][0] at cycle 2606
 HALT operation received from [0][9][0] at cycle 2624
 HALT operation received from [0][10][0] at cycle 2633
+Simulation finished, cycleCount = 2634
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 44401
 ---------- SET KERNEL 2 ------------
@@ -15140,8 +15140,8 @@ HALT operation received from [0][12][0] at cycle 2862
 HALT operation received from [0][13][0] at cycle 2862
 HALT operation received from [0][14][0] at cycle 2862
 HALT operation received from [0][15][0] at cycle 2862
+Simulation finished, cycleCount = 2863
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 24429
 ----------- READ DATA ------------------
@@ -15206,8 +15206,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41513
+Simulation finished, cycleCount = 41514
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 41514
 ---------- SET KERNEL 2 ------------
@@ -15261,8 +15261,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45520
+Simulation finished, cycleCount = 45521
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 45521
 ----------- READ DATA ------------------
@@ -15321,8 +15321,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 42434
+Simulation finished, cycleCount = 42435
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 83949
 ---------- SET KERNEL 2 ------------
@@ -15376,8 +15376,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45870
+Simulation finished, cycleCount = 45871
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 91392
 ----------- READ DATA ------------------
@@ -15436,8 +15436,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 47762
+Simulation finished, cycleCount = 47763
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 131712
 ---------- SET KERNEL 2 ------------
@@ -15491,8 +15491,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 47830
+Simulation finished, cycleCount = 47831
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 139223
 ----------- READ DATA ------------------
@@ -15551,8 +15551,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 76331
+Simulation finished, cycleCount = 76332
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 208044
 ---------- SET KERNEL 2 ------------
@@ -15606,8 +15606,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 55642
+Simulation finished, cycleCount = 55643
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 194866
 ----------- READ DATA ------------------
@@ -15666,8 +15666,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 168884
+Simulation finished, cycleCount = 168885
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 376929
 ---------- SET KERNEL 2 ------------
@@ -15721,8 +15721,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 59324
+Simulation finished, cycleCount = 59325
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 254191
 ----------- READ DATA ------------------
@@ -15781,8 +15781,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 165392
+Simulation finished, cycleCount = 165393
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 542322
 ---------- SET KERNEL 2 ------------
@@ -15836,8 +15836,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 47165
+Simulation finished, cycleCount = 47166
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 301357
 ----------- READ DATA ------------------
@@ -15896,8 +15896,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 51317
+Simulation finished, cycleCount = 51318
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 593640
 ---------- SET KERNEL 2 ------------
@@ -15951,8 +15951,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45464
+Simulation finished, cycleCount = 45465
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 346822
 ----------- READ DATA ------------------
@@ -16011,8 +16011,8 @@ Run Simulation with:
   binaries/final_BFS_1.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 41399
+Simulation finished, cycleCount = 41400
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 635040
 ---------- SET KERNEL 2 ------------
@@ -16066,8 +16066,8 @@ Run Simulation with:
   binaries/final_BFS_2.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 45450
+Simulation finished, cycleCount = 45451
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 392273
 ----------- READ DATA ------------------
@@ -16134,8 +16134,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 22720
 HALT operation received from [0][0][0] at cycle 22879
+Simulation finished, cycleCount = 22880
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 22880
 ---------- SET KERNEL 2 ------------
@@ -16190,8 +16190,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 20696
 HALT operation received from [0][0][0] at cycle 20708
+Simulation finished, cycleCount = 20709
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 20709
 ----------- READ DATA ------------------
@@ -16251,8 +16251,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 23122
 HALT operation received from [0][0][0] at cycle 23398
+Simulation finished, cycleCount = 23399
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 46279
 ---------- SET KERNEL 2 ------------
@@ -16307,8 +16307,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 20834
 HALT operation received from [0][0][0] at cycle 20870
+Simulation finished, cycleCount = 20871
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 41580
 ----------- READ DATA ------------------
@@ -16368,8 +16368,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 25645
 HALT operation received from [0][0][0] at cycle 26203
+Simulation finished, cycleCount = 26204
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 72483
 ---------- SET KERNEL 2 ------------
@@ -16424,8 +16424,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 21614
 HALT operation received from [0][0][0] at cycle 21770
+Simulation finished, cycleCount = 21771
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 63351
 ----------- READ DATA ------------------
@@ -16485,8 +16485,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 38953
 HALT operation received from [0][0][0] at cycle 41464
+Simulation finished, cycleCount = 41465
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 113948
 ---------- SET KERNEL 2 ------------
@@ -16541,8 +16541,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][0][0] at cycle 24992
 HALT operation received from [0][1][0] at cycle 25088
+Simulation finished, cycleCount = 25089
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 88440
 ----------- READ DATA ------------------
@@ -16602,8 +16602,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][0][0] at cycle 85597
 HALT operation received from [0][1][0] at cycle 87373
+Simulation finished, cycleCount = 87374
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 201322
 ---------- SET KERNEL 2 ------------
@@ -16658,8 +16658,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][0][0] at cycle 26588
 HALT operation received from [0][1][0] at cycle 26648
+Simulation finished, cycleCount = 26649
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 115089
 ----------- READ DATA ------------------
@@ -16719,8 +16719,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 84637
 HALT operation received from [0][0][0] at cycle 84841
+Simulation finished, cycleCount = 84842
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 286164
 ---------- SET KERNEL 2 ------------
@@ -16775,8 +16775,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][0][0] at cycle 21380
 HALT operation received from [0][1][0] at cycle 21434
+Simulation finished, cycleCount = 21435
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 136524
 ----------- READ DATA ------------------
@@ -16836,8 +16836,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][0][0] at cycle 27556
 HALT operation received from [0][1][0] at cycle 27847
+Simulation finished, cycleCount = 27848
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 314012
 ---------- SET KERNEL 2 ------------
@@ -16892,8 +16892,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][0][0] at cycle 20678
 HALT operation received from [0][1][0] at cycle 20678
+Simulation finished, cycleCount = 20679
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 157203
 ----------- READ DATA ------------------
@@ -16953,8 +16953,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][1][0] at cycle 22738
 HALT operation received from [0][0][0] at cycle 22747
+Simulation finished, cycleCount = 22748
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 336760
 ---------- SET KERNEL 2 ------------
@@ -17009,8 +17009,8 @@ Run Simulation with:
   2Context_4wide.xml
 HALT operation received from [0][0][0] at cycle 20672
 HALT operation received from [0][1][0] at cycle 20672
+Simulation finished, cycleCount = 20673
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 177876
 ----------- READ DATA ------------------
@@ -17079,8 +17079,8 @@ HALT operation received from [0][1][0] at cycle 11368
 HALT operation received from [0][2][0] at cycle 11368
 HALT operation received from [0][3][0] at cycle 11368
 HALT operation received from [0][0][0] at cycle 11527
+Simulation finished, cycleCount = 11528
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 11528
 ---------- SET KERNEL 2 ------------
@@ -17137,8 +17137,8 @@ HALT operation received from [0][3][0] at cycle 10350
 HALT operation received from [0][0][0] at cycle 10362
 HALT operation received from [0][1][0] at cycle 10362
 HALT operation received from [0][2][0] at cycle 10362
+Simulation finished, cycleCount = 10363
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 10363
 ----------- READ DATA ------------------
@@ -17200,8 +17200,8 @@ HALT operation received from [0][3][0] at cycle 11506
 HALT operation received from [0][1][0] at cycle 11632
 HALT operation received from [0][0][0] at cycle 11662
 HALT operation received from [0][2][0] at cycle 11752
+Simulation finished, cycleCount = 11753
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 23281
 ---------- SET KERNEL 2 ------------
@@ -17258,8 +17258,8 @@ HALT operation received from [0][3][0] at cycle 10422
 HALT operation received from [0][1][0] at cycle 10428
 HALT operation received from [0][2][0] at cycle 10440
 HALT operation received from [0][0][0] at cycle 10446
+Simulation finished, cycleCount = 10447
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 20810
 ----------- READ DATA ------------------
@@ -17321,8 +17321,8 @@ HALT operation received from [0][1][0] at cycle 12769
 HALT operation received from [0][3][0] at cycle 12892
 HALT operation received from [0][2][0] at cycle 12946
 HALT operation received from [0][0][0] at cycle 13273
+Simulation finished, cycleCount = 13274
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 36555
 ---------- SET KERNEL 2 ------------
@@ -17379,8 +17379,8 @@ HALT operation received from [0][1][0] at cycle 10788
 HALT operation received from [0][0][0] at cycle 10794
 HALT operation received from [0][3][0] at cycle 10842
 HALT operation received from [0][2][0] at cycle 10992
+Simulation finished, cycleCount = 10993
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 31803
 ----------- READ DATA ------------------
@@ -17442,8 +17442,8 @@ HALT operation received from [0][0][0] at cycle 19033
 HALT operation received from [0][1][0] at cycle 19126
 HALT operation received from [0][3][0] at cycle 19843
 HALT operation received from [0][2][0] at cycle 22447
+Simulation finished, cycleCount = 22448
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 59003
 ---------- SET KERNEL 2 ------------
@@ -17500,8 +17500,8 @@ HALT operation received from [0][2][0] at cycle 12408
 HALT operation received from [0][3][0] at cycle 12510
 HALT operation received from [0][1][0] at cycle 12594
 HALT operation received from [0][0][0] at cycle 12600
+Simulation finished, cycleCount = 12601
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 44404
 ----------- READ DATA ------------------
@@ -17563,8 +17563,8 @@ HALT operation received from [0][2][0] at cycle 41437
 HALT operation received from [0][3][0] at cycle 43282
 HALT operation received from [0][1][0] at cycle 44107
 HALT operation received from [0][0][0] at cycle 44176
+Simulation finished, cycleCount = 44177
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 103180
 ---------- SET KERNEL 2 ------------
@@ -17621,8 +17621,8 @@ HALT operation received from [0][2][0] at cycle 13278
 HALT operation received from [0][3][0] at cycle 13296
 HALT operation received from [0][0][0] at cycle 13326
 HALT operation received from [0][1][0] at cycle 13368
+Simulation finished, cycleCount = 13369
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 57773
 ----------- READ DATA ------------------
@@ -17684,8 +17684,8 @@ HALT operation received from [0][2][0] at cycle 41812
 HALT operation received from [0][3][0] at cycle 42277
 HALT operation received from [0][1][0] at cycle 42376
 HALT operation received from [0][0][0] at cycle 43045
+Simulation finished, cycleCount = 43046
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 146226
 ---------- SET KERNEL 2 ------------
@@ -17742,8 +17742,8 @@ HALT operation received from [0][1][0] at cycle 10662
 HALT operation received from [0][0][0] at cycle 10674
 HALT operation received from [0][2][0] at cycle 10722
 HALT operation received from [0][3][0] at cycle 10788
+Simulation finished, cycleCount = 10789
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 68562
 ----------- READ DATA ------------------
@@ -17805,8 +17805,8 @@ HALT operation received from [0][1][0] at cycle 13492
 HALT operation received from [0][0][0] at cycle 13705
 HALT operation received from [0][2][0] at cycle 13867
 HALT operation received from [0][3][0] at cycle 14371
+Simulation finished, cycleCount = 14372
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 160598
 ---------- SET KERNEL 2 ------------
@@ -17863,8 +17863,8 @@ HALT operation received from [0][0][0] at cycle 10344
 HALT operation received from [0][3][0] at cycle 10344
 HALT operation received from [0][1][0] at cycle 10350
 HALT operation received from [0][2][0] at cycle 10350
+Simulation finished, cycleCount = 10351
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 78913
 ----------- READ DATA ------------------
@@ -17926,8 +17926,8 @@ HALT operation received from [0][0][0] at cycle 11368
 HALT operation received from [0][3][0] at cycle 11368
 HALT operation received from [0][1][0] at cycle 11386
 HALT operation received from [0][2][0] at cycle 11395
+Simulation finished, cycleCount = 11396
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 171994
 ---------- SET KERNEL 2 ------------
@@ -17984,8 +17984,8 @@ HALT operation received from [0][0][0] at cycle 10344
 HALT operation received from [0][1][0] at cycle 10344
 HALT operation received from [0][2][0] at cycle 10344
 HALT operation received from [0][3][0] at cycle 10344
+Simulation finished, cycleCount = 10345
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 89258
 ----------- READ DATA ------------------
@@ -18058,8 +18058,8 @@ HALT operation received from [0][5][0] at cycle 5692
 HALT operation received from [0][6][0] at cycle 5692
 HALT operation received from [0][7][0] at cycle 5692
 HALT operation received from [0][0][0] at cycle 5851
+Simulation finished, cycleCount = 5852
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5852
 ---------- SET KERNEL 2 ------------
@@ -18120,8 +18120,8 @@ HALT operation received from [0][7][0] at cycle 5186
 HALT operation received from [0][0][0] at cycle 5192
 HALT operation received from [0][1][0] at cycle 5192
 HALT operation received from [0][6][0] at cycle 5192
+Simulation finished, cycleCount = 5193
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 5193
 ----------- READ DATA ------------------
@@ -18187,8 +18187,8 @@ HALT operation received from [0][2][0] at cycle 5860
 HALT operation received from [0][1][0] at cycle 5878
 HALT operation received from [0][0][0] at cycle 5893
 HALT operation received from [0][6][0] at cycle 5908
+Simulation finished, cycleCount = 5909
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 11761
 ---------- SET KERNEL 2 ------------
@@ -18249,8 +18249,8 @@ HALT operation received from [0][3][0] at cycle 5222
 HALT operation received from [0][5][0] at cycle 5222
 HALT operation received from [0][4][0] at cycle 5240
 HALT operation received from [0][6][0] at cycle 5240
+Simulation finished, cycleCount = 5241
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 10434
 ----------- READ DATA ------------------
@@ -18316,8 +18316,8 @@ HALT operation received from [0][0][0] at cycle 6532
 HALT operation received from [0][3][0] at cycle 6538
 HALT operation received from [0][6][0] at cycle 6697
 HALT operation received from [0][4][0] at cycle 6757
+Simulation finished, cycleCount = 6758
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 18519
 ---------- SET KERNEL 2 ------------
@@ -18378,8 +18378,8 @@ HALT operation received from [0][1][0] at cycle 5426
 HALT operation received from [0][3][0] at cycle 5438
 HALT operation received from [0][6][0] at cycle 5498
 HALT operation received from [0][2][0] at cycle 5510
+Simulation finished, cycleCount = 5511
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 15945
 ----------- READ DATA ------------------
@@ -18445,8 +18445,8 @@ HALT operation received from [0][7][0] at cycle 9895
 HALT operation received from [0][3][0] at cycle 9964
 HALT operation received from [0][2][0] at cycle 11110
 HALT operation received from [0][6][0] at cycle 11353
+Simulation finished, cycleCount = 11354
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 29873
 ---------- SET KERNEL 2 ------------
@@ -18507,8 +18507,8 @@ HALT operation received from [0][5][0] at cycle 6284
 HALT operation received from [0][3][0] at cycle 6302
 HALT operation received from [0][1][0] at cycle 6326
 HALT operation received from [0][4][0] at cycle 6362
+Simulation finished, cycleCount = 6363
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 22308
 ----------- READ DATA ------------------
@@ -18574,8 +18574,8 @@ HALT operation received from [0][0][0] at cycle 21715
 HALT operation received from [0][3][0] at cycle 21802
 HALT operation received from [0][4][0] at cycle 22477
 HALT operation received from [0][1][0] at cycle 22507
+Simulation finished, cycleCount = 22508
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 52381
 ---------- SET KERNEL 2 ------------
@@ -18636,8 +18636,8 @@ HALT operation received from [0][6][0] at cycle 6650
 HALT operation received from [0][7][0] at cycle 6680
 HALT operation received from [0][0][0] at cycle 6710
 HALT operation received from [0][5][0] at cycle 6770
+Simulation finished, cycleCount = 6771
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 29079
 ----------- READ DATA ------------------
@@ -18703,8 +18703,8 @@ HALT operation received from [0][4][0] at cycle 21136
 HALT operation received from [0][7][0] at cycle 21403
 HALT operation received from [0][0][0] at cycle 21925
 HALT operation received from [0][5][0] at cycle 21991
+Simulation finished, cycleCount = 21992
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 74373
 ---------- SET KERNEL 2 ------------
@@ -18765,8 +18765,8 @@ HALT operation received from [0][1][0] at cycle 5366
 HALT operation received from [0][3][0] at cycle 5378
 HALT operation received from [0][6][0] at cycle 5378
 HALT operation received from [0][7][0] at cycle 5426
+Simulation finished, cycleCount = 5427
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 34506
 ----------- READ DATA ------------------
@@ -18832,8 +18832,8 @@ HALT operation received from [0][1][0] at cycle 6934
 HALT operation received from [0][6][0] at cycle 7057
 HALT operation received from [0][3][0] at cycle 7093
 HALT operation received from [0][7][0] at cycle 7294
+Simulation finished, cycleCount = 7295
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 81668
 ---------- SET KERNEL 2 ------------
@@ -18894,8 +18894,8 @@ HALT operation received from [0][6][0] at cycle 5180
 HALT operation received from [0][7][0] at cycle 5180
 HALT operation received from [0][1][0] at cycle 5186
 HALT operation received from [0][2][0] at cycle 5186
+Simulation finished, cycleCount = 5187
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 39693
 ----------- READ DATA ------------------
@@ -18961,8 +18961,8 @@ HALT operation received from [0][6][0] at cycle 5692
 HALT operation received from [0][7][0] at cycle 5692
 HALT operation received from [0][1][0] at cycle 5710
 HALT operation received from [0][2][0] at cycle 5719
+Simulation finished, cycleCount = 5720
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 87388
 ---------- SET KERNEL 2 ------------
@@ -19023,8 +19023,8 @@ HALT operation received from [0][4][0] at cycle 5180
 HALT operation received from [0][5][0] at cycle 5180
 HALT operation received from [0][6][0] at cycle 5180
 HALT operation received from [0][7][0] at cycle 5180
+Simulation finished, cycleCount = 5181
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 44874
 ----------- READ DATA ------------------
@@ -19105,8 +19105,8 @@ HALT operation received from [0][13][0] at cycle 2859
 HALT operation received from [0][14][0] at cycle 2859
 HALT operation received from [0][15][0] at cycle 2859
 HALT operation received from [0][0][0] at cycle 3018
+Simulation finished, cycleCount = 3019
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 3019
 ---------- SET KERNEL 2 ------------
@@ -19175,8 +19175,8 @@ HALT operation received from [0][8][0] at cycle 2609
 HALT operation received from [0][14][0] at cycle 2609
 HALT operation received from [0][15][0] at cycle 2609
 HALT operation received from [0][9][0] at cycle 2615
+Simulation finished, cycleCount = 2616
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 2616
 ----------- READ DATA ------------------
@@ -19250,8 +19250,8 @@ HALT operation received from [0][6][0] at cycle 2997
 HALT operation received from [0][15][0] at cycle 2997
 HALT operation received from [0][2][0] at cycle 3027
 HALT operation received from [0][9][0] at cycle 3045
+Simulation finished, cycleCount = 3046
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 6065
 ---------- SET KERNEL 2 ------------
@@ -19320,8 +19320,8 @@ HALT operation received from [0][3][0] at cycle 2639
 HALT operation received from [0][6][0] at cycle 2639
 HALT operation received from [0][8][0] at cycle 2639
 HALT operation received from [0][12][0] at cycle 2645
+Simulation finished, cycleCount = 2646
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 5262
 ----------- READ DATA ------------------
@@ -19395,8 +19395,8 @@ HALT operation received from [0][6][0] at cycle 3477
 HALT operation received from [0][8][0] at cycle 3531
 HALT operation received from [0][3][0] at cycle 3537
 HALT operation received from [0][12][0] at cycle 3600
+Simulation finished, cycleCount = 3601
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 9666
 ---------- SET KERNEL 2 ------------
@@ -19465,8 +19465,8 @@ HALT operation received from [0][6][0] at cycle 2759
 HALT operation received from [0][10][0] at cycle 2765
 HALT operation received from [0][14][0] at cycle 2765
 HALT operation received from [0][2][0] at cycle 2771
+Simulation finished, cycleCount = 2772
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 8034
 ----------- READ DATA ------------------
@@ -19540,8 +19540,8 @@ HALT operation received from [0][10][0] at cycle 5499
 HALT operation received from [0][6][0] at cycle 5574
 HALT operation received from [0][2][0] at cycle 5637
 HALT operation received from [0][14][0] at cycle 5805
+Simulation finished, cycleCount = 5806
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 15472
 ---------- SET KERNEL 2 ------------
@@ -19610,8 +19610,8 @@ HALT operation received from [0][5][0] at cycle 3197
 HALT operation received from [0][11][0] at cycle 3197
 HALT operation received from [0][1][0] at cycle 3209
 HALT operation received from [0][4][0] at cycle 3245
+Simulation finished, cycleCount = 3246
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 11280
 ----------- READ DATA ------------------
@@ -19685,8 +19685,8 @@ HALT operation received from [0][2][0] at cycle 11451
 HALT operation received from [0][11][0] at cycle 11562
 HALT operation received from [0][1][0] at cycle 11925
 HALT operation received from [0][4][0] at cycle 12228
+Simulation finished, cycleCount = 12229
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 27701
 ---------- SET KERNEL 2 ------------
@@ -19755,8 +19755,8 @@ HALT operation received from [0][7][0] at cycle 3365
 HALT operation received from [0][0][0] at cycle 3383
 HALT operation received from [0][10][0] at cycle 3401
 HALT operation received from [0][13][0] at cycle 3431
+Simulation finished, cycleCount = 3432
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 14712
 ----------- READ DATA ------------------
@@ -19830,8 +19830,8 @@ HALT operation received from [0][7][0] at cycle 10818
 HALT operation received from [0][10][0] at cycle 11112
 HALT operation received from [0][0][0] at cycle 11214
 HALT operation received from [0][13][0] at cycle 11550
+Simulation finished, cycleCount = 11551
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 39252
 ---------- SET KERNEL 2 ------------
@@ -19900,8 +19900,8 @@ HALT operation received from [0][11][0] at cycle 2705
 HALT operation received from [0][14][0] at cycle 2705
 HALT operation received from [0][15][0] at cycle 2717
 HALT operation received from [0][7][0] at cycle 2735
+Simulation finished, cycleCount = 2736
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 17448
 ----------- READ DATA ------------------
@@ -19975,8 +19975,8 @@ HALT operation received from [0][11][0] at cycle 3567
 HALT operation received from [0][12][0] at cycle 3594
 HALT operation received from [0][15][0] at cycle 3642
 HALT operation received from [0][7][0] at cycle 3678
+Simulation finished, cycleCount = 3679
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 42931
 ---------- SET KERNEL 2 ------------
@@ -20045,8 +20045,8 @@ HALT operation received from [0][14][0] at cycle 2603
 HALT operation received from [0][15][0] at cycle 2603
 HALT operation received from [0][9][0] at cycle 2609
 HALT operation received from [0][10][0] at cycle 2609
+Simulation finished, cycleCount = 2610
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 20058
 ----------- READ DATA ------------------
@@ -20120,8 +20120,8 @@ HALT operation received from [0][14][0] at cycle 2859
 HALT operation received from [0][15][0] at cycle 2859
 HALT operation received from [0][9][0] at cycle 2877
 HALT operation received from [0][10][0] at cycle 2886
+Simulation finished, cycleCount = 2887
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 45818
 ---------- SET KERNEL 2 ------------
@@ -20190,8 +20190,8 @@ HALT operation received from [0][12][0] at cycle 2603
 HALT operation received from [0][13][0] at cycle 2603
 HALT operation received from [0][14][0] at cycle 2603
 HALT operation received from [0][15][0] at cycle 2603
+Simulation finished, cycleCount = 2604
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 22662
 ----------- READ DATA ------------------

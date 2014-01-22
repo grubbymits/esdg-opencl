@@ -7,26 +7,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7fd357bec180
-Device 1 : LE1 Device ID is 0x7fd357bec290
-Device 2 : LE1 Device ID is 0x7fd357bec3a0
-Device 3 : LE1 Device ID is 0x7fd357bec4b0
-Device 4 : LE1 Device ID is 0x7fd357bec5c0
-Device 5 : LE1 Device ID is 0x7fd357bec6d0
-Device 6 : LE1 Device ID is 0x7fd357bec7e0
-Device 7 : LE1 Device ID is 0x7fd357bec8f0
-Device 8 : LE1 Device ID is 0x7fd357beca00
-Device 9 : LE1 Device ID is 0x7fd357becb10
-Device 10 : LE1 Device ID is 0x7fd357becc20
-Device 11 : LE1 Device ID is 0x7fd357becd30
-Device 12 : LE1 Device ID is 0x7fd357bece40
-Device 13 : LE1 Device ID is 0x7fd357becf50
-Device 14 : LE1 Device ID is 0x7fd357bed060
-Device 15 : LE1 Device ID is 0x7fd357bed170
-Device 16 : LE1 Device ID is 0x7fd357bed280
-Device 17 : LE1 Device ID is 0x7fd357bed390
-Device 18 : LE1 Device ID is 0x7fd357bed4a0
-Device 19 : LE1 Device ID is 0x7fd357bed5b0
+Device 0 : LE1 Device ID is 0x7fdabf8e4180
+Device 1 : LE1 Device ID is 0x7fdabf8e4290
+Device 2 : LE1 Device ID is 0x7fdabf8e43a0
+Device 3 : LE1 Device ID is 0x7fdabf8e44b0
+Device 4 : LE1 Device ID is 0x7fdabf8e45c0
+Device 5 : LE1 Device ID is 0x7fdabf8e46d0
+Device 6 : LE1 Device ID is 0x7fdabf8e47e0
+Device 7 : LE1 Device ID is 0x7fdabf8e48f0
+Device 8 : LE1 Device ID is 0x7fdabf8e4a00
+Device 9 : LE1 Device ID is 0x7fdabf8e4b10
+Device 10 : LE1 Device ID is 0x7fdabf8e4c20
+Device 11 : LE1 Device ID is 0x7fdabf8e4d30
+Device 12 : LE1 Device ID is 0x7fdabf8e4e40
+Device 13 : LE1 Device ID is 0x7fdabf8e4f50
+Device 14 : LE1 Device ID is 0x7fdabf8e5060
+Device 15 : LE1 Device ID is 0x7fdabf8e5170
+Device 16 : LE1 Device ID is 0x7fdabf8e5280
+Device 17 : LE1 Device ID is 0x7fdabf8e5390
+Device 18 : LE1 Device ID is 0x7fdabf8e54a0
+Device 19 : LE1 Device ID is 0x7fdabf8e55b0
 Executing kernel for 1 iterations
 -------------------------------------------
 Device: 1 core scalar
@@ -74,8 +74,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 146803
+Simulation finished, cycleCount = 146804
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 146804
 Device: 1 core scalar
@@ -123,8 +123,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 147678
+Simulation finished, cycleCount = 147679
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 294483
 Device: 1 core scalar
@@ -172,8 +172,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 147758
+Simulation finished, cycleCount = 147759
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 442242
 Device: 1 core scalar
@@ -221,8 +221,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 147144
+Simulation finished, cycleCount = 147145
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 589387
 Device: 1 core scalar
@@ -270,8 +270,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 146644
+Simulation finished, cycleCount = 146645
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 736032
 Device: 1 core scalar
@@ -319,8 +319,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 147004
+Simulation finished, cycleCount = 147005
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 883037
 Device: 1 core scalar
@@ -368,8 +368,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 146240
+Simulation finished, cycleCount = 146241
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 1029278
 Device: 1 core scalar
@@ -417,8 +417,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 146720
+Simulation finished, cycleCount = 146721
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 1175999
 Device: 1 core scalar
@@ -466,8 +466,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 146273
+Simulation finished, cycleCount = 146274
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 1322273
 Device: 1 core scalar
@@ -515,8 +515,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_1wide.xml
 HALT operation received from [0][0][0] at cycle 146531
+Simulation finished, cycleCount = 146532
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 1468805
 
@@ -535,26 +535,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f8a69bac180
-Device 1 : LE1 Device ID is 0x7f8a69bac290
-Device 2 : LE1 Device ID is 0x7f8a69bac3a0
-Device 3 : LE1 Device ID is 0x7f8a69bac4b0
-Device 4 : LE1 Device ID is 0x7f8a69bac5c0
-Device 5 : LE1 Device ID is 0x7f8a69bac6d0
-Device 6 : LE1 Device ID is 0x7f8a69bac7e0
-Device 7 : LE1 Device ID is 0x7f8a69bac8f0
-Device 8 : LE1 Device ID is 0x7f8a69baca00
-Device 9 : LE1 Device ID is 0x7f8a69bacb10
-Device 10 : LE1 Device ID is 0x7f8a69bacc20
-Device 11 : LE1 Device ID is 0x7f8a69bacd30
-Device 12 : LE1 Device ID is 0x7f8a69bace40
-Device 13 : LE1 Device ID is 0x7f8a69bacf50
-Device 14 : LE1 Device ID is 0x7f8a69bad060
-Device 15 : LE1 Device ID is 0x7f8a69bad170
-Device 16 : LE1 Device ID is 0x7f8a69bad280
-Device 17 : LE1 Device ID is 0x7f8a69bad390
-Device 18 : LE1 Device ID is 0x7f8a69bad4a0
-Device 19 : LE1 Device ID is 0x7f8a69bad5b0
+Device 0 : LE1 Device ID is 0x7fe6f9e0c180
+Device 1 : LE1 Device ID is 0x7fe6f9e0c290
+Device 2 : LE1 Device ID is 0x7fe6f9e0c3a0
+Device 3 : LE1 Device ID is 0x7fe6f9e0c4b0
+Device 4 : LE1 Device ID is 0x7fe6f9e0c5c0
+Device 5 : LE1 Device ID is 0x7fe6f9e0c6d0
+Device 6 : LE1 Device ID is 0x7fe6f9e0c7e0
+Device 7 : LE1 Device ID is 0x7fe6f9e0c8f0
+Device 8 : LE1 Device ID is 0x7fe6f9e0ca00
+Device 9 : LE1 Device ID is 0x7fe6f9e0cb10
+Device 10 : LE1 Device ID is 0x7fe6f9e0cc20
+Device 11 : LE1 Device ID is 0x7fe6f9e0cd30
+Device 12 : LE1 Device ID is 0x7fe6f9e0ce40
+Device 13 : LE1 Device ID is 0x7fe6f9e0cf50
+Device 14 : LE1 Device ID is 0x7fe6f9e0d060
+Device 15 : LE1 Device ID is 0x7fe6f9e0d170
+Device 16 : LE1 Device ID is 0x7fe6f9e0d280
+Device 17 : LE1 Device ID is 0x7fe6f9e0d390
+Device 18 : LE1 Device ID is 0x7fe6f9e0d4a0
+Device 19 : LE1 Device ID is 0x7fe6f9e0d5b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -604,8 +604,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 73245
 HALT operation received from [0][0][0] at cycle 73596
+Simulation finished, cycleCount = 73597
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 73597
 Device: 2 core scalar
@@ -654,8 +654,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 73829
 HALT operation received from [0][1][0] at cycle 73887
+Simulation finished, cycleCount = 73888
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 147485
 Device: 2 core scalar
@@ -704,8 +704,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 73833
 HALT operation received from [0][0][0] at cycle 73963
+Simulation finished, cycleCount = 73964
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 221449
 Device: 2 core scalar
@@ -754,8 +754,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 73545
 HALT operation received from [0][1][0] at cycle 73637
+Simulation finished, cycleCount = 73638
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 295087
 Device: 2 core scalar
@@ -804,8 +804,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 73123
 HALT operation received from [0][0][0] at cycle 73559
+Simulation finished, cycleCount = 73560
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 368647
 Device: 2 core scalar
@@ -854,8 +854,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 73153
 HALT operation received from [0][1][0] at cycle 73889
+Simulation finished, cycleCount = 73890
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 442537
 Device: 2 core scalar
@@ -904,8 +904,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 73011
 HALT operation received from [0][0][0] at cycle 73267
+Simulation finished, cycleCount = 73268
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 515805
 Device: 2 core scalar
@@ -954,8 +954,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 73173
 HALT operation received from [0][0][0] at cycle 73585
+Simulation finished, cycleCount = 73586
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 589391
 Device: 2 core scalar
@@ -1004,8 +1004,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][1][0] at cycle 73134
 HALT operation received from [0][0][0] at cycle 73177
+Simulation finished, cycleCount = 73178
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 662569
 Device: 2 core scalar
@@ -1054,8 +1054,8 @@ Run Simulation with:
   2Context_1wide.xml
 HALT operation received from [0][0][0] at cycle 72867
 HALT operation received from [0][1][0] at cycle 73702
+Simulation finished, cycleCount = 73703
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 736272
 
@@ -1074,26 +1074,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7feee417c180
-Device 1 : LE1 Device ID is 0x7feee417c290
-Device 2 : LE1 Device ID is 0x7feee417c3a0
-Device 3 : LE1 Device ID is 0x7feee417c4b0
-Device 4 : LE1 Device ID is 0x7feee417c5c0
-Device 5 : LE1 Device ID is 0x7feee417c6d0
-Device 6 : LE1 Device ID is 0x7feee417c7e0
-Device 7 : LE1 Device ID is 0x7feee417c8f0
-Device 8 : LE1 Device ID is 0x7feee417ca00
-Device 9 : LE1 Device ID is 0x7feee417cb10
-Device 10 : LE1 Device ID is 0x7feee417cc20
-Device 11 : LE1 Device ID is 0x7feee417cd30
-Device 12 : LE1 Device ID is 0x7feee417ce40
-Device 13 : LE1 Device ID is 0x7feee417cf50
-Device 14 : LE1 Device ID is 0x7feee417d060
-Device 15 : LE1 Device ID is 0x7feee417d170
-Device 16 : LE1 Device ID is 0x7feee417d280
-Device 17 : LE1 Device ID is 0x7feee417d390
-Device 18 : LE1 Device ID is 0x7feee417d4a0
-Device 19 : LE1 Device ID is 0x7feee417d5b0
+Device 0 : LE1 Device ID is 0x7ff81e344180
+Device 1 : LE1 Device ID is 0x7ff81e344290
+Device 2 : LE1 Device ID is 0x7ff81e3443a0
+Device 3 : LE1 Device ID is 0x7ff81e3444b0
+Device 4 : LE1 Device ID is 0x7ff81e3445c0
+Device 5 : LE1 Device ID is 0x7ff81e3446d0
+Device 6 : LE1 Device ID is 0x7ff81e3447e0
+Device 7 : LE1 Device ID is 0x7ff81e3448f0
+Device 8 : LE1 Device ID is 0x7ff81e344a00
+Device 9 : LE1 Device ID is 0x7ff81e344b10
+Device 10 : LE1 Device ID is 0x7ff81e344c20
+Device 11 : LE1 Device ID is 0x7ff81e344d30
+Device 12 : LE1 Device ID is 0x7ff81e344e40
+Device 13 : LE1 Device ID is 0x7ff81e344f50
+Device 14 : LE1 Device ID is 0x7ff81e345060
+Device 15 : LE1 Device ID is 0x7ff81e345170
+Device 16 : LE1 Device ID is 0x7ff81e345280
+Device 17 : LE1 Device ID is 0x7ff81e345390
+Device 18 : LE1 Device ID is 0x7ff81e3454a0
+Device 19 : LE1 Device ID is 0x7ff81e3455b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -1145,8 +1145,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73241
 HALT operation received from [0][0][0] at cycle 73592
+Simulation finished, cycleCount = 73593
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 73593
 Device: 4 core scalar
@@ -1197,8 +1197,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73825
 HALT operation received from [0][1][0] at cycle 73883
+Simulation finished, cycleCount = 73884
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 147477
 Device: 4 core scalar
@@ -1249,8 +1249,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73829
 HALT operation received from [0][0][0] at cycle 73959
+Simulation finished, cycleCount = 73960
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 221437
 Device: 4 core scalar
@@ -1301,8 +1301,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73541
 HALT operation received from [0][1][0] at cycle 73633
+Simulation finished, cycleCount = 73634
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 295071
 Device: 4 core scalar
@@ -1353,8 +1353,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73119
 HALT operation received from [0][0][0] at cycle 73555
+Simulation finished, cycleCount = 73556
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 368627
 Device: 4 core scalar
@@ -1405,8 +1405,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73149
 HALT operation received from [0][1][0] at cycle 73885
+Simulation finished, cycleCount = 73886
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 442513
 Device: 4 core scalar
@@ -1457,8 +1457,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73007
 HALT operation received from [0][0][0] at cycle 73263
+Simulation finished, cycleCount = 73264
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 515777
 Device: 4 core scalar
@@ -1509,8 +1509,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73169
 HALT operation received from [0][0][0] at cycle 73581
+Simulation finished, cycleCount = 73582
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 589359
 Device: 4 core scalar
@@ -1561,8 +1561,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73130
 HALT operation received from [0][0][0] at cycle 73173
+Simulation finished, cycleCount = 73174
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 662533
 Device: 4 core scalar
@@ -1613,8 +1613,8 @@ HALT operation received from [0][2][0] at cycle 15
 HALT operation received from [0][3][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 72863
 HALT operation received from [0][1][0] at cycle 73698
+Simulation finished, cycleCount = 73699
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 736232
 
@@ -1633,26 +1633,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f9edc194180
-Device 1 : LE1 Device ID is 0x7f9edc194290
-Device 2 : LE1 Device ID is 0x7f9edc1943a0
-Device 3 : LE1 Device ID is 0x7f9edc1944b0
-Device 4 : LE1 Device ID is 0x7f9edc1945c0
-Device 5 : LE1 Device ID is 0x7f9edc1946d0
-Device 6 : LE1 Device ID is 0x7f9edc1947e0
-Device 7 : LE1 Device ID is 0x7f9edc1948f0
-Device 8 : LE1 Device ID is 0x7f9edc194a00
-Device 9 : LE1 Device ID is 0x7f9edc194b10
-Device 10 : LE1 Device ID is 0x7f9edc194c20
-Device 11 : LE1 Device ID is 0x7f9edc194d30
-Device 12 : LE1 Device ID is 0x7f9edc194e40
-Device 13 : LE1 Device ID is 0x7f9edc194f50
-Device 14 : LE1 Device ID is 0x7f9edc195060
-Device 15 : LE1 Device ID is 0x7f9edc195170
-Device 16 : LE1 Device ID is 0x7f9edc195280
-Device 17 : LE1 Device ID is 0x7f9edc195390
-Device 18 : LE1 Device ID is 0x7f9edc1954a0
-Device 19 : LE1 Device ID is 0x7f9edc1955b0
+Device 0 : LE1 Device ID is 0x7f0fa6cbc180
+Device 1 : LE1 Device ID is 0x7f0fa6cbc290
+Device 2 : LE1 Device ID is 0x7f0fa6cbc3a0
+Device 3 : LE1 Device ID is 0x7f0fa6cbc4b0
+Device 4 : LE1 Device ID is 0x7f0fa6cbc5c0
+Device 5 : LE1 Device ID is 0x7f0fa6cbc6d0
+Device 6 : LE1 Device ID is 0x7f0fa6cbc7e0
+Device 7 : LE1 Device ID is 0x7f0fa6cbc8f0
+Device 8 : LE1 Device ID is 0x7f0fa6cbca00
+Device 9 : LE1 Device ID is 0x7f0fa6cbcb10
+Device 10 : LE1 Device ID is 0x7f0fa6cbcc20
+Device 11 : LE1 Device ID is 0x7f0fa6cbcd30
+Device 12 : LE1 Device ID is 0x7f0fa6cbce40
+Device 13 : LE1 Device ID is 0x7f0fa6cbcf50
+Device 14 : LE1 Device ID is 0x7f0fa6cbd060
+Device 15 : LE1 Device ID is 0x7f0fa6cbd170
+Device 16 : LE1 Device ID is 0x7f0fa6cbd280
+Device 17 : LE1 Device ID is 0x7f0fa6cbd390
+Device 18 : LE1 Device ID is 0x7f0fa6cbd4a0
+Device 19 : LE1 Device ID is 0x7f0fa6cbd5b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -1708,8 +1708,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73241
 HALT operation received from [0][0][0] at cycle 73592
+Simulation finished, cycleCount = 73593
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 73593
 Device: 8 core scalar
@@ -1764,8 +1764,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73825
 HALT operation received from [0][1][0] at cycle 73883
+Simulation finished, cycleCount = 73884
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 147477
 Device: 8 core scalar
@@ -1820,8 +1820,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73829
 HALT operation received from [0][0][0] at cycle 73959
+Simulation finished, cycleCount = 73960
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 221437
 Device: 8 core scalar
@@ -1876,8 +1876,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73541
 HALT operation received from [0][1][0] at cycle 73633
+Simulation finished, cycleCount = 73634
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 295071
 Device: 8 core scalar
@@ -1932,8 +1932,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73119
 HALT operation received from [0][0][0] at cycle 73555
+Simulation finished, cycleCount = 73556
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 368627
 Device: 8 core scalar
@@ -1988,8 +1988,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73149
 HALT operation received from [0][1][0] at cycle 73885
+Simulation finished, cycleCount = 73886
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 442513
 Device: 8 core scalar
@@ -2044,8 +2044,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73007
 HALT operation received from [0][0][0] at cycle 73263
+Simulation finished, cycleCount = 73264
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 515777
 Device: 8 core scalar
@@ -2100,8 +2100,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73169
 HALT operation received from [0][0][0] at cycle 73581
+Simulation finished, cycleCount = 73582
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 589359
 Device: 8 core scalar
@@ -2156,8 +2156,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73130
 HALT operation received from [0][0][0] at cycle 73173
+Simulation finished, cycleCount = 73174
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 662533
 Device: 8 core scalar
@@ -2212,8 +2212,8 @@ HALT operation received from [0][6][0] at cycle 15
 HALT operation received from [0][7][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 72863
 HALT operation received from [0][1][0] at cycle 73698
+Simulation finished, cycleCount = 73699
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 736232
 
@@ -2232,26 +2232,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7fa275b74180
-Device 1 : LE1 Device ID is 0x7fa275b74290
-Device 2 : LE1 Device ID is 0x7fa275b743a0
-Device 3 : LE1 Device ID is 0x7fa275b744b0
-Device 4 : LE1 Device ID is 0x7fa275b745c0
-Device 5 : LE1 Device ID is 0x7fa275b746d0
-Device 6 : LE1 Device ID is 0x7fa275b747e0
-Device 7 : LE1 Device ID is 0x7fa275b748f0
-Device 8 : LE1 Device ID is 0x7fa275b74a00
-Device 9 : LE1 Device ID is 0x7fa275b74b10
-Device 10 : LE1 Device ID is 0x7fa275b74c20
-Device 11 : LE1 Device ID is 0x7fa275b74d30
-Device 12 : LE1 Device ID is 0x7fa275b74e40
-Device 13 : LE1 Device ID is 0x7fa275b74f50
-Device 14 : LE1 Device ID is 0x7fa275b75060
-Device 15 : LE1 Device ID is 0x7fa275b75170
-Device 16 : LE1 Device ID is 0x7fa275b75280
-Device 17 : LE1 Device ID is 0x7fa275b75390
-Device 18 : LE1 Device ID is 0x7fa275b754a0
-Device 19 : LE1 Device ID is 0x7fa275b755b0
+Device 0 : LE1 Device ID is 0x7fee67654180
+Device 1 : LE1 Device ID is 0x7fee67654290
+Device 2 : LE1 Device ID is 0x7fee676543a0
+Device 3 : LE1 Device ID is 0x7fee676544b0
+Device 4 : LE1 Device ID is 0x7fee676545c0
+Device 5 : LE1 Device ID is 0x7fee676546d0
+Device 6 : LE1 Device ID is 0x7fee676547e0
+Device 7 : LE1 Device ID is 0x7fee676548f0
+Device 8 : LE1 Device ID is 0x7fee67654a00
+Device 9 : LE1 Device ID is 0x7fee67654b10
+Device 10 : LE1 Device ID is 0x7fee67654c20
+Device 11 : LE1 Device ID is 0x7fee67654d30
+Device 12 : LE1 Device ID is 0x7fee67654e40
+Device 13 : LE1 Device ID is 0x7fee67654f50
+Device 14 : LE1 Device ID is 0x7fee67655060
+Device 15 : LE1 Device ID is 0x7fee67655170
+Device 16 : LE1 Device ID is 0x7fee67655280
+Device 17 : LE1 Device ID is 0x7fee67655390
+Device 18 : LE1 Device ID is 0x7fee676554a0
+Device 19 : LE1 Device ID is 0x7fee676555b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -2315,8 +2315,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73241
 HALT operation received from [0][0][0] at cycle 73592
+Simulation finished, cycleCount = 73593
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 73593
 Device: 16 core scalar
@@ -2379,8 +2379,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73825
 HALT operation received from [0][1][0] at cycle 73883
+Simulation finished, cycleCount = 73884
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 147477
 Device: 16 core scalar
@@ -2443,8 +2443,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73829
 HALT operation received from [0][0][0] at cycle 73959
+Simulation finished, cycleCount = 73960
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 221437
 Device: 16 core scalar
@@ -2507,8 +2507,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73541
 HALT operation received from [0][1][0] at cycle 73633
+Simulation finished, cycleCount = 73634
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 295071
 Device: 16 core scalar
@@ -2571,8 +2571,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73119
 HALT operation received from [0][0][0] at cycle 73555
+Simulation finished, cycleCount = 73556
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 368627
 Device: 16 core scalar
@@ -2635,8 +2635,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 73149
 HALT operation received from [0][1][0] at cycle 73885
+Simulation finished, cycleCount = 73886
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 442513
 Device: 16 core scalar
@@ -2699,8 +2699,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73007
 HALT operation received from [0][0][0] at cycle 73263
+Simulation finished, cycleCount = 73264
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 515777
 Device: 16 core scalar
@@ -2763,8 +2763,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73169
 HALT operation received from [0][0][0] at cycle 73581
+Simulation finished, cycleCount = 73582
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 589359
 Device: 16 core scalar
@@ -2827,8 +2827,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][1][0] at cycle 73130
 HALT operation received from [0][0][0] at cycle 73173
+Simulation finished, cycleCount = 73174
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 662533
 Device: 16 core scalar
@@ -2891,8 +2891,8 @@ HALT operation received from [0][14][0] at cycle 15
 HALT operation received from [0][15][0] at cycle 15
 HALT operation received from [0][0][0] at cycle 72863
 HALT operation received from [0][1][0] at cycle 73698
+Simulation finished, cycleCount = 73699
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 736232
 
@@ -2911,26 +2911,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f534e0bc180
-Device 1 : LE1 Device ID is 0x7f534e0bc290
-Device 2 : LE1 Device ID is 0x7f534e0bc3a0
-Device 3 : LE1 Device ID is 0x7f534e0bc4b0
-Device 4 : LE1 Device ID is 0x7f534e0bc5c0
-Device 5 : LE1 Device ID is 0x7f534e0bc6d0
-Device 6 : LE1 Device ID is 0x7f534e0bc7e0
-Device 7 : LE1 Device ID is 0x7f534e0bc8f0
-Device 8 : LE1 Device ID is 0x7f534e0bca00
-Device 9 : LE1 Device ID is 0x7f534e0bcb10
-Device 10 : LE1 Device ID is 0x7f534e0bcc20
-Device 11 : LE1 Device ID is 0x7f534e0bcd30
-Device 12 : LE1 Device ID is 0x7f534e0bce40
-Device 13 : LE1 Device ID is 0x7f534e0bcf50
-Device 14 : LE1 Device ID is 0x7f534e0bd060
-Device 15 : LE1 Device ID is 0x7f534e0bd170
-Device 16 : LE1 Device ID is 0x7f534e0bd280
-Device 17 : LE1 Device ID is 0x7f534e0bd390
-Device 18 : LE1 Device ID is 0x7f534e0bd4a0
-Device 19 : LE1 Device ID is 0x7f534e0bd5b0
+Device 0 : LE1 Device ID is 0x7f5905f64180
+Device 1 : LE1 Device ID is 0x7f5905f64290
+Device 2 : LE1 Device ID is 0x7f5905f643a0
+Device 3 : LE1 Device ID is 0x7f5905f644b0
+Device 4 : LE1 Device ID is 0x7f5905f645c0
+Device 5 : LE1 Device ID is 0x7f5905f646d0
+Device 6 : LE1 Device ID is 0x7f5905f647e0
+Device 7 : LE1 Device ID is 0x7f5905f648f0
+Device 8 : LE1 Device ID is 0x7f5905f64a00
+Device 9 : LE1 Device ID is 0x7f5905f64b10
+Device 10 : LE1 Device ID is 0x7f5905f64c20
+Device 11 : LE1 Device ID is 0x7f5905f64d30
+Device 12 : LE1 Device ID is 0x7f5905f64e40
+Device 13 : LE1 Device ID is 0x7f5905f64f50
+Device 14 : LE1 Device ID is 0x7f5905f65060
+Device 15 : LE1 Device ID is 0x7f5905f65170
+Device 16 : LE1 Device ID is 0x7f5905f65280
+Device 17 : LE1 Device ID is 0x7f5905f65390
+Device 18 : LE1 Device ID is 0x7f5905f654a0
+Device 19 : LE1 Device ID is 0x7f5905f655b0
 Executing kernel for 1 iterations
 -------------------------------------------
 Device: 1 core 2w2a1m1ls1b
@@ -2978,8 +2978,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 107471
+Simulation finished, cycleCount = 107472
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 107472
 Device: 1 core 2w2a1m1ls1b
@@ -3027,8 +3027,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 108181
+Simulation finished, cycleCount = 108182
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 215654
 Device: 1 core 2w2a1m1ls1b
@@ -3076,8 +3076,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 108221
+Simulation finished, cycleCount = 108222
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 323876
 Device: 1 core 2w2a1m1ls1b
@@ -3125,8 +3125,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 107683
+Simulation finished, cycleCount = 107684
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 431560
 Device: 1 core 2w2a1m1ls1b
@@ -3174,8 +3174,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 107253
+Simulation finished, cycleCount = 107254
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 538814
 Device: 1 core 2w2a1m1ls1b
@@ -3223,8 +3223,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 107551
+Simulation finished, cycleCount = 107552
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 646366
 Device: 1 core 2w2a1m1ls1b
@@ -3272,8 +3272,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 106893
+Simulation finished, cycleCount = 106894
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 753260
 Device: 1 core 2w2a1m1ls1b
@@ -3321,8 +3321,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 107319
+Simulation finished, cycleCount = 107320
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 860580
 Device: 1 core 2w2a1m1ls1b
@@ -3370,8 +3370,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 127518
+Simulation finished, cycleCount = 127519
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 988099
 Device: 1 core 2w2a1m1ls1b
@@ -3419,8 +3419,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_2wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 127758
+Simulation finished, cycleCount = 127759
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 1115858
 
@@ -3439,26 +3439,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7fafaf38c180
-Device 1 : LE1 Device ID is 0x7fafaf38c290
-Device 2 : LE1 Device ID is 0x7fafaf38c3a0
-Device 3 : LE1 Device ID is 0x7fafaf38c4b0
-Device 4 : LE1 Device ID is 0x7fafaf38c5c0
-Device 5 : LE1 Device ID is 0x7fafaf38c6d0
-Device 6 : LE1 Device ID is 0x7fafaf38c7e0
-Device 7 : LE1 Device ID is 0x7fafaf38c8f0
-Device 8 : LE1 Device ID is 0x7fafaf38ca00
-Device 9 : LE1 Device ID is 0x7fafaf38cb10
-Device 10 : LE1 Device ID is 0x7fafaf38cc20
-Device 11 : LE1 Device ID is 0x7fafaf38cd30
-Device 12 : LE1 Device ID is 0x7fafaf38ce40
-Device 13 : LE1 Device ID is 0x7fafaf38cf50
-Device 14 : LE1 Device ID is 0x7fafaf38d060
-Device 15 : LE1 Device ID is 0x7fafaf38d170
-Device 16 : LE1 Device ID is 0x7fafaf38d280
-Device 17 : LE1 Device ID is 0x7fafaf38d390
-Device 18 : LE1 Device ID is 0x7fafaf38d4a0
-Device 19 : LE1 Device ID is 0x7fafaf38d5b0
+Device 0 : LE1 Device ID is 0x7ffb2399c180
+Device 1 : LE1 Device ID is 0x7ffb2399c290
+Device 2 : LE1 Device ID is 0x7ffb2399c3a0
+Device 3 : LE1 Device ID is 0x7ffb2399c4b0
+Device 4 : LE1 Device ID is 0x7ffb2399c5c0
+Device 5 : LE1 Device ID is 0x7ffb2399c6d0
+Device 6 : LE1 Device ID is 0x7ffb2399c7e0
+Device 7 : LE1 Device ID is 0x7ffb2399c8f0
+Device 8 : LE1 Device ID is 0x7ffb2399ca00
+Device 9 : LE1 Device ID is 0x7ffb2399cb10
+Device 10 : LE1 Device ID is 0x7ffb2399cc20
+Device 11 : LE1 Device ID is 0x7ffb2399cd30
+Device 12 : LE1 Device ID is 0x7ffb2399ce40
+Device 13 : LE1 Device ID is 0x7ffb2399cf50
+Device 14 : LE1 Device ID is 0x7ffb2399d060
+Device 15 : LE1 Device ID is 0x7ffb2399d170
+Device 16 : LE1 Device ID is 0x7ffb2399d280
+Device 17 : LE1 Device ID is 0x7ffb2399d390
+Device 18 : LE1 Device ID is 0x7ffb2399d4a0
+Device 19 : LE1 Device ID is 0x7ffb2399d5b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -3508,8 +3508,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 63728
 HALT operation received from [0][0][0] at cycle 64057
+Simulation finished, cycleCount = 64058
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 64058
 Device: 2 core 2w2a1m1ls1b
@@ -3558,8 +3558,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 64312
 HALT operation received from [0][1][0] at cycle 64314
+Simulation finished, cycleCount = 64315
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 128373
 Device: 2 core 2w2a1m1ls1b
@@ -3608,8 +3608,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 64340
 HALT operation received from [0][0][0] at cycle 64424
+Simulation finished, cycleCount = 64425
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 192798
 Device: 2 core 2w2a1m1ls1b
@@ -3658,8 +3658,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 64114
 HALT operation received from [0][1][0] at cycle 64154
+Simulation finished, cycleCount = 64155
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 256953
 Device: 2 core 2w2a1m1ls1b
@@ -3708,8 +3708,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 63760
 HALT operation received from [0][0][0] at cycle 64114
+Simulation finished, cycleCount = 64115
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 321068
 Device: 2 core 2w2a1m1ls1b
@@ -3758,8 +3758,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 63776
 HALT operation received from [0][1][0] at cycle 64416
+Simulation finished, cycleCount = 64417
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 385485
 Device: 2 core 2w2a1m1ls1b
@@ -3808,8 +3808,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 63664
 HALT operation received from [0][0][0] at cycle 63882
+Simulation finished, cycleCount = 63883
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 449368
 Device: 2 core 2w2a1m1ls1b
@@ -3858,8 +3858,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 63774
 HALT operation received from [0][0][0] at cycle 64168
+Simulation finished, cycleCount = 64169
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 513537
 Device: 2 core 2w2a1m1ls1b
@@ -3908,8 +3908,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][1][0] at cycle 53465
 HALT operation received from [0][0][0] at cycle 53505
+Simulation finished, cycleCount = 53506
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 567043
 Device: 2 core 2w2a1m1ls1b
@@ -3958,8 +3958,8 @@ Run Simulation with:
   2Context_2wide.xml
 HALT operation received from [0][0][0] at cycle 53241
 HALT operation received from [0][1][0] at cycle 53951
+Simulation finished, cycleCount = 53952
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 620995
 
@@ -3978,26 +3978,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f5864924180
-Device 1 : LE1 Device ID is 0x7f5864924290
-Device 2 : LE1 Device ID is 0x7f58649243a0
-Device 3 : LE1 Device ID is 0x7f58649244b0
-Device 4 : LE1 Device ID is 0x7f58649245c0
-Device 5 : LE1 Device ID is 0x7f58649246d0
-Device 6 : LE1 Device ID is 0x7f58649247e0
-Device 7 : LE1 Device ID is 0x7f58649248f0
-Device 8 : LE1 Device ID is 0x7f5864924a00
-Device 9 : LE1 Device ID is 0x7f5864924b10
-Device 10 : LE1 Device ID is 0x7f5864924c20
-Device 11 : LE1 Device ID is 0x7f5864924d30
-Device 12 : LE1 Device ID is 0x7f5864924e40
-Device 13 : LE1 Device ID is 0x7f5864924f50
-Device 14 : LE1 Device ID is 0x7f5864925060
-Device 15 : LE1 Device ID is 0x7f5864925170
-Device 16 : LE1 Device ID is 0x7f5864925280
-Device 17 : LE1 Device ID is 0x7f5864925390
-Device 18 : LE1 Device ID is 0x7f58649254a0
-Device 19 : LE1 Device ID is 0x7f58649255b0
+Device 0 : LE1 Device ID is 0x7fe9e713c180
+Device 1 : LE1 Device ID is 0x7fe9e713c290
+Device 2 : LE1 Device ID is 0x7fe9e713c3a0
+Device 3 : LE1 Device ID is 0x7fe9e713c4b0
+Device 4 : LE1 Device ID is 0x7fe9e713c5c0
+Device 5 : LE1 Device ID is 0x7fe9e713c6d0
+Device 6 : LE1 Device ID is 0x7fe9e713c7e0
+Device 7 : LE1 Device ID is 0x7fe9e713c8f0
+Device 8 : LE1 Device ID is 0x7fe9e713ca00
+Device 9 : LE1 Device ID is 0x7fe9e713cb10
+Device 10 : LE1 Device ID is 0x7fe9e713cc20
+Device 11 : LE1 Device ID is 0x7fe9e713cd30
+Device 12 : LE1 Device ID is 0x7fe9e713ce40
+Device 13 : LE1 Device ID is 0x7fe9e713cf50
+Device 14 : LE1 Device ID is 0x7fe9e713d060
+Device 15 : LE1 Device ID is 0x7fe9e713d170
+Device 16 : LE1 Device ID is 0x7fe9e713d280
+Device 17 : LE1 Device ID is 0x7fe9e713d390
+Device 18 : LE1 Device ID is 0x7fe9e713d4a0
+Device 19 : LE1 Device ID is 0x7fe9e713d5b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -4049,8 +4049,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63726
 HALT operation received from [0][0][0] at cycle 64055
+Simulation finished, cycleCount = 64056
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 64056
 Device: 4 core 2w2a1m1ls1b
@@ -4101,8 +4101,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 64310
 HALT operation received from [0][1][0] at cycle 64312
+Simulation finished, cycleCount = 64313
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 128369
 Device: 4 core 2w2a1m1ls1b
@@ -4153,8 +4153,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 64338
 HALT operation received from [0][0][0] at cycle 64422
+Simulation finished, cycleCount = 64423
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 192792
 Device: 4 core 2w2a1m1ls1b
@@ -4205,8 +4205,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 64112
 HALT operation received from [0][1][0] at cycle 64152
+Simulation finished, cycleCount = 64153
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 256945
 Device: 4 core 2w2a1m1ls1b
@@ -4257,8 +4257,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63758
 HALT operation received from [0][0][0] at cycle 64112
+Simulation finished, cycleCount = 64113
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 321058
 Device: 4 core 2w2a1m1ls1b
@@ -4309,8 +4309,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 63774
 HALT operation received from [0][1][0] at cycle 64414
+Simulation finished, cycleCount = 64415
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 385473
 Device: 4 core 2w2a1m1ls1b
@@ -4361,8 +4361,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63662
 HALT operation received from [0][0][0] at cycle 63880
+Simulation finished, cycleCount = 63881
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 449354
 Device: 4 core 2w2a1m1ls1b
@@ -4413,8 +4413,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63772
 HALT operation received from [0][0][0] at cycle 64166
+Simulation finished, cycleCount = 64167
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 513521
 Device: 4 core 2w2a1m1ls1b
@@ -4465,8 +4465,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 53460
 HALT operation received from [0][0][0] at cycle 53500
+Simulation finished, cycleCount = 53501
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 567022
 Device: 4 core 2w2a1m1ls1b
@@ -4517,8 +4517,8 @@ HALT operation received from [0][2][0] at cycle 14
 HALT operation received from [0][3][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 53236
 HALT operation received from [0][1][0] at cycle 53946
+Simulation finished, cycleCount = 53947
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 620969
 
@@ -4537,26 +4537,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7fa390964180
-Device 1 : LE1 Device ID is 0x7fa390964290
-Device 2 : LE1 Device ID is 0x7fa3909643a0
-Device 3 : LE1 Device ID is 0x7fa3909644b0
-Device 4 : LE1 Device ID is 0x7fa3909645c0
-Device 5 : LE1 Device ID is 0x7fa3909646d0
-Device 6 : LE1 Device ID is 0x7fa3909647e0
-Device 7 : LE1 Device ID is 0x7fa3909648f0
-Device 8 : LE1 Device ID is 0x7fa390964a00
-Device 9 : LE1 Device ID is 0x7fa390964b10
-Device 10 : LE1 Device ID is 0x7fa390964c20
-Device 11 : LE1 Device ID is 0x7fa390964d30
-Device 12 : LE1 Device ID is 0x7fa390964e40
-Device 13 : LE1 Device ID is 0x7fa390964f50
-Device 14 : LE1 Device ID is 0x7fa390965060
-Device 15 : LE1 Device ID is 0x7fa390965170
-Device 16 : LE1 Device ID is 0x7fa390965280
-Device 17 : LE1 Device ID is 0x7fa390965390
-Device 18 : LE1 Device ID is 0x7fa3909654a0
-Device 19 : LE1 Device ID is 0x7fa3909655b0
+Device 0 : LE1 Device ID is 0x7fe392374180
+Device 1 : LE1 Device ID is 0x7fe392374290
+Device 2 : LE1 Device ID is 0x7fe3923743a0
+Device 3 : LE1 Device ID is 0x7fe3923744b0
+Device 4 : LE1 Device ID is 0x7fe3923745c0
+Device 5 : LE1 Device ID is 0x7fe3923746d0
+Device 6 : LE1 Device ID is 0x7fe3923747e0
+Device 7 : LE1 Device ID is 0x7fe3923748f0
+Device 8 : LE1 Device ID is 0x7fe392374a00
+Device 9 : LE1 Device ID is 0x7fe392374b10
+Device 10 : LE1 Device ID is 0x7fe392374c20
+Device 11 : LE1 Device ID is 0x7fe392374d30
+Device 12 : LE1 Device ID is 0x7fe392374e40
+Device 13 : LE1 Device ID is 0x7fe392374f50
+Device 14 : LE1 Device ID is 0x7fe392375060
+Device 15 : LE1 Device ID is 0x7fe392375170
+Device 16 : LE1 Device ID is 0x7fe392375280
+Device 17 : LE1 Device ID is 0x7fe392375390
+Device 18 : LE1 Device ID is 0x7fe3923754a0
+Device 19 : LE1 Device ID is 0x7fe3923755b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -4612,8 +4612,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63726
 HALT operation received from [0][0][0] at cycle 64055
+Simulation finished, cycleCount = 64056
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 64056
 Device: 8 core 2w2a1m1ls1b
@@ -4668,8 +4668,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 64310
 HALT operation received from [0][1][0] at cycle 64312
+Simulation finished, cycleCount = 64313
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 128369
 Device: 8 core 2w2a1m1ls1b
@@ -4724,8 +4724,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 64338
 HALT operation received from [0][0][0] at cycle 64422
+Simulation finished, cycleCount = 64423
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 192792
 Device: 8 core 2w2a1m1ls1b
@@ -4780,8 +4780,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 64112
 HALT operation received from [0][1][0] at cycle 64152
+Simulation finished, cycleCount = 64153
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 256945
 Device: 8 core 2w2a1m1ls1b
@@ -4836,8 +4836,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63758
 HALT operation received from [0][0][0] at cycle 64112
+Simulation finished, cycleCount = 64113
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 321058
 Device: 8 core 2w2a1m1ls1b
@@ -4892,8 +4892,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 63774
 HALT operation received from [0][1][0] at cycle 64414
+Simulation finished, cycleCount = 64415
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 385473
 Device: 8 core 2w2a1m1ls1b
@@ -4948,8 +4948,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63662
 HALT operation received from [0][0][0] at cycle 63880
+Simulation finished, cycleCount = 63881
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 449354
 Device: 8 core 2w2a1m1ls1b
@@ -5004,8 +5004,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 63772
 HALT operation received from [0][0][0] at cycle 64166
+Simulation finished, cycleCount = 64167
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 513521
 Device: 8 core 2w2a1m1ls1b
@@ -5060,8 +5060,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][1][0] at cycle 53460
 HALT operation received from [0][0][0] at cycle 53500
+Simulation finished, cycleCount = 53501
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 567022
 Device: 8 core 2w2a1m1ls1b
@@ -5116,8 +5116,8 @@ HALT operation received from [0][6][0] at cycle 14
 HALT operation received from [0][7][0] at cycle 14
 HALT operation received from [0][0][0] at cycle 53236
 HALT operation received from [0][1][0] at cycle 53946
+Simulation finished, cycleCount = 53947
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 620969
 
@@ -5136,676 +5136,33 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7fc561c7c180
-Device 1 : LE1 Device ID is 0x7fc561c7c290
-Device 2 : LE1 Device ID is 0x7fc561c7c3a0
-Device 3 : LE1 Device ID is 0x7fc561c7c4b0
-Device 4 : LE1 Device ID is 0x7fc561c7c5c0
-Device 5 : LE1 Device ID is 0x7fc561c7c6d0
-Device 6 : LE1 Device ID is 0x7fc561c7c7e0
-Device 7 : LE1 Device ID is 0x7fc561c7c8f0
-Device 8 : LE1 Device ID is 0x7fc561c7ca00
-Device 9 : LE1 Device ID is 0x7fc561c7cb10
-Device 10 : LE1 Device ID is 0x7fc561c7cc20
-Device 11 : LE1 Device ID is 0x7fc561c7cd30
-Device 12 : LE1 Device ID is 0x7fc561c7ce40
-Device 13 : LE1 Device ID is 0x7fc561c7cf50
-Device 14 : LE1 Device ID is 0x7fc561c7d060
-Device 15 : LE1 Device ID is 0x7fc561c7d170
-Device 16 : LE1 Device ID is 0x7fc561c7d280
-Device 17 : LE1 Device ID is 0x7fc561c7d390
-Device 18 : LE1 Device ID is 0x7fc561c7d4a0
-Device 19 : LE1 Device ID is 0x7fc561c7d5b0
+Device 0 : LE1 Device ID is 0x7f6212474180
+Device 1 : LE1 Device ID is 0x7f6212474290
+Device 2 : LE1 Device ID is 0x7f62124743a0
+Device 3 : LE1 Device ID is 0x7f62124744b0
+Device 4 : LE1 Device ID is 0x7f62124745c0
+Device 5 : LE1 Device ID is 0x7f62124746d0
+Device 6 : LE1 Device ID is 0x7f62124747e0
+Device 7 : LE1 Device ID is 0x7f62124748f0
+Device 8 : LE1 Device ID is 0x7f6212474a00
+Device 9 : LE1 Device ID is 0x7f6212474b10
+Device 10 : LE1 Device ID is 0x7f6212474c20
+Device 11 : LE1 Device ID is 0x7f6212474d30
+Device 12 : LE1 Device ID is 0x7f6212474e40
+Device 13 : LE1 Device ID is 0x7f6212474f50
+Device 14 : LE1 Device ID is 0x7f6212475060
+Device 15 : LE1 Device ID is 0x7f6212475170
+Device 16 : LE1 Device ID is 0x7f6212475280
+Device 17 : LE1 Device ID is 0x7f6212475390
+Device 18 : LE1 Device ID is 0x7f62124754a0
+Device 19 : LE1 Device ID is 0x7f62124755b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 1);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][1][0] at cycle 63726
-HALT operation received from [0][0][0] at cycle 64055
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 1
-Total cycles = 64056
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 2);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][0][0] at cycle 64310
-HALT operation received from [0][1][0] at cycle 64312
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 2
-Total cycles = 128369
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 4);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][1][0] at cycle 64338
-HALT operation received from [0][0][0] at cycle 64422
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 3
-Total cycles = 192792
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 8);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][0][0] at cycle 64112
-HALT operation received from [0][1][0] at cycle 64152
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 4
-Total cycles = 256945
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 16);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][1][0] at cycle 63758
-HALT operation received from [0][0][0] at cycle 64112
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 5
-Total cycles = 321058
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 32);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][0][0] at cycle 63774
-HALT operation received from [0][1][0] at cycle 64414
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 6
-Total cycles = 385473
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 64);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][1][0] at cycle 63662
-HALT operation received from [0][0][0] at cycle 63880
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 7
-Total cycles = 449354
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 128);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][1][0] at cycle 63772
-HALT operation received from [0][0][0] at cycle 64166
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 8
-Total cycles = 513521
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 256);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][1][0] at cycle 53460
-HALT operation received from [0][0][0] at cycle 53500
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 9
-Total cycles = 567022
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: fastWalshTransform
-
-Dimension 0: Global work size = 512, Local work size = 256
-
-Kernel launcher function:
-extern int BufferArg_0;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 2;
-  int workgroupX = 2;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    fastWalshTransform(&BufferArg_0, 512);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 4216
-Size of bss area : 
-End of memory: 33728
-Second Pass Completed
-Run Simulation with:
-  binaries/final_fastWalshTransform.s.bin  
-  binaries/final_fastWalshTransform.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][2][0] at cycle 14
-HALT operation received from [0][3][0] at cycle 14
-HALT operation received from [0][4][0] at cycle 14
-HALT operation received from [0][5][0] at cycle 14
-HALT operation received from [0][6][0] at cycle 14
-HALT operation received from [0][7][0] at cycle 14
-HALT operation received from [0][8][0] at cycle 14
-HALT operation received from [0][9][0] at cycle 14
-HALT operation received from [0][10][0] at cycle 14
-HALT operation received from [0][11][0] at cycle 14
-HALT operation received from [0][12][0] at cycle 14
-HALT operation received from [0][13][0] at cycle 14
-HALT operation received from [0][14][0] at cycle 14
-HALT operation received from [0][15][0] at cycle 14
-HALT operation received from [0][0][0] at cycle 53236
-HALT operation received from [0][1][0] at cycle 53946
- -------------------------------------------------------- 
-Device::SaveStats
-Iteration = 10
-Total cycles = 620969
-
-Output
-15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 181.167 142.116 29.3198 57.3503 111.162 43.755 153.883 93.3847 41.4033 181.736 181.394 89.6333 54.2966 200.348 182.536 31.0745 190.943 150.97 213.633 213.966 126.357 160.941 130.182 232.111 146.891 57.2542 125.085 151.665 59.5505 71.549 206.971 240.718 213.665 236.291 42.0683 68.8267 24.0461 195.951 162.211 65.4494 121.687 87.6053 155.083 175.984 31.9535 81.6183 207.058 222.896 232.588 164.691 180.862 102.945 69.6326 55.0442 79.0566 216.524 112.298 204.141 112.189 171.849 19.6905 63.1603 156.567 233.355 43.4514 198.635 46.1821 67.4975 138.586 208.394 132.947 4.2738 39.9988 32.0296 180.258 71.9523 113.648 131.316 38.8486 90.2362 40.0073 219.711 193.181 109.64 18.7548 16.238 70.1637 131.053 220.379 182.353 46.902 240.07 245.513 203.469 217.425 32.9642 146.104 7.60744 100.462 28.6902 216.001 233.409 32.964 256 9.43816 213.222 71.9521 123.086 88.5379 110.801 213.322 128.545 74.5114 150.504 238.185 93.2662 166.742 52.3487 224.319 131.121 234.701 15.2214 115.191 224.214 218.69 76.6163 1.17833 108.794 84.2237 101.64 137.484 44.2247 79.0486 170.448 44.2245 88.4868 127.67 116.177 211.573 216.208 226.977 168.895 88.753 45.4887 63.3986 70.938 138.755 230.14 123.287 107.074 105.261 101.988 122.296 220.452 70.2021 84.9858 41.0686 71.3805 193.78 125.292 173.02 75.2639 169.517 252.069 245.712 213.742 84.5559 117.382 73.9181 40.1287 77.5897 44.8955 209.024 166.343 90.3842 16.4222 237.281 229.139 246.562 104.567 80.2135 95.8236 206.555 202.509 60.2759 20.7574 31.4951 101.344 92.1379 225.275 226.637 9.15836 44.5387 140.154 5.22746 34.2507 97.8954 89.7833 151.633 171.814 129.912 229.222 216.709 82.9356 139.565 51.0932 99.3578 120.845 24.2324 89.9201 225.413 104.446 185.744 175.968 50.9552 246.02 196.725 82.4503 91.3641 32.8634 51.7251 62.0009 42.0217 96.2638 202.155 47.2492 130.514 44.0502 137.033 26.147 215.864 10.9445 255.369 176.573 93.8801 138.934 227.666 193.238 3.77959 251.898 27.158 229.192 100.344 212.902 149.16 151.299 202.921 89.8859 233.75 38.2855 122.749 29.4748 100.286 164.771 125.739 46.4412 212.02 0.253005 90.4913 93.0526 26.4 50.355 103.997 25.7693 226.928 197.877 164.703 198.594 135.115 168.483 194.492 162.273 141.675 38.8363 119.175 34.8357 190.136 66.0962 124.722 167.885 104.382 247.471 197.36 204.668 156.242 67.0988 251.109 112.262 67.3518 85.6005 205.315 93.7518 135.956 53.3118 119.521 106.883 251.189 28.2245 49.477 130.304 196.707 243.969 36.5771 82.3828 26.8054 155.752 117.219 216.941 221.848 241.94 128.827 70.2298 233.411 70.1869 18.8978 133.653 137.286 14.007 245.915 204.638 99.6075 195.229 42.3894 235.563 248.541 161.91 86.4464 243.73 190.135 135.923 118.034 130.842 123.893 154.611 213.225 150.698 54.3633 74.4437 111.639 20.2115 60.3838 240.466 90.4413 37.7948 54.6527 109.339 171.448 191.938 123.346 161.363 140.576 222.954 100.592 182.965 202.517 93.1332 88.8757 32.9632 80.8634 23.0106 168.887 198.898 153.853 36.7792 97.5091 111.078 187.477 151.872 185.522 43.1164 172.084 245.906 27.5821 6.52511 27.7005 82.2348 115.864 199.148 18.1731 239.21 104.511 158.749 206.164 205.103 85.7142 152.681 42.2359 174.59 185.644 123.099 197.601 98.5305 65.997 95.4536 135.31 163.506 206.532 66.7869 59.3785 136.054 109.903 231.462 125.959 137.485 237.987 153.66 219.72 97.8516 96.8078 237.893 81.0619 201.319 140.642 31.2259 150.421 226.357 183.907 192.657 144.947 113.55 59.7565 86.5471 212.081 125.753 182.001 91.3906 33.2596 132.532 158.177 92.638 12.586 12.0807 68.1003 138.545 149.566 50.0878 36.2049 113.286 147.939 133.013 95.1796 229.001 78.3313 235.822 4.2272 228.753 206.179 188.134 165.41 95.1251 45.6842 225.166 181.672 1.76503 94.9196 107.673 93.1556 128.179 240.205 251.333 220.817 252.791 7.41383 32.9175 135.337 156.98 83.0053 171.542 14.2663 230.945 48.5544 109.446 203.946 126.886 89.2679 208.173 99.6382 39.4464 140.307 9.0478 134.571 185.991 234.214 60.2437 187.756 73.1335 167.917 24.9117 201.313 152.122 20.2448 166.13 148.913 27.6587 199.047 28.2498 184.639 26.0527 199.791 198.905 0.997333 248.346 52.3508 204.943 119.231 141.619 157.117 218.87 181.065 41.4235 227.917 59.6366 227.415 206.131 119.88 159.171 23.2648 31.7967 184.082 224.577 183.919 204.327 134.707 76.8318 231.986 77.7547 105.082 160.625 103.807 48.873 103.529 104.805 41.2188 155.88 53.748 160.45 41.4989 210.865 123.32 222.564 252.288 95.2371 26.2005 223.703 45.3684 146.081 126.873 68.6332 177.877 54.9558 37.2107 105.796 3.28307 171.918 182.628 235.269 249.673 31.7094 139.894 97.4801 80.5824 243.423 202.285 121.801 143.303 0.0328755 26.2513 184.802 210.897 149.571 151.366 207.185 244.808 177.567 174.888 34.1767 67.6473 45.7614 102.81 245.525 100.717 140.021 95.3207 104 55.9387 21.9485 83.2693 49.6114 53.6579 223.163 147.092 134.24 210.586 93.3764 0.0413955 97.8891 93.4093 26.2927 26.6912 48.3067 175.864 178.057 255.492 164.672 99.6238 174.38 198.849 167.271 220.142 45.6586 156.796 64.859 185.679 252.116 168.859 241.618 18.0649 252.129 35.2294 71.7228 219.291 182.321 205.963 173.877 19.6973 206.004 15.7664 113.107 232.297 42.4576 161.413 152.161 220.515 160.906 60.833 64.1385 79.2859 3.68176 231.41 43.4277 49.3404 132.205 108.287 235.02 128.322 21.146 220.638 146.387 17.2746 255.867 218.109 236.566 182.188 168.073 154.443 201.885 118.077 170.21 58.9918 94.3742 212.667 220.405 246.535 177.182 125.311 51.3683 241.321 204.597 55.05 216.73 248.024 104.39 92.9355 100.311 83.41 221.257 121.457 48.0476 111.644 138.732 47.9145 73.7533 119.298 230.102 241.826 17.7412 175.987 103.903 187.951 234.979 198.277 144.618 199.384 188.812 65.8006 68.6952 240.181 51.1213 17.2918 39.2305 11.8516 9.31622 143.621 104.787 109.627 227.031 70.0443 231.084 19.0785 181.688 113.816 66.993 255.441 233.114 41.0953 241.267 250.855 217.083 89.1702 182.806 196.062 31.4472 71.4246 139.446 220.259 137.225 208.142 204.44 188.346 225.433 243.67 200.198 234.75 131.291 48.9851 88.3769 102.322 119.029 63.4613 121.401 44.7175 177.277 188.394 44.159 154.391 229.489 29.4263 149.246 190.572 118.596 76.0527 130.634 150.044 147.477 14.0802 114.303 28.7024 222.222 62.7431 217.049 191.655 50.4136 161.247 170.405 181.705 210.232 2.78173 28.0274 73.2614 66.2431 149.428 117.979 243.521 81.8221 162.138 141.912 55.3112 191.564 35.1583 245.883 54.1608 111.211 120.517 204.204 2.68825 134.597 62.5075 31.3907 100.819 125.251 248.44 36.4739 175.664 153.686 206.879 101.369 107.919 209.66 129.397 181.18 19.9035 22.8248 43.159 7.42396 104.647 205.297 149.336 159.958 140.861 184.494 149.841 195.022 39.7052 14.3578 143.226 42.3934 148.955 205.734 73.7841 249.774 74.9846 66.2236 30.2474 250.649 219.91 237.126 96.0181 71.8287 190.786 225.415 253.009 210.69 248.24 40.1676 218.114 96.8864 245.465 111.45 0.844464 130.326 39.9439 150.686 69.3478 79.649 165.043 212.574 122.042 57.9982 162.308 195.827 51.7717 237.293 6.05017 82.0191 231.942 225.96 63.1451 71.9599 41.7889 253.932 41.3745 38.7976 208.621 33.6141 78.9651 170.735 130.5 68.4297 26.1849 131.345 198.755 66.1288 26.0304 12.1033 145.778 191.074 224.678 11.8203 249.072 130.986 207.647 44.8437 112.279 213.697 126.863 88.2205 183.657 190.008 160.18 225.446 187.939 201.555 8.2438 140.561 235.169 87.2089 
-
-Passed!
-
-SUCCESS!
+Error: clGetEventEventInfo Failed with Error Code: Error code : CL_INVALID_EVENT
+Location : SDKCommon.cpp:104
+Error: WaitForEventAndRelease(writeEvt) Failed
+Location : FastWalshTransform.cpp:202
 Platform 0 : Mesa
 
 Input
@@ -5815,26 +5172,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f6ba54ac180
-Device 1 : LE1 Device ID is 0x7f6ba54ac290
-Device 2 : LE1 Device ID is 0x7f6ba54ac3a0
-Device 3 : LE1 Device ID is 0x7f6ba54ac4b0
-Device 4 : LE1 Device ID is 0x7f6ba54ac5c0
-Device 5 : LE1 Device ID is 0x7f6ba54ac6d0
-Device 6 : LE1 Device ID is 0x7f6ba54ac7e0
-Device 7 : LE1 Device ID is 0x7f6ba54ac8f0
-Device 8 : LE1 Device ID is 0x7f6ba54aca00
-Device 9 : LE1 Device ID is 0x7f6ba54acb10
-Device 10 : LE1 Device ID is 0x7f6ba54acc20
-Device 11 : LE1 Device ID is 0x7f6ba54acd30
-Device 12 : LE1 Device ID is 0x7f6ba54ace40
-Device 13 : LE1 Device ID is 0x7f6ba54acf50
-Device 14 : LE1 Device ID is 0x7f6ba54ad060
-Device 15 : LE1 Device ID is 0x7f6ba54ad170
-Device 16 : LE1 Device ID is 0x7f6ba54ad280
-Device 17 : LE1 Device ID is 0x7f6ba54ad390
-Device 18 : LE1 Device ID is 0x7f6ba54ad4a0
-Device 19 : LE1 Device ID is 0x7f6ba54ad5b0
+Device 0 : LE1 Device ID is 0x7f4839974180
+Device 1 : LE1 Device ID is 0x7f4839974290
+Device 2 : LE1 Device ID is 0x7f48399743a0
+Device 3 : LE1 Device ID is 0x7f48399744b0
+Device 4 : LE1 Device ID is 0x7f48399745c0
+Device 5 : LE1 Device ID is 0x7f48399746d0
+Device 6 : LE1 Device ID is 0x7f48399747e0
+Device 7 : LE1 Device ID is 0x7f48399748f0
+Device 8 : LE1 Device ID is 0x7f4839974a00
+Device 9 : LE1 Device ID is 0x7f4839974b10
+Device 10 : LE1 Device ID is 0x7f4839974c20
+Device 11 : LE1 Device ID is 0x7f4839974d30
+Device 12 : LE1 Device ID is 0x7f4839974e40
+Device 13 : LE1 Device ID is 0x7f4839974f50
+Device 14 : LE1 Device ID is 0x7f4839975060
+Device 15 : LE1 Device ID is 0x7f4839975170
+Device 16 : LE1 Device ID is 0x7f4839975280
+Device 17 : LE1 Device ID is 0x7f4839975390
+Device 18 : LE1 Device ID is 0x7f48399754a0
+Device 19 : LE1 Device ID is 0x7f48399755b0
 Executing kernel for 1 iterations
 -------------------------------------------
 Device: 1 core 3w3a1m1ls1b
@@ -5882,8 +5239,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 99372
+Simulation finished, cycleCount = 99373
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 99373
 Device: 1 core 3w3a1m1ls1b
@@ -5931,8 +5288,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 100069
+Simulation finished, cycleCount = 100070
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 199443
 Device: 1 core 3w3a1m1ls1b
@@ -5980,8 +5337,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 100115
+Simulation finished, cycleCount = 100116
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 299559
 Device: 1 core 3w3a1m1ls1b
@@ -6029,8 +5386,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 99639
+Simulation finished, cycleCount = 99640
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 399199
 Device: 1 core 3w3a1m1ls1b
@@ -6078,8 +5435,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 99265
+Simulation finished, cycleCount = 99266
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 498465
 Device: 1 core 3w3a1m1ls1b
@@ -6127,8 +5484,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 99531
+Simulation finished, cycleCount = 99532
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 597997
 Device: 1 core 3w3a1m1ls1b
@@ -6176,8 +5533,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 98953
+Simulation finished, cycleCount = 98954
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 696951
 Device: 1 core 3w3a1m1ls1b
@@ -6225,8 +5582,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 99337
+Simulation finished, cycleCount = 99338
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 796289
 Device: 1 core 3w3a1m1ls1b
@@ -6274,8 +5631,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 105562
+Simulation finished, cycleCount = 105563
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 901852
 Device: 1 core 3w3a1m1ls1b
@@ -6323,8 +5680,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_3wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 105793
+Simulation finished, cycleCount = 105794
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 1007646
 
@@ -6343,26 +5700,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f2999464180
-Device 1 : LE1 Device ID is 0x7f2999464290
-Device 2 : LE1 Device ID is 0x7f29994643a0
-Device 3 : LE1 Device ID is 0x7f29994644b0
-Device 4 : LE1 Device ID is 0x7f29994645c0
-Device 5 : LE1 Device ID is 0x7f29994646d0
-Device 6 : LE1 Device ID is 0x7f29994647e0
-Device 7 : LE1 Device ID is 0x7f29994648f0
-Device 8 : LE1 Device ID is 0x7f2999464a00
-Device 9 : LE1 Device ID is 0x7f2999464b10
-Device 10 : LE1 Device ID is 0x7f2999464c20
-Device 11 : LE1 Device ID is 0x7f2999464d30
-Device 12 : LE1 Device ID is 0x7f2999464e40
-Device 13 : LE1 Device ID is 0x7f2999464f50
-Device 14 : LE1 Device ID is 0x7f2999465060
-Device 15 : LE1 Device ID is 0x7f2999465170
-Device 16 : LE1 Device ID is 0x7f2999465280
-Device 17 : LE1 Device ID is 0x7f2999465390
-Device 18 : LE1 Device ID is 0x7f29994654a0
-Device 19 : LE1 Device ID is 0x7f29994655b0
+Device 0 : LE1 Device ID is 0x7fd5de6f4180
+Device 1 : LE1 Device ID is 0x7fd5de6f4290
+Device 2 : LE1 Device ID is 0x7fd5de6f43a0
+Device 3 : LE1 Device ID is 0x7fd5de6f44b0
+Device 4 : LE1 Device ID is 0x7fd5de6f45c0
+Device 5 : LE1 Device ID is 0x7fd5de6f46d0
+Device 6 : LE1 Device ID is 0x7fd5de6f47e0
+Device 7 : LE1 Device ID is 0x7fd5de6f48f0
+Device 8 : LE1 Device ID is 0x7fd5de6f4a00
+Device 9 : LE1 Device ID is 0x7fd5de6f4b10
+Device 10 : LE1 Device ID is 0x7fd5de6f4c20
+Device 11 : LE1 Device ID is 0x7fd5de6f4d30
+Device 12 : LE1 Device ID is 0x7fd5de6f4e40
+Device 13 : LE1 Device ID is 0x7fd5de6f4f50
+Device 14 : LE1 Device ID is 0x7fd5de6f5060
+Device 15 : LE1 Device ID is 0x7fd5de6f5170
+Device 16 : LE1 Device ID is 0x7fd5de6f5280
+Device 17 : LE1 Device ID is 0x7fd5de6f5390
+Device 18 : LE1 Device ID is 0x7fd5de6f54a0
+Device 19 : LE1 Device ID is 0x7fd5de6f55b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -6412,8 +5769,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 52606
 HALT operation received from [0][0][0] at cycle 52923
+Simulation finished, cycleCount = 52924
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 52924
 Device: 2 core 3w3a1m1ls1b
@@ -6462,8 +5819,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 53120
 HALT operation received from [0][0][0] at cycle 53212
+Simulation finished, cycleCount = 53213
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 106137
 Device: 2 core 3w3a1m1ls1b
@@ -6512,8 +5869,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 53262
 HALT operation received from [0][0][0] at cycle 53289
+Simulation finished, cycleCount = 53290
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 159427
 Device: 2 core 3w3a1m1ls1b
@@ -6562,8 +5919,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 53075
 HALT operation received from [0][0][0] at cycle 53095
+Simulation finished, cycleCount = 53096
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 212523
 Device: 2 core 3w3a1m1ls1b
@@ -6612,8 +5969,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 52809
 HALT operation received from [0][0][0] at cycle 53070
+Simulation finished, cycleCount = 53071
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 265594
 Device: 2 core 3w3a1m1ls1b
@@ -6662,8 +6019,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 52806
 HALT operation received from [0][1][0] at cycle 53360
+Simulation finished, cycleCount = 53361
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 318955
 Device: 2 core 3w3a1m1ls1b
@@ -6712,8 +6069,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 52723
 HALT operation received from [0][0][0] at cycle 52894
+Simulation finished, cycleCount = 52895
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 371850
 Device: 2 core 3w3a1m1ls1b
@@ -6762,8 +6119,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 52771
 HALT operation received from [0][0][0] at cycle 53158
+Simulation finished, cycleCount = 53159
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 425009
 Device: 2 core 3w3a1m1ls1b
@@ -6812,8 +6169,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][1][0] at cycle 54690
 HALT operation received from [0][0][0] at cycle 54717
+Simulation finished, cycleCount = 54718
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 479727
 Device: 2 core 3w3a1m1ls1b
@@ -6862,8 +6219,8 @@ Run Simulation with:
   2Context_3wide.xml
 HALT operation received from [0][0][0] at cycle 54438
 HALT operation received from [0][1][0] at cycle 55206
+Simulation finished, cycleCount = 55207
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 534934
 
@@ -6882,26 +6239,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7fb2878d4180
-Device 1 : LE1 Device ID is 0x7fb2878d4290
-Device 2 : LE1 Device ID is 0x7fb2878d43a0
-Device 3 : LE1 Device ID is 0x7fb2878d44b0
-Device 4 : LE1 Device ID is 0x7fb2878d45c0
-Device 5 : LE1 Device ID is 0x7fb2878d46d0
-Device 6 : LE1 Device ID is 0x7fb2878d47e0
-Device 7 : LE1 Device ID is 0x7fb2878d48f0
-Device 8 : LE1 Device ID is 0x7fb2878d4a00
-Device 9 : LE1 Device ID is 0x7fb2878d4b10
-Device 10 : LE1 Device ID is 0x7fb2878d4c20
-Device 11 : LE1 Device ID is 0x7fb2878d4d30
-Device 12 : LE1 Device ID is 0x7fb2878d4e40
-Device 13 : LE1 Device ID is 0x7fb2878d4f50
-Device 14 : LE1 Device ID is 0x7fb2878d5060
-Device 15 : LE1 Device ID is 0x7fb2878d5170
-Device 16 : LE1 Device ID is 0x7fb2878d5280
-Device 17 : LE1 Device ID is 0x7fb2878d5390
-Device 18 : LE1 Device ID is 0x7fb2878d54a0
-Device 19 : LE1 Device ID is 0x7fb2878d55b0
+Device 0 : LE1 Device ID is 0x7fde9113c180
+Device 1 : LE1 Device ID is 0x7fde9113c290
+Device 2 : LE1 Device ID is 0x7fde9113c3a0
+Device 3 : LE1 Device ID is 0x7fde9113c4b0
+Device 4 : LE1 Device ID is 0x7fde9113c5c0
+Device 5 : LE1 Device ID is 0x7fde9113c6d0
+Device 6 : LE1 Device ID is 0x7fde9113c7e0
+Device 7 : LE1 Device ID is 0x7fde9113c8f0
+Device 8 : LE1 Device ID is 0x7fde9113ca00
+Device 9 : LE1 Device ID is 0x7fde9113cb10
+Device 10 : LE1 Device ID is 0x7fde9113cc20
+Device 11 : LE1 Device ID is 0x7fde9113cd30
+Device 12 : LE1 Device ID is 0x7fde9113ce40
+Device 13 : LE1 Device ID is 0x7fde9113cf50
+Device 14 : LE1 Device ID is 0x7fde9113d060
+Device 15 : LE1 Device ID is 0x7fde9113d170
+Device 16 : LE1 Device ID is 0x7fde9113d280
+Device 17 : LE1 Device ID is 0x7fde9113d390
+Device 18 : LE1 Device ID is 0x7fde9113d4a0
+Device 19 : LE1 Device ID is 0x7fde9113d5b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -6953,8 +6310,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49561
 HALT operation received from [0][0][0] at cycle 49838
+Simulation finished, cycleCount = 49839
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 49839
 Device: 4 core 3w3a1m1ls1b
@@ -7005,8 +6362,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 50017
 HALT operation received from [0][1][0] at cycle 50079
+Simulation finished, cycleCount = 50080
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 99919
 Device: 4 core 3w3a1m1ls1b
@@ -7057,8 +6414,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 50013
 HALT operation received from [0][0][0] at cycle 50129
+Simulation finished, cycleCount = 50130
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 150049
 Device: 4 core 3w3a1m1ls1b
@@ -7109,8 +6466,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 49791
 HALT operation received from [0][1][0] at cycle 49875
+Simulation finished, cycleCount = 49876
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 199925
 Device: 4 core 3w3a1m1ls1b
@@ -7161,8 +6518,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49477
 HALT operation received from [0][0][0] at cycle 49815
+Simulation finished, cycleCount = 49816
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 249741
 Device: 4 core 3w3a1m1ls1b
@@ -7213,8 +6570,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 49493
 HALT operation received from [0][1][0] at cycle 50065
+Simulation finished, cycleCount = 50066
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 299807
 Device: 4 core 3w3a1m1ls1b
@@ -7265,8 +6622,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49389
 HALT operation received from [0][0][0] at cycle 49591
+Simulation finished, cycleCount = 49592
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 349399
 Device: 4 core 3w3a1m1ls1b
@@ -7317,8 +6674,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49523
 HALT operation received from [0][0][0] at cycle 49841
+Simulation finished, cycleCount = 49842
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 399241
 Device: 4 core 3w3a1m1ls1b
@@ -7369,8 +6726,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 52764
 HALT operation received from [0][0][0] at cycle 52825
+Simulation finished, cycleCount = 52826
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 452067
 Device: 4 core 3w3a1m1ls1b
@@ -7421,8 +6778,8 @@ HALT operation received from [0][2][0] at cycle 13
 HALT operation received from [0][3][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 52568
 HALT operation received from [0][1][0] at cycle 53252
+Simulation finished, cycleCount = 53253
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 505320
 
@@ -7441,26 +6798,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7ff0f8494180
-Device 1 : LE1 Device ID is 0x7ff0f8494290
-Device 2 : LE1 Device ID is 0x7ff0f84943a0
-Device 3 : LE1 Device ID is 0x7ff0f84944b0
-Device 4 : LE1 Device ID is 0x7ff0f84945c0
-Device 5 : LE1 Device ID is 0x7ff0f84946d0
-Device 6 : LE1 Device ID is 0x7ff0f84947e0
-Device 7 : LE1 Device ID is 0x7ff0f84948f0
-Device 8 : LE1 Device ID is 0x7ff0f8494a00
-Device 9 : LE1 Device ID is 0x7ff0f8494b10
-Device 10 : LE1 Device ID is 0x7ff0f8494c20
-Device 11 : LE1 Device ID is 0x7ff0f8494d30
-Device 12 : LE1 Device ID is 0x7ff0f8494e40
-Device 13 : LE1 Device ID is 0x7ff0f8494f50
-Device 14 : LE1 Device ID is 0x7ff0f8495060
-Device 15 : LE1 Device ID is 0x7ff0f8495170
-Device 16 : LE1 Device ID is 0x7ff0f8495280
-Device 17 : LE1 Device ID is 0x7ff0f8495390
-Device 18 : LE1 Device ID is 0x7ff0f84954a0
-Device 19 : LE1 Device ID is 0x7ff0f84955b0
+Device 0 : LE1 Device ID is 0x7f78bec94180
+Device 1 : LE1 Device ID is 0x7f78bec94290
+Device 2 : LE1 Device ID is 0x7f78bec943a0
+Device 3 : LE1 Device ID is 0x7f78bec944b0
+Device 4 : LE1 Device ID is 0x7f78bec945c0
+Device 5 : LE1 Device ID is 0x7f78bec946d0
+Device 6 : LE1 Device ID is 0x7f78bec947e0
+Device 7 : LE1 Device ID is 0x7f78bec948f0
+Device 8 : LE1 Device ID is 0x7f78bec94a00
+Device 9 : LE1 Device ID is 0x7f78bec94b10
+Device 10 : LE1 Device ID is 0x7f78bec94c20
+Device 11 : LE1 Device ID is 0x7f78bec94d30
+Device 12 : LE1 Device ID is 0x7f78bec94e40
+Device 13 : LE1 Device ID is 0x7f78bec94f50
+Device 14 : LE1 Device ID is 0x7f78bec95060
+Device 15 : LE1 Device ID is 0x7f78bec95170
+Device 16 : LE1 Device ID is 0x7f78bec95280
+Device 17 : LE1 Device ID is 0x7f78bec95390
+Device 18 : LE1 Device ID is 0x7f78bec954a0
+Device 19 : LE1 Device ID is 0x7f78bec955b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -7516,8 +6873,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49561
 HALT operation received from [0][0][0] at cycle 49838
+Simulation finished, cycleCount = 49839
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 49839
 Device: 8 core 3w3a1m1ls1b
@@ -7572,8 +6929,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 50017
 HALT operation received from [0][1][0] at cycle 50079
+Simulation finished, cycleCount = 50080
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 99919
 Device: 8 core 3w3a1m1ls1b
@@ -7628,8 +6985,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 50013
 HALT operation received from [0][0][0] at cycle 50129
+Simulation finished, cycleCount = 50130
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 150049
 Device: 8 core 3w3a1m1ls1b
@@ -7684,8 +7041,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 49791
 HALT operation received from [0][1][0] at cycle 49875
+Simulation finished, cycleCount = 49876
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 199925
 Device: 8 core 3w3a1m1ls1b
@@ -7740,8 +7097,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49477
 HALT operation received from [0][0][0] at cycle 49815
+Simulation finished, cycleCount = 49816
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 249741
 Device: 8 core 3w3a1m1ls1b
@@ -7796,8 +7153,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 49493
 HALT operation received from [0][1][0] at cycle 50065
+Simulation finished, cycleCount = 50066
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 299807
 Device: 8 core 3w3a1m1ls1b
@@ -7852,8 +7209,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49389
 HALT operation received from [0][0][0] at cycle 49591
+Simulation finished, cycleCount = 49592
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 349399
 Device: 8 core 3w3a1m1ls1b
@@ -7908,8 +7265,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49523
 HALT operation received from [0][0][0] at cycle 49841
+Simulation finished, cycleCount = 49842
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 399241
 Device: 8 core 3w3a1m1ls1b
@@ -7964,8 +7321,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 52764
 HALT operation received from [0][0][0] at cycle 52825
+Simulation finished, cycleCount = 52826
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 452067
 Device: 8 core 3w3a1m1ls1b
@@ -8020,8 +7377,8 @@ HALT operation received from [0][6][0] at cycle 13
 HALT operation received from [0][7][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 52568
 HALT operation received from [0][1][0] at cycle 53252
+Simulation finished, cycleCount = 53253
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 505320
 
@@ -8040,26 +7397,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f639335c180
-Device 1 : LE1 Device ID is 0x7f639335c290
-Device 2 : LE1 Device ID is 0x7f639335c3a0
-Device 3 : LE1 Device ID is 0x7f639335c4b0
-Device 4 : LE1 Device ID is 0x7f639335c5c0
-Device 5 : LE1 Device ID is 0x7f639335c6d0
-Device 6 : LE1 Device ID is 0x7f639335c7e0
-Device 7 : LE1 Device ID is 0x7f639335c8f0
-Device 8 : LE1 Device ID is 0x7f639335ca00
-Device 9 : LE1 Device ID is 0x7f639335cb10
-Device 10 : LE1 Device ID is 0x7f639335cc20
-Device 11 : LE1 Device ID is 0x7f639335cd30
-Device 12 : LE1 Device ID is 0x7f639335ce40
-Device 13 : LE1 Device ID is 0x7f639335cf50
-Device 14 : LE1 Device ID is 0x7f639335d060
-Device 15 : LE1 Device ID is 0x7f639335d170
-Device 16 : LE1 Device ID is 0x7f639335d280
-Device 17 : LE1 Device ID is 0x7f639335d390
-Device 18 : LE1 Device ID is 0x7f639335d4a0
-Device 19 : LE1 Device ID is 0x7f639335d5b0
+Device 0 : LE1 Device ID is 0x7ffb12f84180
+Device 1 : LE1 Device ID is 0x7ffb12f84290
+Device 2 : LE1 Device ID is 0x7ffb12f843a0
+Device 3 : LE1 Device ID is 0x7ffb12f844b0
+Device 4 : LE1 Device ID is 0x7ffb12f845c0
+Device 5 : LE1 Device ID is 0x7ffb12f846d0
+Device 6 : LE1 Device ID is 0x7ffb12f847e0
+Device 7 : LE1 Device ID is 0x7ffb12f848f0
+Device 8 : LE1 Device ID is 0x7ffb12f84a00
+Device 9 : LE1 Device ID is 0x7ffb12f84b10
+Device 10 : LE1 Device ID is 0x7ffb12f84c20
+Device 11 : LE1 Device ID is 0x7ffb12f84d30
+Device 12 : LE1 Device ID is 0x7ffb12f84e40
+Device 13 : LE1 Device ID is 0x7ffb12f84f50
+Device 14 : LE1 Device ID is 0x7ffb12f85060
+Device 15 : LE1 Device ID is 0x7ffb12f85170
+Device 16 : LE1 Device ID is 0x7ffb12f85280
+Device 17 : LE1 Device ID is 0x7ffb12f85390
+Device 18 : LE1 Device ID is 0x7ffb12f854a0
+Device 19 : LE1 Device ID is 0x7ffb12f855b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -8123,8 +7480,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49561
 HALT operation received from [0][0][0] at cycle 49838
+Simulation finished, cycleCount = 49839
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 49839
 Device: 16 core 3w3a1m1ls1b
@@ -8187,8 +7544,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 50017
 HALT operation received from [0][1][0] at cycle 50079
+Simulation finished, cycleCount = 50080
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 99919
 Device: 16 core 3w3a1m1ls1b
@@ -8251,8 +7608,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 50013
 HALT operation received from [0][0][0] at cycle 50129
+Simulation finished, cycleCount = 50130
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 150049
 Device: 16 core 3w3a1m1ls1b
@@ -8315,8 +7672,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 49791
 HALT operation received from [0][1][0] at cycle 49875
+Simulation finished, cycleCount = 49876
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 199925
 Device: 16 core 3w3a1m1ls1b
@@ -8379,8 +7736,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49477
 HALT operation received from [0][0][0] at cycle 49815
+Simulation finished, cycleCount = 49816
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 249741
 Device: 16 core 3w3a1m1ls1b
@@ -8443,8 +7800,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 49493
 HALT operation received from [0][1][0] at cycle 50065
+Simulation finished, cycleCount = 50066
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 299807
 Device: 16 core 3w3a1m1ls1b
@@ -8507,8 +7864,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49389
 HALT operation received from [0][0][0] at cycle 49591
+Simulation finished, cycleCount = 49592
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 349399
 Device: 16 core 3w3a1m1ls1b
@@ -8571,8 +7928,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 49523
 HALT operation received from [0][0][0] at cycle 49841
+Simulation finished, cycleCount = 49842
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 399241
 Device: 16 core 3w3a1m1ls1b
@@ -8635,8 +7992,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][1][0] at cycle 52764
 HALT operation received from [0][0][0] at cycle 52825
+Simulation finished, cycleCount = 52826
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 452067
 Device: 16 core 3w3a1m1ls1b
@@ -8699,8 +8056,8 @@ HALT operation received from [0][14][0] at cycle 13
 HALT operation received from [0][15][0] at cycle 13
 HALT operation received from [0][0][0] at cycle 52568
 HALT operation received from [0][1][0] at cycle 53252
+Simulation finished, cycleCount = 53253
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 505320
 
@@ -8719,26 +8076,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f55c52ac180
-Device 1 : LE1 Device ID is 0x7f55c52ac290
-Device 2 : LE1 Device ID is 0x7f55c52ac3a0
-Device 3 : LE1 Device ID is 0x7f55c52ac4b0
-Device 4 : LE1 Device ID is 0x7f55c52ac5c0
-Device 5 : LE1 Device ID is 0x7f55c52ac6d0
-Device 6 : LE1 Device ID is 0x7f55c52ac7e0
-Device 7 : LE1 Device ID is 0x7f55c52ac8f0
-Device 8 : LE1 Device ID is 0x7f55c52aca00
-Device 9 : LE1 Device ID is 0x7f55c52acb10
-Device 10 : LE1 Device ID is 0x7f55c52acc20
-Device 11 : LE1 Device ID is 0x7f55c52acd30
-Device 12 : LE1 Device ID is 0x7f55c52ace40
-Device 13 : LE1 Device ID is 0x7f55c52acf50
-Device 14 : LE1 Device ID is 0x7f55c52ad060
-Device 15 : LE1 Device ID is 0x7f55c52ad170
-Device 16 : LE1 Device ID is 0x7f55c52ad280
-Device 17 : LE1 Device ID is 0x7f55c52ad390
-Device 18 : LE1 Device ID is 0x7f55c52ad4a0
-Device 19 : LE1 Device ID is 0x7f55c52ad5b0
+Device 0 : LE1 Device ID is 0x7f7e7e4a4180
+Device 1 : LE1 Device ID is 0x7f7e7e4a4290
+Device 2 : LE1 Device ID is 0x7f7e7e4a43a0
+Device 3 : LE1 Device ID is 0x7f7e7e4a44b0
+Device 4 : LE1 Device ID is 0x7f7e7e4a45c0
+Device 5 : LE1 Device ID is 0x7f7e7e4a46d0
+Device 6 : LE1 Device ID is 0x7f7e7e4a47e0
+Device 7 : LE1 Device ID is 0x7f7e7e4a48f0
+Device 8 : LE1 Device ID is 0x7f7e7e4a4a00
+Device 9 : LE1 Device ID is 0x7f7e7e4a4b10
+Device 10 : LE1 Device ID is 0x7f7e7e4a4c20
+Device 11 : LE1 Device ID is 0x7f7e7e4a4d30
+Device 12 : LE1 Device ID is 0x7f7e7e4a4e40
+Device 13 : LE1 Device ID is 0x7f7e7e4a4f50
+Device 14 : LE1 Device ID is 0x7f7e7e4a5060
+Device 15 : LE1 Device ID is 0x7f7e7e4a5170
+Device 16 : LE1 Device ID is 0x7f7e7e4a5280
+Device 17 : LE1 Device ID is 0x7f7e7e4a5390
+Device 18 : LE1 Device ID is 0x7f7e7e4a54a0
+Device 19 : LE1 Device ID is 0x7f7e7e4a55b0
 Executing kernel for 1 iterations
 -------------------------------------------
 Device: 1 core 4w4a1m1ls1b
@@ -8786,8 +8143,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 92564
+Simulation finished, cycleCount = 92565
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 92565
 Device: 1 core 4w4a1m1ls1b
@@ -8835,8 +8192,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 93333
+Simulation finished, cycleCount = 93334
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 185899
 Device: 1 core 4w4a1m1ls1b
@@ -8884,8 +8241,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 93425
+Simulation finished, cycleCount = 93426
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 279325
 Device: 1 core 4w4a1m1ls1b
@@ -8933,8 +8290,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 92939
+Simulation finished, cycleCount = 92940
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 372265
 Device: 1 core 4w4a1m1ls1b
@@ -8982,8 +8339,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 92555
+Simulation finished, cycleCount = 92556
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 464821
 Device: 1 core 4w4a1m1ls1b
@@ -9031,8 +8388,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 92847
+Simulation finished, cycleCount = 92848
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 557669
 Device: 1 core 4w4a1m1ls1b
@@ -9080,8 +8437,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 92235
+Simulation finished, cycleCount = 92236
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 649905
 Device: 1 core 4w4a1m1ls1b
@@ -9129,8 +8486,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 92625
+Simulation finished, cycleCount = 92626
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 742531
 Device: 1 core 4w4a1m1ls1b
@@ -9178,8 +8535,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 105340
+Simulation finished, cycleCount = 105341
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 847872
 Device: 1 core 4w4a1m1ls1b
@@ -9227,8 +8584,8 @@ Run Simulation with:
   binaries/final_fastWalshTransform.data.bin  
   Default_4wide_1ls.xml
 HALT operation received from [0][0][0] at cycle 105568
+Simulation finished, cycleCount = 105569
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 953441
 
@@ -9247,26 +8604,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f5b17b5c180
-Device 1 : LE1 Device ID is 0x7f5b17b5c290
-Device 2 : LE1 Device ID is 0x7f5b17b5c3a0
-Device 3 : LE1 Device ID is 0x7f5b17b5c4b0
-Device 4 : LE1 Device ID is 0x7f5b17b5c5c0
-Device 5 : LE1 Device ID is 0x7f5b17b5c6d0
-Device 6 : LE1 Device ID is 0x7f5b17b5c7e0
-Device 7 : LE1 Device ID is 0x7f5b17b5c8f0
-Device 8 : LE1 Device ID is 0x7f5b17b5ca00
-Device 9 : LE1 Device ID is 0x7f5b17b5cb10
-Device 10 : LE1 Device ID is 0x7f5b17b5cc20
-Device 11 : LE1 Device ID is 0x7f5b17b5cd30
-Device 12 : LE1 Device ID is 0x7f5b17b5ce40
-Device 13 : LE1 Device ID is 0x7f5b17b5cf50
-Device 14 : LE1 Device ID is 0x7f5b17b5d060
-Device 15 : LE1 Device ID is 0x7f5b17b5d170
-Device 16 : LE1 Device ID is 0x7f5b17b5d280
-Device 17 : LE1 Device ID is 0x7f5b17b5d390
-Device 18 : LE1 Device ID is 0x7f5b17b5d4a0
-Device 19 : LE1 Device ID is 0x7f5b17b5d5b0
+Device 0 : LE1 Device ID is 0x7f6dcb414180
+Device 1 : LE1 Device ID is 0x7f6dcb414290
+Device 2 : LE1 Device ID is 0x7f6dcb4143a0
+Device 3 : LE1 Device ID is 0x7f6dcb4144b0
+Device 4 : LE1 Device ID is 0x7f6dcb4145c0
+Device 5 : LE1 Device ID is 0x7f6dcb4146d0
+Device 6 : LE1 Device ID is 0x7f6dcb4147e0
+Device 7 : LE1 Device ID is 0x7f6dcb4148f0
+Device 8 : LE1 Device ID is 0x7f6dcb414a00
+Device 9 : LE1 Device ID is 0x7f6dcb414b10
+Device 10 : LE1 Device ID is 0x7f6dcb414c20
+Device 11 : LE1 Device ID is 0x7f6dcb414d30
+Device 12 : LE1 Device ID is 0x7f6dcb414e40
+Device 13 : LE1 Device ID is 0x7f6dcb414f50
+Device 14 : LE1 Device ID is 0x7f6dcb415060
+Device 15 : LE1 Device ID is 0x7f6dcb415170
+Device 16 : LE1 Device ID is 0x7f6dcb415280
+Device 17 : LE1 Device ID is 0x7f6dcb415390
+Device 18 : LE1 Device ID is 0x7f6dcb4154a0
+Device 19 : LE1 Device ID is 0x7f6dcb4155b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -9314,12 +8671,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 52878
-HALT operation received from [0][0][0] at cycle 53189
+HALT operation received from [0][1][0] at cycle 52622
+HALT operation received from [0][0][0] at cycle 52933
+Simulation finished, cycleCount = 52934
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
-Total cycles = 53190
+Total cycles = 52934
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9364,12 +8721,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 53412
-HALT operation received from [0][0][0] at cycle 53434
+HALT operation received from [0][1][0] at cycle 53156
+HALT operation received from [0][0][0] at cycle 53178
+Simulation finished, cycleCount = 53179
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
-Total cycles = 106625
+Total cycles = 106113
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9414,12 +8771,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 53458
-HALT operation received from [0][0][0] at cycle 53530
+HALT operation received from [0][1][0] at cycle 53202
+HALT operation received from [0][0][0] at cycle 53274
+Simulation finished, cycleCount = 53275
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
-Total cycles = 160156
+Total cycles = 159388
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9464,12 +8821,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][0][0] at cycle 53252
-HALT operation received from [0][1][0] at cycle 53284
+HALT operation received from [0][0][0] at cycle 52996
+HALT operation received from [0][1][0] at cycle 53028
+Simulation finished, cycleCount = 53029
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
-Total cycles = 213441
+Total cycles = 212417
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9514,12 +8871,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 52934
-HALT operation received from [0][0][0] at cycle 53248
+HALT operation received from [0][1][0] at cycle 52678
+HALT operation received from [0][0][0] at cycle 52992
+Simulation finished, cycleCount = 52993
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
-Total cycles = 266690
+Total cycles = 265410
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9564,12 +8921,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][0][0] at cycle 52942
-HALT operation received from [0][1][0] at cycle 53534
+HALT operation received from [0][0][0] at cycle 52686
+HALT operation received from [0][1][0] at cycle 53278
+Simulation finished, cycleCount = 53279
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
-Total cycles = 320225
+Total cycles = 318689
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9614,12 +8971,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 52842
-HALT operation received from [0][0][0] at cycle 53036
+HALT operation received from [0][1][0] at cycle 52586
+HALT operation received from [0][0][0] at cycle 52780
+Simulation finished, cycleCount = 52781
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
-Total cycles = 373262
+Total cycles = 371470
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9664,12 +9021,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 52936
-HALT operation received from [0][0][0] at cycle 53306
+HALT operation received from [0][1][0] at cycle 52680
+HALT operation received from [0][0][0] at cycle 53050
+Simulation finished, cycleCount = 53051
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
-Total cycles = 426569
+Total cycles = 424521
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9714,12 +9071,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 47330
-HALT operation received from [0][0][0] at cycle 47365
+HALT operation received from [0][1][0] at cycle 47586
+HALT operation received from [0][0][0] at cycle 47621
+Simulation finished, cycleCount = 47622
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
-Total cycles = 473935
+Total cycles = 472143
 Device: 2 core 4w4a1m1ls1b
 Compiling kernel: fastWalshTransform
 
@@ -9764,12 +9121,12 @@ Run Simulation with:
   binaries/final_fastWalshTransform.s.bin  
   binaries/final_fastWalshTransform.data.bin  
   2Context_4wide.xml
-HALT operation received from [0][0][0] at cycle 47127
-HALT operation received from [0][1][0] at cycle 47778
+HALT operation received from [0][0][0] at cycle 47383
+HALT operation received from [0][1][0] at cycle 48034
+Simulation finished, cycleCount = 48035
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
-Total cycles = 521714
+Total cycles = 520178
 
 Output
 15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 181.167 142.116 29.3198 57.3503 111.162 43.755 153.883 93.3847 41.4033 181.736 181.394 89.6333 54.2966 200.348 182.536 31.0745 190.943 150.97 213.633 213.966 126.357 160.941 130.182 232.111 146.891 57.2542 125.085 151.665 59.5505 71.549 206.971 240.718 213.665 236.291 42.0683 68.8267 24.0461 195.951 162.211 65.4494 121.687 87.6053 155.083 175.984 31.9535 81.6183 207.058 222.896 232.588 164.691 180.862 102.945 69.6326 55.0442 79.0566 216.524 112.298 204.141 112.189 171.849 19.6905 63.1603 156.567 233.355 43.4514 198.635 46.1821 67.4975 138.586 208.394 132.947 4.2738 39.9988 32.0296 180.258 71.9523 113.648 131.316 38.8486 90.2362 40.0073 219.711 193.181 109.64 18.7548 16.238 70.1637 131.053 220.379 182.353 46.902 240.07 245.513 203.469 217.425 32.9642 146.104 7.60744 100.462 28.6902 216.001 233.409 32.964 256 9.43816 213.222 71.9521 123.086 88.5379 110.801 213.322 128.545 74.5114 150.504 238.185 93.2662 166.742 52.3487 224.319 131.121 234.701 15.2214 115.191 224.214 218.69 76.6163 1.17833 108.794 84.2237 101.64 137.484 44.2247 79.0486 170.448 44.2245 88.4868 127.67 116.177 211.573 216.208 226.977 168.895 88.753 45.4887 63.3986 70.938 138.755 230.14 123.287 107.074 105.261 101.988 122.296 220.452 70.2021 84.9858 41.0686 71.3805 193.78 125.292 173.02 75.2639 169.517 252.069 245.712 213.742 84.5559 117.382 73.9181 40.1287 77.5897 44.8955 209.024 166.343 90.3842 16.4222 237.281 229.139 246.562 104.567 80.2135 95.8236 206.555 202.509 60.2759 20.7574 31.4951 101.344 92.1379 225.275 226.637 9.15836 44.5387 140.154 5.22746 34.2507 97.8954 89.7833 151.633 171.814 129.912 229.222 216.709 82.9356 139.565 51.0932 99.3578 120.845 24.2324 89.9201 225.413 104.446 185.744 175.968 50.9552 246.02 196.725 82.4503 91.3641 32.8634 51.7251 62.0009 42.0217 96.2638 202.155 47.2492 130.514 44.0502 137.033 26.147 215.864 10.9445 255.369 176.573 93.8801 138.934 227.666 193.238 3.77959 251.898 27.158 229.192 100.344 212.902 149.16 151.299 202.921 89.8859 233.75 38.2855 122.749 29.4748 100.286 164.771 125.739 46.4412 212.02 0.253005 90.4913 93.0526 26.4 50.355 103.997 25.7693 226.928 197.877 164.703 198.594 135.115 168.483 194.492 162.273 141.675 38.8363 119.175 34.8357 190.136 66.0962 124.722 167.885 104.382 247.471 197.36 204.668 156.242 67.0988 251.109 112.262 67.3518 85.6005 205.315 93.7518 135.956 53.3118 119.521 106.883 251.189 28.2245 49.477 130.304 196.707 243.969 36.5771 82.3828 26.8054 155.752 117.219 216.941 221.848 241.94 128.827 70.2298 233.411 70.1869 18.8978 133.653 137.286 14.007 245.915 204.638 99.6075 195.229 42.3894 235.563 248.541 161.91 86.4464 243.73 190.135 135.923 118.034 130.842 123.893 154.611 213.225 150.698 54.3633 74.4437 111.639 20.2115 60.3838 240.466 90.4413 37.7948 54.6527 109.339 171.448 191.938 123.346 161.363 140.576 222.954 100.592 182.965 202.517 93.1332 88.8757 32.9632 80.8634 23.0106 168.887 198.898 153.853 36.7792 97.5091 111.078 187.477 151.872 185.522 43.1164 172.084 245.906 27.5821 6.52511 27.7005 82.2348 115.864 199.148 18.1731 239.21 104.511 158.749 206.164 205.103 85.7142 152.681 42.2359 174.59 185.644 123.099 197.601 98.5305 65.997 95.4536 135.31 163.506 206.532 66.7869 59.3785 136.054 109.903 231.462 125.959 137.485 237.987 153.66 219.72 97.8516 96.8078 237.893 81.0619 201.319 140.642 31.2259 150.421 226.357 183.907 192.657 144.947 113.55 59.7565 86.5471 212.081 125.753 182.001 91.3906 33.2596 132.532 158.177 92.638 12.586 12.0807 68.1003 138.545 149.566 50.0878 36.2049 113.286 147.939 133.013 95.1796 229.001 78.3313 235.822 4.2272 228.753 206.179 188.134 165.41 95.1251 45.6842 225.166 181.672 1.76503 94.9196 107.673 93.1556 128.179 240.205 251.333 220.817 252.791 7.41383 32.9175 135.337 156.98 83.0053 171.542 14.2663 230.945 48.5544 109.446 203.946 126.886 89.2679 208.173 99.6382 39.4464 140.307 9.0478 134.571 185.991 234.214 60.2437 187.756 73.1335 167.917 24.9117 201.313 152.122 20.2448 166.13 148.913 27.6587 199.047 28.2498 184.639 26.0527 199.791 198.905 0.997333 248.346 52.3508 204.943 119.231 141.619 157.117 218.87 181.065 41.4235 227.917 59.6366 227.415 206.131 119.88 159.171 23.2648 31.7967 184.082 224.577 183.919 204.327 134.707 76.8318 231.986 77.7547 105.082 160.625 103.807 48.873 103.529 104.805 41.2188 155.88 53.748 160.45 41.4989 210.865 123.32 222.564 252.288 95.2371 26.2005 223.703 45.3684 146.081 126.873 68.6332 177.877 54.9558 37.2107 105.796 3.28307 171.918 182.628 235.269 249.673 31.7094 139.894 97.4801 80.5824 243.423 202.285 121.801 143.303 0.0328755 26.2513 184.802 210.897 149.571 151.366 207.185 244.808 177.567 174.888 34.1767 67.6473 45.7614 102.81 245.525 100.717 140.021 95.3207 104 55.9387 21.9485 83.2693 49.6114 53.6579 223.163 147.092 134.24 210.586 93.3764 0.0413955 97.8891 93.4093 26.2927 26.6912 48.3067 175.864 178.057 255.492 164.672 99.6238 174.38 198.849 167.271 220.142 45.6586 156.796 64.859 185.679 252.116 168.859 241.618 18.0649 252.129 35.2294 71.7228 219.291 182.321 205.963 173.877 19.6973 206.004 15.7664 113.107 232.297 42.4576 161.413 152.161 220.515 160.906 60.833 64.1385 79.2859 3.68176 231.41 43.4277 49.3404 132.205 108.287 235.02 128.322 21.146 220.638 146.387 17.2746 255.867 218.109 236.566 182.188 168.073 154.443 201.885 118.077 170.21 58.9918 94.3742 212.667 220.405 246.535 177.182 125.311 51.3683 241.321 204.597 55.05 216.73 248.024 104.39 92.9355 100.311 83.41 221.257 121.457 48.0476 111.644 138.732 47.9145 73.7533 119.298 230.102 241.826 17.7412 175.987 103.903 187.951 234.979 198.277 144.618 199.384 188.812 65.8006 68.6952 240.181 51.1213 17.2918 39.2305 11.8516 9.31622 143.621 104.787 109.627 227.031 70.0443 231.084 19.0785 181.688 113.816 66.993 255.441 233.114 41.0953 241.267 250.855 217.083 89.1702 182.806 196.062 31.4472 71.4246 139.446 220.259 137.225 208.142 204.44 188.346 225.433 243.67 200.198 234.75 131.291 48.9851 88.3769 102.322 119.029 63.4613 121.401 44.7175 177.277 188.394 44.159 154.391 229.489 29.4263 149.246 190.572 118.596 76.0527 130.634 150.044 147.477 14.0802 114.303 28.7024 222.222 62.7431 217.049 191.655 50.4136 161.247 170.405 181.705 210.232 2.78173 28.0274 73.2614 66.2431 149.428 117.979 243.521 81.8221 162.138 141.912 55.3112 191.564 35.1583 245.883 54.1608 111.211 120.517 204.204 2.68825 134.597 62.5075 31.3907 100.819 125.251 248.44 36.4739 175.664 153.686 206.879 101.369 107.919 209.66 129.397 181.18 19.9035 22.8248 43.159 7.42396 104.647 205.297 149.336 159.958 140.861 184.494 149.841 195.022 39.7052 14.3578 143.226 42.3934 148.955 205.734 73.7841 249.774 74.9846 66.2236 30.2474 250.649 219.91 237.126 96.0181 71.8287 190.786 225.415 253.009 210.69 248.24 40.1676 218.114 96.8864 245.465 111.45 0.844464 130.326 39.9439 150.686 69.3478 79.649 165.043 212.574 122.042 57.9982 162.308 195.827 51.7717 237.293 6.05017 82.0191 231.942 225.96 63.1451 71.9599 41.7889 253.932 41.3745 38.7976 208.621 33.6141 78.9651 170.735 130.5 68.4297 26.1849 131.345 198.755 66.1288 26.0304 12.1033 145.778 191.074 224.678 11.8203 249.072 130.986 207.647 44.8437 112.279 213.697 126.863 88.2205 183.657 190.008 160.18 225.446 187.939 201.555 8.2438 140.561 235.169 87.2089 
@@ -9786,26 +9143,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f6ac6134180
-Device 1 : LE1 Device ID is 0x7f6ac6134290
-Device 2 : LE1 Device ID is 0x7f6ac61343a0
-Device 3 : LE1 Device ID is 0x7f6ac61344b0
-Device 4 : LE1 Device ID is 0x7f6ac61345c0
-Device 5 : LE1 Device ID is 0x7f6ac61346d0
-Device 6 : LE1 Device ID is 0x7f6ac61347e0
-Device 7 : LE1 Device ID is 0x7f6ac61348f0
-Device 8 : LE1 Device ID is 0x7f6ac6134a00
-Device 9 : LE1 Device ID is 0x7f6ac6134b10
-Device 10 : LE1 Device ID is 0x7f6ac6134c20
-Device 11 : LE1 Device ID is 0x7f6ac6134d30
-Device 12 : LE1 Device ID is 0x7f6ac6134e40
-Device 13 : LE1 Device ID is 0x7f6ac6134f50
-Device 14 : LE1 Device ID is 0x7f6ac6135060
-Device 15 : LE1 Device ID is 0x7f6ac6135170
-Device 16 : LE1 Device ID is 0x7f6ac6135280
-Device 17 : LE1 Device ID is 0x7f6ac6135390
-Device 18 : LE1 Device ID is 0x7f6ac61354a0
-Device 19 : LE1 Device ID is 0x7f6ac61355b0
+Device 0 : LE1 Device ID is 0x7fb41d874180
+Device 1 : LE1 Device ID is 0x7fb41d874290
+Device 2 : LE1 Device ID is 0x7fb41d8743a0
+Device 3 : LE1 Device ID is 0x7fb41d8744b0
+Device 4 : LE1 Device ID is 0x7fb41d8745c0
+Device 5 : LE1 Device ID is 0x7fb41d8746d0
+Device 6 : LE1 Device ID is 0x7fb41d8747e0
+Device 7 : LE1 Device ID is 0x7fb41d8748f0
+Device 8 : LE1 Device ID is 0x7fb41d874a00
+Device 9 : LE1 Device ID is 0x7fb41d874b10
+Device 10 : LE1 Device ID is 0x7fb41d874c20
+Device 11 : LE1 Device ID is 0x7fb41d874d30
+Device 12 : LE1 Device ID is 0x7fb41d874e40
+Device 13 : LE1 Device ID is 0x7fb41d874f50
+Device 14 : LE1 Device ID is 0x7fb41d875060
+Device 15 : LE1 Device ID is 0x7fb41d875170
+Device 16 : LE1 Device ID is 0x7fb41d875280
+Device 17 : LE1 Device ID is 0x7fb41d875390
+Device 18 : LE1 Device ID is 0x7fb41d8754a0
+Device 19 : LE1 Device ID is 0x7fb41d8755b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -9857,8 +9214,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52619
 HALT operation received from [0][0][0] at cycle 52930
+Simulation finished, cycleCount = 52931
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 52931
 Device: 4 core 4w4a1m1ls1b
@@ -9909,8 +9266,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 53153
 HALT operation received from [0][0][0] at cycle 53175
+Simulation finished, cycleCount = 53176
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 106107
 Device: 4 core 4w4a1m1ls1b
@@ -9961,8 +9318,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 53199
 HALT operation received from [0][0][0] at cycle 53271
+Simulation finished, cycleCount = 53272
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 159379
 Device: 4 core 4w4a1m1ls1b
@@ -10013,8 +9370,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][0][0] at cycle 52993
 HALT operation received from [0][1][0] at cycle 53025
+Simulation finished, cycleCount = 53026
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 212405
 Device: 4 core 4w4a1m1ls1b
@@ -10065,8 +9422,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52675
 HALT operation received from [0][0][0] at cycle 52989
+Simulation finished, cycleCount = 52990
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 265395
 Device: 4 core 4w4a1m1ls1b
@@ -10117,8 +9474,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][0][0] at cycle 52683
 HALT operation received from [0][1][0] at cycle 53275
+Simulation finished, cycleCount = 53276
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 318671
 Device: 4 core 4w4a1m1ls1b
@@ -10169,8 +9526,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52583
 HALT operation received from [0][0][0] at cycle 52777
+Simulation finished, cycleCount = 52778
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 371449
 Device: 4 core 4w4a1m1ls1b
@@ -10221,8 +9578,8 @@ HALT operation received from [0][2][0] at cycle 11
 HALT operation received from [0][3][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52677
 HALT operation received from [0][0][0] at cycle 53047
+Simulation finished, cycleCount = 53048
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 424497
 Device: 4 core 4w4a1m1ls1b
@@ -10273,8 +9630,8 @@ HALT operation received from [0][2][0] at cycle 12
 HALT operation received from [0][3][0] at cycle 12
 HALT operation received from [0][1][0] at cycle 47581
 HALT operation received from [0][0][0] at cycle 47616
+Simulation finished, cycleCount = 47617
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 472114
 Device: 4 core 4w4a1m1ls1b
@@ -10325,8 +9682,8 @@ HALT operation received from [0][2][0] at cycle 12
 HALT operation received from [0][3][0] at cycle 12
 HALT operation received from [0][0][0] at cycle 47378
 HALT operation received from [0][1][0] at cycle 48029
+Simulation finished, cycleCount = 48030
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 520144
 
@@ -10345,26 +9702,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7fdd94e2c180
-Device 1 : LE1 Device ID is 0x7fdd94e2c290
-Device 2 : LE1 Device ID is 0x7fdd94e2c3a0
-Device 3 : LE1 Device ID is 0x7fdd94e2c4b0
-Device 4 : LE1 Device ID is 0x7fdd94e2c5c0
-Device 5 : LE1 Device ID is 0x7fdd94e2c6d0
-Device 6 : LE1 Device ID is 0x7fdd94e2c7e0
-Device 7 : LE1 Device ID is 0x7fdd94e2c8f0
-Device 8 : LE1 Device ID is 0x7fdd94e2ca00
-Device 9 : LE1 Device ID is 0x7fdd94e2cb10
-Device 10 : LE1 Device ID is 0x7fdd94e2cc20
-Device 11 : LE1 Device ID is 0x7fdd94e2cd30
-Device 12 : LE1 Device ID is 0x7fdd94e2ce40
-Device 13 : LE1 Device ID is 0x7fdd94e2cf50
-Device 14 : LE1 Device ID is 0x7fdd94e2d060
-Device 15 : LE1 Device ID is 0x7fdd94e2d170
-Device 16 : LE1 Device ID is 0x7fdd94e2d280
-Device 17 : LE1 Device ID is 0x7fdd94e2d390
-Device 18 : LE1 Device ID is 0x7fdd94e2d4a0
-Device 19 : LE1 Device ID is 0x7fdd94e2d5b0
+Device 0 : LE1 Device ID is 0x7f4a37c64180
+Device 1 : LE1 Device ID is 0x7f4a37c64290
+Device 2 : LE1 Device ID is 0x7f4a37c643a0
+Device 3 : LE1 Device ID is 0x7f4a37c644b0
+Device 4 : LE1 Device ID is 0x7f4a37c645c0
+Device 5 : LE1 Device ID is 0x7f4a37c646d0
+Device 6 : LE1 Device ID is 0x7f4a37c647e0
+Device 7 : LE1 Device ID is 0x7f4a37c648f0
+Device 8 : LE1 Device ID is 0x7f4a37c64a00
+Device 9 : LE1 Device ID is 0x7f4a37c64b10
+Device 10 : LE1 Device ID is 0x7f4a37c64c20
+Device 11 : LE1 Device ID is 0x7f4a37c64d30
+Device 12 : LE1 Device ID is 0x7f4a37c64e40
+Device 13 : LE1 Device ID is 0x7f4a37c64f50
+Device 14 : LE1 Device ID is 0x7f4a37c65060
+Device 15 : LE1 Device ID is 0x7f4a37c65170
+Device 16 : LE1 Device ID is 0x7f4a37c65280
+Device 17 : LE1 Device ID is 0x7f4a37c65390
+Device 18 : LE1 Device ID is 0x7f4a37c654a0
+Device 19 : LE1 Device ID is 0x7f4a37c655b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -10420,8 +9777,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52619
 HALT operation received from [0][0][0] at cycle 52930
+Simulation finished, cycleCount = 52931
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 52931
 Device: 8 core 4w4a1m1ls1b
@@ -10476,8 +9833,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 53153
 HALT operation received from [0][0][0] at cycle 53175
+Simulation finished, cycleCount = 53176
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 106107
 Device: 8 core 4w4a1m1ls1b
@@ -10532,8 +9889,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 53199
 HALT operation received from [0][0][0] at cycle 53271
+Simulation finished, cycleCount = 53272
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 159379
 Device: 8 core 4w4a1m1ls1b
@@ -10588,8 +9945,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][0][0] at cycle 52993
 HALT operation received from [0][1][0] at cycle 53025
+Simulation finished, cycleCount = 53026
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 212405
 Device: 8 core 4w4a1m1ls1b
@@ -10644,8 +10001,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52675
 HALT operation received from [0][0][0] at cycle 52989
+Simulation finished, cycleCount = 52990
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 265395
 Device: 8 core 4w4a1m1ls1b
@@ -10700,8 +10057,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][0][0] at cycle 52683
 HALT operation received from [0][1][0] at cycle 53275
+Simulation finished, cycleCount = 53276
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 318671
 Device: 8 core 4w4a1m1ls1b
@@ -10756,8 +10113,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52583
 HALT operation received from [0][0][0] at cycle 52777
+Simulation finished, cycleCount = 52778
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 371449
 Device: 8 core 4w4a1m1ls1b
@@ -10812,8 +10169,8 @@ HALT operation received from [0][6][0] at cycle 11
 HALT operation received from [0][7][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52677
 HALT operation received from [0][0][0] at cycle 53047
+Simulation finished, cycleCount = 53048
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 424497
 Device: 8 core 4w4a1m1ls1b
@@ -10868,8 +10225,8 @@ HALT operation received from [0][6][0] at cycle 12
 HALT operation received from [0][7][0] at cycle 12
 HALT operation received from [0][1][0] at cycle 47581
 HALT operation received from [0][0][0] at cycle 47616
+Simulation finished, cycleCount = 47617
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 472114
 Device: 8 core 4w4a1m1ls1b
@@ -10924,8 +10281,8 @@ HALT operation received from [0][6][0] at cycle 12
 HALT operation received from [0][7][0] at cycle 12
 HALT operation received from [0][0][0] at cycle 47378
 HALT operation received from [0][1][0] at cycle 48029
+Simulation finished, cycleCount = 48030
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 520144
 
@@ -10944,26 +10301,26 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7f130bc3c180
-Device 1 : LE1 Device ID is 0x7f130bc3c290
-Device 2 : LE1 Device ID is 0x7f130bc3c3a0
-Device 3 : LE1 Device ID is 0x7f130bc3c4b0
-Device 4 : LE1 Device ID is 0x7f130bc3c5c0
-Device 5 : LE1 Device ID is 0x7f130bc3c6d0
-Device 6 : LE1 Device ID is 0x7f130bc3c7e0
-Device 7 : LE1 Device ID is 0x7f130bc3c8f0
-Device 8 : LE1 Device ID is 0x7f130bc3ca00
-Device 9 : LE1 Device ID is 0x7f130bc3cb10
-Device 10 : LE1 Device ID is 0x7f130bc3cc20
-Device 11 : LE1 Device ID is 0x7f130bc3cd30
-Device 12 : LE1 Device ID is 0x7f130bc3ce40
-Device 13 : LE1 Device ID is 0x7f130bc3cf50
-Device 14 : LE1 Device ID is 0x7f130bc3d060
-Device 15 : LE1 Device ID is 0x7f130bc3d170
-Device 16 : LE1 Device ID is 0x7f130bc3d280
-Device 17 : LE1 Device ID is 0x7f130bc3d390
-Device 18 : LE1 Device ID is 0x7f130bc3d4a0
-Device 19 : LE1 Device ID is 0x7f130bc3d5b0
+Device 0 : LE1 Device ID is 0x7fcc56cfc180
+Device 1 : LE1 Device ID is 0x7fcc56cfc290
+Device 2 : LE1 Device ID is 0x7fcc56cfc3a0
+Device 3 : LE1 Device ID is 0x7fcc56cfc4b0
+Device 4 : LE1 Device ID is 0x7fcc56cfc5c0
+Device 5 : LE1 Device ID is 0x7fcc56cfc6d0
+Device 6 : LE1 Device ID is 0x7fcc56cfc7e0
+Device 7 : LE1 Device ID is 0x7fcc56cfc8f0
+Device 8 : LE1 Device ID is 0x7fcc56cfca00
+Device 9 : LE1 Device ID is 0x7fcc56cfcb10
+Device 10 : LE1 Device ID is 0x7fcc56cfcc20
+Device 11 : LE1 Device ID is 0x7fcc56cfcd30
+Device 12 : LE1 Device ID is 0x7fcc56cfce40
+Device 13 : LE1 Device ID is 0x7fcc56cfcf50
+Device 14 : LE1 Device ID is 0x7fcc56cfd060
+Device 15 : LE1 Device ID is 0x7fcc56cfd170
+Device 16 : LE1 Device ID is 0x7fcc56cfd280
+Device 17 : LE1 Device ID is 0x7fcc56cfd390
+Device 18 : LE1 Device ID is 0x7fcc56cfd4a0
+Device 19 : LE1 Device ID is 0x7fcc56cfd5b0
 homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
@@ -11027,8 +10384,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52619
 HALT operation received from [0][0][0] at cycle 52930
+Simulation finished, cycleCount = 52931
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 1
 Total cycles = 52931
 Device: 16 core 4w4a1m1ls1b
@@ -11091,8 +10448,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 53153
 HALT operation received from [0][0][0] at cycle 53175
+Simulation finished, cycleCount = 53176
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 2
 Total cycles = 106107
 Device: 16 core 4w4a1m1ls1b
@@ -11155,8 +10512,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 53199
 HALT operation received from [0][0][0] at cycle 53271
+Simulation finished, cycleCount = 53272
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 3
 Total cycles = 159379
 Device: 16 core 4w4a1m1ls1b
@@ -11219,8 +10576,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][0][0] at cycle 52993
 HALT operation received from [0][1][0] at cycle 53025
+Simulation finished, cycleCount = 53026
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 4
 Total cycles = 212405
 Device: 16 core 4w4a1m1ls1b
@@ -11283,8 +10640,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52675
 HALT operation received from [0][0][0] at cycle 52989
+Simulation finished, cycleCount = 52990
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 5
 Total cycles = 265395
 Device: 16 core 4w4a1m1ls1b
@@ -11347,8 +10704,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][0][0] at cycle 52683
 HALT operation received from [0][1][0] at cycle 53275
+Simulation finished, cycleCount = 53276
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 6
 Total cycles = 318671
 Device: 16 core 4w4a1m1ls1b
@@ -11411,8 +10768,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52583
 HALT operation received from [0][0][0] at cycle 52777
+Simulation finished, cycleCount = 52778
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 7
 Total cycles = 371449
 Device: 16 core 4w4a1m1ls1b
@@ -11475,8 +10832,8 @@ HALT operation received from [0][14][0] at cycle 11
 HALT operation received from [0][15][0] at cycle 11
 HALT operation received from [0][1][0] at cycle 52677
 HALT operation received from [0][0][0] at cycle 53047
+Simulation finished, cycleCount = 53048
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 8
 Total cycles = 424497
 Device: 16 core 4w4a1m1ls1b
@@ -11539,8 +10896,8 @@ HALT operation received from [0][14][0] at cycle 12
 HALT operation received from [0][15][0] at cycle 12
 HALT operation received from [0][1][0] at cycle 47581
 HALT operation received from [0][0][0] at cycle 47616
+Simulation finished, cycleCount = 47617
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 9
 Total cycles = 472114
 Device: 16 core 4w4a1m1ls1b
@@ -11603,8 +10960,8 @@ HALT operation received from [0][14][0] at cycle 12
 HALT operation received from [0][15][0] at cycle 12
 HALT operation received from [0][0][0] at cycle 47378
 HALT operation received from [0][1][0] at cycle 48029
+Simulation finished, cycleCount = 48030
  -------------------------------------------------------- 
-Device::SaveStats
 Iteration = 10
 Total cycles = 520144
 

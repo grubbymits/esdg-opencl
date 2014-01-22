@@ -35,7 +35,17 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext) {
   BranchesNotTaken = HyperContext->branchNotTaken;
   ControlFlowChange = HyperContext->controlFlowChange;
   MemoryAccessCount = HyperContext->memoryAccessCount;
-  //disabledCores = disabled;
+
+  // Reset the values
+  HyperContext->cycleCount = 0;
+  HyperContext->stallCount = 0;
+  HyperContext->nopCount = 0;
+  HyperContext->idleCount = 0;
+  HyperContext->decodeStallCount = 0;
+  HyperContext->branchTaken = 0;
+  HyperContext->branchNotTaken = 0;
+  HyperContext->controlFlowChange = 0;
+  HyperContext->memoryAccessCount = 0;
 }
 
 SimulationStats::SimulationStats(const SimulationStats &Stats) {
@@ -536,29 +546,21 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
       << "-" << LE1Simulator::iteration<< ".dat";
 
-    // TODO this number must just be left from BFS.
-    if (KernelNumber == 2) {
-      KernelNumber = 0;
-      ++LE1Simulator::iteration;
-    }
+    ++LE1Simulator::iteration;
     system(CopyDump.str().c_str());
   }
 
-  if (KernelNumber == 2) {
-    KernelNumber = 0;
-    ++LE1Simulator::iteration;
-  }
-
+#ifdef DBG_OUTPUT
+  std::cout << "Simulation finished, cycleCount = " << cycleCount << std::endl;
+  std::cout << " -------------------------------------------------------- "
+    << std::endl;
+#endif
   SaveStats(cycleCount);
 
   //pthread_mutex_unlock(&p_simulator_mutex);
 
 #ifdef DBG_SIM
   std::cerr << "Finished running simulation." << std::endl;
-#endif
-#ifdef DBG_OUTPUT
-  std::cout << " -------------------------------------------------------- "
-    << std::endl;
 #endif
   return true;
 }

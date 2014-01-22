@@ -2,6 +2,6 @@
 (
 for device in `seq 0 19`;
 do
-  ./string-search -d $device > output
+  ./string-search -d $device
 done
 )
