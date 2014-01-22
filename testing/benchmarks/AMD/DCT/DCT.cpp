@@ -157,6 +157,25 @@ DCT::setupCL(void)
                       &status);
     CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (dctBuffer)");
 
+    unsigned *groupsX = new unsigned[width]();
+    unsigned *groupsY = new unsigned[height]();
+
+    groupXBuffer = clCreateBuffer(context,
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_uint) * width,
+                                  groupsX,
+                                  &status);
+
+    groupYBuffer = clCreateBuffer(context,
+                                  CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                                  sizeof(cl_uint) * height,
+                                  groupsY,
+                                  &status);
+
+    CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (group buffers)");
+    delete groupsX;
+    delete groupsY;
+
     // create a CL program using the kernel source 
     streamsdk::buildProgramData buildData;
     buildData.kernelName = std::string("DCT_Kernels.cl");
@@ -316,6 +335,18 @@ DCT::runCLKernels(void)
                     (void *)&inverse);
     CHECK_OPENCL_ERROR(status, "clSetKernelArg failed. (inverse)");
 
+    status = clSetKernelArg(kernel,
+                            7,
+                            sizeof(cl_mem),
+                            (void*)&groupXBuffer);
+
+    status = clSetKernelArg(kernel,
+                            8,
+                            sizeof(cl_mem),
+                            (void*)&groupYBuffer);
+
+    CHECK_OPENCL_ERROR(status, "clSetKernelArg failed. (group buffers)");
+
     /**
      * Enqueue a kernel run call.
      */
@@ -351,6 +382,42 @@ DCT::runCLKernels(void)
                 NULL,
                 &readEvt);
     CHECK_OPENCL_ERROR(status, "clEnqueueReadBuffer failed.");
+
+    unsigned *groupsX = new unsigned[width]();
+    status = clEnqueueReadBuffer(
+                commandQueue,
+                groupXBuffer,
+                CL_FALSE,
+                0,
+                width * sizeof(cl_uint),
+                groupsX,
+                0,
+                NULL,
+                &readEvt);
+
+    unsigned *groupsY = new unsigned[height]();
+    status = clEnqueueReadBuffer(
+                commandQueue,
+                groupYBuffer,
+                CL_FALSE,
+                0,
+                height * sizeof(cl_uint),
+                groupsY,
+                0,
+                NULL,
+                &readEvt);
+
+    CHECK_OPENCL_ERROR(status, "clEnqueueReadBuffer failed");
+    std::cout << "X = " << std::endl;
+    for (unsigned x = 0; x < width; x+=8) {
+      std::cout << groupsX[x] << " ";
+    }
+    std::cout << std::endl << "Y = " << std::endl;
+    for (unsigned y = 0; y < height; y+=8) {
+      std::cout << groupsY[y] << " ";
+    }
+    delete groupsX;
+    delete groupsY;
 
     status = clFlush(commandQueue);
     CHECK_OPENCL_ERROR(status, "clFlush failed.");

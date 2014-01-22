@@ -83,6 +83,8 @@ namespace dct
         cl_mem               inputBuffer;    /**< CL memory buffer */
         cl_mem              outputBuffer;    /**< CL memory buffer */
         cl_mem                 dctBuffer;    /**< CL memory buffer */
+        cl_mem              groupXBuffer;
+        cl_mem              groupYBuffer;
         cl_command_queue    commandQueue;    /**< CL command queue */
         cl_program               program;    /**< CL program  */
         cl_kernel                 kernel;    /**< CL kernel */

@@ -2,6 +2,6 @@
 (
 for device in `seq 0 19`;
 do
-  ./bitonic-sort -d $device > output
+  ./bitonic-sort -d $device
 done
 )

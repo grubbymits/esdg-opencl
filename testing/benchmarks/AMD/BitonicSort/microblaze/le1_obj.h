@@ -7,7 +7,7 @@
 #define le1var_global_offset 0x28
 #define le1var_num_cores 0x34
 #define le1var_group_id 0x38
-#define le1var_BufferArg_0 0x78
+#define le1var_BufferArg_0 0x58
 
 /* function labels for the host */
 

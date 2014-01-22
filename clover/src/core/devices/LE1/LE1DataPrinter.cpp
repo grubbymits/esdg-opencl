@@ -80,14 +80,15 @@ static void ConvertToBinary(std::string *binary_string,
 
 LE1DataPrinter::LE1DataPrinter(LE1Device *device,
                                EmbeddedData *data,
-                               KernelEvent *event,
+                               LE1KernelEvent *LE1Event,
                                const char* sourceName) {
-  p_event = event;
-  TheKernel = event->kernel();
+  p_event = LE1Event->getEvent();
+  TheKernel = p_event->kernel();
   TheDevice = device;
   embeddedData = data;
   FinalSourceName = sourceName;
   NumCores = TheDevice->numLE1s();
+  totalWorkgroups = LE1Event->getTotalWorkgroups();
   AttrAddrEnd = 0x38;
 
   // The attributes end at different address depending on the number of cores.
@@ -412,11 +413,13 @@ void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
 }
 
 void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
-  unsigned TotalSize = arg.allocAtKernelRuntime();
+  unsigned TotalSize = arg.allocAtKernelRuntime() * NumCores; //totalWorkgroups;
   llvm::Type* type = arg.type();
 
   void *Data = new unsigned char[TotalSize]();
+  PrintData(Data, Addr, 0, sizeof(char), TotalSize);
 
+  /*
   if (type->getTypeID() == llvm::Type::IntegerTyID) {
 #ifdef DBG_KERNEL
       std::cerr << "Data is int\n";
@@ -430,7 +433,7 @@ void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
       else if (type->isIntegerTy(32)) {
         PrintData(Data, Addr, 0, sizeof(int), TotalSize);
       }
-    }
+  }*/
 
   delete (unsigned char*)Data;
 }

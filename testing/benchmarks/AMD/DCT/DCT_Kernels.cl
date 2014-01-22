@@ -51,7 +51,9 @@ void DCT(__global float * output,
          __local  float * inter,
          const    uint    width,
          const    uint  blockWidth,
-         const    uint    inverse)
+         const    uint    inverse,
+         __global uint *groupX,
+         __global uint *groupY)
 
 {
     /* get global indices of the element */
@@ -61,6 +63,9 @@ void DCT(__global float * output,
     /* get indices of the block to which the element belongs to */
     uint groupIdx  = get_group_id(0);
     uint groupIdy  = get_group_id(1);
+
+    groupX[globalIdx] = groupIdx;
+    groupY[globalIdy] = groupIdy;
 
     /* get indices relative to the block */
     uint i  = get_local_id(0);

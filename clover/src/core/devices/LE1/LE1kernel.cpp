@@ -477,7 +477,7 @@ bool LE1KernelEvent::CompileSource() {
   unsigned merge_dims[3] = {1, 0, 0};
   unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
   unsigned workgroups[3] = {0};
-  unsigned totalWorkgroups = 1;
+  totalWorkgroups = 1;
 
   // Local size may have been set by user, especially in the presence of
   // barriers, so we need to take that into consideration. If the user didn't
@@ -694,7 +694,7 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
       // We're defining the pointers as ints, so divide
       // FIXME what if the size isn't divisible by four?
       unsigned size = arg.allocAtKernelRuntime() / 4;
-      launcher << "(&BufferArg_" << i << " + (__builtin_le1_read_cpuid() * "
+      launcher << "(&BufferArg_" << i <<  " + (__builtin_le1_read_cpuid() * "
         << size << "))";
     }
     // Global and local
@@ -799,7 +799,7 @@ bool LE1KernelEvent::run() {
 
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
   system(CopyCommand.c_str());
-  LE1DataPrinter dataPrinter(p_device, embeddedData, p_event,
+  LE1DataPrinter dataPrinter(p_device, embeddedData, this,
                              CompleteFilename.c_str());
 
   if (!dataPrinter.AppendDataArea()) {

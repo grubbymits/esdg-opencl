@@ -330,8 +330,11 @@ class LE1KernelEvent
         void cacheKernelArgs(void *args);
         /*!< \brief A work-group has just finished */
         void workGroupFinished();
-    public:
+
         static std::vector<LE1Buffer*> DeviceBuffers;
+
+        KernelEvent *getEvent() { return p_event; }
+        unsigned getTotalWorkgroups() { return totalWorkgroups; }
 
     private:
         void CreateLauncher(std::string &LauncherString,
@@ -361,6 +364,7 @@ class LE1KernelEvent
         void *p_kernel_args;
         EmbeddedData *embeddedData;
         unsigned disabledCores;
+        unsigned totalWorkgroups;
         //static unsigned int addr;
         //std::vector<unsigned> ArgAddrs;
         std::string OriginalSource;
