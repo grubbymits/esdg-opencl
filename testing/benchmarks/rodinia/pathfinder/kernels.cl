@@ -80,7 +80,7 @@ __kernel void dynproc_kernel (int iteration,
 		}
 
 		barrier(CLK_LOCAL_MEM_FENCE);
-                printf("iteration = %d\n", iteration);
+                //printf("iteration = %d\n", iteration);
 
 		if(i==iteration-1)
 		{

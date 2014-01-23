@@ -174,8 +174,14 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
         buffer->setAddr(CurrentAddr);
       }
 
-      if (arg.file() == Kernel::Arg::Local)
-        CurrentAddr += (arg.allocAtKernelRuntime() * NumCores);
+      if (arg.file() == Kernel::Arg::Local) {
+        unsigned size = arg.allocAtKernelRuntime() * NumCores;
+#ifdef DBG_OUTPUT
+        std::cout << "Setting the buffer size kernel arg " << i
+          << ", which is a local, to " << size << std::endl;
+#endif
+        CurrentAddr += size;
+      }
       else
         CurrentAddr += (*(MemObject**)arg.data())->size();
     }
@@ -413,7 +419,7 @@ void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
 }
 
 void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
-  unsigned TotalSize = arg.allocAtKernelRuntime() * NumCores; //totalWorkgroups;
+  unsigned TotalSize = arg.allocAtKernelRuntime() * NumCores;
   llvm::Type* type = arg.type();
 
   void *Data = new unsigned char[TotalSize]();

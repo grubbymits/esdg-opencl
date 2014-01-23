@@ -14,9 +14,9 @@ __kernel void dynproc_kernel (int iteration,
                               __local int* prev,
                               __local int* result)
 {  unsigned __esdg_idx = 0;
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
-	int BLOCK_SIZE = 25;
+	int BLOCK_SIZE = 250;
 	int bx = get_group_id(0);
 	int tx = __esdg_idx;
 
@@ -82,7 +82,7 @@ for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
 		}
 
 		barrier( 1  /*CLK_LOCAL_MEM_FENCE*/);
-                printf("iteration = %d\n", iteration);
+                //printf("iteration = %d\n", iteration);
 
 		if(i==iteration-1)
 		{

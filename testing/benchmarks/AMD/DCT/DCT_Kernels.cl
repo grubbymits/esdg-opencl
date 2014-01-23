@@ -25,12 +25,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
  * @param globalWidth Width of the input matrix
  */
 uint
-getIdx(uint blockIdx, uint blockIdy, uint localIdx, uint localIdy, uint blockWidth, uint globalWidth)
+getIdx(uint arg_blockIdx, uint arg_blockIdy, uint arg_localIdx,
+       uint arg_localIdy, uint arg_blockWidth, uint arg_globalWidth)
 {
-    uint globalIdx = blockIdx * blockWidth + localIdx;
-    uint globalIdy = blockIdy * blockWidth + localIdy;
+    uint res_globalIdx = arg_blockIdx * arg_blockWidth + arg_localIdx;
+    uint res_globalIdy = arg_blockIdy * arg_blockWidth + arg_localIdy;
 
-    return (globalIdy * globalWidth  + globalIdx);
+    return (res_globalIdy * arg_globalWidth  + res_globalIdx);
 }
 /**
  * Perform Discrete Cosine Transform for block of size 8x8

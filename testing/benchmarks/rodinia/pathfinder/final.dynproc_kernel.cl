@@ -13,28 +13,20 @@ __kernel void dynproc_kernel (int iteration,
                               int HALO,
                               __local int* prev,
                               __local int* result)
-{int bx;
-int small_block_cols;
-int blkX;
-int blkXmax;
-int validXmin;
-int validXmax;
+{int BLOCK_SIZE;
+int tx[250];
+int xidx[250];
+int W[250];
+int E[250];
+_Bool isValid[250];
+_Bool computed[250];
   unsigned __esdg_idx = 0;
-int BLOCK_SIZE;
-int tx[25];
-int xidx[25];
-int W[25];
-int E[25];
-_Bool isValid[25];
-_Bool computed[25];
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
 	//int BLOCK_SIZE =
 
-BLOCK_SIZE =  25;
-	//int bx =
-
-bx =  get_group_id(0);
+BLOCK_SIZE =  250;
+	int bx = get_group_id(0);
 	//int tx =
 
 tx[__esdg_idx] =  __esdg_idx;
@@ -47,18 +39,12 @@ tx[__esdg_idx] =  __esdg_idx;
 	// all the input data
 
 	// calculate the small block size.
-	//int small_block_cols =
-
-small_block_cols =  BLOCK_SIZE - (iteration*HALO*2);
+	int small_block_cols = BLOCK_SIZE - (iteration*HALO*2);
 
 	// calculate the boundary for the block according to
 	// the boundary of its small block
-	//int blkX =
-
-blkX =  (small_block_cols*bx) - border;
-	//int blkXmax =
-
-blkXmax =  blkX+BLOCK_SIZE-1;
+	int blkX = (small_block_cols*bx) - border;
+	int blkXmax = blkX+BLOCK_SIZE-1;
 
 	// calculate the global thread coordination
 	//int xidx =
@@ -68,12 +54,8 @@ xidx[__esdg_idx] =  blkX+tx[__esdg_idx];
 	// effective range within this block that falls within
 	// the valid range of the input data
 	// used to rule out computation outside the boundary.
-	//int validXmin =
-
-validXmin =  (blkX < 0) ? -blkX : 0;
-	//int validXmax =
-
-validXmax =  (blkXmax > cols-1) ? BLOCK_SIZE-1-(blkXmax-cols+1) : BLOCK_SIZE-1;
+	int validXmin = (blkX < 0) ? -blkX : 0;
+	int validXmax = (blkXmax > cols-1) ? BLOCK_SIZE-1-(blkXmax-cols+1) : BLOCK_SIZE-1;
 	
 	//int W =
 
@@ -100,7 +82,7 @@ isValid[__esdg_idx] =  ( ( tx[__esdg_idx] ) >= ( validXmin ) && ( tx[__esdg_idx]
 	//barrier( 1  /*CLK_LOCAL_MEM_FENCE*/);
 } __esdg_idx = 0;
 
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
 
 	
@@ -109,7 +91,7 @@ for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
 	for (int i = 0; i < iteration; i++)
 	{
 	
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 	computed[__esdg_idx] = false;
 		
 		if(  ( ( tx[__esdg_idx] ) >= ( i + 1 ) && ( tx[__esdg_idx] ) <= ( BLOCK_SIZE - i - 2 ) ) /*IN_RANGE*/ /*(tx, i+1, BLOCK_SIZE-i-2)*/ && isValid[__esdg_idx] )
@@ -129,27 +111,27 @@ for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
 		//barrier( 1  /*CLK_LOCAL_MEM_FENCE*/);
 } __esdg_idx = 0;
 
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
-                printf("iteration = %d\n", iteration);
+                //printf("iteration = %d\n", iteration);
 
 	
 } __esdg_idx = 0;
 	if(i==iteration-1)
 		{
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
 			// we are on the last iteration, and thus don't need to 
 			// compute for the next step.
 		
 } __esdg_idx = 0;
 	break;
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
 		
 } __esdg_idx = 0;
 }
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
 
 		if(computed[__esdg_idx])
@@ -160,13 +142,13 @@ for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
 		//barrier( 1  /*CLK_LOCAL_MEM_FENCE*/);
 } __esdg_idx = 0;
 
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
 	
 } __esdg_idx = 0;
 }
 
-for (__esdg_idx = 0; __esdg_idx < 25; ++__esdg_idx) {
+for (__esdg_idx = 0; __esdg_idx < 250; ++__esdg_idx) {
 
 	// update the global memory
 	// after the last iteration, only threads coordinated within the
