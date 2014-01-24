@@ -21,12 +21,17 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 int
 Reduction::setupReduction()
 {
+  std::cout << "setupReduction:" << std::endl
+    << "  GROUP_SIZE = " << GROUP_SIZE << ", VECTOR_SIZE = "
+    << VECTOR_SIZE << ", MULTIPLY = " << MULTIPLY << std::endl;
+
     // make sure length is multiple of group size * 4
     unsigned int mulFactor = GROUP_SIZE * VECTOR_SIZE * MULTIPLY;
     length = (length < mulFactor) ? mulFactor : length;
     length = (length / mulFactor) * mulFactor;
 
     length = length / VECTOR_SIZE;
+    std::cout << "length now = " << length << std::endl;
 
 #if defined (_WIN32)
     input = (cl_uint*)_aligned_malloc(length * sizeof(cl_uint4), 16);
@@ -187,6 +192,10 @@ int Reduction::setWorkGroupSize()
         std::cout << "Unsupported: Insufficient local memory on device." << std::endl;
         return SDK_FAILURE;
     }
+
+    std::cout << "length = " << length << ", MULTIPLY = " << MULTIPLY
+      << ", so globalThreads = " << length / MULTIPLY << " and localThreads = "
+      << groupSize;
 
     globalThreads[0] = length / MULTIPLY;
     localThreads[0] = groupSize;
