@@ -31,7 +31,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 __kernel
 void 
-reduce(__global uint4* input, __global uint4* output, __local uint4* sdata)
+reduce(__global uint4* restrict input, __global uint4* restrict output, __local uint4* restrict sdata)
 {
     // load shared mem
     unsigned int tid = get_local_id(0);

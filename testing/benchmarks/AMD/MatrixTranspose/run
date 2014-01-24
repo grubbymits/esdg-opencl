@@ -2,7 +2,7 @@
 (
 for device in `seq 20 26`;
 do
-  ./reduction -x 131072 -i 5 -d $device
+  ./matrix-transpose -e -x 128 -y 128 -d $device
 done
 )
 

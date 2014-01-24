@@ -1,0 +1,108 @@
+Platform 0 : Mesa
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : Mesa
+
+Selected Platform Vendor : Mesa
+Device 0 : LE1 Device ID is 0x7fc0c9e9d1a0
+Device 1 : LE1 Device ID is 0x7fc0c9e9d2b0
+Device 2 : LE1 Device ID is 0x7fc0c9e9d3c0
+Device 3 : LE1 Device ID is 0x7fc0c9e9d4d0
+Device 4 : LE1 Device ID is 0x7fc0c9e9d5e0
+Device 5 : LE1 Device ID is 0x7fc0c9e9d6f0
+Device 6 : LE1 Device ID is 0x7fc0c9e9d800
+Device 7 : LE1 Device ID is 0x7fc0c9e9d910
+Device 8 : LE1 Device ID is 0x7fc0c9e9da20
+Device 9 : LE1 Device ID is 0x7fc0c9e9db30
+Device 10 : LE1 Device ID is 0x7fc0c9e9dc40
+Device 11 : LE1 Device ID is 0x7fc0c9e9dd50
+Device 12 : LE1 Device ID is 0x7fc0c9e9de60
+Device 13 : LE1 Device ID is 0x7fc0c9e9df70
+Device 14 : LE1 Device ID is 0x7fc0c9e9e080
+Device 15 : LE1 Device ID is 0x7fc0c9e9e190
+Device 16 : LE1 Device ID is 0x7fc0c9e9e2a0
+Device 17 : LE1 Device ID is 0x7fc0c9e9e3b0
+Device 18 : LE1 Device ID is 0x7fc0c9e9e4c0
+Device 19 : LE1 Device ID is 0x7fc0c9e9e5d0
+Device 20 : LE1 Device ID is 0x7fc0c9e9e6e0
+Device 21 : LE1 Device ID is 0x7fc0c9e9e7f0
+Device 22 : LE1 Device ID is 0x7fc0c9e9e900
+Device 23 : LE1 Device ID is 0x7fc0c9e9ea10
+Device 24 : LE1 Device ID is 0x7fc0c9e9eb20
+Device 25 : LE1 Device ID is 0x7fc0c9e9ec30
+Device 26 : LE1 Device ID is 0x7fc0c9e9ed40
+Device 27 : LE1 Device ID is 0x7fc0c9e9ee50
+Device 28 : LE1 Device ID is 0x7fc0c9e9ef60
+Device 29 : LE1 Device ID is 0x7fc0c9e9f070
+Device 30 : LE1 Device ID is 0x7fc0c9e9f180
+Device 31 : LE1 Device ID is 0x7fc0c9e9f290
+Device 32 : LE1 Device ID is 0x7fc0c9e9f3a0
+Device 33 : LE1 Device ID is 0x7fc0c9e9f4b0
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 4 core 4w4a1m3ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 65536
+mem align: 0
+dram_base_offset: 0
+Size of data area : 196680
+Size of bss area : 
+End of memory: 1573440
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  4Context_4wide_3ls.xml
+HALT operation received from [0][0][0] at cycle 22855
+HALT operation received from [0][1][0] at cycle 22855
+HALT operation received from [0][2][0] at cycle 22859
+HALT operation received from [0][3][0] at cycle 22859
+Simulation finished, cycleCount = 22860
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 22860
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
