@@ -1,0 +1,7 @@
+#!/bin/sh
+(
+for device in `seq 0 19`;
+do
+  ./lud -v -d $device -i ../../data/lud/64.dat
+done
+)

@@ -35,6 +35,7 @@
 #include "llvm/CodeGen/ValueTypes.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/ErrorHandling.h"
+#include "llvm/Target/TargetLibraryInfo.h"
 
 //#include <iostream>
 
@@ -172,11 +173,9 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   // Handle Vectors Comparisons
   // FIXME This screws with legalisation of boolean SetCC? Bug?
-  /*
   for (unsigned i = (unsigned)MVT::FIRST_VECTOR_VALUETYPE;
        i <= (unsigned)MVT::LAST_VECTOR_VALUETYPE; ++i) {
     MVT VT((MVT::SimpleValueType)i);
-
     setCondCodeAction(ISD::SETUGT,  VT, Expand);
     setCondCodeAction(ISD::SETUGE,  VT, Expand);
     setCondCodeAction(ISD::SETULT,  VT, Expand);
@@ -186,8 +185,15 @@ LE1TargetLowering(LE1TargetMachine &TM)
     setCondCodeAction(ISD::SETLT,   VT, Expand);
     setCondCodeAction(ISD::SETLE,   VT, Expand);
     setCondCodeAction(ISD::SETEQ,   VT, Expand);
-    //setCondCodeAction(ISD::SETNE,   VT, Expand);
-  }*/
+    setCondCodeAction(ISD::SETNE,   VT, Expand);
+    setCondCodeAction(ISD::SETOEQ,  VT, Expand);
+    setCondCodeAction(ISD::SETUEQ,  VT, Expand);
+    setCondCodeAction(ISD::SETOGE,  VT, Expand);
+    setCondCodeAction(ISD::SETOGT,  VT, Expand);
+    setCondCodeAction(ISD::SETOLT,  VT, Expand);
+    setCondCodeAction(ISD::SETOLE,  VT, Expand);
+    setOperationAction(ISD::SETCC,   VT, Expand);
+  }
 
   // LE1 doesn't have extending float->double load/store
   //setLoadExtAction(ISD::EXTLOAD, MVT::f32, Expand);
@@ -216,14 +222,16 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setOperationAction(ISD::SDIV, MVT::i32, Expand);
   //setOperationAction(ISD::UDIV, MVT::i32, Expand);
 
+    /*
   // Softfloat Floating Point Library Calls
   // Integer to Float conversions
   setLibcallName(RTLIB::SINTTOFP_I32_F32, "int32_to_float32");
   //setLibcallName(RTLIB::SINTTOFP_I32_F32, "_r_ilfloat");
   setOperationAction(ISD::SINT_TO_FP, MVT::i32, Expand);
 
-  //setLibcallName(RTLIB::UINTTOFP_I32_F32, "_r_ufloat");
-  //setOperationAction(ISD::UINT_TO_FP, MVT::i32, Expand);
+  // FIXME - Is this ok? Is sign detected..?
+  setLibcallName(RTLIB::UINTTOFP_I32_F32, "int32_to_float32");
+  setOperationAction(ISD::UINT_TO_FP, MVT::i32, Expand);
 
   setLibcallName(RTLIB::SINTTOFP_I32_F64, "int32_to_float64");
   //setLibcallName(RTLIB::SINTTOFP_I32_F64, "_d_ilfloat");
@@ -256,13 +264,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setLibcallName(RTLIB::SUB_F32, "_r_sub");
   setOperationAction(ISD::FSUB, MVT::f32, Expand);
 
-  setLibcallName(RTLIB::MUL_F32, "float32_mul");
-  //setLibcallName(RTLIB::MUL_F32, "_r_mul");
-  setOperationAction(ISD::FMUL, MVT::f32, Expand);
 
-  setLibcallName(RTLIB::DIV_F32, "float32_div");
-  //setLibcallName(RTLIB::DIV_F32, "_r_div");
-  setOperationAction(ISD::FDIV, MVT::f32, Expand);
+
 
   setLibcallName(RTLIB::REM_F32, "float32_rem");
   setOperationAction(ISD::SREM, MVT::f32, Expand);
@@ -282,6 +285,13 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setLibcallName(RTLIB::OLT_F32, "float32_lt");
   //setLibcallName(RTLIB::OLT_F32, "_r_lt");
   setOperationAction(ISD::SETOLT, MVT::f32, Expand);
+
+  // TODO I think that the functions for gt and lt are the same accept for
+  // their NaN handling.
+  setLibcallName(RTLIB::OGT_F32, "float32_lt");
+  setOperationAction(ISD::SETOGT, MVT::f32, Expand);
+
+  setLibcallName(RTLIB::UO_F32,  "float32_is_signaling_nan");
 
   // FIXME
   //float32_eq_signaling
@@ -339,6 +349,16 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setLibcallName(RTLIB::OLT_F64, "float64_lt");
   //setLibcallName(RTLIB::OLT_F64, "_d_lt");
   setOperationAction(ISD::SETOLT, MVT::f64, Expand);
+
+  setOperationAction(LibFunc::exp2,   MVT::f32, Expand);
+  setOperationAction(LibFunc::exp2f,  MVT::f32, Expand);
+  setOperationAction(LibFunc::exp2,   MVT::f64, Expand);
+  setOperationAction(LibFunc::exp2f,  MVT::f64, Expand);
+  */
+  setLibcallName(RTLIB::MUL_F32, "float32_mul");
+  setOperationAction(ISD::FMUL, MVT::f32, Expand);
+  setLibcallName(RTLIB::DIV_F32, "float32_div");
+  setOperationAction(ISD::FDIV, MVT::f32, Expand);
 
   // FIXME
   //float64_eq_signaling
@@ -446,6 +466,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::INTRINSIC_W_CHAIN, MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
 
+  setOperationAction(ISD::FSQRT, MVT::f32, Expand);
+
   // FIXME don't know what this should be
   setMinFunctionAlignment(2);
 
@@ -457,7 +479,10 @@ LE1TargetLowering(LE1TargetMachine &TM)
 }
 
 EVT LE1TargetLowering::getSetCCResultType(EVT VT) const {
-  return MVT::i1;
+  if (!VT.isVector())
+    return MVT::i1;
+  else
+    return VT;
 }
 
 SDValue LE1TargetLowering::
@@ -480,6 +505,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
     case ISD::SREM:               return LowerSREM(Op, DAG);
     case ISD::UREM:               return LowerUREM(Op, DAG);
     case ISD::VASTART:            return LowerVASTART(Op, DAG);
+    case ISD::SETCC:
     case ISD::SETNE:              return LowerSETCC(Op, DAG);
     //case ISD::EXTLOAD:
     //case ISD::ZEXTLOAD:
@@ -888,15 +914,39 @@ DivStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
 
 SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
                                       SelectionDAG &DAG) const {
-  //std::cout << "LowerSETCC\n";
+  std::cerr << "LowerSETCC\n";
   SDValue LHS = Op.getOperand(1);
   SDValue RHS = Op.getOperand(2);
   DebugLoc dl = Op.getDebugLoc();
   SDNode* Node = Op.getNode();
   ISD::CondCode CC = cast<CondCodeSDNode>(Node->getOperand(2))->get();
 
-    SDValue LHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), LHS);
-    SDValue RHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), RHS);
+  /*
+  // XOR on vector and scalar input
+  if (!LHS.getValueType().isVector() != !RHS.getValueType().isVector()) {
+    SDValue vector;
+    SDValue scalar;
+    if (LHS.getValueType().isVector()) {
+      vector = LHS;
+      scalar = RHS;
+    }
+    else {
+      vector = RHS;
+      scalar = LHS;
+    }
+    EVT vectorType = vector.getValueType();
+    unsigned numElements = vectorType.getVectorNumElements();
+    SDValue *newVector = new SDValue[numElements];
+    for (unsigned i = 0; i < numElements; ++i)
+      newVector[i] = scalar;
+    SDValue buildVector = DAG.getNode(ISD::BUILD_VECTOR, dl, vectorType,
+                                      newVector, numElements);
+
+    return DAG.getSetCC(dl, MVT::i1, buildVector, vector, CC);
+  }*/
+
+  SDValue LHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), LHS);
+  SDValue RHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), RHS);
 
   return DAG.getSetCC(dl, MVT::i1, LHSz, RHSz, CC);
 }
@@ -1431,6 +1481,8 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
   bool &isTailCall                      = CLI.IsTailCall;
   CallingConv::ID CallConv              = CLI.CallConv;
   bool isVarArg                         = CLI.IsVarArg;
+
+  isTailCall = false;
 
   MachineFunction &MF = DAG.getMachineFunction();
   MachineFrameInfo *MFI = MF.getFrameInfo();

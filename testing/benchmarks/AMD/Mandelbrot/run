@@ -1,0 +1,8 @@
+#!/bin/sh
+
+(
+for device in `seq 0 19`;
+do
+  ./mandelbrot -d $device > output
+done
+)

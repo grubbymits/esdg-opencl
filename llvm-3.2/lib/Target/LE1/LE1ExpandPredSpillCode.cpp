@@ -56,24 +56,14 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
         ++MII) {
       MachineInstr *MI = MII;
 
-      if (MI->isPseudo())
+      if (!MI->isPseudo())
         continue;
 
       DebugLoc DL = MI->getDebugLoc();
 
       int Opc = MI->getOpcode();
       if(Opc == LE1::STW_PRED) {
-        //unsigned FP = MI->getOperand(0).getReg();
-        //assert(FI == TM.getRegisterInfo()->getFrameRegister(MF) && 
-          //     "Not a Frame Pointer");
         unsigned numOps = MI->getNumOperands();
-        for(unsigned i=0;i<numOps;++i) {
-          std::cout << "operand["<< i <<"] = ";
-          if(MI->getOperand(i).isFI()) std::cout << "FI\n";
-          else if(MI->getOperand(i).isImm()) std::cout << "Imm\n";
-          else if(MI->getOperand(i).isReg()) std::cout << "Reg\n";
-          else std::cout << "?\n";
-        }
         assert(MI->getOperand(0).isReg() && "Not Register. Store");
         int SrcReg = MI->getOperand(0).getReg();
         assert(LE1::BRegsRegClass.contains(SrcReg) &&
@@ -85,23 +75,23 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
         assert(MI->getOperand(2).isImm() && "Operand 2 Not offset");
         int FI = MI->getOperand(2).getImm();
 
+
+        MII = MBB->erase(MI);
+        // These pseudo insts do not seem to get eliminated, so sometimes
+        // it's necessary to delete them here
+        if (MII->getOpcode() == LE1::STW_PRED) {
+          int SrcReg2 = MII->getOperand(0).getReg();
+          unsigned FP2 = MII->getOperand(1).getReg();
+          int FI2 = MII->getOperand(2).getImm();
+          if ( (SrcReg == SrcReg2) && (FP == FP2) && (FI == FI2))
+            MII = MBB->erase(MII);
+        }
         BuildMI(*MBB, MII, DL, TII->get(LE1::MFB), TmpReg)
           .addReg(SrcReg);
         BuildMI(*MBB, MII, DL, TII->get(LE1::STW)).addReg(TmpReg)
                 .addReg(FP).addImm(FI);
-
-        MII = MBB->erase(MI);
-        --MI;
       }
       else if(Opc == LE1::LDW_PRED) {
-       unsigned numOps = MI->getNumOperands();
-        for(unsigned i=0;i<numOps;++i) {
-          std::cout << "operand["<< i <<"] = ";
-          if(MI->getOperand(i).isFI()) std::cout << "FI\n";
-          else if(MI->getOperand(i).isImm()) std::cout << "Imm\n";
-          else if(MI->getOperand(i).isReg()) std::cout << "Reg\n";
-          else std::cout << "?\n";
-        }
 
         assert(MI->getOperand(0).isReg() && "Not a register"); 
         int DstReg = MI->getOperand(0).getReg();
@@ -112,14 +102,18 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
         assert(FP == TM.getRegisterInfo()->getFrameRegister(MF) &&
                "Not a Frame Pointer");
         assert(MI->getOperand(2).isImm() && "Not a Frame Index");
-        unsigned FI = MI->getOperand(2).getImm();
+        int FI = MI->getOperand(2).getImm();
 
+        MII = MBB->erase(MI);
+        if (MII->getOpcode() == LE1::STW_PRED) {
+          int SrcReg = MII->getOperand(0).getReg();
+          int FI2 = MII->getOperand(2).getImm();
+          if ((SrcReg == DstReg) && (FI == FI2))
+            MII = MBB->erase(MII);
+        }
         BuildMI(*MBB, MII, DL, TII->get(LE1::LDW), TmpReg)
                 .addReg(FP).addImm(FI);
         BuildMI(*MBB, MII, DL, TII->get(LE1::MTB), DstReg).addReg(TmpReg);
-
-        MII = MBB->erase(MI);
-        --MI;
       }
     }
   }

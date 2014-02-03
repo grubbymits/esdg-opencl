@@ -147,9 +147,9 @@ ContinueFixer::ContinueFixer(StringList *list,
 // in RewriteSource by appending the appropriate source to the OpenWhile string.
 template <typename T>
 void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
-                                        std::list<std::pair<Stmt*, T> > &PSL,
-                                        std::vector<CallExpr*> &InnerBarriers,
-                                        unsigned depth) {
+                                        std::list<T> &Unaries,
+                                        //std::list<std::pair<Stmt*, T> > &PSL,
+                                        std::list<CallExpr*> &InnerBarriers) {
 
 #ifdef DBG_WRKGRP
   std::cerr << "Entering FixInBarrierPresence" << std::endl;
@@ -160,12 +160,14 @@ void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
     RegionBody = (cast<ForStmt>(Region))->getBody();
   else if (isa<WhileStmt>(Region))
     RegionBody = (cast<WhileStmt>(Region))->getBody();
+  else
+    RegionBody = Region;
 
   // This region has barriers and they will define the new regions. Insert
   // total thread valid checks at each barrier location.
   // All the new loops in this region should also check the whether the current
   // thread is valid.
-  for (std::vector<CallExpr*>::iterator CI = InnerBarriers.begin(),
+  for (barrier_iterator CI = InnerBarriers.begin(),
        CE = InnerBarriers.end(); CI != CE; ++CI) {
     InsertText((*CI)->getLocEnd().getLocWithOffset(2), TotalValidCheck);
     InsertText((*CI)->getLocEnd().getLocWithOffset(4), CurrentValidCheck);
@@ -176,34 +178,39 @@ void StmtFixer<T>::FixInBarrierPresence(Stmt *Region,
 
   // The valid counter and array both need to be reset after the region.
 
-  if (PSL.size() == 1) {
+  if (Unaries.size() == 1) {
 #ifdef DBG_WRKGRP
     std::cerr << "Statement list is only one element long" << std::endl;
 #endif
-    //Stmt *cond = PSL.front().first;
-    T s = PSL.front().second;
+    T s = Unaries.front(); //PSL.front().second;
     InsertText(s->getLocStart(), UnaryConvert);
     return;
   }
   // else
-  for (typename std::list<std::pair<Stmt*, T> >::iterator SLI = PSL.begin(),
-       SLE = PSL.end(); SLI != SLE; ++SLI) {
+  for (typename std::list<T>::iterator TI = Unaries.begin(),
+       TE = Unaries.end(); TI != TE; ++TI) {
 
-    //Stmt *cond = (*SLI).first;
-    T s = (*SLI).second;
+    T s = *TI; //(*SLI).second;
     InsertText(s->getLocStart(), UnaryConvert);
   }
-
 }
 
 template <typename T>
 void LocalStmtFixer<T>::FixInBarrierPresence(Stmt *Region,
-  std::list<std::pair<Stmt*, T> > &PSL,
-  std::vector<CallExpr*> &InnerBarriers, unsigned depth) {
+  std::list<T> &Unaries,
+  std::list<CallExpr*> &InnerBarriers) {
 
-  StmtFixer<T>::FixInBarrierPresence(Region, PSL, InnerBarriers, depth);
+  StmtFixer<T>::FixInBarrierPresence(Region, Unaries, InnerBarriers);
 
+  SourceLocation InsertLoc;
+  if (isa<ForStmt>(Region))
+    InsertLoc = cast<ForStmt>(Region)->getBody()->getLocStart();
+  else if (isa<WhileStmt>(Region))
+    InsertLoc = cast<WhileStmt>(Region)->getBody()->getLocStart();
+
+  this->InsertText(Region->getLocStart(), "{\n");
   this->InsertText(Region->getLocStart(), this->InvalidCounterInit);
   this->InsertText(Region->getLocStart(), this->InvalidArrayInit);
+  this->InsertText(Region->getLocEnd().getLocWithOffset(1), "\n}\n");
 }
 

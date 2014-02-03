@@ -24,8 +24,8 @@ using namespace Coal;
 
 unsigned LE1Simulator::iteration = 0;
 
-SimulationStats::SimulationStats(hyperContextT *HyperContext,
-                                 unsigned disabled) {
+SimulationStats::SimulationStats(hyperContextT *HyperContext) {
+                                 //unsigned disabled) {
   TotalCycles = HyperContext->cycleCount;
   Stalls = HyperContext->stallCount;
   NOPs = HyperContext->nopCount;
@@ -35,7 +35,17 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext,
   BranchesNotTaken = HyperContext->branchNotTaken;
   ControlFlowChange = HyperContext->controlFlowChange;
   MemoryAccessCount = HyperContext->memoryAccessCount;
-  disabledCores = disabled;
+
+  // Reset the values
+  HyperContext->cycleCount = 0;
+  HyperContext->stallCount = 0;
+  HyperContext->nopCount = 0;
+  HyperContext->idleCount = 0;
+  HyperContext->decodeStallCount = 0;
+  HyperContext->branchTaken = 0;
+  HyperContext->branchNotTaken = 0;
+  HyperContext->controlFlowChange = 0;
+  HyperContext->memoryAccessCount = 0;
 }
 
 SimulationStats::SimulationStats(const SimulationStats &Stats) {
@@ -48,7 +58,7 @@ SimulationStats::SimulationStats(const SimulationStats &Stats) {
   BranchesNotTaken = Stats.BranchesNotTaken;
   ControlFlowChange = Stats.ControlFlowChange;
   MemoryAccessCount = Stats.MemoryAccessCount;
-  disabledCores = Stats.disabledCores;
+  //disabledCores = Stats.disabledCores;
 }
 
 LE1Simulator::LE1Simulator() {
@@ -56,6 +66,7 @@ LE1Simulator::LE1Simulator() {
   dram_size = 0;
   KernelNumber = 0;
   isInitialised = false;
+  isLLVM = 1;
 }
 
 LE1Simulator::~LE1Simulator() {
@@ -87,6 +98,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     std::cerr << "ERROR: Simulator is already initialised!\n";
     return false;
   }
+  machineModel = Machine;
   /*
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
     std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
@@ -135,8 +147,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
     STACK_SIZE = SYS->STACK_SIZE;
     dram_size = ((SYS->DRAM_SHARED_CONFIG >> 8) & 0xFFFF) * 1024;
 #ifdef DBG_SIM
-    std::cerr << "DRAM_SHARED_CONFIG = " << SYS->DRAM_SHARED_CONFIG
-      << std::endl;
+    std::cerr << "dram_size = " << dram_size << std::endl;
 #endif
 
     unsigned int totalHC = 0;
@@ -176,7 +187,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
 }
 
 // Save the execution statistics and resets the device
-void LE1Simulator::SaveStats(unsigned disabled) {
+void LE1Simulator::SaveStats(unsigned cycles) {
   // 0 = Single system
     /* system, context, hypercontext, cluster */
     //unsigned char s = 0;
@@ -203,14 +214,16 @@ void LE1Simulator::SaveStats(unsigned disabled) {
                           + (k * sizeof(hyperContextT)));
 
       // Save the execution statistics
-      SimulationStats NewStat(hypercontext, disabled);
-      Stats.push_back(NewStat);
+      SimulationStats NewStat(hypercontext); //, disabled);
+      statVector.push_back(NewStat);
 
       memset(hypercontext->S_GPR, 0,
              (hypercontext->sGPRCount * sizeof(unsigned)));
       hypercontext->programCounter = 0;
     }
   }
+  // pair cycles with StatVector
+  statSet = new std::pair<unsigned, StatVector>(cycles, statVector);
 }
 
 void LE1Simulator::LockAccess(void) {
@@ -264,18 +277,21 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::Run(const char *iram, const char *dram,
-                       const unsigned disabled) {
+bool LE1Simulator::Run(const char *iram, const char *dram) {
+                       //const unsigned disabled) {
 #ifdef DBG_SIM
-  std::cout << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
-    << std::endl;
+  std::cerr << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
+    << std::endl << machineModel << std::endl;
 #endif
-
+#ifdef DBG_OUTPUT
+  std::cout << "Run Simulation with:\n  " << iram << "  " << std::endl
+    << "  " << dram << "  " << std::endl << "  " << machineModel << std::endl;
+#endif
   //LockAccess();
   ++KernelNumber;
 
   /* turn printout on */
-  PRINT_OUT = 0;
+  PRINT_OUT = false;
   bool MEM_DUMP = false;
 
     /* Load IRAM */
@@ -377,10 +393,15 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
     fseek(data, 0L, SEEK_END);
     DRAMFileSize = ftell(data);
     fseek(data, 0L, SEEK_SET);
+#ifdef DBG_SIM
+    std::cerr << "Machine DRAM = " << dram_size << ", total used = "
+      << DRAMFileSize << std::endl;
+#endif
 
     if(DRAMFileSize > dram_size) {
-      fprintf(stderr, "!!! ERROR DRAM is larger than the size specified !!!\n");
-      fprintf(stderr, "DRAM = %d and fileSize = %d\n", dram_size, DRAMFileSize);
+      std::cout << "!!! ERROR DRAM is larger than the size specified !!!\n"
+        << "DRAM = " << dram_size << " and fileSize = " << DRAMFileSize
+        << std::endl;
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -484,9 +505,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
 
   //extern unsigned long long cycleCount;
   /* Clock */
+  cycleCount = 0;
   {
     unsigned int vt_ctrl;
-    cycleCount = 0;
     while(checkStatus()) {
       galaxyConfigT *g = NULL;
       gTracePacketT gTracePacket;
@@ -525,26 +546,21 @@ bool LE1Simulator::Run(const char *iram, const char *dram,
     CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
       << "-" << LE1Simulator::iteration<< ".dat";
 
-    // TODO this number must just be left from BFS.
-    if (KernelNumber == 2) {
-      KernelNumber = 0;
-      ++LE1Simulator::iteration;
-    }
+    ++LE1Simulator::iteration;
     system(CopyDump.str().c_str());
   }
 
-  if (KernelNumber == 2) {
-    KernelNumber = 0;
-    ++LE1Simulator::iteration;
-  }
-
-  SaveStats(disabled);
+#ifdef DBG_OUTPUT
+  std::cout << "Simulation finished, cycleCount = " << cycleCount << std::endl;
+  std::cout << " -------------------------------------------------------- "
+    << std::endl;
+#endif
+  SaveStats(cycleCount);
 
   //pthread_mutex_unlock(&p_simulator_mutex);
 
 #ifdef DBG_SIM
-  std::cerr << "Finished running simulation. globalS = "
-    << std::hex << globalS << std::endl;
+  std::cerr << "Finished running simulation." << std::endl;
 #endif
   return true;
 }

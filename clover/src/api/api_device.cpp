@@ -37,32 +37,45 @@
 
 // TODO Add a LE1Device to this and replace the the cpu code
 static Coal::LE1Device LE1Devices[TotalLE1Devices] = {
-  Coal::LE1Device("Default_1wide.xml", "scalar", 1),            // 0
-  Coal::LE1Device("Default_2wide_1ls.xml", "2w2a1m1ls1b", 1),   // 1
-  Coal::LE1Device("Default_3wide_1ls.xml", "3w3a1m1ls1b", 1),   // 3
-  Coal::LE1Device("Default_4wide_1ls.xml", "4w4a1m1ls1b", 1),   // 7
-  Coal::LE1Device("Default_5wide_1ls.xml", "5w5a1m1ls1b", 1),
+  Coal::LE1Device("Default_1wide.xml", "scalar", 1),                    // 0
+  Coal::LE1Device("2Context_1wide.xml", "scalar", 2),                   // 1
+  Coal::LE1Device("4Context_1wide.xml", "scalar", 4),                   // 2
+  Coal::LE1Device("8Context_1wide.xml", "scalar", 8),                   // 3
+  Coal::LE1Device("16Context_1wide.xml", "scalar", 16),                 // 4
 
-  Coal::LE1Device("Default_2wide_2ls.xml", "2w2a1m2ls1b", 1),   // 2
-  Coal::LE1Device("Default_3wide_2ls.xml", "3w3a1m2ls1b", 1),   // 4
-  Coal::LE1Device("Default_4wide_2ls.xml", "4w4a1m2ls1b", 1),   // 6
-  Coal::LE1Device("Default_5wide_2ls.xml", "5w5a1m2ls1b", 1),
+  Coal::LE1Device("Default_2wide_1ls.xml", "2w2a1m1ls1b", 1),           // 5
+  Coal::LE1Device("2Context_2wide.xml", "2w2a1m1ls1b", 2),              // 6
+  Coal::LE1Device("4Context_2wide.xml", "2w2a1m1ls1b", 4),              // 7
+  Coal::LE1Device("8Context_2wide.xml", "2w2a1m1ls1b", 8),              // 8
+  Coal::LE1Device("16Context_2wide.xml", "2w2a1m1ls1b", 16),            // 9
 
-  Coal::LE1Device("2Context_1wide.xml", "scalar", 2),           // 8
-  Coal::LE1Device("4Context_1wide.xml", "scalar", 4),           // 9
-  Coal::LE1Device("8Context_1wide.xml", "scalar", 8),           // 10
+  Coal::LE1Device("Default_3wide_1ls.xml", "3w3a1m1ls1b", 1),           // 10
+  Coal::LE1Device("2Context_3wide.xml", "3w3a1m1ls1b", 2),              // 11
+  Coal::LE1Device("4Context_3wide.xml", "3w3a1m1ls1b", 4),              // 12
+  Coal::LE1Device("8Context_3wide.xml", "3w3a1m1ls1b", 8),              // 13
+  Coal::LE1Device("16Context_3wide.xml", "3w3a1m1ls1b", 16),            // 14
 
-  Coal::LE1Device("2Context_2wide.xml", "2w2a1m1ls1b", 2),  // 11
-  Coal::LE1Device("4Context_2wide.xml", "2w2a1m1ls1b", 4),  // 12
-  Coal::LE1Device("8Context_2wide.xml", "2w2a1m1ls1b", 8),  // 13
+  Coal::LE1Device("Default_4wide_1ls.xml", "4w4a1m1ls1b", 1),           // 15
+  Coal::LE1Device("2Context_4wide.xml", "4w4a1m1ls1b", 2),              // 16
+  Coal::LE1Device("4Context_4wide.xml", "4w4a1m1ls1b", 4),              // 17
+  Coal::LE1Device("8Context_4wide.xml", "4w4a1m1ls1b", 8),              // 18
+  Coal::LE1Device("16Context_4wide.xml", "4w4a1m1ls1b", 16),            // 19
 
-  Coal::LE1Device("2Context_3wide.xml", "3w3a1m1ls1b", 2),  // 14
-  Coal::LE1Device("4Context_3wide.xml", "3w3a1m1ls1b", 4),  // 15
-  Coal::LE1Device("8Context_3wide.xml", "3w3a1m1ls1b", 8),   // 16
+  Coal::LE1Device("Default_2wide_2ls.xml", "2w2a1m2ls1b", 1),           // 20
+  Coal::LE1Device("Default_3wide_2ls.xml", "3w3a1m2ls1b", 1),           // 21
+  Coal::LE1Device("Default_4wide_2ls.xml", "4w4a1m2ls1b", 1),           // 22
+  Coal::LE1Device("Default_4wide_4ls.xml", "4w4a1m4ls1b", 1),           // 23
+  Coal::LE1Device("Default_5wide_1ls.xml", "5w5a1m1ls1b", 1),           // 24
+  Coal::LE1Device("Default_5wide_2ls.xml", "5w5a1m2ls1b", 1),           // 25
+  Coal::LE1Device("Default_5wide_4ls.xml", "5w5a1m4ls1b", 1),           // 26
 
-  Coal::LE1Device("2Context_4wide.xml", "4w4a1m1ls1b", 2),  // 14
-  Coal::LE1Device("4Context_4wide.xml", "4w4a1m1ls1b", 4),  // 15
-  Coal::LE1Device("8Context_4wide.xml", "4w4a1m1ls1b", 8)   // 16
+  Coal::LE1Device("2Context_2wide_2ls.xml", "2w2a1m2ls1b", 2),          // 27
+  Coal::LE1Device("4Context_2wide_2ls.xml", "2w2a1m2ls1b", 4),          // 28
+  Coal::LE1Device("2Context_3wide_2ls.xml", "3w3a1m2ls1b", 2),          // 29
+  Coal::LE1Device("4Context_3wide_2ls.xml", "3w3a1m2ls1b", 4),          // 30
+  Coal::LE1Device("2Context_4wide_2ls.xml", "4w4a1m2ls1b", 2),          // 31
+  Coal::LE1Device("4Context_4wide_2ls.xml", "4w4a1m2ls1b", 4),          // 32
+  Coal::LE1Device("4Context_4wide_3ls.xml", "4w4a1m3ls1b", 4)           // 33
 };
 
 cl_int

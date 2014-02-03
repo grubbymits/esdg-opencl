@@ -7,6 +7,7 @@
 #include "../../kernel.h"
 #include "../../memobject.h"
 
+#include <llvm/Constants.h>
 #include <llvm/Type.h>
 #include <llvm/DerivedTypes.h>
 
@@ -14,6 +15,7 @@
 #include <iostream>
 
 using namespace Coal;
+using namespace llvm;
 
 static std::string ConvertToBinary(unsigned int value) {
   std::string binary_string;
@@ -77,15 +79,16 @@ static void ConvertToBinary(std::string *binary_string,
 }
 
 LE1DataPrinter::LE1DataPrinter(LE1Device *device,
-                               EmbeddedData &data,
-                               KernelEvent *event,
+                               EmbeddedData *data,
+                               LE1KernelEvent *LE1Event,
                                const char* sourceName) {
-  p_event = event;
-  TheKernel = event->kernel();
+  p_event = LE1Event->getEvent();
+  TheKernel = p_event->kernel();
   TheDevice = device;
   embeddedData = data;
   FinalSourceName = sourceName;
   NumCores = TheDevice->numLE1s();
+  totalWorkgroups = LE1Event->getTotalWorkgroups();
   AttrAddrEnd = 0x38;
 
   // The attributes end at different address depending on the number of cores.
@@ -99,36 +102,66 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 
   // Place the embedded data before the buffers.
 #ifdef DBG_KERNEL
-  std::cerr << "Size of embedded data = " << embeddedData.getTotalSize()
+  std::cerr << "Size of embedded data = " << embeddedData->getTotalSize()
     << std::endl;
 #endif
 
+  // Align the CurrentAddr
+  while (CurrentAddr % 4)
+    ++CurrentAddr;
+
   // Calculate the address for any embedded data
-  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
-       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
+  for (EmbeddedData::const_word_iterator I = embeddedData->getWords()->begin(),
+       E = embeddedData->getWords()->end(); I != E; ++I) {
 
-    (*WI)->setAddr(CurrentAddr);
-    CurrentAddr += (*WI)->getSize();
+    (*I)->setAddr(CurrentAddr);
+    CurrentAddr += (*I)->getSize();
   }
 
-  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
-       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
+  for (EmbeddedData::const_half_iterator I = embeddedData->getHalves()->begin(),
+       E = embeddedData->getHalves()->end(); I != E; ++I) {
 
-    (*WI)->setAddr(CurrentAddr);
-    CurrentAddr += (*WI)->getSize();
+    (*I)->setAddr(CurrentAddr);
+    CurrentAddr += (*I)->getSize();
   }
 
-  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
-       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
+  for (EmbeddedData::const_byte_iterator I = embeddedData->getBytes()->begin(),
+       E = embeddedData->getBytes()->end(); I != E; ++I) {
 
-    (*WI)->setAddr(CurrentAddr);
-    CurrentAddr += (*WI)->getSize();
+    (*I)->setAddr(CurrentAddr);
+    CurrentAddr += (*I)->getSize();
   }
+
+  // Align the CurrentAddr
+  while (CurrentAddr % 4)
+    ++CurrentAddr;
+
+  for (EmbeddedData::const_struct_iterator
+       SI = embeddedData->getStructs()->begin(),
+       SE = embeddedData->getStructs()->end(); SI != SE; ++SI) {
+    (*SI)->setAddr(CurrentAddr);
+    CurrentAddr += (*SI)->getSize();
+  }
+
+  while (CurrentAddr % 4)
+    ++CurrentAddr;
 
   // Calculate buffer addresses
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
     const Kernel::Arg& arg = TheKernel->arg(i);
+
     if (arg.kind() == Kernel::Arg::Buffer) {
+      llvm::Type *type = arg.type();
+      unsigned bytes = 0;
+      if (type->isIntegerTy(8))
+        bytes = 1;
+      else if (type->isIntegerTy(16))
+        bytes = 2;
+      else
+        bytes = 4;
+      while (CurrentAddr % bytes)
+        ++CurrentAddr;
+
 #ifdef DBG_KERNEL
       std::cerr << "Arg " << i << "'s address being set to "
         << std::hex << CurrentAddr << std::endl;
@@ -141,8 +174,14 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
         buffer->setAddr(CurrentAddr);
       }
 
-      if (arg.file() == Kernel::Arg::Local)
-        CurrentAddr += (arg.allocAtKernelRuntime() * NumCores);
+      if (arg.file() == Kernel::Arg::Local) {
+        unsigned size = arg.allocAtKernelRuntime() * NumCores;
+#ifdef DBG_OUTPUT
+        std::cout << "Setting the buffer size kernel arg " << i
+          << ", which is a local, to " << size << std::endl;
+#endif
+        CurrentAddr += size;
+      }
       else
         CurrentAddr += (*(MemObject**)arg.data())->size();
     }
@@ -150,6 +189,9 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 
   // FIXME Should still check whether DataSize is a legal size
   DataSize = CurrentAddr;
+#ifdef DBG_KERNEL
+  std::cerr << "DataSize = " << DataSize << std::endl;
+#endif
 
 }
 
@@ -158,33 +200,46 @@ bool LE1DataPrinter::AppendDataArea() {
   std::cerr << "Entering LE1DataPrinter::AppendDataArea" << std::endl;
 #endif
 
+  if (DataSize >= LE1Device::MaxGlobalAddr) {
+    std::cerr << "!! ERROR: DataSize is too great, maximum address = "
+      << LE1Device::MaxGlobalAddr << ", but DataSize = " << DataSize
+      << std::endl;
+    return false;
+  }
+
   FinalSource.open(FinalSourceName, std::ios_base::app);
   std::ostringstream Output (std::ostringstream::out);
 
   Output << "##Data Labels" << std::endl;
-  Output << "00000 - work_dim" << std::endl;
-  Output << "00004 - global_size" << std::endl;
-  Output << "00010 - local_size" << std::endl;
-  Output << "0001c - num_groups" << std::endl;
-  Output << "00028 - global_offset" << std::endl;
-  Output << "00034 - num_cores" << std::endl;
-  Output << "00038 - group_id" << std::endl;
+  Output << "000000 - work_dim" << std::endl;
+  Output << "000004 - global_size" << std::endl;
+  Output << "000010 - local_size" << std::endl;
+  Output << "00001c - num_groups" << std::endl;
+  Output << "000028 - global_offset" << std::endl;
+  Output << "000034 - num_cores" << std::endl;
+  Output << "000038 - group_id" << std::endl;
 
   // Print labels for any embedded data
-  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
-       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
-      << " - " << (*WI)->getName() << std::endl;
+  for (EmbeddedData::const_word_iterator I = embeddedData->getWords()->begin(),
+       E = embeddedData->getWords()->end(); I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
   }
-  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
-       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
-      << " - " << (*WI)->getName() << std::endl;
+  for (EmbeddedData::const_half_iterator I = embeddedData->getHalves()->begin(),
+       E = embeddedData->getHalves()->end(); I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
   }
-  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
-       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
-    Output << std::hex << std::setw(5) << std::setfill('0') << (*WI)->getAddr()
-      << " - " << (*WI)->getName() << std::endl;
+  for (EmbeddedData::const_byte_iterator I = embeddedData->getBytes()->begin(),
+       E = embeddedData->getBytes()->end(); I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
+  }
+  for (EmbeddedData::const_struct_iterator I =
+       embeddedData->getStructs()->begin(),
+       E = embeddedData->getStructs()->end(); I != E; ++I) {
+    Output << std::hex << std::setw(6) << std::setfill('0') << (*I)->getAddr()
+      << " - " << (*I)->getName() << std::endl;
   }
 
   // Print labels for buffers
@@ -210,7 +265,7 @@ bool LE1DataPrinter::AppendDataArea() {
       std::cerr << "Writing arg " << i << "'s address as " << ArgAddrs[j]
         << std::endl;
 #endif
-      Output << std::hex << std::setw(5) << std::setfill('0') << ArgAddrs[j]
+      Output << std::hex << std::setw(6) << std::setfill('0') << ArgAddrs[j]
         << " - BufferArg_" << std::dec << i << std::endl;
       ++j;
     }
@@ -224,7 +279,7 @@ bool LE1DataPrinter::AppendDataArea() {
   // Size taken by kernel attributes before the argument data
   // FIXME is this size right?
   Output << "##Data Section - " << DataSize << " - Data_align=32" << std::endl;
-  Output << "00000 - " << std::hex << std::setw(8) << std::setfill('0')
+  Output << "000000 - " << std::hex << std::setw(8) << std::setfill('0')
     << p_event->work_dim() << " - "
     << ConvertToBinary(p_event->work_dim())
     << std::endl;
@@ -295,27 +350,39 @@ bool LE1DataPrinter::AppendDataArea() {
   FinalSource.close();
 
   // Print Embedded Data
-  for (EmbeddedData::const_word_iterator WI = embeddedData.getWords()->begin(),
-       WE = embeddedData.getWords()->end(); WI != WE; ++WI) {
-    size_t totalBytes = (*WI)->getSize();
-    const unsigned* data = (*WI)->getData();
+  for (EmbeddedData::const_word_iterator I = embeddedData->getWords()->begin(),
+       E = embeddedData->getWords()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    const unsigned* data = (*I)->getData();
     PrintData(data, PrintAddr, 0, sizeof(int), totalBytes);
     PrintAddr += totalBytes;
   }
 
-  for (EmbeddedData::const_half_iterator WI = embeddedData.getHalves()->begin(),
-       WE = embeddedData.getHalves()->end(); WI != WE; ++WI) {
-    size_t totalBytes = (*WI)->getSize();
-    const unsigned short* data = (*WI)->getData();
+  for (EmbeddedData::const_half_iterator I = embeddedData->getHalves()->begin(),
+       E = embeddedData->getHalves()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    const unsigned short* data = (*I)->getData();
     PrintData(data, PrintAddr, 0, sizeof(short), totalBytes);
     PrintAddr += totalBytes;
   }
 
-  for (EmbeddedData::const_byte_iterator WI = embeddedData.getBytes()->begin(),
-       WE = embeddedData.getBytes()->end(); WI != WE; ++WI) {
-    size_t totalBytes = (*WI)->getSize();
-    const unsigned char* data = (*WI)->getData();
+  for (EmbeddedData::const_byte_iterator I = embeddedData->getBytes()->begin(),
+       E = embeddedData->getBytes()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    const unsigned char* data = (*I)->getData();
     PrintData(data, PrintAddr, 0, sizeof(char), totalBytes);
+    PrintAddr += totalBytes;
+  }
+  for (EmbeddedData::const_struct_iterator
+       I = embeddedData->getStructs()->begin(),
+       E = embeddedData->getStructs()->end(); I != E; ++I) {
+    size_t totalBytes = (*I)->getSize();
+    llvm::ConstantStruct* const *CS = (*I)->getData();
+    unsigned numElements = (*I)->getNumElements();
+    if (!WriteStructData(CS, numElements, PrintAddr)) {
+      std::cerr << "Failed for " << (*I)->getName() << std::endl;
+      return false;
+    }
     PrintAddr += totalBytes;
   }
 
@@ -344,7 +411,7 @@ bool LE1DataPrinter::AppendDataArea() {
 void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
                                      unsigned addr,
                                      size_t attr) {
-  Output << std::hex << std::setw(5) << std::setfill('0') << addr << " - "
+  Output << std::hex << std::setw(6) << std::setfill('0') << addr << " - "
       << std::hex << std::setw(8) << std::setfill('0')
       << attr << " - "
       << ConvertToBinary(attr) << std::endl;
@@ -352,11 +419,13 @@ void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
 }
 
 void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
-  unsigned TotalSize = arg.allocAtKernelRuntime();
+  unsigned TotalSize = arg.allocAtKernelRuntime() * NumCores;
   llvm::Type* type = arg.type();
 
   void *Data = new unsigned char[TotalSize]();
+  PrintData(Data, Addr, 0, sizeof(char), TotalSize);
 
+  /*
   if (type->getTypeID() == llvm::Type::IntegerTyID) {
 #ifdef DBG_KERNEL
       std::cerr << "Data is int\n";
@@ -370,7 +439,7 @@ void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
       else if (type->isIntegerTy(32)) {
         PrintData(Data, Addr, 0, sizeof(int), TotalSize);
       }
-    }
+  }*/
 
   delete (unsigned char*)Data;
 }
@@ -444,6 +513,13 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
           return false;
         }
       }
+      else if (elementType->isFloatTy()) {
+        PrintData(Data, Addr, 0, sizeof(int), TotalSize);
+      }
+      else {
+        std::cerr << "!! Unhandled vector element type!" << std::endl;
+        return false;
+      }
     }
     else if (type->getTypeID() == llvm::Type::StructTyID) {
 #ifdef DBG_KERNEL
@@ -510,6 +586,88 @@ void LE1DataPrinter::WriteStructData(llvm::StructType *StructArg,
         PrintSingleElement(Data, Addr, &DataWritten, sizeof(float));
     }
   }
+}
+
+bool LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
+                                     unsigned numElements,
+                                     unsigned addr) {
+  llvm::StructType *type = CSArray[0]->getType();
+  unsigned numFields = type->getNumElements();
+
+  for (unsigned element = 0; element < numElements; ++element) {
+    llvm::ConstantStruct *CS = CSArray[element];
+
+  // We just reset this value after each call to PrintSingle since it's
+  // supposed to be used as a offset into a big lump of data. Hopefully
+  // increasing the base address should work to maintain addresses.
+    for (unsigned i = 0; i < numFields; ++i) {
+      llvm::Type *fieldType = type->getTypeAtIndex(i);
+      if (!WriteField(CS->getAggregateElement(i), fieldType, &addr))
+        return false;
+    }
+  }
+  return true;
+}
+
+bool LE1DataPrinter::WriteField(llvm::Constant *C, llvm::Type *fieldType,
+                                unsigned *addr) {
+  unsigned dataWritten = 0;
+
+  if (fieldType->getTypeID() == llvm::Type::IntegerTyID) {
+    llvm::ConstantInt *CI = llvm::cast<llvm::ConstantInt>(C);
+    if (fieldType->isIntegerTy(32)) {
+      unsigned data = CI->getZExtValue();
+      PrintSingleElement(&data, *addr, &dataWritten, sizeof(int));
+      *addr += dataWritten;
+      dataWritten = 0;
+    }
+    else if (fieldType->isIntegerTy(16)) {
+      unsigned short data = CI->getZExtValue();
+      PrintSingleElement(&data, *addr, &dataWritten, sizeof(short));
+      *addr += dataWritten;
+      dataWritten = 0;
+    }
+    else if (fieldType->isIntegerTy(8)) {
+      unsigned char data = 0;
+      if (!isa<UndefValue>(CI))
+        data = CI->getZExtValue();
+      PrintSingleElement(&data, *addr, &dataWritten, sizeof(char));
+      *addr += dataWritten;
+      dataWritten = 0;
+    }
+  }
+  else if (fieldType->isFloatTy()) {
+    ConstantFP *CFP = cast<ConstantFP>(C);
+    float data = CFP->getValueAPF().convertToFloat();
+    PrintSingleElement(&data, *addr, &dataWritten, sizeof(float));
+    *addr += dataWritten;
+    dataWritten = 0;
+  }
+  else if (fieldType->isArrayTy()) {
+    ConstantArray *CA = cast<ConstantArray>(C);
+    llvm::ArrayType *arrayType = CA->getType();
+    llvm::Type *elementType = arrayType->getElementType();
+    unsigned numArrayElements = arrayType->getNumElements();
+    for (unsigned i = 0; i < numArrayElements; ++i) {
+      if (!WriteField(CA->getAggregateElement(i), elementType, addr))
+        return false;
+    }
+  }
+  else if (fieldType->isStructTy()) {
+    ConstantStruct *CS = cast<ConstantStruct>(C);
+    llvm::StructType *structType = CS->getType();
+    unsigned numFields = structType->getNumElements();
+    for (unsigned i = 0; i < numFields; ++i) {
+      llvm::Type *type = structType->getTypeAtIndex(i);
+      if (!WriteField(CS->getAggregateElement(i), type, addr))
+        return false;
+    }
+  }
+  else {
+    std::cerr << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
+    return false;
+  }
+  return true;
 }
 
 // This function is used for writing elements of a structure. It takes single
@@ -629,7 +787,7 @@ inline void LE1DataPrinter::PrintLine(unsigned Addr,
   std::ostringstream DataLine(std::ostringstream::out);
 
   // Write the address
-  DataLine << std::hex << std::setw(5) << std::setfill('0')
+  DataLine << std::hex << std::setw(6) << std::setfill('0')
     << (Addr - 4) << " - ";
 
   // Write data in hex
@@ -681,7 +839,7 @@ void LE1DataPrinter::PrintData(const void* data,
       bytes = &bytes[index];
 
       // Write formatted data to stream
-      data_line << std::hex << std::setw(5) << std::setfill('0')
+      data_line << std::hex << std::setw(6) << std::setfill('0')
         << device_mem_ptr << " - ";
       for (unsigned i = 0; i < 4 ; ++i) {
         ConvertToBinary(&binary_string, &bytes[i], sizeof(char));
@@ -697,7 +855,7 @@ void LE1DataPrinter::PrintData(const void* data,
       halves = &halves[index];
 
       // Write formatted data to stream
-      data_line << std::hex << std::setw(5) << std::setfill('0')
+      data_line << std::hex << std::setw(6) << std::setfill('0')
         << device_mem_ptr << " - ";
       for (unsigned i = 0; i < 2; ++i) {
         ConvertToBinary(&binary_string, &halves[i], sizeof(short));
@@ -712,7 +870,7 @@ void LE1DataPrinter::PrintData(const void* data,
       //word = &word[index];
       ConvertToBinary(&binary_string, &word[index], sizeof(int));
       // Write formatted data to stream
-      data_line << std::hex << std::setw(5) << std::setfill('0')
+      data_line << std::hex << std::setw(6) << std::setfill('0')
         << device_mem_ptr << " - ";
       data_line << std::setw(8) << std::setfill('0') << word[index];
       data_line << " - " << binary_string << std::endl;
@@ -745,7 +903,7 @@ void LE1DataPrinter::PrintData(const void* data,
           padded_array[i] = remaining_data[i];
         }
         // Write data to the stream
-        data_line  << std::hex << std::setw(5) << std::setfill('0')
+        data_line  << std::hex << std::setw(6) << std::setfill('0')
           << device_mem_ptr << " - ";
         for(unsigned i = 0; i < 4; ++i) {
           ConvertToBinary(&binary_string, &padded_array[i], sizeof(char));
@@ -766,8 +924,8 @@ void LE1DataPrinter::PrintData(const void* data,
           padded_array[i] = remaining_data[i];
         }
         // Write data to the stream
-        data_line << std::hex << std::setw(5) << device_mem_ptr << " - ";
-        for (unsigned i = 0; i < 4; ++i) {
+        data_line << std::hex << std::setw(6) << device_mem_ptr << " - ";
+        for (unsigned i = 0; i < 2; ++i) {
           ConvertToBinary(&binary_string, &padded_array[i], sizeof(short));
           data_line << std::hex << std::setw(4) << std::setfill('0')
             << static_cast<int>(padded_array[0]);

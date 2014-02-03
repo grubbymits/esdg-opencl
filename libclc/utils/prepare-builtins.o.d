@@ -1,6 +1,14 @@
 utils/prepare-builtins.o: utils/prepare-builtins.cpp \
- /opt/esdg-opencl/include/llvm/ADT/OwningPtr.h \
+ /opt/esdg-opencl/include/llvm/Attributes.h \
+ /opt/esdg-opencl/include/llvm/Support/MathExtras.h \
+ /opt/esdg-opencl/include/llvm/Support/SwapByteOrder.h \
+ /opt/esdg-opencl/include/llvm/Support/DataTypes.h \
+ /opt/esdg-opencl/include/llvm/ADT/ArrayRef.h \
+ /opt/esdg-opencl/include/llvm/ADT/SmallVector.h \
+ /opt/esdg-opencl/include/llvm/Support/AlignOf.h \
  /opt/esdg-opencl/include/llvm/Support/Compiler.h \
+ /opt/esdg-opencl/include/llvm/Support/type_traits.h \
+ /opt/esdg-opencl/include/llvm/ADT/OwningPtr.h \
  /opt/esdg-opencl/include/llvm/Bitcode/ReaderWriter.h \
  /opt/esdg-opencl/include/llvm/Function.h \
  /opt/esdg-opencl/include/llvm/GlobalValue.h \
@@ -8,8 +16,6 @@ utils/prepare-builtins.o: utils/prepare-builtins.cpp \
  /opt/esdg-opencl/include/llvm/User.h \
  /opt/esdg-opencl/include/llvm/Support/ErrorHandling.h \
  /opt/esdg-opencl/include/llvm/ADT/StringRef.h \
- /opt/esdg-opencl/include/llvm/Support/type_traits.h \
- /opt/esdg-opencl/include/llvm/Support/DataTypes.h \
  /opt/esdg-opencl/include/llvm/Value.h \
  /opt/esdg-opencl/include/llvm/Use.h \
  /opt/esdg-opencl/include/llvm/ADT/PointerIntPair.h \
@@ -25,12 +31,6 @@ utils/prepare-builtins.o: utils/prepare-builtins.cpp \
  /opt/esdg-opencl/include/llvm/ADT/ilist.h \
  /opt/esdg-opencl/include/llvm/ADT/Twine.h \
  /opt/esdg-opencl/include/llvm/Argument.h \
- /opt/esdg-opencl/include/llvm/Attributes.h \
- /opt/esdg-opencl/include/llvm/Support/MathExtras.h \
- /opt/esdg-opencl/include/llvm/Support/SwapByteOrder.h \
- /opt/esdg-opencl/include/llvm/ADT/ArrayRef.h \
- /opt/esdg-opencl/include/llvm/ADT/SmallVector.h \
- /opt/esdg-opencl/include/llvm/Support/AlignOf.h \
  /opt/esdg-opencl/include/llvm/GlobalVariable.h \
  /opt/esdg-opencl/include/llvm/OperandTraits.h \
  /opt/esdg-opencl/include/llvm/LLVMContext.h \

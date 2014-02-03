@@ -1,0 +1,8 @@
+#!/bin/sh
+python ./matrixGenerator.py 16
+(
+for device in `seq 0 19`;
+do
+  ./gaussian-elim matrix16.txt -p 0 -d $device
+done
+)

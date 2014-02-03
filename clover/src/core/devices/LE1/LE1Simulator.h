@@ -11,7 +11,7 @@ extern "C" { struct hyperContextT; }
 namespace Coal {
 
   struct SimulationStats {
-    SimulationStats(hyperContextT *HyperContext, const unsigned disabled);
+    SimulationStats(hyperContextT *HyperContext);
     SimulationStats(const SimulationStats &Stats);
     unsigned long TotalCycles;
     unsigned long Stalls;
@@ -22,11 +22,12 @@ namespace Coal {
     unsigned long BranchesNotTaken;
     unsigned long ControlFlowChange;
     unsigned long MemoryAccessCount;
-    unsigned disabledCores;
+    //unsigned disabledCores;
   };
 
-  typedef std::vector<SimulationStats> StatsSet;
-  typedef std::map<std::string, StatsSet> StatsMap;
+  typedef std::vector<SimulationStats> StatVector;
+  typedef std::pair<unsigned, StatVector> StatSet;
+  typedef std::map<std::string, std::pair<unsigned, StatSet> > StatsMap;
 
   class LE1Simulator {
 
@@ -35,11 +36,16 @@ namespace Coal {
     ~LE1Simulator();
     bool Initialise(const std::string &Machine);
     void SaveStats(unsigned disabled);
-    std::vector<SimulationStats> *GetStats() { return &Stats; }
+    //std::vector<SimulationStats> *GetStats() { return &Stats; }
+    StatSet *GetStats() { return statSet; }
     unsigned GetIterations() const { return LE1Simulator::iteration; }
-    void ClearStats() { Stats.clear(); }
+    void ClearStats() {
+      statVector.clear();
+      if (statSet)
+        delete statSet;
+    }
     int checkStatus(void);
-    bool Run(const char *iram, const char *dram, const unsigned disabled);
+    bool Run(const char *iram, const char *dram);//, const unsigned disabled);
     void LockAccess();
     void UnlockAccess();
     bool readByteData(unsigned int addr,
@@ -53,6 +59,7 @@ namespace Coal {
                       unsigned int* data);
 private:
   static unsigned iteration;
+  std::string machineModel;
   bool isInitialised;
   pthread_mutex_t p_simulator_mutex;
   unsigned dram_size;
@@ -61,11 +68,12 @@ private:
   unsigned KernelNumber;
   systemConfig *SYS;
   systemT *LE1System;
-  StatsSet Stats;
+  StatVector statVector;
+  StatSet *statSet;
   };
 
-  typedef std::vector<SimulationStats> StatsSet;
-  typedef std::map<std::string, StatsSet> StatsMap;
+  //typedef std::vector<SimulationStats> StatsSet;
+  //typedef std::map<std::string, StatsSet> StatsMap;
 }
 
 #endif

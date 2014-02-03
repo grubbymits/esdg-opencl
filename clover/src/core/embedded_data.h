@@ -6,7 +6,18 @@
 #include <iostream>
 #include <vector>
 
+namespace llvm {
+  class Constant;
+  class ConstantInt;
+  class ConstantFP;
+  class ConstantArray;
+  class ConstantDataSequential;
+  class ConstantStruct;
+  class StructType;
+}
+
 namespace Coal {
+  class DeviceInterface;
 
   class EmbeddedData;
 
@@ -22,15 +33,13 @@ public:
     GlobalVariable(std::string ref) {
       name = ref;
     }
-    inline void addElement(T element) {
-      dataSet.push_back(element);
-    }
+    bool InsertData(llvm::Constant *C);
 
     void setAddr(unsigned addr) {
       varAddr = addr;
     }
 
-    unsigned getSize() {
+    virtual unsigned getSize() {
       totalSize = dataSet.size() * sizeof(T);
       totalSize += totalSize % 4;
       return totalSize;
@@ -44,15 +53,46 @@ public:
       return name;
     }
 
-    const T* getData() {
+    const T* getData() const {
       return dataSet.data();
     }
 
+  protected:
+    virtual inline void AddElement(T element) {
+      dataSet.push_back(element);
+    }
   private:
+    bool AddElements(llvm::ConstantArray *CA);
+    bool AddElements(llvm::ConstantDataSequential *CDS);
+    void AddFPElement(llvm::ConstantFP *CFP);
+    void AddIntElement(llvm::ConstantInt *CI);
+
+  protected:
     std::string name;
     unsigned varAddr;
     std::vector<T> dataSet;
     unsigned totalSize;
+
+  };
+
+  class GlobalStructVariable : public GlobalVariable<llvm::ConstantStruct*> {
+  public:
+    GlobalStructVariable(std::string ref, llvm::StructType *type,
+                         DeviceInterface *di) :
+      GlobalVariable<llvm::ConstantStruct*>(ref), sType(type), device(di) { }
+
+    bool AddElements(llvm::ConstantArray *CA);
+    inline void AddElement(llvm::ConstantStruct *element) {
+      this->dataSet.push_back(element);
+    }
+    unsigned getNumElements() {
+      return this->dataSet.size();
+    }
+    unsigned getSize();
+  private:
+    std::string name;
+    llvm::StructType *sType;
+    DeviceInterface *device;
 
   };
 
@@ -69,20 +109,16 @@ public:
     const_half_iterator;
   typedef typename std::vector<GlobalVariable<unsigned char>*>::const_iterator
     const_byte_iterator;
+  typedef typename std::vector<GlobalStructVariable*>::const_iterator
+    const_struct_iterator;
 
 public:
+  EmbeddedData(DeviceInterface *di) : device(di) { }
+
+  bool AddVariable(llvm::Constant *C, std::string name);
 
   bool isEmpty() {
     return (globalWords.empty() && globalHalves.empty() && globalBytes.empty());
-  }
-  void addByteVariable(GlobalVariable<unsigned char> *var) {
-    globalBytes.push_back(var);
-  }
-  void addHalfVariable(GlobalVariable<unsigned short> *var) {
-    globalHalves.push_back(var);
-  }
-  void addWordVariable(GlobalVariable<unsigned> *var) {
-    globalWords.push_back(var);
   }
   unsigned getTotalSize();
 
@@ -98,12 +134,39 @@ public:
     return &globalBytes;
   }
 
+  const std::vector<GlobalStructVariable*>* getStructs()
+    const {
+      return &globalStructs;
+    }
+
+private:
+  bool AddStructVariable(llvm::Constant *C, std::string &name);
+
+  void addByteVariable(GlobalVariable<unsigned char> *var) {
+    globalBytes.push_back(var);
+  }
+  void addHalfVariable(GlobalVariable<unsigned short> *var) {
+    globalHalves.push_back(var);
+  }
+  void addWordVariable(GlobalVariable<unsigned> *var) {
+    globalWords.push_back(var);
+  }
+  void addStructVariable(GlobalStructVariable *var) {
+    globalStructs.push_back(var);
+  }
+
 private:
   unsigned totalSize;
+  DeviceInterface *device;
 
+  GlobalVariable<unsigned> *newWordVariable;
+  GlobalVariable<unsigned short> *newHalfVariable;
+  GlobalVariable<unsigned char> *newByteVariable;
+  GlobalStructVariable *newStructVariable;
   std::vector<GlobalVariable<unsigned>*> globalWords;
   std::vector<GlobalVariable<unsigned short>*> globalHalves;
   std::vector<GlobalVariable<unsigned char>*> globalBytes;
+  std::vector<GlobalStructVariable*> globalStructs;
 };
 
 }

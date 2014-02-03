@@ -1,0 +1,8 @@
+#!/bin/sh
+(
+for device in `seq 20 26`;
+do
+  ./matrix-transpose -e -x 128 -y 128 -d $device
+done
+)
+

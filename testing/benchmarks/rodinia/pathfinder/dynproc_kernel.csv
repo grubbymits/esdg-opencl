@@ -1,0 +1,6 @@
+Config, Contexts, Total Cycles, Total Stalls, Decode Stalls, Branches Taken, Branches not Taken, Total Average Cycles
+scalar, 1, 1589, 377, 92, 93, 101, 1589
+scalar, 1, 1592, 378, 93, 93, 102, 1592, 1, 1592, 93
+scalar, 1, 4499, 1431, 207, 405, 271, 4499, 1, 4499, 207
+scalar, 1, 113540, 45068, 6080, 12981, 7347, 113540, 5, 22708, 1216
+scalar, 1, 454295, 179976, 24150, 51912, 29764, 454295, 5, 90859, 4830

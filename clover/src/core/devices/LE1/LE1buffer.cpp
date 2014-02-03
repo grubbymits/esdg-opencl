@@ -111,9 +111,13 @@ bool LE1Buffer::allocate()
 #endif
     size_t buf_size = p_buffer->size();
 
-    if (buf_size == 0)
+    if (buf_size == 0) {
+#ifdef DBG_BUFFER
+      std::cerr << "Error, buffer size = 0" << std::endl;
+#endif
         // Something went wrong...
         return false;
+    }
 
     if (!p_data)
     {

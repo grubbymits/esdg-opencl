@@ -239,6 +239,9 @@ MapBufferEvent::MapBufferEvent(CommandQueue *parent,
 : BufferEvent(parent, buffer, num_events_in_wait_list, event_wait_list, errcode_ret),
   p_offset(offset), p_cb(cb), p_map_flags(map_flags)
 {
+#ifdef DEBUGCL
+  std::cerr << "Constructing MapBufferEvent" << std::endl;
+#endif
     if (*errcode_ret != CL_SUCCESS) return;
 
     // Check flags
@@ -251,6 +254,12 @@ MapBufferEvent::MapBufferEvent(CommandQueue *parent,
     // Check for out-of-bounds values
     if (offset + cb > buffer->size())
     {
+#ifdef DEBUGCL
+      std::cerr << "offset + cb > buffer->size" << std::endl;
+      std::cerr << "offset = " << offset << std::endl
+        << "cb = " << cb << std::endl
+        << "buffer->size = " << buffer->size() << std::endl;
+#endif
         *errcode_ret = CL_INVALID_VALUE;
         return;
     }

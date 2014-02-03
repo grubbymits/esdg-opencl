@@ -136,7 +136,9 @@ LE1Device::~LE1Device()
   for (StatsMap::iterator SMI = ExecutionStats.begin(),
        SME = ExecutionStats.end(); SMI != SME; ++SMI) {
 
-    std::cout << "Kernel Stats for " << SMI->first << std::endl;
+#ifdef DEBUGCL
+    std::cerr << "Kernel Stats for " << SMI->first << std::endl;
+#endif
 
     unsigned TotalCycles = 0;
     unsigned TotalStalls = 0;
@@ -145,15 +147,14 @@ LE1Device::~LE1Device()
     unsigned TotalBranchesTaken = 0;
     unsigned TotalBranchesNotTaken = 0;
 
-    unsigned AverageCycles = 0;
-    unsigned AverageStalls = 0;
-    unsigned AverageIdle = 0;
-    unsigned AverageDecodeStalls = 0;
-    unsigned AverageBranchesTaken = 0;
-    unsigned AverageBranchesNotTaken = 0;
+    StatSet statSet = SMI->second.second;
+    StatVector statVector = statSet.second;
+    unsigned numIterations = SMI->second.first;
+    unsigned completionCycles = statSet.first;
 
-    for (StatsSet::iterator SI = SMI->second.begin(),
-         SE = SMI->second.end(); SI != SE; ++SI) {
+    for (StatVector::iterator SI = statVector.begin(),
+         SE = statVector.end(); SI != SE; ++SI) {
+
       SimulationStats Stats = *SI;
       TotalCycles += Stats.TotalCycles;
       TotalStalls += Stats.Stalls;
@@ -161,24 +162,7 @@ LE1Device::~LE1Device()
       TotalDecodeStalls += Stats.DecodeStalls;
       TotalBranchesTaken += Stats.BranchesTaken;
       TotalBranchesNotTaken += Stats.BranchesNotTaken;
-
-      AverageCycles += Stats.TotalCycles / (NumCores - Stats.disabledCores);
-      AverageStalls += Stats.Stalls / (NumCores - Stats.disabledCores);
-      AverageIdle += Stats.IdleCycles / (NumCores - Stats.disabledCores);
-      AverageDecodeStalls += Stats.DecodeStalls /
-        (NumCores - Stats.disabledCores);
-      AverageBranchesTaken += Stats.BranchesTaken /
-        (NumCores - Stats.disabledCores);
-      AverageBranchesNotTaken += Stats.BranchesNotTaken /
-        (NumCores - Stats.disabledCores);
     }
-
-    //AverageCycles /= KernelIterations;
-    //AverageIdle /= KernelIterations;
-    //AverageDecodeStalls /= KernelIterations;
-    //AverageStalls /= KernelIterations;
-    //AverageBranchesTaken /= KernelIterations;
-    //AverageBranchesNotTaken /= KernelIterations;
 
     // Write results to a CSV file
     // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
@@ -190,12 +174,17 @@ LE1Device::~LE1Device()
 
     if(!std::ifstream(filename.c_str())) {
       Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
-        << " Branches Taken, Branches not Taken, Total Average Cycles\n";
+        << " Branches Taken, Branches not Taken, Cycle to complete, Iterations"
+        << ", Average Cycles, Average Decode"
+        << std::endl;
     }
     Line << CPU << ", " << NumCores << ", " << TotalCycles << ", "
       << TotalStalls << ", " << TotalDecodeStalls << ", "
       << TotalBranchesTaken << ", " << TotalBranchesNotTaken << ", "
-      << AverageCycles << std::endl;
+      << completionCycles << ", " << numIterations << ", "
+      << completionCycles / numIterations << ", "
+      << TotalDecodeStalls / numIterations
+      << std::endl;
 
     std::ofstream Results;
     Results.open(filename.c_str(), std::ios_base::app);
@@ -247,15 +236,24 @@ void LE1Device::incrGlobalBaseAddr(unsigned mem_incr) {
 }
 
 void LE1Device::SaveStats(std::string &Kernel) {
-  StatsSet *NewStats = Simulator->GetStats();
+  StatSet *NewStats = Simulator->GetStats();
 
   if (ExecutionStats.find(Kernel) == ExecutionStats.end()) {
-    ExecutionStats.insert(std::make_pair(Kernel, *NewStats));
+    ExecutionStats.insert(std::make_pair(Kernel, std::make_pair(1, *NewStats)));
   }
   else {
-    StatsSet OldSet = ExecutionStats[Kernel];
-    OldSet.insert(OldSet.end(), NewStats->begin(), NewStats->end());
+    StatSet *OldSet = &(ExecutionStats[Kernel].second);
+    OldSet->second.insert(OldSet->second.end(), NewStats->second.begin(),
+                         NewStats->second.end());
+    // Increment the number of times this kernel has run, and the total cycles
+    OldSet->first += NewStats->first;
+    ExecutionStats[Kernel].first++;
   }
+#ifdef DBG_OUTPUT
+  std::cout << "Iteration = " << ExecutionStats[Kernel].first << std::endl;
+  std::cout << "Total cycles = " << ExecutionStats[Kernel].second.first
+    << std::endl;
+#endif
 
   Simulator->ClearStats();
 }
@@ -298,6 +296,17 @@ cl_int LE1Device::initEventDeviceData(Event *event)
             data += e->offset();
 
             e->setPtr((void *)data);
+#ifdef DEBUGCL
+            if (buf->allocated())
+              std::cerr << "Buffer is allocated, ";
+            std::cerr << "addr = " << std::hex << buf->addr() << ", offset = "
+              << e->offset() << std::endl;
+            std::cerr << "data size = " << std::dec << e->buffer()->size()
+              << std::endl;
+            if (e->buffer()->size() == 4)
+              std::cerr << "single word data = " << (unsigned)*data
+                << std::endl;
+#endif
             break;
         }
         case Event::MapImage:

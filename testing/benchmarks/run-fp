@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Directories:
+# - rodinia
+#   - gaussian
+#   - lud
+#   - nn
+
+# Each directory will contain a script to iterate through all the devices
+declare -a benchmarks=(rodinia/gaussian rodinia/lud/ocl rodinia/nn
+                       AMD/FastWalshTransform AMD/NBody);
+
+for benchmark in ${benchmarks[@]}
+do
+  (
+    cd $benchmark
+    make clean
+    make
+    bash ./run > output &
+  )
+done

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+(
+for device in `seq 0 19`;
+do
+  ./fast-walsh -d $device -x 4096
+done
+)

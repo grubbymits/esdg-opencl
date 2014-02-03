@@ -773,9 +773,11 @@ def ADJCALLSTACKUP   : LE1Pseudo<(outs), (ins uimm16:$amt1, uimm16:$amt2),
 // Operations to load/store predicate register
 let Defs = [T45] in {
 def LDW_PRED  : LE1Pseudo<(outs BRegs:$dst), (ins mem:$addr),
-                          "!LOADPRED $dst", []>;
+                          "!LOADPRED $dst, $addr",
+                          [(set (i1 BRegs:$dst), (load addr:$addr))]>;
 def STW_PRED  : LE1Pseudo<(outs), (ins BRegs:$src, mem:$addr),
-                          "!STOREPRED $src", []>;
+                          "!STOREPRED $src, $addr",
+                          [(store (i1 BRegs:$src), addr:$addr)]>;
 }
 
 // Operation to handle function pointer

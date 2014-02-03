@@ -14,6 +14,7 @@ namespace llvm {
 
 namespace Coal {
   class KernelEvent;
+  class LE1KernelEvent;
   class LE1Device;
   class LE1Kernel;
   class EmbeddedData;
@@ -22,8 +23,8 @@ namespace Coal {
 class LE1DataPrinter {
 public:
   LE1DataPrinter(LE1Device *device,
-                 EmbeddedData &data,
-                 KernelEvent *event,
+                 EmbeddedData *data,
+                 LE1KernelEvent *event,
                  const char* sourceName);
   bool AppendDataArea();
 private:
@@ -41,6 +42,12 @@ private:
                        const void *Data,
                        unsigned Addr,
                        unsigned TotalSize);
+  bool WriteStructData(llvm::ConstantStruct* const* CSArray,
+                       unsigned numElements,
+                       unsigned addr);
+  bool WriteField(llvm::Constant *C,
+                  llvm::Type *fieldType,
+                  unsigned *addr);
   void PrintSingleElement(const void *Data,
                           unsigned Addr,
                           unsigned *Offset,
@@ -51,8 +58,9 @@ private:
   private:
     KernelEvent *p_event;
     LE1Device *TheDevice;
-    EmbeddedData embeddedData;
+    EmbeddedData *embeddedData;
     unsigned NumCores;
+    unsigned totalWorkgroups;
     Kernel *TheKernel;
     std::vector<unsigned> ArgAddrs;
     unsigned AttrAddrEnd;

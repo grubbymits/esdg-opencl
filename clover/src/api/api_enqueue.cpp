@@ -486,6 +486,10 @@ clEnqueueMapBuffer(cl_command_queue command_queue,
                    cl_event *       event,
                    cl_int *         errcode_ret)
 {
+#ifdef DBG_API
+  std::cerr << "clEnqueueMapBuffer: offset = " << offset << ", cb = "
+    << cb << std::endl;
+#endif
     cl_int dummy_errcode;
 
     if (!errcode_ret)

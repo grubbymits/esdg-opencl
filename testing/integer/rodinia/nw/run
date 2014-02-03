@@ -1,7 +1,0 @@
-#!/bin/sh
-(
-for device in `seq 0 12`;
-do
-  ./nw 256 10 ./nw.cl $device
-done
-)

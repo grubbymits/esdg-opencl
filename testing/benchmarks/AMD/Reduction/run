@@ -1,0 +1,8 @@
+#!/bin/sh
+(
+for device in `seq 20 26`;
+do
+  ./reduction -x 131072 -i 5 -d $device
+done
+)
+

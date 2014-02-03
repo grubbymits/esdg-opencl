@@ -79,7 +79,7 @@ const char *KernelSource =
 "   __global float* output)\n" \
 "{\n" \
 "   int i = get_global_id(0);\n" \
-"   output[i] = (input1[i] * input2[i]);\n" \
+"   output[i] = (input1[i] / input2[i]);\n" \
 "}\n" \
 "\n";
  
@@ -264,7 +264,7 @@ int main(int argc, char** argv)
     correct = 0;
     for(i = 0; i < count; i++)
     {
-      float expected = data1[i] * data2[i];
+      float expected = data1[i] / data2[i];
       float res = results[i];
       //printf("    data1 = %x, data2 = %x\n", data1[i], data2[i]);
 

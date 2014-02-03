@@ -45,10 +45,15 @@ typedef std::map<std::string, StmtSet> StmtSetMap;
 typedef std::map<std::string, DeclRefSet> DeclRefSetMap;
 typedef std::map<std::string, NamedDeclSet> NamedDeclSetMap;
 
-typedef std::list<std::pair<clang::Stmt*, clang::ReturnStmt*> > PairedReturnList;
-typedef std::list<std::pair<clang::Stmt*, clang::ContinueStmt*> > PairedContinueList;
-typedef std::list<std::pair<clang::Stmt*, clang::BreakStmt*> > PairedBreakList;
 typedef std::list<std::pair<clang::SourceLocation, std::string> > StringList;
+
+typedef std::list<clang::Stmt*>::iterator region_iterator;
+typedef std::list<clang::CallExpr*>::iterator barrier_iterator;
+typedef std::list<clang::DeclStmt*>::iterator declstmt_iterator;
+typedef std::list<clang::ReturnStmt*>::iterator return_iterator;
+typedef std::list<clang::ContinueStmt*>::iterator continue_iterator;
+typedef std::list<clang::BreakStmt*>::iterator break_iterator;
+typedef std::vector<clang::DeclRefExpr*>::iterator declref_iterator;
 
 class WorkitemCoarsen {
 
@@ -83,6 +88,7 @@ public:
     TheConsumer->RewriteSource();
     return TheRewriter.getRewriteBufferFor(SourceMgr->getMainFileID());
   }
+  bool isParallel() const { return TheConsumer->isParallel(); }
 
 private:
 
@@ -119,6 +125,8 @@ public:
           }*/
           // Traverse the declaration using our AST visitor.
           Visitor.TraverseDecl(*b);
+          if (isParallel())
+            Visitor.FixReturns();
         }
       }
     }
@@ -128,13 +136,7 @@ public:
   void RewriteSource() {
     Visitor.RewriteSource();
   }
-  /*
-  bool needsScalarFixes() const {
-    return Visitor.needsToFixScalarAccesses();
-  }
-  void FixAllScalarAccesses() {
-    Visitor.FixAllScalarAccesses();
-  }*/
+  bool isParallel() const { return Visitor.isParallel(); }
 
 private:
   std::string KernelName;
@@ -162,6 +164,8 @@ template <typename T> class ASTVisitorBase :
   public clang::RecursiveASTVisitor<T> {
 public:
   ASTVisitorBase(clang::Rewriter &R, unsigned x, unsigned y, unsigned z);
+  bool isParallel() const { return !foundBarrier; }
+  virtual void FixReturns() { }
   //virtual bool needsToFixScalarAccesses() const = 0;
   //virtual void FixAllScalarAccesses() = 0;
   virtual void RewriteSource();
@@ -178,6 +182,7 @@ protected:
   unsigned LocalX;
   unsigned LocalY;
   unsigned LocalZ;
+  bool foundBarrier;
   std::stringstream OpenWhile;
   std::stringstream CloseWhile;
   clang::Rewriter &TheRewriter;
@@ -193,6 +198,10 @@ public:
   bool VisitFunctionDecl(clang::FunctionDecl *f);
   bool VisitDeclStmt(clang::Stmt *s);
   bool VisitCallExpr(clang::Expr *s);
+  bool VisitReturnStmt(clang::Stmt *s);
+  void FixReturns();
+private:
+  std::vector<clang::Stmt*> ReturnStmts;
 };
 
 class ThreadSerialiser : public ASTVisitorBase<ThreadSerialiser> {
@@ -201,38 +210,47 @@ public:
   ~ThreadSerialiser();
   void RewriteSource();
 
-  //bool VisitForStmt(clang::Stmt *s);
   bool VisitForStmt(clang::Stmt *s);
-  //bool VisitCallExpr(clang::Expr *s);
-  //bool VisitReturnStmt(clang::Stmt *s);
-  bool WalkUpFromUnaryContinueStmt(clang::UnaryOperator *s);
   bool VisitDeclRefExpr(clang::Expr *expr);
-  bool VisitUnaryOperator(clang::Expr *expr);
-  bool VisitBinaryOperator(clang::Expr *expr);
+  //bool VisitUnaryOperator(clang::Expr *expr);
+  //bool VisitBinaryOperator(clang::Expr *expr);
   bool VisitFunctionDecl(clang::FunctionDecl *f);
 
 private:
   clang::SourceLocation GetOffsetInto(clang::SourceLocation Loc);
   clang::SourceLocation GetOffsetOut(clang::SourceLocation Loc);
 
-  void TraverseRegion(clang::Stmt *s);
-  void TraverseConditionalRegion(clang::Stmt* Region,
-                                 clang::Stmt* s);
-  void CheckForUnary(clang::Stmt *Region,
-                     clang::Stmt *Then,
-                     clang::Stmt *unary);
+  unsigned TraverseRegion(clang::Stmt *Parent,
+                          clang::Stmt *Region,
+                          bool isConditional,
+                          bool isThreadDep);
+  //bool TraverseConditionalRegion(clang::Stmt *Region);
   void HandleNonParallelRegion(clang::Stmt *Region, int depth);
+  void FixUnary(clang::Stmt *Unary);
+  void FixBarrier(clang::CallExpr *Call);
   void FixReturnsInBarrierAbsence(clang::Stmt* Region,
                                   unsigned depth);
   //void HandleBreaks(clang::Stmt *Region);
   bool CheckWithinEnclosedLoop(clang::SourceLocation InsertLoc,
                                clang::DeclStmt *s,
                                clang::Stmt *Scope);
-  void SearchForIndVars(clang::Stmt *s);
-  bool SearchThroughRegions(clang::Stmt *Loop);
-  void AssignIndVars(void);
-  void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
-                        clang::Stmt *Loop);
+  //void SearchForIndVars(clang::Stmt *s);
+  bool SearchThroughRegions(clang::Stmt *Region,
+                            bool isParentParallel);
+  //void AssignIndVars(void);
+
+  bool isVarThreadDep(clang::Decl *decl);
+  void AddDep(clang::Decl *decl);
+  void FindThreadDeps(clang::Stmt *s, bool depRegion);
+  void CheckDeclStmtDep(clang::Stmt *s, bool depRegion);
+  void CheckUnaryOpDep(clang::Expr *expr, bool depRegion);
+  void CheckBinaryOpDep(clang::Expr *expr, bool depRegion);
+  void CheckArrayDeps(clang::Expr *expr, bool depRegion);
+  bool SearchExpr(clang::Expr *s);
+
+  //void FindRefsToExpand(std::list<clang::DeclStmt*> &Stmts,
+    //                    clang::Stmt *Loop);
+  void FindRefsToExpand(void);
   void ExpandDecl(std::stringstream &NewDecl);
   void ExpandRef(std::stringstream &NewRef);
   void ScalarExpand(clang::SourceLocation InsertLoc,
@@ -249,24 +267,21 @@ private:
   void AccessNonScalar(clang::DeclRefExpr *Ref);
 
 private:
-  std::map<clang::Stmt*, std::vector<clang::Stmt*> > NestedLoops;
+  std::map<clang::Stmt*, std::list<clang::Stmt*> > NestedRegions;
   std::map<clang::Stmt*, std::list<clang::DeclStmt*> > ScopedDeclStmts;
-  std::map<clang::Stmt*, std::vector<clang::CallExpr*> > Barriers;
-  std::map<clang::Stmt*, std::vector<clang::CompoundStmt*> > ScopedRegions;
-
-  std::map<clang::Stmt*, PairedContinueList> ContinueStmts;
-  std::map<clang::Stmt*, PairedBreakList> BreakStmts;
-  std::map<clang::Stmt*, PairedReturnList> ReturnStmts;
+  std::map<clang::Stmt*, std::list<clang::CallExpr*> > Barriers;
+  std::map<clang::Stmt*, std::list<clang::ContinueStmt*> > ContinueStmts;
+  std::map<clang::Stmt*, std::list<clang::BreakStmt*> > BreakStmts;
+  std::map<clang::Stmt*, std::list<clang::ReturnStmt*> > ReturnStmts;
 
   std::map<clang::Decl*, std::vector<clang::DeclRefExpr*> > AllRefs;
   std::map<clang::Decl*, clang::Stmt*> DeclParents;
-  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > RefAssignments;
-  std::map<clang::Decl*, std::list<clang::DeclRefExpr*> > PotentialIndVars;
+  std::map<clang::Decl*, bool> threadDepVars;
 
-  std::vector<clang::Decl*> IndVars;
   std::vector<clang::FunctionDecl*> AllFunctions;
   std::vector<clang::FunctionDecl*> CalledFunctions;
 
+  std::vector<clang::SourceLocation> FissionLocs;
 
   clang::SourceLocation FuncBodyStart;
   clang::SourceLocation FuncStart;
