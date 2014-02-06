@@ -1963,10 +1963,6 @@ LE1ToolChain::~LE1ToolChain() {
       delete it->second;
 }
 
-bool LE1ToolChain::IsMathErrnoDefault() const {
-  return true;
-}
-
 Tool &LE1ToolChain::SelectTool(const Compilation &C,
                                const JobAction &JA,
                                const ActionList &Inputs) const {

@@ -5635,6 +5635,9 @@ const TargetCodeGenInfo &CodeGenModule::getTargetCodeGenInfo() {
   case llvm::Triple::tce:
     return *(TheTargetCodeGenInfo = new TCETargetCodeGenInfo(Types));
 
+  case llvm::Triple::le1:
+    return *(TheTargetCodeGenInfo = new LE1TargetCodeGenInfo(Types));
+
   case llvm::Triple::x86: {
     bool IsDarwinVectorABI = Triple.isOSDarwin();
     bool IsSmallStructInRegABI =

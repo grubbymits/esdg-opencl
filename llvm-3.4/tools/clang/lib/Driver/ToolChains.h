@@ -643,9 +643,10 @@ public:
 
   virtual Tool &SelectTool(const Compilation &C, const JobAction &JA,
                            const ActionList &Inputs) const;
-  bool IsMathErrnoDefault() const;
+  bool IsMathErrnoDefault() const { return true; }
   bool isPICDefault() const { return false; }
   bool isPICDefaultForced() const { return false; }
+  bool isPIEDefault() const { return false; }
   //bool IsUnwindTablesDefault() const;
   //const char* GetDefaultRelocationModel() const;
   //const char* GetForcedPicModel() const;

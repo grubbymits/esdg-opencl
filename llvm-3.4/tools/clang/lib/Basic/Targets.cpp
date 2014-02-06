@@ -5852,6 +5852,9 @@ static TargetInfo *AllocateTarget(const llvm::Triple &Triple) {
   case llvm::Triple::tce:
     return new TCETargetInfo(Triple);
 
+  case llvm::Triple::le1:
+    return new LE1TargetInfo(Triple);
+
   case llvm::Triple::x86:
     if (Triple.isOSDarwin())
       return new DarwinI386TargetInfo(Triple);

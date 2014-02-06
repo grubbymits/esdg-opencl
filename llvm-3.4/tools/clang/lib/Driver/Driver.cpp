@@ -1977,6 +1977,11 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
         TC = new toolchains::Hexagon_TC(*this, Target, Args);
         break;
       }
+      if ((Target.getArchName() == "le1") ||
+          (Target.getArch() == llvm::Triple::le1)) {
+        TC = new toolchains::LE1ToolChain(*this, Target, Args);
+        break;
+      }
       if (Target.getArch() == llvm::Triple::xcore) {
         TC = new toolchains::XCore(*this, Target, Args);
         break;
