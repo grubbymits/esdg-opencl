@@ -21,6 +21,7 @@
 namespace llvm {
 
   class LE1MCAsmInfo : public MCAsmInfo {
+    virtual void anchor();
   public:
     explicit LE1MCAsmInfo(const MCRegisterInfo &MRI, StringRef TT);
   };

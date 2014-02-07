@@ -31,6 +31,8 @@
 #define GET_REGINFO_MC_DESC
 #include "LE1GenRegisterInfo.inc"
 
+#include <iostream>
+
 using namespace llvm;
 
 static MCInstrInfo *createLE1MCInstrInfo() {
@@ -53,6 +55,7 @@ static MCSubtargetInfo *createLE1MCSubtargetInfo(StringRef TT, StringRef CPU,
 }
 
 static MCAsmInfo *createLE1MCAsmInfo(const MCRegisterInfo &MRI, StringRef TT) {
+  std::cout << "createLE1MCAsmInfo" << std::endl;
   MCAsmInfo *MAI = new LE1MCAsmInfo(MRI, TT);
 
   //MachineLocation Dst(MachineLocation::VirtualFP);
@@ -98,6 +101,7 @@ static MCStreamer *createMCStreamer(const Target &T, StringRef TT,
 }*/
 
 extern "C" void LLVMInitializeLE1TargetMC() {
+  std::cout << "LLVMInitializeLE1TargetMC" << std::endl;
   // Register the MC asm info.
   RegisterMCAsmInfoFn X(TheLE1Target, createLE1MCAsmInfo);
 

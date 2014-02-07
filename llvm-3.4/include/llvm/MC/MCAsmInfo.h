@@ -21,6 +21,7 @@
 #include "llvm/MC/MachineLocation.h"
 #include <cassert>
 #include <vector>
+#include <iostream>
 
 namespace llvm {
   class MCExpr;
@@ -517,6 +518,7 @@ namespace llvm {
       return ExceptionsType != ExceptionHandling::None;
     }
     ExceptionHandling::ExceptionsType getExceptionHandlingType() const {
+      std::cout << "getExceptionHandlingType" << std::endl;
       return ExceptionsType;
     }
     bool isExceptionHandlingDwarf() const {

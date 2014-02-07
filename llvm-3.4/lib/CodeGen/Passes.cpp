@@ -28,6 +28,8 @@
 #include "llvm/Target/TargetSubtargetInfo.h"
 #include "llvm/Transforms/Scalar.h"
 
+#include <iostream>
+
 using namespace llvm;
 
 static cl::opt<bool> DisablePostRA("disable-post-ra", cl::Hidden,
@@ -388,6 +390,7 @@ void TargetPassConfig::addIRPasses() {
 /// Turn exception handling constructs into something the code generators can
 /// handle.
 void TargetPassConfig::addPassesToHandleExceptions() {
+  std::cout << "addPassesToHandleExceptions" << std::endl;
   switch (TM->getMCAsmInfo()->getExceptionHandlingType()) {
   case ExceptionHandling::SjLj:
     // SjLj piggy-backs on dwarf for this bit. The cleanups done apply to both
@@ -404,10 +407,15 @@ void TargetPassConfig::addPassesToHandleExceptions() {
     addPass(createDwarfEHPass(TM));
     break;
   case ExceptionHandling::None:
+    std::cout << "ExceptionHandling::None" << std::endl;
     addPass(createLowerInvokePass(TM));
+
+    std::cout << "created LowerInvokePass" << std::endl;
 
     // The lower invoke pass may create unreachable code. Remove it.
     addPass(createUnreachableBlockEliminationPass());
+
+    std::cout << "created UnreachableBlockEliminationPass" << std::endl;
     break;
   }
 }

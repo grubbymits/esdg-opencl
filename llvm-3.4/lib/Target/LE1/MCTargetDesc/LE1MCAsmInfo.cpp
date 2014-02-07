@@ -13,10 +13,15 @@
 
 #include "LE1MCAsmInfo.h"
 #include "llvm/ADT/Triple.h"
+#include <iostream>
 
 using namespace llvm;
 
+void LE1MCAsmInfo::anchor() {}
+
 LE1MCAsmInfo::LE1MCAsmInfo(const MCRegisterInfo &MRI, StringRef TT) {
+  std::cout << "Constructed LE1MCAsmInfo" << std::endl;
+
   Triple TheTriple(TT);
   IsLittleEndian = false;
   // TODO check these
@@ -32,7 +37,7 @@ LE1MCAsmInfo::LE1MCAsmInfo(const MCRegisterInfo &MRI, StringRef TT) {
 
   SupportsDebugInformation = true;
 
-  ExceptionsType = ExceptionHandling::DwarfCFI;
+  ExceptionsType = ExceptionHandling::None;
   HasLEB128 = true;
   DwarfRegNumForCFI = true;
 }
