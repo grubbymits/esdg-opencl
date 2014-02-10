@@ -50,7 +50,9 @@ LE1TargetMachine(const Target &T, StringRef TT,
   InstrInfo(Subtarget),
   TLInfo(*this), TSInfo(*this),
   FrameLowering(Subtarget),
-  InstrItins(Subtarget.getInstrItineraryData()) { 
+  InstrItins(Subtarget.getInstrItineraryData()) {
+    initAsmInfo();
+    this->Options.FloatABIType = FloatABI::Soft;
 }
 
 bool LE1TargetMachine::addPassesForOptimizations(PassManagerBase &PM) {

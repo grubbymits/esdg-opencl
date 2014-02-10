@@ -198,6 +198,7 @@ SelectAddr(SDValue Addr, SDValue &Base, SDValue &Offset) {
 /// Select instructions not customized! Used for
 /// expanded, promoted and normal instructions
 SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
+  std::cout << "Select: " << std::endl;
 
   unsigned Opcode = Node->getOpcode();
   SDLoc dl(Node);

@@ -355,6 +355,9 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(LibFunc::exp2,   MVT::f64, Expand);
   setOperationAction(LibFunc::exp2f,  MVT::f64, Expand);
   */
+  setLibcallName(RTLIB::ADD_F32, "float32_add");
+  setOperationAction(ISD::FADD, MVT::f32, Expand);
+
   setLibcallName(RTLIB::MUL_F32, "float32_mul");
   setOperationAction(ISD::FMUL, MVT::f32, Expand);
   setLibcallName(RTLIB::DIV_F32, "float32_div");

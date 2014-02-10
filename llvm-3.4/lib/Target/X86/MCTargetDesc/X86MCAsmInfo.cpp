@@ -19,6 +19,9 @@
 #include "llvm/MC/MCStreamer.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/ELF.h"
+
+#include <iostream>
+
 using namespace llvm;
 
 enum AsmWriterFlavorTy {
@@ -74,6 +77,7 @@ X86_64MCAsmInfoDarwin::X86_64MCAsmInfoDarwin(const Triple &Triple)
 void X86ELFMCAsmInfo::anchor() { }
 
 X86ELFMCAsmInfo::X86ELFMCAsmInfo(const Triple &T) {
+  std::cout << "Constructing X86ELFMCAsmInfo" << std::endl;
   bool is64Bit = T.getArch() == Triple::x86_64;
   bool isX32 = T.getEnvironment() == Triple::GNUX32;
 
