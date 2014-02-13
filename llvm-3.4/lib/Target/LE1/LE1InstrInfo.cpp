@@ -438,8 +438,11 @@ CreateTargetScheduleState(const TargetMachine *TM,
 ScheduleHazardRecognizer *LE1InstrInfo::
 CreateTargetHazardRecognizer(const TargetMachine *TM,
                              const ScheduleDAG *DAG) const {
-  const InstrItineraryData *II = Subtarget.getInstrItineraryData();
-  return new ScoreboardHazardRecognizer(II, DAG, "sched-instrs");
+  if (usePreRAHazardRecognizer()) {
+    const InstrItineraryData *II = Subtarget.getInstrItineraryData();
+    return new ScoreboardHazardRecognizer(II, DAG, "sched-instrs");
+  }
+  return TargetInstrInfo::CreateTargetHazardRecognizer(TM, DAG);
 }
 
 ScheduleHazardRecognizer *LE1InstrInfo::

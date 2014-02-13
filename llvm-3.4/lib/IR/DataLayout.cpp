@@ -21,6 +21,7 @@
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Module.h"
+#include "llvm/Support/Debug.h"
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/GetElementPtrTypeIterator.h"
 #include "llvm/Support/ManagedStatic.h"
@@ -180,6 +181,7 @@ void DataLayout::init(StringRef Desc) {
 static std::pair<StringRef, StringRef> split(StringRef Str, char Separator) {
   assert(!Str.empty() && "parse error, string can't be empty here");
   std::pair<StringRef, StringRef> Split = Str.split(Separator);
+  DEBUG(dbgs() << Str.str() << "\n");
   assert((!Split.second.empty() || Split.first == Str) &&
          "a trailing separator is not allowed");
   return Split;

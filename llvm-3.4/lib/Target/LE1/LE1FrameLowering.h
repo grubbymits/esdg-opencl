@@ -42,6 +42,9 @@ public:
 
   void processFunctionBeforeCalleeSavedScan(MachineFunction &MF,
                                             RegScavenger *RS) const;
+  void eliminateCallFramePseudoInstr(MachineFunction &MF,
+                                     MachineBasicBlock &MBB,
+                                     MachineBasicBlock::iterator MI) const;
 };
 
 } // End llvm namespace

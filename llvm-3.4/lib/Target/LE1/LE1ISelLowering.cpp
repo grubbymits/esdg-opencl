@@ -144,7 +144,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setSelectIsExpensive(false);
   setIntDivIsCheap(false);
   setJumpIsExpensive(true);
-  setSchedulingPreference(Sched::VLIW);
+  setSchedulingPreference(Sched::ILP);
 
   // Basically try to completely remove calls to these library functions
   MaxStoresPerMemset = 100;

@@ -252,3 +252,10 @@ processFunctionBeforeCalleeSavedScan(MachineFunction &MF,
   else
     MRI.setPhysRegUnused(LE1::L0);
 }
+
+// Just delete ADJCALLSTACK pseudo instructions
+void LE1FrameLowering::
+eliminateCallFramePseudoInstr(MachineFunction &MF, MachineBasicBlock &MBB,
+                              MachineBasicBlock::iterator MI) const {
+  MBB.erase(MI);
+}

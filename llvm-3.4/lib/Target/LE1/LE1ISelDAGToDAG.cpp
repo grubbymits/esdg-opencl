@@ -164,9 +164,14 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
   SDLoc dl(Node);
 
   // Dump information about the Node being selected
-  DEBUG(dbgs() << "Selecting: "; Node->dump(CurDAG); << "\n");
+  DEBUG(dbgs() << "Selecting:" << Opcode << "\n");
+  DEBUG(Node->dump(CurDAG));
 
   switch(Opcode) {
+  default:
+    // Select the default instruction
+    return SelectCode(Node);
+    break;
     // FIXME ADDE should take a valid carry flag. This is an expanded op
     // in TargetLowering, should try to make it custom
   case ISD::ADDE: {
@@ -184,21 +189,7 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     return CurDAG->SelectNodeTo(Node, LE1::ADD, VT, MVT::Glue,
                                 LHS, SDValue(AddCarry,0));
     break;
-  }/*
-  case ISD::EXTLOAD:
-  case ISD::SEXTLOAD:
-  case ISD::ZEXTLOAD: {
-    std::cout << "Extend load\n";
-    unsigned NumOperands = Node->getNumOperands();
-    std::cout << "NumOperands = " << NumOperands << std::endl;
-    if(NumOperands > 0)
-      if(Node->getOperand(1).getNode()->getOpcode() == LE1ISD::TargetGlobal)
-        return SelectExtLoad(Node);
-    //SDNode *Target = Node->getOperand(1).getNode();
-    //if(Target->getOpcode() == LE1ISD::TargetGlobal)
-      //std::cout << "TargetGlobal\n";
-    break;
-  }*/
+  }
   case ISD::LOAD: {
   //case ISD::EXTLOAD:
   //case ISD::SEXTLOAD:
@@ -215,72 +206,7 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
        Target->getOpcode() == LE1ISD::TargetGlobal)
       return SelectStore(Node);
     break;
-  }/*
-  case LE1ISD::LoadGlobalU8: {
-      SDValue TargetAddr = Node->getOperand(1);
-    SDValue TargetOffset = Node->getOperand(2);
-    SDValue Chain = Node->getOperand(3);
-  return CurDAG->getMachineNode(LE1::LDBu_G, dl, MVT::i8, MVT::Other,
-                                  TargetAddr, TargetOffset, Chain);
-    break;
   }
-  case LE1ISD::LoadGlobalU16: {
-     SDValue TargetAddr = Node->getOperand(1);
-    SDValue TargetOffset = Node->getOperand(2);
-    SDValue Chain = Node->getOperand(3);
-   return CurDAG->getMachineNode(LE1::LDHu_G, dl, MVT::i16, MVT::Other,
-                                  TargetAddr, TargetOffset, Chain);
-    break;
-  }
-  case LE1ISD::LoadGlobalS8: {
-     SDValue TargetAddr = Node->getOperand(1);
-    SDValue TargetOffset = Node->getOperand(2);
-    SDValue Chain = Node->getOperand(3);
-   return CurDAG->getMachineNode(LE1::LDB_G, dl, MVT::i8, MVT::Other,
-                                  TargetAddr, TargetOffset, Chain);
-    break;
-  }
-  case LE1ISD::LoadGlobalS16: {
-    SDValue TargetAddr = Node->getOperand(1);
-    SDValue TargetOffset = Node->getOperand(2);
-    SDValue Chain = Node->getOperand(3);
-    return CurDAG->getMachineNode(LE1::LDH_G, dl, MVT::i16, MVT::Other,
-                                  TargetAddr, TargetOffset, Chain);
-    break;
-  }*/
-  //case LE1ISD::Call:
-    //if(!Node->getOperand(1).isGlobal()) {
-      //SDValue LoadLink = CurDAG->getMachineNode(LE1::LDW, dl, MVT::i32,
- /* 
-  case ISD::MULHS: {
-  //case ISD::MULHU: {
-    // FIXME is this ok for both signed and unsigned?
-    //SDValue LHS = Node->getOperand(0);
-    //SDValue RHS = Node->getOperand(1);
-    SDValue MulOp1 = Node->getOperand(0);
-    SDValue MulOp2 = Node->getOperand(1);
-
-    SDValue ShiftImm = CurDAG->getTargetConstant(16, MVT::i32);
-
-    SDValue LLVal = SDValue(CurDAG->getMachineNode(LE1::MULLLU, dl, MVT::i32, 
-                                                   MulOp1, MulOp2), 0);
-    SDValue LHVal = SDValue(CurDAG->getMachineNode(LE1::MULLHU, dl, MVT::i32, 
-                                                   MulOp2, MulOp1), 0);
-    SDValue HLVal = SDValue(CurDAG->getMachineNode(LE1::MULLHU, dl, MVT::i32, 
-                                                   MulOp1, MulOp2), 0);
-    SDValue Im1Val =  SDValue(CurDAG->getMachineNode(LE1::ADD, dl, MVT::i32, 
-                                                     LHVal, HLVal), 0);
-    SDValue Im2Val = SDValue(CurDAG->getMachineNode(LE1::SHR, dl, MVT::i32, 
-                                                    LLVal, ShiftImm), 0);
-    SDValue Im3Val = SDValue(CurDAG->getMachineNode(LE1::ADD, dl, MVT::i32, 
-                                                    Im2Val, Im1Val), 0);
-    SDValue Im4Val = SDValue(CurDAG->getMachineNode(LE1::SHR, dl, MVT::i32, 
-                                                  Im3Val, ShiftImm), 0);
-    SDValue HHVal = SDValue(CurDAG->getMachineNode(LE1::MULHH, dl, MVT::i32, 
-                                                   MulOp1, MulOp2), 0);
-    return CurDAG->getMachineNode(LE1::ADD, dl, MVT::i32, HHVal, Im4Val);
-    break;
-  }*/
   case LE1ISD::Addcg: {
     SDValue LHS = Node->getOperand(0);
     SDValue RHS = Node->getOperand(1);
@@ -329,22 +255,8 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
   case LE1ISD::NUM_CORES:
     return CurDAG->getMachineNode(LE1::LE1_NUM_CORES, dl, MVT::i32);
   }
-
-  // Select the default instruction
-  //std::cout << "Selecting the default instruction\n";
-  SDNode *ResNode = SelectCode(Node);
-
-  //std::cout << "Selected instruction = " << ResNode->getOperationName()
-    //<< "\n";
-
-  DEBUG(errs() << "=> ");
-  if (ResNode == NULL || ResNode == Node)
-    DEBUG(Node->dump(CurDAG));
-  else
-    DEBUG(ResNode->dump(CurDAG));
-  DEBUG(errs() << "\n");
-  return ResNode;
-}/*
+}
+/*
 SDNode* LE1DAGToDAGISel::
 SelectExtLoad(SDNode *Node) {
   std::cout << "ExtLoad with TargetGlobal\n";
