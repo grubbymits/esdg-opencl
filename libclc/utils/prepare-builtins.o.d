@@ -1,50 +1,63 @@
 utils/prepare-builtins.o: utils/prepare-builtins.cpp \
- /opt/esdg-opencl/include/llvm/Attributes.h \
+ /opt/esdg-opencl/include/llvm/ADT/OwningPtr.h \
+ /opt/esdg-opencl/include/llvm/Support/Compiler.h \
+ /opt/esdg-opencl/include/llvm/Config/llvm-config.h \
+ /opt/esdg-opencl/include/llvm/Bitcode/ReaderWriter.h \
+ /opt/esdg-opencl/include/llvm/IR/Attributes.h \
+ /opt/esdg-opencl/include/llvm/ADT/ArrayRef.h \
+ /opt/esdg-opencl/include/llvm/ADT/None.h \
+ /opt/esdg-opencl/include/llvm/ADT/SmallVector.h \
+ /opt/esdg-opencl/include/llvm/Support/AlignOf.h \
  /opt/esdg-opencl/include/llvm/Support/MathExtras.h \
  /opt/esdg-opencl/include/llvm/Support/SwapByteOrder.h \
  /opt/esdg-opencl/include/llvm/Support/DataTypes.h \
- /opt/esdg-opencl/include/llvm/ADT/ArrayRef.h \
- /opt/esdg-opencl/include/llvm/ADT/SmallVector.h \
- /opt/esdg-opencl/include/llvm/Support/AlignOf.h \
- /opt/esdg-opencl/include/llvm/Support/Compiler.h \
  /opt/esdg-opencl/include/llvm/Support/type_traits.h \
- /opt/esdg-opencl/include/llvm/ADT/OwningPtr.h \
- /opt/esdg-opencl/include/llvm/Bitcode/ReaderWriter.h \
- /opt/esdg-opencl/include/llvm/Function.h \
- /opt/esdg-opencl/include/llvm/GlobalValue.h \
- /opt/esdg-opencl/include/llvm/Constant.h \
- /opt/esdg-opencl/include/llvm/User.h \
- /opt/esdg-opencl/include/llvm/Support/ErrorHandling.h \
- /opt/esdg-opencl/include/llvm/ADT/StringRef.h \
- /opt/esdg-opencl/include/llvm/Value.h \
- /opt/esdg-opencl/include/llvm/Use.h \
- /opt/esdg-opencl/include/llvm/ADT/PointerIntPair.h \
- /opt/esdg-opencl/include/llvm/Support/PointerLikeTypeTraits.h \
- /opt/esdg-opencl/include/llvm/Support/Casting.h \
- /opt/esdg-opencl/include/llvm/CallingConv.h \
- /opt/esdg-opencl/include/llvm/BasicBlock.h \
- /opt/esdg-opencl/include/llvm/Instruction.h \
- /opt/esdg-opencl/include/llvm/ADT/ilist_node.h \
- /opt/esdg-opencl/include/llvm/Support/DebugLoc.h \
- /opt/esdg-opencl/include/llvm/Instruction.def \
- /opt/esdg-opencl/include/llvm/SymbolTableListTraits.h \
- /opt/esdg-opencl/include/llvm/ADT/ilist.h \
- /opt/esdg-opencl/include/llvm/ADT/Twine.h \
- /opt/esdg-opencl/include/llvm/Argument.h \
- /opt/esdg-opencl/include/llvm/GlobalVariable.h \
- /opt/esdg-opencl/include/llvm/OperandTraits.h \
- /opt/esdg-opencl/include/llvm/LLVMContext.h \
- /opt/esdg-opencl/include/llvm/Module.h \
- /opt/esdg-opencl/include/llvm/GlobalAlias.h \
- /opt/esdg-opencl/include/llvm/Metadata.h \
  /opt/esdg-opencl/include/llvm/ADT/FoldingSet.h \
+ /opt/esdg-opencl/include/llvm/ADT/StringRef.h \
+ /opt/esdg-opencl/include/llvm/Support/PointerLikeTypeTraits.h \
+ /opt/esdg-opencl/include/llvm/IR/Function.h \
+ /opt/esdg-opencl/include/llvm/IR/Argument.h \
+ /opt/esdg-opencl/include/llvm/ADT/Twine.h \
+ /opt/esdg-opencl/include/llvm/Support/ErrorHandling.h \
+ /opt/esdg-opencl/include/llvm/ADT/ilist_node.h \
+ /opt/esdg-opencl/include/llvm/IR/Value.h \
+ /opt/esdg-opencl/include/llvm/IR/Use.h \
+ /opt/esdg-opencl/include/llvm/ADT/PointerIntPair.h \
+ /opt/esdg-opencl/include/llvm/Support/CBindingWrapping.h \
+ /opt/esdg-opencl/include/llvm/Support/Casting.h \
+ /opt/esdg-opencl/include/llvm-c/Core.h \
+ /opt/esdg-opencl/include/llvm/IR/BasicBlock.h \
+ /opt/esdg-opencl/include/llvm/ADT/ilist.h \
+ /opt/esdg-opencl/include/llvm/IR/Instruction.h \
+ /opt/esdg-opencl/include/llvm/IR/User.h \
+ /opt/esdg-opencl/include/llvm/Support/DebugLoc.h \
+ /opt/esdg-opencl/include/llvm/IR/Instruction.def \
+ /opt/esdg-opencl/include/llvm/IR/SymbolTableListTraits.h \
+ /opt/esdg-opencl/include/llvm/IR/CallingConv.h \
+ /opt/esdg-opencl/include/llvm/IR/GlobalValue.h \
+ /opt/esdg-opencl/include/llvm/IR/Constant.h \
+ /opt/esdg-opencl/include/llvm/IR/DerivedTypes.h \
+ /opt/esdg-opencl/include/llvm/IR/Type.h \
+ /opt/esdg-opencl/include/llvm/ADT/APFloat.h \
+ /opt/esdg-opencl/include/llvm/ADT/APInt.h \
+ /opt/esdg-opencl/include/llvm/IR/GlobalVariable.h \
+ /opt/esdg-opencl/include/llvm/IR/OperandTraits.h \
+ /opt/esdg-opencl/include/llvm/IR/LLVMContext.h \
+ /opt/esdg-opencl/include/llvm/IR/Module.h \
+ /opt/esdg-opencl/include/llvm/IR/GlobalAlias.h \
+ /opt/esdg-opencl/include/llvm/IR/Metadata.h \
  /opt/esdg-opencl/include/llvm/Support/CommandLine.h \
+ /opt/esdg-opencl/include/llvm/ADT/StringMap.h \
+ /opt/esdg-opencl/include/llvm/Support/Allocator.h \
  /opt/esdg-opencl/include/llvm/Support/ManagedStatic.h \
  /opt/esdg-opencl/include/llvm/Support/Atomic.h \
  /opt/esdg-opencl/include/llvm/Support/Threading.h \
  /opt/esdg-opencl/include/llvm/Support/Valgrind.h \
- /opt/esdg-opencl/include/llvm/Config/llvm-config.h \
  /opt/esdg-opencl/include/llvm/Support/MemoryBuffer.h \
  /opt/esdg-opencl/include/llvm/Support/raw_ostream.h \
+ /opt/esdg-opencl/include/llvm/Support/FileSystem.h \
+ /opt/esdg-opencl/include/llvm/ADT/IntrusiveRefCntPtr.h \
+ /opt/esdg-opencl/include/llvm/ADT/SmallString.h \
+ /opt/esdg-opencl/include/llvm/Support/TimeValue.h \
  /opt/esdg-opencl/include/llvm/Support/system_error.h \
  /opt/esdg-opencl/include/llvm/Support/ToolOutputFile.h

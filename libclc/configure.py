@@ -38,7 +38,7 @@ llvm_bindir = llvm_config(['--bindir'])
 llvm_core_libs = llvm_config(['--ldflags', '--libs', 'core', 'bitreader', 'bitwriter'])
 llvm_cxxflags = llvm_config(['--cxxflags']) + ' -fno-exceptions -fno-rtti'
 
-llvm_clang = os.path.join(llvm_bindir, 'clang-3.2')
+llvm_clang = os.path.join(llvm_bindir, 'clang-3.4')
 llvm_link = os.path.join(llvm_bindir, 'llvm-link')
 llvm_opt = os.path.join(llvm_bindir, 'opt')
 
@@ -54,7 +54,7 @@ b.rule("LLVM_AS", "%s -o $out $in" % os.path.join(llvm_bindir, "llvm-as"),
        'LLVM-AS $out')
 b.rule("LLVM_LINK", command = llvm_link + " -o $out $in",
        description = 'LLVM-LINK $out')
-b.rule("OPT", command = llvm_opt + " -targetlibinfo -no-aa -tbaa -basicaa -globalopt -ipsccp -deadargelim -instcombine -simplifycfg -basiccg -prune-eh -inline -functionattrs -argpromotion -sroa -domtree -early-cse -simplify-libcalls -lazy-value-info -jump-threading -correlated-propagation -simplifycfg -instcombine -simplifycfg -reassociate -domtree -loops -loop-simplify -lcssa -loop-rotate -licm -lcssa -loop-unswitch -instcombine -scalar-evolution -loop-simplify -lcssa -indvars -loop-idiom -loop-deletion -loop-unroll -memdep -gvn -memdep -memcpyopt -sccp -instcombine -lazy-value-info -jump-threading -correlated-propagation -domtree -memdep -dse -adce -simplifycfg -instcombine -strip-dead-prototypes -globaldce -constmerge -preverify -domtree -verify -o $out $in",
+b.rule("OPT", command = llvm_opt + " -targetlibinfo -no-aa -tbaa -basicaa -globalopt -ipsccp -deadargelim -instcombine -simplifycfg -basiccg -prune-eh -inline -functionattrs -argpromotion -sroa -domtree -early-cse -lazy-value-info -jump-threading -correlated-propagation -simplifycfg -instcombine -simplifycfg -reassociate -domtree -loops -loop-simplify -lcssa -loop-rotate -licm -lcssa -loop-unswitch -instcombine -scalar-evolution -loop-simplify -lcssa -indvars -loop-idiom -loop-deletion -loop-unroll -memdep -gvn -memdep -memcpyopt -sccp -instcombine -lazy-value-info -jump-threading -correlated-propagation -domtree -memdep -dse -adce -simplifycfg -instcombine -strip-dead-prototypes -globaldce -constmerge -preverify -domtree -verify -o $out $in",
        description = 'OPT $out')
 
 c_compiler_rule(b, "LLVM_TOOL_CXX", 'CXX', 'c++', llvm_cxxflags)
@@ -102,6 +102,7 @@ for target in targets:
   # The rule for building a .bc file for the specified architecture using clang.
   clang_bc_flags = "-target %s -I`dirname $in` %s " \
                    "-Dcl_clang_storage_class_specifiers " \
+                   "-DSINGLE_PRECISION " \
                    "-emit-llvm" % (target, clang_cl_includes)
   clang_bc_rule = "CLANG_CL_BC_" + target
   c_compiler_rule(b, clang_bc_rule, "LLVM-CC", llvm_clang, clang_bc_flags)

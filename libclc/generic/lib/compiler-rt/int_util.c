@@ -45,12 +45,12 @@ void compilerrt_abort_impl(const char *file, int line, const char *function) {
 #else
 
 /* Get the system definition of abort() */
-#include <stdlib.h>
+//#include <stdlib.h>
 
 __attribute__((weak))
 __attribute__((visibility("hidden")))
 void compilerrt_abort_impl(const char *file, int line, const char *function) {
-  abort();
+  //abort();
 }
 
 #endif

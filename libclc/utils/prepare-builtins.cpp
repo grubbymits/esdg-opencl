@@ -1,10 +1,10 @@
-#include "llvm/Attributes.h"
 #include "llvm/ADT/OwningPtr.h"
 #include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/Function.h"
-#include "llvm/GlobalVariable.h"
-#include "llvm/LLVMContext.h"
-#include "llvm/Module.h"
+#include "llvm/IR/Attributes.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/GlobalVariable.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/ManagedStatic.h"
 #include "llvm/Support/MemoryBuffer.h"
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
   std::string ErrorInfo;
   OwningPtr<tool_output_file> Out
   (new tool_output_file(OutputFilename.c_str(), ErrorInfo,
-                        raw_fd_ostream::F_Binary));
+                        sys::fs::F_Binary));
   if (!ErrorInfo.empty()) {
     errs() << ErrorInfo << '\n';
     exit(1);

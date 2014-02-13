@@ -39,7 +39,7 @@
 #include <llvm/Support/raw_ostream.h>
 
 
-#define CLANG_RESOURCE_DIR "/opt/esdg-opencl/lib/clang/3.2/"
+#define CLANG_RESOURCE_DIR "/opt/esdg-opencl/lib/clang/3.4/"
 #define LIBCLC_INCLUDE_DIR "/opt/esdg-opencl/include"
 
 namespace llvm

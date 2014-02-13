@@ -67,6 +67,7 @@
 #include <llvm/ADT/Triple.h>
 #include <llvm/Bitcode/ReaderWriter.h>
 #include <llvm/Support/CodeGen.h>
+#include <llvm/Support/DataStream.h>
 #include <llvm/Support/FormattedStream.h>
 #include <llvm/Support/Host.h>
 #include <llvm/Support/ManagedStatic.h>
@@ -133,7 +134,7 @@ bool Compiler::ExpandMacros(const char *filename) {
     "cl_clang_storage_class_specifiers");
   CI.getInvocation().setLangDefaults(CI.getLangOpts(), IK_OpenCL);
 
-  CI.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+  CI.createDiagnostics(new clang::TextDiagnosticPrinter(
       macro_log, &CI.getDiagnosticOpts()));
 
   if (!CI.ExecuteAction(act)) {
@@ -328,8 +329,10 @@ bool Compiler::CompileToBitcode(std::string &Source,
   p_compiler.getPreprocessorOpts()
     .addRemappedFile(TempFilename, llvm::MemoryBuffer::getMemBuffer(Source));
 
-  p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
-    s_log, &p_compiler.getDiagnosticOpts()));
+  //p_compiler.createDiagnostics(0, NULL, new clang::TextDiagnosticPrinter(
+    //s_log, &p_compiler.getDiagnosticOpts()));
+  p_compiler.createDiagnostics(new clang::TextDiagnosticPrinter(
+      s_log, &p_compiler.getDiagnosticOpts()));
 
   // Compile the code
   if (!p_compiler.ExecuteAction(act)) {
@@ -381,6 +384,27 @@ llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
     //                 isNative)) {
     //return NULL;
   //}
+  std::string filename = "/opt/esdg-opencl/lib/builtins.bc";
+  std::string err;
+  llvm::LLVMContext &Context = llvm::getGlobalContext();
+  OwningPtr<llvm::Module> Runtime;
+  DataStreamer *streamer = llvm::getDataFileStreamer(filename, &err);
+  if (streamer) {
+    Runtime.reset(getStreamedBitcodeModule(filename, streamer, Context,
+                                           &err));
+    if (Runtime.get() != 0 && Runtime->MaterializeAllPermanently(&err)) {
+      Runtime.reset();
+    }
+  }
+
+  if (Runtime.get() == 0) {
+    std::cout << "!!ERROR: couldn't read bitcode" << std::endl;
+    return NULL;
+  }
+  if (ld.linkInModule(Runtime.get(), &err)) {
+    std::cout << "!! ERROR: Runtime link failed:" << err << std::endl;
+    return NULL;
+  }
 
 #ifdef DBG_COMPILER
   std::string error;

@@ -604,6 +604,9 @@ bool LE1KernelEvent::CompileSource() {
 
   CompleteModule = MainCompiler.LinkRuntime(CompleteModule);
 
+  if (!CompleteModule)
+    return false;
+
   //Coarsener.DeleteTempFiles();
   if (!LE1Compiler.ExtractKernelData(CompleteModule, embeddedData))
     return false;

@@ -116,7 +116,6 @@ compiler-rt/negvti2.c
 compiler-rt/paritydi2.c
 compiler-rt/paritysi2.c
 compiler-rt/parityti2.c
-compiler-rt/popcountdi2.c
 compiler-rt/popcountsi2.c
 compiler-rt/popcountti2.c
 compiler-rt/powidf2.c

@@ -56,10 +56,6 @@ getCalleeSavedRegs(const MachineFunction *MF) const
 {
   // LE1 callee-save register range is $16-$23, $f20-$f30
   static const uint16_t CalleeSavedRegs[] = {
-    //LE1::F31, LE1::F30, LE1::F29, LE1::F28, LE1::F27, LE1::F26,
-    //LE1::F25, LE1::F24, LE1::F23, LE1::F22, LE1::F21, LE1::F20,
-    //LE1::RA, LE1::FP, LE1::S7, LE1::S6, LE1::S5, LE1::S4,
-    //LE1::S3, LE1::S2, LE1::S1, LE1::S0, 0
     LE1::L0, LE1::TS0, LE1::TS1, LE1::TS2, LE1::TS3,
     LE1::TS4, LE1::TS5, LE1::TS6, 0
   };
@@ -70,9 +66,7 @@ getCalleeSavedRegs(const MachineFunction *MF) const
 BitVector LE1RegisterInfo::
 getReservedRegs(const MachineFunction &MF) const {
   static const unsigned ReservedCPURegs[] = {
-    //LE1::ZERO, LE1::AT, LE1::K0, LE1::K1, 
-    //LE1::GP, LE1::SP, LE1::FP, LE1::RA, 0
-    LE1::ZERO, LE1::SP, LE1::L0, LE1::IdX, LE1::IdY, LE1::IdZ, LE1::T45, 0
+    LE1::ZERO, LE1::SP, LE1::L0, LE1::T45, 0
   };
 
   BitVector Reserved(getNumRegs());

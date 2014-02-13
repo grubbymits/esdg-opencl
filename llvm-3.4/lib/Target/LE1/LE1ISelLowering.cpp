@@ -401,6 +401,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   setOperationAction(ISD::BR_JT,            MVT::Other, Expand);
   setOperationAction(ISD::BR_CC,            MVT::Other, Expand);
+  setOperationAction(ISD::BR_CC,            MVT::i32,  Expand);
   setOperationAction(ISD::BRIND,            MVT::Other, Expand);
   //setOperationAction(ISD::SELECT_CC,         MVT::Other, Expand);
   setOperationAction(ISD::BSWAP,            MVT::i32, Expand);

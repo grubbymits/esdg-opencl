@@ -110,9 +110,9 @@ let Namespace = "LE1" in {
   def T39   : GPR<50, "r0.50">, DwarfRegNum<[50]>;
   def T40   : GPR<51, "r0.51">, DwarfRegNum<[51]>;
   def T41   : GPR<52, "r0.52">, DwarfRegNum<[52]>;
-  def IdX   : GPR<53, "r0.53">, DwarfRegNum<[53]>;
-  def IdY   : GPR<54, "r0.54">, DwarfRegNum<[54]>;
-  def IdZ   : GPR<55, "r0.55">, DwarfRegNum<[55]>;
+  def T42   : GPR<53, "r0.53">, DwarfRegNum<[53]>;
+  def T43   : GPR<54, "r0.54">, DwarfRegNum<[54]>;
+  def T44   : GPR<55, "r0.55">, DwarfRegNum<[55]>;
   def T45   : GPR<56, "r0.56">, DwarfRegNum<[56]>;
   def TS0   : GPR<57, "r0.57">, DwarfRegNum<[57]>;
   def TS1   : GPR<58, "r0.58">, DwarfRegNum<[58]>;
@@ -153,11 +153,11 @@ def CPURegs : RegisterClass<"LE1", [i32], 32, (add
   T10, T11, T12, T13, T14, T15, T16, T17, T18, T19,
   T20, T21, T22, T23, T24, T25, T26, T27, T28, T29,
   T30, T31, T32, T33, T34, T35, T36, T37, T38, T39,
-  T40, T41,
+  T40, T41, T42, T43, T44,
   // Callee save
   TS0, TS1, TS2, TS3, TS4, TS5, TS6,
   // Reserved
-  ZERO, SP, IdX, IdY, IdZ, T45)>;
+  ZERO, SP)>;
 
 //def CLRegs : RegisterClass<"LE1", [i32], 32, (add
   //T42, T43, T44)>;

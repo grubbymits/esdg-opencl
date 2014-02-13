@@ -17,64 +17,6 @@ def le1_read_attr         : SDNode<"LE1ISD::READ_ATTR", SDTIntUnaryOp, []>;
 def le1_set_attr          : SDNode<"LE1ISD::SET_ATTR", SDTLE1FakeStore,
                                     [SDNPMayStore, SDNPHasChain]>;
 
-/*
-let Constraints = "$dst = $src", mayLoad = 1, mayStore = 1  in {
-  class IncrReg<RegisterClass RC>
-    : LE1Inst<
-      (outs RC:$dst),
-      (ins RC:$src),
-      "add.0  $dst, $src, 1",
-      [(set RC:$dst, (le1_incr_local_id RC:$src))], IIAlu>;
-}
-
-def IncLocalIdx : IncrReg<LocalIdx>;
-def IncLocalIdy : IncrReg<LocalIdy>;
-def IncLocalIdz : IncrReg<LocalIdz>;
-
-def : Pat<(int_le1_inc_local_idx),
-          (IncLocalIdx IdX)>;
-def : Pat<(int_le1_inc_local_idy),
-          (IncLocalIdx IdY)>;
-def : Pat<(int_le1_inc_local_idz),
-          (IncLocalIdz IdZ)>;*/
-
-
-let Defs = [IdX] in
-def ResetLocalIdX :
-  LE1Inst<(outs), (ins),
-  "mov.0  r0.53, r0.0",
-  [(int_le1_reset_local_idx)], IIAlu>;
-
-let Defs = [IdY] in
-def ResetLocalIdY :
-  LE1Inst<(outs), (ins),
-  "mov.0  r0.54, r0.0",
-  [(int_le1_reset_local_idy)], IIAlu>;
-
-let Defs = [IdZ] in
-def ResetLocalIdZ :
-  LE1Inst<(outs), (ins),
-  "mov.0  r0.55, r0.0",
-  [(int_le1_reset_local_idz)], IIAlu>;
-
-let Uses = [IdX], Defs = [IdX] in
-def IncLocalIdX :
-  LE1Inst<(outs), (ins),
-  "add.0  r0.53, r0.53, 1",
-  [(int_le1_inc_local_idx)], IIAlu>;
-
-let Uses = [IdY], Defs = [IdY] in
-def IncLocalIdY :
-  LE1Inst<(outs), (ins),
-  "add.0  r0.54, r0.54, 1",
-  [(int_le1_inc_local_idy)], IIAlu>;
-
-let Uses = [IdZ], Defs = [IdZ] in
-def IncLocalIdZ :
-  LE1Inst<(outs), (ins),
-  "add.0  r0.55, r0.55, 1",
-  [(int_le1_inc_local_idz)], IIAlu>;
-
 def GroupIdAddr :
   LE1Inst<
   (outs CPURegs:$dst),

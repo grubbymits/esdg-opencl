@@ -14,16 +14,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ********************************************************************/
 
-/**
- * One instance of this kernel call is a thread.
- * Each thread finds out the segment in which it should look for the element.
- * After that, it checks if the element is between the lower bound and upper bound
- * of its segment. If yes, then this segment becomes the total searchspace for the next pass.
- *
- * To achieve this, it writes the lower bound and upper bound to the output array.
- * In case the element at the left end (lower bound) matches the element we are looking for,
- * That is marked in the output and we no longer need to look any further.
- */
 __kernel void
 binarySearch(        __global uint4 * outputArray,
              __const __global uint2  * sortedArray, 
