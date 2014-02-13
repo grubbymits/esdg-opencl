@@ -124,26 +124,11 @@ SelectAddr(SDValue Addr, SDValue &Base, SDValue &Offset) {
     return true;
   }
 
-  // on PIC code Load GA
-  //if (TM.getRelocationModel() == Reloc::PIC_) {
-    //if (Addr.getOpcode() == LE1ISD::WrapperPIC) {
-      //Base   = CurDAG->getRegister(LE1::ZERO, ValTy);
-      //Offset = Addr.getOperand(0);
-      //return true;
-    //}
-  //} else {
-
     if ((Addr.getOpcode() == ISD::TargetExternalSymbol ||
         Addr.getOpcode() == ISD::TargetGlobalAddress)) {
       //std::cout << "Addr is TargetGlobal\n";
       return false;
     }
-    //else if (Addr.getOpcode() == ISD::TargetGlobalTLSAddress) {
-      //Base   = CurDAG->getRegister(GPReg, ValTy);
-      //Offset = Addr;
-      //return true;
-    //}
-  //}
 
   // Addresses of the form FI+const or FI|const
   if (CurDAG->isBaseWithConstantOffset(Addr)) {
@@ -165,30 +150,6 @@ SelectAddr(SDValue Addr, SDValue &Base, SDValue &Offset) {
     }
   }
 
-  // Operand is a result from an ADD.
-  //if (Addr.getOpcode() == ISD::ADD) {
-    // When loading from constant pools, load the lower address part in
-    // the instruction itself. Example, instead of:
-    //  lui $2, %hi($CPI1_0)
-    //  addiu $2, $2, %lo($CPI1_0)
-    //  lwc1 $f0, 0($2)
-    // Generate:
-    //  lui $2, %hi($CPI1_0)
-    //  lwc1 $f0, %lo($CPI1_0)($2)
-    //if ((Addr.getOperand(0).getOpcode() == LE1ISD::Hi ||
-      //   Addr.getOperand(0).getOpcode() == ISD::LOAD) &&
-        //Addr.getOperand(1).getOpcode() == LE1ISD::Lo) {
-      //SDValue LoVal = Addr.getOperand(1);
-      //if (isa<ConstantPoolSDNode>(LoVal.getOperand(0)) || 
-        //  isa<GlobalAddressSDNode>(LoVal.getOperand(0))) {
-        //Base = Addr.getOperand(0);
-        //Offset = LoVal.getOperand(0);
-        //std::cout << "Addr is ADD\n";
-        //return true;
-      //}
-    //}
-  //}
-
   Base   = Addr;
   Offset = CurDAG->getTargetConstant(0, ValTy);
   //std::cout << "Leaving SelectAddr through bottom\n";
@@ -198,20 +159,12 @@ SelectAddr(SDValue Addr, SDValue &Base, SDValue &Offset) {
 /// Select instructions not customized! Used for
 /// expanded, promoted and normal instructions
 SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
-  std::cout << "Select: " << std::endl;
 
   unsigned Opcode = Node->getOpcode();
   SDLoc dl(Node);
-  if (Node->isTargetOpcode())
 
   // Dump information about the Node being selected
-  DEBUG(errs() << "Selecting: "; Node->dump(CurDAG); errs() << "\n");
-
-  // If we have a custom node, we already have selected!
-  if (Node->isMachineOpcode()) {
-    DEBUG(errs() << "== "; Node->dump(CurDAG); errs() << "\n");
-    return NULL;
-  }
+  DEBUG(dbgs() << "Selecting: "; Node->dump(CurDAG); << "\n");
 
   switch(Opcode) {
     // FIXME ADDE should take a valid carry flag. This is an expanded op

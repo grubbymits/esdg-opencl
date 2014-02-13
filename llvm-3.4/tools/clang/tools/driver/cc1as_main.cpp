@@ -142,7 +142,6 @@ public:
 };
 
 }
-
 bool AssemblerInvocation::CreateFromArgs(AssemblerInvocation &Opts,
                                          const char **ArgBegin,
                                          const char **ArgEnd,
