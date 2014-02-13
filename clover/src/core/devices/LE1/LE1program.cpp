@@ -37,7 +37,7 @@
 
 #include "../../program.h"
 
-#include <llvm/PassManager.h>
+#include <llvm/IR/LegacyPassManager.h>
 #include <llvm/Analysis/Passes.h>
 #include <llvm/Analysis/Verifier.h>
 #include <llvm/Transforms/Scalar.h>
@@ -77,7 +77,7 @@ bool LE1Program::linkStdLib() const
     return true;
 }
 
-void LE1Program::createOptimizationPasses(llvm::PassManager *manager,
+void LE1Program::createOptimizationPasses(llvm::legacy::PassManager *manager,
                                           bool optimize)
 {
   // TODO This is where the passes should be added to combine work-items?

@@ -7,9 +7,9 @@
 #include "../../kernel.h"
 #include "../../memobject.h"
 
-#include <llvm/Constants.h>
-#include <llvm/Type.h>
-#include <llvm/DerivedTypes.h>
+#include <llvm/IR/Constants.h>
+#include <llvm/IR/DerivedTypes.h>
+#include <llvm/IR/Type.h>
 
 #include <iomanip>
 #include <iostream>

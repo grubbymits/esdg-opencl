@@ -51,16 +51,17 @@
 #include <clang/CodeGen/BackendUtil.h>
 #include <clang/CodeGen/CodeGenAction.h>
 #include <clang/Rewrite/Frontend/FrontendActions.h>
-#include <llvm/Constants.h>
-#include <llvm/DataLayout.h>
-#include <llvm/DerivedTypes.h>
-#include <llvm/Function.h>
-#include <llvm/Instruction.h>
-#include <llvm/IntrinsicInst.h>
+#include <llvm/CodeGen/Passes.h>
+#include <llvm/IR/Constants.h>
+#include <llvm/IR/DataLayout.h>
+#include <llvm/IR/DerivedTypes.h>
+#include <llvm/IR/Function.h>
+#include <llvm/IR/Instruction.h>
+#include <llvm/IR/IntrinsicInst.h>
+#include <llvm/IR/LegacyPassManager.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Module.h>
 #include <llvm/Linker.h>
-#include <llvm/LLVMContext.h>
-#include <llvm/Module.h>
-#include <llvm/PassManager.h>
 #include <llvm/ADT/SmallVector.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/ADT/Triple.h>
@@ -123,9 +124,9 @@ bool Compiler::ExpandMacros(const char *filename) {
 
   CI.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
                                    frontend::Angled,
-                                   false, false, false);
+                                   false, false);
   CI.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR, frontend::Angled,
-                                   false, false, false);
+                                   false, false);
   CI.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
   CI.getPreprocessorOpts().Includes.push_back("clc/clc.h");
   CI.getPreprocessorOpts().addMacroDef(
@@ -280,7 +281,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
     // Add libclc search path
     p_compiler.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
                                              clang::frontend::Angled,
-                                             false, false, false);
+                                             false, false);
     // Add libclc include
     p_compiler.getPreprocessorOpts().Includes.push_back("clc/clc.h");
 
@@ -311,7 +312,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
   p_compiler.getHeaderSearchOpts().AddPath(CLANG_RESOURCE_DIR,
                                            clang::frontend::Angled,
-                                           false, false, false);
+                                           false, false);
 
   p_compiler.getCodeGenOpts().OptimizationLevel = 3;
   p_compiler.getCodeGenOpts().SimplifyLibCalls = false;
@@ -355,38 +356,38 @@ llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering LinkModules\n";
 #endif
-  llvm::StringRef progName("MyLinker");
-  llvm::Linker ld(progName, m1);
-  if ( ld.LinkInModule(m2) ) {
+  //llvm::StringRef progName("MyLinker");
+  llvm::Linker ld(m1);
+  std::string err;
+  if ( ld.linkInModule(m2, &err) ) {
+    std::cout << "Link failed: " << err << std::endl;
     return NULL;
   }
 
 #ifdef DBG_COMPILER
   std::cerr << "Leaving LinkModules\n";
 #endif
-  return ld.releaseModule();
+  return ld.getModule();
 }
 
 llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering LinkRuntime" << std::endl;
 #endif
+  llvm::Linker ld(M);
 
-  llvm::StringRef progName("MyLinker");
-  llvm::Linker ld(progName, M);
-
-  bool isNative = false;
-  if (ld.LinkInFile(llvm::sys::Path("/opt/esdg-opencl/lib/builtins.bc"),
-                     isNative)) {
-    return NULL;
-  }
+  //bool isNative = false;
+  //if (ld.LinkInFile(llvm::sys::Path("/opt/esdg-opencl/lib/builtins.bc"),
+    //                 isNative)) {
+    //return NULL;
+  //}
 
 #ifdef DBG_COMPILER
   std::string error;
   llvm::raw_fd_ostream bytecode("final.bc", error);
   llvm::WriteBitcodeToFile(ld.getModule(), bytecode);
 #endif
-  return ld.releaseModule();
+  return ld.getModule();
 
 }
 
@@ -421,7 +422,7 @@ void Compiler::ScanForSoftfloat() {
           llvm::Type::getInt32Ty(p_module->getContext());
         llvm::Type *Float32Ty =
           llvm::Type::getFloatTy(p_module->getContext());
-        llvm::Attributes Attrs;
+        llvm::Attribute Attrs;
           //= llvm::Attributes::get(CGM.getLLVMContext(),
             //                      llvm::Attributes::NoUnwind);
 
@@ -674,19 +675,20 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
     target(TheTarget->createTargetMachine(Triple,
                                           CPU, FeatureSet, Options,
                                           llvm::Reloc::Static,
-                                          llvm::CodeModel::Default,
+                                          llvm::CodeModel::Kernel,
                                           llvm::CodeGenOpt::Aggressive));
   llvm::TargetMachine &Target = *target.get();
 
-  llvm::PassManager PM;
+  llvm::legacy::PassManager PM;
   llvm::TargetLibraryInfo *TLI =
     new llvm::TargetLibraryInfo(llvm::Triple(Triple));
   TLI->disableAllFunctions();
   PM.add(TLI);
   if (target.get()) {
-    PM.add(new llvm::TargetTransformInfo(target->getScalarTargetTransformInfo(),
-                                         target->getVectorTargetTransformInfo())
-           );
+    //PM.add(new llvm::TargetTransformInfo(target->getScalarTargetTransformInfo(),
+      //                                   target->getVectorTargetTransformInfo())
+        //   );
+    PM.add(llvm::createBasicTargetTransformInfoPass(&Target));
   }
 
   if (const llvm::DataLayout *TD = Target.getDataLayout())
@@ -698,13 +700,14 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   //PM.add(createLoopUnrollPass(10, 2, 1));
 
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
-                                                             Error, 0);
+                                                             0);
+  /*
   if (!Error.empty()) {
     std::cerr << Error;
     delete FDOut;
     delete TLI;
     return false;
-  }
+  }*/
 
   llvm::OwningPtr<llvm::tool_output_file> Out(FDOut);
   if (!Out) {

@@ -53,12 +53,12 @@
 #include <llvm/Support/Casting.h>
 #include <llvm/Bitcode/ReaderWriter.h>
 #include <llvm/Transforms/IPO.h>
-#include <llvm/LLVMContext.h>
-#include <llvm/Module.h>
 #include <llvm/Linker.h>
-#include <llvm/PassManager.h>
-#include <llvm/Metadata.h>
-#include <llvm/Function.h>
+#include <llvm/IR/Function.h>
+#include <llvm/IR/LegacyPassManager.h>
+#include <llvm/IR/LLVMContext.h>
+#include <llvm/IR/Metadata.h>
+#include <llvm/IR/Module.h>
 #include <llvm/Analysis/Passes.h>
 #include <llvm/Transforms/IPO.h>
 

@@ -41,9 +41,12 @@
 
 namespace llvm
 {
-    class PassManager;
+    //class PassManager;
     class Module;
     class Function;
+    namespace legacy {
+      class PassManager;
+    }
 }
 
 namespace Coal
@@ -267,7 +270,7 @@ class DeviceProgram
          * \param optimize false if \c -cl-opt-disable was given at compilation
          *                 time.
          */
-        virtual void createOptimizationPasses(llvm::PassManager *manager,
+        virtual void createOptimizationPasses(llvm::legacy::PassManager *manager,
                                               bool optimize) = 0;
 
         /**

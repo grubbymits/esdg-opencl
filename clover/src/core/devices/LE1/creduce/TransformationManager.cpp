@@ -125,18 +125,18 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   ClangInstance = new CompilerInstance();
   assert(ClangInstance);
   
-  ClangInstance->createDiagnostics(0, 0);
+  ClangInstance->createDiagnostics();
 
   CompilerInvocation &Invocation = ClangInstance->getInvocation();
 
   ClangInstance->getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
                                                clang::frontend::Angled,
-                                               false, false, false);
+                                               false, false);
   ClangInstance->getHeaderSearchOpts().AddPath(
-    "/opt/esdg-opencl/lib/clang/3.2/include", clang::frontend::Angled,
-    false, false, false);
+    "/opt/esdg-opencl/lib/clang/3.4/include", clang::frontend::Angled,
+    false, false);
   ClangInstance->getHeaderSearchOpts().ResourceDir =
-    "/opt/esdg-opencl/lib/clang/3.2/";
+    "/opt/esdg-opencl/lib/clang/3.4/";
   ClangInstance->getHeaderSearchOpts().UseBuiltinIncludes = true;
   ClangInstance->getHeaderSearchOpts().UseStandardSystemIncludes = false;
 
@@ -151,7 +151,7 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
   TargetOpts.Triple = "le1"; //LLVM_DEFAULT_TARGET_TRIPLE;
   TargetInfo *Target =
     TargetInfo::CreateTargetInfo(ClangInstance->getDiagnostics(),
-                                 TargetOpts);
+                                 &TargetOpts);
   ClangInstance->setTarget(Target);
   ClangInstance->createFileManager();
   ClangInstance->createSourceManager(ClangInstance->getFileManager());

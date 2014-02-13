@@ -23,8 +23,8 @@
 #include "clang/Rewrite/Frontend/Rewriters.h"
 #include "llvm/ADT/IntrusiveRefCntPtr.h"
 #include "llvm/Bitcode/ReaderWriter.h"
-#include "llvm/LLVMContext.h"
-#include "llvm/Module.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
 #include "llvm/Support/Host.h"
 #include "llvm/Support/raw_ostream.h"
 
@@ -1860,7 +1860,6 @@ void WorkitemCoarsen::ThreadSerialiser::CheckDeclStmtDep(Stmt *s,
   }
 }
 
-//template <typename T>
 bool WorkitemCoarsen::ThreadSerialiser::VisitFunctionDecl(FunctionDecl *f) {
   // Only function definitions (with bodies), not declarations.
   if (f->hasBody()) {
@@ -1886,22 +1885,22 @@ WorkitemCoarsen::OpenCLCompiler<T>::OpenCLCompiler(unsigned x,
 
   // CompilerInstance will hold the instance of the Clang compiler for us,
   // managing the various objects needed to run the compiler.
-  TheCompInst.createDiagnostics(0, 0);
+  TheCompInst.createDiagnostics();
 
   // Initialize target info with the default triple for our platform.
   IntrusiveRefCntPtr<TargetOptions> TO(new TargetOptions);
   TO.getPtr()->Triple = llvm::sys::getDefaultTargetTriple();
   TargetInfo *TI = TargetInfo::CreateTargetInfo(
-    TheCompInst.getDiagnostics(), *TO);
+    TheCompInst.getDiagnostics(), TO.getPtr());
   TheCompInst.setTarget(TI);
 
   // Set the compiler up to handle OpenCL
   TheCompInst.getHeaderSearchOpts().AddPath(LIBCLC_INCLUDE_DIR,
                                             clang::frontend::Angled,
-                                            false, false, false);
+                                            false, false);
   TheCompInst.getHeaderSearchOpts().AddPath(
     CLANG_INCLUDE_DIR, clang::frontend::Angled,
-    false, false, false);
+    false, false);
   TheCompInst.getHeaderSearchOpts().ResourceDir = CLANG_RESOURCE_DIR;
   TheCompInst.getHeaderSearchOpts().UseBuiltinIncludes = true;
   TheCompInst.getHeaderSearchOpts().UseStandardSystemIncludes = false;

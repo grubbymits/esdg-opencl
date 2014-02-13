@@ -39,7 +39,12 @@ namespace llvm
 {
     class ExecutionEngine;
     class Module;
+
+    namespace legacy {
+      class PassManager;
+    }
 }
+
 
 namespace Coal
 {
@@ -68,7 +73,8 @@ class LE1Program : public DeviceProgram
         ~LE1Program();
 
         bool linkStdLib() const;
-        void createOptimizationPasses(llvm::PassManager *manager, bool optimize);
+        void createOptimizationPasses(llvm::legacy::PassManager *manager,
+                                      bool optimize);
         bool build(llvm::Module *module);
 
         /**

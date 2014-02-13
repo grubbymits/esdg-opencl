@@ -2,6 +2,7 @@
 #define _WORKITEM_COARSEN_H
 
 #include "clang/AST/ASTConsumer.h"
+#include "clang/AST/Attr.h"
 #include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Frontend/CompilerInstance.h"
@@ -12,8 +13,8 @@
 #include <iostream>
 #include <pthread.h>
 
-#define CLANG_RESOURCE_DIR  "/opt/esdg-opencl/lib/clang/3.2/"
-#define CLANG_INCLUDE_DIR   "/opt/esdg-opencl/lib/clang/3.2/include"
+#define CLANG_RESOURCE_DIR  "/opt/esdg-opencl/lib/clang/3.4/"
+#define CLANG_INCLUDE_DIR   "/opt/esdg-opencl/lib/clang/3.4/include"
 #define LIBCLC_INCLUDE_DIR  "/opt/esdg-opencl/include"
 
 namespace llvm {
