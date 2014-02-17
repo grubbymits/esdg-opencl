@@ -110,9 +110,9 @@ private:
 
 /// ComplexPattern used on LE1InstrInfo
 /// Used on LE1 Load/Store instructions
-bool LE1DAGToDAGISel::
-SelectAddr(SDValue Addr, SDValue &Base, SDValue &Offset) {
-  //std::cout << "Addr belongs to " << Addr.getNode()->getOperationName() << "\n";
+bool LE1DAGToDAGISel::SelectAddr(SDValue Addr, SDValue &Base, SDValue &Offset) {
+  DEBUG(dbgs() << "Addr belongs to " << Addr.getNode()->getOperationName()
+        << "\n");
   EVT ValTy = Addr.getValueType();
   //unsigned RReg;
   
@@ -280,8 +280,8 @@ SelectExtLoad(SDNode *Node) {
   return SelectCode(Node);
 }*/
 
-SDNode* LE1DAGToDAGISel::
-SelectLoad(SDNode *Node) {
+SDNode* LE1DAGToDAGISel::SelectLoad(SDNode *Node) {
+  DEBUG(dbgs() << "SelectLoad\n");
   SDLoc dl(Node);
   LoadSDNode *LoadNode = cast<LoadSDNode>(Node);
   SDValue Chain = LoadNode->getChain();
@@ -336,9 +336,8 @@ SelectLoad(SDNode *Node) {
   return SelectCode(Node);
 }
 
-SDNode* LE1DAGToDAGISel::
-SelectStore(SDNode *Node) {
-  //std::cout << "SelectStore\n";
+SDNode* LE1DAGToDAGISel::SelectStore(SDNode *Node) {
+  DEBUG(dbgs() << "SelectStore\n");
   SDLoc dl(Node);
   StoreSDNode* StoreNode = cast<StoreSDNode>(Node);
   SDValue Chain = StoreNode->getChain();

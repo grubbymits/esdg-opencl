@@ -249,7 +249,7 @@ def immZExt5 : PatLeaf<(imm), [{
 // LE1 Address Mode! SDNode frameindex could possibily be a match
 // since load and store instructions from stack used it.
 def addr : ComplexPattern<iPTR, 2, "SelectAddr", [frameindex], []>;
-def gAddr : ComplexPattern<i32, 2, "SelectGAddr", [frameindex], []>;
+//def gAddr : ComplexPattern<i32, 2, "SelectGAddr", [frameindex], []>;
 
 //===----------------------------------------------------------------------===//
 // Pattern fragment for load/store
