@@ -180,6 +180,10 @@ def uimm16      : Operand<i32> {
   let PrintMethod = "printUnsignedImm";
 }
 
+def immediate : Operand<i32> {
+  let PrintMethod = "printUnsignedImm";
+}
+
 def globaladdroffset : Operand<i32> {
   let PrintMethod = "printGlobalOffset";
 }
@@ -229,6 +233,11 @@ def immZExt32 : PatLeaf<(imm),
 def immSExt1  : ImmLeaf<i1, [{ return (int32_t)Imm->getSExtValue(); }]>;
 
 def u16ImmPred : PatLeaf<(i32 imm), [{ return isUInt<16>(N->getSExtValue()); }]>;
+
+def imm9  : ImmLeaf<i32, [{ return (Imm == (Imm & 0x1F)); }]>;
+def imm12 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFF)); }]>;
+def imm16 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFFF)); }]>;
+def imm32 : ImmLeaf<i32, [{ return (Imm != (Imm & 0x1F)); }]>;
 
 // Node immediate fits as 16-bit zero extended on target immediate.
 // The LO16 param means that only the lower 16 bits of the node
@@ -307,6 +316,103 @@ def truncstorei32_u : UnalignedStore<truncstorei32>;
 //===----------------------------------------------------------------------===//
 
 // Arithmetic and boolean logic operators
+class ArithLogic_R_RR<bits<5> opcode, string instr_asm, SDNode OpNode,
+                      InstrItinClass II, bit isComm = 0>
+  : LE1Format_R_RR<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, " $rd, $src1, $src2"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], II> {
+    let isCommutable = isComm;
+}
+
+class ArithLogic_R_I32R<bits<5> opcode, string instr_asm, SDNode OpNode,
+                        ImmLeaf immPat, InstrItinClass II, bit isComm = 0>
+  : LE1Format_R_I32R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src, immediate:$imm32),
+  !strconcat(instr_asm, " $rd, $src, $imm32"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src, immPat:$imm32))], II> {
+    let isCommutable = isComm;
+}
+
+class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
+                       ImmLeaf immPat, InstrItinClass II, bit isComm = 0>
+  : LE1Format_R_I9R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, immediate:$imm9),
+  !strconcat(instr_asm, " $rd, $src1, $imm9"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, immPat:$imm9))], II> {
+    let isCommutable = isComm;
+}
+
+class Compare_R_RR<bits<4> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_R_RR_1<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, " $rd, $src1, $src2"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
+
+class Compare_P_RR<bits<4> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_P_RR<
+  opcode,
+  (outs BRegs:$prd),
+  (ins CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, " $prd, $src1, $src2"),
+  [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
+
+class Compare_R_I32R<bits<4> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_RoB_I32R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, immediate:$imm32),
+  !strconcat(instr_asm, " $rd, $src1, $imm32"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>;
+
+class Compare_R_I9R<bits<4> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_RoB_I9R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, immediate:$imm9),
+  !strconcat(instr_asm, "  $rd, $src1, $imm9"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
+
+class Logic_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_R_RR_1<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, " $rd, $src1, $src2"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
+
+class Logic_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_P_RR<
+  opcode,
+  (outs BRegs:$prd),
+  (ins CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, " $prd, $src1, $src2"),
+  [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
+
+class Logic_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_RoB_I32R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, immediate:$imm32),
+  !strconcat(instr_asm, " $rd, $src1, $imm32"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>;
+
+class Logic_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_RoB_I9R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, immediate:$imm9),
+  !strconcat(instr_asm, "  $rd, $src1, $imm9"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
+
 class ArithLogicR<string instr_asm, SDNode OpNode, bit isComm = 0>:
       LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, CPURegs:$src2),
       !strconcat(instr_asm, "  $dst, $src1, $src2"),
@@ -462,13 +568,202 @@ class CBranch<string instr_asm, SDNode OpNode>:
 //===----------------------------------------------------------------------===//
 // Instruction definition
 //===----------------------------------------------------------------------===//
+// Arithmetic and Logic Instructions
+multiclass ARITH_LOGIC<bits<5> opcode, string instr_asm, SDNode OpNode,
+                       InstrItinClass II, bit isComm = 0> {
+  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, II, isComm>;
+  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, imm32, II, isComm>;
+  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, imm9, II, isComm>;
+}
+
+defm ADD      : ARITH_LOGIC<0x0,   "add.0", add, IIAlu, 1>;
+defm AND      : ARITH_LOGIC<0x1,   "and.0", and, IIAlu, 1>;
+defm ANDC     : ARITH_LOGIC<0x2,   "andc.0", le1_andc, IIAlu>;
+defm MAXS     : ARITH_LOGIC<0x3,   "max.0", le1_max, IIAlu>;
+defm MAXU     : ARITH_LOGIC<0x4,   "maxu.0", le1_max, IIAlu>;
+defm MINS     : ARITH_LOGIC<0x5,   "min.0", le1_min, IIAlu>;
+defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_min, IIAlu>;
+defm OR       : ARITH_LOGIC<0x7,   "or.0",  or, IIAlu, 1>;
+defm ORC      : ARITH_LOGIC<0x8,   "orc.0", le1_orc, IIAlu>;
+defm SH1ADD   : ARITH_LOGIC<0x9,   "sh1add.0", le1_sh1add, IIAlu>;
+defm SH2ADD   : ARITH_LOGIC<0xA,   "sh2add.0", le1_sh2add, IIAlu>;
+defm SH3ADD   : ARITH_LOGIC<0xB,   "sh3add.0", le1_sh3add, IIAlu>;
+defm SH4ADD   : ARITH_LOGIC<0xC,   "sh4add.0", le1_sh4add, IIAlu>;
+defm SHL      : ARITH_LOGIC<0xD,   "shl.0", shl, IIAlu>;
+defm SHR      : ARITH_LOGIC<0xE,   "shr.0", sra, IIAlu>;
+defm SHRU     : ARITH_LOGIC<0xF,   "shru.0", srl, IIAlu>;
+defm SUB      : ARITH_LOGIC<0x10,  "sub.0", sub, IIAlu>;
+defm XOR      : ARITH_LOGIC<0x11,  "xor.0", xor, IIAlu, 1>;
+// i16(s1) * i16(s2)
+defm MULLL    : ARITH_LOGIC<0x12,  "mulll.0", le1_mulll, IIMul>;
+// ui16(s1) * ui16(s2)
+defm MULLLU   : ARITH_LOGIC<0x13,  "mulllu.0", le1_mulllu, IIMul>;
+// i16(s1) * i16(s2 >> 16)
+defm MULLH    : ARITH_LOGIC<0x14,  "mullh.0", le1_mullh, IIMul>;
+// ui16(s1) * ui16(s2 >> 16)
+defm MULLHU   : ARITH_LOGIC<0x15,  "mullhu.0", le1_mullhu, IIMul>;
+// i16(s1 >> 16) * i16(s2 >> 16)
+defm MULHH    : ARITH_LOGIC<0x16,  "mulhh.0", le1_mulhh, IIMul>;
+// ui16(s1 >> 16) * ui16(s2 >> 16)
+defm MULHHU   : ARITH_LOGIC<0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
+// s1 * i16(s2)
+defm MULL     : ARITH_LOGIC<0x18,  "mull.0", le1_mull, IIMul>;
+// s1 * ui16(s2)
+defm MULLU    : ARITH_LOGIC<0x19,  "mullu.0", le1_mullu, IIMul>;
+// s1 * i16(s2 >> 16)
+defm MULH     : ARITH_LOGIC<0x1A,  "mulh.0", le1_mulh, IIMul>;
+// s1 * ui16(s2 >> 16)
+defm MULHU    : ARITH_LOGIC<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
+// s1 * ui16(s2 >> 16) << 16
+defm MULHS    : ARITH_LOGIC<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
+/*
+def ADDr      : ArithLogic_R_RR   <0x0,   "add.0", add, IIAlu, 1>;
+def ADDi32    : ArithLogic_R_I32R <0x0,   "add.0", add, imm32, IIAlu, 1>;
+def ADDi9     : ArithLogic_R_I9R  <0x0,   "add.0", add, imm9, IIAlu, 1>;
+def SUBr      : ArithLogic_R_RR   <0x10,  "sub.0", sub, IIAlu>;
+def SUBi32    : ArithLogic_R_I32R <0x10,  "sub.0", sub, imm32, IIAlu>;
+def SUBi9     : ArithLogic_R_I9R  <0x10,  "sub.0", sub, imm9, IIAlu>;
+
+def ANDr      : ArithLogic_R_RR   <0x1,   "and.0", and, IIAlu, 1>;
+def ANDi32    : ArithLogic_R_I32R <0x1,   "and.0", and, imm32, IIAlu, 1>;
+def ANDi9     : ArithLogic_R_I9R  <0x1,   "and.0", and, imm9, IIAlu, 1>;
+def ORr       : ArithLogic_R_RR   <0x7,   "or.0",  or, IIAlu, 1>;
+def ORi32     : ArithLogic_R_I32R <0x7,   "or.0",  or, imm32, IIAlu, 1>;
+def ORi9      : ArithLogic_R_I9R  <0x7,   "or.0",  or, imm9, IIAlu, 1>;
+def XORr      : ArithLogic_R_RR   <0x11,  "xor.0", xor, IIAlu, 1>;
+def XORi32    : ArithLogic_R_I32R <0x11,  "xor.0", xor, imm32, IIAlu, 1>;
+def XORi9     : ArithLogic_R_I9R  <0x11,  "xor.0", xor, imm9, IIAlu, 1>;
+def ANDCr     : ArithLogic_R_RR   <0x2,   "andc.0", le1_andc, IIAlu>;
+def ANDCi32   : ArithLogic_R_I32R <0x2,   "andc.0", le1_andc, imm32, IIAlu>;
+def ANDCi9    : ArithLogic_R_I9R  <0x2,   "andc.0", le1_andc, imm9, IIAlu>;
+def ORCr      : ArithLogic_R_RR   <0x8,   "orc.0", le1_orc, IIAlu>;
+def ORCi32    : ArithLogic_R_I32R <0x8,   "orc.0", le1_orc, imm32, IIAlu>;
+def ORCi9     : ArithLogic_R_I9R  <0x8,   "orc.0", le1_orc, imm9, IIAlu>;
+
+def SHLr      : ArithLogic_R_RR   <0xD,   "shl.0", shl, IIAlu>;
+def SHLi32    : ArithLogic_R_I32R <0xD,   "shl.0", shl, imm32, IIAlu>;
+def SHLi9     : ArithLogic_R_I9R  <0xD,   "shl.0", shl, imm9, IIAlu>;
+def SHRr      : ArithLogic_R_RR   <0xE,   "shr.0", sra, IIAlu>;
+def SHRi32    : ArithLogic_R_I32R <0xE,   "shr.0", sra, imm32, IIAlu>;
+def SHRi9     : ArithLogic_R_I9R  <0xE,   "shr.0", sra, imm9, IIAlu>;
+def SHRUr     : ArithLogic_R_RR   <0xF,   "shru.0", srl, IIAlu>;
+def SHRUi32   : ArithLogic_R_I32R <0xF,   "shru.0", srl, imm32, IIAlu>;
+def SHRUi9    : ArithLogic_R_I9R  <0xF,   "shru.0", srl, imm9, IIAlu>;
+
+def SH1ADDr   : ArithLogic_R_RR   <0x9,   "sh1add.0", le1_sh1add, IIAlu>;
+def SH1ADDi32 : ArithLogic_R_I32R <0x9,   "sh1add.0", le1_sh1add, imm32, IIAlu>;
+def SH1ADDi9  : ArithLogic_R_I9R  <0x9,   "sh1add.0", le1_sh1add, imm9, IIAlu>;
+def SH2ADDr   : ArithLogic_R_RR   <0xA,   "sh2add.0", le1_sh2add, IIAlu>;
+def SH2ADDi32 : ArithLogic_R_I32R <0xA,   "sh2add.0", le1_sh2add, imm32, IIAlu>;
+def SH2ADDi9  : ArithLogic_R_I9R  <0xA,   "sh2add.0", le1_sh2add, imm9, IIAlu>;
+def SH3ADDr   : ArithLogic_R_RR   <0xB,   "sh3add.0", le1_sh3add, IIAlu>;
+def SH3ADDi32 : ArithLogic_R_I32R <0xB,   "sh3add.0", le1_sh3add, imm32, IIAlu>;
+def SH3ADDi9  : ArithLogic_R_I9R  <0xB,   "sh3add.0", le1_sh3add, imm9, IIAlu>;
+def SH4ADDr   : ArithLogic_R_RR   <0xC,   "sh4add.0", le1_sh4add, IIAlu>;
+def SH4ADDi32 : ArithLogic_R_I32R <0xC,   "sh4add.0", le1_sh4add, imm32, IIAlu>;
+def SH4ADDi9  : ArithLogic_R_I9R  <0xC,   "sh4add.0", le1_sh4add, imm9, IIAlu>;
+
+def MAXSr     : ArithLogic_R_RR   <0x3,   "max.0", le1_max, IIAlu>;
+def MAXSi32   : ArithLogic_R_I32R <0x3,   "max.0", le1_max, imm32, IIAlu>;
+def MAXSi9    : ArithLogic_R_I9R  <0x3,   "max.0", le1_max, imm9, IIAlu>;
+def MAXUr     : ArithLogic_R_RR   <0x4,   "maxu.0", le1_max, IIAlu>;
+def MAXUi32   : ArithLogic_R_I32R <0x4,   "maxu.0", le1_max, imm32, IIAlu>;
+def MAXUi9    : ArithLogic_R_I9R  <0x4,   "maxu.0", le1_max, imm9, IIAlu>;
+def MINSr     : ArithLogic_R_RR   <0x5,   "min.0", le1_min, IIAlu>;
+def MINSi32   : ArithLogic_R_I32R <0x5,   "min.0", le1_min, imm32, IIAlu>;
+def MINSi9    : ArithLogic_R_I9R  <0x5,   "min.0", le1_min, imm9, IIAlu>;
+def MINUr     : ArithLogic_R_RR   <0x6,   "minu.0", le1_min, IIAlu>;
+def MINUi32   : ArithLogic_R_I32R <0x6,   "minu.0", le1_min, imm32, IIAlu>;
+def MINUi9    : ArithLogic_R_I9R  <0x6,   "minu.0", le1_min, imm9, IIAlu>;
+
+// i16(s1) * i16(s2)
+def MULLLr    : ArithLogic_R_RR   <0x12,  "mulll.0", le1_mulll, IIMul>;
+def MULLLi32  : ArithLogic_R_I32R <0x12,  "mulll.0", le1_mulll, imm16, IIMul>;
+def MULLLi9   : ArithLogic_R_I9R  <0x12,  "mulll.0", le1_mulll, imm9, IIMul>;
+// ui16(s1) * ui16(s2)
+def MULLLUr   : ArithLogic_R_RR   <0x13,  "mulllu.0", le1_mulllu, IIMul>;
+def MULLLUi32 : ArithLogic_R_I32R <0x13,  "mulllu.0", le1_mulllu, imm16, IIMul>;
+def MULLLUi9  : ArithLogic_R_I9R  <0x13,  "mulllu.0", le1_mulllu, imm9, IIMul>;
+// i16(s1) * i16(s2 >> 16)
+def MULLHr    : ArithLogic_R_RR   <0x14,  "mullh.0", le1_mullh, IIMul>;
+def MULLHi32  : ArithLogic_R_I32R <0x14,  "mullh.0", le1_mullh, imm16, IIMul>;
+def MULLHi9   : ArithLogic_R_I9R  <0x14,  "mullh.0", le1_mullh, imm9, IIMul>;
+// ui16(s1) * ui16(s2 >> 16)
+def MULLHUr   : ArithLogic_R_RR   <0x15,  "mullhu.0", le1_mullhu, IIMul>;
+def MULLHUi32 : ArithLogic_R_I32R <0x15,  "mullhu.0", le1_mullhu, imm16, IIMul>;
+def MULLHUi9  : ArithLogic_R_I9R  <0x15,  "mullhu.0", le1_mullhu, imm9, IIMul>;
+// i16(s1 >> 16) * i16(s2 >> 16)
+def MULHHr    : ArithLogic_R_RR   <0x16,  "mulhh.0", le1_mulhh, IIMul>;
+def MULHHi32  : ArithLogic_R_I32R <0x16,  "mulhh.0", le1_mulhh, imm16, IIMul>;
+def MULHHi9   : ArithLogic_R_I9R  <0x16,  "mulhh.0", le1_mulhh, imm9, IIMul>;
+// ui16(s1 >> 16) * ui16(s2 >> 16)
+def MULHHUr   : ArithLogic_R_RR   <0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
+def MULHHUi32 : ArithLogic_R_I32R <0x17,  "mulhhu.0", le1_mulhhu, imm16, IIMul>;
+def MULHHUi9  : ArithLogic_R_I9R  <0x17,  "mulhhu.0", le1_mulhhu, imm9, IIMul>;
+// s1 * i16(s2)
+def MULLr     : ArithLogic_R_RR   <0x18,  "mull.0", le1_mull, IIMul>;
+def MULLi32   : ArithLogic_R_I32R <0x18,  "mull.0", le1_mull, imm16, IIMul>;
+def MULLi9    : ArithLogic_R_I9R  <0x18,  "mull.0", le1_mull, imm9, IIMul>;
+// s1 * ui16(s2)
+def MULLUr    : ArithLogic_R_RR   <0x19,  "mullu.0", le1_mullu, IIMul>;
+def MULLUi32  : ArithLogic_R_I32R <0x19,  "mullu.0", le1_mullu, imm16, IIMul>;
+def MULLUi9   : ArithLogic_R_I9R  <0x19,  "mullu.0", le1_mullu, imm9, IIMul>;
+// s1 * i16(s2 >> 16)
+def MULHr     : ArithLogic_R_RR   <0x1A,  "mulh.0", le1_mulh, IIMul>;
+def MULHi32   : ArithLogic_R_I32R <0x1A,  "mulh.0", le1_mulh, imm16, IIMul>;
+def MULHi9    : ArithLogic_R_I9R  <0x1A,  "mulh.0", le1_mulh, imm9, IIMul>;
+// s1 * ui16(s2 >> 16)
+def MULHUr    : ArithLogic_R_RR   <0x1B,  "mulhu.0", le1_mulhu, IIMul>;
+def MULHUi32  : ArithLogic_R_I32R <0x1B,  "mulhu.0", le1_mulhu, imm16, IIMul>;
+def MULHUi9   : ArithLogic_R_I9R  <0x1B,  "mulhu.0", le1_mulhu, imm9, IIMul>;
+// s1 * ui16(s2 >> 16) << 16
+def MULHSr    : ArithLogic_R_RR   <0x1C,  "mulhs.0", le1_mulhs, IIMul>;
+def MULHSi32  : ArithLogic_R_I32R <0x1C,  "mulhs.0", le1_mulhs, imm16, IIMul>;
+def MULHSi9   : ArithLogic_R_I9R  <0x1C,  "mulhs.0", le1_mulhs, imm9, IIMul>;
+*/
+
+
+let isCompare = 1 in {
+  multiclass COMPARE<bits<4> opc, string instr_asm, PatFrag OpNode> {
+    // Results into BRegs
+    def NAME#p    : Compare_P_RR<opc, instr_asm, OpNode>;
+    // Results into CPURegs
+    def NAME#r    : Compare_R_RR<opc, instr_asm, OpNode>;
+    def NAME#i32  : Compare_R_I32R<opc, instr_asm, OpNode>;
+    def NAME#i9   : Compare_R_I9R<opc, instr_asm, OpNode>;
+  }
+}
+
+multiclass LOGIC<bits<4> opc, string instr_asm, SDNode OpNode> {
+  // Results into BRegs
+  def NAME#p    : Logic_P_RR<opc, instr_asm, OpNode>;
+  // Results into CPURegs
+  def NAME#r    : Logic_R_RR<opc, instr_asm, OpNode>;
+  def NAME#i32  : Logic_R_I32R<opc, instr_asm, OpNode>;
+  def NAME#i9   : Logic_R_I9R<opc, instr_asm, OpNode>;
+}
+
+defm CMPEQ  : COMPARE<0x0, "cmpeq.0", seteq>;
+defm CMPGE  : COMPARE<0x1, "cmpge.0", setge>;
+defm CMPGEU : COMPARE<0x2, "cmpgeu.0", setuge>;
+defm CMPGT  : COMPARE<0x3, "cmpgt.0", setgt>;
+defm CMPGTU : COMPARE<0x4, "cmpgtu.0", setugt>;
+defm CMPLE  : COMPARE<0x5, "cmple.0", setle>;
+defm CMPLEU : COMPARE<0x6, "cmpleu.0", setule>;
+defm CMPLT  : COMPARE<0x7, "cmplt.0", setlt>;
+defm CMPLTU : COMPARE<0x8, "cmpltu.0", setult>;
+defm CMPNE  : COMPARE<0x9, "cmpne.0", setne>;
+defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
+defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
+defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
+defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
 
 //===----------------------------------------------------------------------===//
-/// Arithmetic Instructions 
+/// Arithmetic Instructions
+
 def ADDi   : ArithLogicI<"add.0", add>;
 def SUBi   : ArithLogicI<"sub.0", sub>;
 def ADD    : ArithLogicR<"add.0", add, 1>;
-def ADDCH  : ArithLogicR<"add.0", le1_addch, 1>;
 def SUB    : ArithLogicR<"sub.0", sub>;
 
 //===----------------------------------------------------------------------===//
@@ -510,6 +805,7 @@ def SH4ADDi  : ShiftI<"sh4add.0", le1_sh4add>;
 ///===---------------------------------------------------------------------===//
 // Compare Instructions
 let isCompare = 1 in {
+  /*
 def CMPEQr  : SetCCR<"cmpeq.0", seteq, CPURegs>;
 def CMPGEr  : SetCCR<"cmpge.0", setge, CPURegs>;
 def CMPGEUr : SetCCR<"cmpgeu.0", setuge, CPURegs>;
@@ -520,6 +816,7 @@ def CMPLEUr : SetCCR<"cmpleu.0", setule, CPURegs>;
 def CMPLTr  : SetCCR<"cmplt.0", setlt, CPURegs>;
 def CMPLTUr : SetCCR<"cmpltu.0", setult, CPURegs>;
 def CMPNEr  : SetCCR<"cmpne.0", setne, CPURegs>;
+*/
 
 def CMPEQri  : SetCCI<"cmpeq.0", seteq, CPURegs>;
 def CMPGEri  : SetCCI<"cmpge.0", setge, CPURegs>;
