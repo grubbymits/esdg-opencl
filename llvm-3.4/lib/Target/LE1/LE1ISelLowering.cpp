@@ -68,12 +68,12 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::MFB:           return "LE1ISD::MFB";
   case LE1ISD::MTBINV:        return "LE1ISD::MTBINV";
 
-  case LE1ISD::Nandl:         return "LE1ISD::Nandl";
-  case LE1ISD::Norl:          return "LE1ISD::Norl";
-  case LE1ISD::Orl:           return "LE1ISD::Orl";
-  case LE1ISD::Andc:          return "LE1ISD::Andc";
-  case LE1ISD::Andl:          return "LE1ISD::Andl";
-  case LE1ISD::Orc:           return "LE1ISD::Orc";
+  case LE1ISD::NANDL:         return "LE1ISD::NANDL";
+  case LE1ISD::NORL:          return "LE1ISD::NROL";
+  case LE1ISD::ORL:           return "LE1ISD::ORL";
+  case LE1ISD::ANDC:          return "LE1ISD::ANDC";
+  case LE1ISD::ANDL:          return "LE1ISD::ANDL";
+  case LE1ISD::ORC:           return "LE1ISD::ORC";
 
   case LE1ISD::Mull:          return "LE1ISD::Mull";
   case LE1ISD::Mulh:          return "LE1ISD::Mulh";
@@ -459,6 +459,10 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setTargetDAGCombine(ISD::SETCC);
   //setTargetDAGCombine(ISD::AND);
   //setTargetDAGCombine(ISD::OR);
+
+  setTargetDAGCombine(ISD::ADD);
+
+
   //setOperationAction(ISD::EXTLOAD,    MVT::i8,    Custom);
   //setOperationAction(ISD::EXTLOAD,    MVT::i16,   Custom);
   //setOperationAction(ISD::SEXTLOAD,   MVT::i8,    Custom);
@@ -525,6 +529,115 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
   return SDValue();
 }
 
+SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
+                                             DAGCombinerInfo &DCI) {
+  SelectionDAG &DAG = DCI.DAG;
+  switch(Node->getOpcode()) {
+  default:
+    break;
+  case ISD::ADD: return PerformADDCombine(N, DAG);
+  }
+  return SDValue();
+}
+
+SDValue LE1TargetLowering::PerformADDCombine(SDNode *N, SelectionDAG &DAG) {
+  SDValue LHS = N->getOperand(0);
+  SDValue RHS = N->getOperand(1);
+  SDLoc dl(N);
+
+  if ((LHS.getOpcode() != ISD::SHL) && (LHS.getOpcode() != ISD::SHL))
+    return N->getValue(0);
+
+  uint64_t ShiftVal = 0;
+  if (LHS.getOpcode() == ISD::SHL) {
+    if (ConstantSDNode *CN = cast<ConstantSDNode>(LHS.getOperand(1)))
+      ShiftVal = CN->getConstantOperandVal();
+  }
+  else if (RHS.getOpcode() == ISD::SHL) {
+    if (ConstantSDNode *CN = cast<ConstantSDNode>(RHS.getOperand(1)))
+      ShiftVal = CN->getConstantOperandVal();
+  }
+  unsigned Opcode = 0;
+  switch (ShiftVal) {
+  default:
+    return N->getValue(0);
+  case 1:
+    Opcode = LE1ISD::SH1ADD;
+    break;
+  case 2:
+    Opcode = LE1ISD::SH2ADD;
+    break;
+  case 3:
+    Opcode = LE1ISD::SH3ADD;
+    break;
+  case 4:
+    Opcode = LE1ISD::SH4ADD;
+    break;
+  }
+  return DAG.getNode(Opcode, dl, MVT::i32, LHS, RHS);
+}
+
+// ANDC = ~(s1) & (s2)
+// ANDL = ((((s1) == 0) | ((s2) == 0)) ? 0 : 1)
+SDValue LE1TargetLowering::PerformANDCombine(SDNode *N, SelectionDAG &DAG) {
+  SDValue LHS = N->getOperand(0);
+  SDValue RHS = N->getOperand(1);
+  SDLoc dl(N);
+
+  SDValue Xor;
+  if (LHS.getOpcode() = ISD::XOR)
+    Xor = LHS;
+  else if (RHS.getOpcode() != ISD::XOR)
+    Xor = RHS;
+  else
+    return N->getValue(0);
+
+  bool isANDC = false;
+  if (ConstantSDNode *CSN = cast<ConstantSDNode>(Xor.getOperand(0))) {
+    if (CSN->getConstantOperandVal() == -1)
+      isANDC = true;
+  }
+  else if (ConstantSDNode *CSN = cast<ConstantSDNode>(Xor.getOperand(1))) {
+    if (CSN->getConstantOperandVal() == -1)
+      isANDC = true;
+  }
+  if (isANDC)
+    return DAG.getNode(LE1ISD::ANDC, dl, N->getEVT(), LHS, RHS);
+  else
+    return N->getValue(0);
+}
+
+// ORC = (~(s1)) | (s2)
+// ORL = (((s1) == 0) & ((s2) == 0)) ? 0 : 1
+SDValue LE1TargetLowering::PerformORCombine(SDNode *N, SelectionDAG &DAG) {
+}
+
+//def MULLL   // i16(s1) * i16(s2)
+//def MULLLU  // ui16(s1) * ui16(s2)
+//def MULLU   // s1 * ui16(s2)
+//def MULL    // s1 * i16(s2)
+//def MULHH   // i16(s1 >> 16) * i16(s2 >> 16)
+//def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
+//def MULLHU  // ui16(s1) * ui16(s2 >> 16)
+//def MULLH   // i16(s1) * i16(s2 >> 16)
+//def MULHS   // s1 * ui16(s2 >> 16) << 16
+//def MULH    // s1 * i16(s2 >> 16)
+//def MULHU   // s1 * ui16(s2 >> 16)
+SDValue LE1TargetLowering::PerformMULCombine(SDNode *N, SelectionDAG &DAG) {
+  SDValue LHS = N->getOperand(0);
+  SDValue RHS = N->getOperand(1);
+  SDLoc dl(N);
+
+  if (LHS.getOpcode() == ISD::SRA) {
+    if (ConstantSDNode *CSN = cast<ConstantSDNode>(LHS.getOperand(1))) {
+      if (CSN->getConstantOperandValue() == 16) {
+        if (RHS.getOpcode() == ISD::SRA) {
+
+    }
+  }
+
+}
+
 //===----------------------------------------------------------------------===//
 //  Lower helper functions
 //===----------------------------------------------------------------------===//
@@ -540,33 +653,7 @@ AddLiveIn(MachineFunction &MF, unsigned PReg, const TargetRegisterClass *RC)
   MF.getRegInfo().addLiveIn(PReg, VReg);
   return VReg;
 }
-/*
-static bool SelectLoadLink(SDNode *CopyNode, SelectionDAG *CurDAG)
-{
-  if(CopyNode->getOperand(1) == CurDAG.getRegister(LE1::L0, MVT::i32))
-    if(CopyNode->getOperand(2).getNode()->getOpcode() == ISD::LOAD) {
-      CurDAG->getNode(LE1::LDL, dl, MVT::i32, MVT::Other, TargetAddr,
-                      TargetConstantOff, Chain);
-    }
-  return false;
-}*/
 
-//===----------------------------------------------------------------------===//
-//  Misc Lower Operation implementation
-//===----------------------------------------------------------------------===//
-//SDValue LE1TargetLowering::
-//LowerADDC(SDValue Op, SelectionDAG &DAG) const
-//{
-  //DebugLoc dl = Op.getDebugLoc();
-  //SDValue LHS = Op.getOperand(0);
-  //SDValue RHS = Op.getOperand(1);
-  //SDValue Zero = DAG.getRegister(LE1::ZERO, MVT::i32);
-  
-//SDValue LE1TargetLowering::
-//LowerADDE(SDValue Op, SelectionDAG &DAG) const
-//{
-
-//}
 SDValue LE1TargetLowering::
 LowerMULHS(SDValue Op, SelectionDAG &DAG) const
 {

@@ -62,12 +62,12 @@ namespace llvm {
       SLCTF,
 
       // Extra Boolean Operators
-      Nandl,
-      Norl,
-      Orl,
-      Andc,
-      Andl,
-      Orc,
+      NANDL,
+      NORL,
+      ORL,
+      ANDC,
+      ANDL,
+      ORC,
 
       // Group of multiplications
       Mull,
@@ -81,8 +81,6 @@ namespace llvm {
       Mullhu,
       Mulhh,
       Mulhhu,
-      MUL_CHAIN,
-      ADD_CHAIN,
 
       // Compare Ops
       Cmpeq,
@@ -184,6 +182,11 @@ namespace llvm {
     const LE1Subtarget *Subtarget;
    //FIXME can't be 64-bit 
     bool HasLE164, IsN64;
+
+    SDValue PerformADDCombine(SDNode *N, SelectionDAG &DAG);
+    SDValue PerformANDCombine(SDNode *N, SelectionDAG &DAG);
+    SDValue PerformORCombine(SDNode *N, SelectionDAG &DAG);
+    SDValue PerformMULCombine(SDNode *N, SelectionDAG &DAG);
 
     SDValue LowerMULHS(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerMULHU(SDValue Op, SelectionDAG &DAG) const;

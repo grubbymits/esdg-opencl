@@ -114,10 +114,6 @@ def le1_mulhhu  : SDNode<"LE1ISD::Mulhhu", SDTIntBinOp, [SDNPCommutative]>;
 def le1_addcg   : SDNode<"LE1ISD::Addcg", SDT_LE1CarryUseGen, []>;
 def le1_divs    : SDNode<"LE1ISD::Divs", SDT_LE1CarryUseGen, []>;
 
-// Nodes for OpenCL calculations
-def le1_mulch   : SDNode<"LE1ISD::MUL_CHAIN", SDTIntBinOp, [SDNPHasChain]>;
-def le1_addch   : SDNode<"LE1ISD::ADD_CHAIN", SDTIntBinOp, [SDNPHasChain]>;
-
 // Shift Adds
 def le1_sh1add  : SDNode<"LE1ISD::Sh1Add", SDTIntShiftOp, []>;
 def le1_sh2add  : SDNode<"LE1ISD::Sh2Add", SDTIntShiftOp, []>;
@@ -141,12 +137,12 @@ def le1_max     : SDNode<"LE1ISD::Max", SDTIntBinOp, [SDNPCommutative]>;
 def le1_min     : SDNode<"LE1ISD::Min", SDTIntBinOp, [SDNPCommutative]>;
 
 // Boolean Operators
-def le1_nandl   : SDNode<"LE1ISD::Nandl", SDTIntBinOp, [SDNPCommutative]>;
-def le1_norl    : SDNode<"LE1ISD::Norl", SDTIntBinOp, [SDNPCommutative]>;
-def le1_orl     : SDNode<"LE1ISD::Orl", SDTIntBinOp, [SDNPCommutative]>;
-def le1_andc    : SDNode<"LE1ISD::Andc", SDTIntBinOp, []>;
-def le1_andl    : SDNode<"LE1ISD::Andl", SDTIntBinOp, [SDNPCommutative]>;
-def le1_orc     : SDNode<"LE1ISD::Orc", SDTIntBinOp, []>;
+def le1_nandl   : SDNode<"LE1ISD::NANDL", SDTIntBinOp, [SDNPCommutative]>;
+def le1_norl    : SDNode<"LE1ISD::NORL", SDTIntBinOp, [SDNPCommutative]>;
+def le1_orl     : SDNode<"LE1ISD::ORL", SDTIntBinOp, [SDNPCommutative]>;
+def le1_andc    : SDNode<"LE1ISD::ANDC", SDTIntBinOp, []>;
+def le1_andl    : SDNode<"LE1ISD::ANDL", SDTIntBinOp, [SDNPCommutative]>;
+def le1_orc     : SDNode<"LE1ISD::ORC", SDTIntBinOp, []>;
 
 // These are target-independent nodes, but have target-specific formats.
 def callseq_start : SDNode<"ISD::CALLSEQ_START", SDT_LE1CallSeqStart,
@@ -413,6 +409,9 @@ class Logic_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   !strconcat(instr_asm, "  $rd, $src1, $imm9"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
 
+
+// ------------------- END OF NEW IMPLEMENTATIONS ----------------------- //
+
 class ArithLogicR<string instr_asm, SDNode OpNode, bit isComm = 0>:
       LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, CPURegs:$src2),
       !strconcat(instr_asm, "  $dst, $src1, $src2"),
@@ -616,112 +615,6 @@ defm MULH     : ARITH_LOGIC<0x1A,  "mulh.0", le1_mulh, IIMul>;
 defm MULHU    : ARITH_LOGIC<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
 // s1 * ui16(s2 >> 16) << 16
 defm MULHS    : ARITH_LOGIC<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
-/*
-def ADDr      : ArithLogic_R_RR   <0x0,   "add.0", add, IIAlu, 1>;
-def ADDi32    : ArithLogic_R_I32R <0x0,   "add.0", add, imm32, IIAlu, 1>;
-def ADDi9     : ArithLogic_R_I9R  <0x0,   "add.0", add, imm9, IIAlu, 1>;
-def SUBr      : ArithLogic_R_RR   <0x10,  "sub.0", sub, IIAlu>;
-def SUBi32    : ArithLogic_R_I32R <0x10,  "sub.0", sub, imm32, IIAlu>;
-def SUBi9     : ArithLogic_R_I9R  <0x10,  "sub.0", sub, imm9, IIAlu>;
-
-def ANDr      : ArithLogic_R_RR   <0x1,   "and.0", and, IIAlu, 1>;
-def ANDi32    : ArithLogic_R_I32R <0x1,   "and.0", and, imm32, IIAlu, 1>;
-def ANDi9     : ArithLogic_R_I9R  <0x1,   "and.0", and, imm9, IIAlu, 1>;
-def ORr       : ArithLogic_R_RR   <0x7,   "or.0",  or, IIAlu, 1>;
-def ORi32     : ArithLogic_R_I32R <0x7,   "or.0",  or, imm32, IIAlu, 1>;
-def ORi9      : ArithLogic_R_I9R  <0x7,   "or.0",  or, imm9, IIAlu, 1>;
-def XORr      : ArithLogic_R_RR   <0x11,  "xor.0", xor, IIAlu, 1>;
-def XORi32    : ArithLogic_R_I32R <0x11,  "xor.0", xor, imm32, IIAlu, 1>;
-def XORi9     : ArithLogic_R_I9R  <0x11,  "xor.0", xor, imm9, IIAlu, 1>;
-def ANDCr     : ArithLogic_R_RR   <0x2,   "andc.0", le1_andc, IIAlu>;
-def ANDCi32   : ArithLogic_R_I32R <0x2,   "andc.0", le1_andc, imm32, IIAlu>;
-def ANDCi9    : ArithLogic_R_I9R  <0x2,   "andc.0", le1_andc, imm9, IIAlu>;
-def ORCr      : ArithLogic_R_RR   <0x8,   "orc.0", le1_orc, IIAlu>;
-def ORCi32    : ArithLogic_R_I32R <0x8,   "orc.0", le1_orc, imm32, IIAlu>;
-def ORCi9     : ArithLogic_R_I9R  <0x8,   "orc.0", le1_orc, imm9, IIAlu>;
-
-def SHLr      : ArithLogic_R_RR   <0xD,   "shl.0", shl, IIAlu>;
-def SHLi32    : ArithLogic_R_I32R <0xD,   "shl.0", shl, imm32, IIAlu>;
-def SHLi9     : ArithLogic_R_I9R  <0xD,   "shl.0", shl, imm9, IIAlu>;
-def SHRr      : ArithLogic_R_RR   <0xE,   "shr.0", sra, IIAlu>;
-def SHRi32    : ArithLogic_R_I32R <0xE,   "shr.0", sra, imm32, IIAlu>;
-def SHRi9     : ArithLogic_R_I9R  <0xE,   "shr.0", sra, imm9, IIAlu>;
-def SHRUr     : ArithLogic_R_RR   <0xF,   "shru.0", srl, IIAlu>;
-def SHRUi32   : ArithLogic_R_I32R <0xF,   "shru.0", srl, imm32, IIAlu>;
-def SHRUi9    : ArithLogic_R_I9R  <0xF,   "shru.0", srl, imm9, IIAlu>;
-
-def SH1ADDr   : ArithLogic_R_RR   <0x9,   "sh1add.0", le1_sh1add, IIAlu>;
-def SH1ADDi32 : ArithLogic_R_I32R <0x9,   "sh1add.0", le1_sh1add, imm32, IIAlu>;
-def SH1ADDi9  : ArithLogic_R_I9R  <0x9,   "sh1add.0", le1_sh1add, imm9, IIAlu>;
-def SH2ADDr   : ArithLogic_R_RR   <0xA,   "sh2add.0", le1_sh2add, IIAlu>;
-def SH2ADDi32 : ArithLogic_R_I32R <0xA,   "sh2add.0", le1_sh2add, imm32, IIAlu>;
-def SH2ADDi9  : ArithLogic_R_I9R  <0xA,   "sh2add.0", le1_sh2add, imm9, IIAlu>;
-def SH3ADDr   : ArithLogic_R_RR   <0xB,   "sh3add.0", le1_sh3add, IIAlu>;
-def SH3ADDi32 : ArithLogic_R_I32R <0xB,   "sh3add.0", le1_sh3add, imm32, IIAlu>;
-def SH3ADDi9  : ArithLogic_R_I9R  <0xB,   "sh3add.0", le1_sh3add, imm9, IIAlu>;
-def SH4ADDr   : ArithLogic_R_RR   <0xC,   "sh4add.0", le1_sh4add, IIAlu>;
-def SH4ADDi32 : ArithLogic_R_I32R <0xC,   "sh4add.0", le1_sh4add, imm32, IIAlu>;
-def SH4ADDi9  : ArithLogic_R_I9R  <0xC,   "sh4add.0", le1_sh4add, imm9, IIAlu>;
-
-def MAXSr     : ArithLogic_R_RR   <0x3,   "max.0", le1_max, IIAlu>;
-def MAXSi32   : ArithLogic_R_I32R <0x3,   "max.0", le1_max, imm32, IIAlu>;
-def MAXSi9    : ArithLogic_R_I9R  <0x3,   "max.0", le1_max, imm9, IIAlu>;
-def MAXUr     : ArithLogic_R_RR   <0x4,   "maxu.0", le1_max, IIAlu>;
-def MAXUi32   : ArithLogic_R_I32R <0x4,   "maxu.0", le1_max, imm32, IIAlu>;
-def MAXUi9    : ArithLogic_R_I9R  <0x4,   "maxu.0", le1_max, imm9, IIAlu>;
-def MINSr     : ArithLogic_R_RR   <0x5,   "min.0", le1_min, IIAlu>;
-def MINSi32   : ArithLogic_R_I32R <0x5,   "min.0", le1_min, imm32, IIAlu>;
-def MINSi9    : ArithLogic_R_I9R  <0x5,   "min.0", le1_min, imm9, IIAlu>;
-def MINUr     : ArithLogic_R_RR   <0x6,   "minu.0", le1_min, IIAlu>;
-def MINUi32   : ArithLogic_R_I32R <0x6,   "minu.0", le1_min, imm32, IIAlu>;
-def MINUi9    : ArithLogic_R_I9R  <0x6,   "minu.0", le1_min, imm9, IIAlu>;
-
-// i16(s1) * i16(s2)
-def MULLLr    : ArithLogic_R_RR   <0x12,  "mulll.0", le1_mulll, IIMul>;
-def MULLLi32  : ArithLogic_R_I32R <0x12,  "mulll.0", le1_mulll, imm16, IIMul>;
-def MULLLi9   : ArithLogic_R_I9R  <0x12,  "mulll.0", le1_mulll, imm9, IIMul>;
-// ui16(s1) * ui16(s2)
-def MULLLUr   : ArithLogic_R_RR   <0x13,  "mulllu.0", le1_mulllu, IIMul>;
-def MULLLUi32 : ArithLogic_R_I32R <0x13,  "mulllu.0", le1_mulllu, imm16, IIMul>;
-def MULLLUi9  : ArithLogic_R_I9R  <0x13,  "mulllu.0", le1_mulllu, imm9, IIMul>;
-// i16(s1) * i16(s2 >> 16)
-def MULLHr    : ArithLogic_R_RR   <0x14,  "mullh.0", le1_mullh, IIMul>;
-def MULLHi32  : ArithLogic_R_I32R <0x14,  "mullh.0", le1_mullh, imm16, IIMul>;
-def MULLHi9   : ArithLogic_R_I9R  <0x14,  "mullh.0", le1_mullh, imm9, IIMul>;
-// ui16(s1) * ui16(s2 >> 16)
-def MULLHUr   : ArithLogic_R_RR   <0x15,  "mullhu.0", le1_mullhu, IIMul>;
-def MULLHUi32 : ArithLogic_R_I32R <0x15,  "mullhu.0", le1_mullhu, imm16, IIMul>;
-def MULLHUi9  : ArithLogic_R_I9R  <0x15,  "mullhu.0", le1_mullhu, imm9, IIMul>;
-// i16(s1 >> 16) * i16(s2 >> 16)
-def MULHHr    : ArithLogic_R_RR   <0x16,  "mulhh.0", le1_mulhh, IIMul>;
-def MULHHi32  : ArithLogic_R_I32R <0x16,  "mulhh.0", le1_mulhh, imm16, IIMul>;
-def MULHHi9   : ArithLogic_R_I9R  <0x16,  "mulhh.0", le1_mulhh, imm9, IIMul>;
-// ui16(s1 >> 16) * ui16(s2 >> 16)
-def MULHHUr   : ArithLogic_R_RR   <0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
-def MULHHUi32 : ArithLogic_R_I32R <0x17,  "mulhhu.0", le1_mulhhu, imm16, IIMul>;
-def MULHHUi9  : ArithLogic_R_I9R  <0x17,  "mulhhu.0", le1_mulhhu, imm9, IIMul>;
-// s1 * i16(s2)
-def MULLr     : ArithLogic_R_RR   <0x18,  "mull.0", le1_mull, IIMul>;
-def MULLi32   : ArithLogic_R_I32R <0x18,  "mull.0", le1_mull, imm16, IIMul>;
-def MULLi9    : ArithLogic_R_I9R  <0x18,  "mull.0", le1_mull, imm9, IIMul>;
-// s1 * ui16(s2)
-def MULLUr    : ArithLogic_R_RR   <0x19,  "mullu.0", le1_mullu, IIMul>;
-def MULLUi32  : ArithLogic_R_I32R <0x19,  "mullu.0", le1_mullu, imm16, IIMul>;
-def MULLUi9   : ArithLogic_R_I9R  <0x19,  "mullu.0", le1_mullu, imm9, IIMul>;
-// s1 * i16(s2 >> 16)
-def MULHr     : ArithLogic_R_RR   <0x1A,  "mulh.0", le1_mulh, IIMul>;
-def MULHi32   : ArithLogic_R_I32R <0x1A,  "mulh.0", le1_mulh, imm16, IIMul>;
-def MULHi9    : ArithLogic_R_I9R  <0x1A,  "mulh.0", le1_mulh, imm9, IIMul>;
-// s1 * ui16(s2 >> 16)
-def MULHUr    : ArithLogic_R_RR   <0x1B,  "mulhu.0", le1_mulhu, IIMul>;
-def MULHUi32  : ArithLogic_R_I32R <0x1B,  "mulhu.0", le1_mulhu, imm16, IIMul>;
-def MULHUi9   : ArithLogic_R_I9R  <0x1B,  "mulhu.0", le1_mulhu, imm9, IIMul>;
-// s1 * ui16(s2 >> 16) << 16
-def MULHSr    : ArithLogic_R_RR   <0x1C,  "mulhs.0", le1_mulhs, IIMul>;
-def MULHSi32  : ArithLogic_R_I32R <0x1C,  "mulhs.0", le1_mulhs, imm16, IIMul>;
-def MULHSi9   : ArithLogic_R_I9R  <0x1C,  "mulhs.0", le1_mulhs, imm9, IIMul>;
-*/
-
 
 let isCompare = 1 in {
   multiclass COMPARE<bits<4> opc, string instr_asm, PatFrag OpNode> {
@@ -753,105 +646,18 @@ defm CMPLEU : COMPARE<0x6, "cmpleu.0", setule>;
 defm CMPLT  : COMPARE<0x7, "cmplt.0", setlt>;
 defm CMPLTU : COMPARE<0x8, "cmpltu.0", setult>;
 defm CMPNE  : COMPARE<0x9, "cmpne.0", setne>;
-defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
-defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
-defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
-defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
+//defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
+//defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
+//defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
+//defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
 
-//===----------------------------------------------------------------------===//
-/// Arithmetic Instructions
 
-def ADDi   : ArithLogicI<"add.0", add>;
-def SUBi   : ArithLogicI<"sub.0", sub>;
-def ADD    : ArithLogicR<"add.0", add, 1>;
-def SUB    : ArithLogicR<"sub.0", sub>;
-
-//===----------------------------------------------------------------------===//
-/// Boolean Instructions
-def AND     : ArithLogicR<"and.0", and, 1>;
-def OR      : ArithLogicR<"or.0",  or, 1>;
-def XOR     : ArithLogicR<"xor.0", xor, 1>;
-def ANDi    : ArithLogicI<"and.0", and>;
-def ORi     : ArithLogicI<"or.0", or>;
-def XORi    : ArithLogicI<"xor.0", xor>;
+// ------------------------- END OF NEW IMPLEMENTATION ---------------------- //
 
 def NANDL : ArithLogicR<"nandl.0", le1_nandl>;
 def NORL  : ArithLogicR<"norl.0", le1_norl>;
 def ORL   : ArithLogicR<"orl.0", le1_orl>;
-def ANDC  : ArithLogicR<"andc.0", le1_andc>;
 def ANDL  : ArithLogicR<"andl.0", le1_andl>;
-def ORC   : ArithLogicR<"orc.0", le1_orc>;
-def ANDCi : ArithLogicI<"andc.0", le1_andc>;
-def ORCi  : ArithLogicI<"orc.0", le1_orc>;
-
-///===---------------------------------------------------------------------===//
-// Shift Instructions
-def SHLi      : ShiftI<"shl.0", shl>;
-def SHRi      : ShiftI<"shr.0", sra>;
-def SHL       : ShiftR<"shl.0", shl>;
-def SHR       : ShiftR<"shr.0", sra>;
-def SHRU      : ShiftR<"shru.0", srl>;
-def SHRUi     : ShiftI<"shru.0", srl>;
-
-def SH1ADD   : ShiftR<"sh1add.0", le1_sh1add>;
-def SH2ADD   : ShiftR<"sh2add.0", le1_sh2add>;
-def SH3ADD   : ShiftR<"sh3add.0", le1_sh3add>;
-def SH4ADD   : ShiftR<"sh4add.0", le1_sh4add>;
-def SH1ADDi  : ShiftI<"sh1add.0", le1_sh1add>;
-def SH2ADDi  : ShiftI<"sh2add.0", le1_sh2add>;
-def SH3ADDi  : ShiftI<"sh3add.0", le1_sh3add>;
-def SH4ADDi  : ShiftI<"sh4add.0", le1_sh4add>;
-
-///===---------------------------------------------------------------------===//
-// Compare Instructions
-let isCompare = 1 in {
-  /*
-def CMPEQr  : SetCCR<"cmpeq.0", seteq, CPURegs>;
-def CMPGEr  : SetCCR<"cmpge.0", setge, CPURegs>;
-def CMPGEUr : SetCCR<"cmpgeu.0", setuge, CPURegs>;
-def CMPGTr  : SetCCR<"cmpgt.0", setgt, CPURegs>;
-def CMPGTUr : SetCCR<"cmpgtu.0", setugt, CPURegs>;
-def CMPLEr  : SetCCR<"cmple.0", setle, CPURegs>;
-def CMPLEUr : SetCCR<"cmpleu.0", setule, CPURegs>;
-def CMPLTr  : SetCCR<"cmplt.0", setlt, CPURegs>;
-def CMPLTUr : SetCCR<"cmpltu.0", setult, CPURegs>;
-def CMPNEr  : SetCCR<"cmpne.0", setne, CPURegs>;
-*/
-
-def CMPEQri  : SetCCI<"cmpeq.0", seteq, CPURegs>;
-def CMPGEri  : SetCCI<"cmpge.0", setge, CPURegs>;
-def CMPGEUri : SetCCI<"cmpgeu.0", setuge, CPURegs>;
-def CMPGTri  : SetCCI<"cmpgt.0", setgt, CPURegs>;
-def CMPGTUri : SetCCI<"cmpgtu.0", setugt, CPURegs>;
-def CMPLEri  : SetCCI<"cmple.0", setle, CPURegs>;
-def CMPLEUri : SetCCI<"cmpleu.0", setule, CPURegs>;
-def CMPLTri  : SetCCI<"cmplt.0", setlt, CPURegs>;
-def CMPLTUri : SetCCI<"cmpltu.0", setult, CPURegs>;
-def CMPNEri  : SetCCI<"cmpne.0", setne, CPURegs>;
-
-def CMPEQ  : SetCCR<"cmpeq.0", seteq, BRegs>;
-def CMPGE  : SetCCR<"cmpge.0", setge, BRegs>;
-def CMPGEU : SetCCR<"cmpgeu.0", setuge, BRegs>;
-def CMPGT  : SetCCR<"cmpgt.0", setgt, BRegs>;
-def CMPGTU : SetCCR<"cmpgtu.0", setugt, BRegs>;
-def CMPLE  : SetCCR<"cmple.0", setle, BRegs>;
-def CMPLEU : SetCCR<"cmpleu.0", setule, BRegs>;
-def CMPLT  : SetCCR<"cmplt.0", setlt, BRegs>;
-def CMPLTU : SetCCR<"cmpltu.0", setult, BRegs>;
-def CMPNE  : SetCCR<"cmpne.0", setne, BRegs>;
-
-def CMPEQi  : SetCCI<"cmpeq.0", seteq, BRegs>;
-def CMPGEi  : SetCCI<"cmpge.0", setge, BRegs>;
-def CMPGEUi : SetCCI<"cmpgeu.0", setuge, BRegs>;
-def CMPGTi  : SetCCI<"cmpgt.0", setgt, BRegs>;
-def CMPGTUi : SetCCI<"cmpgtu.0", setugt, BRegs>;
-def CMPLEi  : SetCCI<"cmple.0", setle, BRegs>;
-def CMPLEUi : SetCCI<"cmpleu.0", setule, BRegs>;
-def CMPLTi  : SetCCI<"cmplt.0", setlt, BRegs>;
-def CMPLTUi : SetCCI<"cmpltu.0", setult, BRegs>;
-def CMPNEi  : SetCCI<"cmpne.0", setne, BRegs>;
-
-}
 
 ///===---------------------------------------------------------------------===//
 /// Bit Operators
@@ -859,19 +665,6 @@ def TBIT  : ArithLogicR<"tbit.0", le1_tbit>;
 def TBITF : ArithLogicR<"tbitf.0", le1_tbitf>;
 def SBIT  : ArithLogicR<"sbit.0", le1_sbit>;
 def SBITF : ArithLogicR<"sbitf.0", le1_sbitf>;
-
-
-///===---------------------------------------------------------------------===//
-/// Max and Min Instructions
-def MAX   : MaxMinR<"max.0", le1_max>;
-def MIN   : MaxMinR<"min.0", le1_min>;
-def MAXU  : MaxMinR<"maxu.0", le1_max>;
-def MINU  : MaxMinR<"minu.0", le1_min>;
-def MAXi  : MaxMinI<"max.0", le1_max>;
-def MINi   : MaxMinI<"min.0", le1_min>;
-def MAXUi  : MaxMinI<"maxu.0", le1_max>;
-def MINUi  : MaxMinI<"minu.0", le1_min>;
-
 
 ///===---------------------------------------------------------------------===//
 /// Select Instructions
@@ -915,34 +708,6 @@ def DIVS :  LE1Inst<(outs CPURegs:$res, BRegs:$cout),
             [/*(set CPURegs:$res, BRegs:$cout, (le1_divs CPURegs:$src1,
                                               CPURegs:$src2, BRegs:$cin))*/],
             IIAlu>;
-
-///===---------------------------------------------------------------------===//
-// Multiply Instructions
-
-
-def MULL    : MultR<"mull.0", le1_mull>;     // s1 * i16(s2)
-def MULLU   : MultR<"mullu.0", le1_mullu>;    // s1 * ui16(s2)
-def MULH    : MultR<"mulh.0", le1_mulh>;     // s1 * i16(s2 >> 16)
-def MULHU   : MultR<"mulhu.0", le1_mulhu>;    // s1 * ui16(s2 >> 16)
-def MULHS   : MultR<"mulhs.0", le1_mulhs>;    // s1 * ui16(s2 >> 16) << 16
-def MULLL   : MultR<"mulll.0", le1_mulll>;    // i16(s1) * i16(s2)
-def MULLLU  : MultR<"mulllu.0", le1_mulllu>;   // ui16(s1) * ui16(s2)
-def MULLH   : MultR<"mullh.0", le1_mullh>;    // i16(s1) * i16(s2 >> 16)
-def MULLHU  : MultR<"mullhu.0", le1_mullhu>;   // ui16(s1) * ui16(s2 >> 16)
-def MULHH   : MultR<"mulhh.0", le1_mulhh>;    // i16(s1 >> 16) * i16(s2 >> 16)
-def MULHHU  : MultR<"mulhhu.0", le1_mulhhu>;   // ui16(s1 >> 16) * ui16(s2 >> 16)
-
-def MULLi    : MultI<"mull.0", le1_mull, simm16, immSExt16>;
-def MULLUi   : MultI<"mullu.0", le1_mullu, uimm16, immZExt16>;
-def MULHi    : MultI<"mulh.0", le1_mulh, simm16, immSExt16>;
-def MULHUi   : MultI<"mulhu.0", le1_mulhu, uimm16, immZExt16>;
-def MULHSi   : MultI<"mulhs.0", le1_mulhs, simm16, immSExt16>;
-def MULLLi   : MultI<"mulll.0", le1_mulll, simm16, immSExt16>;
-def MULLLUi  : MultI<"mulllu.0", le1_mulllu, uimm16, immZExt16>;
-def MULLHi   : MultI<"mullh.0", le1_mullh, simm16, immSExt16>;
-def MULLHUi  : MultI<"mullhu.0", le1_mullhu, uimm16, immZExt16>;
-def MULHHi   : MultI<"mulhh.0", le1_mulhh, simm16, immSExt16>;
-def MULHHUi  : MultI<"mulhhu.0", le1_mulhhu, uimm16, immZExt16>;
 
 ///===---------------------------------------------------------------------===//
 /// Load and Store Instructions
@@ -1098,12 +863,12 @@ def RetFlag : LE1Pseudo < (outs), (ins), ";", [(le1_retflag)]>;
 //===----------------------------------------------------------------------===//
 
 // Carry patterns
-def : Pat<(subc CPURegs:$lhs, CPURegs:$rhs),
-          (SUB CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(addc CPURegs:$lhs, CPURegs:$rhs),
-          (ADD CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(addc  CPURegs:$src, imm:$imm),
-          (ADDi CPURegs:$src, imm:$imm)>;
+//def : Pat<(subc CPURegs:$lhs, CPURegs:$rhs),
+  //        (SUB CPURegs:$lhs, CPURegs:$rhs)>;
+//def : Pat<(addc CPURegs:$lhs, CPURegs:$rhs),
+  //        (ADD CPURegs:$lhs, CPURegs:$rhs)>;
+//def : Pat<(addc  CPURegs:$src, imm:$imm),
+  //        (ADDi CPURegs:$src, imm:$imm)>;
 
 // Call
 def : Pat<(le1_call LReg:$lnk, (i32 tglobaladdr:$dst)),
@@ -1116,6 +881,7 @@ def : Pat<(le1_call LReg:$lnk, (i32 (load addr:$src))),
           (CALLPOINTER LReg:$lnk, addr:$src)>;
 
 // Shift Add Patterns
+/*
 def : Pat<(add (shl CPURegs:$lhs, (i32 1)), CPURegs:$rhs),
           (SH1ADD CPURegs:$lhs, CPURegs:$rhs)>;
 def : Pat<(add (shl CPURegs:$lhs, (i32 2 )), CPURegs:$rhs),
@@ -1131,7 +897,7 @@ def : Pat <(add (shl CPURegs:$lhs, (i32 2)), (i32 imm:$rhs)),
 def : Pat<(add (shl CPURegs:$lhs, (i32 3)), (i32 imm:$rhs)),
           (SH3ADDi CPURegs:$lhs, imm:$rhs)>;
 def : Pat<(add (shl CPURegs:$lhs, (i32 4)), (i32 imm:$rhs)),
-          (SH4ADDi CPURegs:$lhs, imm:$rhs)>;
+          (SH4ADDi CPURegs:$lhs, imm:$rhs)>;*/
 
 // Extending Patterns
 def : Pat<(sra (shl CPURegs:$src, (i32 16)), (i32 16)),
@@ -1175,6 +941,7 @@ def : Pat<(and CPURegs:$lhs, (xor (shl (i32 1), CPURegs:$rhs), (i32 -1))),
           (SBITF CPURegs:$lhs, CPURegs:$rhs)>;
 
 // Boolean Patterns
+/*
 // NANDL = (((s1) == 0) | ((s2) == 0)) ? 1 : 0
 def : Pat<(selectcc (or (setcc CPURegs:$lhs, (i32 0), SETEQ),
                         (setcc CPURegs:$rhs, (i32 0), SETEQ)),
@@ -1208,6 +975,7 @@ def : Pat<(or (not CPURegs:$lhs), CPURegs:$rhs),
           (ORC CPURegs:$lhs, CPURegs:$rhs)>;
 def : Pat<(or (not CPURegs:$lhs), imm:$rhs),
           (ORCi CPURegs:$lhs, imm:$rhs)>;
+          */
 
 
 // Multiplications Patterns
