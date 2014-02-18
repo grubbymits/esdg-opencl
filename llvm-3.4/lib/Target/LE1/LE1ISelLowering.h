@@ -36,8 +36,10 @@ namespace llvm {
       BRF,
 
       // Max and Min operations
-      Max,
-      Min,
+      MAXS,
+      MAXU,
+      MINS,
+      MINU,
 
       // Return
       Ret,
@@ -70,29 +72,29 @@ namespace llvm {
       ORC,
 
       // Group of multiplications
-      Mull,
-      Mullu,
-      Mulh,
-      Mulhu,
-      Mulhs,
-      Mulll,
-      Mulllu,
-      Mullh,
-      Mullhu,
-      Mulhh,
-      Mulhhu,
+      MULL,
+      MULLU,
+      MULH,
+      MULHU,
+      MULHS,
+      MULLL,
+      MULLLU,
+      MULLH,
+      MULLHU,
+      MULHH,
+      MULHHU,
 
       // Compare Ops
-      Cmpeq,
-      Cmpge,
-      Cmpgeu,
-      Cmpgt,
-      Cmpgtu,
-      Cmple,
-      Cmpleu,
-      Cmplt,
-      Cmpltu,
-      Cmpne,
+      CMPEQ,
+      CMPGE,
+      CMPGEU,
+      CMPGT,
+      CMPGTU,
+      CMPLE,
+      CMPLEU,
+      CMPLT,
+      CMPLTU,
+      CMPNE,
 
       // MAdd/Sub nodes
       //MAdd,
@@ -106,10 +108,10 @@ namespace llvm {
       Shru,
 
       // Shift Add ops
-      Sh1Add,
-      Sh2Add,
-      Sh3Add,
-      Sh4Add,
+      SH1ADD,
+      SH2ADD,
+      SH3ADD,
+      SH4ADD,
 
       // Extend in reg ops
       SXTB,
@@ -118,10 +120,10 @@ namespace llvm {
       ZXTH,
 
       // Bit Set and Test
-      Tbit,
-      Tbitf,
-      Sbit,
-      Sbitf,
+      TBIT,
+      TBITF,
+      SBIT,
+      SBITF,
 
       // Extending instructions
       SextB,
@@ -180,9 +182,8 @@ namespace llvm {
   private:
     // Subtarget Info
     const LE1Subtarget *Subtarget;
-   //FIXME can't be 64-bit 
-    bool HasLE164, IsN64;
 
+    SDValue PerformDAGCombine(SDNode *N, DAGCombinerInfo &DCI);
     SDValue PerformADDCombine(SDNode *N, SelectionDAG &DAG);
     SDValue PerformANDCombine(SDNode *N, SelectionDAG &DAG);
     SDValue PerformORCombine(SDNode *N, SelectionDAG &DAG);
@@ -190,6 +191,7 @@ namespace llvm {
 
     SDValue LowerMULHS(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerMULHU(SDValue Op, SelectionDAG &DAG) const;
+    SDValue LowerMUL(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerSDIV(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerSREM(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerUDIV(SDValue Op, SelectionDAG &DAG) const;
@@ -198,7 +200,9 @@ namespace llvm {
                     SDValue AddArg, SDValue AddCin, SelectionDAG &DAG) const;
     SDValue RemStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin,
                     SDValue AddArg, SDValue AddCin, SelectionDAG &DAG) const;
+    SDValue LowerBRCOND(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerSETCC(SDValue Op, SelectionDAG &DAG) const;
+    SDValue LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerINTRINSIC_WO_CHAIN(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerIntrinsicWChain(SDValue Op, SelectionDAG &DAG) const;
 

@@ -178,8 +178,12 @@ void LE1FrameLowering::emitPrologue(MachineFunction &MF) const {
   std::vector<MachineMove> &Moves = MMI.getFrameMoves();
   MachineLocation DstML, SrcML;*/
 
-  BuildMI(MBB, MBBI, dl, TII.get(LE1::SUBi), LE1::SP)
-    .addReg(LE1::SP).addImm(StackSize);
+  if (StackSize > 1023)
+    BuildMI(MBB, MBBI, dl, TII.get(LE1::SUBi32), LE1::SP)
+      .addReg(LE1::SP).addImm(StackSize);
+  else
+    BuildMI(MBB, MBBI, dl, TII.get(LE1::SUBi9), LE1::SP)
+      .addReg(LE1::SP).addImm(StackSize);
 }
 
 void LE1FrameLowering::emitEpilogue(MachineFunction &MF,

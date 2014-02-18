@@ -75,43 +75,45 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::ANDL:          return "LE1ISD::ANDL";
   case LE1ISD::ORC:           return "LE1ISD::ORC";
 
-  case LE1ISD::Mull:          return "LE1ISD::Mull";
-  case LE1ISD::Mulh:          return "LE1ISD::Mulh";
-  case LE1ISD::Mulhs:         return "LE1ISD::Mulhs";
-  case LE1ISD::Mulll:         return "LE1ISD::Mulll";
-  case LE1ISD::Mullh:         return "LE1ISD::Mullh";
-  case LE1ISD::Mulhh:         return "LE1ISD::Mulhh";
+  case LE1ISD::MULL:          return "LE1ISD::MULL";
+  case LE1ISD::MULH:          return "LE1ISD::MULH";
+  case LE1ISD::MULHS:         return "LE1ISD::MULHS";
+  case LE1ISD::MULLL:         return "LE1ISD::MULLL";
+  case LE1ISD::MULLH:         return "LE1ISD::MULLH";
+  case LE1ISD::MULHH:         return "LE1ISD::MULHH";
   case LE1ISD::Addcg:         return "LE1ISD::Addcg";
   case LE1ISD::Divs:          return "LE1ISD::Divs";
 
-  case LE1ISD::Cmpeq:         return "LE1ISD::Cmpeq";
-  case LE1ISD::Cmpge:         return "LE1ISD::Cmpge";
-  case LE1ISD::Cmpgeu:        return "LE1ISD::Cmpgeu";
-  case LE1ISD::Cmpgt:         return "LE1ISD::Cmpgt";
-  case LE1ISD::Cmpgtu:        return "LE1ISD::Cmpgtu";
-  case LE1ISD::Cmple:         return "LE1ISD::Cmple";
-  case LE1ISD::Cmpleu:        return "LE1ISD::Cmpleu";
-  case LE1ISD::Cmplt:         return "LE1ISD::Cmplt";
-  case LE1ISD::Cmpltu:        return "LE1ISD::Cmpltu";
-  case LE1ISD::Cmpne:         return "LE1ISD::Cmpne";
+  case LE1ISD::CMPEQ:         return "LE1ISD::CMPEQ";
+  case LE1ISD::CMPGE:         return "LE1ISD::CMPGE";
+  case LE1ISD::CMPGEU:        return "LE1ISD::CMPGEU";
+  case LE1ISD::CMPGT:         return "LE1ISD::CMPGT";
+  case LE1ISD::CMPGTU:        return "LE1ISD::CMPGTU";
+  case LE1ISD::CMPLE:         return "LE1ISD::CMPLE";
+  case LE1ISD::CMPLEU:        return "LE1ISD::CMPLEU";
+  case LE1ISD::CMPLT:         return "LE1ISD::CMPLT";
+  case LE1ISD::CMPLTU:        return "LE1ISD::CMPLTU";
+  case LE1ISD::CMPNE:         return "LE1ISD::CMPNE";
 
-  case LE1ISD::Max:           return "LE1ISD::Max";
-  case LE1ISD::Min:           return "LE1ISD::Min";
+  case LE1ISD::MAXS:           return "LE1ISD::MAXS";
+  case LE1ISD::MAXU:           return "LE1ISD::MAXU";
+  case LE1ISD::MINS:           return "LE1ISD::MINS";
+  case LE1ISD::MINU:           return "LE1ISD::MINU";
 
   case LE1ISD::SXTB:          return "LE1ISD::SXTB";
   case LE1ISD::SXTH:          return "LE1ISD::SXTH";
   case LE1ISD::ZXTB:          return "LE1ISD::ZXTB";
   case LE1ISD::ZXTH:          return "LE1ISD::ZXTH";
 
-  case LE1ISD::Sh1Add:        return "LE1ISD::Sh1add";
-  case LE1ISD::Sh2Add:        return "LE1ISD::Sh2add";
-  case LE1ISD::Sh3Add:        return "LE1ISD::Sh3add";
-  case LE1ISD::Sh4Add:        return "LE1ISD::Sh4add";
+  case LE1ISD::SH1ADD:        return "LE1ISD::SH1ADD";
+  case LE1ISD::SH2ADD:        return "LE1ISD::SH2ADD";
+  case LE1ISD::SH3ADD:        return "LE1ISD::SH3ADD";
+  case LE1ISD::SH4ADD:        return "LE1ISD::SH4ADD";
 
-  case LE1ISD::Tbit:          return "LE1ISD::Tbit";
-  case LE1ISD::Tbitf:         return "LE1ISD::Tbitf";
-  case LE1ISD::Sbit:          return "LE1ISD::Sbit";
-  case LE1ISD::Sbitf:         return "LE1ISD::Sbitf";
+  case LE1ISD::TBIT:          return "LE1ISD::TBIT";
+  case LE1ISD::TBITF:         return "LE1ISD::TBITF";
+  case LE1ISD::SBIT:          return "LE1ISD::SBIT";
+  case LE1ISD::SBITF:         return "LE1ISD::SBITF";
 
   case LE1ISD::CPUID:         return "LE1ISD::CPUID";
   case LE1ISD::LocalSize:     return "LE1ISD::LocalSize";
@@ -200,27 +202,19 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setTruncStoreAction(MVT::f64, MVT::f32, Expand);
 
   // LE1 Custom Operations
-  // If we're compiling a library, expand the code using addcg and divs
-  
-  //if(Subtarget->hasExpandDiv()) {
-    setOperationAction(ISD::SDIV,             MVT::i32, Custom);
-    setOperationAction(ISD::UDIV,             MVT::i32, Custom);
-    setOperationAction(ISD::SREM,             MVT::i32, Custom);
-    setOperationAction(ISD::UREM,             MVT::i32, Custom);
-    /*
-  } else  {
-    setLibcallName(RTLIB::SDIV_I32, "_i_div");
-    setOperationAction(ISD::SDIV,   MVT::i32, Expand);
-    setLibcallName(RTLIB::SREM_I32, "_i_rem");
-    setOperationAction(ISD::SREM,   MVT::i32, Expand);
-
-    setLibcallName(RTLIB::UDIV_I32, "_i_udiv");
-    setOperationAction(ISD::UDIV,   MVT::i32, Expand);
-    setLibcallName(RTLIB::UREM_I32, "_i_urem");
-    setOperationAction(ISD::UREM,   MVT::i32, Expand);
-  }*/
-  //setOperationAction(ISD::SDIV, MVT::i32, Expand);
-  //setOperationAction(ISD::UDIV, MVT::i32, Expand);
+  setOperationAction(ISD::SDIV,               MVT::i32, Custom);
+  setOperationAction(ISD::UDIV,               MVT::i32, Custom);
+  setOperationAction(ISD::SREM,               MVT::i32, Custom);
+  setOperationAction(ISD::UREM,               MVT::i32, Custom);
+  setOperationAction(ISD::MULHS,              MVT::i32, Custom);
+  setOperationAction(ISD::MULHU,              MVT::i32, Custom);
+  setOperationAction(ISD::MUL,                MVT::i32, Custom);
+  setOperationAction(ISD::SETCC,              MVT::i32, Custom);
+  setOperationAction(ISD::SELECT_CC,           MVT::i32, Custom);
+  setOperationAction(ISD::BRCOND,             MVT::Other, Custom);
+  setOperationAction(ISD::INTRINSIC_VOID,     MVT::Other, Custom);
+  setOperationAction(ISD::INTRINSIC_W_CHAIN,  MVT::Other, Custom);
+  setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
 
     /*
   // Softfloat Floating Point Library Calls
@@ -396,8 +390,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   setOperationAction(ISD::SMUL_LOHI,        MVT::i32, Expand);
   setOperationAction(ISD::UMUL_LOHI,        MVT::i32, Expand);
-  setOperationAction(ISD::MULHS,            MVT::i32, Custom);
-  setOperationAction(ISD::MULHU,            MVT::i32, Custom);
 
   setOperationAction(ISD::BR_JT,            MVT::Other, Expand);
   setOperationAction(ISD::BR_CC,            MVT::Other, Expand);
@@ -470,9 +462,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setOperationAction(ISD::ZEXTLOAD,   MVT::i8,    Custom);
   //setOperationAction(ISD::ZEXTLOAD,   MVT::i16,   Custom);
 
-  setOperationAction(ISD::INTRINSIC_VOID, MVT::Other, Custom);
-  setOperationAction(ISD::INTRINSIC_W_CHAIN, MVT::Other, Custom);
-  setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
 
   setOperationAction(ISD::FSQRT, MVT::f32, Expand);
 
@@ -498,30 +487,19 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
 {
   switch (Op.getOpcode())
   {
-    //case ISD::BRCOND:             return LowerBRCOND(Op, DAG);
-    //case ISD::ConstantPool:       return LowerConstantPool(Op, DAG);
-    //case ISD::DYNAMIC_STACKALLOC: return LowerDYNAMIC_STACKALLOC(Op, DAG);
     case ISD::GlobalAddress:      return LowerGlobalAddress(Op, DAG);
-    //case ISD::BlockAddress:       return LowerBlockAddress(Op, DAG);
-    //case ISD::GlobalTLSAddress:   return LowerGlobalTLSAddress(Op, DAG);
-    //case ISD::JumpTable:          return LowerJumpTable(Op, DAG);
-    //case ISD::SELECT:             return LowerSELECT(Op, DAG);
     case ISD::MULHS:              return LowerMULHS(Op, DAG);
     case ISD::MULHU:              return LowerMULHU(Op, DAG);
+    case ISD::MUL:                return LowerMUL(Op, DAG);
     case ISD::SDIV:               return LowerSDIV(Op, DAG);
     case ISD::UDIV:               return LowerUDIV(Op, DAG);
     case ISD::SREM:               return LowerSREM(Op, DAG);
     case ISD::UREM:               return LowerUREM(Op, DAG);
     case ISD::VASTART:            return LowerVASTART(Op, DAG);
-    case ISD::SETCC:
-    case ISD::SETNE:              return LowerSETCC(Op, DAG);
-    //case ISD::EXTLOAD:
-    //case ISD::ZEXTLOAD:
-    //case ISD::SEXTLOAD:           return LowerLoad(Op, DAG);
-    //case ISD::FCOPYSIGN:          return LowerFCOPYSIGN(Op, DAG);
+    case ISD::SELECT_CC:          return LowerSELECT_CC(Op, DAG);
+    case ISD::SETCC:              return LowerSETCC(Op, DAG);
+    case ISD::BRCOND:             return LowerBRCOND(Op, DAG);
     case ISD::FRAMEADDR:          return LowerFRAMEADDR(Op, DAG);
-    //case ISD::MEMBARRIER:         return LowerMEMBARRIER(Op, DAG);
-    //case ISD::ATOMIC_FENCE:       return LowerATOMIC_FENCE(Op, DAG);
     case ISD::INTRINSIC_VOID:
     case ISD::INTRINSIC_W_CHAIN:  return LowerIntrinsicWChain(Op, DAG);
     case ISD::INTRINSIC_WO_CHAIN: return LowerINTRINSIC_WO_CHAIN(Op, DAG);
@@ -532,7 +510,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
 SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
                                              DAGCombinerInfo &DCI) {
   SelectionDAG &DAG = DCI.DAG;
-  switch(Node->getOpcode()) {
+  switch(N->getOpcode()) {
   default:
     break;
   case ISD::ADD: return PerformADDCombine(N, DAG);
@@ -546,21 +524,21 @@ SDValue LE1TargetLowering::PerformADDCombine(SDNode *N, SelectionDAG &DAG) {
   SDLoc dl(N);
 
   if ((LHS.getOpcode() != ISD::SHL) && (LHS.getOpcode() != ISD::SHL))
-    return N->getValue(0);
+    return SDValue(N, 0);
 
   uint64_t ShiftVal = 0;
   if (LHS.getOpcode() == ISD::SHL) {
     if (ConstantSDNode *CN = cast<ConstantSDNode>(LHS.getOperand(1)))
-      ShiftVal = CN->getConstantOperandVal();
+      ShiftVal = CN->getConstantOperandVal(0);
   }
   else if (RHS.getOpcode() == ISD::SHL) {
     if (ConstantSDNode *CN = cast<ConstantSDNode>(RHS.getOperand(1)))
-      ShiftVal = CN->getConstantOperandVal();
+      ShiftVal = CN->getConstantOperandVal(0);
   }
   unsigned Opcode = 0;
   switch (ShiftVal) {
   default:
-    return N->getValue(0);
+    return SDValue(N, 0);
   case 1:
     Opcode = LE1ISD::SH1ADD;
     break;
@@ -585,26 +563,26 @@ SDValue LE1TargetLowering::PerformANDCombine(SDNode *N, SelectionDAG &DAG) {
   SDLoc dl(N);
 
   SDValue Xor;
-  if (LHS.getOpcode() = ISD::XOR)
+  if (LHS.getOpcode() == ISD::XOR)
     Xor = LHS;
   else if (RHS.getOpcode() != ISD::XOR)
     Xor = RHS;
   else
-    return N->getValue(0);
+    return SDValue(N, 0);
 
   bool isANDC = false;
   if (ConstantSDNode *CSN = cast<ConstantSDNode>(Xor.getOperand(0))) {
-    if (CSN->getConstantOperandVal() == -1)
+    if (CSN->getConstantOperandVal(0) == -1)
       isANDC = true;
   }
   else if (ConstantSDNode *CSN = cast<ConstantSDNode>(Xor.getOperand(1))) {
-    if (CSN->getConstantOperandVal() == -1)
+    if (CSN->getConstantOperandVal(0) == -1)
       isANDC = true;
   }
   if (isANDC)
-    return DAG.getNode(LE1ISD::ANDC, dl, N->getEVT(), LHS, RHS);
+    return DAG.getNode(LE1ISD::ANDC, dl, N->getValueType(0), LHS, RHS);
   else
-    return N->getValue(0);
+    return SDValue(N, 0);
 }
 
 // ORC = (~(s1)) | (s2)
@@ -630,12 +608,14 @@ SDValue LE1TargetLowering::PerformMULCombine(SDNode *N, SelectionDAG &DAG) {
 
   if (LHS.getOpcode() == ISD::SRA) {
     if (ConstantSDNode *CSN = cast<ConstantSDNode>(LHS.getOperand(1))) {
-      if (CSN->getConstantOperandValue() == 16) {
+      if (CSN->getConstantOperandVal(0) == 16) {
         if (RHS.getOpcode() == ISD::SRA) {
 
+        }
+      }
     }
   }
-
+  return SDValue(N, 0);
 }
 
 //===----------------------------------------------------------------------===//
@@ -652,6 +632,18 @@ AddLiveIn(MachineFunction &MF, unsigned PReg, const TargetRegisterClass *RC)
   unsigned VReg = MF.getRegInfo().createVirtualRegister(RC);
   MF.getRegInfo().addLiveIn(PReg, VReg);
   return VReg;
+}
+
+SDValue LE1TargetLowering::LowerMUL(SDValue Op, SelectionDAG &DAG) const {
+  SDValue LHS = Op.getOperand(0);
+  SDValue RHS = Op.getOperand(1);
+  SDLoc dl(Op.getNode());
+
+  SDValue Mullu = DAG.getNode(LE1ISD::MULLU, dl, Op.getValueType(),
+                              LHS, RHS);
+  SDValue Mulhs = DAG.getNode(LE1ISD::MULHS, dl, Op.getValueType(),
+                              LHS, RHS);
+  return DAG.getNode(ISD::ADD, dl, Op.getValueType(), Mullu, Mulhs);
 }
 
 SDValue LE1TargetLowering::
@@ -864,8 +856,7 @@ LowerSREM(SDValue Op, SelectionDAG &DAG) const
 
 }
 
-SDValue LE1TargetLowering::
-LowerUDIV(SDValue Op, SelectionDAG &DAG) const
+SDValue LE1TargetLowering::LowerUDIV(SDValue Op, SelectionDAG &DAG) const
 {
   //std::cout << "LowerUDIV\n";
   assert((Op.getValueType() == MVT::i32) && "32-bit division only!");
@@ -897,8 +888,7 @@ LowerUDIV(SDValue Op, SelectionDAG &DAG) const
 
 }
 
-SDValue LE1TargetLowering::
-LowerUREM(SDValue Op, SelectionDAG &DAG) const
+SDValue LE1TargetLowering::LowerUREM(SDValue Op, SelectionDAG &DAG) const
 {
   //std::cout << "LowerUREM\n";
   assert((Op.getValueType() == MVT::i32) && "32-bit remainder only!");
@@ -996,50 +986,189 @@ DivStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
     SDValue Cmpge = DAG.getSetCC(dl, MVT::i1, DivRes, Zero, ISD::SETGE);
     //SDValue Cmpge = DAG.getNode(ISD::SETCC, dl, MVT::i1, DivRes, Zero,
       //                          DAG.getConstant(ISD::SETGE, MVT::i32));
-    SDValue ORC = DAG.getNode(LE1ISD::Orc, dl, MVT::i32, Final, Zero);
+    SDValue ORC = DAG.getNode(LE1ISD::ORC, dl, MVT::i32, Final, Zero);
     SDValue MFB = DAG.getNode(LE1ISD::MFB, dl, MVT::i32, Cmpge);
-    return DAG.getNode(LE1ISD::Sh1Add, dl, MVT::i32, ORC, MFB);
+    return DAG.getNode(LE1ISD::SH1ADD, dl, MVT::i32, ORC, MFB);
     // return AddRes;
   }
 }
 
+static SDValue CreateCMP(SDValue Op, SelectionDAG &DAG) {
+  if (Op.getOpcode() != ISD::SETCC)
+    return Op;
+
+  SDLoc dl(Op.getNode());
+  ISD::CondCode CC = cast<CondCodeSDNode>(Op.getOperand(2))->get();
+  SDValue LHS = Op.getOperand(0);
+  SDValue RHS = Op.getOperand(1);
+  unsigned Opcode = 0;
+
+  switch(CC) {
+  default:
+    return Op;
+  case ISD::SETEQ:
+    Opcode = LE1ISD::CMPEQ;
+    break;
+  case ISD::SETNE:
+    Opcode = LE1ISD::CMPNE;
+    break;
+  case ISD::SETLT:
+    Opcode = LE1ISD::CMPLT;
+    break;
+  case ISD::SETULT:
+    Opcode = LE1ISD::CMPLTU;
+    break;
+  case ISD::SETLE:
+    Opcode = LE1ISD::CMPLE;
+    break;
+  case ISD::SETULE:
+    Opcode = LE1ISD::CMPLEU;
+    break;
+  case ISD::SETGT:
+    Opcode = LE1ISD::CMPGT;
+    break;
+  case ISD::SETUGT:
+    Opcode = LE1ISD::CMPGTU;
+    break;
+  case ISD::SETGE:
+    Opcode = LE1ISD::CMPGE;
+    break;
+  case ISD::SETUGE:
+    Opcode = LE1ISD::CMPGEU;
+    break;
+  }
+
+  return DAG.getNode(Opcode, dl, Op.getValueType(), LHS, RHS);
+}
+
 SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
                                       SelectionDAG &DAG) const {
-  std::cerr << "LowerSETCC\n";
   SDValue LHS = Op.getOperand(1);
   SDValue RHS = Op.getOperand(2);
   SDLoc dl(Op.getNode());
   SDNode* Node = Op.getNode();
   ISD::CondCode CC = cast<CondCodeSDNode>(Node->getOperand(2))->get();
+  unsigned Opcode = 0;
 
-  /*
-  // XOR on vector and scalar input
-  if (!LHS.getValueType().isVector() != !RHS.getValueType().isVector()) {
-    SDValue vector;
-    SDValue scalar;
-    if (LHS.getValueType().isVector()) {
-      vector = LHS;
-      scalar = RHS;
+  // ORL and NORL
+  if (LHS.getOpcode() == ISD::OR) {
+    if (ConstantSDNode* CSN = cast<ConstantSDNode>(RHS.getNode())) {
+      if (CSN->getConstantOperandVal(0) == 0) {
+
+        if (CC == ISD::SETEQ)
+          Opcode = LE1ISD::NORL;
+        else if (CC == ISD::SETNE)
+          Opcode = LE1ISD::ORL;
+        else
+          return SDValue();
+
+        return DAG.getNode(Opcode, dl, Op.getValueType(), LHS, RHS);
+      }
     }
-    else {
-      vector = RHS;
-      scalar = LHS;
+  }
+  // TBIT and TBITF
+  else if (LHS.getOpcode() == ISD::AND) {
+    if (ConstantSDNode *CSN = cast<ConstantSDNode>(RHS.getNode())) {
+      if ((CSN->getConstantOperandVal(0) == 0) &&
+          (LHS.getOperand(0).getOpcode() == ISD::SHL)) {
+
+        if (ConstantSDNode *CSN =
+            cast<ConstantSDNode>(LHS.getOperand(0).getOperand(0).getNode())) {
+          if (CSN->getConstantOperandVal(0) == 1) {
+
+            if (CC == ISD::SETEQ)
+              Opcode = LE1ISD::TBITF;
+            else if (CC == ISD::SETNE)
+              Opcode = LE1ISD::TBIT;
+            else
+              return SDValue();
+
+            return DAG.getNode(Opcode, dl, Op.getValueType(), LHS, RHS);
+          }
+        }
+      }
     }
-    EVT vectorType = vector.getValueType();
-    unsigned numElements = vectorType.getVectorNumElements();
-    SDValue *newVector = new SDValue[numElements];
-    for (unsigned i = 0; i < numElements; ++i)
-      newVector[i] = scalar;
-    SDValue buildVector = DAG.getNode(ISD::BUILD_VECTOR, dl, vectorType,
-                                      newVector, numElements);
+  }
+  return SDValue();
+}
 
-    return DAG.getSetCC(dl, MVT::i1, buildVector, vector, CC);
-  }*/
+SDValue LE1TargetLowering::LowerBRCOND(SDValue Op, SelectionDAG &DAG) const {
+  SDValue Chain = Op.getOperand(0);
+  SDValue Dest = Op.getOperand(2);
+  SDLoc dl(Op.getNode());
+  SDValue Cond = CreateCMP(Op.getOperand(1), DAG);
 
-  SDValue LHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), LHS);
-  SDValue RHSz = DAG.getNode(ISD::ZERO_EXTEND, dl, EVT(MVT::i32), RHS);
+  return DAG.getNode(LE1ISD::BR, dl, Op.getValueType(), Chain, Cond, Dest);
+}
 
-  return DAG.getSetCC(dl, MVT::i1, LHSz, RHSz, CC);
+SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
+  SDValue Op0 = Op.getOperand(0);
+  SDValue Op1 = Op.getOperand(1);
+  SDValue Op2 = Op.getOperand(2);
+  SDValue Op3 = Op.getOperand(3);
+  ISD::CondCode CC = cast<CondCodeSDNode>(Op.getOperand(4))->get();
+  SDLoc dl(Op.getNode());
+  unsigned Opcode = 0;
+
+  // Max and Min
+  if ((Op0 == Op2) && (Op1 == Op3)) {
+    switch(CC) {
+    default:
+      return SDValue();
+    case ISD::SETGT:
+    case ISD::SETGE:
+      Opcode = LE1ISD::MAXS;
+      break;
+    case ISD::SETLT:
+    case ISD::SETLE:
+      Opcode = LE1ISD::MINS;
+      break;
+    case ISD::SETUGT:
+    case ISD::SETUGE:
+      Opcode = LE1ISD::MAXU;
+      break;
+    case ISD::SETULT:
+    case ISD::SETULE:
+      Opcode = LE1ISD::MINU;
+      break;
+    }
+    return DAG.getNode(Opcode, dl, Op.getValueType(), Op0, Op1);
+  }
+  // NANDL, NORL, ANDL, ORL
+  if (CC == ISD::SETNE) {
+    if (ConstantSDNode *CSN0 = cast<ConstantSDNode>(Op1.getNode())) {
+      if (CSN0->getConstantOperandVal(0) == 0) {
+        if (ConstantSDNode *CSN1 = cast<ConstantSDNode>(Op2.getNode())) {
+          if (ConstantSDNode *CSN2 = cast<ConstantSDNode>(Op3.getNode())) {
+            // NANDL or NORL
+            if ((CSN1->getConstantOperandVal(0) == 1) &&
+                (CSN2->getConstantOperandVal(0) == 0)) {
+
+              if (Op0.getOpcode() == ISD::OR)
+                Opcode = LE1ISD::NANDL;
+              else if (Op0.getOpcode() == ISD::AND)
+                Opcode = LE1ISD::NORL;
+            }
+            // ANDL or ORL
+            else if ((CSN1->getConstantOperandVal(0) == 0) &&
+                     (CSN2->getConstantOperandVal(0) == 1)) {
+
+              if (Op0.getOpcode() == ISD::OR)
+                Opcode = LE1ISD::ANDL;
+              else if (Op0.getOpcode() == ISD::AND)
+                Opcode = LE1ISD::ORL;
+            }
+            else
+              return SDValue();
+
+            return DAG.getNode(Opcode, dl, Op.getValueType(), Op0.getOperand(0),
+                               Op0.getOperand(1));
+          }
+        }
+      }
+    }
+  }
+  return SDValue();
 }
 
 SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,

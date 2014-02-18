@@ -99,26 +99,26 @@ def le1_mfl     : SDNode<"LE1ISD::MFL", SDTIntUnaryOp, []>;
 //def le1_mtbinv  : SDNode<"LE1ISD::MTBINV", SDTIntTruncOp, []>;
 
 // Multiplication and Division Nodes
-def le1_mull    : SDNode<"LE1ISD::Mull", SDTIntBinOp, [SDNPCommutative]>;
-def le1_mullu   : SDNode<"LE1ISD::Mullu", SDTIntBinOp, [SDNPCommutative]>;
-def le1_mulh    : SDNode<"LE1ISD::Mulh", SDTIntBinOp, []>;
-def le1_mulhu   : SDNode<"LE1ISD::Mulhu", SDTIntBinOp, []>;
-def le1_mulhs   : SDNode<"LE1ISD::Mulhs", SDTIntBinOp, []>;
-def le1_mulll   : SDNode<"LE1ISD::Mulll", SDTIntBinOp, []>;
-def le1_mulllu  : SDNode<"LE1ISD::Mulllu", SDTIntBinOp, []>;
-def le1_mullh   : SDNode<"LE1ISD::Mullh", SDTIntBinOp, []>;
-def le1_mullhu  : SDNode<"LE1ISD::Mullhu", SDTIntBinOp, []>;
-def le1_mulhh   : SDNode<"LE1ISD::Mulhh", SDTIntBinOp, [SDNPCommutative]>;
-def le1_mulhhu  : SDNode<"LE1ISD::Mulhhu", SDTIntBinOp, [SDNPCommutative]>;
+def le1_mull    : SDNode<"LE1ISD::MULL", SDTIntBinOp, [SDNPCommutative]>;
+def le1_mullu   : SDNode<"LE1ISD::MULLU", SDTIntBinOp, [SDNPCommutative]>;
+def le1_mulh    : SDNode<"LE1ISD::MULH", SDTIntBinOp, []>;
+def le1_mulhu   : SDNode<"LE1ISD::MULHU", SDTIntBinOp, []>;
+def le1_mulhs   : SDNode<"LE1ISD::MULHS", SDTIntBinOp, []>;
+def le1_mulll   : SDNode<"LE1ISD::MULLL", SDTIntBinOp, []>;
+def le1_mulllu  : SDNode<"LE1ISD::MULLLU", SDTIntBinOp, []>;
+def le1_mullh   : SDNode<"LE1ISD::MULLH", SDTIntBinOp, []>;
+def le1_mullhu  : SDNode<"LE1ISD::MULLHU", SDTIntBinOp, []>;
+def le1_mulhh   : SDNode<"LE1ISD::MULHH", SDTIntBinOp, [SDNPCommutative]>;
+def le1_mulhhu  : SDNode<"LE1ISD::MULHHU", SDTIntBinOp, [SDNPCommutative]>;
 
 def le1_addcg   : SDNode<"LE1ISD::Addcg", SDT_LE1CarryUseGen, []>;
 def le1_divs    : SDNode<"LE1ISD::Divs", SDT_LE1CarryUseGen, []>;
 
 // Shift Adds
-def le1_sh1add  : SDNode<"LE1ISD::Sh1Add", SDTIntShiftOp, []>;
-def le1_sh2add  : SDNode<"LE1ISD::Sh2Add", SDTIntShiftOp, []>;
-def le1_sh3add  : SDNode<"LE1ISD::Sh3Add", SDTIntShiftOp, []>;
-def le1_sh4add  : SDNode<"LE1ISD::Sh4Add", SDTIntShiftOp, []>;
+def le1_sh1add  : SDNode<"LE1ISD::SH1ADD", SDTIntShiftOp, []>;
+def le1_sh2add  : SDNode<"LE1ISD::SH2ADD", SDTIntShiftOp, []>;
+def le1_sh3add  : SDNode<"LE1ISD::SH3ADD", SDTIntShiftOp, []>;
+def le1_sh4add  : SDNode<"LE1ISD::SH4ADD", SDTIntShiftOp, []>;
 
 // Extend Nodes
 def le1_sxtb    : SDNode<"LE1ISD::SXTB", SDTExtInreg, []>;
@@ -127,14 +127,16 @@ def le1_zxtb    : SDNode<"LE1ISD::ZXTB", SDTExtInreg, []>;
 def le1_zxth    : SDNode<"LE1ISD::ZXTH", SDTExtInreg, []>;
 
 // Bit Operators
-def le1_tbit    : SDNode<"LE1ISD::Tbit", SDTIntBinOp, []>;
-def le1_tbitf   : SDNode<"LE1ISD::Tbitf", SDTIntBinOp, []>;
-def le1_sbit    : SDNode<"LE1ISD::Sbit", SDTIntBinOp, []>;
-def le1_sbitf   : SDNode<"LE1ISD::Sbitf", SDTIntBinOp, []>;
+def le1_tbit    : SDNode<"LE1ISD::TBIT", SDTIntBinOp, []>;
+def le1_tbitf   : SDNode<"LE1ISD::TBITF", SDTIntBinOp, []>;
+def le1_sbit    : SDNode<"LE1ISD::SBIT", SDTIntBinOp, []>;
+def le1_sbitf   : SDNode<"LE1ISD::SBITF", SDTIntBinOp, []>;
 
 // Max and Min Operators
-def le1_max     : SDNode<"LE1ISD::Max", SDTIntBinOp, [SDNPCommutative]>;
-def le1_min     : SDNode<"LE1ISD::Min", SDTIntBinOp, [SDNPCommutative]>;
+def le1_maxs    : SDNode<"LE1ISD::MAXS", SDTIntBinOp, [SDNPCommutative]>;
+def le1_maxu    : SDNode<"LE1ISD::MAXU", SDTIntBinOp, [SDNPCommutative]>;
+def le1_mins    : SDNode<"LE1ISD::MINS", SDTIntBinOp, [SDNPCommutative]>;
+def le1_minu    : SDNode<"LE1ISD::MINU", SDTIntBinOp, [SDNPCommutative]>;
 
 // Boolean Operators
 def le1_nandl   : SDNode<"LE1ISD::NANDL", SDTIntBinOp, [SDNPCommutative]>;
@@ -578,10 +580,10 @@ multiclass ARITH_LOGIC<bits<5> opcode, string instr_asm, SDNode OpNode,
 defm ADD      : ARITH_LOGIC<0x0,   "add.0", add, IIAlu, 1>;
 defm AND      : ARITH_LOGIC<0x1,   "and.0", and, IIAlu, 1>;
 defm ANDC     : ARITH_LOGIC<0x2,   "andc.0", le1_andc, IIAlu>;
-defm MAXS     : ARITH_LOGIC<0x3,   "max.0", le1_max, IIAlu>;
-defm MAXU     : ARITH_LOGIC<0x4,   "maxu.0", le1_max, IIAlu>;
-defm MINS     : ARITH_LOGIC<0x5,   "min.0", le1_min, IIAlu>;
-defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_min, IIAlu>;
+defm MAXS     : ARITH_LOGIC<0x3,   "max.0", le1_maxs, IIAlu>;
+defm MAXU     : ARITH_LOGIC<0x4,   "maxu.0", le1_maxu, IIAlu>;
+defm MINS     : ARITH_LOGIC<0x5,   "min.0", le1_mins, IIAlu>;
+defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_mins, IIAlu>;
 defm OR       : ARITH_LOGIC<0x7,   "or.0",  or, IIAlu, 1>;
 defm ORC      : ARITH_LOGIC<0x8,   "orc.0", le1_orc, IIAlu>;
 defm SH1ADD   : ARITH_LOGIC<0x9,   "sh1add.0", le1_sh1add, IIAlu>;
@@ -979,6 +981,7 @@ def : Pat<(or (not CPURegs:$lhs), imm:$rhs),
 
 
 // Multiplications Patterns
+/*
 //def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
 def : Pat<(mul (srl CPURegs:$lhs, (i32 16)), (srl CPURegs:$rhs, (i32 16))),
           (MULHHU CPURegs:$lhs, CPURegs:$rhs)>;
@@ -1049,26 +1052,17 @@ def : Pat<(mul CPURegs:$lhs, (sext_inreg CPURegs:$rhs, i16)),
           (MULL CPURegs:$lhs, CPURegs:$rhs)>;
 def : Pat<(mul CPURegs:$lhs, immSExt16:$rhs),
           (MULLi CPURegs:$lhs, immSExt16:$rhs)>;
-
 def : Pat<(mul CPURegs:$lhs, CPURegs:$rhs),
           (ADD (MULLU CPURegs:$lhs, CPURegs:$rhs),
                 (MULHS CPURegs:$lhs, CPURegs:$rhs))>;
 def : Pat<(mul CPURegs:$lhs, imm:$rhs),
           (ADD (MULLUi CPURegs:$lhs, imm:$rhs),
                 (MULHS CPURegs:$lhs, CPURegs:$rhs))>;
-/*
-// MUL patterns that use a chain for when accessing OpenCL regs
-def : Pat<(le1_mulch CPURegs:$lhs, CPURegs:$rhs),
-          (ADDCH (MULLU CPURegs:$lhs, CPURegs:$rhs),
-                 (MULHS CPURegs:$lhs, CPURegs:$rhs))>;
-
-def : Pat<(le1_mulch CPURegs:$lhs, imm:$rhs),
-          (ADDCH (MULLUi CPURegs:$lhs, imm:$rhs),
-                 (MULHS CPURegs:$lhs, CPURegs:$rhs))>;*/
+*/
 
 // LE1 does not have "not", so we expand our way
 def : Pat<(not CPURegs:$in),
-          (ORC CPURegs:$in, ZERO)>;
+          (ORCr CPURegs:$in, ZERO)>;
 
 // extended load and stores
 def : Pat<(extloadi1  addr:$src), (LDBu addr:$src)>;
@@ -1193,6 +1187,7 @@ def : Pat<(store (i32 0), addr:$dst), (STW ZERO, addr:$dst)>;
 
 
 // Branch Patterns
+/*
 multiclass BranchPats<Instruction BrOp, Instruction CmpOpR, Instruction CmpOpI, 
                       PatFrag cond> {
   def : Pat<(brcond (i1 (cond CPURegs:$lhs, CPURegs:$rhs)), bb:$dst),
@@ -1203,28 +1198,28 @@ multiclass BranchPats<Instruction BrOp, Instruction CmpOpR, Instruction CmpOpI,
             (BrOp (CmpOpR CPURegs:$lhs, ZERO), bb:$dst)>;
 }
 
-defm : BranchPats<BR, CMPEQ,   CMPEQi,   seteq>;
-defm : BranchPats<BR, CMPNE,   CMPNEi,   setne>;
-defm : BranchPats<BR, CMPLT,   CMPLTi,   setlt>;
-defm : BranchPats<BR, CMPLTU,  CMPLTUi,  setult>;
-defm : BranchPats<BR, CMPLE,   CMPLEi,   setle>;
-defm : BranchPats<BR, CMPLEU,  CMPLEUi,  setule>;
-defm : BranchPats<BR, CMPGT,   CMPGTi,   setgt>;
-defm : BranchPats<BR, CMPGTU,  CMPGTUi,  setugt>;
-defm : BranchPats<BR, CMPGE,   CMPGEi,   setge>;
-defm : BranchPats<BR, CMPGEU,  CMPGEUi,  setuge>;
+defm : BranchPats<BR, CMPEQr,   CMPEQi32,   seteq>;
+defm : BranchPats<BR, CMPNEr,   CMPNEi32,   setne>;
+defm : BranchPats<BR, CMPLTr,   CMPLTi32,   setlt>;
+defm : BranchPats<BR, CMPLTUr,  CMPLTUi32,  setult>;
+defm : BranchPats<BR, CMPLEr,   CMPLEi32,   setle>;
+defm : BranchPats<BR, CMPLEUr,  CMPLEUi32,  setule>;
+defm : BranchPats<BR, CMPGTr,   CMPGTi32,   setgt>;
+defm : BranchPats<BR, CMPGTUr,  CMPGTUi32,  setugt>;
+defm : BranchPats<BR, CMPGEr,   CMPGEi32,   setge>;
+defm : BranchPats<BR, CMPGEUr,  CMPGEUi32,  setuge>;
 
-defm : BranchPats<BRF, CMPEQ,   CMPEQi,   setne>;
-defm : BranchPats<BRF, CMPNE,   CMPNEi,   seteq>;
-defm : BranchPats<BRF, CMPLT,   CMPLTi,   setge>;
-defm : BranchPats<BRF, CMPLTU,  CMPLTUi,  setuge>;
-defm : BranchPats<BRF, CMPLE,   CMPLEi,   setgt>;
-defm : BranchPats<BRF, CMPLEU,  CMPLEUi,  setugt>;
-defm : BranchPats<BRF, CMPGT,   CMPGTi,   setle>;
-defm : BranchPats<BRF, CMPGTU,  CMPGTUi,  setule>;
-defm : BranchPats<BRF, CMPGE,   CMPGEi,   setlt>;
-defm : BranchPats<BRF, CMPGEU,  CMPGEUi,  setult>;
-
+defm : BranchPats<BRF, CMPEQr,   CMPEQi32,   setne>;
+defm : BranchPats<BRF, CMPNEr,   CMPNEi32,   seteq>;
+defm : BranchPats<BRF, CMPLTr,   CMPLTi32,   setge>;
+defm : BranchPats<BRF, CMPLTUr,  CMPLTUi32,  setuge>;
+defm : BranchPats<BRF, CMPLEr,   CMPLEi32,   setgt>;
+defm : BranchPats<BRF, CMPLEUr,  CMPLEUi32,  setugt>;
+defm : BranchPats<BRF, CMPGTr,   CMPGTi32,   setle>;
+defm : BranchPats<BRF, CMPGTUr,  CMPGTUi32,  setule>;
+defm : BranchPats<BRF, CMPGEr,   CMPGEi32,   setlt>;
+defm : BranchPats<BRF, CMPGEUr,  CMPGEUi32,  setult>;
+*/
 def : Pat<(le1_call L0, L0),
           (LNKCALL L0)>;
 def : Pat<(le1_call L0, (le1_targetglobal tglobaladdr:$addr)),
@@ -1249,6 +1244,7 @@ def : Pat<(brcond (i1 (setne BRegs:$cond, (i1 0))), bb:$offset),
 def : Pat<(brcond BRegs:$cond, bb:$dst),
           (BR BRegs:$cond, bb:$dst)>;
 
+/*
 // Max and Min Patterns
 multiclass MaxMinPats<Instruction OpR, Instruction OpI, CondCode CC,
                       CondCode AltCC> {
@@ -1274,6 +1270,7 @@ defm : MaxMinPats<MAXU, MAXUi,  SETUGT, SETULE>;
 defm : MaxMinPats<MAXU, MAXUi,  SETUGE, SETULT>;
 defm : MaxMinPats<MINU, MINUi,  SETULT, SETUGE>;
 defm : MaxMinPats<MINU, MINUi,  SETULE, SETUGT>;
+*/
 
 
 // setcc patterns
@@ -1300,6 +1297,7 @@ multiclass ExtendCmpPats<Instruction CmpOpR, Instruction CmpOpI, CondCode CC> {
 
 }
 
+/*
 multiclass CmpPats<Instruction CmpOpR, Instruction CmpOpI, CondCode CC> {
   // Peepholes
   def : Pat<(setcc CPURegs:$lhs, 0, CC),
@@ -1333,8 +1331,10 @@ defm : CmpPats<CMPGT,   CMPGTi,   SETGT>;
 defm : CmpPats<CMPGTU,  CMPGTUi,  SETUGT>;
 defm : CmpPats<CMPGE,   CMPGEi,   SETGE>;
 defm : CmpPats<CMPGEU,  CMPGEUi,  SETUGE>;
+*/
 
 // Setcc Patterns to handle trying to compare i1s
+/*
 def : Pat<(setcc BRegs:$lhs, (i1 0), SETEQ),
           (CMPEQ (MFB BRegs:$lhs), ZERO)>;
 def : Pat<(setcc BRegs:$lhs, (i1 0), SETNE),
@@ -1352,7 +1352,8 @@ def : Pat<(setcc BRegs:$lhs, (i1 0), SETGT),
           (CMPGT (MFB BRegs:$lhs), ZERO)>;
 def : Pat<(setcc BRegs:$lhs, (i1 -1), SETGT),
           (CMPGT (MFB BRegs:$lhs), (i32 -1))>;
-
+*/
+/*
 multiclass SlctPats<Instruction CmpOpR, Instruction CmpOpI, CondCode CC> {
   def : Pat<(selectcc CPURegs:$lhs, CPURegs:$rhs, CPURegs:$T, CPURegs:$F, CC),
             (SLCTrr (i1 (CmpOpR CPURegs:$lhs, CPURegs:$rhs)),
@@ -1410,6 +1411,7 @@ defm : SlctPats<CMPGT,  CMPGTi,   SETGT>;
 defm : SlctPats<CMPGTU, CMPGTUi,  SETUGT>;
 defm : SlctPats<CMPGE,  CMPGEi,   SETGE>;
 defm : SlctPats<CMPGEU, CMPGEUi,  SETUGE>;
+*/
 
 //Select Patterns
 def : Pat<(select (i1 BRegs:$cond), (i32 CPURegs:$T), (i32 CPURegs:$F)),
@@ -1447,8 +1449,6 @@ def : Pat<(anyext BRegs:$in),
 // Peepholes using the zero reg
 //def : Pat<(i32 0),
   //        (MOVr ZERO)>;
-def : Pat<(sub (i32 0), CPURegs:$in),
-          (SUB ZERO, CPURegs:$in)>;
 
 //include "LE1InstrInfoNew.td"
 include "LE1IntrinsicInstrInfo.td"

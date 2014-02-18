@@ -388,6 +388,7 @@ isLegalToPacketizeTogether(SUnit *SUI, SUnit *SUJ) {
 
 
 static const char* getName(MachineInstr *MI) {
+  /*
   switch(MI->getOpcode()) {
   default:                        return "PSEUDO";
   case TargetOpcode::BUNDLE:    return "BUNDLE";
@@ -474,6 +475,7 @@ static const char* getName(MachineInstr *MI) {
   case llvm::LE1::MTB:             return "MTB";
   case llvm::LE1::MTL:             return "MTL";
   case llvm::LE1::MTLg:            return "MTLg";
+  */
   /*
   case llvm::LE1::MULHi:
   case llvm::LE1::MULH:            return "MULH";
@@ -497,6 +499,7 @@ static const char* getName(MachineInstr *MI) {
   case llvm::LE1::MULLLUi:         return "MULLLU";
   case llvm::LE1::MULLU:
   case llvm::LE1::MULLUi:          return "MULLU";*/
+    /*
   case llvm::LE1::NANDL:           return "NANDL";
   case llvm::LE1::NORL:            return "NORL";
   case llvm::LE1::ORC:
@@ -544,6 +547,7 @@ static const char* getName(MachineInstr *MI) {
   case llvm::LE1::ZXTB:            return "ZXTB";
   case llvm::LE1::ZXTH:            return "ZXTH";
   }
+  */
 }
 /*
 MachineBasicBlock::instr_iterator
