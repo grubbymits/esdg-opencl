@@ -710,8 +710,9 @@ SDValue static PerformMULCombine(SDNode *N, SelectionDAG &DAG) {
       DEBUG(dbgs() << "LHS.getOperand(0) = SHL_16\n");
 
       if (isSHL_16(RHS.getOperand(0))) {
-        return DAG.getNode(LE1ISD::MULLL, dl, VT, LHS.getOperand(0),
-                           RHS.getOperand(0));
+        return DAG.getNode(LE1ISD::MULLL, dl, VT,
+                           LHS.getOperand(0).getOperand(0),
+                           RHS.getOperand(0).getOperand(0));
       }
       else
         return DAG.getNode(LE1ISD::MULLH, dl, VT,
@@ -744,11 +745,12 @@ SDValue static PerformMULCombine(SDNode *N, SelectionDAG &DAG) {
   //           (MULLLUi CPURegs:$lhs, immZExt16:$rhs)>;
   if (isSRL_16(LHS)) {
     if (isSHL_16(LHS.getOperand(0))) {
-      if (isSRL_16(RHS)) {
-        if (isSHL_16(RHS.getOperand(0)))
-          return DAG.getNode(LE1ISD::MULLLU, dl, VT,
-                             LHS.getOperand(0).getOperand(0),
-                             RHS.getOperand(0).getOperand(0));
+      DEBUG(dbgs() << "LHS = SRL_16, LHS.getOperand(0) = SHL_16\n");
+      if ((isSRL_16(RHS)) && (isSHL_16(RHS.getOperand(0)))) {
+        DEBUG(dbgs() << "RHS = SRL_16, RHS.getOperand(0) = SHL_16\n");
+        return DAG.getNode(LE1ISD::MULLLU, dl, VT,
+                           LHS.getOperand(0).getOperand(0),
+                           RHS.getOperand(0).getOperand(0));
       }
       else if (is16BitUImm(RHS))
         return DAG.getNode(LE1ISD::MULLLU, dl, VT,
@@ -756,8 +758,12 @@ SDValue static PerformMULCombine(SDNode *N, SelectionDAG &DAG) {
     }
   }
   else if ((is16BitMask(LHS)) && (is16BitMask(RHS)))
-    return DAG.getNode(LE1ISD::MULLLU, dl, VT, LHS.getOperand(0),
-                       RHS.getOperand(1));
+    return DAG.getNode(LE1ISD::MULLLU, dl, VT, LHS.getOperand(0).getOperand(0),
+                       RHS.getOperand(1).getOperand(0));
+  else if ((LHS.getOpcode() == ISD::ZERO_EXTEND) &&
+           (RHS.getOpcode() == ISD::ZERO_EXTEND))
+    return DAG.getNode(LE1ISD::MULLU, dl, VT, LHS.getOperand(0),
+                       RHS.getOperand(0));
 
   // def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
   // def : Pat<(mul (srl CPURegs:$lhs, (i32 16)),
