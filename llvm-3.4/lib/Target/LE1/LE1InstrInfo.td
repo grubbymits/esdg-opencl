@@ -61,6 +61,10 @@ def SDTLE1LoadLink    : SDTypeProfile<1, 2, [SDTCisPtrTy<1>,
   //                                           SDTCisInt<2>,
     //                                         SDTCisVT<2, i32>]>;
 
+def SDTLE1LogicCmp    : SDTypeProfile<1, 2, [SDTCisInt<0>,
+                                             SDTCisVT<1, i32>,
+                                             SDTCisSameAs<1, 2>]>;
+
 def le1_targetglobal  : SDNode<"LE1ISD::TargetGlobal", SDTLE1TargetGlobal>;
 def le1_globalconst  : SDNode<"LE1ISD::TargetGlobalConst", SDTLE1TargetGlobal>;
 
@@ -126,12 +130,6 @@ def le1_sxth    : SDNode<"LE1ISD::SXTH", SDTExtInreg, []>;
 def le1_zxtb    : SDNode<"LE1ISD::ZXTB", SDTExtInreg, []>;
 def le1_zxth    : SDNode<"LE1ISD::ZXTH", SDTExtInreg, []>;
 
-// Bit Operators
-def le1_tbit    : SDNode<"LE1ISD::TBIT", SDTIntBinOp, []>;
-def le1_tbitf   : SDNode<"LE1ISD::TBITF", SDTIntBinOp, []>;
-def le1_sbit    : SDNode<"LE1ISD::SBIT", SDTIntBinOp, []>;
-def le1_sbitf   : SDNode<"LE1ISD::SBITF", SDTIntBinOp, []>;
-
 // Max and Min Operators
 def le1_maxs    : SDNode<"LE1ISD::MAXS", SDTIntBinOp, [SDNPCommutative]>;
 def le1_maxu    : SDNode<"LE1ISD::MAXU", SDTIntBinOp, [SDNPCommutative]>;
@@ -139,12 +137,12 @@ def le1_mins    : SDNode<"LE1ISD::MINS", SDTIntBinOp, [SDNPCommutative]>;
 def le1_minu    : SDNode<"LE1ISD::MINU", SDTIntBinOp, [SDNPCommutative]>;
 
 // Boolean Operators
-def le1_nandl   : SDNode<"LE1ISD::NANDL", SDTIntBinOp, [SDNPCommutative]>;
-def le1_norl    : SDNode<"LE1ISD::NORL", SDTIntBinOp, [SDNPCommutative]>;
-def le1_orl     : SDNode<"LE1ISD::ORL", SDTIntBinOp, [SDNPCommutative]>;
-def le1_andc    : SDNode<"LE1ISD::ANDC", SDTIntBinOp, []>;
-def le1_andl    : SDNode<"LE1ISD::ANDL", SDTIntBinOp, [SDNPCommutative]>;
-def le1_orc     : SDNode<"LE1ISD::ORC", SDTIntBinOp, []>;
+def le1_nandl   : SDNode<"LE1ISD::NANDL", SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_norl    : SDNode<"LE1ISD::NORL", SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_orl     : SDNode<"LE1ISD::ORL", SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_andc    : SDNode<"LE1ISD::ANDC", SDTLE1LogicCmp, []>;
+def le1_andl    : SDNode<"LE1ISD::ANDL", SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_orc     : SDNode<"LE1ISD::ORC", SDTLE1LogicCmp, []>;
 
 // These are target-independent nodes, but have target-specific formats.
 def callseq_start : SDNode<"ISD::CALLSEQ_START", SDT_LE1CallSeqStart,
@@ -648,25 +646,13 @@ defm CMPLEU : COMPARE<0x6, "cmpleu.0", setule>;
 defm CMPLT  : COMPARE<0x7, "cmplt.0", setlt>;
 defm CMPLTU : COMPARE<0x8, "cmpltu.0", setult>;
 defm CMPNE  : COMPARE<0x9, "cmpne.0", setne>;
-//defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
-//defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
-//defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
-//defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
+defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
+defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
+defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
+defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
 
 
 // ------------------------- END OF NEW IMPLEMENTATION ---------------------- //
-
-def NANDL : ArithLogicR<"nandl.0", le1_nandl>;
-def NORL  : ArithLogicR<"norl.0", le1_norl>;
-def ORL   : ArithLogicR<"orl.0", le1_orl>;
-def ANDL  : ArithLogicR<"andl.0", le1_andl>;
-
-///===---------------------------------------------------------------------===//
-/// Bit Operators
-def TBIT  : ArithLogicR<"tbit.0", le1_tbit>;
-def TBITF : ArithLogicR<"tbitf.0", le1_tbitf>;
-def SBIT  : ArithLogicR<"sbit.0", le1_sbit>;
-def SBITF : ArithLogicR<"sbitf.0", le1_sbitf>;
 
 ///===---------------------------------------------------------------------===//
 /// Select Instructions
@@ -926,21 +912,6 @@ def : Pat<(sext_inreg CPURegs:$src, i16),
 def : Pat<(sext BRegs:$src),
           (SLCTFri BRegs:$src, ZERO, (i32 0xFFFFFFFF))>;
 
-// Bit Operator Patterns
-// TBIT  = ((s1) & ((unsigned int) 1 << (s2))) ? 1 : 0
-def : Pat<(selectcc (and CPURegs:$lhs, (shl (i32 1), CPURegs:$rhs)),
-                     (i32 0), (i32 1), (i32 0), SETNE),
-          (TBIT CPURegs:$lhs, CPURegs:$rhs)>;
-// TBITF = ((s1) & ((unsigned int) 1 << (s2))) ? 0 : 1
-def : Pat<(zext (setcc (and CPURegs:$lhs, (shl (i32 1), CPURegs:$rhs)),
-                       (i32 0), SETEQ)),
-          (TBITF CPURegs:$lhs, CPURegs:$rhs)>;
-// SBIT = (s1) | ((unsigned int) 1 << (s2))
-def : Pat<(or CPURegs:$lhs, (shl (i32 1), CPURegs:$rhs)),
-          (SBIT CPURegs:$lhs, CPURegs:$rhs)>;
-// SBITF = (s1) & ~((unsigned int) 1 << (s2))
-def : Pat<(and CPURegs:$lhs, (xor (shl (i32 1), CPURegs:$rhs), (i32 -1))),
-          (SBITF CPURegs:$lhs, CPURegs:$rhs)>;
 
 // Boolean Patterns
 /*
@@ -982,82 +953,9 @@ def : Pat<(or (not CPURegs:$lhs), imm:$rhs),
 
 // Multiplications Patterns
 /*
-//def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
-def : Pat<(mul (srl CPURegs:$lhs, (i32 16)), (srl CPURegs:$rhs, (i32 16))),
-          (MULHHU CPURegs:$lhs, CPURegs:$rhs)>;
 
-//def MULLHU  // ui16(s1) * ui16(s2 >> 16)
-def : Pat<(mul (srl (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-               (srl CPURegs:$rhs, (i32 16))),
-          (MULLHU CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul (and CPURegs:$lhs, (i32 0xffff)), (srl CPURegs:$rhs, (i32 16))),
-          (MULLHU CPURegs:$lhs, CPURegs:$rhs)>;
 
-//def MULHH   // i16(s1 >> 16) * i16(s2 >> 16)
-def : Pat<(mul (sra CPURegs:$lhs, (i32 16)), (sra CPURegs:$rhs, (i32 16))),
-          (MULHH CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul (sra CPURegs:$lhs, (i32 16)), (sra imm:$rhs, (i32 16))),
-          (MULHH CPURegs:$lhs, imm:$rhs)>;
 
-//def MULLH   // i16(s1) * i16(s2 >> 16)
-def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-               (sra CPURegs:$rhs, (i32 16))),
-          (MULLH CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-               (sra imm:$rhs, (i32 16))),
-          (MULLH CPURegs:$lhs, imm:$rhs)>;
-
-//def MULHS   // s1 * ui16(s2 >> 16) << 16
-def : Pat<(shl (mul CPURegs:$lhs, (srl CPURegs:$rhs, (i32 16))), (i32 16)),
-          (MULHS CPURegs:$lhs, CPURegs:$rhs)>;
-
-//def MULH    // s1 * i16(s2 >> 16)
-def : Pat<(mul CPURegs:$lhs, (sra CPURegs:$rhs, (i32 16))),
-          (MULH CPURegs:$lhs, CPURegs:$rhs)>;
-
-//def MULHU   // s1 * ui16(s2 >> 16)
-def : Pat<(mul CPURegs:$lhs, (srl CPURegs:$rhs, (i32 16))),
-          (MULHU CPURegs:$lhs, CPURegs:$rhs)>;
-
-//def MULLL   // i16(s1) * i16(s2)
-def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-               (sra (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-          (MULLL CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul (sext_inreg CPURegs:$lhs, i16), (sext_inreg CPURegs:$rhs, i16)),
-          (MULLL CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)), immSExt16:$rhs),
-          (MULLLi CPURegs:$lhs, immSExt16:$rhs)>; 
-
-//def MULLLU  // ui16(s1) * ui16(s2)
-def : Pat<(mul (and CPURegs:$lhs, (i32 0xffff)), (and CPURegs:$rhs, (i32 0xffff))),
-          (MULLLU CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul (srl (shl CPURegs:$lhs, (i32 16)), (i32 16)), 
-               (srl (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-          (MULLLU CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul (srl (shl CPURegs:$lhs, (i32 16)), (i32 16)), immZExt16:$rhs),
-          (MULLLUi CPURegs:$lhs, immZExt16:$rhs)>;
-
-//def MULLU   // s1 * ui16(s2)
-def : Pat<(mul CPURegs:$lhs, (and CPURegs:$rhs, (i32 0xFFFF))),
-          (MULLU CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul CPURegs:$lhs, (srl (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-          (MULLU CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul CPURegs:$lhs, immZExt16:$rhs),
-          (MULLUi CPURegs:$lhs, immZExt16:$rhs)>;
-
-//def MULL    // s1 * i16(s2)
-def : Pat<(mul CPURegs:$lhs, (sra (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-          (MULL CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul CPURegs:$lhs, (sext_inreg CPURegs:$rhs, i16)),
-          (MULL CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(mul CPURegs:$lhs, immSExt16:$rhs),
-          (MULLi CPURegs:$lhs, immSExt16:$rhs)>;
-def : Pat<(mul CPURegs:$lhs, CPURegs:$rhs),
-          (ADD (MULLU CPURegs:$lhs, CPURegs:$rhs),
-                (MULHS CPURegs:$lhs, CPURegs:$rhs))>;
-def : Pat<(mul CPURegs:$lhs, imm:$rhs),
-          (ADD (MULLUi CPURegs:$lhs, imm:$rhs),
-                (MULHS CPURegs:$lhs, CPURegs:$rhs))>;
 */
 
 // LE1 does not have "not", so we expand our way

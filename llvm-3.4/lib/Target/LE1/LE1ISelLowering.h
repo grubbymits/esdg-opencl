@@ -183,12 +183,7 @@ namespace llvm {
     // Subtarget Info
     const LE1Subtarget *Subtarget;
 
-    SDValue PerformDAGCombine(SDNode *N, DAGCombinerInfo &DCI);
-    SDValue PerformADDCombine(SDNode *N, SelectionDAG &DAG);
-    SDValue PerformANDCombine(SDNode *N, SelectionDAG &DAG);
-    SDValue PerformORCombine(SDNode *N, SelectionDAG &DAG);
-    SDValue PerformMULCombine(SDNode *N, SelectionDAG &DAG);
-
+    SDValue PerformDAGCombine(SDNode *N, DAGCombinerInfo &DCI) const;
     SDValue LowerMULHS(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerMULHU(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerMUL(SDValue Op, SelectionDAG &DAG) const;
