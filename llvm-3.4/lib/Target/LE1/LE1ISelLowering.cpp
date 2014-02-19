@@ -132,10 +132,6 @@ LE1TargetLowering::
 LE1TargetLowering(LE1TargetMachine &TM)
   : TargetLowering(TM, new TargetLoweringObjectFileELF()),
     Subtarget(&TM.getSubtarget<LE1Subtarget>()) {
-  
-  // LE1 does not have i1 type, so use i32 for
-  // setcc operations results (slt, sgt, ...).
-  //setBooleanVectorContents(ZeroOrOneBooleanContent); // FIXME: Is this correct?
 
   // Set up the register classes
   addRegisterClass(MVT::i32, &LE1::CPURegsRegClass);
@@ -523,7 +519,7 @@ SDValue LE1TargetLowering::PerformADDCombine(SDNode *N, SelectionDAG &DAG) {
   SDValue RHS = N->getOperand(1);
   SDLoc dl(N);
 
-  if ((LHS.getOpcode() != ISD::SHL) && (LHS.getOpcode() != ISD::SHL))
+  if ((LHS.getOpcode() != ISD::SHL) && (RHS.getOpcode() != ISD::SHL))
     return SDValue(N, 0);
 
   uint64_t ShiftVal = 0;
@@ -590,10 +586,43 @@ SDValue LE1TargetLowering::PerformANDCombine(SDNode *N, SelectionDAG &DAG) {
 SDValue LE1TargetLowering::PerformORCombine(SDNode *N, SelectionDAG &DAG) {
 }
 
+static inline bool isImm16(SDValue Imm) {
+  if (ConstantSDNode *CSN = cast<ConstantSDNode>(Imm))
+    return (CSN->getConstantOperandVal(0) == 16);
+  return false;
+}
+
+static inline bool isSHL_16(SDValue Op) {
+  if (Op.getOpcode() == ISD::SHL)
+    return (isImm16(Op.getOperand(1)));
+  return false;
+}
+
+static inline bool isSRL_16(SDValue Op) {
+  if (Op.getOpcode() == ISD::SRL)
+    return (isImm16(Op.getOperand(1)));
+  return false;
+}
+
+static inline bool isSRA_16(SDValue Op) {
+  if (Op.getOpcode() == ISD::SRA)
+    return (isImm16(Op.getOperand(1)));
+  return false;
+}
+
+static inline bool isSEXT_16(SDValue Op) {
+  if (Op.getOpcode() == ISD::SIGN_EXTEND_INREG)
+    return (Op.getOperand(1).getValueType() == MVT::i16);
+  return false;
+}
+static inline bool isZEXT_16(SDValue Op) {
+  if (Op.getOpcode() == ISD::ZERO_EXTEND_INREG)
+    return (Op.getOperand(1).getValueType() == MVT::i16);
+  return false;
+}
 //def MULLL   // i16(s1) * i16(s2)
 //def MULLLU  // ui16(s1) * ui16(s2)
 //def MULLU   // s1 * ui16(s2)
-//def MULL    // s1 * i16(s2)
 //def MULHH   // i16(s1 >> 16) * i16(s2 >> 16)
 //def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
 //def MULLHU  // ui16(s1) * ui16(s2 >> 16)
@@ -606,15 +635,14 @@ SDValue LE1TargetLowering::PerformMULCombine(SDNode *N, SelectionDAG &DAG) {
   SDValue RHS = N->getOperand(1);
   SDLoc dl(N);
 
-  if (LHS.getOpcode() == ISD::SRA) {
-    if (ConstantSDNode *CSN = cast<ConstantSDNode>(LHS.getOperand(1))) {
-      if (CSN->getConstantOperandVal(0) == 16) {
-        if (RHS.getOpcode() == ISD::SRA) {
+  //def MULL    // s1 * i16(s2)
+  if ((isSRA_16(RHS)) &&(isSHL_16(RHS.getOperand(0))))
+    return DAG.getNode(LE1ISD::MULL, dl, VT, LHS, RHS);
+  else if (isSEXT_16(RHS))
+    return DAG.getNode(LE1ISD::MULL, dl, VT, LHS, RHS);
+  else if (isImm16(RHS))
+    return DAG.getNode(LE1ISD::MULL, dl, VT, LHS, RHS);
 
-        }
-      }
-    }
-  }
   return SDValue(N, 0);
 }
 
