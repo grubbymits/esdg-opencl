@@ -76,11 +76,17 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::ORC:           return "LE1ISD::ORC";
 
   case LE1ISD::MULL:          return "LE1ISD::MULL";
+  case LE1ISD::MULLU:         return "LE1ISD::MULLU";
   case LE1ISD::MULH:          return "LE1ISD::MULH";
+  case LE1ISD::MULHU:         return "LE1ISD::MULHU";
   case LE1ISD::MULHS:         return "LE1ISD::MULHS";
   case LE1ISD::MULLL:         return "LE1ISD::MULLL";
+  case LE1ISD::MULLLU:        return "LE1ISD::MULLLU";
   case LE1ISD::MULLH:         return "LE1ISD::MULLH";
+  case LE1ISD::MULLHU:        return "LE1ISD::MULLHU";
   case LE1ISD::MULHH:         return "LE1ISD::MULHH";
+  case LE1ISD::MULHHU:        return "LE1ISD::MULHHU";
+
   case LE1ISD::Addcg:         return "LE1ISD::Addcg";
   case LE1ISD::Divs:          return "LE1ISD::Divs";
 
@@ -109,11 +115,6 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::SH2ADD:        return "LE1ISD::SH2ADD";
   case LE1ISD::SH3ADD:        return "LE1ISD::SH3ADD";
   case LE1ISD::SH4ADD:        return "LE1ISD::SH4ADD";
-
-  case LE1ISD::TBIT:          return "LE1ISD::TBIT";
-  case LE1ISD::TBITF:         return "LE1ISD::TBITF";
-  case LE1ISD::SBIT:          return "LE1ISD::SBIT";
-  case LE1ISD::SBITF:         return "LE1ISD::SBITF";
 
   case LE1ISD::CPUID:         return "LE1ISD::CPUID";
   case LE1ISD::LocalSize:     return "LE1ISD::LocalSize";
@@ -507,7 +508,7 @@ static inline bool isSEXT_16(SDValue Op) {
 static inline bool is16BitSImm(SDValue Op) {
   if (ConstantSDNode *CSN = dyn_cast<ConstantSDNode>(Op)) {
     int value = CSN->getSExtValue();
-    return (value == (value & 0xFF));
+    return (value == (value & 0xFFFF));
   }
   return false;
 }
@@ -515,7 +516,7 @@ static inline bool is16BitSImm(SDValue Op) {
 static inline bool is16BitUImm(SDValue Op) {
   if (ConstantSDNode *CSN = dyn_cast<ConstantSDNode>(Op)) {
     unsigned value = CSN->getZExtValue();
-    return (value == (value & 0xFF));
+    return (value == (value & 0xFFFF));
   }
   return false;
 }
@@ -523,9 +524,54 @@ static inline bool is16BitUImm(SDValue Op) {
 static bool is16BitMask(SDValue Op) {
   if (Op.getOpcode() == ISD::AND) {
     if (ConstantSDNode *CSN = dyn_cast<ConstantSDNode>(Op.getOperand(1)))
-      return (CSN->getZExtValue() == 0xFF);
+      return (CSN->getZExtValue() == 0xFFFF);
   }
   return false;
+}
+
+static inline bool isSignedCast(SDValue Op) {
+  return ((isSRA_16(Op) && (isSHL_16(Op.getOperand(0)))));
+}
+
+static inline bool isUnsignedCast(SDValue Op) {
+  return ((isSRL_16(Op) && (isSHL_16(Op.getOperand(0)))));
+}
+
+static inline bool isSigned16(SDValue Op) {
+  if (is16BitSImm(Op))
+    return true;
+  else if (isSignedCast(Op))
+    return true;
+  else if (Op.getOpcode() == ISD::SIGN_EXTEND_INREG)
+    return (Op.getValueType() == MVT::i16);
+  else
+    return false;
+}
+
+static inline bool isUnsigned16(SDValue Op) {
+  if (is16BitUImm(Op))
+    return true;
+  else if (isUnsignedCast(Op))
+    return true;
+  else if (is16BitMask(Op))
+    return true;
+  else if (Op.getOpcode() == ISD::ZERO_EXTEND)
+    return (Op.getValueType() == MVT::i16);
+  else
+    return false;
+}
+
+static inline SDValue getMulOperand(SDValue Op) {
+  if (isSignedCast(Op))
+    return Op.getOperand(0).getOperand(0);
+  else if ((Op.getOpcode() == ISD::AND) ||
+           (Op.getOpcode() == ISD::SIGN_EXTEND_INREG) ||
+           (Op.getOpcode() == ISD::ZERO_EXTEND) ||
+           (Op.getOpcode() == ISD::SRA) ||
+           (Op.getOpcode() == ISD::SRL))
+    return Op.getOperand(0);
+  else
+    return Op;
 }
 
 SDValue static PerformADDCombine(SDNode *N, SelectionDAG &DAG) {
@@ -681,155 +727,80 @@ SDValue static PerformMULCombine(SDNode *N, SelectionDAG &DAG) {
   SDLoc dl(N);
   EVT VT = N->getValueType(0);
 
-  // def MULLH   // i16(s1) * i16(s2 >> 16)
-  // def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-  //                (sra CPURegs:$rhs, (i32 16))),
-  //           (MULLH CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-  //                (sra imm:$rhs, (i32 16))),
-  //           (MULLH CPURegs:$lhs, imm:$rhs)>;
-
-  // def MULHH   // i16(s1 >> 16) * i16(s2 >> 16)
-  // def : Pat<(mul (sra CPURegs:$lhs, (i32 16)),
-  //                (sra CPURegs:$rhs, (i32 16))),
-  //           (MULHH CPURegs:$lhs, CPURegs:$rhs)>;
   // def MULLL   // i16(s1) * i16(s2)
-  // def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-  //                (sra (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-  //           (MULLL CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul (sext_inreg CPURegs:$lhs, i16),
-  //                (sext_inreg CPURegs:$rhs, i16)),
-  //           (MULLL CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul (sra (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-  //                 immSExt16:$rhs),
-  //           (MULLLi CPURegs:$lhs, immSExt16:$rhs)>;
+  if ((isSigned16(LHS)) && (isSigned16(RHS))) {
+    return DAG.getNode(LE1ISD::MULLL, dl, VT, getMulOperand(LHS),
+                       getMulOperand(RHS));
+  }
+  // def MULLH   // i16(s1) * i16(s2 >> 16)
+  if ((isSigned16(LHS) && (isSRA_16(RHS)))) {
+    return DAG.getNode(LE1ISD::MULLH, dl, VT, getMulOperand(LHS),
+                       getMulOperand(RHS));
+  }
+  if ((isSigned16(RHS) && (isSRA_16(LHS)))) {
+    return DAG.getNode(LE1ISD::MULLH, dl, VT, getMulOperand(RHS),
+                       getMulOperand(LHS));
+  }
+  // def MULHH   // i16(s1 >> 16) * i16(s2 >> 16)
   if ((isSRA_16(LHS)) && (isSRA_16(RHS))) {
-    DEBUG(dbgs() << "LHS and RHS = SRA_16\n");
-
-    if (isSHL_16(LHS.getOperand(0))) {
-      DEBUG(dbgs() << "LHS.getOperand(0) = SHL_16\n");
-
-      if (isSHL_16(RHS.getOperand(0))) {
-        return DAG.getNode(LE1ISD::MULLL, dl, VT,
-                           LHS.getOperand(0).getOperand(0),
-                           RHS.getOperand(0).getOperand(0));
-      }
-      else
-        return DAG.getNode(LE1ISD::MULLH, dl, VT,
-                           LHS.getOperand(0).getOperand(0), RHS.getOperand(0));
-    }
-    else
-      return DAG.getNode(LE1ISD::MULHH, dl, VT, LHS.getOperand(0),
-                         RHS.getOperand(0));
-  }
-  else if ((isSEXT_16(LHS)) && (isSEXT_16(RHS))) {
-    DEBUG(dbgs() << "LHS and RHS = SEXT_16\n");
-    return DAG.getNode(LE1ISD::MULLL, dl, VT, LHS.getOperand(0),
-                       RHS.getOperand(0));
-  }
-  else if ((isSRA_16(LHS)) && (is16BitUImm(RHS))) {
-    DEBUG(dbgs() << "LHS = SRA_16 and RHS = 16BitUImm\n");
-    if (isSHL_16(LHS.getOperand(0)))
-      return DAG.getNode(LE1ISD::MULLL, dl, VT, LHS.getOperand(0).getOperand(0),
-                         RHS);
+    return DAG.getNode(LE1ISD::MULHH, dl, VT, getMulOperand(LHS),
+                       getMulOperand(RHS));
   }
   // def MULLLU  // ui16(s1) * ui16(s2)
-  // def : Pat<(mul (and CPURegs:$lhs, (i32 0xffff)),
-  //                (and CPURegs:$rhs, (i32 0xffff))),
-  //           (MULLLU CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul (srl (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-  //                (srl (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-  //           (MULLLU CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul (srl (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-  //                 immZExt16:$rhs),
-  //           (MULLLUi CPURegs:$lhs, immZExt16:$rhs)>;
-  if (isSRL_16(LHS)) {
-    if (isSHL_16(LHS.getOperand(0))) {
-      DEBUG(dbgs() << "LHS = SRL_16, LHS.getOperand(0) = SHL_16\n");
-      if ((isSRL_16(RHS)) && (isSHL_16(RHS.getOperand(0)))) {
-        DEBUG(dbgs() << "RHS = SRL_16, RHS.getOperand(0) = SHL_16\n");
-        return DAG.getNode(LE1ISD::MULLLU, dl, VT,
-                           LHS.getOperand(0).getOperand(0),
-                           RHS.getOperand(0).getOperand(0));
-      }
-      else if (is16BitUImm(RHS))
-        return DAG.getNode(LE1ISD::MULLLU, dl, VT,
-                           LHS.getOperand(0).getOperand(0), RHS);
-    }
+  if ((isUnsigned16(LHS)) && (isUnsigned16(RHS))) {
+    return DAG.getNode(LE1ISD::MULLLU, dl, VT, getMulOperand(LHS),
+                       getMulOperand(RHS));
   }
-  else if ((is16BitMask(LHS)) && (is16BitMask(RHS)))
-    return DAG.getNode(LE1ISD::MULLLU, dl, VT, LHS.getOperand(0).getOperand(0),
-                       RHS.getOperand(1).getOperand(0));
-  else if ((LHS.getOpcode() == ISD::ZERO_EXTEND) &&
-           (RHS.getOpcode() == ISD::ZERO_EXTEND))
-    return DAG.getNode(LE1ISD::MULLU, dl, VT, LHS.getOperand(0),
-                       RHS.getOperand(0));
-
-  // def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
-  // def : Pat<(mul (srl CPURegs:$lhs, (i32 16)),
-  //                (srl CPURegs:$rhs, (i32 16))),
-  //           (MULHHU CPURegs:$lhs, CPURegs:$rhs)>;
   // def MULLHU  // ui16(s1) * ui16(s2 >> 16)
-  // def : Pat<(mul (srl (shl CPURegs:$lhs, (i32 16)), (i32 16)),
-  //                (srl CPURegs:$rhs, (i32 16))),
-  //           (MULLHU CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul (and CPURegs:$lhs, (i32 0xffff)),
-  //                (srl CPURegs:$rhs, (i32 16))),
-  //        (MULLHU CPURegs:$lhs, CPURegs:$rhs)>;
+  if ((isUnsigned16(LHS) && (isSRL_16(RHS)))) {
+      return DAG.getNode(LE1ISD::MULLHU, dl, VT, getMulOperand(LHS),
+                         getMulOperand(RHS));
+  }
+  if ((isUnsigned16(RHS) && (isSRL_16(LHS)))) {
+    return DAG.getNode(LE1ISD::MULLHU, dl, VT, getMulOperand(RHS),
+                       getMulOperand(LHS));
+  }
+  // def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
   if ((isSRL_16(LHS)) && (isSRL_16(RHS))) {
-    if (isSHL_16(LHS.getOperand(0)))
-      return DAG.getNode(LE1ISD::MULLHU, dl, VT,
-                         LHS.getOperand(0).getOperand(0),
-                         RHS.getOperand(0));
-    else
-      return DAG.getNode(LE1ISD::MULHHU, dl, VT, LHS.getOperand(0),
-                         RHS.getOperand(0));
+    return DAG.getNode(LE1ISD::MULHHU, dl, VT, getMulOperand(LHS),
+                       getMulOperand(RHS));
   }
-  else if ((is16BitMask(LHS)) && (isSRA_16(RHS)))
-    return DAG.getNode(LE1ISD::MULLHU, dl, VT, LHS.getOperand(0),
-                       RHS.getOperand(0));
-
   // def MULL    // s1 * i16(s2)
-  // def : Pat<(mul CPURegs:$lhs, (sra (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-  //           (MULL CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul CPURegs:$lhs, (sext_inreg CPURegs:$rhs, i16)),
-  //           (MULL CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul CPURegs:$lhs, immSExt16:$rhs),
-  //           (MULLi CPURegs:$lhs, immSExt16:$rhs)>;
-  if ((isSRA_16(RHS)) && (isSHL_16(RHS.getOperand(0))))
+  if (isSigned16(RHS)) {
     return DAG.getNode(LE1ISD::MULL, dl, VT, LHS,
-                       RHS.getOperand(0).getOperand(0));
-  else if (isSEXT_16(RHS))
-    return DAG.getNode(LE1ISD::MULL, dl, VT, LHS, RHS.getOperand(0));
-  else if (is16BitSImm(RHS))
-    return DAG.getNode(LE1ISD::MULL, dl, VT, LHS, RHS);
-
-  // def MULLU   // s1 * ui16(s2)
-  // def : Pat<(mul CPURegs:$lhs, (and CPURegs:$rhs, (i32 0xFFFF))),
-  //           (MULLU CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul CPURegs:$lhs, (srl (shl CPURegs:$rhs, (i32 16)), (i32 16))),
-  //           (MULLU CPURegs:$lhs, CPURegs:$rhs)>;
-  // def : Pat<(mul CPURegs:$lhs, immZExt16:$rhs),
-  //           (MULLUi CPURegs:$lhs, immZExt16:$rhs)>;
-  // def MULHU   // s1 * ui16(s2 >> 16)
-  // def : Pat<(mul CPURegs:$lhs, (srl CPURegs:$rhs, (i32 16))),
-  //           (MULH CPURegs:$lhs, CPURegs:$rhs)>;
-  if (isSRL_16(RHS)) {
-    if (isSHL_16(RHS.getOperand(0)))
-      return DAG.getNode(LE1ISD::MULLU, dl, VT, LHS, RHS.getOperand(0));
-    else
-      return DAG.getNode(LE1ISD::MULHU, dl, VT, LHS, RHS.getOperand(0));
+                       getMulOperand(RHS));
   }
-  else if (is16BitUImm(RHS))
-    return DAG.getNode(LE1ISD::MULLU, dl, VT, LHS, RHS);
-  else if ((is16BitMask(RHS)))
-    return DAG.getNode(LE1ISD::MULLU, dl, VT, LHS, RHS.getOperand(0));
-
+  if (isSigned16(LHS)) {
+    return DAG.getNode(LE1ISD::MULL, dl, VT, RHS,
+                       getMulOperand(LHS));
+  }
+  // def MULLU   // s1 * ui16(s2)
+  if (isUnsigned16(RHS)) {
+    return DAG.getNode(LE1ISD::MULLU, dl, VT, LHS,
+                       getMulOperand(RHS));
+  }
+  if (isUnsigned16(LHS)) {
+    return DAG.getNode(LE1ISD::MULLU, dl, VT, RHS,
+                       getMulOperand(LHS));
+  }
+  // def MULHU   // s1 * ui16(s2 >> 16)
+  if ((isSRL_16(RHS))) {
+    return DAG.getNode(LE1ISD::MULHU, dl, VT, LHS,
+                       getMulOperand(RHS));
+  }
+  if ((isSRL_16(LHS))) {
+    return DAG.getNode(LE1ISD::MULHU, dl, VT, RHS,
+                       getMulOperand(LHS));
+  }
   //def MULH    // s1 * i16(s2 >> 16)
-  //def : Pat<(mul CPURegs:$lhs, (sra CPURegs:$rhs, (i32 16))),
-  //          (MULH CPURegs:$lhs, CPURegs:$rhs)>;
-  if ((isSRA_16(RHS)))
-    return DAG.getNode(LE1ISD::MULH, dl, VT, LHS, RHS.getOperand(0));
+  if ((isSRA_16(RHS))) {
+    return DAG.getNode(LE1ISD::MULH, dl, VT, LHS,
+                       getMulOperand(LHS));
+  }
+  if ((isSRA_16(LHS))) {
+    return DAG.getNode(LE1ISD::MULH, dl, VT, RHS,
+                       getMulOperand(RHS));
+  }
 
   return SDValue(N, 0);
 }
@@ -1371,29 +1342,6 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
           return SDValue();
 
         return DAG.getNode(Opcode, dl, Op.getValueType(), LHS, RHS);
-      }
-    }
-  }
-  // TBIT and TBITF
-  else if (LHS.getOpcode() == ISD::AND) {
-    if (ConstantSDNode *CSN = cast<ConstantSDNode>(RHS.getNode())) {
-      if ((CSN->getConstantOperandVal(0) == 0) &&
-          (LHS.getOperand(0).getOpcode() == ISD::SHL)) {
-
-        if (ConstantSDNode *CSN =
-            cast<ConstantSDNode>(LHS.getOperand(0).getOperand(0).getNode())) {
-          if (CSN->getConstantOperandVal(0) == 1) {
-
-            if (CC == ISD::SETEQ)
-              Opcode = LE1ISD::TBITF;
-            else if (CC == ISD::SETNE)
-              Opcode = LE1ISD::TBIT;
-            else
-              return SDValue();
-
-            return DAG.getNode(Opcode, dl, Op.getValueType(), LHS, RHS);
-          }
-        }
       }
     }
   }

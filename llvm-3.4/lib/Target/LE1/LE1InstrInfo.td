@@ -235,6 +235,7 @@ def imm12 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFF)); }]>;
 def imm16 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFFF)); }]>;
 def imm32 : ImmLeaf<i32, [{ return (Imm != (Imm & 0x1F)); }]>;
 
+
 // Node immediate fits as 16-bit zero extended on target immediate.
 // The LO16 param means that only the lower 16 bits of the node
 // immediate are caught.
@@ -868,25 +869,6 @@ def : Pat<(le1_call LReg:$lnk, (i32 texternalsym:$dst)),
 def : Pat<(le1_call LReg:$lnk, (i32 (load addr:$src))),
           (CALLPOINTER LReg:$lnk, addr:$src)>;
 
-// Shift Add Patterns
-/*
-def : Pat<(add (shl CPURegs:$lhs, (i32 1)), CPURegs:$rhs),
-          (SH1ADD CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(add (shl CPURegs:$lhs, (i32 2 )), CPURegs:$rhs),
-          (SH2ADD CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(add (shl CPURegs:$lhs, (i32 3)), CPURegs:$rhs),
-          (SH3ADD CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(add (shl CPURegs:$lhs, (i32 4)), CPURegs:$rhs),
-          (SH4ADD CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(add (shl CPURegs:$lhs, (i32 1)), (i32 imm:$rhs)),
-          (SH1ADDi CPURegs:$lhs, imm:$rhs)>;
-def : Pat <(add (shl CPURegs:$lhs, (i32 2)), (i32 imm:$rhs)),
-          (SH2ADDi CPURegs:$lhs, imm:$rhs)>;
-def : Pat<(add (shl CPURegs:$lhs, (i32 3)), (i32 imm:$rhs)),
-          (SH3ADDi CPURegs:$lhs, imm:$rhs)>;
-def : Pat<(add (shl CPURegs:$lhs, (i32 4)), (i32 imm:$rhs)),
-          (SH4ADDi CPURegs:$lhs, imm:$rhs)>;*/
-
 // Extending Patterns
 def : Pat<(sra (shl CPURegs:$src, (i32 16)), (i32 16)),
           (SXTH CPURegs:$src)>;
@@ -911,52 +893,6 @@ def : Pat<(sext_inreg CPURegs:$src, i16),
 // Patterns to deal with extending branch registers
 def : Pat<(sext BRegs:$src),
           (SLCTFri BRegs:$src, ZERO, (i32 0xFFFFFFFF))>;
-
-
-// Boolean Patterns
-/*
-// NANDL = (((s1) == 0) | ((s2) == 0)) ? 1 : 0
-def : Pat<(selectcc (or (setcc CPURegs:$lhs, (i32 0), SETEQ),
-                        (setcc CPURegs:$rhs, (i32 0), SETEQ)),
-                    (i1 0), (i32 1), (i32 0), SETNE),
-          (NANDL CPURegs:$lhs, CPURegs:$rhs)>;
-
-// NORL = (((s1) == 0) & ((s2) == 0)) ? 1 : 0
-def : Pat<(selectcc (i32 (or CPURegs:$lhs, CPURegs:$rhs)),
-                    (i32 0), (i32 1), (i32 0), SETEQ),
-          (NORL CPURegs:$lhs, CPURegs:$rhs)>;
-
-// ORL = (((s1) == 0) & ((s2) == 0)) ? 0 : 1
-def : Pat<(zext (setcc (or CPURegs:$lhs, CPURegs:$rhs), (i32 0), SETNE)),
-          (ORL CPURegs:$lhs, CPURegs:$rhs)>;
-
-// ANDC = ~(s1) & (s2)
-def : Pat<(and (not CPURegs:$lhs), CPURegs:$rhs),
-          (ANDC CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(and (not CPURegs:$lhs), imm:$rhs),
-          (ANDCi CPURegs:$lhs, imm:$rhs)>;
-
-// ANDL = ((((s1) == 0) | ((s2) == 0)) ? 0 : 1)
-def : Pat<(zext (and (setcc CPURegs:$lhs, (i32 0), SETNE),
-               (setcc CPURegs:$rhs, (i32 0), SETNE))),
-          (ANDL CPURegs:$lhs, CPURegs:$rhs)>;
-
-// ORC = (~(s1)) | (s2)
-def : Pat<(or (xor CPURegs:$lhs, (i32 -1)), CPURegs:$rhs),
-          (ORC CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(or (not CPURegs:$lhs), CPURegs:$rhs),
-          (ORC CPURegs:$lhs, CPURegs:$rhs)>;
-def : Pat<(or (not CPURegs:$lhs), imm:$rhs),
-          (ORCi CPURegs:$lhs, imm:$rhs)>;
-          */
-
-
-// Multiplications Patterns
-/*
-
-
-
-*/
 
 // LE1 does not have "not", so we expand our way
 def : Pat<(not CPURegs:$in),

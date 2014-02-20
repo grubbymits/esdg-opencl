@@ -43,11 +43,9 @@ int MULHU(int s1, int s2) {
 int MULLU(int s1, int s2) {
   return s1 * (ui16)s2;
 }
-
 int MULL(int s1, int s2) {
   return s1 * (i16)s2;
 }
-
 int MULLHU(int s1, int s2) {
   return ((ui16)(s1)) * ((ui16)(s2 >> 16));
 }
@@ -63,7 +61,7 @@ int MULLLU(int s1, int s2) {
 int MULLL(int s1, int s2) {
   return ((i16)(s1) * (i16)(s2));
 }
-/*
+
 int  MULHH(int s1, int s2) {
   return ((i16)(s1 >> 16) * (i16)(s2 >> 16));
 }
@@ -71,7 +69,6 @@ int  MULHH(int s1, int s2) {
 int MULLH(int s1, int s2) {
   return (i16)(s1) * (i16)(s2 >> 16);
 }
-*/
 
 int main(void) {
   int c = NANDL(a, b);

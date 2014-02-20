@@ -96,12 +96,6 @@ namespace llvm {
       CMPLTU,
       CMPNE,
 
-      // MAdd/Sub nodes
-      //MAdd,
-      //MAddu,
-      //MSub,
-      //MSubu,
-
       // Shift ops
       Shl,
       Shr,
@@ -118,12 +112,6 @@ namespace llvm {
       SXTH,
       ZXTB,
       ZXTH,
-
-      // Bit Set and Test
-      TBIT,
-      TBITF,
-      SBIT,
-      SBITF,
 
       // Extending instructions
       SextB,
