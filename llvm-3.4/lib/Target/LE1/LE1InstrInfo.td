@@ -197,60 +197,10 @@ def mem_ea : Operand<i32> {
   let EncoderMethod = "getMemEncoding";
 }
 
-// size operand of ext instruction
-def size_ext : Operand<i32> {
-  let EncoderMethod = "getSizeExtEncoding";
-}
-
-// size operand of ins instruction
-def size_ins : Operand<i32> {
-  let EncoderMethod = "getSizeInsEncoding";
-}
-
-// Transformation Function - get the lower 16 bits.
-def LO16 : SDNodeXForm<imm, [{
-  return getI32Imm((unsigned)N->getZExtValue() & 0xFFFF);
-}]>;
-
-// Transformation Function - get the higher 16 bits.
-def HI16 : SDNodeXForm<imm, [{
-  return getI32Imm((unsigned)N->getZExtValue() >> 16);
-}]>;
-
-// Node immediate fits as 16-bit sign extended on target immediate.
-// e.g. addi, andi
-def immSExt16  : PatLeaf<(imm), [{ return isInt<16>(N->getSExtValue()); }]>;
-
-def immSExt32 : PatLeaf<(imm), [{ return isInt<32>(N->getSExtValue()); }]>;
-
-def immZExt32 : PatLeaf<(imm), 
-    [{ return (uint32_t)N->getZExtValue() == (unsigned int)N->getZExtValue();}]>;
-
-def immSExt1  : ImmLeaf<i1, [{ return (int32_t)Imm->getSExtValue(); }]>;
-
-def u16ImmPred : PatLeaf<(i32 imm), [{ return isUInt<16>(N->getSExtValue()); }]>;
-
 def imm9  : ImmLeaf<i32, [{ return (Imm == (Imm & 0x1F)); }]>;
 def imm12 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFF)); }]>;
 def imm16 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFFF)); }]>;
 def imm32 : ImmLeaf<i32, [{ return (Imm != (Imm & 0x1F)); }]>;
-
-
-// Node immediate fits as 16-bit zero extended on target immediate.
-// The LO16 param means that only the lower 16 bits of the node
-// immediate are caught.
-// e.g. addiu, sltiu
-def immZExt16  : PatLeaf<(imm), [{
-  if (N->getValueType(0) == MVT::i32)
-    return (uint32_t)N->getZExtValue() == (unsigned short)N->getZExtValue();
-  else
-    return (uint64_t)N->getZExtValue() == (unsigned short)N->getZExtValue();
-}], LO16>;
-
-// shamt field must fit in 5 bits.
-def immZExt5 : PatLeaf<(imm), [{
-  return N->getZExtValue() == ((N->getZExtValue()) & 0x1f) ;
-}]>;
 
 // LE1 Address Mode! SDNode frameindex could possibily be a match
 // since load and store instructions from stack used it.
@@ -260,49 +210,6 @@ def addr : ComplexPattern<iPTR, 2, "SelectAddr", [frameindex], []>;
 //===----------------------------------------------------------------------===//
 // Pattern fragment for load/store
 //===----------------------------------------------------------------------===//
-class UnalignedLoad<PatFrag Node> : PatFrag<(ops node:$ptr), (Node node:$ptr), [{
-  LoadSDNode *LD = cast<LoadSDNode>(N);
-  return LD->getMemoryVT().getSizeInBits()/8 > LD->getAlignment();
-}]>;
-
-class AlignedLoad<PatFrag Node> : PatFrag<(ops node:$ptr), (Node node:$ptr), [{
-  LoadSDNode *LD = cast<LoadSDNode>(N);
-  return LD->getMemoryVT().getSizeInBits()/8 <= LD->getAlignment();
-}]>;
-
-class UnalignedStore<PatFrag Node> : PatFrag<(ops node:$val, node:$ptr),
-                                             (Node node:$val, node:$ptr), [{
-  StoreSDNode *SD = cast<StoreSDNode>(N);
-  return SD->getMemoryVT().getSizeInBits()/8 > SD->getAlignment();
-}]>;
-
-class AlignedStore<PatFrag Node> : PatFrag<(ops node:$val, node:$ptr),
-                                           (Node node:$val, node:$ptr), [{
-  StoreSDNode *SD = cast<StoreSDNode>(N);
-  return SD->getMemoryVT().getSizeInBits()/8 <= SD->getAlignment();
-}]>;
-
-// Load/Store PatFrags.
-def sextloadi16_a   : AlignedLoad<sextloadi16>;
-def zextloadi16_a   : AlignedLoad<zextloadi16>;
-def extloadi16_a    : AlignedLoad<extloadi16>;
-def load_a          : AlignedLoad<load>;
-def sextloadi32_a   : AlignedLoad<sextloadi32>;
-def zextloadi32_a   : AlignedLoad<zextloadi32>;
-def extloadi32_a    : AlignedLoad<extloadi32>;
-def truncstorei16_a : AlignedStore<truncstorei16>;
-def store_a         : AlignedStore<store>;
-def truncstorei32_a : AlignedStore<truncstorei32>;
-def sextloadi16_u   : UnalignedLoad<sextloadi16>;
-def zextloadi16_u   : UnalignedLoad<zextloadi16>;
-def extloadi16_u    : UnalignedLoad<extloadi16>;
-def load_u          : UnalignedLoad<load>;
-def sextloadi32_u   : UnalignedLoad<sextloadi32>;
-def zextloadi32_u   : UnalignedLoad<zextloadi32>;
-def extloadi32_u    : UnalignedLoad<extloadi32>;
-def truncstorei16_u : UnalignedStore<truncstorei16>;
-def store_u         : UnalignedStore<store>;
-def truncstorei32_u : UnalignedStore<truncstorei32>;
 
 //===----------------------------------------------------------------------===//
 // Instructions specific format
@@ -477,38 +384,12 @@ class SelectRI<string instr_asm, SDNode OpNode>:
       [(set CPURegs:$res, (OpNode BRegs:$cond, CPURegs:$T, imm:$F))],
       IIAlu>;
 
-// Maximum and Minimum
-class MaxMinR<string instr_asm, SDNode OpNode> :
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, CPURegs:$src2),
-      !strconcat(instr_asm, "  $dst, $src1, $src2"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
-
-let isReMaterializable = 1, neverHasSideEffects = 1 in
-class MaxMinI<string instr_asm, SDNode OpNode> :
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, i32imm:$src2),
-      !strconcat(instr_asm, "  $dst, $src1, $src2"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src1, imm:$src2))], IIAlu>;
-
 // Extend
 let isReMaterializable = 1, neverHasSideEffects = 1 in
 class Extend<string instr_asm, SDNode OpNode, ValueType vt>:
       LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src),
       !strconcat(instr_asm, "  $dst, $src"),
       [(set CPURegs:$dst, (OpNode CPURegs:$src, vt))], IIAlu>;
-
-//===----------------------------------------------------------------------===//
-// Instruction Classes that utilise the multiplier functional units
-//===----------------------------------------------------------------------===//
-
-class MultR<string instr_asm, SDNode OpNode> :
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, CPURegs:$src2),
-     !strconcat(instr_asm, "  $dst, $src1, $src2"),
-     [(set CPURegs:$dst, (OpNode CPURegs:$src1, CPURegs:$src2))], IIMul>;
-
-class MultI<string instr_asm, SDNode OpNode, Operand Op, PatLeaf PL> :
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, i32imm:$src2),
-      !strconcat(instr_asm, "  $dst, $src1, $src2"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src1, PL:$src2))], IIMul>;
 
 //===----------------------------------------------------------------------===//
 // Instruction Classes that utilise the Load/Store units
@@ -527,6 +408,7 @@ class LoadM<string instr_asm, PatFrag OpNode>:
       LE1Inst<(outs CPURegs:$dst), (ins mem:$addr),
       !strconcat(instr_asm, "  $dst, $addr"),
       [(set CPURegs:$dst, (OpNode addr:$addr))], IILoadStore>;
+
 
 class StoreM<string instr_asm, PatFrag OpNode>:
       LE1Inst<(outs), (ins CPURegs:$src, mem:$addr),
@@ -700,11 +582,22 @@ def DIVS :  LE1Inst<(outs CPURegs:$res, BRegs:$cout),
 
 ///===---------------------------------------------------------------------===//
 /// Load and Store Instructions
-def LDB      : LoadM<"ldb.0",  sextloadi8>;
-def LDBu     : LoadM<"ldbu.0", zextloadi8>;
-def LDH      : LoadM<"ldh.0",  sextloadi16>;
-def LDHu     : LoadM<"ldhu.0", zextloadi16>;
-def LDW      : LoadM<"ldw.0",  load>;
+class LoadMem<bits<5> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_LD_I32<
+    opcode,
+    (outs CPURegs:$rd),
+    (ins mem:$addr),
+    !strconcat(instr_asm, "  $dst, $addr"),
+    [(set CPURegs:$dst, (OpNode addr:$addr))], IILoadStore>;
+
+def LDB      : LoadMem<0x3, "ldb.0",  sextloadi8>;
+def LDH      : LoadMem<0xB, "ldh.0",  sextloadi16>;
+def LDBu     : LoadMem<0x7, "ldbu.0", zextloadi8>;
+def LDHu     : LoadMem<0xF, "ldhu.0", zextloadi16>;
+def LDW      : LoadMem<0x13, "ldw.0",  load>;
+
+def LDL      : LoadMem<0x15, "ldl.0">;
+
 def STB      : StoreM<"stb.0", truncstorei8>;
 def STH      : StoreM<"sth.0", truncstorei16>;
 def STW      : StoreM<"stw.0", store>;

@@ -84,6 +84,35 @@ class LE1Format_R_RR<bits<5>opcode, dag outs, dag ins, string asmstr,
   let Inst{5-0} = src1;
 }
 
+class LE1Format_R_R<bits<5>opcode, dag outs, dag ins, string asmstr,
+                    list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  bits<6> rd;
+  bits<6> src1;
+
+  let fmt = 1;
+  let Inst{25-21} = ocpode;
+  let Inst{20-15} = rd;
+  let Inst{10-6} = 1;
+  let Inst{5-0} = src1;
+}
+
+class LE1Format_LD_I32<bits<5>opcode, dag outs, dag ins, string asmstr,
+                       list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  bits<6> rd;
+  bits<6> src1;
+
+  let fmt = 1;
+  let Inst{25-21} = opcode;
+  let Inst{20-15} = rd;
+  let Inst{10-6} = 2;
+  let Inst{5-0} = src1;
+}
+
+
 class LE1Format_R_I32R<bits<5> opcode, dag outs, dag ins, string asmstr,
                  list<dag> pattern, InstrItinClass itin>
   : LE1FormatBase<outs, ins, asmstr, pattern, itin> {

@@ -96,11 +96,6 @@ namespace llvm {
       CMPLTU,
       CMPNE,
 
-      // Shift ops
-      Shl,
-      Shr,
-      Shru,
-
       // Shift Add ops
       SH1ADD,
       SH2ADD,
