@@ -262,6 +262,7 @@ class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
 }
 
 // Comparisons
+/*
 class Compare_R_RR<bits<4> opcode, string instr_asm, PatFrag OpNode>
   : LE1Format_R_RR_1<
   opcode,
@@ -293,8 +294,8 @@ class Compare_R_I9R<bits<4> opcode, string instr_asm, PatFrag OpNode>
   (ins CPURegs:$src1, immediate:$imm9),
   !strconcat(instr_asm, "  $rd, $src1, $imm9"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
-
-class Logic_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
+*/
+class LogicCompare_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_R_RR_1<
   opcode,
   (outs CPURegs:$rd),
@@ -302,7 +303,7 @@ class Logic_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   !strconcat(instr_asm, " $rd, $src1, $src2"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
 
-class Logic_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
+class LogicCompare_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_RoB_I32R<
   opcode,
   (outs CPURegs:$rd),
@@ -310,7 +311,7 @@ class Logic_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
   !strconcat(instr_asm, " $rd, $src1, $imm32"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>;
 
-class Logic_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
+class LogicCompare_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_RoB_I9R<
   opcode,
   (outs CPURegs:$rd),
@@ -318,7 +319,7 @@ class Logic_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   !strconcat(instr_asm, "  $rd, $src1, $imm9"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
 
-class Logic_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
+class LogicCompare_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_P_RR<
   opcode,
   (outs BRegs:$prd),
@@ -499,6 +500,7 @@ defm MULHU    : ARITH_LOGIC<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
 // s1 * ui16(s2 >> 16) << 16
 defm MULHS    : ARITH_LOGIC<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
 
+/*
 let isCompare = 1 in {
   multiclass COMPARE<bits<4> opc, string instr_asm, PatFrag OpNode> {
     // Results into BRegs
@@ -509,14 +511,15 @@ let isCompare = 1 in {
     def NAME#i9   : Compare_R_I9R<opc, instr_asm, OpNode>;
   }
 }
+*/
 
-multiclass LOGIC<bits<4> opc, string instr_asm, SDNode OpNode> {
+multiclass LOGICCOMPARE<bits<4> opc, string instr_asm, SDNode OpNode> {
   // Results into BRegs
-  def NAME#p    : Logic_P_RR<opc, instr_asm, OpNode>;
+  def NAME#p    : LogicCompare_P_RR<opc, instr_asm, OpNode>;
   // Results into CPURegs
-  def NAME#r    : Logic_R_RR<opc, instr_asm, OpNode>;
-  def NAME#i32  : Logic_R_I32R<opc, instr_asm, OpNode>;
-  def NAME#i9   : Logic_R_I9R<opc, instr_asm, OpNode>;
+  def NAME#r    : LogicCompare_R_RR<opc, instr_asm, OpNode>;
+  def NAME#i32  : LogicCompare_R_I32R<opc, instr_asm, OpNode>;
+  def NAME#i9   : LogicCompare_R_I9R<opc, instr_asm, OpNode>;
 }
 /*
 defm CMPEQ  : COMPARE<0x0, "cmpeq.0", seteq>;
@@ -530,20 +533,22 @@ defm CMPLT  : COMPARE<0x7, "cmplt.0", setlt>;
 defm CMPLTU : COMPARE<0x8, "cmpltu.0", setult>;
 defm CMPNE  : COMPARE<0x9, "cmpne.0", setne>;
 */
-defm CMPEQ  : LOGIC<0x0, "cmpeq.0", le1_cmpeq>;
-defm CMPGE  : LOGIC<0x1, "cmpge.0", le1_cmpge>;
-defm CMPGEU : LOGIC<0x2, "cmpgeu.0", le1_cmpgeu>;
-defm CMPGT  : LOGIC<0x3, "cmpgt.0", le1_cmpgt>;
-defm CMPGTU : LOGIC<0x4, "cmpgtu.0", le1_cmpgtu>;
-defm CMPLE  : LOGIC<0x5, "cmple.0", le1_cmple>;
-defm CMPLEU : LOGIC<0x6, "cmpleu.0", le1_cmpleu>;
-defm CMPLT  : LOGIC<0x7, "cmplt.0", le1_cmplt>;
-defm CMPLTU : LOGIC<0x8, "cmpltu.0", le1_cmpltu>;
-defm CMPNE  : LOGIC<0x9, "cmpne.0", le1_cmpne>;
-defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
-defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
-defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
-defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
+let isCompare = 1 in {
+  defm CMPEQ  : LOGICCOMPARE<0x0, "cmpeq.0", le1_cmpeq>;
+  defm CMPGE  : LOGICCOMPARE<0x1, "cmpge.0", le1_cmpge>;
+  defm CMPGEU : LOGICCOMPARE<0x2, "cmpgeu.0", le1_cmpgeu>;
+  defm CMPGT  : LOGICCOMPARE<0x3, "cmpgt.0", le1_cmpgt>;
+  defm CMPGTU : LOGICCOMPARE<0x4, "cmpgtu.0", le1_cmpgtu>;
+  defm CMPLE  : LOGICCOMPARE<0x5, "cmple.0", le1_cmple>;
+  defm CMPLEU : LOGICCOMPARE<0x6, "cmpleu.0", le1_cmpleu>;
+  defm CMPLT  : LOGICCOMPARE<0x7, "cmplt.0", le1_cmplt>;
+  defm CMPLTU : LOGICCOMPARE<0x8, "cmpltu.0", le1_cmpltu>;
+  defm CMPNE  : LOGICCOMPARE<0x9, "cmpne.0", le1_cmpne>;
+}
+defm NANDL  : LOGICCOMPARE<0xA, "nandl.0", le1_nandl>;
+defm NORL   : LOGICCOMPARE<0xB, "norl.0", le1_norl>;
+defm ORL    : LOGICCOMPARE<0xC, "orl.0", le1_orl>;
+defm ANDL   : LOGICCOMPARE<0xD, "andl.0", le1_andl>;
 
 //def : Pat<(zext (le1_norl CPURegs:$src1, CPURegs:$src2)),
   //        (NORLr CPURegs:$src1, CPURegs:$src2)>;
