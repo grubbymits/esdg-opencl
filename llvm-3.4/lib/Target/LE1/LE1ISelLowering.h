@@ -108,38 +108,18 @@ namespace llvm {
       ZXTB,
       ZXTH,
 
-      // Extending instructions
-      SextB,
-      ZextB,
-      SextH,
-      ZextH,
-
       Addcg,
       Divs,
 
-      // Load from global
-      LoadGlobalU8,
-      LoadGlobalU16,
-      LoadGlobalS8,
-      LoadGlobalS16,
-
-      ResetLocalID,
-      IncrLocalID,
-      IncLocalID,
+      // Nodes for OpenCL
       CPUID,
       NUM_CORES,
       GlobalId,
-      LocalSize,
       READ_GROUP_ID,
       GROUP_ID_ADDR,
       LOAD_GROUP_ID,
       READ_ATTR,
       SET_ATTR
-      //GlobalLoadU8,
-      //GlobalLoadU16,
-      //GlobalLoadS8,
-      //GlobalLoadS16
-
     };
   }
 
@@ -193,19 +173,8 @@ namespace llvm {
 
     // Lower Operand specifics
     //SDValue LowerBRCOND(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerConstantPool(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerDYNAMIC_STACKALLOC(SDValue Op, SelectionDAG &DAG) const;
-    SDValue LowerGlobalAddress(SDValue Op, SelectionDAG &DAG) const;
-    SDValue LowerLoad(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerBlockAddress(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerGlobalTLSAddress(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerJumpTable(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerSELECT(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerVASTART(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerFCOPYSIGN(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerFRAMEADDR(SDValue Op, SelectionDAG &DAG) const;
-    //SDValue LowerMEMBARRIER(SDValue Op, SelectionDAG& DAG) const;
-    //SDValue LowerATOMIC_FENCE(SDValue Op, SelectionDAG& DAG) const;
 
     SDValue
       LowerFormalArguments(SDValue Chain,

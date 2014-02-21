@@ -75,6 +75,17 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::ANDL:          return "LE1ISD::ANDL";
   case LE1ISD::ORC:           return "LE1ISD::ORC";
 
+  case LE1ISD::CMPEQ:         return "LE1ISD::CMPEQ";
+  case LE1ISD::CMPGE:         return "LE1ISD::CMPGE";
+  case LE1ISD::CMPGEU:        return "LE1ISD::CMPGEU";
+  case LE1ISD::CMPGT:         return "LE1ISD::CMPGT";
+  case LE1ISD::CMPGTU:        return "LE1ISD::CMPGTU";
+  case LE1ISD::CMPLE:         return "LE1ISD::CMPLE";
+  case LE1ISD::CMPLEU:        return "LE1ISD::CMPLEU";
+  case LE1ISD::CMPLT:         return "LE1ISD::CMPLT";
+  case LE1ISD::CMPLTU:        return "LE1ISD::CMPLTU";
+  case LE1ISD::CMPNE:         return "LE1ISD::CMPNE";
+
   case LE1ISD::MULL:          return "LE1ISD::MULL";
   case LE1ISD::MULLU:         return "LE1ISD::MULLU";
   case LE1ISD::MULH:          return "LE1ISD::MULH";
@@ -89,17 +100,6 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
 
   case LE1ISD::Addcg:         return "LE1ISD::Addcg";
   case LE1ISD::Divs:          return "LE1ISD::Divs";
-
-  case LE1ISD::CMPEQ:         return "LE1ISD::CMPEQ";
-  case LE1ISD::CMPGE:         return "LE1ISD::CMPGE";
-  case LE1ISD::CMPGEU:        return "LE1ISD::CMPGEU";
-  case LE1ISD::CMPGT:         return "LE1ISD::CMPGT";
-  case LE1ISD::CMPGTU:        return "LE1ISD::CMPGTU";
-  case LE1ISD::CMPLE:         return "LE1ISD::CMPLE";
-  case LE1ISD::CMPLEU:        return "LE1ISD::CMPLEU";
-  case LE1ISD::CMPLT:         return "LE1ISD::CMPLT";
-  case LE1ISD::CMPLTU:        return "LE1ISD::CMPLTU";
-  case LE1ISD::CMPNE:         return "LE1ISD::CMPNE";
 
   case LE1ISD::MAXS:           return "LE1ISD::MAXS";
   case LE1ISD::MAXU:           return "LE1ISD::MAXU";
@@ -117,13 +117,13 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::SH4ADD:        return "LE1ISD::SH4ADD";
 
   case LE1ISD::CPUID:         return "LE1ISD::CPUID";
-  case LE1ISD::LocalSize:     return "LE1ISD::LocalSize";
-  case LE1ISD::GlobalId:      return "LE1ISD::GlobalId";
   case LE1ISD::READ_GROUP_ID: return "LE1ISD::READ_GROUP_ID";
   case LE1ISD::GROUP_ID_ADDR: return "LE1ISD::GROUP_ID_ADDR";
   case LE1ISD::LOAD_GROUP_ID: return "LE1ISD::LOAD_GROUP_ID";
   case LE1ISD::READ_ATTR:     return "LE1ISD::READ_ATTR";
   case LE1ISD::SET_ATTR:      return "LE1ISD::SET_ATTR";
+
+  case LE1ISD::TargetGlobal:  return "LE1ISD::TargetGlobal";
 
   default:                         return NULL;
   }
@@ -361,10 +361,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //float64_lt_quiet
   //float64_is_signaling_nan
 
-  setOperationAction(ISD::GlobalAddress,      MVT::i32,   Custom);
-  setOperationAction(ISD::GlobalAddress,      MVT::i16,   Custom);
-  setOperationAction(ISD::GlobalAddress,      MVT::i8,    Custom);
-
   setOperationAction(ISD::VASTART,            MVT::Other, Custom);
 
   // FIXME This should use Addcg and be custom
@@ -440,6 +436,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setTargetDAGCombine(ISD::MUL);
   setTargetDAGCombine(ISD::SHL);
   setTargetDAGCombine(ISD::SELECT_CC);
+  setTargetDAGCombine(ISD::ZERO_EXTEND);
 
 
   setOperationAction(ISD::FSQRT, MVT::f32, Expand);
@@ -848,6 +845,33 @@ SDValue static PerformSELECT_CCCombine(SDNode *N, SelectionDAG &DAG) {
   return SDValue(N, 0);
 }
 
+SDValue static PerformZERO_EXTENDCombine(SDNode *N,
+                                         SelectionDAG &DAG) {
+  SDLoc dl(N);
+  SDValue Op = N->getOperand(0);
+  unsigned Opcode = Op.getOpcode();
+
+  // TODO Maybe we should lower SETCC nodes to our specific ones, and also
+  // combine them here too.
+  if ((Opcode == LE1ISD::NORL) ||
+      (Opcode == LE1ISD::NANDL) ||
+      (Opcode == LE1ISD::ORL) ||
+      (Opcode == LE1ISD::ANDL) ||
+      (Opcode == LE1ISD::CMPEQ) ||
+      (Opcode == LE1ISD::CMPGE) ||
+      (Opcode == LE1ISD::CMPGEU) ||
+      (Opcode == LE1ISD::CMPGT) ||
+      (Opcode == LE1ISD::CMPGTU) ||
+      (Opcode == LE1ISD::CMPLE) ||
+      (Opcode == LE1ISD::CMPLEU) ||
+      (Opcode == LE1ISD::CMPLT) ||
+      (Opcode == LE1ISD::CMPLTU) ||
+      (Opcode == LE1ISD::CMPNE))
+    return DAG.getNode(Opcode, dl, MVT::i32, Op.getOperand(0),
+                       Op.getOperand(1));
+  return SDValue(N, 0);
+}
+
 SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
                                              DAGCombinerInfo &DCI) const {
   DEBUG(dbgs() << "PeformDAGCombine\n");
@@ -855,12 +879,13 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
   switch(N->getOpcode()) {
   default:
     break;
-  case ISD::ADD:        return PerformADDCombine(N, DAG);
-  case ISD::AND:        return PerformANDCombine(N, DAG);
-  case ISD::OR:         return PerformORCombine(N, DAG);
-  case ISD::MUL:        return PerformMULCombine(N, DAG);
-  case ISD::SHL:        return PerformSHLCombine(N, DAG);
-  case ISD::SELECT_CC:  return PerformSELECT_CCCombine(N, DAG);
+  case ISD::ADD:          return PerformADDCombine(N, DAG);
+  case ISD::AND:          return PerformANDCombine(N, DAG);
+  case ISD::OR:           return PerformORCombine(N, DAG);
+  case ISD::MUL:          return PerformMULCombine(N, DAG);
+  case ISD::SHL:          return PerformSHLCombine(N, DAG);
+  case ISD::SELECT_CC:    return PerformSELECT_CCCombine(N, DAG);
+  case ISD::ZERO_EXTEND:  return PerformZERO_EXTENDCombine(N, DAG);
   }
   return SDValue();
 }
@@ -877,7 +902,6 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
 {
   switch (Op.getOpcode())
   {
-    case ISD::GlobalAddress:      return LowerGlobalAddress(Op, DAG);
     case ISD::MULHS:              return LowerMULHS(Op, DAG);
     case ISD::MULHU:              return LowerMULHU(Op, DAG);
     case ISD::MUL:                return LowerMUL(Op, DAG);
@@ -1345,7 +1369,8 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
       }
     }
   }
-  return SDValue();
+  return CreateCMP(Op, DAG);
+  //return SDValue();
 }
 
 SDValue LE1TargetLowering::LowerBRCOND(SDValue Op, SelectionDAG &DAG) const {
@@ -1518,64 +1543,6 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
   return Result;
 }
 
-
-SDValue LE1TargetLowering::LowerGlobalAddress(SDValue Op,
-                                               SelectionDAG &DAG) const {
-  //std::cout << "Entering LE1TargetLowering::LowerGlobalAddress\n";
-  // FIXME there isn't actually debug info here
-  //std::cout << "LowerGlobal, Opcode = " << Op.getOpcode() << std::endl;
-  SDLoc dl(Op.getNode());
-  const GlobalValue *GV = cast<GlobalAddressSDNode>(Op)->getGlobal();
-  int64_t Offset = cast<GlobalAddressSDNode>(Op)->getOffset();
-  EVT ValTy = Op.getValueType();
-  SDValue GA = DAG.getTargetGlobalAddress(GV, dl, ValTy, Offset);
-
-  //LE1TargetObjectFile &TLOF =
-    //(LE1TargetObjectFile&)getObjFileLowering();
-  //if(TLOF.IsGlobalInSmallSection(GV, getTargetMachine())) {
-    //std::cout << "isSmallSection\n";
-    return DAG.getNode(LE1ISD::TargetGlobal, dl, ValTy, GA);
-  //}
-  //else std::cout << "!isSmallSection\n";
-  return DAG.getNode(LE1ISD::TargetGlobalConst, dl, ValTy, GA);
-
-  return DAG.getNode(LE1ISD::Mov, dl, MVT::i32, GA);
-
-  // Otherwise, just return the address
-  return GA;
-
-}
-
-SDValue LE1TargetLowering::LowerLoad(SDValue Op, SelectionDAG &DAG) const {
-  /*DebugLoc dl = Op.getDebugLoc();
-  LoadSDNode *LoadNode = cast<LoadSDNode>(Op.getNode());
-  SDValue Chain = LoadNode->getChain();
-  EVT VT = Op.getValueType();
-  //EVT VT = LoadNode->getMemoryVT();
-
-  // Only lower load ops that are directly using a global address
-  if(Op.getOperand(1)->getOpcode() == LE1ISD::TargetGlobal) {
-
-    SDValue TargetAddr = Op.getOperand(1);
-    SDValue TargetOffset = Op.getOperand(2);
-    unsigned Opcode = 0;
-
-    switch(Op.getOpcode()) {
-    case ISD::EXTLOAD:
-    case ISD::ZEXTLOAD:
-      Opcode = (VT == MVT::i8) ? LE1ISD::LoadGlobalU8 : LE1ISD::LoadGlobalU16;
-      break;
-    case ISD::SEXTLOAD:
-      Opcode = (VT == MVT::i8) ? LE1ISD::LoadGlobalS8 : LE1ISD::LoadGlobalS16;
-      break;
-    }
-    return DAG.getNode(Opcode, dl, VT, MVT::Other, TargetAddr, TargetOffset,
-                       Chain);
-  }
-  else*/
-    return Op;
-}
-
 SDValue LE1TargetLowering::LowerVASTART(SDValue Op, SelectionDAG &DAG) const {
   MachineFunction &MF = DAG.getMachineFunction();
   LE1FunctionInfo *FuncInfo = MF.getInfo<LE1FunctionInfo>();
@@ -1607,81 +1574,7 @@ LowerFRAMEADDR(SDValue Op, SelectionDAG &DAG) const {
   return FrameAddr;
 }
 
-// TODO: set SType according to the desired memory barrier behavior.
-/*SDValue LE1TargetLowering::LowerMEMBARRIER(SDValue Op,
-                                            SelectionDAG& DAG) const {
-  unsigned SType = 0;
-  DebugLoc dl = Op.getDebugLoc();
-  return DAG.getNode(LE1ISD::Sync, dl, MVT::Other, Op.getOperand(0),
-                     DAG.getConstant(SType, MVT::i32));
-}*/
-
-//===----------------------------------------------------------------------===//
-//                      Calling Convention Implementation
-//===----------------------------------------------------------------------===//
 #include "LE1GenCallingConv.inc"
-
-//===----------------------------------------------------------------------===//
-// TODO: Implement a generic logic using tblgen that can support this.
-// LE1 O32 ABI rules:
-// ---
-// i32 - Passed in A0, A1, A2, A3 and stack
-// f32 - Only passed in f32 registers if no int reg has been used yet to hold
-//       an argument. Otherwise, passed in A1, A2, A3 and stack.
-// f64 - Only passed in two aliased f32 registers if no int reg has been used
-//       yet to hold an argument. Otherwise, use A2, A3 and stack. If A1 is
-//       not used, it must be shadowed. If only A3 is avaiable, shadow it and
-//       go to stack.
-//
-//  For vararg functions, all arguments are passed in A0, A1, A2, A3 and stack.
-//===----------------------------------------------------------------------===//
-/*static bool CC_LE1(unsigned ValNo, MVT ValVT,
-                       MVT LocVT, CCValAssign::LocInfo LocInfo,
-                       ISD::ArgFlagsTy ArgFlags, CCState &State) {
-
-  static const unsigned IntRegsSize=8;
-
-  static const unsigned IntRegs[] = {
-      LE1::AR0, LE1::AR1, LE1::AR2, LE1::AR3,
-      LE1::AR4, LE1::AR5, LE1::AR6, LE1::AR7
-  };
-
-  // ByVal Args
-  if (ArgFlags.isByVal()) {
-    State.HandleByVal(ValNo, ValVT, LocVT, LocInfo,
-                      1, 4, ArgFlags);
-    unsigned NextReg = (State.getNextStackOffset() + 3) / 4;
-    for (unsigned r = State.getFirstUnallocated(IntRegs, IntRegsSize);
-         r < std::min(IntRegsSize, NextReg); ++r)
-      State.AllocateReg(IntRegs[r]);
-    return false;
-  }
-
-  // Promote i8 and i16
-  if (LocVT == MVT::i8 || LocVT == MVT::i16) {
-    LocVT = MVT::i32;
-    if (ArgFlags.isSExt())
-      LocInfo = CCValAssign::SExt;
-    else if (ArgFlags.isZExt())
-      LocInfo = CCValAssign::ZExt;
-    else
-      LocInfo = CCValAssign::AExt;
-  }
-
-  unsigned Reg = State.AllocateReg(IntRegs, IntRegsSize);
-  unsigned SizeInBytes = ValVT.getSizeInBits() >> 3;
-  unsigned OrigAlign = ArgFlags.getOrigAlign();
-  unsigned Offset = State.AllocateStack(SizeInBytes, OrigAlign);
-
-  if (!Reg)
-    State.addLoc(CCValAssign::getMem(ValNo, ValVT, Offset, LocVT, LocInfo));
-  else
-    State.addLoc(CCValAssign::getReg(ValNo, ValVT, Reg, LocVT, LocInfo));
-
-  return false; // CC must always match
-}*/
-
-
 //===----------------------------------------------------------------------===//
 //                  Call Calling Convention Implementation
 //===----------------------------------------------------------------------===//
@@ -1692,12 +1585,6 @@ static const uint16_t O32IntRegs[] = {
   LE1::AR0, LE1::AR1, LE1::AR2, LE1::AR3, 
   LE1::AR4, LE1::AR5, LE1::AR6, LE1::AR7
 };
-
-// Return next O32 integer argument register.
-//static unsigned getNextIntArgReg(unsigned Reg) {
-//  assert((Reg == LE1::AR0) || (Reg == LE1::AR2));
-//  return (Reg == LE1::AR0) ? LE1::AR1 : LE1::AR3;
-//}
 
 // Write ByVal Arg to arg registers and stack.
 static void

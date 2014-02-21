@@ -137,12 +137,22 @@ def le1_mins    : SDNode<"LE1ISD::MINS", SDTIntBinOp, [SDNPCommutative]>;
 def le1_minu    : SDNode<"LE1ISD::MINU", SDTIntBinOp, [SDNPCommutative]>;
 
 // Boolean Operators
-def le1_nandl   : SDNode<"LE1ISD::NANDL", SDTLE1LogicCmp, [SDNPCommutative]>;
-def le1_norl    : SDNode<"LE1ISD::NORL", SDTLE1LogicCmp, [SDNPCommutative]>;
-def le1_orl     : SDNode<"LE1ISD::ORL", SDTLE1LogicCmp, [SDNPCommutative]>;
-def le1_andc    : SDNode<"LE1ISD::ANDC", SDTLE1LogicCmp, []>;
-def le1_andl    : SDNode<"LE1ISD::ANDL", SDTLE1LogicCmp, [SDNPCommutative]>;
-def le1_orc     : SDNode<"LE1ISD::ORC", SDTLE1LogicCmp, []>;
+def le1_nandl   : SDNode<"LE1ISD::NANDL",   SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_norl    : SDNode<"LE1ISD::NORL",    SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_orl     : SDNode<"LE1ISD::ORL",     SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_andc    : SDNode<"LE1ISD::ANDC",    SDTLE1LogicCmp, []>;
+def le1_andl    : SDNode<"LE1ISD::ANDL",    SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_orc     : SDNode<"LE1ISD::ORC",     SDTLE1LogicCmp, []>;
+def le1_cmpeq   : SDNode<"LE1ISD::CMPEQ",   SDTLE1LogicCmp, [SDNPCommutative]>;
+def le1_cmpge   : SDNode<"LE1ISD::CMPGE",   SDTLE1LogicCmp, []>;
+def le1_cmpgeu  : SDNode<"LE1ISD::CMPGEU",  SDTLE1LogicCmp, []>;
+def le1_cmpgt   : SDNode<"LE1ISD::CMPGT",   SDTLE1LogicCmp, []>;
+def le1_cmpgtu  : SDNode<"LE1ISD::CMPGTU",  SDTLE1LogicCmp, []>;
+def le1_cmple   : SDNode<"LE1ISD::CMPLE",   SDTLE1LogicCmp, []>;
+def le1_cmpleu  : SDNode<"LE1ISD::CMPLEU",  SDTLE1LogicCmp, []>;
+def le1_cmplt   : SDNode<"LE1ISD::CMPLT",   SDTLE1LogicCmp, []>;
+def le1_cmpltu  : SDNode<"LE1ISD::CMPLTU",  SDTLE1LogicCmp, []>;
+def le1_cmpne   : SDNode<"LE1ISD::CMPNE",   SDTLE1LogicCmp, [SDNPCommutative]>;
 
 // These are target-independent nodes, but have target-specific formats.
 def callseq_start : SDNode<"ISD::CALLSEQ_START", SDT_LE1CallSeqStart,
@@ -163,7 +173,6 @@ def brtarget    : Operand<OtherVT>;
 def calltarget  : Operand<i32>;
 def simm16      : Operand<i32>;
 //def simm16_64   : Operand<i64>;
-def shamt       : Operand<i32>;
 def globaladdress : Operand<i32>;
 
 //def i32imm      : Operand<i32>;
@@ -202,10 +211,9 @@ def imm12 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFF)); }]>;
 def imm16 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFFF)); }]>;
 def imm32 : ImmLeaf<i32, [{ return (Imm != (Imm & 0x1F)); }]>;
 
-// LE1 Address Mode! SDNode frameindex could possibily be a match
-// since load and store instructions from stack used it.
-def addr : ComplexPattern<iPTR, 2, "SelectAddr", [frameindex], []>;
-//def gAddr : ComplexPattern<i32, 2, "SelectGAddr", [frameindex], []>;
+def addr_i8   : ComplexPattern<iPTR, 2, "SelectAddri8", [frameindex], []>;
+def addr_i12  : ComplexPattern<iPTR, 2, "SelectAddri12", [frameindex], []>;
+def addr_i32  : ComplexPattern<iPTR, 2, "SelectAddri32", [frameindex], []>;
 
 //===----------------------------------------------------------------------===//
 // Pattern fragment for load/store
@@ -219,7 +227,7 @@ def addr : ComplexPattern<iPTR, 2, "SelectAddr", [frameindex], []>;
 // Instruction Classes that utilise the Integer ALUs 
 //===----------------------------------------------------------------------===//
 
-// Arithmetic and boolean logic operators
+// Arithmetic
 class ArithLogic_R_RR<bits<5> opcode, string instr_asm, SDNode OpNode,
                       InstrItinClass II, bit isComm = 0>
   : LE1Format_R_RR<
@@ -253,6 +261,7 @@ class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
     let isCommutable = isComm;
 }
 
+// Comparisons
 class Compare_R_RR<bits<4> opcode, string instr_asm, PatFrag OpNode>
   : LE1Format_R_RR_1<
   opcode,
@@ -293,14 +302,6 @@ class Logic_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   !strconcat(instr_asm, " $rd, $src1, $src2"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
 
-class Logic_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
-  : LE1Format_P_RR<
-  opcode,
-  (outs BRegs:$prd),
-  (ins CPURegs:$src1, CPURegs:$src2),
-  !strconcat(instr_asm, " $prd, $src1, $src2"),
-  [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
-
 class Logic_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_RoB_I32R<
   opcode,
@@ -317,20 +318,80 @@ class Logic_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   !strconcat(instr_asm, "  $rd, $src1, $imm9"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
 
+class Logic_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_P_RR<
+  opcode,
+  (outs BRegs:$prd),
+  (ins CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, " $prd, $src1, $src2"),
+  [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
+
+//===----------------------------------------------------------------------===//
+// Instruction Classes that utilise the Load/Store units
+//===----------------------------------------------------------------------===//
+// Loads
+class LoadMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_LD_I32<
+    opcode,
+    (outs CPURegs:$rd),
+    (ins mem:$addr),
+    !strconcat(instr_asm, "  $rd, $addr"),
+    [(set CPURegs:$rd, (OpNode addr_i32:$addr))], IILoadStore>;
+
+class LoadMem_I12<bits<2> opcode, bits<4> format, string instr_asm,
+                  PatFrag OpNode>
+  : LE1Format_ST_S<
+  opcode,
+  format,
+  (outs CPURegs:$rd),
+  (ins mem:$addr),
+  !strconcat(instr_asm, " $rd, $addr"),
+  [(set CPURegs:$rd, (OpNode addr_i12:$addr))], IILoadStore>;
+
+class LoadMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_LDST_I8<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins mem:$addr),
+  !strconcat(instr_asm, " $rd, $addr"),
+  [(set CPURegs:$rd, (OpNode addr_i8:$addr))], IILoadStore>;
+
+// Stores
+class StoreMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_ST_I32<
+    opcode,
+    (outs),
+    (ins CPURegs:$src1, mem:$addr),
+    !strconcat(instr_asm, "  $addr, $src1"),
+    [(OpNode CPURegs:$src1, addr_i32:$addr)], IILoadStore>;
+
+class StoreMem_I12<bits<2> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_ST_S<
+  opcode,
+  0x7,
+  (outs),
+  (ins CPURegs:$rd, mem:$addr),
+  !strconcat(instr_asm, " $rd, $addr"),
+  [(OpNode CPURegs:$rd, addr_i12:$addr)], IILoadStore>;
+
+class StoreMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_LDST_I8<
+  opcode,
+  (outs),
+  (ins CPURegs:$rd, mem:$addr),
+  !strconcat(instr_asm, " $rd, $addr"),
+  [(OpNode CPURegs:$rd, addr_i8:$addr)], IILoadStore>;
+
+class Extend<bits<5> opcode, string instr_asm, SDNode OpNode, ValueType vt>
+  : LE1Format_R_R<
+    opcode,
+    (outs CPURegs:$rd),
+    (ins CPURegs:$src1),
+    !strconcat(instr_asm, "  $rd, $src1"),
+    [(set CPURegs:$rd, (OpNode CPURegs:$src1, vt))], IIAlu>;
+
 
 // ------------------- END OF NEW IMPLEMENTATIONS ----------------------- //
-
-class ArithLogicR<string instr_asm, SDNode OpNode, bit isComm = 0>:
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, CPURegs:$src2),
-      !strconcat(instr_asm, "  $dst, $src1, $src2"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu> {
-      let isCommutable = isComm;
-}
-
-class ArithLogicI<string instr_asm, SDNode OpNode> :
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, i32imm:$src2),
-      !strconcat(instr_asm, "  $dst, $src1, $src2"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src1, imm:$src2))], IIAlu>;
 
 let isAsCheapAsAMove = 1 in
 class MoveR<string instr_asm, SDNode OpNode, RegisterClass OutReg,
@@ -345,19 +406,6 @@ class MoveI<string instr_asm, SDNode OpNode, RegisterClass OutReg, Operand Opr,
       LE1Inst<(outs OutReg:$dst), (ins Opr:$src),
       !strconcat(instr_asm, "  $dst, $src"),
       [(set OutReg:$dst, (OpNode I:$src))], IIAlu>;
-
-// Shifts
-let isReMaterializable = 1 in
-class ShiftI<string instr_asm, SDNode OpNode>:
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src, uimm16:$src2),
-      !strconcat(instr_asm, "  $dst, $src, $src2"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src, (i32 imm:$src2)))],
-      IIAlu>;
-
-class ShiftR<string instr_asm, SDNode OpNode>:
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src1, CPURegs:$src2),
-      !strconcat(instr_asm, "  $dst, $src1, $src2"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
 
 // Comparisons
 class SetCCR<string instr_asm, PatFrag cond_op, RegisterClass DestRegs>:
@@ -384,56 +432,7 @@ class SelectRI<string instr_asm, SDNode OpNode>:
       [(set CPURegs:$res, (OpNode BRegs:$cond, CPURegs:$T, imm:$F))],
       IIAlu>;
 
-// Extend
-let isReMaterializable = 1, neverHasSideEffects = 1 in
-class Extend<string instr_asm, SDNode OpNode, ValueType vt>:
-      LE1Inst<(outs CPURegs:$dst), (ins CPURegs:$src),
-      !strconcat(instr_asm, "  $dst, $src"),
-      [(set CPURegs:$dst, (OpNode CPURegs:$src, vt))], IIAlu>;
 
-//===----------------------------------------------------------------------===//
-// Instruction Classes that utilise the Load/Store units
-//===----------------------------------------------------------------------===//
-/*
-class FMem<bits<6> op, dag outs, dag ins, string asmstr, list<dag> pattern,
-          InstrItinClass itin>: FFI<op, outs, ins, asmstr, pattern, itin> {
-  bits<21> addr;
-  let Inst{25-21} = addr{20-16};
-  let Inst{15-0}  = addr{15-0};
-}*/
-
-let Uses = [ZERO, SP] in {
-let canFoldAsLoad = 1 in
-class LoadM<string instr_asm, PatFrag OpNode>:
-      LE1Inst<(outs CPURegs:$dst), (ins mem:$addr),
-      !strconcat(instr_asm, "  $dst, $addr"),
-      [(set CPURegs:$dst, (OpNode addr:$addr))], IILoadStore>;
-
-
-class StoreM<string instr_asm, PatFrag OpNode>:
-      LE1Inst<(outs), (ins CPURegs:$src, mem:$addr),
-      !strconcat(instr_asm, "  $addr, $src"),
-      [(OpNode CPURegs:$src, addr:$addr)], IILoadStore>;
-
-let neverHasSideEffects = 1, canFoldAsLoad = 1, isReMaterializable=1 in
-class LoadG<string instr_asm, PatFrag OpNode>:
-      LE1Inst<(outs CPURegs:$dst),
-      (ins globaladdress:$addr, globaladdroffset:$offset),
-      !strconcat(instr_asm, " $dst, r0.0[($addr+$offset)]"),
-      [/*(set CPURegs:$dst, (OpNode (add tglobaladdr:$addr, imm:$offset)))*/],
-      IILoadStore>;
-
-class StoreG<string instr_asm, PatFrag OpNode>:
-      LE1Inst<(outs),
-      (ins CPURegs:$src, globaladdress:$addr, globaladdroffset:$offset),
-      !strconcat(instr_asm, "  r0.0[($addr+$offset)], $src"),
-      [/*(OpNode CPURegs:$src, (add tglobaladdr:$addr, imm:$offset))*/],
-      IILoadStore>;
-
-class EffectiveAddress<string instr_asm> :
-      LE1Inst<(outs CPURegs:$rt), (ins mem_ea:$addr),
-      instr_asm, [(set CPURegs:$rt, addr:$addr)], IIAlu>;
-}
 
 // -----------------------------------------------------------------------//
 // Instruction Class that use the Branch unit
@@ -476,6 +475,7 @@ defm SHR      : ARITH_LOGIC<0xE,   "shr.0", sra, IIAlu>;
 defm SHRU     : ARITH_LOGIC<0xF,   "shru.0", srl, IIAlu>;
 defm SUB      : ARITH_LOGIC<0x10,  "sub.0", sub, IIAlu>;
 defm XOR      : ARITH_LOGIC<0x11,  "xor.0", xor, IIAlu, 1>;
+
 // i16(s1) * i16(s2)
 defm MULLL    : ARITH_LOGIC<0x12,  "mulll.0", le1_mulll, IIMul>;
 // ui16(s1) * ui16(s2)
@@ -518,7 +518,7 @@ multiclass LOGIC<bits<4> opc, string instr_asm, SDNode OpNode> {
   def NAME#i32  : Logic_R_I32R<opc, instr_asm, OpNode>;
   def NAME#i9   : Logic_R_I9R<opc, instr_asm, OpNode>;
 }
-
+/*
 defm CMPEQ  : COMPARE<0x0, "cmpeq.0", seteq>;
 defm CMPGE  : COMPARE<0x1, "cmpge.0", setge>;
 defm CMPGEU : COMPARE<0x2, "cmpgeu.0", setuge>;
@@ -529,10 +529,82 @@ defm CMPLEU : COMPARE<0x6, "cmpleu.0", setule>;
 defm CMPLT  : COMPARE<0x7, "cmplt.0", setlt>;
 defm CMPLTU : COMPARE<0x8, "cmpltu.0", setult>;
 defm CMPNE  : COMPARE<0x9, "cmpne.0", setne>;
+*/
+defm CMPEQ  : LOGIC<0x0, "cmpeq.0", le1_cmpeq>;
+defm CMPGE  : LOGIC<0x1, "cmpge.0", le1_cmpge>;
+defm CMPGEU : LOGIC<0x2, "cmpgeu.0", le1_cmpgeu>;
+defm CMPGT  : LOGIC<0x3, "cmpgt.0", le1_cmpgt>;
+defm CMPGTU : LOGIC<0x4, "cmpgtu.0", le1_cmpgtu>;
+defm CMPLE  : LOGIC<0x5, "cmple.0", le1_cmple>;
+defm CMPLEU : LOGIC<0x6, "cmpleu.0", le1_cmpleu>;
+defm CMPLT  : LOGIC<0x7, "cmplt.0", le1_cmplt>;
+defm CMPLTU : LOGIC<0x8, "cmpltu.0", le1_cmpltu>;
+defm CMPNE  : LOGIC<0x9, "cmpne.0", le1_cmpne>;
 defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
 defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
 defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
 defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
+
+//def : Pat<(zext (le1_norl CPURegs:$src1, CPURegs:$src2)),
+  //        (NORLr CPURegs:$src1, CPURegs:$src2)>;
+
+def SXTB  : Extend<0x0, "sxtb.0", le1_sxtb, i8>;
+def SXTH  : Extend<0x1, "sxth.0", le1_sxth, i16>;
+def ZXTB  : Extend<0x2, "zxtb.0", le1_zxtb, i8>;
+def ZXTH  : Extend<0x3, "zxth.0", le1_zxth, i16>;
+
+// Extending Patterns
+def : Pat<(sra (shl CPURegs:$src, (i32 16)), (i32 16)),
+          (SXTH CPURegs:$src)>;
+def : Pat<(sra (shl CPURegs:$src, (i32 24)), (i32 24)),
+          (SXTB CPURegs:$src)>;
+def : Pat<(srl (shl CPURegs:$src, (i32 16)), (i32 16)),
+          (ZXTH CPURegs:$src)>;
+def : Pat<(srl (shl CPURegs:$src, (i32 24)), (i32 24)),
+          (ZXTB CPURegs:$src)>;
+
+def : Pat<(and CPURegs:$src, (i32 0x000000FF)),
+          (ZXTB CPURegs:$src)>;
+def : Pat<(and CPURegs:$src, (i32 0x0000FFFF)),
+          (ZXTH CPURegs:$src)>;
+
+def : Pat<(sext_inreg CPURegs:$src, i8),
+          (SXTB CPURegs:$src)>;
+def : Pat<(sext_inreg CPURegs:$src, i16),
+          (SXTH CPURegs:$src)>;
+
+
+def LDSBi32   : LoadMem_I32<0x3, "ldb.0",  sextloadi8>;
+def LDUBi32   : LoadMem_I32<0x7, "ldbu.0", zextloadi8>;
+def LDSHi32   : LoadMem_I32<0xB, "ldh.0",  sextloadi16>;
+def LDUHi32   : LoadMem_I32<0xF, "ldhu.0", zextloadi16>;
+def LDWi32    : LoadMem_I32<0x13, "ldw.0",  load>;
+//def LDL       : LoadMem_I32<0x15, "ldl.0", load>;
+
+def LDSBi12   : LoadMem_I12<0x0, 10, "ldb.0",  sextloadi8>;
+def LDUBi12   : LoadMem_I12<0x0, 11, "ldbu.0", zextloadi8>;
+def LDSHi12   : LoadMem_I12<0x0, 12, "ldh.0",  sextloadi16>;
+def LDUHi12   : LoadMem_I12<0x0, 13, "ldhu.0", zextloadi16>;
+def LDWi12    : LoadMem_I12<0x0, 14, "ldw.0",  load>;
+
+def LDUBi8    : LoadMem_I8<0x0, "ldbu.0", zextloadi8>;
+def LDSBi8    : LoadMem_I8<0x1,"ldb.0",  sextloadi8>;
+def LDUHi8    : LoadMem_I8<0x2, "ldhu.0", zextloadi16>;
+def LDSHi8    : LoadMem_I8<0x3, "ldh.0",  sextloadi16>;
+def LDWi8     : LoadMem_I8<0x4, "ldw.0",  load>;
+
+def STBi32    : StoreMem_I32<0x0, "stb.0", truncstorei8>;
+def STHi32    : StoreMem_I32<0x1, "sth.0", truncstorei16>;
+def STWi32    : StoreMem_I32<0x2, "stw.0", store>;
+//def STL       : StoreMem_I32<0xC, "stl.0", store>;
+
+def STBi12    : StoreMem_I12<0x0, "stb.0", truncstorei8>;
+def STHi12    : StoreMem_I12<0x1, "sth.0", truncstorei16>;
+def STWi12    : StoreMem_I12<0x2, "stw.0", store>;
+
+def STBi8     : StoreMem_I8<0x20, "stb.0", truncstorei8>;
+def STHi8     : StoreMem_I8<0x21, "sth.0", truncstorei16>;
+def STWi8     : StoreMem_I8<0x22, "stw.0", store>;
 
 
 // ------------------------- END OF NEW IMPLEMENTATION ---------------------- //
@@ -546,10 +618,7 @@ def SLCTFri : SelectRI<"slctf.0", le1_selectf>;
 
 ///===---------------------------------------------------------------------===//
 /// Extending Instructions
-def SXTB  : Extend<"sxtb.0", le1_sxtb, i8>;
-def SXTH  : Extend<"sxth.0", le1_sxth, i16>;
-def ZXTB  : Extend<"zxtb.0", le1_zxtb, i8>;
-def ZXTH  : Extend<"zxth.0", le1_zxth, i16>;
+
 
 ///===---------------------------------------------------------------------===//
 // Move Instructions
@@ -579,57 +648,6 @@ def DIVS :  LE1Inst<(outs CPURegs:$res, BRegs:$cout),
             [/*(set CPURegs:$res, BRegs:$cout, (le1_divs CPURegs:$src1,
                                               CPURegs:$src2, BRegs:$cin))*/],
             IIAlu>;
-
-///===---------------------------------------------------------------------===//
-/// Load and Store Instructions
-class LoadMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
-  : LE1Format_LD_I32<
-    opcode,
-    (outs CPURegs:$rd),
-    (ins mem:$addr),
-    !strconcat(instr_asm, "  $rd, $addr"),
-    [(set CPURegs:$rd, (OpNode addr:$addr))], IILoadStore>;
-
-class LoadMem_I12<bits<2> opcode, string instr_asm, PatFrag OpNode>
-  : LE1Format<
-  opcode,
-  (outs CPURegs:$rd),
-  (ins mem:$addr),
-  !strconcat(instr_asm, " $rd, $addr"),
-  [(set CPURegs:$rd, (OpNode addr:$addr))], IILoadStore>;
-
-class LoadMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
-  : LE1Format_LDST_I8<
-  opcode,
-  (outs CPURegs:$rd),
-  (ins mem:$addr),
-  !strconcat(instr_asm, " $rd, $addr"),
-  [(set CPURegs:$rd, (OpNode addr:$addr))], IILoadStore>;
-
-def LDB      : LoadMem<0x3, "ldb.0",  sextloadi8>;
-def LDH      : LoadMem<0xB, "ldh.0",  sextloadi16>;
-def LDBu     : LoadMem<0x7, "ldbu.0", zextloadi8>;
-def LDHu     : LoadMem<0xF, "ldhu.0", zextloadi16>;
-def LDW      : LoadMem<0x13, "ldw.0",  load>;
-
-def LDL      : LoadMem<0x15, "ldl.0", load>;
-
-def STB      : StoreM<"stb.0", truncstorei8>;
-def STH      : StoreM<"sth.0", truncstorei16>;
-def STW      : StoreM<"stw.0", store>;
-
-//let neverHasSideEffects = 1 in {
-  /*
-def LDB_G      : LoadG<"ldb.0",  sextloadi8>;
-def LDBu_G     : LoadG<"ldbu.0", zextloadi8>;
-def LDH_G      : LoadG<"ldh.0",  sextloadi16>;
-def LDHu_G     : LoadG<"ldhu.0", zextloadi16>;
-def LDW_G      : LoadG<"ldw.0",  load>;
-def STB_G      : StoreG<"stb.0", truncstorei8>;
-def STH_G      : StoreG<"sth.0", truncstorei16>;
-def STW_G      : StoreG<"stw.0", store>;
-*/
-//}
 
 //let isReMaterializable = 1, isMoveImm = 1 in {
 let AddedComplexity = 100 in {
@@ -708,16 +726,6 @@ def Ret : LE1Inst<(outs),
 //def : Pat<(le1_call L0, (load (le1_targetglobal tglobaladdr:$addr))),
   //        (CALLPOINTER L0, tglobaladdr:$addr)>;
 
-
-
-
-// FrameIndexes are legalized when they are operands from load/store
-// instructions. The same not happens for stack address copies, so an
-// add op with mem ComplexPattern is used and the stack address copy
-// can be matched. It's similar to Sparc LEA_ADDRi
-//def LEA_ADDiu : EffectiveAddress<"addiu  $rt, $addr">;
-def EA_ADD  : EffectiveAddress<"add.0  $rt, $addr">;
-
 //===----------------------------------------------------------------------===//
 // Pseudo instructions
 //===----------------------------------------------------------------------===//
@@ -736,10 +744,10 @@ def ADJCALLSTACKUP   : LE1Pseudo<(outs), (ins uimm16:$amt1, uimm16:$amt2),
 let Defs = [T45] in {
 def LDW_PRED  : LE1Pseudo<(outs BRegs:$dst), (ins mem:$addr),
                           "!LOADPRED $dst, $addr",
-                          [(set (i1 BRegs:$dst), (load addr:$addr))]>;
+                          [(set (i1 BRegs:$dst), (load addr_i32:$addr))]>;
 def STW_PRED  : LE1Pseudo<(outs), (ins BRegs:$src, mem:$addr),
                           "!STOREPRED $src, $addr",
-                          [(store (i1 BRegs:$src), addr:$addr)]>;
+                          [(store (i1 BRegs:$src), addr_i32:$addr)]>;
 }
 
 // Operation to handle function pointer
@@ -777,29 +785,9 @@ def : Pat<(le1_call LReg:$lnk, (i32 texternalsym:$dst)),
           (CALL LReg:$lnk, texternalsym:$dst)>;
 
 // Calls using function pointers
-def : Pat<(le1_call LReg:$lnk, (i32 (load addr:$src))),
-          (CALLPOINTER LReg:$lnk, addr:$src)>;
+def : Pat<(le1_call LReg:$lnk, (i32 (load addr_i32:$src))),
+          (CALLPOINTER LReg:$lnk, addr_i32:$src)>;
 
-// Extending Patterns
-def : Pat<(sra (shl CPURegs:$src, (i32 16)), (i32 16)),
-          (SXTH CPURegs:$src)>;
-def : Pat<(sra (shl CPURegs:$src, (i32 24)), (i32 24)),
-          (SXTB CPURegs:$src)>;
-def : Pat<(srl (shl CPURegs:$src, (i32 16)), (i32 16)),
-          (ZXTH CPURegs:$src)>;
-def : Pat<(srl (shl CPURegs:$src, (i32 24)), (i32 24)),
-          (ZXTB CPURegs:$src)>;
-
-def : Pat<(and CPURegs:$src, (i32 0x000000FF)),
-          (ZXTB CPURegs:$src)>;
-def : Pat<(and CPURegs:$src, (i32 0x0000FFFF)),
-          (ZXTH CPURegs:$src)>;
-
-// Extend in reg patterns
-def : Pat<(sext_inreg CPURegs:$src, i8),
-          (SXTB CPURegs:$src)>;
-def : Pat<(sext_inreg CPURegs:$src, i16),
-          (SXTH CPURegs:$src)>;
 
 // Patterns to deal with extending branch registers
 def : Pat<(sext BRegs:$src),
@@ -809,104 +797,6 @@ def : Pat<(sext BRegs:$src),
 def : Pat<(not CPURegs:$in),
           (ORCr CPURegs:$in, ZERO)>;
 
-// extended load and stores
-def : Pat<(extloadi1  addr:$src), (LDBu addr:$src)>;
-def : Pat<(extloadi8  addr:$src), (LDBu addr:$src)>;
-def : Pat<(extloadi16 addr:$src), (LDHu addr:$src)>;
-
-// Load and Store Branch Registers
-def : Pat<(store BRegs:$src, addr:$dst),
-          (STW (MFB BRegs:$src), addr:$dst)>;
-def : Pat<(extloadi1 addr:$src),
-          (MTB (LDBu addr:$src))>;
-
-multiclass GlobalLoadPats<Instruction MemOp, PatFrag LoadFrag> {
-  def : Pat<(i32 (LoadFrag (le1_targetglobal tglobaladdr:$global))),
-            (i32 (MemOp tglobaladdr:$global, 0))>;
-
-  def : Pat<(i32 (LoadFrag (add (le1_targetglobal tglobaladdr:$global),
-                                                  u16ImmPred:$offset))),
-            (i32 (MemOp tglobaladdr:$global, u16ImmPred:$offset))>;
-
-  def : Pat<(i32 (LoadFrag (le1_globalconst tglobaladdr:$global))),
-            (i32 (MemOp tglobaladdr:$global, 0))>;
-
-  def : Pat<(i32 (LoadFrag (add (le1_globalconst tglobaladdr:$global),
-                                                u16ImmPred:$offset))),
-            (i32 (MemOp tglobaladdr:$global, u16ImmPred:$offset))>;
-
-}
-defm : GlobalLoadPats<LDBu_G, extloadi8>;
-defm : GlobalLoadPats<LDBu_G, zextloadi8>;
-defm : GlobalLoadPats<LDHu_G, extloadi16>;
-defm : GlobalLoadPats<LDHu_G, zextloadi16>;
-defm : GlobalLoadPats<LDB_G, sextloadi8>;
-defm : GlobalLoadPats<LDH_G, sextloadi16>;
-defm : GlobalLoadPats<LDW_G, load>;
-
-multiclass GlobalStorePats<Instruction MemOp, PatFrag StoreFrag> {
-  def : Pat<(StoreFrag CPURegs:$src, (le1_targetglobal tglobaladdr:$dst)),
-            (MemOp CPURegs:$src, tglobaladdr:$dst, 0)>;
-
-  def : Pat<(StoreFrag CPURegs:$src, (add (le1_targetglobal tglobaladdr:$dst), imm:$offset)),
-            (MemOp CPURegs:$src, tglobaladdr:$dst, imm:$offset)>;
-
-  def : Pat<(StoreFrag CPURegs:$src, (le1_globalconst tglobaladdr:$dst)),
-            (MemOp CPURegs:$src, tglobaladdr:$dst, 0)>;
-
-  def : Pat<(StoreFrag CPURegs:$src, (add (le1_globalconst tglobaladdr:$dst), imm:$offset)),
-            (MemOp CPURegs:$src, tglobaladdr:$dst, imm:$offset)>;
-
-}
-defm : GlobalStorePats<STB_G, truncstorei8>;
-defm : GlobalStorePats<STH_G, truncstorei16>;
-defm : GlobalStorePats<STW_G, store>;
-
-/*
-def : Pat<(extloadi8 (le1_targetglobal tglobaladdr:$global)),
-          (LDBu_G tglobaladdr:$global, 0)>;
-def : Pat<(extloadi8 (add (le1_targetglobal tglobaladdr:$global), imm:$offset)),
-          (LDBu_G tglobaladdr:$global, imm:$offset)>;
-
-def : Pat<(extloadi16 (le1_targetglobal tglobaladdr:$global)),
-          (LDHu_G tglobaladdr:$global, 0)>;
-def : Pat<(extloadi16 (add (le1_targetglobal tglobaladdr:$global), imm:$offset)),
-          (LDHu_G tglobaladdr:$global, imm:$offset)>;
-
-def : Pat<(zextloadi8 (le1_targetglobal tglobaladdr:$global)),
-          (LDBu_G tglobaladdr:$global, 0)>;
-def : Pat<(zextloadi8 (add (le1_targetglobal tglobaladdr:$global), imm:$offset)),
-          (LDBu_G tglobaladdr:$global, imm:$offset)>;
-
-def : Pat<(zextloadi16 (le1_targetglobal tglobaladdr:$global)),
-          (LDHu_G tglobaladdr:$global, 0)>;
-def : Pat<(zextloadi16 (add (le1_targetglobal tglobaladdr:$global), imm:$offset)),
-          (LDHu_G tglobaladdr:$global, imm:$offset)>;
-
-def : Pat<(sextloadi8 (le1_targetglobal tglobaladdr:$global)),
-          (LDB_G tglobaladdr:$global, 0)>;
-def : Pat<(sextloadi8 (add (le1_targetglobal tglobaladdr:$global), imm:$offset)),
-          (LDB_G tglobaladdr:$global, imm:$offset)>;
-
-def : Pat<(sextloadi16 (le1_targetglobal tglobaladdr:$global)),
-          (LDH_G tglobaladdr:$global, 0)>;
-def : Pat<(sextloadi16 (add (le1_targetglobal tglobaladdr:$global), imm:$offset)),
-          (LDH_G tglobaladdr:$global, imm:$offset)>;
-
-def : Pat<(load (add (le1_targetglobal (i32 tglobaladdr:$global)), imm:$offset)),
-          (LDW_G tglobaladdr:$global, imm:$offset)>;
-def : Pat<(load (le1_targetglobal (i32 tglobaladdr:$global))),
-          (LDW_G tglobaladdr:$global, 0)>;
-
-def : Pat<(truncstorei8 CPURegs:$src, (le1_targetglobal tglobaladdr:$dst)),
-          (STB_G CPURegs:$src, tglobaladdr:$dst, 0)>;
-def : Pat<(truncstorei16 CPURegs:$src, (le1_targetglobal tglobaladdr:$dst)),
-          (STH_G CPURegs:$src, tglobaladdr:$dst, 0)>;
-def : Pat<(store CPURegs:$src, (add (le1_targetglobal (i32 tglobaladdr:$dst)), imm:$offset)),
-          (STW_G CPURegs:$src, tglobaladdr:$dst, imm:$offset)>;
-def : Pat<(store CPURegs:$src, (le1_targetglobal (i32 tglobaladdr:$dst))),
-          (STW_G CPURegs:$src, tglobaladdr:$dst, 0)>;
-*/
 def : Pat<(le1_loadlink tglobaladdr:$addr, imm:$offset),
           (LDL tglobaladdr:$addr, imm:$offset)>;
 
@@ -915,20 +805,9 @@ def : Pat<(i32 0),
           (MOVr ZERO)>;
 def : Pat<(i32 imm:$in),
           (MOVi imm:$in)>;
-//def : Pat<(le1_globalconst tglobaladdr:$addr),
-  //        (MOVg tglobaladdr:$addr)>;
-//def : Pat<(le1_targetglobal tglobaladdr:$addr),
-  //        (MOVg tglobaladdr:$addr)>;
-
-//def : Pat<(i32 tglobaladdr:$addr),
-  //        (MOVg tglobaladdr:$addr)>;
-//def : Pat<(le1_targetglobal tglobaladdr:$addr),
-  //        (MOVg tglobaladdr:$addr)>;
-//def : Pat<(le1_mtl (le1_targetglobal tglobaladdr:$addr)),
-  //        (MTLi tglobaladdr:$addr)>;
 
 // peepholes
-def : Pat<(store (i32 0), addr:$dst), (STW ZERO, addr:$dst)>;
+//def : Pat<(store (i32 0), addr:$dst), (STW ZERO, addr:$dst)>;
 
 
 // Branch Patterns

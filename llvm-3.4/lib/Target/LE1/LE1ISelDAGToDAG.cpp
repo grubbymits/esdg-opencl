@@ -88,12 +88,11 @@ private:
 
   //SDNode *getGlobalBaseReg();
   SDNode *Select(SDNode *N);
-  SDNode *SelectExtLoad(SDNode *N);
-  SDNode *SelectLoad(SDNode *N);
-  SDNode *SelectStore(SDNode *N);
 
   // Complex Pattern.
-  bool SelectAddr(SDValue N, SDValue &Base, SDValue &Offset);
+  bool SelectAddri8(SDValue Addr, SDValue &Base, SDValue &Offset);
+  bool SelectAddri12(SDValue Addr, SDValue &Base, SDValue &Offset);
+  bool SelectAddri32(SDValue Addr, SDValue &Base, SDValue &Offset);
 
   // getI32Imm - Return a target constant with the specified
   // value, of type i32.
@@ -108,52 +107,52 @@ private:
 
 }
 
-/// ComplexPattern used on LE1InstrInfo
-/// Used on LE1 Load/Store instructions
-bool LE1DAGToDAGISel::SelectAddr(SDValue Addr, SDValue &Base, SDValue &Offset) {
-  DEBUG(dbgs() << "Addr belongs to " << Addr.getNode()->getOperationName()
-        << "\n");
+bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
+                                    SDValue &Offset) {
   EVT ValTy = Addr.getValueType();
-  //unsigned RReg;
-  
-  // if Address is FI, get the TargetFrameIndex.
-  if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
-    Base   = CurDAG->getTargetFrameIndex(FIN->getIndex(), ValTy);
-    Offset = CurDAG->getTargetConstant(0, ValTy);
-    //std::cout << "Address is FI\n";
-    return true;
-  }
 
-    if ((Addr.getOpcode() == ISD::TargetExternalSymbol ||
-        Addr.getOpcode() == ISD::TargetGlobalAddress)) {
-      //std::cout << "Addr is TargetGlobal\n";
-      return false;
-    }
-
-  // Addresses of the form FI+const or FI|const
   if (CurDAG->isBaseWithConstantOffset(Addr)) {
-    ConstantSDNode *CN = dyn_cast<ConstantSDNode>(Addr.getOperand(1));
-    if (isInt<16>(CN->getSExtValue())) {
-
-      // If the first operand is a FI, get the TargetFI Node
-      if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>
-                                  (Addr.getOperand(0)))
-        Base = CurDAG->getTargetFrameIndex(FIN->getIndex(), ValTy);
-      else
-        Base = Addr.getOperand(0);
-
-      Offset = CurDAG->getTargetConstant(CN->getZExtValue(), ValTy);
-
-      //RReg = CurDAG->getRegister(LE1::ZERO, MVT::i32);
-      //std::cout << "Addr is FI + const\n";
+    ConstantSDNode *CN = cast<ConstantSDNode>(Addr.getOperand(1));
+    if (CN->getZExtValue() == (CN->getZExtValue() & 0xFF)) {
+      Base = Addr.getOperand(0);
+      Offset = Addr.getOperand(1);
       return true;
     }
   }
+  if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
+    Base   = CurDAG->getTargetFrameIndex(FIN->getIndex(), ValTy);
+    Offset = CurDAG->getTargetConstant(0, ValTy);
+    return true;
+  }
+  return false;
+}
 
-  Base   = Addr;
-  Offset = CurDAG->getTargetConstant(0, ValTy);
-  //std::cout << "Leaving SelectAddr through bottom\n";
-  return true;
+bool LE1DAGToDAGISel::SelectAddri12(SDValue Addr, SDValue &Base,
+                                    SDValue &Offset) {
+  if (CurDAG->isBaseWithConstantOffset(Addr)) {
+    ConstantSDNode *CN = cast<ConstantSDNode>(Addr.getOperand(1));
+    if (CN->getZExtValue() == (CN->getZExtValue() & 0xFFF)) {
+      Base = Addr.getOperand(0);
+      Offset = Addr.getOperand(1);
+      return true;
+    }
+  }
+  return false;
+}
+
+bool LE1DAGToDAGISel::SelectAddri32(SDValue Addr, SDValue &Base,
+                                    SDValue &Offset) {
+  DEBUG(dbgs() << "SelectAddri32 with " << Addr.getNode()->getOperationName()
+        << "\n");
+  SDLoc dl(Addr.getNode());
+  if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr))
+    return false;
+  if (GlobalAddressSDNode *GA = cast<GlobalAddressSDNode>(Addr)) {
+    Base = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32, 0);
+    Offset = CurDAG->getTargetConstant(GA->getOffset(), MVT::i32);
+    return true;
+  }
+  return false;
 }
 
 /// Select instructions not customized! Used for
@@ -190,23 +189,6 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     return CurDAG->SelectNodeTo(Node, LE1::ADD, VT, MVT::Glue,
                                 LHS, SDValue(AddCarry,0));
     */
-    break;
-  }
-  case ISD::LOAD: {
-  //case ISD::EXTLOAD:
-  //case ISD::SEXTLOAD:
-  //case ISD::ZEXTLOAD:{
-    SDNode *Target = Node->getOperand(1).getNode();
-    if(//Target->getOpcode() == LE1ISD::TargetGlobalConst ||
-       Target->getOpcode() == LE1ISD::TargetGlobal)
-      return SelectLoad(Node);
-    break;
-  }
-  case ISD::STORE: {
-    SDNode *Target = Node->getOperand(2).getNode();
-    if(//Target->getOpcode() == LE1ISD::TargetGlobalConst ||
-       Target->getOpcode() == LE1ISD::TargetGlobal)
-      return SelectStore(Node);
     break;
   }
   case LE1ISD::Addcg: {
@@ -258,129 +240,6 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
   case LE1ISD::NUM_CORES:
     return CurDAG->getMachineNode(LE1::LE1_NUM_CORES, dl, MVT::i32);
   }
-}
-/*
-SDNode* LE1DAGToDAGISel::
-SelectExtLoad(SDNode *Node) {
-  std::cout << "ExtLoad with TargetGlobal\n";
-
-  LoadSDNode *LoadNode = cast<LoadSDNode>(Node);
-  SDValue Chain = LoadNode->getChain();
-  EVT VT = LoadNode->getMemoryVT();
-  SDNode *Result;
-  ISD::MemIndexedMode AM = LoadNode->getAddressingMode();
-  bool zext = (LoadNode->getExtensionType() == ISD::ZEXTLOAD);
-  unsigned Opcode;
-
-  if(VT == MVT::i16)
-    Opcode = zext ? LE1::LDHu_G : LE1::LDH_G;
-  else if(VT == MVT::i8)
-    Opcode = zext ? LE1::LDBu_G : LE1::LDB_G;
-  else
-    llvm_unreachable("unknown memory type");
-
-  std::cout << "Load Opcode = " << Opcode << std::endl;
-  return SelectCode(Node);
-}*/
-
-SDNode* LE1DAGToDAGISel::SelectLoad(SDNode *Node) {
-  DEBUG(dbgs() << "SelectLoad\n");
-  SDLoc dl(Node);
-  LoadSDNode *LoadNode = cast<LoadSDNode>(Node);
-  SDValue Chain = LoadNode->getChain();
-  EVT VT = LoadNode->getMemoryVT();
-  SDNode *Result;
-  ISD::MemIndexedMode AM = LoadNode->getAddressingMode();
-  bool zext = (LoadNode->getExtensionType() == ISD::ZEXTLOAD);
-  unsigned Opcode;
-
-  if(VT == MVT::i32)
-    Opcode = LE1::LDW_G;
-  else if(VT == MVT::i16)
-    Opcode = zext ? LE1::LDHu_G : LE1::LDH_G;
-  else if(VT == MVT::i8)
-    Opcode = zext ? LE1::LDBu_G : LE1::LDB_G;
-  else
-    llvm_unreachable("unknown memory type");
-
-  //std::cout << "Load Opcode = " << Opcode << std::endl;
-  if(AM == ISD::UNINDEXED) {
-    //std::cout << "Unindexed\n";
-    //std::cout << "NumOperands = " << Node->getNumOperands() << std::endl;
-    //std::cout << "BaseOffset load\n";
-    SDNode *Target = LoadNode->getBasePtr().getNode();
-    if(Target->getOpcode() == LE1ISD::TargetGlobal &&
-      ISD::isNormalLoad(LoadNode)) {
-      //std::cout << "Base is TargetGlobal\n";
-      SDValue Base = Target->getOperand(0);
-      //std::cout << "Got base\n";
-      int64_t Offset = cast<GlobalAddressSDNode>(Base)->getOffset();
-      MVT PointerTy = getTargetLowering()->getPointerTy();
-      const GlobalValue *GV = cast<GlobalAddressSDNode>(Base)->getGlobal();
-      SDValue TargetAddr = CurDAG->getTargetGlobalAddress(GV, dl,
-                                                            PointerTy, 0);
-      SDValue TargetConstantOff = CurDAG->getTargetConstant(Offset, PointerTy);
-      Result = CurDAG->getMachineNode(Opcode, dl, VT, MVT::Other, TargetAddr,
-                                      TargetConstantOff, Chain);
-      MachineSDNode::mmo_iterator MemOp = MF->allocateMemRefsArray(1);
-      MemOp[0] = LoadNode->getMemOperand();
-      cast<MachineSDNode>(Result)->setMemRefs(MemOp, MemOp+1);
-      ReplaceUses(LoadNode, Result);
-      //std::cout << "Returning result\n";
-      return Result;
-      //return CurDAG->SelectNodeTo(Node, LE1::ADD, VT, MVT::Glue,
-        //                        LHS, SDValue(AddCarry,0));
-
-    }
-  }
-  else{
-    //std::cout << "Indexed load\n";
-  }
-  return SelectCode(Node);
-}
-
-SDNode* LE1DAGToDAGISel::SelectStore(SDNode *Node) {
-  DEBUG(dbgs() << "SelectStore\n");
-  SDLoc dl(Node);
-  StoreSDNode* StoreNode = cast<StoreSDNode>(Node);
-  SDValue Chain = StoreNode->getChain();
-  //SDNode* TargetGlobal = StoreNode->getBasePtr().getNode();
-  SDNode* TargetGlobal = StoreNode->getOperand(2).getNode();
-  EVT VT = StoreNode->getMemoryVT();
-  SDValue Value = StoreNode->getValue();
-  unsigned Opcode = 0;
-
-  if(VT == MVT::i32)
-    Opcode = LE1::STW_G;
-  else if(VT == MVT::i16)
-    Opcode = LE1::STH_G;
-  else if(VT == MVT::i8)
-    Opcode = LE1::STB_G;
-  else
-    llvm_unreachable("unknown memory type");
-
-  //std::cout << "Opcode = " << Opcode << std::endl;
-  //SDValue Base = StoreNode->getOperand(2);
-  if(TargetGlobal->getOpcode() == LE1ISD::TargetGlobal) {
-    //std::cout << "is TargetGlobal\n";
-    SDValue Base = TargetGlobal->getOperand(0);
-    int64_t Offset = cast<GlobalAddressSDNode>(Base)->getOffset();
-    //SDValue Offset = StoreNode->getOperand(3);
-    //std::cout << "Offset = " << Offset << std::endl;
-    MVT PointerTy = getTargetLowering()->getPointerTy();
-    const GlobalValue* GV = cast<GlobalAddressSDNode>(Base)->getGlobal();
-    SDValue TargetAddr = CurDAG->getTargetGlobalAddress(GV, dl, PointerTy, 0);
-    SDNode* Result =
-      CurDAG->getMachineNode(Opcode, dl, MVT::Other, Value, TargetAddr,
-                             CurDAG->getTargetConstant(Offset, PointerTy));
-    MachineSDNode::mmo_iterator MemOp = MF->allocateMemRefsArray(1);
-    MemOp[0] = StoreNode->getMemOperand();
-    cast<MachineSDNode>(Result)->setMemRefs(MemOp, MemOp+1);
-    ReplaceUses(StoreNode, Result);
-    return Result;
-  }
-
-  return SelectCode(StoreNode);
 }
 
 bool LE1DAGToDAGISel::

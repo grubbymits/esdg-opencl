@@ -88,7 +88,16 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
         }
         BuildMI(*MBB, MII, DL, TII->get(LE1::MFB), TmpReg)
           .addReg(SrcReg);
-        BuildMI(*MBB, MII, DL, TII->get(LE1::STW)).addReg(TmpReg)
+
+        unsigned Opc = 0;
+        if (FI == (FI & 0xFF))
+          Opc = LE1::STWi8;
+        else if (FI == (FI & 0xFFF))
+          Opc = LE1::STWi12;
+        else
+          Opc = LE1::STWi32;
+
+        BuildMI(*MBB, MII, DL, TII->get(Opc)).addReg(TmpReg)
                 .addReg(FP).addImm(FI);
       }
       else if(Opc == LE1::LDW_PRED) {
@@ -111,8 +120,16 @@ bool LE1ExpandPredSpillCode::runOnMachineFunction(MachineFunction &MF) {
           if ((SrcReg == DstReg) && (FI == FI2))
             MII = MBB->erase(MII);
         }
-        BuildMI(*MBB, MII, DL, TII->get(LE1::LDW), TmpReg)
-                .addReg(FP).addImm(FI);
+        if (FI == (FI & 0xFF))
+          BuildMI(*MBB, MII, DL, TII->get(LE1::LDWi8), TmpReg)
+            .addReg(FP).addImm(FI);
+        else if (FI == (FI & 0xFFF))
+          BuildMI(*MBB, MII, DL, TII->get(LE1::LDWi12), TmpReg)
+            .addReg(FP).addImm(FI);
+        else
+          BuildMI(*MBB, MII, DL, TII->get(LE1::LDWi32), TmpReg)
+            .addReg(FP).addImm(FI);
+
         BuildMI(*MBB, MII, DL, TII->get(LE1::MTB), DstReg).addReg(TmpReg);
       }
     }

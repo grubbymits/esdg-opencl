@@ -9,7 +9,7 @@ def SDTLE1ReadReg         : SDTypeProfile<1, 0, [SDTCisVT<0, i32>]>;
 
 def le1_cpuid             : SDNode<"LE1ISD::CPUID", SDTLE1ReadReg, []>;
 def le1_num_cores         : SDNode<"LE1ISD::NUM_CORES", SDTLE1LoadAttr, []>;
-def le1_read_local_size   : SDNode<"LE1ISD::LocalSize", SDTIntUnaryOp, []>;
+//def le1_read_local_size   : SDNode<"LE1ISD::LocalSize", SDTIntUnaryOp, []>;
 def le1_read_global_id    : SDNode<"LE1ISD::GlobalId", SDTIntUnaryOp, []>;
 def le1_group_id_addr     : SDNode<"LE1ISD::GROUP_ID_ADDR", SDTLE1ReadReg, []>;
 def le1_load_group_id     : SDNode<"LE1ISD::LOAD_GROUP_ID", SDTIntUnaryOp, []>;
@@ -71,13 +71,14 @@ def LE1_READ_GLOBAL_SIZE_1 : LE1_READ_KERNEL_ATTR<"global_size+4",
                                                   int_le1_read_global_size_1>;
 def LE1_READ_GLOBAL_SIZE_2 : LE1_READ_KERNEL_ATTR<"global_size+8",
                                                   int_le1_read_global_size_2>;
-
+/*
 def LE1_READ_LOCAL_SIZE_0 : LE1_READ_KERNEL_ATTR<"local_size+0",
                                                   int_le1_read_local_size_0>;
 def LE1_READ_LOCAL_SIZE_1 : LE1_READ_KERNEL_ATTR<"local_size+4",
                                                   int_le1_read_local_size_1>;
 def LE1_READ_LOCAL_SIZE_2 : LE1_READ_KERNEL_ATTR<"local_size+8",
                                                   int_le1_read_local_size_2>;
+*/
 /*
 def LE1_READ_GROUP_ID_0   : LE1_READ_KERNEL_ATTR<"group_id+0",
                                                  int_le1_read_group_id_0>;
@@ -100,12 +101,12 @@ def LE1_READ_GLOBAL_OFFSET_1 : LE1_READ_KERNEL_ATTR<"global_offset+4",
 def LE1_READ_GLOBAL_OFFSET_2 : LE1_READ_KERNEL_ATTR<"global_offset+8",
                                                   int_le1_read_global_offset_2>;
 
-def : Pat<(le1_read_local_size (i32 0)),
-          (LE1_READ_LOCAL_SIZE_0)>;
-def : Pat<(le1_read_local_size (i32 1)),
-          (LE1_READ_LOCAL_SIZE_1)>;
-def : Pat<(le1_read_local_size (i32 2)),
-          (LE1_READ_LOCAL_SIZE_2)>;
+//def : Pat<(le1_read_local_size (i32 0)),
+  //        (LE1_READ_LOCAL_SIZE_0)>;
+//def : Pat<(le1_read_local_size (i32 1)),
+  //        (LE1_READ_LOCAL_SIZE_1)>;
+//def : Pat<(le1_read_local_size (i32 2)),
+  //        (LE1_READ_LOCAL_SIZE_2)>;
 
 def : Pat<(le1_cpuid),
           (LE1_READ_CPUID)>;

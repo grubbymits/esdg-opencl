@@ -12,12 +12,6 @@
 //
 //  CPU INSTRUCTION FORMATS
 //
-//  opcode  - operation code.
-//  rs      - src reg.
-//  rt      - dst reg (on a 2 regs instr) or src reg (on a 3 reg instr).
-//  rd      - dst reg, only used on 3 regs instr.
-//  shamt   - only used on shift instructions, contains the shift amount.
-//  funct   - combined with opcode field give us an operation code.
 //
 //===----------------------------------------------------------------------===//
 
@@ -112,6 +106,63 @@ class LE1Format_LD_I32<bits<5>opcode, dag outs, dag ins, string asmstr,
   let Inst{5-0} = src1;
 }
 
+class LE1Format_ST_I32<bits<5>opcode, dag outs, dag ins, string asmstr,
+                       list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  bits<6> src2;
+  bits<6> src1;
+
+  let fmt = 1;
+  let Inst{25-21} = opcode;
+  let Inst{20-15} = src2;
+  let Inst{14-9} = 0;
+  let Inst{8-6} = 3;
+  let Inst{5-0} = src1;
+}
+
+class LE1Format_ST_RRI<bits<2>opcode, dag outs, dag ins, string asmstr,
+                       list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  bits<6> src2;
+  bits<6> src1;
+
+  let fmt = 7;
+  let Inst{25-24} = opcode;
+  let Inst{11-6} = src2;
+  let Inst{5-0} = src1;
+}
+
+class LE1Format_ST_S<bits<2>opcode, bits<4> format, dag outs, dag ins,
+                     string asmstr, list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  //bits<12> imm12;
+  bits<6> rd;
+  bits<6> src1;
+
+  let fmt = format;
+  let Inst{25-24} = opcode;
+  //let Inst{23-12} = imm12;
+  let Inst{11-6} = rd;
+  let Inst{5-0} = src1;
+}
+
+class LE1Format_LDST_I8<bits<6> opcode, dag outs, dag ins, string asmstr,
+                        list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  //bits<8> imm8;
+  bits<6> rd;
+  bits<6> src1;
+
+  let fmt = 15;
+  let Inst{25-20} = opcode;
+  //let Inst{19-12} = imm8;
+  let Inst{11-6} = rd;
+  let Inst{5-0} = src1;
+}
 
 class LE1Format_R_I32R<bits<5> opcode, dag outs, dag ins, string asmstr,
                  list<dag> pattern, InstrItinClass itin>

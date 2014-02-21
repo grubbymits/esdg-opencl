@@ -72,5 +72,8 @@ int MULLH(int s1, int s2) {
 
 int main(void) {
   int c = NANDL(a, b);
-  return c;
+  int d = NORL(a, b);
+  a = c;
+  b = d;
+  return a + b;
 }

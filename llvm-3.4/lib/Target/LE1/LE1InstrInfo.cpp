@@ -57,7 +57,8 @@ isLoadFromStackSlot(const MachineInstr *MI, int &FrameIndex) const
 {
   unsigned Opc = MI->getOpcode();
 
-  if (Opc == LE1::LDW) {
+  //if (Opc == LE1::LDW) {
+  if (MI->mayLoad()) {
     if ((MI->getOperand(1).isFI()) && // is a stack slot
         (MI->getOperand(2).isImm()) &&  // the imm is zero
         (isZeroImm(MI->getOperand(2)))) {
@@ -79,7 +80,8 @@ isStoreToStackSlot(const MachineInstr *MI, int &FrameIndex) const
 {
   unsigned Opc = MI->getOpcode();
 
-  if (Opc == LE1::STW) {
+  //if (Opc == LE1::STW) {
+  if (MI->mayStore()) {
     if ((MI->getOperand(1).isFI()) && // is a stack slot
         (MI->getOperand(2).isImm()) &&  // the imm is zero
         (isZeroImm(MI->getOperand(2)))) {
@@ -170,7 +172,7 @@ storeRegToStackSlot(MachineBasicBlock &MBB, MachineBasicBlock::iterator I,
 
   if (LE1::CPURegsRegClass.hasSubClassEq(RC) ||
       LE1::LRegRegClass.hasSubClassEq(RC)) {
-    Opc = LE1::STW;
+    Opc = LE1::STWi8;
     BuildMI(MBB, I, DL, get(Opc)).addReg(SrcReg, getKillRegState(isKill))
       .addFrameIndex(FI).addImm(0).addMemOperand(MMO);
   }
@@ -195,7 +197,12 @@ loadRegFromStackSlot(MachineBasicBlock &MBB, MachineBasicBlock::iterator I,
 
   if (LE1::CPURegsRegClass.hasSubClassEq(RC) ||
       LE1::LRegRegClass.hasSubClassEq(RC)) {
-    Opc = LE1::LDW;
+    if (FI == (FI & 0xFF))
+      Opc = LE1::LDWi8;
+    else if (FI == (FI & 0xFFF))
+      Opc = LE1::LDWi12;
+    else
+      Opc = LE1::LDWi32;
     BuildMI(MBB, I, DL, get(Opc), DestReg).addFrameIndex(FI).addImm(0)
       .addMemOperand(MMO);
   }
