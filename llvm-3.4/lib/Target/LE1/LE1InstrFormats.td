@@ -92,7 +92,7 @@ class LE1Format_R_R<bits<5>opcode, dag outs, dag ins, string asmstr,
   bits<6> src1;
 
   let fmt = 1;
-  let Inst{25-21} = ocpode;
+  let Inst{25-21} = opcode;
   let Inst{20-15} = rd;
   let Inst{10-6} = 1;
   let Inst{5-0} = src1;

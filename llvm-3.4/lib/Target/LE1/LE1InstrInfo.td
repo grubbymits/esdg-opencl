@@ -582,13 +582,29 @@ def DIVS :  LE1Inst<(outs CPURegs:$res, BRegs:$cout),
 
 ///===---------------------------------------------------------------------===//
 /// Load and Store Instructions
-class LoadMem<bits<5> opcode, string instr_asm, PatFrag OpNode>
+class LoadMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
   : LE1Format_LD_I32<
     opcode,
     (outs CPURegs:$rd),
     (ins mem:$addr),
-    !strconcat(instr_asm, "  $dst, $addr"),
-    [(set CPURegs:$dst, (OpNode addr:$addr))], IILoadStore>;
+    !strconcat(instr_asm, "  $rd, $addr"),
+    [(set CPURegs:$rd, (OpNode addr:$addr))], IILoadStore>;
+
+class LoadMem_I12<bits<2> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins mem:$addr),
+  !strconcat(instr_asm, " $rd, $addr"),
+  [(set CPURegs:$rd, (OpNode addr:$addr))], IILoadStore>;
+
+class LoadMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_LDST_I8<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins mem:$addr),
+  !strconcat(instr_asm, " $rd, $addr"),
+  [(set CPURegs:$rd, (OpNode addr:$addr))], IILoadStore>;
 
 def LDB      : LoadMem<0x3, "ldb.0",  sextloadi8>;
 def LDH      : LoadMem<0xB, "ldh.0",  sextloadi16>;
@@ -596,13 +612,14 @@ def LDBu     : LoadMem<0x7, "ldbu.0", zextloadi8>;
 def LDHu     : LoadMem<0xF, "ldhu.0", zextloadi16>;
 def LDW      : LoadMem<0x13, "ldw.0",  load>;
 
-def LDL      : LoadMem<0x15, "ldl.0">;
+def LDL      : LoadMem<0x15, "ldl.0", load>;
 
 def STB      : StoreM<"stb.0", truncstorei8>;
 def STH      : StoreM<"sth.0", truncstorei16>;
 def STW      : StoreM<"stw.0", store>;
 
 //let neverHasSideEffects = 1 in {
+  /*
 def LDB_G      : LoadG<"ldb.0",  sextloadi8>;
 def LDBu_G     : LoadG<"ldbu.0", zextloadi8>;
 def LDH_G      : LoadG<"ldh.0",  sextloadi16>;
@@ -611,6 +628,7 @@ def LDW_G      : LoadG<"ldw.0",  load>;
 def STB_G      : StoreG<"stb.0", truncstorei8>;
 def STH_G      : StoreG<"sth.0", truncstorei16>;
 def STW_G      : StoreG<"stw.0", store>;
+*/
 //}
 
 //let isReMaterializable = 1, isMoveImm = 1 in {

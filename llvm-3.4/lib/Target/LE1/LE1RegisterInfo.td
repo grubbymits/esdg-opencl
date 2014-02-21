@@ -22,24 +22,7 @@ class GPR<bits<6> num, string n> : LE1Reg<n> {
   let Num = num;
 }
 
-//class CLR<bits<6> num, string n> : LE1Reg<n> {
-  //let Num = num;
-//}
-
 class LNK<bits<6> num, string n> : LE1Reg<n> {
-  field bits<6> Num;
-  let Namespace = "LE1";
-}
-
-class IDX<bits<6> num, string n> : LE1Reg<n> {
-  field bits<6> Num;
-  let Namespace = "LE1";
-}
-class IDY<bits<6> num, string n> : LE1Reg<n> {
-  field bits<6> Num;
-  let Namespace = "LE1";
-}
-class IDZ<bits<6> num, string n> : LE1Reg<n> {
   field bits<6> Num;
   let Namespace = "LE1";
 }
