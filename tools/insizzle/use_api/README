@@ -1,0 +1,14 @@
+You need to make the INSIZZLEAPI object
+
+cd ../LE1/Insizzle
+make API
+
+should create INSIZZLEAPI object
+then compile this main.c file including that object and some header files
+
+gcc -DAPI -I../inc -lm `xml2-config --libs` -lpcre -I/home/elds2/LE1/le1_driver main.c ../INSIZZLEAPI
+./a.out
+
+
+Makefile included to compile INSIZZLEAPI and main.c
+make test to run through an example.
