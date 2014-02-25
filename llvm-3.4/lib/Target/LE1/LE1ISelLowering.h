@@ -108,8 +108,8 @@ namespace llvm {
       ZXTB,
       ZXTH,
 
-      Addcg,
-      Divs,
+      ADDCG,
+      DIVS,
 
       // Nodes for OpenCL
       CPUID,

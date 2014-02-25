@@ -98,8 +98,8 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::MULHH:         return "LE1ISD::MULHH";
   case LE1ISD::MULHHU:        return "LE1ISD::MULHHU";
 
-  case LE1ISD::Addcg:         return "LE1ISD::Addcg";
-  case LE1ISD::Divs:          return "LE1ISD::Divs";
+  case LE1ISD::ADDCG:         return "LE1ISD::ADDCG";
+  case LE1ISD::DIVS:          return "LE1ISD::DIVS";
 
   case LE1ISD::MAXS:           return "LE1ISD::MAXS";
   case LE1ISD::MAXU:           return "LE1ISD::MAXU";
@@ -363,7 +363,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   setOperationAction(ISD::VASTART,            MVT::Other, Custom);
 
-  // FIXME This should use Addcg and be custom
+  // FIXME This should use ADDCG and be custom
   setOperationAction(ISD::ADDE,             MVT::i32, Expand);
   setOperationAction(ISD::SUBE,             MVT::i32, Expand);
 
@@ -1061,15 +1061,15 @@ LowerMULHU(SDValue Op, SelectionDAG &DAG) const
   // bits carried from the additions of the lower 32 bits
 
   SDValue MTB0 = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, Zero);
-  SDValue Addcg0 = DAG.getNode(LE1ISD::Addcg, dl,
+  SDValue ADDCG0 = DAG.getNode(LE1ISD::ADDCG, dl,
                                DAG.getVTList(MVT::i32, MVT::i1),
                                Mulllu0, Mullhu0, MTB0);
-  SDValue Cout0(Addcg0.getNode(), 1);
+  SDValue Cout0(ADDCG0.getNode(), 1);
 
-  SDValue Addcg1 = DAG.getNode(LE1ISD::Addcg, dl,
+  SDValue ADDCG1 = DAG.getNode(LE1ISD::ADDCG, dl,
                                DAG.getVTList(MVT::i32, MVT::i1),
-                               Addcg0, Mullhu1, Cout0);
-  SDValue Cout1(Addcg1.getNode(), 1);
+                               ADDCG0, Mullhu1, Cout0);
+  SDValue Cout1(ADDCG1.getNode(), 1);
 
   SDValue Add2 = DAG.getNode(ISD::ADD, dl, MVT::i32, Add1,
                              DAG.getTargetConstant(1, MVT::i32));
@@ -1108,11 +1108,11 @@ LowerSDIV(SDValue Op, SelectionDAG &DAG) const
 
   // Begin the division process
   SDValue MTB0 = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, Zero);
-  SDValue Addcg0 = DAG.getNode(LE1ISD::Addcg, dl, 
+  SDValue ADDCG0 = DAG.getNode(LE1ISD::ADDCG, dl, 
                                DAG.getVTList(MVT::i32, MVT::i1),
                                Slct0, Slct0, MTB0);
-  SDValue AddCout(Addcg0.getNode(), 1);
-  SDValue Res = DivStep(Zero, Slct1, AddCout, Addcg0, MTB0, DAG);
+  SDValue AddCout(ADDCG0.getNode(), 1);
+  SDValue Res = DivStep(Zero, Slct1, AddCout, ADDCG0, MTB0, DAG);
 
   // If the polarities were the same, return result otherwise return the
   // corrected value using Sub2
@@ -1141,13 +1141,13 @@ LowerSREM(SDValue Op, SelectionDAG &DAG) const
   SDValue Slct1 = DAG.getNode(ISD::SELECT, dl, MVT::i32, Cmplt1, Sub1, RHS);
 
   SDValue MTB0 = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, Zero);
-  SDValue Addcg0 = DAG.getNode(LE1ISD::Addcg, dl, 
+  SDValue ADDCG0 = DAG.getNode(LE1ISD::ADDCG, dl, 
                                DAG.getVTList(MVT::i32, MVT::i1),
                                Slct0, Slct0, MTB0);
-  SDValue AddCout(Addcg0.getNode(), 1);
+  SDValue AddCout(ADDCG0.getNode(), 1);
 
   // Perform the addcg/divs operations
-  SDValue Res = RemStep(Zero, Slct1, AddCout, Addcg0, MTB0, DAG);
+  SDValue Res = RemStep(Zero, Slct1, AddCout, ADDCG0, MTB0, DAG);
   //SDValue ResCout(Res.getNode(), 1);
 
   //SDValue Cmpge0 = DAG.getNode(LE1ISD::Cmpge, dl, MVT::i1, Res, Zero);
@@ -1178,12 +1178,12 @@ SDValue LE1TargetLowering::LowerUDIV(SDValue Op, SelectionDAG &DAG) const
   //SDValue Cmpgeu = DAG.getNode(LE1ISD::Cmpgeu, dl, MVT::i1, LHS, RHS);
   SDValue CMPGEU = DAG.getSetCC(dl, MVT::i1, LHS, RHS, ISD::SETUGE);
 
-  SDValue Addcg = DAG.getNode(LE1ISD::Addcg, dl,
+  SDValue ADDCG = DAG.getNode(LE1ISD::ADDCG, dl,
                              DAG.getVTList(MVT::i32, MVT::i1),
                              Shru1, Shru1, MTB0);
   //std::cout << "ADD0\n";
-  SDValue CarryA(Addcg.getNode(), 1);
-  SDValue Res = DivStep(Zero, Shru0, CarryA, Addcg, MTB0, DAG);
+  SDValue CarryA(ADDCG.getNode(), 1);
+  SDValue Res = DivStep(Zero, Shru0, CarryA, ADDCG, MTB0, DAG);
   //SDValue MTB1 = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, CMPLT);
   SDValue MFB0 = DAG.getNode(LE1ISD::MFB, dl, MVT::i32, CMPGEU);
   return DAG.getNode(ISD::SELECT, dl, MVT::i32, CMPLT, MFB0, Res);
@@ -1212,13 +1212,13 @@ SDValue LE1TargetLowering::LowerUREM(SDValue Op, SelectionDAG &DAG) const
   // FIXME unused value?!
   SDValue Sub0 = DAG.getNode(ISD::SUB, dl, MVT::i32, LHS, RHS);
 
-  SDValue Addcg0 = DAG.getNode(LE1ISD::Addcg, dl,
+  SDValue ADDCG0 = DAG.getNode(LE1ISD::ADDCG, dl,
                                DAG.getVTList(MVT::i32, MVT::i1),
                                Shru1, Shru1, MTB0);
-  SDValue AddCout(Addcg0.getNode(),1);
+  SDValue AddCout(ADDCG0.getNode(),1);
 
   SDValue Slct0 = DAG.getNode(ISD::SELECT, dl, MVT::i32, Cmpgeu0, LHS, RHS);
-  SDValue Res = RemStep(Zero, Shru0, AddCout, Addcg0, MTB0, DAG);
+  SDValue Res = RemStep(Zero, Shru0, AddCout, ADDCG0, MTB0, DAG);
 
   //SDValue Cmpge0 = DAG.getNode(LE1ISD::Cmpge, dl, MVT::i1, Res, Zero);
   SDValue Cmpge0 = DAG.getSetCC(dl, MVT::i1, Res, Zero, ISD::SETGE);
@@ -1237,12 +1237,12 @@ RemStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
   // FIXME no DebugLoc
   SDLoc dl(DivArg1.getNode());
 
-  SDValue DivRes = DAG.getNode(LE1ISD::Divs, dl,
+  SDValue DivRes = DAG.getNode(LE1ISD::DIVS, dl,
                                DAG.getVTList(MVT::i32, MVT::i1),
                                DivArg1, DivArg2, DivCin);
   SDValue DivCout(DivRes.getNode(), 1);
   
-  SDValue AddRes = DAG.getNode(LE1ISD::Addcg, dl,
+  SDValue AddRes = DAG.getNode(LE1ISD::ADDCG, dl,
                                DAG.getVTList(MVT::i32, MVT::i1),
                                AddArg, AddArg, AddCin);
   SDValue AddCout(AddRes.getNode(), 1);
@@ -1252,7 +1252,7 @@ RemStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
     return RemStep(DivRes, DivArg2, AddCout, AddRes, DivCout, DAG);
   else {
     stepCount = 0;
-    return DAG.getNode(LE1ISD::Divs, dl,
+    return DAG.getNode(LE1ISD::DIVS, dl,
                        DAG.getVTList(MVT::i32, MVT::i1),
                        DivRes, DivArg2, AddCout);
   }
@@ -1266,12 +1266,12 @@ DivStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
   //FIXME no DebugLoc
   SDLoc dl(DivArg1.getNode());
 
-  SDValue DivRes = DAG.getNode(LE1ISD::Divs, dl,
+  SDValue DivRes = DAG.getNode(LE1ISD::DIVS, dl,
                                DAG.getVTList(MVT::i32, MVT::i1),
                                DivArg1, DivArg2, DivCin);
   SDValue DivCout(DivRes.getNode(), 1);
   
-  SDValue AddRes = DAG.getNode(LE1ISD::Addcg, dl,
+  SDValue AddRes = DAG.getNode(LE1ISD::ADDCG, dl,
                                DAG.getVTList(MVT::i32, MVT::i1),
                                AddArg, AddArg, AddCin);
   SDValue AddCout(AddRes.getNode(), 1);
@@ -1282,7 +1282,7 @@ DivStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
   else {
     stepCount = 0;
     SDValue Zero = DAG.getRegister(LE1::ZERO, MVT::i32);
-    SDValue Final = DAG.getNode(LE1ISD::Addcg, dl,
+    SDValue Final = DAG.getNode(LE1ISD::ADDCG, dl,
                                 DAG.getVTList(MVT::i32, MVT::i1),
                                 AddRes, AddRes, DivCout);
     //SDValue Cmpge = DAG.getNode(LE1ISD::Cmpge, dl, MVT::i1, DivRes, Zero);

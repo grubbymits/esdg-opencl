@@ -115,8 +115,8 @@ def le1_mullhu  : SDNode<"LE1ISD::MULLHU", SDTIntBinOp, []>;
 def le1_mulhh   : SDNode<"LE1ISD::MULHH", SDTIntBinOp, [SDNPCommutative]>;
 def le1_mulhhu  : SDNode<"LE1ISD::MULHHU", SDTIntBinOp, [SDNPCommutative]>;
 
-def le1_addcg   : SDNode<"LE1ISD::Addcg", SDT_LE1CarryUseGen, []>;
-def le1_divs    : SDNode<"LE1ISD::Divs", SDT_LE1CarryUseGen, []>;
+def le1_addcg   : SDNode<"LE1ISD::ADDCG", SDT_LE1CarryUseGen, []>;
+def le1_divs    : SDNode<"LE1ISD::DIVS", SDT_LE1CarryUseGen, []>;
 
 // Shift Adds
 def le1_sh1add  : SDNode<"LE1ISD::SH1ADD", SDTIntShiftOp, []>;
@@ -612,6 +612,32 @@ def STHi8     : StoreMem_I8<0x21, "sth.0", truncstorei16>;
 def STWi8     : StoreMem_I8<0x22, "stw.0", store>;
 
 
+def ADDCG : LE1Format_RP_PRR<
+            0x0,
+            (outs CPURegs:$rd, BRegs:$prd2),
+            (ins CPURegs:$src1, CPURegs:$src2, BRegs:$prs),
+            "addcg.0  $rd, $prd2, $src1, $src2, $prs",
+            [], IIAlu>;
+
+def DIVS  : LE1Format_RP_PRR<
+            0x1,
+            (outs CPURegs:$rd, BRegs:$prd2),
+            (ins CPURegs:$src1, CPURegs:$src2, BRegs:$prs),
+            "divs.0  $rd, $prd2, $src1, $src2, $prs",
+            [], IIAlu>;
+
+def MFB   : LE1Format_RP_PRR<
+            0x2,
+            (outs CPURegs:$rd),
+            (ins BRegs:$prs),
+            "mfb.0  $rd, $prs",
+            [(set CPURegs:$rd, (le1_mfb BRegs:$prs))], IIAlu> {
+  let prd2 = 0;
+  let src1 = 0;
+  let src2 = 0;
+}
+
+
 // ------------------------- END OF NEW IMPLEMENTATION ---------------------- //
 
 ///===---------------------------------------------------------------------===//
@@ -627,7 +653,7 @@ def SLCTFri : SelectRI<"slctf.0", le1_selectf>;
 
 ///===---------------------------------------------------------------------===//
 // Move Instructions
-def MFB   : MoveR<"mfb.0",  le1_mfb,  CPURegs,  BRegs>;
+//def MFB   : MoveR<"mfb.0",  le1_mfb,  CPURegs,  BRegs>;
 def MTB   : MoveR<"mtb.0",  le1_mtb,  BRegs,    CPURegs>;
 def MTBF  : MoveR<"mtbf.0", le1_mtbf, BRegs,    CPURegs>;
 def MOVr  : MoveR<"mov.0",  le1_mov,  CPURegs,  CPURegs>;
@@ -640,6 +666,7 @@ def MTLg  : MoveI<"mov.0", le1_mtl, LReg, globaladdress, tglobaladdr>;
 ///===---------------------------------------------------------------------===//
 /// Instructions used for software division
 //let usesCustomInserter in {
+  /*
 def ADDCG : LE1Inst<(outs CPURegs:$res, BRegs:$cout),
             (ins CPURegs:$src1, CPURegs:$src2, BRegs:$cin),
             "addcg.0  $res, $cout, $src1, $src2, $cin",
@@ -647,12 +674,13 @@ def ADDCG : LE1Inst<(outs CPURegs:$res, BRegs:$cout),
                                               CPURegs:$src2, BRegs:$cin))*/],
             IIAlu>;
 
+
 def DIVS :  LE1Inst<(outs CPURegs:$res, BRegs:$cout),
             (ins CPURegs:$src1, CPURegs:$src2, BRegs:$cin),
             "divs.0  $res, $cout, $src1, $src2, $cin",
             [/*(set CPURegs:$res, BRegs:$cout, (le1_divs CPURegs:$src1,
                                               CPURegs:$src2, BRegs:$cin))*/],
-            IIAlu>;
+            IIAlu>;*/
 
 //let isReMaterializable = 1, isMoveImm = 1 in {
 let AddedComplexity = 100 in {

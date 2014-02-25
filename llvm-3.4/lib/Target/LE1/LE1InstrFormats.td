@@ -121,6 +121,25 @@ class LE1Format_ST_I32<bits<5>opcode, dag outs, dag ins, string asmstr,
   let Inst{5-0} = src1;
 }
 
+class LE1Format_RP_PRR<bits<2>opc2, dag outs, dag ins, string asmstr,
+                       list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  bits<3> prd2;
+  bits<6> rd;
+  bits<3> prs;
+  bits<6> src2;
+  bits<6> src1;
+
+  let fmt = 3;
+  let Inst{25-24} = opc2;
+  let Inst{23-21} = prd2;
+  let Inst{20-15} = rd;
+  let Inst{14-12} = prs;
+  let Inst{11-6} = src2;
+  let Inst{5-0} = src1;
+}
+
 class LE1Format_ST_RRI<bits<2>opcode, dag outs, dag ins, string asmstr,
                        list<dag> pattern, InstrItinClass itin>
   : LE1FormatBase<outs, ins, asmstr, pattern, itin> {

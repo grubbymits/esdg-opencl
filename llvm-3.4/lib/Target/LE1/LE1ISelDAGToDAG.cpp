@@ -191,7 +191,7 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     */
     break;
   }
-  case LE1ISD::Addcg: {
+  case LE1ISD::ADDCG: {
     SDValue LHS = Node->getOperand(0);
     SDValue RHS = Node->getOperand(1);
     SDValue Cin = Node->getOperand(2);
@@ -199,7 +199,7 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
                                   LHS, RHS, Cin);
     break;
   }
-  case LE1ISD::Divs: {
+  case LE1ISD::DIVS: {
     SDValue LHS = Node->getOperand(0);
     SDValue RHS = Node->getOperand(1);
     SDValue Cin = Node->getOperand(2);
