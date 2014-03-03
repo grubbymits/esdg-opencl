@@ -19,33 +19,7 @@ def IIMul       : InstrItinClass;
 def IILoadStore : InstrItinClass;
 def IIBranch    : InstrItinClass;
 def IIPseudo    : InstrItinClass;
-/*
-def IIAluR      : InstrItinClass;
-def IIAlu       : InstrItinClass;
-def IICmpBr     : InstrItinClass;
-def IICmpGr     : InstrItinClass;
-def IISelect    : InstrItinClass;
-def IIMult      : InstrItinClass;
-def IILoad      : InstrItinClass;
-def IILoadLr    : InstrItinClass;
-def IIStore     : InstrItinClass;
-def IIPft       : InstrItinClass;
-def IIAsm1l     : InstrItinClass;
-def IIAsm2l     : InstrItinClass;
-def IIAsm3l     : InstrItinClass;
-def IIAsm4l     : InstrItinClass;
-def IIAsm1h     : InstrItinClass;
-def IIAsm2h     : InstrItinClass;
-def IIAsm3h     : InstrItinClass;
-def IIAsm4h     : InstrItinClass;
-def IICpGrBr    : InstrItinClass;
-def IICpBrGr    : InstrItinClass;
-def IICpGrLr    : InstrItinClass;
-def IICpLrGr    : InstrItinClass;
-def IISpill     : InstrItinClass;
-def IIRestore   : InstrItinClass;
-def IIRestoreLr : InstrItinClass;
-*/
+
 // Functional Units
 def ALU_0   : FuncUnit;
 def MUL_0   : FuncUnit;

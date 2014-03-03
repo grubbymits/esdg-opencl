@@ -100,6 +100,86 @@ bool LE1PacketizerList::needsNops() {
   return MF.getTarget().getSubtarget<LE1Subtarget>().needsNops();
 }*/
 
+static bool canReserveResources(const llvm::MCInstrDesc *MID) {
+  unsigned InsnClass = MID->getSchedClass();
+  const llvm::InstrStage *IS = InstrItins->beginStage(InsnClass);
+  unsigned FuncUnits = IS->getUnits();
+}
+static bool canReserveResources(llvm::MachineInstr *MI) {
+  const llvm::MCInstrDesc &MID = MI->getDesc();
+  return canReserveResources(&MID);
+}
+
+void LE1Packetizer::PacketizeMIs(MachineBasicBlock *MBB,
+                                      MachineBasicBlock::iterator BeginItr,
+                                      MachineBasicBlock::iterator EndItr) {
+  assert(VLIWScheduler && "VLIW Scheduler is not initialized!");
+  VLIWScheduler->startBlock(MBB);
+  VLIWScheduler->enterRegion(MBB, BeginItr, EndItr,
+                             std::distance(BeginItr, EndItr));
+  VLIWScheduler->schedule();
+
+  // Generate MI -> SU map.
+  MIToSUnit.clear();
+  for (unsigned i = 0, e = VLIWScheduler->SUnits.size(); i != e; ++i) {
+    SUnit *SU = &VLIWScheduler->SUnits[i];
+    MIToSUnit[SU->getInstr()] = SU;
+  }
+
+  // The main packetizer loop.
+  for (; BeginItr != EndItr; ++BeginItr) {
+    MachineInstr *MI = BeginItr;
+
+    //this->initPacketizerState();
+
+    // End the current packet if needed.
+    if (this->isSoloInstruction(MI)) {
+      endPacket(MBB, MI);
+      continue;
+    }
+
+    // Ignore pseudo instructions.
+    if (this->ignorePseudoInstruction(MI, MBB))
+      continue;
+
+    SUnit *SUI = MIToSUnit[MI];
+    assert(SUI && "Missing SUnit Info!");
+
+    // Ask DFA if machine resource is available for MI.
+    bool ResourceAvail = ResourceTracker->canReserveResources(MI);
+    if (ResourceAvail) {
+      // Dependency check for MI with instructions in CurrentPacketMIs.
+      for (std::vector<MachineInstr*>::iterator VI = CurrentPacketMIs.begin(),
+           VE = CurrentPacketMIs.end(); VI != VE; ++VI) {
+        MachineInstr *MJ = *VI;
+        SUnit *SUJ = MIToSUnit[MJ];
+        assert(SUJ && "Missing SUnit Info!");
+
+        // Is it legal to packetize SUI and SUJ together.
+        if (!this->isLegalToPacketizeTogether(SUI, SUJ)) {
+          // Allow packetization if dependency can be pruned.
+          if (!this->isLegalToPruneDependencies(SUI, SUJ)) {
+            // End the packet if dependency cannot be pruned.
+            endPacket(MBB, MI);
+            break;
+          } // !isLegalToPruneDependencies.
+        } // !isLegalToPacketizeTogether.
+      } // For all instructions in CurrentPacketMIs.
+    } else {
+      // End the packet if resource is not available.
+      endPacket(MBB, MI);
+    }
+
+    // Add MI to the current packet.
+    BeginItr = this->addToPacket(MI);
+  } // For all instructions in BB.
+
+  // End any packet left behind.
+  endPacket(MBB, EndItr);
+  VLIWScheduler->exitRegion();
+  VLIWScheduler->finishBlock();
+}
+
 bool LE1Packetizer::runOnMachineFunction(MachineFunction &MF) {
   const TargetInstrInfo *TII = MF.getTarget().getInstrInfo();
   MachineLoopInfo &MLI = getAnalysis<MachineLoopInfo>();
@@ -302,19 +382,6 @@ isLegalToPacketizeTogether(SUnit *SUI, SUnit *SUJ) {
   if(J->getOpcode() == LE1::CALL ||
      J->getOpcode() == LE1::LNKCALL)
     return false;
-
-  // Callee-save register function cannot be packatized with ops
-  // that modify those regs
-  /*
-  if(doesCallModifySavedRegs(I, RI) &&
-     doesModifyCalleeSavedRegs(J, RI) ||
-     (doesCallModifySavedRegs(J, RI) &&
-      doesModifyCalleeSavedRegs(I, RI))) {
-    Dependence = true;
-    DEBUG(dbgs() << "\nDependence = true, CalleeSavedRegs modified");
-    return false;
-  }*/
-
 
   // Only allowed one control-flow instruction. There's only one functional
   // unit to handle control-flow so this shouldn't be ever be true
