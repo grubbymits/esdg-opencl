@@ -97,18 +97,13 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
 
   LockAccess();
 
-  if (LE1Simulator::isInitialised) {
+  if (isInitialised) {
 #ifdef DBG_OUTPUT
     std::cerr << "ERROR: Simulator is already initialised!\n";
 #endif
     return false;
   }
   machineModel = Machine;
-  /*
-  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
-    exit(EXIT_FAILURE);
-  }*/
   /* Setup global struct */
   /* readConf reads xml file and sets up global SYSTEM variable
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
@@ -302,7 +297,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
   ++KernelNumber;
 
   /* turn printout on */
-  PRINT_OUT = false;
+  PRINT_OUT = true;
   bool MEM_DUMP = false;
 
     /* Load IRAM */

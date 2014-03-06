@@ -34,11 +34,11 @@
 #include <cstring>
 #include <core/config.h>
 
-static const char platform_profile[] = "FULL_PROFILE";
-static const char platform_version[] = "OpenCL 1.1 MESA " COAL_VERSION;
-static const char platform_name[] = "Default";
-static const char platform_vendor[] = "Mesa";
-static const char platform_extensions[] = "cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics";
+static const char platform_profile[] = "EMBEDDED_PROFILE";
+static const char platform_version[] = "OpenCL 1.1 " COAL_VERSION;
+static const char platform_name[] = "ESDG-CL";
+static const char platform_vendor[] = "ESDG";
+static const char platform_extensions[] = "";
 
 // Platform API
 
