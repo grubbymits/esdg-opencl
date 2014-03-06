@@ -175,7 +175,7 @@ LE1Device::~LE1Device()
     if(!std::ifstream(filename.c_str())) {
       Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
         << " Branches Taken, Branches not Taken, Cycle to complete, Iterations"
-        << ", Average Cycles, Average Decode"
+        << ", Average Cycles, Average Decode, Model"
         << std::endl;
     }
     Line << CPU << ", " << NumCores << ", " << TotalCycles << ", "
@@ -183,7 +183,8 @@ LE1Device::~LE1Device()
       << TotalBranchesTaken << ", " << TotalBranchesNotTaken << ", "
       << completionCycles << ", " << numIterations << ", "
       << completionCycles / numIterations << ", "
-      << TotalDecodeStalls / numIterations
+      << TotalDecodeStalls / numIterations << ", "
+      << simulatorModel
       << std::endl;
 
     std::ofstream Results;

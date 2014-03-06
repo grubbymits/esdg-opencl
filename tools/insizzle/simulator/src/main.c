@@ -655,7 +655,6 @@ int main(int argc, char *argv[])
 #endif
 	  }
 #else
-          /*
           {
 	    unsigned findBank, findBankT, i;
 	    findBank=0;
@@ -665,7 +664,8 @@ int main(int argc, char *argv[])
 	    serviceMemRequest(system, findBank,
                              ((SYS->DRAM_SHARED_CONFIG >> 24) & 0xff),
                              (((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024));
-          }*/
+          }
+          /*
 	  if (serviceMemRequestPERFECT(system, (((SYS->DRAM_SHARED_CONFIG >> 8)
                                                  & 0xffff) * 1024)) !=
               INSIZZLE_SUCCESS) {
@@ -691,7 +691,7 @@ int main(int argc, char *argv[])
             }
 
             return INSIZZLE_FAIL;
-          }
+          }*/
 #endif
 
 #ifdef VTHREAD

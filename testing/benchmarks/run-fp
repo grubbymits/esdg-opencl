@@ -16,6 +16,6 @@ do
     cd $benchmark
     make clean
     make
-    bash ./run > output &
+    bash ./run > output
   )
 done

@@ -98,7 +98,9 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
   LockAccess();
 
   if (LE1Simulator::isInitialised) {
+#ifdef DBG_OUTPUT
     std::cerr << "ERROR: Simulator is already initialised!\n";
+#endif
     return false;
   }
   machineModel = Machine;
@@ -115,7 +117,10 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
   std::string FullPath = LE1Device::MachinesDir;
   FullPath.append(Machine);
   if(readConf(const_cast<char*>(FullPath.c_str())) == -1) {
-    std::cout << "!!! ERROR reading machine model file !!!" << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR reading machine model file : " << FullPath
+      << std::endl;
+#endif
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;
   }
@@ -126,7 +131,9 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
      galaxyT is a global pointer of type systemT
   */
   if(setupGalaxy() == -1) {
+#ifdef DBG_OUTPUT
     std::cout << "!!! ERROR setting up galaxy" << std::endl;
+#endif
     //fprintf(stderr, "!!! ERROR setting up galaxy !!!\n");
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;
@@ -307,7 +314,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
       FILE *inst = fopen(iram, "rb");
       if(inst == NULL) {
-        fprintf(stderr, "!!! ERROR Could not open file (%s) !!!\n", iram);
+#ifdef DBG_OUTPUT
+        std::cout << "!!! ERROR: Could not open file " << iram << std::endl;
+#endif
         //pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
@@ -319,7 +328,10 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       /* Create local data and copy content of file into it */
       i_data = (char *)calloc(sizeof(char), IRAMFileSize);
       if(i_data == NULL) {
-        fprintf(stderr, "!!! ERROR Could not allocate memory (i_data) !!!\n");
+#ifdef DBG_OUTPUT
+        std::cout << "!!! ERROR: Could not allocate memory for i_data"
+          << std::endl;
+#endif
         //pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
@@ -390,7 +402,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
     FILE *data = fopen(dram, "rb");
     if(data == NULL) {
-      fprintf(stderr, "!!! ERROR Could not open file (%s) !!!\n", dram);
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Could not open file - " << dram << std::endl;
+#endif
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -403,9 +417,11 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 #endif
 
     if(DRAMFileSize > dram_size) {
+#ifdef DBG_OUTPUT
       std::cout << "!!! ERROR DRAM is larger than the size specified !!!\n"
         << "DRAM = " << dram_size << " and fileSize = " << DRAMFileSize
         << std::endl;
+#endif
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -413,7 +429,10 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     /* Create local data and copy content of file into it */
     d_data = (char *)calloc(sizeof(char), dram_size);
     if(d_data == NULL) {
-      fprintf(stderr, "!!! ERROR Could not allocate memory (d_data) !!!\n");
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Could not allocate memory for d_data"
+        << std::endl;
+#endif
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -524,7 +543,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
         // Something has gone wrong...
         printf("-------------------------------------------- end of cycle %lld\n",
           cycleCount);
-        std::cout << "!!ERROR - Simulation failed!" << std::endl;
+#ifdef DBG_OUTPUT
+        std::cout << "!!! ERROR - Simulation failed!" << std::endl;
+#endif
         return false;
       }
 
@@ -630,8 +651,10 @@ bool LE1Simulator::readHalfData(unsigned addr,
     }
   }
   else {
-    std::cerr << "!!ERROR: Unhandled number of bytes to read back from device!"
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: Unhandled number of bytes to read back from device"
       << std::endl;
+#endif
     return false;
   }
   return true;

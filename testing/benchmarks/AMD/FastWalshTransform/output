@@ -7,59 +7,156 @@ Found 1 platform(s)
 Platform found : Mesa
 
 Selected Platform Vendor : Mesa
-Device 0 : LE1 Device ID is 0x7ffff7dcaf80
-Device 1 : LE1 Device ID is 0x7ffff7dcb090
-Device 2 : LE1 Device ID is 0x7ffff7dcb1a0
-Device 3 : LE1 Device ID is 0x7ffff7dcb2b0
-Device 4 : LE1 Device ID is 0x7ffff7dcb3c0
-Device 5 : LE1 Device ID is 0x7ffff7dcb4d0
-Device 6 : LE1 Device ID is 0x7ffff7dcb5e0
-Device 7 : LE1 Device ID is 0x7ffff7dcb6f0
-Device 8 : LE1 Device ID is 0x7ffff7dcb800
-Device 9 : LE1 Device ID is 0x7ffff7dcb910
-Device 10 : LE1 Device ID is 0x7ffff7dcba20
-Device 11 : LE1 Device ID is 0x7ffff7dcbb30
-Device 12 : LE1 Device ID is 0x7ffff7dcbc40
-Device 13 : LE1 Device ID is 0x7ffff7dcbd50
-Device 14 : LE1 Device ID is 0x7ffff7dcbe60
-Device 15 : LE1 Device ID is 0x7ffff7dcbf70
-Device 16 : LE1 Device ID is 0x7ffff7dcc080
-Device 17 : LE1 Device ID is 0x7ffff7dcc190
-Device 18 : LE1 Device ID is 0x7ffff7dcc2a0
-Device 19 : LE1 Device ID is 0x7ffff7dcc3b0
-Device 20 : LE1 Device ID is 0x7ffff7dcc4c0
-Device 21 : LE1 Device ID is 0x7ffff7dcc5d0
-Device 22 : LE1 Device ID is 0x7ffff7dcc6e0
-Device 23 : LE1 Device ID is 0x7ffff7dcc7f0
-Device 24 : LE1 Device ID is 0x7ffff7dcc900
-Device 25 : LE1 Device ID is 0x7ffff7dcca10
-Device 26 : LE1 Device ID is 0x7ffff7dccb20
-Device 27 : LE1 Device ID is 0x7ffff7dccc30
-Device 28 : LE1 Device ID is 0x7ffff7dccd40
-Device 29 : LE1 Device ID is 0x7ffff7dcce50
-Device 30 : LE1 Device ID is 0x7ffff7dccf60
-Device 31 : LE1 Device ID is 0x7ffff7dcd070
-Device 32 : LE1 Device ID is 0x7ffff7dcd180
-Device 33 : LE1 Device ID is 0x7ffff7dcd290
-Device 34 : LE1 Device ID is 0x7ffff7dcd3a0
-Device 35 : LE1 Device ID is 0x7ffff7dcd4b0
-Device 36 : LE1 Device ID is 0x7ffff7dcd5c0
-Device 37 : LE1 Device ID is 0x7ffff7dcd6d0
-Device 38 : LE1 Device ID is 0x7ffff7dcd7e0
-Device 39 : LE1 Device ID is 0x7ffff7dcd8f0
-Device 40 : LE1 Device ID is 0x7ffff7dcda00
-Device 41 : LE1 Device ID is 0x7ffff7dcdb10
-Device 42 : LE1 Device ID is 0x7ffff7dcdc20
-Device 43 : LE1 Device ID is 0x7ffff7dcdd30
-Device 44 : LE1 Device ID is 0x7ffff7dcde40
-Device 45 : LE1 Device ID is 0x7ffff7dcdf50
-Device 46 : LE1 Device ID is 0x7ffff7dce060
-Device 47 : LE1 Device ID is 0x7ffff7dce170
-Device 48 : LE1 Device ID is 0x7ffff7dce280
-Device 49 : LE1 Device ID is 0x7ffff7dce390
+Device 0 : LE1 Device ID is 0x7fd5629f9660
+Device 1 : LE1 Device ID is 0x7fd5629f9770
+Device 2 : LE1 Device ID is 0x7fd5629f9880
+Device 3 : LE1 Device ID is 0x7fd5629f9990
+Device 4 : LE1 Device ID is 0x7fd5629f9aa0
+Device 5 : LE1 Device ID is 0x7fd5629f9bb0
+Device 6 : LE1 Device ID is 0x7fd5629f9cc0
+Device 7 : LE1 Device ID is 0x7fd5629f9dd0
+Device 8 : LE1 Device ID is 0x7fd5629f9ee0
+Device 9 : LE1 Device ID is 0x7fd5629f9ff0
+Device 10 : LE1 Device ID is 0x7fd5629fa100
+Device 11 : LE1 Device ID is 0x7fd5629fa210
+Device 12 : LE1 Device ID is 0x7fd5629fa320
+Device 13 : LE1 Device ID is 0x7fd5629fa430
+Device 14 : LE1 Device ID is 0x7fd5629fa540
+Device 15 : LE1 Device ID is 0x7fd5629fa650
+Device 16 : LE1 Device ID is 0x7fd5629fa760
+Device 17 : LE1 Device ID is 0x7fd5629fa870
+Device 18 : LE1 Device ID is 0x7fd5629fa980
+Device 19 : LE1 Device ID is 0x7fd5629faa90
+Device 20 : LE1 Device ID is 0x7fd5629faba0
+Device 21 : LE1 Device ID is 0x7fd5629facb0
+Device 22 : LE1 Device ID is 0x7fd5629fadc0
+Device 23 : LE1 Device ID is 0x7fd5629faed0
+Device 24 : LE1 Device ID is 0x7fd5629fafe0
+Device 25 : LE1 Device ID is 0x7fd5629fb0f0
+Device 26 : LE1 Device ID is 0x7fd5629fb200
+Device 27 : LE1 Device ID is 0x7fd5629fb310
+Device 28 : LE1 Device ID is 0x7fd5629fb420
+Device 29 : LE1 Device ID is 0x7fd5629fb530
+Device 30 : LE1 Device ID is 0x7fd5629fb640
+Device 31 : LE1 Device ID is 0x7fd5629fb750
+Device 32 : LE1 Device ID is 0x7fd5629fb860
+Device 33 : LE1 Device ID is 0x7fd5629fb970
+Device 34 : LE1 Device ID is 0x7fd5629fba80
+Device 35 : LE1 Device ID is 0x7fd5629fbb90
+Device 36 : LE1 Device ID is 0x7fd5629fbca0
+Device 37 : LE1 Device ID is 0x7fd5629fbdb0
+Device 38 : LE1 Device ID is 0x7fd5629fbec0
+Device 39 : LE1 Device ID is 0x7fd5629fbfd0
+Device 40 : LE1 Device ID is 0x7fd5629fc0e0
+Device 41 : LE1 Device ID is 0x7fd5629fc1f0
+Device 42 : LE1 Device ID is 0x7fd5629fc300
+Device 43 : LE1 Device ID is 0x7fd5629fc410
+Device 44 : LE1 Device ID is 0x7fd5629fc520
+Device 45 : LE1 Device ID is 0x7fd5629fc630
+Device 46 : LE1 Device ID is 0x7fd5629fc740
+Device 47 : LE1 Device ID is 0x7fd5629fc850
+Device 48 : LE1 Device ID is 0x7fd5629fc960
+Device 49 : LE1 Device ID is 0x7fd5629fca70
+homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
-Error: clGetEventEventInfo Failed with Error Code: Error code : CL_INVALID_EVENT
-Location : SDKCommon.cpp:104
-Error: WaitForEventAndRelease(writeEvt) Failed
-Location : FastWalshTransform.cpp:202
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: fastWalshTransform
+
+Dimension 0: Global work size = 2048, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    fastWalshTransform(&BufferArg_0, 1);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 16472
+Size of bss area : 
+End of memory: 131776
+Second Pass Completed
+Run Simulation with:
+  binaries/final_fastWalshTransform.s.bin  
+  binaries/final_fastWalshTransform.data.bin  
+  8C_4w_2ls_1b.xml
+HALT operation received from [0][1][0] at cycle 53365
+HALT operation received from [0][0][0] at cycle 53517
+HALT operation received from [0][2][0] at cycle 53545
+HALT operation received from [0][5][0] at cycle 53577
+HALT operation received from [0][7][0] at cycle 53695
+HALT operation received from [0][3][0] at cycle 53697
+HALT operation received from [0][6][0] at cycle 53860
+HALT operation received from [0][4][0] at cycle 53905
+Simulation finished, cycleCount = 53906
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 53906
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: fastWalshTransform
+
+Dimension 0: Global work size = 2048, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    fastWalshTransform(&BufferArg_0, 2);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 16472
+Size of bss area : 
+End of memory: 131776
+Second Pass Completed
+Run Simulation with:
+  binaries/final_fastWalshTransform.s.bin  
+  binaries/final_fastWalshTransform.data.bin  
+  8C_4w_2ls_1b.xml
