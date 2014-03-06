@@ -91,6 +91,9 @@ LE1Simulator::~LE1Simulator() {
 }
 
 bool LE1Simulator::Initialise(const std::string &Machine) {
+#ifdef DBG_SIM
+  std::cerr << "Entering LE1Simulator::Initialise" << std::endl;
+#endif
 
   LockAccess();
 
@@ -112,7 +115,7 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
   std::string FullPath = LE1Device::MachinesDir;
   FullPath.append(Machine);
   if(readConf(const_cast<char*>(FullPath.c_str())) == -1) {
-    fprintf(stderr, "!!! ERROR reading machine model file !!!\n");
+    std::cout << "!!! ERROR reading machine model file !!!" << std::endl;
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;
   }
@@ -123,7 +126,8 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
      galaxyT is a global pointer of type systemT
   */
   if(setupGalaxy() == -1) {
-    fprintf(stderr, "!!! ERROR setting up galaxy !!!\n");
+    std::cout << "!!! ERROR setting up galaxy" << std::endl;
+    //fprintf(stderr, "!!! ERROR setting up galaxy !!!\n");
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;
   }
@@ -547,7 +551,11 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       << "-" << LE1Simulator::iteration<< ".dat";
 
     ++LE1Simulator::iteration;
-    system(CopyDump.str().c_str());
+    if (system(CopyDump.str().c_str()) != 0) {
+#ifdef DBG_SIM
+      std::cerr << "Memory dump copy failed!" << std::endl;
+#endif
+    }
   }
 
 #ifdef DBG_OUTPUT

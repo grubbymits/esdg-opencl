@@ -655,6 +655,17 @@ int main(int argc, char *argv[])
 #endif
 	  }
 #else
+          /*
+          {
+	    unsigned findBank, findBankT, i;
+	    findBank=0;
+	    findBankT = (unsigned)log2(((SYS->DRAM_SHARED_CONFIG >> 24) & 0xff));
+	    for(i=0;i<findBankT;i++)
+	      findBank |= 1 << i;
+	    serviceMemRequest(system, findBank,
+                             ((SYS->DRAM_SHARED_CONFIG >> 24) & 0xff),
+                             (((SYS->DRAM_SHARED_CONFIG >> 8) & 0xffff) * 1024));
+          }*/
 	  if (serviceMemRequestPERFECT(system, (((SYS->DRAM_SHARED_CONFIG >> 8)
                                                  & 0xffff) * 1024)) !=
               INSIZZLE_SUCCESS) {

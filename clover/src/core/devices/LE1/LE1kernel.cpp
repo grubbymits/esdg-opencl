@@ -798,11 +798,20 @@ bool LE1KernelEvent::run() {
   simulator->LockAccess();
 
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
-  system(CopyCommand.c_str());
+  if (system(CopyCommand.c_str()) != 0) {
+#ifdef DBG_KERNEL
+    std::cerr << "Copy failed!" << std::endl;
+#endif
+    simulator->UnlockAccess();
+    return false;
+  }
   LE1DataPrinter dataPrinter(p_device, embeddedData, this,
                              CompleteFilename.c_str());
 
   if (!dataPrinter.AppendDataArea()) {
+#ifdef DBG_KERNEL
+    std::cerr << "AppendDataArea failed!" << std::endl;
+#endif
     pthread_mutex_unlock(&p_mutex);
     simulator->UnlockAccess();
     return false;
@@ -813,6 +822,9 @@ bool LE1KernelEvent::run() {
   assemble.append(" -OPC=").append(LE1Device::IncDir + "opcodes.txt");
 
   if (system(assemble.c_str()) != 0) {
+#ifdef DBG_KERNEL
+    std::cerr << "Assemble failed!" << std::endl;
+#endif
     simulator->UnlockAccess();
     return false;
   }
@@ -822,6 +834,9 @@ bool LE1KernelEvent::run() {
 
   wasSuccess = simulator->Run(iram.c_str(), dram.c_str());//, disabledCores);
   if (!wasSuccess) {
+#ifdef DBG_KERNEL
+    std::cerr << "Simulaton failed!" << std::endl;
+#endif
     pthread_mutex_unlock(&p_mutex);
     simulator->UnlockAccess();
     return false;
