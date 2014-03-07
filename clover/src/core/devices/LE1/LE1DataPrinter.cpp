@@ -201,9 +201,11 @@ bool LE1DataPrinter::AppendDataArea() {
 #endif
 
   if (DataSize >= LE1Device::MaxGlobalAddr) {
-    std::cerr << "!! ERROR: DataSize is too great, maximum address = "
+#ifdef DBG_OUTPUT
+    std::cout << "!! ERROR: DataSize is too great, maximum address = "
       << LE1Device::MaxGlobalAddr << ", but DataSize = " << DataSize
       << std::endl;
+#endif
     return false;
   }
 
@@ -255,8 +257,10 @@ bool LE1DataPrinter::AppendDataArea() {
           static_cast<LE1Buffer*>((*(MemObject**)
                                  arg.data())->deviceBuffer(TheDevice));
         if (buffer->addr() != ArgAddrs[j]) {
+#ifdef DBG_OUTPUT
           std::cout << "!! ERROR: Mismatch in buffer argument addresses!: "
             << std::hex << buffer->addr() << " != " << ArgAddrs[j] << std::endl;
+#endif
           return false;
         }
       }
@@ -340,9 +344,11 @@ bool LE1DataPrinter::AppendDataArea() {
   }
 
   if (AttrAddrEnd != PrintAddr) {
+#ifdef DBG_OUTPUT
     std::cout << "Miscalculation in kernel attribute addresses!" << std::endl;
     std::cout << "AttrAddrEnd = " << AttrAddrEnd << " while PrintAddr = "
       << PrintAddr << std::endl;
+#endif
     return false;
   }
 
@@ -380,7 +386,10 @@ bool LE1DataPrinter::AppendDataArea() {
     llvm::ConstantStruct* const *CS = (*I)->getData();
     unsigned numElements = (*I)->getNumElements();
     if (!WriteStructData(CS, numElements, PrintAddr)) {
-      std::cerr << "Failed for " << (*I)->getName() << std::endl;
+#ifdef DBG_OUTPUT
+      std::cout << "ERROR: WriteStruct failed for "
+        << (*I)->getName() << std::endl;
+#endif
       return false;
     }
     PrintAddr += totalBytes;
@@ -395,8 +404,12 @@ bool LE1DataPrinter::AppendDataArea() {
       continue;
 
     if (Arg.file() != Kernel::Arg::Local) {
-      if (!HandleBufferArg(Arg))
+      if (!HandleBufferArg(Arg)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: HandleBufferArg failed" << std::endl;
+#endif
         return false;
+      }
     }
     else InitialiseLocal(Arg, ArgAddrs[i]);
   }
@@ -509,7 +522,9 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
           PrintData(Data, Addr, 0, sizeof(int), TotalSize);
         }
         else {
-          std::cerr << "!! unhandled vector element type!!\n";
+#ifdef DBG_OUTPUT
+          std::cout << "!! ERROR: unhandled vector element type!!" << std::endl;
+#endif
           return false;
         }
       }
@@ -517,7 +532,9 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
         PrintData(Data, Addr, 0, sizeof(int), TotalSize);
       }
       else {
-        std::cerr << "!! Unhandled vector element type!" << std::endl;
+#ifdef DBG_OUTPUT
+        std::cout << "!! ERROR: unhandled vector element type!!" << std::endl;
+#endif
         return false;
       }
     }
@@ -530,8 +547,10 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
       //addr += TotalSize;
     }
     else {
-      std::cerr << "!! Unhandled argument type of size = " << TotalSize
+#ifdef DBG_OUTPUT
+      std::cout << "!! Unhandled argument type of size = " << TotalSize
         << std::endl;
+#endif
       return false;
     }
 #ifdef DBG_KERNEL
@@ -602,8 +621,12 @@ bool LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
   // increasing the base address should work to maintain addresses.
     for (unsigned i = 0; i < numFields; ++i) {
       llvm::Type *fieldType = type->getTypeAtIndex(i);
-      if (!WriteField(CS->getAggregateElement(i), fieldType, &addr))
+      if (!WriteField(CS->getAggregateElement(i), fieldType, &addr)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: WriteField failed" << std::endl;
+#endif
         return false;
+      }
     }
   }
   return true;
@@ -649,8 +672,12 @@ bool LE1DataPrinter::WriteField(llvm::Constant *C, llvm::Type *fieldType,
     llvm::Type *elementType = arrayType->getElementType();
     unsigned numArrayElements = arrayType->getNumElements();
     for (unsigned i = 0; i < numArrayElements; ++i) {
-      if (!WriteField(CA->getAggregateElement(i), elementType, addr))
+      if (!WriteField(CA->getAggregateElement(i), elementType, addr)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: WriteField failed" << std::endl;
+#endif
         return false;
+      }
     }
   }
   else if (fieldType->isStructTy()) {
@@ -659,12 +686,18 @@ bool LE1DataPrinter::WriteField(llvm::Constant *C, llvm::Type *fieldType,
     unsigned numFields = structType->getNumElements();
     for (unsigned i = 0; i < numFields; ++i) {
       llvm::Type *type = structType->getTypeAtIndex(i);
-      if (!WriteField(CS->getAggregateElement(i), type, addr))
+      if (!WriteField(CS->getAggregateElement(i), type, addr)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: WriteField failed" << std::endl;
+#endif
         return false;
+      }
     }
   }
   else {
-    std::cerr << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
+#endif
     return false;
   }
   return true;
@@ -830,7 +863,9 @@ void LE1DataPrinter::PrintData(const void* data,
 
     switch(size) {
     default:
-      std::cerr << "!!! ERROR: Unhandled type!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Unhandled type!" << std::endl;
+#endif
       exit(-1);
       break;
     case sizeof(char): {

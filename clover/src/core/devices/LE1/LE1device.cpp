@@ -94,7 +94,9 @@ bool LE1Device::init()
   Simulator = new LE1Simulator();
 
   if(!Simulator->Initialise(simulatorModel)) {
-    std::cerr << "ERROR: Failed to initialise simulator!\n";
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Failed to initialise simulator!\n";
+#endif
     return false;
   }
 
@@ -133,6 +135,7 @@ LE1Device::~LE1Device()
   pthread_mutex_destroy(&p_events_mutex);
   pthread_cond_destroy(&p_events_cond);
 
+  // For each kernel
   for (StatsMap::iterator SMI = ExecutionStats.begin(),
        SME = ExecutionStats.end(); SMI != SME; ++SMI) {
 
@@ -140,18 +143,21 @@ LE1Device::~LE1Device()
     std::cerr << "Kernel Stats for " << SMI->first << std::endl;
 #endif
 
-    unsigned TotalCycles = 0;
-    unsigned TotalStalls = 0;
-    unsigned TotalIdle = 0;
-    unsigned TotalDecodeStalls = 0;
-    unsigned TotalBranchesTaken = 0;
-    unsigned TotalBranchesNotTaken = 0;
+    unsigned long TotalCycles = 0;
+    unsigned long TotalStalls = 0;
+    unsigned long TotalIdle = 0;
+    unsigned long TotalDecodeStalls = 0;
+    unsigned long TotalBranchesTaken = 0;
+    unsigned long TotalBranchesNotTaken = 0;
+    unsigned DramSize = 0;
+    unsigned IramSize = 0;
 
     StatSet statSet = SMI->second.second;
     StatVector statVector = statSet.second;
     unsigned numIterations = SMI->second.first;
     unsigned completionCycles = statSet.first;
 
+    // For each iteration
     for (StatVector::iterator SI = statVector.begin(),
          SE = statVector.end(); SI != SE; ++SI) {
 
@@ -162,7 +168,11 @@ LE1Device::~LE1Device()
       TotalDecodeStalls += Stats.DecodeStalls;
       TotalBranchesTaken += Stats.BranchesTaken;
       TotalBranchesNotTaken += Stats.BranchesNotTaken;
+      DramSize += Stats.DramSize;
+      IramSize += Stats.IramSize;
     }
+    DramSize /= numIterations;
+    IramSize /= numIterations;
 
     // Write results to a CSV file
     // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
@@ -173,11 +183,23 @@ LE1Device::~LE1Device()
     filename.append(".csv");
 
     if(!std::ifstream(filename.c_str())) {
+      Line << "Model, Target, Contexts, Dram, Iram, Cycles,"
+        << "Total Stalls, Decode Stalls, Branches Taken, Iterations"
+        << std::endl;
+
+      /*
       Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
         << " Branches Taken, Branches not Taken, Cycle to complete, Iterations"
         << ", Average Cycles, Average Decode, Model"
-        << std::endl;
+        << std::endl;*/
     }
+    Line << simulatorModel << ", " << CPU << ", " << NumCores << ", "
+      << DramSize / NumCores << ", "
+      << IramSize / NumCores << ", "
+      << completionCycles << ", " << TotalStalls << ", " << TotalDecodeStalls
+      << ", " << TotalBranchesTaken << ", " << numIterations << std::endl;
+
+    /*
     Line << CPU << ", " << NumCores << ", " << TotalCycles << ", "
       << TotalStalls << ", " << TotalDecodeStalls << ", "
       << TotalBranchesTaken << ", " << TotalBranchesNotTaken << ", "
@@ -185,7 +207,7 @@ LE1Device::~LE1Device()
       << completionCycles / numIterations << ", "
       << TotalDecodeStalls / numIterations << ", "
       << simulatorModel
-      << std::endl;
+      << std::endl;*/
 
     std::ofstream Results;
     Results.open(filename.c_str(), std::ios_base::app);

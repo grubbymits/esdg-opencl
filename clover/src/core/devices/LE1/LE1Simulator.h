@@ -11,7 +11,8 @@ extern "C" { struct hyperContextT; }
 namespace Coal {
 
   struct SimulationStats {
-    SimulationStats(hyperContextT *HyperContext);
+    SimulationStats(hyperContextT *HyperContext,
+                    unsigned dram, unsigned iram);
     SimulationStats(const SimulationStats &Stats);
     unsigned long TotalCycles;
     unsigned long Stalls;
@@ -22,7 +23,8 @@ namespace Coal {
     unsigned long BranchesNotTaken;
     unsigned long ControlFlowChange;
     unsigned long MemoryAccessCount;
-    //unsigned disabledCores;
+    unsigned DramSize;
+    unsigned IramSize;
   };
 
   typedef std::vector<SimulationStats> StatVector;
@@ -35,15 +37,18 @@ namespace Coal {
     LE1Simulator();
     ~LE1Simulator();
     bool Initialise(const std::string &Machine);
+    void Reset();
     void SaveStats(unsigned disabled);
-    //std::vector<SimulationStats> *GetStats() { return &Stats; }
+
     StatSet *GetStats() { return statSet; }
     unsigned GetIterations() const { return LE1Simulator::iteration; }
+
     void ClearStats() {
       statVector.clear();
       if (statSet)
         delete statSet;
     }
+
     int checkStatus(void);
     bool Run(const char *iram, const char *dram);//, const unsigned disabled);
     void LockAccess();
@@ -58,18 +63,18 @@ namespace Coal {
                       unsigned int numBytes,
                       unsigned int* data);
 private:
-  static unsigned iteration;
-  std::string machineModel;
-  bool isInitialised;
-  pthread_mutex_t p_simulator_mutex;
-  unsigned dram_size;
-  unsigned IRAMFileSize;
-  unsigned DRAMFileSize;
-  unsigned KernelNumber;
-  systemConfig *SYS;
-  systemT *LE1System;
-  StatVector statVector;
-  StatSet *statSet;
+    static unsigned iteration;
+    std::string machineModel;
+    bool isInitialised;
+    pthread_mutex_t p_simulator_mutex;
+    unsigned dram_size;
+    unsigned IRAMFileSize;
+    unsigned DRAMFileSize;
+    unsigned KernelNumber;
+    systemConfig *SYS;
+    systemT *LE1System;
+    StatVector statVector;
+    StatSet *statSet;
   };
 
   //typedef std::vector<SimulationStats> StatsSet;

@@ -3,6 +3,6 @@
 (
 for device in `seq 0 49`;
 do
-  ./binary-search -d $device
+  ./binary-search -e -d $device
 done
 )

@@ -112,8 +112,8 @@ bool LE1Buffer::allocate()
     size_t buf_size = p_buffer->size();
 
     if (buf_size == 0) {
-#ifdef DBG_BUFFER
-      std::cerr << "Error, buffer size = 0" << std::endl;
+#ifdef DBG_OUTPUT
+      std::cout << "ERROR, buffer size = 0" << std::endl;
 #endif
         // Something went wrong...
         return false;
@@ -124,8 +124,12 @@ bool LE1Buffer::allocate()
         // We don't use a host ptr, we need to allocate a buffer
         p_data = std::malloc(buf_size);
 
-        if (!p_data)
+        if (!p_data) {
+#ifdef DBG_OUTPUT
+          std::cout << "ERROR: malloc failed for p_data" << std::endl;
+#endif
             return false;
+        }
 
         p_data_malloced = true;
     }

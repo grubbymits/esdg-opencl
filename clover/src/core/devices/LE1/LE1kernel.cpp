@@ -437,23 +437,12 @@ bool LE1KernelEvent::createFinalSource(LE1Program *prog) {
   FinalAsmName = "kernel_" + KernelName + ".s";
   CompleteFilename = "final_" + KernelName + ".s";
 
-  //CalculateBufferAddrs();
-
-  /*
-  // Only compile a kernel once
-  if (!p_event->kernel()->isBuilt()) {
-    // FIXME Change this to the kernel specific name
-    //if(!CompileSource("program.bc", filename))
-    if(!CompileSource())
-      return false;
-  }
-  else {
-#ifdef DBG_KERNEL
-    std::cerr << "Program has already been compiled\n";
+  if (!CompileSource()) {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: CompileSource failed" << std::endl;
 #endif
-  }*/
-  if(!CompileSource())
     return false;
+  }
 
   p_event->kernel()->SetBuilt();
 #if DBG_KERNEL
@@ -531,17 +520,6 @@ bool LE1KernelEvent::CompileSource() {
 #endif
   }
 
-  /*
-  for(unsigned i = 0; i < p_event->work_dim(); ++i) {
-    merge_dims[i] = p_event->global_work_size(i) / cores;
-    if (p_event->local_work_size(i) != merge_dims[i]) {
-      WorkgroupsPerCore[i] = merge_dims[i] / p_event->local_work_size(i);
-      merge_dims[i] = p_event->local_work_size(i);
-    }
-    if (i != 0)
-      WorkgroupsPerCore[i] *= cores;
-  }*/
-
   // First, write the source string to a file
   std::ofstream SourceFile;
   SourceFile.open(OriginalSourceName.c_str());
@@ -556,8 +534,12 @@ bool LE1KernelEvent::CompileSource() {
     // Then pass the file name to workitem coarsener
     WorkitemCoarsen Coarsener(merge_dims[0], merge_dims[1], merge_dims[2]);
     if (!Coarsener.CreateWorkgroup(OriginalSourceName,
-                                   p_event->kernel()->name()))
+                                   p_event->kernel()->name())) {
+#ifdef DBG_OUTPUT
+      std::cout << "ERROR: CreateWorkgroup failed" << std::endl;
+#endif
       return false;
+    }
 
     WorkgroupSource = Coarsener.getFinalKernel();
   }
@@ -576,8 +558,12 @@ bool LE1KernelEvent::CompileSource() {
   Opts.append("-mllvm -unroll-runtime ");
   Opts.append("-mllvm -disable-tail-calls ");
 
-  if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts))
+  if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts)) {
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: CompileToBitcode Failed" << std::endl;
+#endif
     return false;
+  }
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
   //LE1Compiler.RunOptimisations(WorkgroupModule);
@@ -593,7 +579,12 @@ bool LE1KernelEvent::CompileSource() {
 
   Compiler MainCompiler(p_device);
   if(!MainCompiler.CompileToBitcode(LauncherString, clang::IK_C, std::string()))
+  {
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: CompileToBitcode Failed" << std::endl;
+#endif
     return false;
+  }
   llvm::Module *MainModule = MainCompiler.module();
 
   // Link the main module with the coarsened kernel code
@@ -605,18 +596,24 @@ bool LE1KernelEvent::CompileSource() {
   CompleteModule = MainCompiler.LinkRuntime(CompleteModule);
 
   //Coarsener.DeleteTempFiles();
-  if (!LE1Compiler.ExtractKernelData(CompleteModule, embeddedData))
+  if (!LE1Compiler.ExtractKernelData(CompleteModule, embeddedData)) {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: ExtractKernelData failed" << std::endl;
+#endif
     return false;
+  }
 
 #ifdef DBG_KERNEL
   std::cerr << "Extracted any embedded data" << std::endl;
 #endif
 
   // Output a single assembly file
-  if(!MainCompiler.CompileToAssembly(TempAsmName,
-                                     CompleteModule))
+  if(!MainCompiler.CompileToAssembly(TempAsmName, CompleteModule)) {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: CompileToAssembly failed" << std::endl;
+#endif
     return false;
-
+  }
 
   std::stringstream pre_asm_command;
   // TODO Include the script as a char array
@@ -624,9 +621,11 @@ bool LE1KernelEvent::CompileSource() {
     << TempAsmName
     //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
     << " > " << FinalAsmName;
-  // FIXME return false?
+
   if (system(pre_asm_command.str().c_str()) != 0) {
-    std::cerr << "LLVM Transform failed\n";
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: LLVM Transform failed\n";
+#endif
     return false;
   }
 
@@ -799,8 +798,8 @@ bool LE1KernelEvent::run() {
 
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
   if (system(CopyCommand.c_str()) != 0) {
-#ifdef DBG_KERNEL
-    std::cerr << "Copy failed!" << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Copy failed!" << std::endl;
 #endif
     simulator->UnlockAccess();
     return false;
@@ -809,8 +808,8 @@ bool LE1KernelEvent::run() {
                              CompleteFilename.c_str());
 
   if (!dataPrinter.AppendDataArea()) {
-#ifdef DBG_KERNEL
-    std::cerr << "AppendDataArea failed!" << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: AppendDataArea failed!" << std::endl;
 #endif
     pthread_mutex_unlock(&p_mutex);
     simulator->UnlockAccess();
@@ -822,8 +821,8 @@ bool LE1KernelEvent::run() {
   assemble.append(" -OPC=").append(LE1Device::IncDir + "opcodes.txt");
 
   if (system(assemble.c_str()) != 0) {
-#ifdef DBG_KERNEL
-    std::cerr << "Assemble failed!" << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "Assemble failed!" << std::endl;
 #endif
     simulator->UnlockAccess();
     return false;
@@ -834,8 +833,8 @@ bool LE1KernelEvent::run() {
 
   wasSuccess = simulator->Run(iram.c_str(), dram.c_str());//, disabledCores);
   if (!wasSuccess) {
-#ifdef DBG_KERNEL
-    std::cerr << "Simulaton failed!" << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "Simulaton failed!" << std::endl;
 #endif
     pthread_mutex_unlock(&p_mutex);
     simulator->UnlockAccess();
@@ -857,8 +856,10 @@ bool LE1KernelEvent::run() {
         static_cast<LE1Buffer*>((*(MemObject**)Arg.data())->deviceBuffer(p_device));
 
       if (buffer->data() == NULL) {
-        std::cerr << "!ERROR : Arg " << i << " buffer data is NULL"
+#ifdef DBG_OUTPUT
+        std::cout << "!!! ERROR : Arg " << i << " buffer data is NULL"
           << std::endl;
+#endif
         return false;
       }
 
@@ -915,8 +916,10 @@ bool LE1KernelEvent::run() {
             simulator->readWordData(buffer->addr(), TotalSize,
                                     (unsigned*)buffer->data());
           else {
-            std::cerr << "!!ERROR: Unhandled struct element type"
+#ifdef DBG_OUTPUT
+            std::cout << "!!ERROR: Unhandled struct element type"
               << std::endl;
+#endif
             return false;
           }
         }
