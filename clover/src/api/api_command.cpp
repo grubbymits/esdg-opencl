@@ -67,16 +67,18 @@ clCreateCommandQueue(cl_context                     context,
 
     if (!context->isA(Coal::Object::T_Context))
     {
-      std::cerr << "INVALID_CONTEXT\n";
-        *errcode_ret = CL_INVALID_CONTEXT;
-        return 0;
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: INVALID_CONTEXT" << std::endl;
+#endif
+      *errcode_ret = CL_INVALID_CONTEXT;
+      return 0;
     }
 #ifdef DEBUGCL
     std::cerr << "Attempt to initialise device\n";
 #endif
     if (!device->init()) {
-#ifdef DEBUGCL
-      std::cerr << "!ERROR! Device initialisation failed!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "!!!ERROR: Device initialisation failed!\n";
 #endif
       *errcode_ret = CL_DEVICE_NOT_AVAILABLE;
       return 0;
@@ -91,6 +93,9 @@ clCreateCommandQueue(cl_context                     context,
 
     if (*errcode_ret != CL_SUCCESS)
     {
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: CommandQueue create failed" << std::endl;
+#endif
         // Initialization failed, destroy context
         delete queue;
         return 0;
@@ -113,8 +118,12 @@ clRetainCommandQueue(cl_command_queue command_queue)
 cl_int
 clReleaseCommandQueue(cl_command_queue command_queue)
 {
-    if (!command_queue->isA(Coal::Object::T_CommandQueue))
-        return CL_INVALID_COMMAND_QUEUE;
+    if (!command_queue->isA(Coal::Object::T_CommandQueue)) {
+#ifdef DBG_OUTPUT
+      std::cout << "clReleaseCommandQueue failed" << std::endl;
+#endif
+      return CL_INVALID_COMMAND_QUEUE;
+    }
 
     command_queue->flush();
 

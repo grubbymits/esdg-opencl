@@ -101,8 +101,8 @@ int SDKCommon::waitForEventAndRelease(cl_event *event)
                         sizeof(cl_int),
                         &eventStatus,
                         NULL);
-		CHECK_OPENCL_ERROR(status, "clGetEventEventInfo Failed with Error Code:");
-	}
+	CHECK_OPENCL_ERROR(status, "clGetEventEventInfo Failed with Error Code:");
+    }
 
     status = clReleaseEvent(*event);
     CHECK_OPENCL_ERROR(status, "clReleaseEvent Failed with Error Code:");

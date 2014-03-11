@@ -53,8 +53,11 @@ static inline cl_int queueEvent(Coal::CommandQueue *queue,
 
     if (rs != CL_SUCCESS)
     {
-        delete command;
-        return rs;
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: queueEvent failed" << std::endl;
+#endif
+      delete command;
+      return rs;
     }
 
     if (event)
@@ -656,8 +659,8 @@ clEnqueueNDRangeKernel(cl_command_queue command_queue,
 
     if (!command_queue->isA(Coal::Object::T_CommandQueue))
     {
-#ifdef DEBUGCL
-      std::cerr << "ERROR, command queue is invalid\n";
+#ifdef DBG_OUTPUT
+      std::cout << "!!!ERROR: command queue is invalid\n";
 #endif
         return CL_INVALID_COMMAND_QUEUE;
     }
@@ -671,8 +674,8 @@ clEnqueueNDRangeKernel(cl_command_queue command_queue,
 
     if (rs != CL_SUCCESS)
     {
-#ifdef DEBUGCL
-      std::cerr << "ERROR, creating KernelEvent failed!\n";
+#ifdef DBG_OUTPUT
+      std::cerr << "!!!ERROR: creating KernelEvent failed!\n";
 #endif
         delete command;
         return rs;

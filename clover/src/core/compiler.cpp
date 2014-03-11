@@ -136,8 +136,10 @@ bool Compiler::ExpandMacros(const char *filename) {
       macro_log, &CI.getDiagnosticOpts()));
 
   if (!CI.ExecuteAction(act)) {
-    std::cerr << "RewriteMacrosAction failed:" << std::endl
+#ifdef DBG_OUTPUT
+    std::cout << "RewriteMacrosAction failed:" << std::endl
       << log;
+#endif
     return false;
   }
 
@@ -173,13 +175,17 @@ int Compiler::InlineSource(const char *filename) {
   TM->setTransformationCounter(1);
 
   if (!TM->initializeCompilerInstance(err)) {
-    std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
+#ifdef DBG_OUTPUT
+    std::cout << "!!ERROR: Initialising compiler failed!" << std::endl
       << err << std::endl;
+#endif
     return -1;
   }
 
   if (!TM->doTransformation(err)) {
-    std::cerr << "!!ERROR: " << err << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "!!ERROR: " << err << std::endl;
+#endif
     return -1;
   }
 
@@ -202,13 +208,17 @@ int Compiler::InlineSource(const char *filename) {
       TM->setTransformationCounter(1);
 
       if (!TM->initializeCompilerInstance(err)) {
-        std::cerr << "!!ERROR: Initialising compiler failed!" << std::endl
+#ifdef DBG_OUTPUT
+        std::cout << "!!ERROR: Initialising compiler failed!" << std::endl
           << err << std::endl;
+#endif
         return -1;
       }
 
       if (!TM->doTransformation(err)) {
-        std::cerr << "Inline failed!:" << std::endl << err << std::endl;
+#ifdef DBG_OUTPUT
+        std::cout << "Inline failed!:" << std::endl << err << std::endl;
+#endif
         return -1;
       }
       ++completed;
@@ -270,7 +280,9 @@ bool Compiler::CompileToBitcode(std::string &Source,
                                         Diags);
 
   if (!Success) {
-    std::cerr << "!ERROR: Could not create CompilerInvocation!\n";
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: Could not create CompilerInvocation!" << std::endl;
+#endif
     return false;
   }
 
@@ -332,10 +344,10 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
   // Compile the code
   if (!p_compiler.ExecuteAction(act)) {
-#ifdef DBG_COMPILER
-    std::cerr << "Compilation Failed\n";
-    std::cerr << log;
-    std::cerr << "temp file:" << std::endl
+#ifdef DBG_OUTPUT
+    std::cout << "Compilation Failed\n";
+    std::cout << log;
+    std::cout << "temp file:" << std::endl
       << Source << std::endl;
 #endif
     return false;
@@ -378,6 +390,9 @@ llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
   bool isNative = false;
   if (ld.LinkInFile(llvm::sys::Path("/opt/esdg-opencl/lib/builtins.bc"),
                      isNative)) {
+#ifdef DBG_OUTPUT
+    std::cout << "!! ERROR: runtime linkage failed" << std::endl;
+#endif
     return NULL;
   }
 
@@ -400,8 +415,10 @@ void Compiler::ScanForSoftfloat() {
 
     llvm::Function *F = FI;
 
+#ifdef DBG_COMPILER
     std::cerr << "Iterating through function:" << F->getName().str()
       << std::endl;
+#endif
 
     // Iterate through all the basic block of the function
     for (llvm::Function::BasicBlockListType::iterator BI = F->begin(),
@@ -628,8 +645,10 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData *theData) {
 #endif
       bool success = theData->AddVariable(C, name.str());
       if (!success) {
-        std::cerr << "!!ERROR: Extraction of global variable failed!"
+#ifdef DBG_OUTPUT
+        std::cout << "!!ERROR: Extraction of global variable failed!"
           << std::endl;
+#endif
         return false;
       }
     }
@@ -663,7 +682,9 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   const llvm::Target *TheTarget = llvm::TargetRegistry::lookupTarget(Triple,
                                                                      Error);
   if (!TheTarget) {
-    std::cerr << "Target not available: " << Error;
+#ifdef DBG_OUTPUT
+    std::cout << "Target not available: " << Error;
+#endif
     return false;
   }
 
@@ -700,7 +721,10 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
                                                              Error, 0);
   if (!Error.empty()) {
-    std::cerr << Error;
+#ifdef DBG_OUTPUT
+    std::cout << "!! ERROR: " << std::endl;
+    std::cout << Error;
+#endif
     delete FDOut;
     delete TLI;
     return false;
@@ -708,7 +732,9 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
 
   llvm::OwningPtr<llvm::tool_output_file> Out(FDOut);
   if (!Out) {
-    std::cerr << "Couldn't create output file\n";
+#ifdef DBG_OUTPUT
+    std::cout << "!! ERROR: Couldn't create output file" << std::endl;
+#endif
     return false;
   }
   llvm::formatted_raw_ostream FOS(Out->os());
@@ -719,7 +745,9 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   if (Target.addPassesToEmitFile(PM, FOS,
                                  llvm::TargetMachine::CGFT_AssemblyFile,
                                  false, 0, 0)) {
-    std::cerr << "Target does not support generation of this filetype!\n";
+#ifdef DBG_OUTPUT
+    std::cout << "Target does not support generation of this filetype!\n";
+#endif
     return false;
   }
 

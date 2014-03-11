@@ -47,8 +47,12 @@ clWaitForEvents(cl_uint             num_events,
   std::cerr << "Entering clWaitForEvents with " << num_events << " events in \
 thread " << pthread_self() << std::endl;
 #endif
-    if (!num_events || !event_list)
+    if (!num_events || !event_list) {
+#ifdef DBG_OUTPUT
+      std::cout << "!!!ERROR: !num_events || !events_list" << std::endl;
+#endif
         return CL_INVALID_VALUE;
+    }
 
     // Check the events in the list
     cl_context global_ctx = 0;
@@ -61,8 +65,13 @@ thread " << pthread_self() << std::endl;
       if (event_list[i]->status() == Coal::Event::Complete)
         continue;
 
-        if (!event_list[i]->isA(Coal::Object::T_Event))
-            return CL_INVALID_EVENT;
+        if (!event_list[i]->isA(Coal::Object::T_Event)) {
+#ifdef DBG_OUTPUT
+          std::cout << "!! ERROR: Invalid event in clWaitForEvents"
+            << std::endl;
+#endif
+          return CL_INVALID_EVENT;
+        }
 
         if (event_list[i]->status() < 0)
             return CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST;
@@ -86,8 +95,12 @@ thread " << pthread_self() << std::endl;
 
         if (global_ctx == 0)
             global_ctx = evt_ctx;
-        else if (global_ctx != evt_ctx)
-            return CL_INVALID_CONTEXT;
+        else if (global_ctx != evt_ctx) {
+#ifdef DBG_OUTPUT
+          std::cout << "!!! ERROR: Invalid Context" << std::endl;
+#endif
+          return CL_INVALID_CONTEXT;
+        }
     }
 
     // Wait for the events
@@ -119,8 +132,12 @@ clGetEventInfo(cl_event         event,
                void *           param_value,
                size_t *         param_value_size_ret)
 {
-    if (!event->isA(Coal::Object::T_Event))
-        return CL_INVALID_EVENT;
+    if (!event->isA(Coal::Object::T_Event)) {
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Object is not an event" << std::endl;
+#endif
+      return CL_INVALID_EVENT;
+    }
 
     return event->info(param_name, param_value_size, param_value,
                        param_value_size_ret);
@@ -134,28 +151,36 @@ clSetEventCallback(cl_event     event,
                                                                 void *user_data),
                    void *user_data)
 {
-  std::cerr << "Entering clSetEventCallback\n";
-    if (!event->isA(Coal::Object::T_Event))
-        return CL_INVALID_EVENT;
+    if (!event->isA(Coal::Object::T_Event)) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Invalid event in clSetEventCallback" << std::endl;
+#endif
+      return CL_INVALID_EVENT;
+    }
 
-    if (!pfn_event_notify || command_exec_callback_type != CL_COMPLETE)
-        return CL_INVALID_VALUE;
+    if (!pfn_event_notify || command_exec_callback_type != CL_COMPLETE) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Invalid value in clSetEventCallback" << std::endl;
+#endif
+      return CL_INVALID_VALUE;
+    }
 
     event->setCallback(command_exec_callback_type, pfn_event_notify, user_data);
 
-  std::cerr << "Leaving clSetEventCallback\n";
     return CL_SUCCESS;
 }
 
 cl_int
 clRetainEvent(cl_event event)
 {
-  std::cerr << "Entering clRetainEvent\n";
-    if (!event->isA(Coal::Object::T_Event))
-        return CL_INVALID_EVENT;
+    if (!event->isA(Coal::Object::T_Event)) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Invalid event in clRetainEvent" << std::endl;
+#endif
+      return CL_INVALID_EVENT;
+    }
 
     event->reference();
-  std::cerr << "Leaving clRetainEvent\n";
 
     return CL_SUCCESS;
 }
@@ -163,8 +188,12 @@ clRetainEvent(cl_event event)
 cl_int
 clReleaseEvent(cl_event event)
 {
-    if (!event->isA(Coal::Object::T_Event))
-        return CL_INVALID_EVENT;
+    if (!event->isA(Coal::Object::T_Event)) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Invalid event in clReleaseEvent" << std::endl;
+#endif
+      return CL_INVALID_EVENT;
+    }
 
     if (event->dereference())
     {
@@ -187,8 +216,12 @@ clCreateUserEvent(cl_context    context,
 
     if (!context->isA(Coal::Object::T_Context))
     {
-        *errcode_ret = CL_INVALID_CONTEXT;
-        return 0;
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Invalid context in clCreateUserEvent"
+        << std::endl;
+#endif
+      *errcode_ret = CL_INVALID_CONTEXT;
+      return 0;
     }
 
     *errcode_ret = CL_SUCCESS;
@@ -199,8 +232,11 @@ clCreateUserEvent(cl_context    context,
 
     if (*errcode_ret != CL_SUCCESS)
     {
-        delete command;
-        return 0;
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Failed to create UserEvent" << std::endl;
+#endif
+      delete command;
+      return 0;
     }
 
   std::cerr << "Leaving clCreateUserEvent\n";
@@ -215,16 +251,31 @@ clSetUserEventStatus(cl_event   event,
     Coal::Event *command = (Coal::Event *)event;
 
     if (!command->isA(Coal::Object::T_Event) ||
-        command->type() != Coal::Event::User)
-        return CL_INVALID_EVENT;
+        command->type() != Coal::Event::User) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Invalid event in clSetUserEventStatus"
+        << std::endl;
+#endif
+      return CL_INVALID_EVENT;
+    }
 
-    if (execution_status != CL_COMPLETE)
-        return CL_INVALID_VALUE;
+    if (execution_status != CL_COMPLETE) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: event not complete clSetUserEventStatus"
+        << std::endl;
+#endif
+      return CL_INVALID_VALUE;
+    }
 
-    if (command->status() != CL_SUBMITTED)
-        return CL_INVALID_OPERATION;
+    if (command->status() != CL_SUBMITTED) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: command not submitted in clSetUserEventStatus"
+        << std::endl;
+#endif
+      return CL_INVALID_OPERATION;
+    }
 
-    command->setStatus((Coal::Event::Status)execution_status);
+  command->setStatus((Coal::Event::Status)execution_status);
   std::cerr << "Leaving clSetUserEventStatus\n";
 
     return CL_SUCCESS;

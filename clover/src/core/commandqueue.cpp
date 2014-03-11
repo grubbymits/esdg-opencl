@@ -79,11 +79,17 @@ CommandQueue::CommandQueue(Context *ctx,
     // Check that the device belongs to the context
     if (!ctx->hasDevice(device))
     {
-        *errcode_ret = CL_INVALID_DEVICE;
-        return;
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Invalid device" << std::endl;
+#endif
+      *errcode_ret = CL_INVALID_DEVICE;
+      return;
     }
 
     if (!device->init()) {
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Invalid device" << std::endl;
+#endif
       *errcode_ret = CL_INVALID_DEVICE;
       return;
     }
@@ -208,7 +214,9 @@ void CommandQueue::flush()
 
     // Wait for the command queue to be in state "flushed".
     if (pthread_mutex_lock(&p_event_list_mutex) != 0) {
-      std::cerr << "p_event_list_mutex lock failed!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "p_event_list_mutex lock failed!\n";
+#endif
       exit(EXIT_FAILURE);
     }
 
@@ -239,8 +247,8 @@ cl_int CommandQueue::finish()
     pthread_mutex_lock(&p_event_list_mutex);
 
     if (errcode != CL_SUCCESS) {
-#ifdef DEBUGCL
-      std::cerr << "!! cleanEvents returned a failure !!!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: cleanEvents returned a failure !!!\n";
 #endif
       pthread_cond_broadcast(&p_event_list_cond);
       p_flushed = true;
@@ -272,12 +280,18 @@ cl_int CommandQueue::queueEvent(Event *event)
     // memory would be mapped)
     cl_int rs = p_device->initEventDeviceData(event);
 
-    if (rs != CL_SUCCESS)
-        return rs;
+    if (rs != CL_SUCCESS) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: initEventDeviceData failed" << std::endl;
+#endif
+      return rs;
+    }
 
     // Append the event at the end of the list
     if (pthread_mutex_lock(&p_event_list_mutex) != 0) {
-      std::cerr << "p_event_list_mutext lock failed!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "p_event_list_mutext lock failed!\n";
+#endif
       exit(EXIT_FAILURE);
     }
 
@@ -285,7 +299,9 @@ cl_int CommandQueue::queueEvent(Event *event)
     p_flushed = false;
 
     if (pthread_mutex_unlock(&p_event_list_mutex) != 0) {
-      std::cerr << "p_event_list_mutex unlock failed!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "p_event_list_mutex unlock failed!\n";
+#endif
       exit(EXIT_FAILURE);
     }
 
@@ -331,8 +347,8 @@ cl_int CommandQueue::cleanEvents()
             clReleaseEvent((cl_event)event);
         }
         else if (event->status() == Event::Failed) {
-#ifdef DEBUGCL
-          std::cerr << "!!! Event Failed !!!\n";
+#ifdef DBG_OUTPUT
+          std::cout << "!! ERROR: Event Failed !!!" << std::endl;
 #endif
           errcode = event->status();
           event->setReleaseParent(false);

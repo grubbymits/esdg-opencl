@@ -254,9 +254,9 @@ MapBufferEvent::MapBufferEvent(CommandQueue *parent,
     // Check for out-of-bounds values
     if (offset + cb > buffer->size())
     {
-#ifdef DEBUGCL
-      std::cerr << "offset + cb > buffer->size" << std::endl;
-      std::cerr << "offset = " << offset << std::endl
+#ifdef DBG_OUTPUT
+      std::cout << "offset + cb > buffer->size" << std::endl;
+      std::cout << "offset = " << offset << std::endl
         << "cb = " << cb << std::endl
         << "buffer->size = " << buffer->size() << std::endl;
 #endif
