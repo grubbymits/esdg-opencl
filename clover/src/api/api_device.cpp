@@ -117,7 +117,7 @@ clGetDeviceIDs(cl_platform_id   platform,
                cl_device_id *   devices,
                cl_uint *        num_devices)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clGetDeviceIDs" << std::endl;
   std::cerr << "Address of num_devices = " << std::hex << num_devices
     << std::endl;
@@ -144,7 +144,7 @@ clGetDeviceIDs(cl_platform_id   platform,
           //return CL_DEVICE_NOT_AVAILABLE;
         if (devices) {
           for (unsigned i = 0; ((i < TotalLE1Devices) && (i < num_entries)); ++i) {
-#ifdef DEBUGCL
+#ifdef DBG_API
             std::cerr << "assigning device " << i << " to list" << std::endl;
 #endif
             devices[i] = (cl_device_id)&LE1Devices[i];
@@ -161,7 +161,7 @@ clGetDeviceIDs(cl_platform_id   platform,
         return CL_DEVICE_NOT_FOUND;
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Returning CL_SUCCESS from clGetDeviceIDs" << std::endl;
 #endif
     return CL_SUCCESS;
@@ -174,7 +174,7 @@ clGetDeviceInfo(cl_device_id    device,
                 void *          param_value,
                 size_t *        param_value_size_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clGetDeviceInfo\n";
 #endif
     if (!device->isA(Coal::Object::T_Device))

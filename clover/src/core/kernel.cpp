@@ -68,14 +68,20 @@ Kernel::Kernel(Program *program)
 
 Kernel::~Kernel()
 {
-    while (p_device_dependent.size())
-    {
-        DeviceDependent &dep = p_device_dependent.back();
+#ifdef DBG_KERNEL
+  std::cerr << "Destructing Kernel" << std::endl;
+#endif
+  while (p_device_dependent.size())
+  {
+      DeviceDependent &dep = p_device_dependent.back();
 
-        delete dep.kernel;
+      delete dep.kernel;
 
-        p_device_dependent.pop_back();
-    }
+      p_device_dependent.pop_back();
+  }
+#ifdef DBG_KERNEL
+  std::cerr << "Successfully destructed kernel" << std::endl;
+#endif
 }
 
 const Kernel::DeviceDependent &Kernel::deviceDependent(DeviceInterface *device) const
@@ -367,8 +373,8 @@ bool Kernel::argsSpecified() const
     for (size_t i=0; i<p_args.size(); ++i)
     {
         if (!p_args[i].defined()) {
-#ifdef DBG_KERNEL
-          std::cerr << "ERROR: arg " << i << " is not defined!\n";
+#ifdef DBG_OUTPUT
+          std::cout << "ERROR: arg " << i << " is not defined!\n";
 #endif
             return false;
         }
@@ -495,8 +501,8 @@ cl_int Kernel::workGroupInfo(DeviceInterface *device,
             break;
 
         default:
-#ifdef DBG_KERNEL
-            std::cerr << "Leaving Kernel::workGroupInfo, INVALID_VALUE\n";
+#ifdef DBG_OUTPUT
+            std::cout << "Leaving Kernel::workGroupInfo, INVALID_VALUE\n";
 #endif
             return CL_INVALID_VALUE;
     }

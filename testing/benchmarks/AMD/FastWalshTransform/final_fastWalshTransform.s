@@ -38,8 +38,8 @@ add.0 r0.4, r0.2, 0x1
 stb.0 r0.3, r0.4[0x0]
 stb.0 r0.59, r0.2[0x0]
 mov.0 r0.3, BufferArg_0
-;
 mov.0 r0.4, 0x800
+;
 add.0 r0.59, r0.59, 0x10
 call.0 l0.0, FUNC_fastWalshTransform
 ;
@@ -210,8 +210,8 @@ cmpge.0 b0.1, r0.6, r0.0
 slct.0 r0.4, b0.1, r0.6, r0.4
 addcg.0 r0.5, b0.0, r0.5, r0.5, b0.0
 mtb.0 b0.0, r0.3
-;
 maxu.0 r0.3, r0.2, r0.57
+;
 orc.0 r0.5, r0.5, r0.0
 mfb.0 r0.6, b0.1
 ;
@@ -248,7 +248,6 @@ call.0 l0.0, FUNC___addsf3
 stw.0 r0.58[0x0], r0.3
 mov.0 r0.3, r0.59
 mov.0 r0.4, r0.60
-;
 call.0 l0.0, FUNC___subsf3
 ;
 add.0 r0.61, r0.61, 0x1
@@ -489,8 +488,8 @@ shl.0 r0.5, r0.5, r0.8
 sub.0 r0.9, r0.3, r0.7
 cmpeq.0 b0.0, r0.3, r0.7
 xor.0 r0.7, r0.2, r0.4
-;
 and.0 r0.4, r0.2, -0x80000000
+;
 shl.0 r0.5, r0.5, 3
 shl.0 r0.2, r0.6, 3
 ;

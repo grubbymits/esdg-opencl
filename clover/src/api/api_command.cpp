@@ -44,7 +44,7 @@ clCreateCommandQueue(cl_context                     context,
                      cl_command_queue_properties    properties,
                      cl_int *                       errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clCreateCommandQueue\n";
 #endif
     cl_int default_errcode_ret;
@@ -55,7 +55,7 @@ clCreateCommandQueue(cl_context                     context,
 
 
 
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Check if the device is an object\n";
 #endif
     if (!device->isA(Coal::Object::T_Device))
@@ -73,7 +73,7 @@ clCreateCommandQueue(cl_context                     context,
       *errcode_ret = CL_INVALID_CONTEXT;
       return 0;
     }
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Attempt to initialise device\n";
 #endif
     if (!device->init()) {

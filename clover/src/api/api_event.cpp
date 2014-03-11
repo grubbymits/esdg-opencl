@@ -43,7 +43,7 @@ cl_int
 clWaitForEvents(cl_uint             num_events,
                 const cl_event *    event_list)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clWaitForEvents with " << num_events << " events in \
 thread " << pthread_self() << std::endl;
 #endif
@@ -56,7 +56,7 @@ thread " << pthread_self() << std::endl;
 
     // Check the events in the list
     cl_context global_ctx = 0;
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Check the events in the list\n";
 #endif
 
@@ -75,18 +75,18 @@ thread " << pthread_self() << std::endl;
 
         if (event_list[i]->status() < 0)
             return CL_EXEC_STATUS_ERROR_FOR_EVENTS_IN_WAIT_LIST;
-#ifdef DEBUGCL
+#ifdef DBG_API
       std::cerr << "is a valid event\n";
       std::cerr << "event at address " << std::hex << event_list[i]
         << std::endl;
 #endif
 
         cl_context evt_ctx = (cl_context)event_list[i]->parent()->parent();
-#ifdef DEBUGCL
+#ifdef DBG_API
         std::cerr << "got context\n";
 #endif
         cl_command_queue evt_queue = (cl_command_queue)event_list[i]->parent();
-#ifdef DEBUGCL
+#ifdef DBG_API
         std::cerr << "got command queue\n";
 #endif
 
@@ -104,7 +104,7 @@ thread " << pthread_self() << std::endl;
     }
 
     // Wait for the events
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Wait for the events\n";
 #endif
 
@@ -119,7 +119,7 @@ thread " << pthread_self() << std::endl;
       if (event_list[finished]->status() == Coal::Event::Complete)
         ++finished;
     }
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Leaving clWaitForEvents\n";
 #endif
     return CL_SUCCESS;
@@ -200,7 +200,9 @@ clReleaseEvent(cl_event event)
         event->freeDeviceData();
         delete event;
     }
-
+#ifdef DBG_API
+    std::cerr << "released event successfully" << std::endl;
+#endif
     return CL_SUCCESS;
 }
 
