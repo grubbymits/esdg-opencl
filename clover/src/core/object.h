@@ -121,6 +121,8 @@ class Object
          */
         bool isA(Type type) const;
 
+        const Object* getAddress() const { return this; }
+
     private:
         unsigned int p_references;
         Object *p_parent;

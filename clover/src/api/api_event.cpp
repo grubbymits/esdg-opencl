@@ -132,15 +132,18 @@ clGetEventInfo(cl_event         event,
                void *           param_value,
                size_t *         param_value_size_ret)
 {
-    if (!event->isA(Coal::Object::T_Event)) {
-#ifdef DBG_OUTPUT
-      std::cout << "!!! ERROR: Object is not an event" << std::endl;
+#ifdef DBG_API
+  std::cerr << "clGetEventInfo" << std::endl;
 #endif
-      return CL_INVALID_EVENT;
-    }
+  if (!event->isA(Coal::Object::T_Event)) {
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: Object is not an event" << std::endl;
+#endif
+    return CL_INVALID_EVENT;
+  }
 
-    return event->info(param_name, param_value_size, param_value,
-                       param_value_size_ret);
+  return event->info(param_name, param_value_size, param_value,
+                     param_value_size_ret);
 }
 
 cl_int
@@ -188,6 +191,11 @@ clRetainEvent(cl_event event)
 cl_int
 clReleaseEvent(cl_event event)
 {
+#ifdef DBG_API
+  std::cerr << "clReleaseEvent for " << std::hex
+    << (unsigned long)event->getAddress() << std::endl;
+#endif
+
     if (!event->isA(Coal::Object::T_Event)) {
 #ifdef DBG_OUTPUT
       std::cout << "!! ERROR: Invalid event in clReleaseEvent" << std::endl;

@@ -31,6 +31,7 @@
  */
 
 #include "object.h"
+#include <iostream>
 
 using namespace Coal;
 
@@ -100,9 +101,44 @@ Object::Type Object::type() const
 
 bool Object::isA(Object::Type type) const
 {
+#ifdef DBG_OBJ
+  std::cerr << "Object at " << std::hex << (unsigned long)this
+    << ", isA: ";
+  switch(type) {
+  case T_Device:
+    std::cerr << "Device";
+    break;
+  case T_CommandQueue:
+    std::cerr << "CommandQueue";
+    break;
+  case T_Event:
+    std::cerr << "Event";
+    break;
+  case T_Context:
+    std::cerr << "Context";
+    break;
+  case T_Kernel:
+    std::cerr << "Kernel";
+    break;
+  case T_MemObject:
+    std::cerr << "MemObject";
+    break;
+  case T_Program:
+    std::cerr << "Program";
+    break;
+  case T_Sampler:
+    std::cerr << "Sampler";
+    break;
+  }
+  std::cerr << std::endl;
+#endif
     // Check for null values
-    if (this == 0)
-        return false;
+    if (this == 0) {
+#ifdef DBG_OBJ
+      std::cerr << "this is null, returning false" << std::endl;
+#endif
+      return false;
+    }
 
     pthread_mutex_lock(&Object::KnownObjectsMutex);
     // Check that the value isn't garbage or freed pointer
@@ -111,13 +147,19 @@ bool Object::isA(Object::Type type) const
     while (it != e)
     {
         if (*it == this) {
-            pthread_mutex_unlock(&Object::KnownObjectsMutex);
-            return this->type() == type;
+          pthread_mutex_unlock(&Object::KnownObjectsMutex);
+#ifdef DBG_OBJ
+            std::cerr << "found object in known objects" << std::endl;
+#endif
+          return this->type() == type;
         }
 
         ++it;
     }
     pthread_mutex_unlock(&Object::KnownObjectsMutex);
 
+#ifdef DBG_OBJ
+    std::cerr << "returning false" << std::endl;
+#endif
     return false;
 }
