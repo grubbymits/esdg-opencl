@@ -53,6 +53,7 @@ namespace Coal
 class Program;
 class DeviceInterface;
 class DeviceKernel;
+class MemObject;
 
 /**
  * \brief Kernel
@@ -198,7 +199,9 @@ class Kernel : public Object
                 bool defined() const;
                 /*!< \brief Size of the \c __local buffer to allocate at kernel
                   runtime */
+
                 size_t allocAtKernelRuntime() const;
+
                 /*!< \brief Pointer to the value of this argument, for the \p
                   index vector element */
                 const void *value(unsigned short index) const;

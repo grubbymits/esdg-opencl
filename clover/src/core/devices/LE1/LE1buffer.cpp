@@ -88,6 +88,10 @@ LE1Buffer::~LE1Buffer()
 #endif
     if (p_data_malloced)
     {
+#ifdef DBG_BUFFER
+      std::cerr << "freeing data at " << std::hex << (unsigned long)p_data
+        << std::endl;
+#endif
         std::free((void *)p_data);
     }
 }

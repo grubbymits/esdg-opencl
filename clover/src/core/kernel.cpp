@@ -537,15 +537,33 @@ Kernel::Arg::Arg(unsigned short vec_dim, File file, Kind kind, llvm::Type* type)
 
 Kernel::Arg::~Arg()
 {
-    if (p_data)
-        std::free(p_data);
+#ifdef DBG_KERNEL
+  std::cerr << "Destructing Kernel::Arg: "
+    << std::hex << (unsigned long)this << std::endl;
+#endif
+  if (p_data) {
+#ifdef DBG_KERNEL
+    std::cerr << "freeing data at " << std::hex << (unsigned long)p_data
+      << std::endl;
+#endif
+    std::free(p_data);
+  }
+#ifdef DBG_KERNEL
+  std::cerr << "Successfully destroyed Kernel::Arg: "
+    << std::hex << (unsigned long)this << std::endl;
+#endif
 }
 
 void Kernel::Arg::alloc()
 {
   // TODO Don't know if I actually need to allocate memory for the kernel arg.
-    if (!p_data)
-        p_data = std::malloc(p_vec_dim * valueSize());
+  if (!p_data) {
+#ifdef DBG_KERNEL
+    std::cerr << "Allocating data for Kernel::Arg ("
+      << std::hex << (unsigned long)this << ")" << std::endl;
+#endif
+    p_data = std::malloc(p_vec_dim * valueSize());
+  }
 }
 
 void Kernel::Arg::loadData(const void *data)

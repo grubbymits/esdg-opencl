@@ -54,7 +54,7 @@ BufferEvent::BufferEvent(CommandQueue *parent,
 : Event(parent, Queued, num_events_in_wait_list, event_wait_list, errcode_ret),
   p_buffer(buffer)
 {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Entering BufferEvent::BufferEvent in thread " << pthread_self()
     << std::endl;
 #endif
@@ -99,7 +99,7 @@ BufferEvent::BufferEvent(CommandQueue *parent,
         *errcode_ret = CL_MEM_OBJECT_ALLOCATION_FAILURE;
         return;
     }
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Leaving BufferEvent::BufferEvent\n";
 #endif
 }
@@ -146,7 +146,7 @@ ReadWriteBufferEvent::ReadWriteBufferEvent(CommandQueue *parent,
 : BufferEvent(parent, buffer, num_events_in_wait_list, event_wait_list, errcode_ret),
   p_offset(offset), p_cb(cb), p_ptr(ptr)
 {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Entering ReadWriteBufferEvent::ReadWriteBufferEvent in thread "
     << pthread_self() << std::endl;
 #endif
@@ -164,7 +164,7 @@ ReadWriteBufferEvent::ReadWriteBufferEvent(CommandQueue *parent,
         *errcode_ret = CL_INVALID_VALUE;
         return;
     }
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Leaving ReadWriteBufferEvent::ReadWriteBufferEvent\n";
 #endif
 }
@@ -195,7 +195,7 @@ ReadBufferEvent::ReadBufferEvent(CommandQueue *parent,
 : ReadWriteBufferEvent(parent, buffer, offset, cb, ptr, num_events_in_wait_list,
                        event_wait_list, errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Creating ReadBufferEvent::ReadBufferEvent in thread "
     << pthread_self() << std::endl;
 #endif
@@ -217,7 +217,7 @@ WriteBufferEvent::WriteBufferEvent(CommandQueue *parent,
 : ReadWriteBufferEvent(parent, buffer, offset, cb, ptr, num_events_in_wait_list,
                        event_wait_list, errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Creating WriteBufferEvent::WriteBufferEvent in thread "
     << pthread_self() << std::endl;
 #endif
@@ -239,7 +239,7 @@ MapBufferEvent::MapBufferEvent(CommandQueue *parent,
 : BufferEvent(parent, buffer, num_events_in_wait_list, event_wait_list, errcode_ret),
   p_offset(offset), p_cb(cb), p_map_flags(map_flags)
 {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Constructing MapBufferEvent" << std::endl;
 #endif
     if (*errcode_ret != CL_SUCCESS) return;
@@ -668,7 +668,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
 {
   // TODO This is where everything else needs to be handled. Need to try to use
   // device specific methods though.
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
   std::cerr << "Entering KernelEvent::KernelEvent\n";
 #endif
     if (*errcode_ret != CL_SUCCESS) return;
@@ -707,14 +707,14 @@ KernelEvent::KernelEvent(CommandQueue *parent,
         return;
 
     p_dev_kernel = kernel->deviceDependentKernel(device);
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
     std::cerr << "got deviceDependentKernel\n";
 #endif
 
     if (!p_dev_kernel)
     {
         *errcode_ret = CL_INVALID_PROGRAM_EXECUTABLE;
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
         std::cerr << "ERROR: deviceDependentKernel failed\n";
 #endif
         return;
@@ -723,7 +723,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
     // Check that contexts match
     if (k_ctx != q_ctx)
     {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
         std::cerr << "ERROR: contexts don't match!\n";
 #endif
         *errcode_ret = CL_INVALID_CONTEXT;
@@ -733,7 +733,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
     // Check args
     if (!kernel->argsSpecified())
     {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
         std::cerr << "ERROR: kernel args aren't specifed\n";
 #endif
         *errcode_ret = CL_INVALID_KERNEL_ARGS;
@@ -743,7 +743,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
     // Check dimension
     if (work_dim == 0 || work_dim > max_dims)
     {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
         std::cerr << "ERROR: invalid work dimension\n";
 #endif
         *errcode_ret = CL_INVALID_WORK_DIMENSION;
@@ -823,7 +823,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
     // Check arguments (buffer alignment, image size, ...)
     for (unsigned int i=0; i<kernel->numArgs(); ++i)
     {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
       std::cerr << "Checking argument " << i << std::endl;
 #endif
         const Kernel::Arg &a = kernel->arg(i);
@@ -832,7 +832,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
 
         if (a.kind() == Kernel::Arg::Buffer)
         {
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
           std::cerr << "Arg is a buffer\n";
 #endif
             const MemObject *buffer = *(const MemObject **)(a.value(0));
@@ -885,7 +885,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
             }
         }
     }
-#ifdef DEBUGCL
+#ifdef DBG_EVENT
     std::cerr << "Leaving KernelEvent::KernelEvent\n";
 #endif
 }

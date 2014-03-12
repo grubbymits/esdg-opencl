@@ -59,6 +59,11 @@ Object::Object(Type type, Object *parent)
 
 Object::~Object()
 {
+#ifdef DBG_OBJ
+  std::cerr << "Destructing Object (" << std::hex << (unsigned long)this
+    << ")" << std::endl;
+#endif
+
     if (p_parent && p_parent->dereference() && p_release_parent)
         delete p_parent;
 
@@ -66,6 +71,11 @@ Object::~Object()
     // Remove object from the list of known objects
     getKnownObjects().erase(p_it);
     pthread_mutex_unlock(&Object::KnownObjectsMutex);
+
+#ifdef DBG_OBJ
+  std::cerr << "Successfully destroyed Object (" << std::hex
+    << (unsigned long)this << ")" << std::endl;
+#endif
 }
 
 void Object::reference()

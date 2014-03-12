@@ -10,7 +10,7 @@ include_directories (${Coal_SOURCE_DIR}/include
 
 set(CMAKE_INSTALL_RPATH "/opt/esdg-opencl/lib")
 set(CMAKE_CXX_FLAGS
-" -std=c++0x -g -fno-rtti -DINSIZZLEAPI -DDBG_API -DDBG_QUEUE -DDBG_OBJ -DDBG_WORKER -DDBG_OUTPUT")
+" -std=c++0x -g -fno-rtti -DINSIZZLEAPI -DDBG_API -DDBG_QUEUE -DDBG_OBJ -DDBG_KERNEL -DDBG_BUFFER -DDBG_OUTPUT")
 
 configure_file(core/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/config.h)
 
@@ -39,14 +39,6 @@ set(COAL_SRC_FILES
     core/kernel.cpp
     core/sampler.cpp
     core/object.cpp
-
-    #core/cpu/buffer.cpp
-    #core/cpu/device.cpp
-    #core/cpu/kernel.cpp
-    #core/cpu/program.cpp
-    #core/cpu/worker.cpp
-    #core/cpu/builtins.cpp
-    #core/cpu/sampler.cpp
 
     core/devices/LE1/LE1buffer.cpp
     core/devices/LE1/LE1device.cpp

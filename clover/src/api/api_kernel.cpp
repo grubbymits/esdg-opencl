@@ -161,7 +161,8 @@ cl_int
 clReleaseKernel(cl_kernel   kernel)
 {
 #ifdef DBG_API
-  std::cerr << "Entering clReleaseKernel\n";
+  std::cerr << "Entering clReleaseKernel for kernel at "
+    << std::hex << (unsigned long)kernel->getAddress() << std::endl;
 #endif
     if (!kernel->isA(Coal::Object::T_Kernel)) {
 #ifdef DBG_OUTPUT

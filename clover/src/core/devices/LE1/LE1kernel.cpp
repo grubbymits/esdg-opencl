@@ -76,10 +76,20 @@ LE1Kernel::LE1Kernel(LE1Device *device, Kernel *kernel, llvm::Function *function
 
 LE1Kernel::~LE1Kernel()
 {
-    if (p_call_function)
-        p_call_function->eraseFromParent();
+#ifdef DBG_KERNEL
+  std::cerr << "Destructing LE1kernel ("
+    << std::hex << (unsigned long)this << ")" << std::endl;
+#endif
 
-    pthread_mutex_destroy(&p_call_function_mutex);
+  if (p_call_function)
+    p_call_function->eraseFromParent();
+
+  pthread_mutex_destroy(&p_call_function_mutex);
+
+#ifdef DBG_KERNEL
+  std::cerr << "Successfully destroyed LE1Kernel ("
+    << std::hex << (unsigned long)this << ")" << std::endl;
+#endif
 }
 
 // FIXME This probably needs to match device->info
