@@ -417,10 +417,11 @@ bool LE1KernelEvent::AllocateBuffers() {
 #endif
 
       LE1Buffer* buffer = static_cast<LE1Buffer*>(
-        (*(MemObject**)Arg.data())->deviceBuffer(p_device));
+        (*(Arg.getMemObject()))->deviceBuffer(p_device));
 
       if (buffer->data() == NULL) {
-        if (!((*(MemObject**)Arg.data())->allocate(p_device)))
+        //if (!((*(Arg.getMemObject()))->allocate(p_device)))
+        if (!(static_cast<Buffer*>(*(Arg.getMemObject())))->allocate(p_device))
           return false;
       }
     }
@@ -627,10 +628,8 @@ bool LE1KernelEvent::CompileSource() {
 
   std::stringstream pre_asm_command;
   // TODO Include the script as a char array
-  pre_asm_command << "perl " << LE1Device::ScriptsDir << "llvmTransform.pl -syscall "
-    << TempAsmName
-    //<< " -OPC=/home/sam/Dropbox/src/LE1/Assembler/includes/opcodes.txt_asm "
-    << " > " << FinalAsmName;
+  pre_asm_command << "perl " << LE1Device::ScriptsDir
+    << "llvmTransform.pl -syscall " << TempAsmName << " > " << FinalAsmName;
 
   if (system(pre_asm_command.str().c_str()) != 0) {
 #ifdef DBG_OUTPUT
@@ -711,8 +710,9 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
       launcher << "&BufferArg_" << i;
     // Private
     else {
-      void *ArgData = const_cast<void*>(arg.data());
-      launcher << *(static_cast<unsigned*>(ArgData));
+      //void *ArgData = const_cast<void*>(arg.data());
+      //launcher << *(static_cast<unsigned*>(ArgData));
+      launcher << (unsigned)arg.getValue();
     }
     if (i < (kernel->numArgs()-1))
       launcher << ", ";
@@ -723,69 +723,6 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
    << "  }\n"
    << "  return id;\n"
    << "}\n";
-
-  /*
-  if (disabledCores)
-    launcher << "  if (__builtin_le1_read_cpuid() > "
-      << (totalCores - disabledCores - 1) << ") return 0;\n" << std::endl;
-
-  unsigned NestedLoops = 0;
-  if (WorkgroupsPerCore[2] != 0) {
-    launcher << "  for (unsigned z = 0; z < " << WorkgroupsPerCore[2]
-      << "; ++z) {\n"
-    <<      "   __builtin_le1_set_group_id_2(z);\n";
-    ++NestedLoops;
-  }
-  if (WorkgroupsPerCore[1] != 0) {
-    launcher << "    for (unsigned y = 0; y < " << WorkgroupsPerCore[1]
-      << "; ++y) {\n"
-    << "      __builtin_le1_set_group_id_1(y);\n";
-    ++NestedLoops;
-  }
-  if (WorkgroupsPerCore[0] != 0) {
-    launcher << "      for (unsigned x = 0; x < " << WorkgroupsPerCore[0]
-      << "; ++x) {\n"
-    << "        __builtin_le1_set_group_id_0(x + " << WorkgroupsPerCore[0]
-    << " * __builtin_le1_read_cpuid());\n";
-    ++NestedLoops;
-  }
-  launcher<< "        " << KernelName << "(";
-
-  for (unsigned i = 0; i < kernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = kernel->arg(i);
-    // Local
-    if ((arg.kind() == Kernel::Arg::Buffer) &&
-        arg.allocAtKernelRuntime()) {
-      // We're defining the pointers as ints, so divide
-      // FIXME what if the size isn't divisible by four?
-      unsigned size = arg.allocAtKernelRuntime() / 4;
-      launcher << "(&BufferArg_" << i << " + (__builtin_le1_read_cpuid() * "
-        << size << "))";
-    }
-    // Global and local
-    else if (arg.kind() == Kernel::Arg::Buffer)
-      launcher << "&BufferArg_" << i;
-    // Private
-    else {
-      void *ArgData = const_cast<void*>(arg.data());
-      launcher << *(static_cast<unsigned*>(ArgData));
-    }
-    if (i < (kernel->numArgs()-1))
-      launcher << ", ";
-    else {
-      launcher << ");\n";
-
-      for (unsigned i = 0; i < NestedLoops; ++i)
-        launcher << "}\n";
-      launcher << "return 0;\n}";
-    }
-  }
-
-  launcher << "\nvoid reset_local(int *buffer, int size) {\n"
-    << "  for (unsigned id = 0; id < size; ++id)\n"
-    << "    buffer[id] = 0;\n"
-    << "}\n";
-  */
 
   LauncherString = launcher.str();
 #ifdef DBG_OUTPUT
@@ -862,8 +799,8 @@ bool LE1KernelEvent::run() {
 #ifdef DBG_KERNEL
       std::cerr << "Updating kernel arg " << i << std::endl;
 #endif
-      LE1Buffer* buffer =
-        static_cast<LE1Buffer*>((*(MemObject**)Arg.data())->deviceBuffer(p_device));
+      LE1Buffer *buffer =
+        static_cast<LE1Buffer*>(Arg.getDeviceBuffer(p_device));
 
       if (buffer->data() == NULL) {
 #ifdef DBG_OUTPUT
@@ -873,7 +810,8 @@ bool LE1KernelEvent::run() {
         return false;
       }
 
-      unsigned TotalSize = (*(MemObject**)Arg.data())->size();
+      //unsigned TotalSize = (*(MemObject**)Arg.data())->size();
+      unsigned TotalSize = Arg.getMemSize();
       llvm::Type *argType = Arg.type();
 
       if (argType->isIntegerTy(8)) {

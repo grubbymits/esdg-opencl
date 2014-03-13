@@ -342,7 +342,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
     }
 
     // Copy the data
-    arg.alloc();
+    //arg.alloc();
     arg.loadData(value);
 
   // Loop through dependent devices and check whether any of them (the LE1) need
@@ -526,7 +526,8 @@ cl_int Kernel::workGroupInfo(DeviceInterface *device,
  * Kernel::Arg
  */
 Kernel::Arg::Arg(unsigned short vec_dim, File file, Kind kind, llvm::Type* type)
-: p_vec_dim(vec_dim), p_file(file), p_kind(kind), p_type(type), p_data(0),
+: p_vec_dim(vec_dim), p_file(file), p_kind(kind), p_type(type),
+  //p_data(0),
   p_defined(false), p_runtime_alloc(0)
 {
   pointer = false;
@@ -535,19 +536,36 @@ Kernel::Arg::Arg(unsigned short vec_dim, File file, Kind kind, llvm::Type* type)
     pointer = true;
 }
 
+Kernel::Arg::Arg(const Kernel::Arg& arg) {
+  p_vec_dim = arg.vecDim();
+  p_file = arg.file();
+  p_type = arg.type();
+  p_kind = arg.kind();
+  p_defined = arg.defined();
+  p_runtime_alloc = arg.allocAtKernelRuntime();
+  //if (arg.data() && arg.defined()) {
+    //p_data = new unsigned long[arg.vecDim()];
+    //std::memcpy(p_data, arg.data(), arg.valueSize() * arg.vecDim());
+  //}
+
+  argData = arg.getData();
+}
+
 Kernel::Arg::~Arg()
 {
 #ifdef DBG_KERNEL
   std::cerr << "Destructing Kernel::Arg: "
     << std::hex << (unsigned long)this << std::endl;
 #endif
+  /*
   if (p_data) {
 #ifdef DBG_KERNEL
     std::cerr << "freeing data at " << std::hex << (unsigned long)p_data
       << std::endl;
 #endif
-    std::free(p_data);
-  }
+    //std::free(p_data);
+    delete[] (unsigned long*)p_data;
+  }*/
 #ifdef DBG_KERNEL
   std::cerr << "Successfully destroyed Kernel::Arg: "
     << std::hex << (unsigned long)this << std::endl;
@@ -557,13 +575,15 @@ Kernel::Arg::~Arg()
 void Kernel::Arg::alloc()
 {
   // TODO Don't know if I actually need to allocate memory for the kernel arg.
+  /*
   if (!p_data) {
 #ifdef DBG_KERNEL
     std::cerr << "Allocating data for Kernel::Arg ("
       << std::hex << (unsigned long)this << ")" << std::endl;
 #endif
-    p_data = std::malloc(p_vec_dim * valueSize());
-  }
+    //p_data = std::malloc(p_vec_dim * valueSize());
+    p_data = new unsigned long[p_vec_dim];
+  }*/
 }
 
 void Kernel::Arg::loadData(const void *data)
@@ -572,11 +592,31 @@ void Kernel::Arg::loadData(const void *data)
   std::cerr << "Kernel::Arg::loadData\n";
   std::cerr << "copying " << p_vec_dim * valueSize() << " bytes of data\n";
 #endif
+
+  if (p_kind == Arg::Buffer)
+    argData.mem = static_cast<MemObject**>(const_cast<void*>(data));
+  else if (p_kind == Arg::Int8)
+    argData.i8 = *(static_cast<unsigned char*>(const_cast<void*>(data)));
+  else if (p_kind == Arg::Int16)
+    argData.i16 = *(static_cast<unsigned short*>(const_cast<void*>(data)));
+  else if (p_kind == Arg::Int32)
+    argData.i32 = *(static_cast<unsigned*>(const_cast<void*>(data)));
+  else
+    argData.f32 = *(static_cast<float*>(const_cast<void*>(data)));
+
   /* TODO Use the p_type to decide how to write the data out instead of doing a
      memcpy. */
-    std::memcpy(p_data, data, p_vec_dim * valueSize());
+  //  std::memcpy(p_data, data, p_vec_dim * valueSize());
     // FIXME What about if it isn't a MemObject?!
     p_defined = true;
+}
+
+DeviceBuffer *Kernel::Arg::getDeviceBuffer(DeviceInterface *device) const {
+  return (*argData.mem)->deviceBuffer(device);
+}
+
+unsigned Kernel::Arg::getMemSize() const {
+  return (*argData.mem)->size();
 }
 
 void Kernel::Arg::setAllocAtKernelRuntime(size_t size)

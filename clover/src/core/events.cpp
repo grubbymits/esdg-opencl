@@ -835,7 +835,8 @@ KernelEvent::KernelEvent(CommandQueue *parent,
 #ifdef DBG_EVENT
           std::cerr << "Arg is a buffer\n";
 #endif
-            const MemObject *buffer = *(const MemObject **)(a.value(0));
+            //const MemObject *buffer = *(const MemObject **)(a.value(0));
+          const MemObject *buffer = *(a.getMemObject());
 
             if (!BufferEvent::isSubBufferAligned(buffer, device))
             {

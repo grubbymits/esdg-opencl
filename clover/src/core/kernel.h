@@ -53,6 +53,7 @@ namespace Coal
 class Program;
 class DeviceInterface;
 class DeviceKernel;
+class DeviceBuffer;
 class MemObject;
 
 /**
@@ -84,6 +85,9 @@ class Kernel : public Object
         class Arg
         {
           friend class Kernel;
+
+
+
             public:
                 /**
                  * \brief Memory address space qualifier
@@ -123,6 +127,8 @@ class Kernel : public Object
                 Arg(unsigned short vec_dim, File file, Kind kind,
                     llvm::Type* type);
                 ~Arg();
+
+                Arg(const Arg& arg);
 
                 /**
                  * \brief Allocate the argument
@@ -210,6 +216,23 @@ class Kernel : public Object
                 const void *data() const;
                 bool isPointer() const { return pointer; }
 
+                MemObject **getMemObject() const { return argData.mem; }
+
+                DeviceBuffer *getDeviceBuffer(DeviceInterface *device) const;
+
+                unsigned getMemSize() const;
+
+                unsigned getValue() const {
+                 if (p_kind == Int8)
+                  return argData.i8;
+                 else if (p_kind == Int16)
+                  return argData.i16;
+                 else if (p_kind == Int32)
+                   return argData.i32;
+                 else
+                   return argData.f32;
+                }
+
             private:
                 unsigned short p_vec_dim;
                 File p_file;
@@ -220,6 +243,19 @@ class Kernel : public Object
                 size_t p_runtime_alloc;
                 unsigned start_addr;
                 bool pointer;
+
+                // Everything can fit within 64-bits
+                union ArgData {
+                  MemObject **mem;
+                  unsigned char i8;
+                  unsigned short i16;
+                  unsigned int i32;
+                  unsigned long i64;
+                  float f32;
+                  double f64;
+                } argData;
+
+                ArgData getData() const { return argData; }
         };
 
         /**

@@ -169,8 +169,10 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
       ArgAddrs.push_back(CurrentAddr);
 
       if (arg.file() != Kernel::Arg::Local) {
-        LE1Buffer* buffer = static_cast<LE1Buffer*>((*(MemObject**)
-                                      arg.data())->deviceBuffer(TheDevice));
+        //LE1Buffer* buffer = static_cast<LE1Buffer*>((*(MemObject**)
+          //                            arg.data())->deviceBuffer(TheDevice));
+        LE1Buffer *buffer =
+          static_cast<LE1Buffer*>((*(arg.getMemObject()))->deviceBuffer(TheDevice));
         buffer->setAddr(CurrentAddr);
       }
 
@@ -182,8 +184,10 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 #endif
         CurrentAddr += size;
       }
-      else
-        CurrentAddr += (*(MemObject**)arg.data())->size();
+      else {
+        //CurrentAddr += (*(MemObject**)arg.data())->size();
+        CurrentAddr += (*(arg.getMemObject()))->size();
+      }
     }
   }
 
@@ -253,9 +257,12 @@ bool LE1DataPrinter::AppendDataArea() {
       // Sanity check
       if (arg.file() != Kernel::Arg::Local) {
 
-        LE1Buffer* buffer =
-          static_cast<LE1Buffer*>((*(MemObject**)
-                                 arg.data())->deviceBuffer(TheDevice));
+        //LE1Buffer* buffer =
+          //static_cast<LE1Buffer*>((*(MemObject**)
+            //                     arg.data())->deviceBuffer(TheDevice));
+        LE1Buffer *buffer = static_cast<LE1Buffer*>(
+          (*(arg.getMemObject()))->deviceBuffer(TheDevice));
+
         if (buffer->addr() != ArgAddrs[j]) {
 #ifdef DBG_OUTPUT
           std::cout << "!! ERROR: Mismatch in buffer argument addresses!: "
@@ -463,10 +470,10 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
 #endif
 
   llvm::Type* type = arg.type();
-  LE1Buffer* buffer =
-    static_cast<LE1Buffer*>((*(MemObject**)arg.data())->deviceBuffer(TheDevice));
+  LE1Buffer *buffer = static_cast<LE1Buffer*>(arg.getDeviceBuffer(TheDevice));
 
-  unsigned TotalSize = (*(MemObject**)arg.data())->size();
+  //unsigned TotalSize = (*(MemObject**)arg.data())->size();
+  unsigned TotalSize = arg.getMemSize();
   unsigned Addr = buffer->addr();
   void *Data = buffer->data();
 

@@ -44,7 +44,6 @@ using namespace Coal;
 /*
  * MemObject
  */
-
 MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
                      cl_int *errcode_ret)
 : Object(Object::T_MemObject, ctx), p_num_devices(0), p_flags(flags),
@@ -62,7 +61,7 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
     if ((flags & ~all_flags) != 0)
     {
         *errcode_ret = CL_INVALID_VALUE;
-        return;
+      return;
     }
 
     if ((flags & CL_MEM_ALLOC_HOST_PTR) && (flags & CL_MEM_USE_HOST_PTR))
