@@ -10,61 +10,484 @@ Found 1 platform(s)
 Platform found : ESDG
 
 Selected Platform Vendor : ESDG
-Device 0 : LE1 Device ID is 0x7f33b94a0320
-Device 1 : LE1 Device ID is 0x7f33b94a0430
-Device 2 : LE1 Device ID is 0x7f33b94a0540
-Device 3 : LE1 Device ID is 0x7f33b94a0650
-Device 4 : LE1 Device ID is 0x7f33b94a0760
-Device 5 : LE1 Device ID is 0x7f33b94a0870
-Device 6 : LE1 Device ID is 0x7f33b94a0980
-Device 7 : LE1 Device ID is 0x7f33b94a0a90
-Device 8 : LE1 Device ID is 0x7f33b94a0ba0
-Device 9 : LE1 Device ID is 0x7f33b94a0cb0
-Device 10 : LE1 Device ID is 0x7f33b94a0dc0
-Device 11 : LE1 Device ID is 0x7f33b94a0ed0
-Device 12 : LE1 Device ID is 0x7f33b94a0fe0
-Device 13 : LE1 Device ID is 0x7f33b94a10f0
-Device 14 : LE1 Device ID is 0x7f33b94a1200
-Device 15 : LE1 Device ID is 0x7f33b94a1310
-Device 16 : LE1 Device ID is 0x7f33b94a1420
-Device 17 : LE1 Device ID is 0x7f33b94a1530
-Device 18 : LE1 Device ID is 0x7f33b94a1640
-Device 19 : LE1 Device ID is 0x7f33b94a1750
-Device 20 : LE1 Device ID is 0x7f33b94a1860
-Device 21 : LE1 Device ID is 0x7f33b94a1970
-Device 22 : LE1 Device ID is 0x7f33b94a1a80
-Device 23 : LE1 Device ID is 0x7f33b94a1b90
-Device 24 : LE1 Device ID is 0x7f33b94a1ca0
-Device 25 : LE1 Device ID is 0x7f33b94a1db0
-Device 26 : LE1 Device ID is 0x7f33b94a1ec0
-Device 27 : LE1 Device ID is 0x7f33b94a1fd0
-Device 28 : LE1 Device ID is 0x7f33b94a20e0
-Device 29 : LE1 Device ID is 0x7f33b94a21f0
-Device 30 : LE1 Device ID is 0x7f33b94a2300
-Device 31 : LE1 Device ID is 0x7f33b94a2410
-Device 32 : LE1 Device ID is 0x7f33b94a2520
-Device 33 : LE1 Device ID is 0x7f33b94a2630
-Device 34 : LE1 Device ID is 0x7f33b94a2740
-Device 35 : LE1 Device ID is 0x7f33b94a2850
-Device 36 : LE1 Device ID is 0x7f33b94a2960
-Device 37 : LE1 Device ID is 0x7f33b94a2a70
-Device 38 : LE1 Device ID is 0x7f33b94a2b80
-Device 39 : LE1 Device ID is 0x7f33b94a2c90
-Device 40 : LE1 Device ID is 0x7f33b94a2da0
-Device 41 : LE1 Device ID is 0x7f33b94a2eb0
-Device 42 : LE1 Device ID is 0x7f33b94a2fc0
-Device 43 : LE1 Device ID is 0x7f33b94a30d0
-Device 44 : LE1 Device ID is 0x7f33b94a31e0
-Device 45 : LE1 Device ID is 0x7f33b94a32f0
-Device 46 : LE1 Device ID is 0x7f33b94a3400
-Device 47 : LE1 Device ID is 0x7f33b94a3510
-Device 48 : LE1 Device ID is 0x7f33b94a3620
-Device 49 : LE1 Device ID is 0x7f33b94a3730
-length = 32768, MULTIPLY = 2, so globalThreads = 16384 and localThreads = 256!!! ERROR: Object is not an event
-Error: clGetEventEventInfo Failed with Error Code: Error code : CL_INVALID_EVENT
-Location : SDKCommon.cpp:104
-Error: WaitForEventAndRelease(inMapEvt1) Failed
-Location : Reduction.cpp:252
+Device 0 : LE1 Device ID is 0x7ffdd3439300
+Device 1 : LE1 Device ID is 0x7ffdd3439410
+Device 2 : LE1 Device ID is 0x7ffdd3439520
+Device 3 : LE1 Device ID is 0x7ffdd3439630
+Device 4 : LE1 Device ID is 0x7ffdd3439740
+Device 5 : LE1 Device ID is 0x7ffdd3439850
+Device 6 : LE1 Device ID is 0x7ffdd3439960
+Device 7 : LE1 Device ID is 0x7ffdd3439a70
+Device 8 : LE1 Device ID is 0x7ffdd3439b80
+Device 9 : LE1 Device ID is 0x7ffdd3439c90
+Device 10 : LE1 Device ID is 0x7ffdd3439da0
+Device 11 : LE1 Device ID is 0x7ffdd3439eb0
+Device 12 : LE1 Device ID is 0x7ffdd3439fc0
+Device 13 : LE1 Device ID is 0x7ffdd343a0d0
+Device 14 : LE1 Device ID is 0x7ffdd343a1e0
+Device 15 : LE1 Device ID is 0x7ffdd343a2f0
+Device 16 : LE1 Device ID is 0x7ffdd343a400
+Device 17 : LE1 Device ID is 0x7ffdd343a510
+Device 18 : LE1 Device ID is 0x7ffdd343a620
+Device 19 : LE1 Device ID is 0x7ffdd343a730
+Device 20 : LE1 Device ID is 0x7ffdd343a840
+Device 21 : LE1 Device ID is 0x7ffdd343a950
+Device 22 : LE1 Device ID is 0x7ffdd343aa60
+Device 23 : LE1 Device ID is 0x7ffdd343ab70
+Device 24 : LE1 Device ID is 0x7ffdd343ac80
+Device 25 : LE1 Device ID is 0x7ffdd343ad90
+Device 26 : LE1 Device ID is 0x7ffdd343aea0
+Device 27 : LE1 Device ID is 0x7ffdd343afb0
+Device 28 : LE1 Device ID is 0x7ffdd343b0c0
+Device 29 : LE1 Device ID is 0x7ffdd343b1d0
+Device 30 : LE1 Device ID is 0x7ffdd343b2e0
+Device 31 : LE1 Device ID is 0x7ffdd343b3f0
+Device 32 : LE1 Device ID is 0x7ffdd343b500
+Device 33 : LE1 Device ID is 0x7ffdd343b610
+Device 34 : LE1 Device ID is 0x7ffdd343b720
+Device 35 : LE1 Device ID is 0x7ffdd343b830
+Device 36 : LE1 Device ID is 0x7ffdd343b940
+Device 37 : LE1 Device ID is 0x7ffdd343ba50
+Device 38 : LE1 Device ID is 0x7ffdd343bb60
+Device 39 : LE1 Device ID is 0x7ffdd343bc70
+Device 40 : LE1 Device ID is 0x7ffdd343bd80
+Device 41 : LE1 Device ID is 0x7ffdd343be90
+Device 42 : LE1 Device ID is 0x7ffdd343bfa0
+Device 43 : LE1 Device ID is 0x7ffdd343c0b0
+Device 44 : LE1 Device ID is 0x7ffdd343c1c0
+Device 45 : LE1 Device ID is 0x7ffdd343c2d0
+Device 46 : LE1 Device ID is 0x7ffdd343c3e0
+Device 47 : LE1 Device ID is 0x7ffdd343c4f0
+Device 48 : LE1 Device ID is 0x7ffdd343c600
+Device 49 : LE1 Device ID is 0x7ffdd343c710
+Device 50 : LE1 Device ID is 0x7ffdd343c820
+Device 51 : LE1 Device ID is 0x7ffdd343c930
+Device 52 : LE1 Device ID is 0x7ffdd343ca40
+Device 53 : LE1 Device ID is 0x7ffdd343cb50
+Device 54 : LE1 Device ID is 0x7ffdd343cc60
+Device 55 : LE1 Device ID is 0x7ffdd343cd70
+Device 56 : LE1 Device ID is 0x7ffdd343ce80
+Device 57 : LE1 Device ID is 0x7ffdd343cf90
+Device 58 : LE1 Device ID is 0x7ffdd343d0a0
+Device 59 : LE1 Device ID is 0x7ffdd343d1b0
+Device 60 : LE1 Device ID is 0x7ffdd343d2c0
+Device 61 : LE1 Device ID is 0x7ffdd343d3d0
+Device 62 : LE1 Device ID is 0x7ffdd343d4e0
+Device 63 : LE1 Device ID is 0x7ffdd343d5f0
+Device 64 : LE1 Device ID is 0x7ffdd343d700
+Device 65 : LE1 Device ID is 0x7ffdd343d810
+Device 66 : LE1 Device ID is 0x7ffdd343d920
+Device 67 : LE1 Device ID is 0x7ffdd343da30
+Device 68 : LE1 Device ID is 0x7ffdd343db40
+Device 69 : LE1 Device ID is 0x7ffdd343dc50
+homogeneous system
+length = 32768, MULTIPLY = 2, so globalThreads = 16384 and localThreads = 256Device: 4 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 16384
+mem align: 0
+dram_base_offset: 0
+Size of data area : 541768
+Size of bss area : 
+End of memory: 4334144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 541768
+HALT operation received from [0][0][0] at cycle 460471
+HALT operation received from [0][1][0] at cycle 464408
+HALT operation received from [0][2][0] at cycle 472164
+HALT operation received from [0][3][0] at cycle 479680
+Simulation finished, cycleCount = 479681
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 479681
+Device: 4 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 16384
+mem align: 0
+dram_base_offset: 0
+Size of data area : 541768
+Size of bss area : 
+End of memory: 4334144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 541768
+HALT operation received from [0][0][0] at cycle 460471
+HALT operation received from [0][1][0] at cycle 464408
+HALT operation received from [0][2][0] at cycle 472164
+HALT operation received from [0][3][0] at cycle 479680
+Simulation finished, cycleCount = 479681
+ -------------------------------------------------------- 
+Iteration = 2
+Total cycles = 959362
+Executing kernel for 5 iterations
+-------------------------------------------
+Device: 4 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 16384
+mem align: 0
+dram_base_offset: 0
+Size of data area : 541768
+Size of bss area : 
+End of memory: 4334144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 541768
+HALT operation received from [0][0][0] at cycle 460471
+HALT operation received from [0][1][0] at cycle 464408
+HALT operation received from [0][2][0] at cycle 472164
+HALT operation received from [0][3][0] at cycle 479680
+Simulation finished, cycleCount = 479681
+ -------------------------------------------------------- 
+Iteration = 3
+Total cycles = 1439043
+Device: 4 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 16384
+mem align: 0
+dram_base_offset: 0
+Size of data area : 541768
+Size of bss area : 
+End of memory: 4334144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 541768
+HALT operation received from [0][0][0] at cycle 460471
+HALT operation received from [0][1][0] at cycle 464408
+HALT operation received from [0][2][0] at cycle 472164
+HALT operation received from [0][3][0] at cycle 479680
+Simulation finished, cycleCount = 479681
+ -------------------------------------------------------- 
+Iteration = 4
+Total cycles = 1918724
+Device: 4 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 16384
+mem align: 0
+dram_base_offset: 0
+Size of data area : 541768
+Size of bss area : 
+End of memory: 4334144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 541768
+HALT operation received from [0][0][0] at cycle 460471
+HALT operation received from [0][1][0] at cycle 464408
+HALT operation received from [0][2][0] at cycle 472164
+HALT operation received from [0][3][0] at cycle 479680
+Simulation finished, cycleCount = 479681
+ -------------------------------------------------------- 
+Iteration = 5
+Total cycles = 2398405
+Device: 4 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 16384
+mem align: 0
+dram_base_offset: 0
+Size of data area : 541768
+Size of bss area : 
+End of memory: 4334144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 541768
+HALT operation received from [0][0][0] at cycle 460471
+HALT operation received from [0][1][0] at cycle 464408
+HALT operation received from [0][2][0] at cycle 472164
+HALT operation received from [0][3][0] at cycle 479680
+Simulation finished, cycleCount = 479681
+ -------------------------------------------------------- 
+Iteration = 6
+Total cycles = 2878086
+Device: 4 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 16384
+mem align: 0
+dram_base_offset: 0
+Size of data area : 541768
+Size of bss area : 
+End of memory: 4334144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 541768
+HALT operation received from [0][0][0] at cycle 460471
+HALT operation received from [0][1][0] at cycle 464408
+HALT operation received from [0][2][0] at cycle 472164
+HALT operation received from [0][3][0] at cycle 479680
+Simulation finished, cycleCount = 479681
+ -------------------------------------------------------- 
+Iteration = 7
+Total cycles = 3357767
+
+Output
+327727 
+
+Passed!
+
 Platform 0 : ESDG
 setupReduction:
   GROUP_SIZE = 256, VECTOR_SIZE = 4, MULTIPLY = 2
@@ -77,62 +500,512 @@ Found 1 platform(s)
 Platform found : ESDG
 
 Selected Platform Vendor : ESDG
-Device 0 : LE1 Device ID is 0x7fe05dc9a320
-Device 1 : LE1 Device ID is 0x7fe05dc9a430
-Device 2 : LE1 Device ID is 0x7fe05dc9a540
-Device 3 : LE1 Device ID is 0x7fe05dc9a650
-Device 4 : LE1 Device ID is 0x7fe05dc9a760
-Device 5 : LE1 Device ID is 0x7fe05dc9a870
-Device 6 : LE1 Device ID is 0x7fe05dc9a980
-Device 7 : LE1 Device ID is 0x7fe05dc9aa90
-Device 8 : LE1 Device ID is 0x7fe05dc9aba0
-Device 9 : LE1 Device ID is 0x7fe05dc9acb0
-Device 10 : LE1 Device ID is 0x7fe05dc9adc0
-Device 11 : LE1 Device ID is 0x7fe05dc9aed0
-Device 12 : LE1 Device ID is 0x7fe05dc9afe0
-Device 13 : LE1 Device ID is 0x7fe05dc9b0f0
-Device 14 : LE1 Device ID is 0x7fe05dc9b200
-Device 15 : LE1 Device ID is 0x7fe05dc9b310
-Device 16 : LE1 Device ID is 0x7fe05dc9b420
-Device 17 : LE1 Device ID is 0x7fe05dc9b530
-Device 18 : LE1 Device ID is 0x7fe05dc9b640
-Device 19 : LE1 Device ID is 0x7fe05dc9b750
-Device 20 : LE1 Device ID is 0x7fe05dc9b860
-Device 21 : LE1 Device ID is 0x7fe05dc9b970
-Device 22 : LE1 Device ID is 0x7fe05dc9ba80
-Device 23 : LE1 Device ID is 0x7fe05dc9bb90
-Device 24 : LE1 Device ID is 0x7fe05dc9bca0
-Device 25 : LE1 Device ID is 0x7fe05dc9bdb0
-Device 26 : LE1 Device ID is 0x7fe05dc9bec0
-Device 27 : LE1 Device ID is 0x7fe05dc9bfd0
-Device 28 : LE1 Device ID is 0x7fe05dc9c0e0
-Device 29 : LE1 Device ID is 0x7fe05dc9c1f0
-Device 30 : LE1 Device ID is 0x7fe05dc9c300
-Device 31 : LE1 Device ID is 0x7fe05dc9c410
-Device 32 : LE1 Device ID is 0x7fe05dc9c520
-Device 33 : LE1 Device ID is 0x7fe05dc9c630
-Device 34 : LE1 Device ID is 0x7fe05dc9c740
-Device 35 : LE1 Device ID is 0x7fe05dc9c850
-Device 36 : LE1 Device ID is 0x7fe05dc9c960
-Device 37 : LE1 Device ID is 0x7fe05dc9ca70
-Device 38 : LE1 Device ID is 0x7fe05dc9cb80
-Device 39 : LE1 Device ID is 0x7fe05dc9cc90
-Device 40 : LE1 Device ID is 0x7fe05dc9cda0
-Device 41 : LE1 Device ID is 0x7fe05dc9ceb0
-Device 42 : LE1 Device ID is 0x7fe05dc9cfc0
-Device 43 : LE1 Device ID is 0x7fe05dc9d0d0
-Device 44 : LE1 Device ID is 0x7fe05dc9d1e0
-Device 45 : LE1 Device ID is 0x7fe05dc9d2f0
-Device 46 : LE1 Device ID is 0x7fe05dc9d400
-Device 47 : LE1 Device ID is 0x7fe05dc9d510
-Device 48 : LE1 Device ID is 0x7fe05dc9d620
-Device 49 : LE1 Device ID is 0x7fe05dc9d730
+Device 0 : LE1 Device ID is 0x7ffa52479300
+Device 1 : LE1 Device ID is 0x7ffa52479410
+Device 2 : LE1 Device ID is 0x7ffa52479520
+Device 3 : LE1 Device ID is 0x7ffa52479630
+Device 4 : LE1 Device ID is 0x7ffa52479740
+Device 5 : LE1 Device ID is 0x7ffa52479850
+Device 6 : LE1 Device ID is 0x7ffa52479960
+Device 7 : LE1 Device ID is 0x7ffa52479a70
+Device 8 : LE1 Device ID is 0x7ffa52479b80
+Device 9 : LE1 Device ID is 0x7ffa52479c90
+Device 10 : LE1 Device ID is 0x7ffa52479da0
+Device 11 : LE1 Device ID is 0x7ffa52479eb0
+Device 12 : LE1 Device ID is 0x7ffa52479fc0
+Device 13 : LE1 Device ID is 0x7ffa5247a0d0
+Device 14 : LE1 Device ID is 0x7ffa5247a1e0
+Device 15 : LE1 Device ID is 0x7ffa5247a2f0
+Device 16 : LE1 Device ID is 0x7ffa5247a400
+Device 17 : LE1 Device ID is 0x7ffa5247a510
+Device 18 : LE1 Device ID is 0x7ffa5247a620
+Device 19 : LE1 Device ID is 0x7ffa5247a730
+Device 20 : LE1 Device ID is 0x7ffa5247a840
+Device 21 : LE1 Device ID is 0x7ffa5247a950
+Device 22 : LE1 Device ID is 0x7ffa5247aa60
+Device 23 : LE1 Device ID is 0x7ffa5247ab70
+Device 24 : LE1 Device ID is 0x7ffa5247ac80
+Device 25 : LE1 Device ID is 0x7ffa5247ad90
+Device 26 : LE1 Device ID is 0x7ffa5247aea0
+Device 27 : LE1 Device ID is 0x7ffa5247afb0
+Device 28 : LE1 Device ID is 0x7ffa5247b0c0
+Device 29 : LE1 Device ID is 0x7ffa5247b1d0
+Device 30 : LE1 Device ID is 0x7ffa5247b2e0
+Device 31 : LE1 Device ID is 0x7ffa5247b3f0
+Device 32 : LE1 Device ID is 0x7ffa5247b500
+Device 33 : LE1 Device ID is 0x7ffa5247b610
+Device 34 : LE1 Device ID is 0x7ffa5247b720
+Device 35 : LE1 Device ID is 0x7ffa5247b830
+Device 36 : LE1 Device ID is 0x7ffa5247b940
+Device 37 : LE1 Device ID is 0x7ffa5247ba50
+Device 38 : LE1 Device ID is 0x7ffa5247bb60
+Device 39 : LE1 Device ID is 0x7ffa5247bc70
+Device 40 : LE1 Device ID is 0x7ffa5247bd80
+Device 41 : LE1 Device ID is 0x7ffa5247be90
+Device 42 : LE1 Device ID is 0x7ffa5247bfa0
+Device 43 : LE1 Device ID is 0x7ffa5247c0b0
+Device 44 : LE1 Device ID is 0x7ffa5247c1c0
+Device 45 : LE1 Device ID is 0x7ffa5247c2d0
+Device 46 : LE1 Device ID is 0x7ffa5247c3e0
+Device 47 : LE1 Device ID is 0x7ffa5247c4f0
+Device 48 : LE1 Device ID is 0x7ffa5247c600
+Device 49 : LE1 Device ID is 0x7ffa5247c710
+Device 50 : LE1 Device ID is 0x7ffa5247c820
+Device 51 : LE1 Device ID is 0x7ffa5247c930
+Device 52 : LE1 Device ID is 0x7ffa5247ca40
+Device 53 : LE1 Device ID is 0x7ffa5247cb50
+Device 54 : LE1 Device ID is 0x7ffa5247cc60
+Device 55 : LE1 Device ID is 0x7ffa5247cd70
+Device 56 : LE1 Device ID is 0x7ffa5247ce80
+Device 57 : LE1 Device ID is 0x7ffa5247cf90
+Device 58 : LE1 Device ID is 0x7ffa5247d0a0
+Device 59 : LE1 Device ID is 0x7ffa5247d1b0
+Device 60 : LE1 Device ID is 0x7ffa5247d2c0
+Device 61 : LE1 Device ID is 0x7ffa5247d3d0
+Device 62 : LE1 Device ID is 0x7ffa5247d4e0
+Device 63 : LE1 Device ID is 0x7ffa5247d5f0
+Device 64 : LE1 Device ID is 0x7ffa5247d700
+Device 65 : LE1 Device ID is 0x7ffa5247d810
+Device 66 : LE1 Device ID is 0x7ffa5247d920
+Device 67 : LE1 Device ID is 0x7ffa5247da30
+Device 68 : LE1 Device ID is 0x7ffa5247db40
+Device 69 : LE1 Device ID is 0x7ffa5247dc50
 homogeneous system
-length = 32768, MULTIPLY = 2, so globalThreads = 16384 and localThreads = 256!!! ERROR: Object is not an event
-Error: clGetEventEventInfo Failed with Error Code: Error code : CL_INVALID_EVENT
-Location : SDKCommon.cpp:104
-Error: WaitForEventAndRelease(inMapEvt1) Failed
-Location : Reduction.cpp:252
+length = 32768, MULTIPLY = 2, so globalThreads = 16384 and localThreads = 256Device: 8 core 4w4a1m1ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 258486
+HALT operation received from [0][1][0] at cycle 262505
+HALT operation received from [0][2][0] at cycle 267425
+HALT operation received from [0][3][0] at cycle 271431
+HALT operation received from [0][4][0] at cycle 275248
+HALT operation received from [0][5][0] at cycle 279434
+HALT operation received from [0][6][0] at cycle 282718
+HALT operation received from [0][7][0] at cycle 285856
+Simulation finished, cycleCount = 285857
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 285857
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 258486
+HALT operation received from [0][1][0] at cycle 262505
+HALT operation received from [0][2][0] at cycle 267425
+HALT operation received from [0][3][0] at cycle 271431
+HALT operation received from [0][4][0] at cycle 275248
+HALT operation received from [0][5][0] at cycle 279434
+HALT operation received from [0][6][0] at cycle 282718
+HALT operation received from [0][7][0] at cycle 285856
+Simulation finished, cycleCount = 285857
+ -------------------------------------------------------- 
+Iteration = 2
+Total cycles = 571714
+Executing kernel for 5 iterations
+-------------------------------------------
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 258486
+HALT operation received from [0][1][0] at cycle 262505
+HALT operation received from [0][2][0] at cycle 267425
+HALT operation received from [0][3][0] at cycle 271431
+HALT operation received from [0][4][0] at cycle 275248
+HALT operation received from [0][5][0] at cycle 279434
+HALT operation received from [0][6][0] at cycle 282718
+HALT operation received from [0][7][0] at cycle 285856
+Simulation finished, cycleCount = 285857
+ -------------------------------------------------------- 
+Iteration = 3
+Total cycles = 857571
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 258486
+HALT operation received from [0][1][0] at cycle 262505
+HALT operation received from [0][2][0] at cycle 267425
+HALT operation received from [0][3][0] at cycle 271431
+HALT operation received from [0][4][0] at cycle 275248
+HALT operation received from [0][5][0] at cycle 279434
+HALT operation received from [0][6][0] at cycle 282718
+HALT operation received from [0][7][0] at cycle 285856
+Simulation finished, cycleCount = 285857
+ -------------------------------------------------------- 
+Iteration = 4
+Total cycles = 1143428
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 258486
+HALT operation received from [0][1][0] at cycle 262505
+HALT operation received from [0][2][0] at cycle 267425
+HALT operation received from [0][3][0] at cycle 271431
+HALT operation received from [0][4][0] at cycle 275248
+HALT operation received from [0][5][0] at cycle 279434
+HALT operation received from [0][6][0] at cycle 282718
+HALT operation received from [0][7][0] at cycle 285856
+Simulation finished, cycleCount = 285857
+ -------------------------------------------------------- 
+Iteration = 5
+Total cycles = 1429285
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 258486
+HALT operation received from [0][1][0] at cycle 262505
+HALT operation received from [0][2][0] at cycle 267425
+HALT operation received from [0][3][0] at cycle 271431
+HALT operation received from [0][4][0] at cycle 275248
+HALT operation received from [0][5][0] at cycle 279434
+HALT operation received from [0][6][0] at cycle 282718
+HALT operation received from [0][7][0] at cycle 285856
+Simulation finished, cycleCount = 285857
+ -------------------------------------------------------- 
+Iteration = 6
+Total cycles = 1715142
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 258486
+HALT operation received from [0][1][0] at cycle 262505
+HALT operation received from [0][2][0] at cycle 267425
+HALT operation received from [0][3][0] at cycle 271431
+HALT operation received from [0][4][0] at cycle 275248
+HALT operation received from [0][5][0] at cycle 279434
+HALT operation received from [0][6][0] at cycle 282718
+HALT operation received from [0][7][0] at cycle 285856
+Simulation finished, cycleCount = 285857
+ -------------------------------------------------------- 
+Iteration = 7
+Total cycles = 2000999
+
+Output
+327727 
+
+Passed!
+
 Platform 0 : ESDG
 setupReduction:
   GROUP_SIZE = 256, VECTOR_SIZE = 4, MULTIPLY = 2
@@ -145,54 +1018,509 @@ Found 1 platform(s)
 Platform found : ESDG
 
 Selected Platform Vendor : ESDG
-Device 0 : LE1 Device ID is 0x7f46d4403320
-Device 1 : LE1 Device ID is 0x7f46d4403430
-Device 2 : LE1 Device ID is 0x7f46d4403540
-Device 3 : LE1 Device ID is 0x7f46d4403650
-Device 4 : LE1 Device ID is 0x7f46d4403760
-Device 5 : LE1 Device ID is 0x7f46d4403870
-Device 6 : LE1 Device ID is 0x7f46d4403980
-Device 7 : LE1 Device ID is 0x7f46d4403a90
-Device 8 : LE1 Device ID is 0x7f46d4403ba0
-Device 9 : LE1 Device ID is 0x7f46d4403cb0
-Device 10 : LE1 Device ID is 0x7f46d4403dc0
-Device 11 : LE1 Device ID is 0x7f46d4403ed0
-Device 12 : LE1 Device ID is 0x7f46d4403fe0
-Device 13 : LE1 Device ID is 0x7f46d44040f0
-Device 14 : LE1 Device ID is 0x7f46d4404200
-Device 15 : LE1 Device ID is 0x7f46d4404310
-Device 16 : LE1 Device ID is 0x7f46d4404420
-Device 17 : LE1 Device ID is 0x7f46d4404530
-Device 18 : LE1 Device ID is 0x7f46d4404640
-Device 19 : LE1 Device ID is 0x7f46d4404750
-Device 20 : LE1 Device ID is 0x7f46d4404860
-Device 21 : LE1 Device ID is 0x7f46d4404970
-Device 22 : LE1 Device ID is 0x7f46d4404a80
-Device 23 : LE1 Device ID is 0x7f46d4404b90
-Device 24 : LE1 Device ID is 0x7f46d4404ca0
-Device 25 : LE1 Device ID is 0x7f46d4404db0
-Device 26 : LE1 Device ID is 0x7f46d4404ec0
-Device 27 : LE1 Device ID is 0x7f46d4404fd0
-Device 28 : LE1 Device ID is 0x7f46d44050e0
-Device 29 : LE1 Device ID is 0x7f46d44051f0
-Device 30 : LE1 Device ID is 0x7f46d4405300
-Device 31 : LE1 Device ID is 0x7f46d4405410
-Device 32 : LE1 Device ID is 0x7f46d4405520
-Device 33 : LE1 Device ID is 0x7f46d4405630
-Device 34 : LE1 Device ID is 0x7f46d4405740
-Device 35 : LE1 Device ID is 0x7f46d4405850
-Device 36 : LE1 Device ID is 0x7f46d4405960
-Device 37 : LE1 Device ID is 0x7f46d4405a70
-Device 38 : LE1 Device ID is 0x7f46d4405b80
-Device 39 : LE1 Device ID is 0x7f46d4405c90
-Device 40 : LE1 Device ID is 0x7f46d4405da0
-Device 41 : LE1 Device ID is 0x7f46d4405eb0
-Device 42 : LE1 Device ID is 0x7f46d4405fc0
-Device 43 : LE1 Device ID is 0x7f46d44060d0
-Device 44 : LE1 Device ID is 0x7f46d44061e0
-Device 45 : LE1 Device ID is 0x7f46d44062f0
-Device 46 : LE1 Device ID is 0x7f46d4406400
-Device 47 : LE1 Device ID is 0x7f46d4406510
-Device 48 : LE1 Device ID is 0x7f46d4406620
-Device 49 : LE1 Device ID is 0x7f46d4406730
+Device 0 : LE1 Device ID is 0x7f974d4d1300
+Device 1 : LE1 Device ID is 0x7f974d4d1410
+Device 2 : LE1 Device ID is 0x7f974d4d1520
+Device 3 : LE1 Device ID is 0x7f974d4d1630
+Device 4 : LE1 Device ID is 0x7f974d4d1740
+Device 5 : LE1 Device ID is 0x7f974d4d1850
+Device 6 : LE1 Device ID is 0x7f974d4d1960
+Device 7 : LE1 Device ID is 0x7f974d4d1a70
+Device 8 : LE1 Device ID is 0x7f974d4d1b80
+Device 9 : LE1 Device ID is 0x7f974d4d1c90
+Device 10 : LE1 Device ID is 0x7f974d4d1da0
+Device 11 : LE1 Device ID is 0x7f974d4d1eb0
+Device 12 : LE1 Device ID is 0x7f974d4d1fc0
+Device 13 : LE1 Device ID is 0x7f974d4d20d0
+Device 14 : LE1 Device ID is 0x7f974d4d21e0
+Device 15 : LE1 Device ID is 0x7f974d4d22f0
+Device 16 : LE1 Device ID is 0x7f974d4d2400
+Device 17 : LE1 Device ID is 0x7f974d4d2510
+Device 18 : LE1 Device ID is 0x7f974d4d2620
+Device 19 : LE1 Device ID is 0x7f974d4d2730
+Device 20 : LE1 Device ID is 0x7f974d4d2840
+Device 21 : LE1 Device ID is 0x7f974d4d2950
+Device 22 : LE1 Device ID is 0x7f974d4d2a60
+Device 23 : LE1 Device ID is 0x7f974d4d2b70
+Device 24 : LE1 Device ID is 0x7f974d4d2c80
+Device 25 : LE1 Device ID is 0x7f974d4d2d90
+Device 26 : LE1 Device ID is 0x7f974d4d2ea0
+Device 27 : LE1 Device ID is 0x7f974d4d2fb0
+Device 28 : LE1 Device ID is 0x7f974d4d30c0
+Device 29 : LE1 Device ID is 0x7f974d4d31d0
+Device 30 : LE1 Device ID is 0x7f974d4d32e0
+Device 31 : LE1 Device ID is 0x7f974d4d33f0
+Device 32 : LE1 Device ID is 0x7f974d4d3500
+Device 33 : LE1 Device ID is 0x7f974d4d3610
+Device 34 : LE1 Device ID is 0x7f974d4d3720
+Device 35 : LE1 Device ID is 0x7f974d4d3830
+Device 36 : LE1 Device ID is 0x7f974d4d3940
+Device 37 : LE1 Device ID is 0x7f974d4d3a50
+Device 38 : LE1 Device ID is 0x7f974d4d3b60
+Device 39 : LE1 Device ID is 0x7f974d4d3c70
+Device 40 : LE1 Device ID is 0x7f974d4d3d80
+Device 41 : LE1 Device ID is 0x7f974d4d3e90
+Device 42 : LE1 Device ID is 0x7f974d4d3fa0
+Device 43 : LE1 Device ID is 0x7f974d4d40b0
+Device 44 : LE1 Device ID is 0x7f974d4d41c0
+Device 45 : LE1 Device ID is 0x7f974d4d42d0
+Device 46 : LE1 Device ID is 0x7f974d4d43e0
+Device 47 : LE1 Device ID is 0x7f974d4d44f0
+Device 48 : LE1 Device ID is 0x7f974d4d4600
+Device 49 : LE1 Device ID is 0x7f974d4d4710
+Device 50 : LE1 Device ID is 0x7f974d4d4820
+Device 51 : LE1 Device ID is 0x7f974d4d4930
+Device 52 : LE1 Device ID is 0x7f974d4d4a40
+Device 53 : LE1 Device ID is 0x7f974d4d4b50
+Device 54 : LE1 Device ID is 0x7f974d4d4c60
+Device 55 : LE1 Device ID is 0x7f974d4d4d70
+Device 56 : LE1 Device ID is 0x7f974d4d4e80
+Device 57 : LE1 Device ID is 0x7f974d4d4f90
+Device 58 : LE1 Device ID is 0x7f974d4d50a0
+Device 59 : LE1 Device ID is 0x7f974d4d51b0
+Device 60 : LE1 Device ID is 0x7f974d4d52c0
+Device 61 : LE1 Device ID is 0x7f974d4d53d0
+Device 62 : LE1 Device ID is 0x7f974d4d54e0
+Device 63 : LE1 Device ID is 0x7f974d4d55f0
+Device 64 : LE1 Device ID is 0x7f974d4d5700
+Device 65 : LE1 Device ID is 0x7f974d4d5810
+Device 66 : LE1 Device ID is 0x7f974d4d5920
+Device 67 : LE1 Device ID is 0x7f974d4d5a30
+Device 68 : LE1 Device ID is 0x7f974d4d5b40
+Device 69 : LE1 Device ID is 0x7f974d4d5c50
 homogeneous system
+length = 32768, MULTIPLY = 2, so globalThreads = 16384 and localThreads = 256Device: 8 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_2ls_8b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 222056
+HALT operation received from [0][1][0] at cycle 223514
+HALT operation received from [0][2][0] at cycle 226658
+HALT operation received from [0][3][0] at cycle 228920
+HALT operation received from [0][4][0] at cycle 231323
+HALT operation received from [0][5][0] at cycle 233716
+HALT operation received from [0][6][0] at cycle 235547
+HALT operation received from [0][7][0] at cycle 237833
+Simulation finished, cycleCount = 237834
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 237834
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_2ls_8b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 222056
+HALT operation received from [0][1][0] at cycle 223514
+HALT operation received from [0][2][0] at cycle 226658
+HALT operation received from [0][3][0] at cycle 228920
+HALT operation received from [0][4][0] at cycle 231323
+HALT operation received from [0][5][0] at cycle 233716
+HALT operation received from [0][6][0] at cycle 235547
+HALT operation received from [0][7][0] at cycle 237833
+Simulation finished, cycleCount = 237834
+ -------------------------------------------------------- 
+Iteration = 2
+Total cycles = 475668
+Executing kernel for 5 iterations
+-------------------------------------------
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_2ls_8b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 222056
+HALT operation received from [0][1][0] at cycle 223514
+HALT operation received from [0][2][0] at cycle 226658
+HALT operation received from [0][3][0] at cycle 228920
+HALT operation received from [0][4][0] at cycle 231323
+HALT operation received from [0][5][0] at cycle 233716
+HALT operation received from [0][6][0] at cycle 235547
+HALT operation received from [0][7][0] at cycle 237833
+Simulation finished, cycleCount = 237834
+ -------------------------------------------------------- 
+Iteration = 3
+Total cycles = 713502
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_2ls_8b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 222056
+HALT operation received from [0][1][0] at cycle 223514
+HALT operation received from [0][2][0] at cycle 226658
+HALT operation received from [0][3][0] at cycle 228920
+HALT operation received from [0][4][0] at cycle 231323
+HALT operation received from [0][5][0] at cycle 233716
+HALT operation received from [0][6][0] at cycle 235547
+HALT operation received from [0][7][0] at cycle 237833
+Simulation finished, cycleCount = 237834
+ -------------------------------------------------------- 
+Iteration = 4
+Total cycles = 951336
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_2ls_8b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 222056
+HALT operation received from [0][1][0] at cycle 223514
+HALT operation received from [0][2][0] at cycle 226658
+HALT operation received from [0][3][0] at cycle 228920
+HALT operation received from [0][4][0] at cycle 231323
+HALT operation received from [0][5][0] at cycle 233716
+HALT operation received from [0][6][0] at cycle 235547
+HALT operation received from [0][7][0] at cycle 237833
+Simulation finished, cycleCount = 237834
+ -------------------------------------------------------- 
+Iteration = 5
+Total cycles = 1189170
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_2ls_8b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 222056
+HALT operation received from [0][1][0] at cycle 223514
+HALT operation received from [0][2][0] at cycle 226658
+HALT operation received from [0][3][0] at cycle 228920
+HALT operation received from [0][4][0] at cycle 231323
+HALT operation received from [0][5][0] at cycle 233716
+HALT operation received from [0][6][0] at cycle 235547
+HALT operation received from [0][7][0] at cycle 237833
+Simulation finished, cycleCount = 237834
+ -------------------------------------------------------- 
+Iteration = 6
+Total cycles = 1427004
+Device: 8 core 4w4a1m2ls1b
+Compiling kernel: reduce
+
+Dimension 0: Global work size = 16384, Local work size = 256
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 64;
+  int workgroupX = 64;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    reduce(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 1024)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 558168
+Size of bss area : 
+End of memory: 4465344
+Second Pass Completed
+Run Simulation with:
+  binaries/final_reduce.s.bin  
+  binaries/final_reduce.data.bin  
+  8C_4w_2ls_8b.xml
+IRAMFileSize = 716
+DRAMFileSize = 558168
+HALT operation received from [0][0][0] at cycle 222056
+HALT operation received from [0][1][0] at cycle 223514
+HALT operation received from [0][2][0] at cycle 226658
+HALT operation received from [0][3][0] at cycle 228920
+HALT operation received from [0][4][0] at cycle 231323
+HALT operation received from [0][5][0] at cycle 233716
+HALT operation received from [0][6][0] at cycle 235547
+HALT operation received from [0][7][0] at cycle 237833
+Simulation finished, cycleCount = 237834
+ -------------------------------------------------------- 
+Iteration = 7
+Total cycles = 1664838
+
+Output
+327727 
+
+Passed!
+

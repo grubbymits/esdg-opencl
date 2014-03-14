@@ -7,59 +7,80 @@ Found 1 platform(s)
 Platform found : ESDG
 
 Selected Platform Vendor : ESDG
-Device 0 : LE1 Device ID is 0x7ffff7dce300
-Device 1 : LE1 Device ID is 0x7ffff7dce410
-Device 2 : LE1 Device ID is 0x7ffff7dce520
-Device 3 : LE1 Device ID is 0x7ffff7dce630
-Device 4 : LE1 Device ID is 0x7ffff7dce740
-Device 5 : LE1 Device ID is 0x7ffff7dce850
-Device 6 : LE1 Device ID is 0x7ffff7dce960
-Device 7 : LE1 Device ID is 0x7ffff7dcea70
-Device 8 : LE1 Device ID is 0x7ffff7dceb80
-Device 9 : LE1 Device ID is 0x7ffff7dcec90
-Device 10 : LE1 Device ID is 0x7ffff7dceda0
-Device 11 : LE1 Device ID is 0x7ffff7dceeb0
-Device 12 : LE1 Device ID is 0x7ffff7dcefc0
-Device 13 : LE1 Device ID is 0x7ffff7dcf0d0
-Device 14 : LE1 Device ID is 0x7ffff7dcf1e0
-Device 15 : LE1 Device ID is 0x7ffff7dcf2f0
-Device 16 : LE1 Device ID is 0x7ffff7dcf400
-Device 17 : LE1 Device ID is 0x7ffff7dcf510
-Device 18 : LE1 Device ID is 0x7ffff7dcf620
-Device 19 : LE1 Device ID is 0x7ffff7dcf730
-Device 20 : LE1 Device ID is 0x7ffff7dcf840
-Device 21 : LE1 Device ID is 0x7ffff7dcf950
-Device 22 : LE1 Device ID is 0x7ffff7dcfa60
-Device 23 : LE1 Device ID is 0x7ffff7dcfb70
-Device 24 : LE1 Device ID is 0x7ffff7dcfc80
-Device 25 : LE1 Device ID is 0x7ffff7dcfd90
-Device 26 : LE1 Device ID is 0x7ffff7dcfea0
-Device 27 : LE1 Device ID is 0x7ffff7dcffb0
-Device 28 : LE1 Device ID is 0x7ffff7dd00c0
-Device 29 : LE1 Device ID is 0x7ffff7dd01d0
-Device 30 : LE1 Device ID is 0x7ffff7dd02e0
-Device 31 : LE1 Device ID is 0x7ffff7dd03f0
-Device 32 : LE1 Device ID is 0x7ffff7dd0500
-Device 33 : LE1 Device ID is 0x7ffff7dd0610
-Device 34 : LE1 Device ID is 0x7ffff7dd0720
-Device 35 : LE1 Device ID is 0x7ffff7dd0830
-Device 36 : LE1 Device ID is 0x7ffff7dd0940
-Device 37 : LE1 Device ID is 0x7ffff7dd0a50
-Device 38 : LE1 Device ID is 0x7ffff7dd0b60
-Device 39 : LE1 Device ID is 0x7ffff7dd0c70
-Device 40 : LE1 Device ID is 0x7ffff7dd0d80
-Device 41 : LE1 Device ID is 0x7ffff7dd0e90
-Device 42 : LE1 Device ID is 0x7ffff7dd0fa0
-Device 43 : LE1 Device ID is 0x7ffff7dd10b0
-Device 44 : LE1 Device ID is 0x7ffff7dd11c0
-Device 45 : LE1 Device ID is 0x7ffff7dd12d0
-Device 46 : LE1 Device ID is 0x7ffff7dd13e0
-Device 47 : LE1 Device ID is 0x7ffff7dd14f0
-Device 48 : LE1 Device ID is 0x7ffff7dd1600
-Device 49 : LE1 Device ID is 0x7ffff7dd1710
+Device 0 : LE1 Device ID is 0x7fc895609300
+Device 1 : LE1 Device ID is 0x7fc895609410
+Device 2 : LE1 Device ID is 0x7fc895609520
+Device 3 : LE1 Device ID is 0x7fc895609630
+Device 4 : LE1 Device ID is 0x7fc895609740
+Device 5 : LE1 Device ID is 0x7fc895609850
+Device 6 : LE1 Device ID is 0x7fc895609960
+Device 7 : LE1 Device ID is 0x7fc895609a70
+Device 8 : LE1 Device ID is 0x7fc895609b80
+Device 9 : LE1 Device ID is 0x7fc895609c90
+Device 10 : LE1 Device ID is 0x7fc895609da0
+Device 11 : LE1 Device ID is 0x7fc895609eb0
+Device 12 : LE1 Device ID is 0x7fc895609fc0
+Device 13 : LE1 Device ID is 0x7fc89560a0d0
+Device 14 : LE1 Device ID is 0x7fc89560a1e0
+Device 15 : LE1 Device ID is 0x7fc89560a2f0
+Device 16 : LE1 Device ID is 0x7fc89560a400
+Device 17 : LE1 Device ID is 0x7fc89560a510
+Device 18 : LE1 Device ID is 0x7fc89560a620
+Device 19 : LE1 Device ID is 0x7fc89560a730
+Device 20 : LE1 Device ID is 0x7fc89560a840
+Device 21 : LE1 Device ID is 0x7fc89560a950
+Device 22 : LE1 Device ID is 0x7fc89560aa60
+Device 23 : LE1 Device ID is 0x7fc89560ab70
+Device 24 : LE1 Device ID is 0x7fc89560ac80
+Device 25 : LE1 Device ID is 0x7fc89560ad90
+Device 26 : LE1 Device ID is 0x7fc89560aea0
+Device 27 : LE1 Device ID is 0x7fc89560afb0
+Device 28 : LE1 Device ID is 0x7fc89560b0c0
+Device 29 : LE1 Device ID is 0x7fc89560b1d0
+Device 30 : LE1 Device ID is 0x7fc89560b2e0
+Device 31 : LE1 Device ID is 0x7fc89560b3f0
+Device 32 : LE1 Device ID is 0x7fc89560b500
+Device 33 : LE1 Device ID is 0x7fc89560b610
+Device 34 : LE1 Device ID is 0x7fc89560b720
+Device 35 : LE1 Device ID is 0x7fc89560b830
+Device 36 : LE1 Device ID is 0x7fc89560b940
+Device 37 : LE1 Device ID is 0x7fc89560ba50
+Device 38 : LE1 Device ID is 0x7fc89560bb60
+Device 39 : LE1 Device ID is 0x7fc89560bc70
+Device 40 : LE1 Device ID is 0x7fc89560bd80
+Device 41 : LE1 Device ID is 0x7fc89560be90
+Device 42 : LE1 Device ID is 0x7fc89560bfa0
+Device 43 : LE1 Device ID is 0x7fc89560c0b0
+Device 44 : LE1 Device ID is 0x7fc89560c1c0
+Device 45 : LE1 Device ID is 0x7fc89560c2d0
+Device 46 : LE1 Device ID is 0x7fc89560c3e0
+Device 47 : LE1 Device ID is 0x7fc89560c4f0
+Device 48 : LE1 Device ID is 0x7fc89560c600
+Device 49 : LE1 Device ID is 0x7fc89560c710
+Device 50 : LE1 Device ID is 0x7fc89560c820
+Device 51 : LE1 Device ID is 0x7fc89560c930
+Device 52 : LE1 Device ID is 0x7fc89560ca40
+Device 53 : LE1 Device ID is 0x7fc89560cb50
+Device 54 : LE1 Device ID is 0x7fc89560cc60
+Device 55 : LE1 Device ID is 0x7fc89560cd70
+Device 56 : LE1 Device ID is 0x7fc89560ce80
+Device 57 : LE1 Device ID is 0x7fc89560cf90
+Device 58 : LE1 Device ID is 0x7fc89560d0a0
+Device 59 : LE1 Device ID is 0x7fc89560d1b0
+Device 60 : LE1 Device ID is 0x7fc89560d2c0
+Device 61 : LE1 Device ID is 0x7fc89560d3d0
+Device 62 : LE1 Device ID is 0x7fc89560d4e0
+Device 63 : LE1 Device ID is 0x7fc89560d5f0
+Device 64 : LE1 Device ID is 0x7fc89560d700
+Device 65 : LE1 Device ID is 0x7fc89560d810
+Device 66 : LE1 Device ID is 0x7fc89560d920
+Device 67 : LE1 Device ID is 0x7fc89560da30
+Device 68 : LE1 Device ID is 0x7fc89560db40
+Device 69 : LE1 Device ID is 0x7fc89560dc50
+homogeneous system
 Executing kernel for 1 iterations
 -------------------------------------------
-Device: 1 core scalar
+Device: 2 core scalar
 Compiling kernel: matrixTranspose
 
 Dimension 0: Global work size = 32, Local work size = 16
@@ -71,7 +92,7 @@ extern int BufferArg_1;
 extern int BufferArg_2;
 int main(void) {
   int id = 0;
-  int num_cores = 1;
+  int num_cores = 2;
   int total_workgroups = 4;
   int workgroupX = 2;
   int workgroupY = 2;
@@ -96,24 +117,2741 @@ int main(void) {
   return id;
 }
 
-Setting the buffer size kernel arg 2, which is a local, to 16384
+Setting the buffer size kernel arg 2, which is a local, to 32768
 mem align: 0
 dram_base_offset: 0
-Size of data area : 147516
+Size of data area : 163904
 Size of bss area : 
-End of memory: 1180128
+End of memory: 1311232
 Second Pass Completed
 Run Simulation with:
   binaries/final_matrixTranspose.s.bin  
   binaries/final_matrixTranspose.data.bin  
-  1C_1w.xml
+  2C_1w_2b.xml
 IRAMFileSize = 1520
-DRAMFileSize = 147516
-HALT operation received from [0][0][0] at cycle 150855
-Simulation finished, cycleCount = 150856
+DRAMFileSize = 163904
+HALT operation received from [0][0][0] at cycle 77152
+HALT operation received from [0][1][0] at cycle 87324
+Simulation finished, cycleCount = 87325
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 150856
+Total cycles = 87325
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f8fb2db9300
+Device 1 : LE1 Device ID is 0x7f8fb2db9410
+Device 2 : LE1 Device ID is 0x7f8fb2db9520
+Device 3 : LE1 Device ID is 0x7f8fb2db9630
+Device 4 : LE1 Device ID is 0x7f8fb2db9740
+Device 5 : LE1 Device ID is 0x7f8fb2db9850
+Device 6 : LE1 Device ID is 0x7f8fb2db9960
+Device 7 : LE1 Device ID is 0x7f8fb2db9a70
+Device 8 : LE1 Device ID is 0x7f8fb2db9b80
+Device 9 : LE1 Device ID is 0x7f8fb2db9c90
+Device 10 : LE1 Device ID is 0x7f8fb2db9da0
+Device 11 : LE1 Device ID is 0x7f8fb2db9eb0
+Device 12 : LE1 Device ID is 0x7f8fb2db9fc0
+Device 13 : LE1 Device ID is 0x7f8fb2dba0d0
+Device 14 : LE1 Device ID is 0x7f8fb2dba1e0
+Device 15 : LE1 Device ID is 0x7f8fb2dba2f0
+Device 16 : LE1 Device ID is 0x7f8fb2dba400
+Device 17 : LE1 Device ID is 0x7f8fb2dba510
+Device 18 : LE1 Device ID is 0x7f8fb2dba620
+Device 19 : LE1 Device ID is 0x7f8fb2dba730
+Device 20 : LE1 Device ID is 0x7f8fb2dba840
+Device 21 : LE1 Device ID is 0x7f8fb2dba950
+Device 22 : LE1 Device ID is 0x7f8fb2dbaa60
+Device 23 : LE1 Device ID is 0x7f8fb2dbab70
+Device 24 : LE1 Device ID is 0x7f8fb2dbac80
+Device 25 : LE1 Device ID is 0x7f8fb2dbad90
+Device 26 : LE1 Device ID is 0x7f8fb2dbaea0
+Device 27 : LE1 Device ID is 0x7f8fb2dbafb0
+Device 28 : LE1 Device ID is 0x7f8fb2dbb0c0
+Device 29 : LE1 Device ID is 0x7f8fb2dbb1d0
+Device 30 : LE1 Device ID is 0x7f8fb2dbb2e0
+Device 31 : LE1 Device ID is 0x7f8fb2dbb3f0
+Device 32 : LE1 Device ID is 0x7f8fb2dbb500
+Device 33 : LE1 Device ID is 0x7f8fb2dbb610
+Device 34 : LE1 Device ID is 0x7f8fb2dbb720
+Device 35 : LE1 Device ID is 0x7f8fb2dbb830
+Device 36 : LE1 Device ID is 0x7f8fb2dbb940
+Device 37 : LE1 Device ID is 0x7f8fb2dbba50
+Device 38 : LE1 Device ID is 0x7f8fb2dbbb60
+Device 39 : LE1 Device ID is 0x7f8fb2dbbc70
+Device 40 : LE1 Device ID is 0x7f8fb2dbbd80
+Device 41 : LE1 Device ID is 0x7f8fb2dbbe90
+Device 42 : LE1 Device ID is 0x7f8fb2dbbfa0
+Device 43 : LE1 Device ID is 0x7f8fb2dbc0b0
+Device 44 : LE1 Device ID is 0x7f8fb2dbc1c0
+Device 45 : LE1 Device ID is 0x7f8fb2dbc2d0
+Device 46 : LE1 Device ID is 0x7f8fb2dbc3e0
+Device 47 : LE1 Device ID is 0x7f8fb2dbc4f0
+Device 48 : LE1 Device ID is 0x7f8fb2dbc600
+Device 49 : LE1 Device ID is 0x7f8fb2dbc710
+Device 50 : LE1 Device ID is 0x7f8fb2dbc820
+Device 51 : LE1 Device ID is 0x7f8fb2dbc930
+Device 52 : LE1 Device ID is 0x7f8fb2dbca40
+Device 53 : LE1 Device ID is 0x7f8fb2dbcb50
+Device 54 : LE1 Device ID is 0x7f8fb2dbcc60
+Device 55 : LE1 Device ID is 0x7f8fb2dbcd70
+Device 56 : LE1 Device ID is 0x7f8fb2dbce80
+Device 57 : LE1 Device ID is 0x7f8fb2dbcf90
+Device 58 : LE1 Device ID is 0x7f8fb2dbd0a0
+Device 59 : LE1 Device ID is 0x7f8fb2dbd1b0
+Device 60 : LE1 Device ID is 0x7f8fb2dbd2c0
+Device 61 : LE1 Device ID is 0x7f8fb2dbd3d0
+Device 62 : LE1 Device ID is 0x7f8fb2dbd4e0
+Device 63 : LE1 Device ID is 0x7f8fb2dbd5f0
+Device 64 : LE1 Device ID is 0x7f8fb2dbd700
+Device 65 : LE1 Device ID is 0x7f8fb2dbd810
+Device 66 : LE1 Device ID is 0x7f8fb2dbd920
+Device 67 : LE1 Device ID is 0x7f8fb2dbda30
+Device 68 : LE1 Device ID is 0x7f8fb2dbdb40
+Device 69 : LE1 Device ID is 0x7f8fb2dbdc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 4 core scalar
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 65536
+mem align: 0
+dram_base_offset: 0
+Size of data area : 196680
+Size of bss area : 
+End of memory: 1573440
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  4C_1w_2b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 196680
+HALT operation received from [0][0][0] at cycle 49842
+HALT operation received from [0][1][0] at cycle 51444
+HALT operation received from [0][2][0] at cycle 54163
+HALT operation received from [0][3][0] at cycle 55444
+Simulation finished, cycleCount = 55445
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 55445
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f7809569300
+Device 1 : LE1 Device ID is 0x7f7809569410
+Device 2 : LE1 Device ID is 0x7f7809569520
+Device 3 : LE1 Device ID is 0x7f7809569630
+Device 4 : LE1 Device ID is 0x7f7809569740
+Device 5 : LE1 Device ID is 0x7f7809569850
+Device 6 : LE1 Device ID is 0x7f7809569960
+Device 7 : LE1 Device ID is 0x7f7809569a70
+Device 8 : LE1 Device ID is 0x7f7809569b80
+Device 9 : LE1 Device ID is 0x7f7809569c90
+Device 10 : LE1 Device ID is 0x7f7809569da0
+Device 11 : LE1 Device ID is 0x7f7809569eb0
+Device 12 : LE1 Device ID is 0x7f7809569fc0
+Device 13 : LE1 Device ID is 0x7f780956a0d0
+Device 14 : LE1 Device ID is 0x7f780956a1e0
+Device 15 : LE1 Device ID is 0x7f780956a2f0
+Device 16 : LE1 Device ID is 0x7f780956a400
+Device 17 : LE1 Device ID is 0x7f780956a510
+Device 18 : LE1 Device ID is 0x7f780956a620
+Device 19 : LE1 Device ID is 0x7f780956a730
+Device 20 : LE1 Device ID is 0x7f780956a840
+Device 21 : LE1 Device ID is 0x7f780956a950
+Device 22 : LE1 Device ID is 0x7f780956aa60
+Device 23 : LE1 Device ID is 0x7f780956ab70
+Device 24 : LE1 Device ID is 0x7f780956ac80
+Device 25 : LE1 Device ID is 0x7f780956ad90
+Device 26 : LE1 Device ID is 0x7f780956aea0
+Device 27 : LE1 Device ID is 0x7f780956afb0
+Device 28 : LE1 Device ID is 0x7f780956b0c0
+Device 29 : LE1 Device ID is 0x7f780956b1d0
+Device 30 : LE1 Device ID is 0x7f780956b2e0
+Device 31 : LE1 Device ID is 0x7f780956b3f0
+Device 32 : LE1 Device ID is 0x7f780956b500
+Device 33 : LE1 Device ID is 0x7f780956b610
+Device 34 : LE1 Device ID is 0x7f780956b720
+Device 35 : LE1 Device ID is 0x7f780956b830
+Device 36 : LE1 Device ID is 0x7f780956b940
+Device 37 : LE1 Device ID is 0x7f780956ba50
+Device 38 : LE1 Device ID is 0x7f780956bb60
+Device 39 : LE1 Device ID is 0x7f780956bc70
+Device 40 : LE1 Device ID is 0x7f780956bd80
+Device 41 : LE1 Device ID is 0x7f780956be90
+Device 42 : LE1 Device ID is 0x7f780956bfa0
+Device 43 : LE1 Device ID is 0x7f780956c0b0
+Device 44 : LE1 Device ID is 0x7f780956c1c0
+Device 45 : LE1 Device ID is 0x7f780956c2d0
+Device 46 : LE1 Device ID is 0x7f780956c3e0
+Device 47 : LE1 Device ID is 0x7f780956c4f0
+Device 48 : LE1 Device ID is 0x7f780956c600
+Device 49 : LE1 Device ID is 0x7f780956c710
+Device 50 : LE1 Device ID is 0x7f780956c820
+Device 51 : LE1 Device ID is 0x7f780956c930
+Device 52 : LE1 Device ID is 0x7f780956ca40
+Device 53 : LE1 Device ID is 0x7f780956cb50
+Device 54 : LE1 Device ID is 0x7f780956cc60
+Device 55 : LE1 Device ID is 0x7f780956cd70
+Device 56 : LE1 Device ID is 0x7f780956ce80
+Device 57 : LE1 Device ID is 0x7f780956cf90
+Device 58 : LE1 Device ID is 0x7f780956d0a0
+Device 59 : LE1 Device ID is 0x7f780956d1b0
+Device 60 : LE1 Device ID is 0x7f780956d2c0
+Device 61 : LE1 Device ID is 0x7f780956d3d0
+Device 62 : LE1 Device ID is 0x7f780956d4e0
+Device 63 : LE1 Device ID is 0x7f780956d5f0
+Device 64 : LE1 Device ID is 0x7f780956d700
+Device 65 : LE1 Device ID is 0x7f780956d810
+Device 66 : LE1 Device ID is 0x7f780956d920
+Device 67 : LE1 Device ID is 0x7f780956da30
+Device 68 : LE1 Device ID is 0x7f780956db40
+Device 69 : LE1 Device ID is 0x7f780956dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 8 core scalar
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 131072
+mem align: 0
+dram_base_offset: 0
+Size of data area : 262232
+Size of bss area : 
+End of memory: 2097856
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  8C_1w_4b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 262232
+HALT operation received from [0][4][0] at cycle 21
+HALT operation received from [0][5][0] at cycle 22
+HALT operation received from [0][6][0] at cycle 23
+HALT operation received from [0][7][0] at cycle 24
+HALT operation received from [0][0][0] at cycle 40985
+HALT operation received from [0][1][0] at cycle 42619
+HALT operation received from [0][2][0] at cycle 44514
+HALT operation received from [0][3][0] at cycle 46477
+Simulation finished, cycleCount = 46478
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 46478
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f101ec59300
+Device 1 : LE1 Device ID is 0x7f101ec59410
+Device 2 : LE1 Device ID is 0x7f101ec59520
+Device 3 : LE1 Device ID is 0x7f101ec59630
+Device 4 : LE1 Device ID is 0x7f101ec59740
+Device 5 : LE1 Device ID is 0x7f101ec59850
+Device 6 : LE1 Device ID is 0x7f101ec59960
+Device 7 : LE1 Device ID is 0x7f101ec59a70
+Device 8 : LE1 Device ID is 0x7f101ec59b80
+Device 9 : LE1 Device ID is 0x7f101ec59c90
+Device 10 : LE1 Device ID is 0x7f101ec59da0
+Device 11 : LE1 Device ID is 0x7f101ec59eb0
+Device 12 : LE1 Device ID is 0x7f101ec59fc0
+Device 13 : LE1 Device ID is 0x7f101ec5a0d0
+Device 14 : LE1 Device ID is 0x7f101ec5a1e0
+Device 15 : LE1 Device ID is 0x7f101ec5a2f0
+Device 16 : LE1 Device ID is 0x7f101ec5a400
+Device 17 : LE1 Device ID is 0x7f101ec5a510
+Device 18 : LE1 Device ID is 0x7f101ec5a620
+Device 19 : LE1 Device ID is 0x7f101ec5a730
+Device 20 : LE1 Device ID is 0x7f101ec5a840
+Device 21 : LE1 Device ID is 0x7f101ec5a950
+Device 22 : LE1 Device ID is 0x7f101ec5aa60
+Device 23 : LE1 Device ID is 0x7f101ec5ab70
+Device 24 : LE1 Device ID is 0x7f101ec5ac80
+Device 25 : LE1 Device ID is 0x7f101ec5ad90
+Device 26 : LE1 Device ID is 0x7f101ec5aea0
+Device 27 : LE1 Device ID is 0x7f101ec5afb0
+Device 28 : LE1 Device ID is 0x7f101ec5b0c0
+Device 29 : LE1 Device ID is 0x7f101ec5b1d0
+Device 30 : LE1 Device ID is 0x7f101ec5b2e0
+Device 31 : LE1 Device ID is 0x7f101ec5b3f0
+Device 32 : LE1 Device ID is 0x7f101ec5b500
+Device 33 : LE1 Device ID is 0x7f101ec5b610
+Device 34 : LE1 Device ID is 0x7f101ec5b720
+Device 35 : LE1 Device ID is 0x7f101ec5b830
+Device 36 : LE1 Device ID is 0x7f101ec5b940
+Device 37 : LE1 Device ID is 0x7f101ec5ba50
+Device 38 : LE1 Device ID is 0x7f101ec5bb60
+Device 39 : LE1 Device ID is 0x7f101ec5bc70
+Device 40 : LE1 Device ID is 0x7f101ec5bd80
+Device 41 : LE1 Device ID is 0x7f101ec5be90
+Device 42 : LE1 Device ID is 0x7f101ec5bfa0
+Device 43 : LE1 Device ID is 0x7f101ec5c0b0
+Device 44 : LE1 Device ID is 0x7f101ec5c1c0
+Device 45 : LE1 Device ID is 0x7f101ec5c2d0
+Device 46 : LE1 Device ID is 0x7f101ec5c3e0
+Device 47 : LE1 Device ID is 0x7f101ec5c4f0
+Device 48 : LE1 Device ID is 0x7f101ec5c600
+Device 49 : LE1 Device ID is 0x7f101ec5c710
+Device 50 : LE1 Device ID is 0x7f101ec5c820
+Device 51 : LE1 Device ID is 0x7f101ec5c930
+Device 52 : LE1 Device ID is 0x7f101ec5ca40
+Device 53 : LE1 Device ID is 0x7f101ec5cb50
+Device 54 : LE1 Device ID is 0x7f101ec5cc60
+Device 55 : LE1 Device ID is 0x7f101ec5cd70
+Device 56 : LE1 Device ID is 0x7f101ec5ce80
+Device 57 : LE1 Device ID is 0x7f101ec5cf90
+Device 58 : LE1 Device ID is 0x7f101ec5d0a0
+Device 59 : LE1 Device ID is 0x7f101ec5d1b0
+Device 60 : LE1 Device ID is 0x7f101ec5d2c0
+Device 61 : LE1 Device ID is 0x7f101ec5d3d0
+Device 62 : LE1 Device ID is 0x7f101ec5d4e0
+Device 63 : LE1 Device ID is 0x7f101ec5d5f0
+Device 64 : LE1 Device ID is 0x7f101ec5d700
+Device 65 : LE1 Device ID is 0x7f101ec5d810
+Device 66 : LE1 Device ID is 0x7f101ec5d920
+Device 67 : LE1 Device ID is 0x7f101ec5da30
+Device 68 : LE1 Device ID is 0x7f101ec5db40
+Device 69 : LE1 Device ID is 0x7f101ec5dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 16 core scalar
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 262144
+mem align: 0
+dram_base_offset: 0
+Size of data area : 393336
+Size of bss area : 
+End of memory: 3146688
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  16C_1w_8b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 393336
+HALT operation received from [0][4][0] at cycle 21
+HALT operation received from [0][5][0] at cycle 24
+HALT operation received from [0][6][0] at cycle 26
+HALT operation received from [0][7][0] at cycle 29
+HALT operation received from [0][8][0] at cycle 30
+HALT operation received from [0][9][0] at cycle 31
+HALT operation received from [0][10][0] at cycle 33
+HALT operation received from [0][11][0] at cycle 35
+HALT operation received from [0][12][0] at cycle 38
+HALT operation received from [0][13][0] at cycle 39
+HALT operation received from [0][14][0] at cycle 40
+HALT operation received from [0][15][0] at cycle 41
+HALT operation received from [0][0][0] at cycle 38870
+HALT operation received from [0][1][0] at cycle 39776
+HALT operation received from [0][2][0] at cycle 40987
+HALT operation received from [0][3][0] at cycle 42264
+Simulation finished, cycleCount = 42265
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 42265
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7fd211f29300
+Device 1 : LE1 Device ID is 0x7fd211f29410
+Device 2 : LE1 Device ID is 0x7fd211f29520
+Device 3 : LE1 Device ID is 0x7fd211f29630
+Device 4 : LE1 Device ID is 0x7fd211f29740
+Device 5 : LE1 Device ID is 0x7fd211f29850
+Device 6 : LE1 Device ID is 0x7fd211f29960
+Device 7 : LE1 Device ID is 0x7fd211f29a70
+Device 8 : LE1 Device ID is 0x7fd211f29b80
+Device 9 : LE1 Device ID is 0x7fd211f29c90
+Device 10 : LE1 Device ID is 0x7fd211f29da0
+Device 11 : LE1 Device ID is 0x7fd211f29eb0
+Device 12 : LE1 Device ID is 0x7fd211f29fc0
+Device 13 : LE1 Device ID is 0x7fd211f2a0d0
+Device 14 : LE1 Device ID is 0x7fd211f2a1e0
+Device 15 : LE1 Device ID is 0x7fd211f2a2f0
+Device 16 : LE1 Device ID is 0x7fd211f2a400
+Device 17 : LE1 Device ID is 0x7fd211f2a510
+Device 18 : LE1 Device ID is 0x7fd211f2a620
+Device 19 : LE1 Device ID is 0x7fd211f2a730
+Device 20 : LE1 Device ID is 0x7fd211f2a840
+Device 21 : LE1 Device ID is 0x7fd211f2a950
+Device 22 : LE1 Device ID is 0x7fd211f2aa60
+Device 23 : LE1 Device ID is 0x7fd211f2ab70
+Device 24 : LE1 Device ID is 0x7fd211f2ac80
+Device 25 : LE1 Device ID is 0x7fd211f2ad90
+Device 26 : LE1 Device ID is 0x7fd211f2aea0
+Device 27 : LE1 Device ID is 0x7fd211f2afb0
+Device 28 : LE1 Device ID is 0x7fd211f2b0c0
+Device 29 : LE1 Device ID is 0x7fd211f2b1d0
+Device 30 : LE1 Device ID is 0x7fd211f2b2e0
+Device 31 : LE1 Device ID is 0x7fd211f2b3f0
+Device 32 : LE1 Device ID is 0x7fd211f2b500
+Device 33 : LE1 Device ID is 0x7fd211f2b610
+Device 34 : LE1 Device ID is 0x7fd211f2b720
+Device 35 : LE1 Device ID is 0x7fd211f2b830
+Device 36 : LE1 Device ID is 0x7fd211f2b940
+Device 37 : LE1 Device ID is 0x7fd211f2ba50
+Device 38 : LE1 Device ID is 0x7fd211f2bb60
+Device 39 : LE1 Device ID is 0x7fd211f2bc70
+Device 40 : LE1 Device ID is 0x7fd211f2bd80
+Device 41 : LE1 Device ID is 0x7fd211f2be90
+Device 42 : LE1 Device ID is 0x7fd211f2bfa0
+Device 43 : LE1 Device ID is 0x7fd211f2c0b0
+Device 44 : LE1 Device ID is 0x7fd211f2c1c0
+Device 45 : LE1 Device ID is 0x7fd211f2c2d0
+Device 46 : LE1 Device ID is 0x7fd211f2c3e0
+Device 47 : LE1 Device ID is 0x7fd211f2c4f0
+Device 48 : LE1 Device ID is 0x7fd211f2c600
+Device 49 : LE1 Device ID is 0x7fd211f2c710
+Device 50 : LE1 Device ID is 0x7fd211f2c820
+Device 51 : LE1 Device ID is 0x7fd211f2c930
+Device 52 : LE1 Device ID is 0x7fd211f2ca40
+Device 53 : LE1 Device ID is 0x7fd211f2cb50
+Device 54 : LE1 Device ID is 0x7fd211f2cc60
+Device 55 : LE1 Device ID is 0x7fd211f2cd70
+Device 56 : LE1 Device ID is 0x7fd211f2ce80
+Device 57 : LE1 Device ID is 0x7fd211f2cf90
+Device 58 : LE1 Device ID is 0x7fd211f2d0a0
+Device 59 : LE1 Device ID is 0x7fd211f2d1b0
+Device 60 : LE1 Device ID is 0x7fd211f2d2c0
+Device 61 : LE1 Device ID is 0x7fd211f2d3d0
+Device 62 : LE1 Device ID is 0x7fd211f2d4e0
+Device 63 : LE1 Device ID is 0x7fd211f2d5f0
+Device 64 : LE1 Device ID is 0x7fd211f2d700
+Device 65 : LE1 Device ID is 0x7fd211f2d810
+Device 66 : LE1 Device ID is 0x7fd211f2d920
+Device 67 : LE1 Device ID is 0x7fd211f2da30
+Device 68 : LE1 Device ID is 0x7fd211f2db40
+Device 69 : LE1 Device ID is 0x7fd211f2dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 2 core 2w2a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 163904
+Size of bss area : 
+End of memory: 1311232
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  2C_2w_1ls_2b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 163904
+HALT operation received from [0][0][0] at cycle 70637
+HALT operation received from [0][1][0] at cycle 79823
+Simulation finished, cycleCount = 79824
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 79824
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f667d8b9300
+Device 1 : LE1 Device ID is 0x7f667d8b9410
+Device 2 : LE1 Device ID is 0x7f667d8b9520
+Device 3 : LE1 Device ID is 0x7f667d8b9630
+Device 4 : LE1 Device ID is 0x7f667d8b9740
+Device 5 : LE1 Device ID is 0x7f667d8b9850
+Device 6 : LE1 Device ID is 0x7f667d8b9960
+Device 7 : LE1 Device ID is 0x7f667d8b9a70
+Device 8 : LE1 Device ID is 0x7f667d8b9b80
+Device 9 : LE1 Device ID is 0x7f667d8b9c90
+Device 10 : LE1 Device ID is 0x7f667d8b9da0
+Device 11 : LE1 Device ID is 0x7f667d8b9eb0
+Device 12 : LE1 Device ID is 0x7f667d8b9fc0
+Device 13 : LE1 Device ID is 0x7f667d8ba0d0
+Device 14 : LE1 Device ID is 0x7f667d8ba1e0
+Device 15 : LE1 Device ID is 0x7f667d8ba2f0
+Device 16 : LE1 Device ID is 0x7f667d8ba400
+Device 17 : LE1 Device ID is 0x7f667d8ba510
+Device 18 : LE1 Device ID is 0x7f667d8ba620
+Device 19 : LE1 Device ID is 0x7f667d8ba730
+Device 20 : LE1 Device ID is 0x7f667d8ba840
+Device 21 : LE1 Device ID is 0x7f667d8ba950
+Device 22 : LE1 Device ID is 0x7f667d8baa60
+Device 23 : LE1 Device ID is 0x7f667d8bab70
+Device 24 : LE1 Device ID is 0x7f667d8bac80
+Device 25 : LE1 Device ID is 0x7f667d8bad90
+Device 26 : LE1 Device ID is 0x7f667d8baea0
+Device 27 : LE1 Device ID is 0x7f667d8bafb0
+Device 28 : LE1 Device ID is 0x7f667d8bb0c0
+Device 29 : LE1 Device ID is 0x7f667d8bb1d0
+Device 30 : LE1 Device ID is 0x7f667d8bb2e0
+Device 31 : LE1 Device ID is 0x7f667d8bb3f0
+Device 32 : LE1 Device ID is 0x7f667d8bb500
+Device 33 : LE1 Device ID is 0x7f667d8bb610
+Device 34 : LE1 Device ID is 0x7f667d8bb720
+Device 35 : LE1 Device ID is 0x7f667d8bb830
+Device 36 : LE1 Device ID is 0x7f667d8bb940
+Device 37 : LE1 Device ID is 0x7f667d8bba50
+Device 38 : LE1 Device ID is 0x7f667d8bbb60
+Device 39 : LE1 Device ID is 0x7f667d8bbc70
+Device 40 : LE1 Device ID is 0x7f667d8bbd80
+Device 41 : LE1 Device ID is 0x7f667d8bbe90
+Device 42 : LE1 Device ID is 0x7f667d8bbfa0
+Device 43 : LE1 Device ID is 0x7f667d8bc0b0
+Device 44 : LE1 Device ID is 0x7f667d8bc1c0
+Device 45 : LE1 Device ID is 0x7f667d8bc2d0
+Device 46 : LE1 Device ID is 0x7f667d8bc3e0
+Device 47 : LE1 Device ID is 0x7f667d8bc4f0
+Device 48 : LE1 Device ID is 0x7f667d8bc600
+Device 49 : LE1 Device ID is 0x7f667d8bc710
+Device 50 : LE1 Device ID is 0x7f667d8bc820
+Device 51 : LE1 Device ID is 0x7f667d8bc930
+Device 52 : LE1 Device ID is 0x7f667d8bca40
+Device 53 : LE1 Device ID is 0x7f667d8bcb50
+Device 54 : LE1 Device ID is 0x7f667d8bcc60
+Device 55 : LE1 Device ID is 0x7f667d8bcd70
+Device 56 : LE1 Device ID is 0x7f667d8bce80
+Device 57 : LE1 Device ID is 0x7f667d8bcf90
+Device 58 : LE1 Device ID is 0x7f667d8bd0a0
+Device 59 : LE1 Device ID is 0x7f667d8bd1b0
+Device 60 : LE1 Device ID is 0x7f667d8bd2c0
+Device 61 : LE1 Device ID is 0x7f667d8bd3d0
+Device 62 : LE1 Device ID is 0x7f667d8bd4e0
+Device 63 : LE1 Device ID is 0x7f667d8bd5f0
+Device 64 : LE1 Device ID is 0x7f667d8bd700
+Device 65 : LE1 Device ID is 0x7f667d8bd810
+Device 66 : LE1 Device ID is 0x7f667d8bd920
+Device 67 : LE1 Device ID is 0x7f667d8bda30
+Device 68 : LE1 Device ID is 0x7f667d8bdb40
+Device 69 : LE1 Device ID is 0x7f667d8bdc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 4 core 2w2a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 65536
+mem align: 0
+dram_base_offset: 0
+Size of data area : 196680
+Size of bss area : 
+End of memory: 1573440
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  4C_2w_1ls_2b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 196680
+HALT operation received from [0][0][0] at cycle 45901
+HALT operation received from [0][1][0] at cycle 47705
+HALT operation received from [0][2][0] at cycle 49930
+HALT operation received from [0][3][0] at cycle 51455
+Simulation finished, cycleCount = 51456
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 51456
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f1b96449300
+Device 1 : LE1 Device ID is 0x7f1b96449410
+Device 2 : LE1 Device ID is 0x7f1b96449520
+Device 3 : LE1 Device ID is 0x7f1b96449630
+Device 4 : LE1 Device ID is 0x7f1b96449740
+Device 5 : LE1 Device ID is 0x7f1b96449850
+Device 6 : LE1 Device ID is 0x7f1b96449960
+Device 7 : LE1 Device ID is 0x7f1b96449a70
+Device 8 : LE1 Device ID is 0x7f1b96449b80
+Device 9 : LE1 Device ID is 0x7f1b96449c90
+Device 10 : LE1 Device ID is 0x7f1b96449da0
+Device 11 : LE1 Device ID is 0x7f1b96449eb0
+Device 12 : LE1 Device ID is 0x7f1b96449fc0
+Device 13 : LE1 Device ID is 0x7f1b9644a0d0
+Device 14 : LE1 Device ID is 0x7f1b9644a1e0
+Device 15 : LE1 Device ID is 0x7f1b9644a2f0
+Device 16 : LE1 Device ID is 0x7f1b9644a400
+Device 17 : LE1 Device ID is 0x7f1b9644a510
+Device 18 : LE1 Device ID is 0x7f1b9644a620
+Device 19 : LE1 Device ID is 0x7f1b9644a730
+Device 20 : LE1 Device ID is 0x7f1b9644a840
+Device 21 : LE1 Device ID is 0x7f1b9644a950
+Device 22 : LE1 Device ID is 0x7f1b9644aa60
+Device 23 : LE1 Device ID is 0x7f1b9644ab70
+Device 24 : LE1 Device ID is 0x7f1b9644ac80
+Device 25 : LE1 Device ID is 0x7f1b9644ad90
+Device 26 : LE1 Device ID is 0x7f1b9644aea0
+Device 27 : LE1 Device ID is 0x7f1b9644afb0
+Device 28 : LE1 Device ID is 0x7f1b9644b0c0
+Device 29 : LE1 Device ID is 0x7f1b9644b1d0
+Device 30 : LE1 Device ID is 0x7f1b9644b2e0
+Device 31 : LE1 Device ID is 0x7f1b9644b3f0
+Device 32 : LE1 Device ID is 0x7f1b9644b500
+Device 33 : LE1 Device ID is 0x7f1b9644b610
+Device 34 : LE1 Device ID is 0x7f1b9644b720
+Device 35 : LE1 Device ID is 0x7f1b9644b830
+Device 36 : LE1 Device ID is 0x7f1b9644b940
+Device 37 : LE1 Device ID is 0x7f1b9644ba50
+Device 38 : LE1 Device ID is 0x7f1b9644bb60
+Device 39 : LE1 Device ID is 0x7f1b9644bc70
+Device 40 : LE1 Device ID is 0x7f1b9644bd80
+Device 41 : LE1 Device ID is 0x7f1b9644be90
+Device 42 : LE1 Device ID is 0x7f1b9644bfa0
+Device 43 : LE1 Device ID is 0x7f1b9644c0b0
+Device 44 : LE1 Device ID is 0x7f1b9644c1c0
+Device 45 : LE1 Device ID is 0x7f1b9644c2d0
+Device 46 : LE1 Device ID is 0x7f1b9644c3e0
+Device 47 : LE1 Device ID is 0x7f1b9644c4f0
+Device 48 : LE1 Device ID is 0x7f1b9644c600
+Device 49 : LE1 Device ID is 0x7f1b9644c710
+Device 50 : LE1 Device ID is 0x7f1b9644c820
+Device 51 : LE1 Device ID is 0x7f1b9644c930
+Device 52 : LE1 Device ID is 0x7f1b9644ca40
+Device 53 : LE1 Device ID is 0x7f1b9644cb50
+Device 54 : LE1 Device ID is 0x7f1b9644cc60
+Device 55 : LE1 Device ID is 0x7f1b9644cd70
+Device 56 : LE1 Device ID is 0x7f1b9644ce80
+Device 57 : LE1 Device ID is 0x7f1b9644cf90
+Device 58 : LE1 Device ID is 0x7f1b9644d0a0
+Device 59 : LE1 Device ID is 0x7f1b9644d1b0
+Device 60 : LE1 Device ID is 0x7f1b9644d2c0
+Device 61 : LE1 Device ID is 0x7f1b9644d3d0
+Device 62 : LE1 Device ID is 0x7f1b9644d4e0
+Device 63 : LE1 Device ID is 0x7f1b9644d5f0
+Device 64 : LE1 Device ID is 0x7f1b9644d700
+Device 65 : LE1 Device ID is 0x7f1b9644d810
+Device 66 : LE1 Device ID is 0x7f1b9644d920
+Device 67 : LE1 Device ID is 0x7f1b9644da30
+Device 68 : LE1 Device ID is 0x7f1b9644db40
+Device 69 : LE1 Device ID is 0x7f1b9644dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 8 core 2w2a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 131072
+mem align: 0
+dram_base_offset: 0
+Size of data area : 262232
+Size of bss area : 
+End of memory: 2097856
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  8C_2w_1ls_4b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 262232
+HALT operation received from [0][4][0] at cycle 20
+HALT operation received from [0][5][0] at cycle 21
+HALT operation received from [0][6][0] at cycle 22
+HALT operation received from [0][7][0] at cycle 23
+HALT operation received from [0][0][0] at cycle 37669
+HALT operation received from [0][1][0] at cycle 38714
+HALT operation received from [0][2][0] at cycle 40461
+HALT operation received from [0][3][0] at cycle 42402
+Simulation finished, cycleCount = 42403
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 42403
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f0fa2219300
+Device 1 : LE1 Device ID is 0x7f0fa2219410
+Device 2 : LE1 Device ID is 0x7f0fa2219520
+Device 3 : LE1 Device ID is 0x7f0fa2219630
+Device 4 : LE1 Device ID is 0x7f0fa2219740
+Device 5 : LE1 Device ID is 0x7f0fa2219850
+Device 6 : LE1 Device ID is 0x7f0fa2219960
+Device 7 : LE1 Device ID is 0x7f0fa2219a70
+Device 8 : LE1 Device ID is 0x7f0fa2219b80
+Device 9 : LE1 Device ID is 0x7f0fa2219c90
+Device 10 : LE1 Device ID is 0x7f0fa2219da0
+Device 11 : LE1 Device ID is 0x7f0fa2219eb0
+Device 12 : LE1 Device ID is 0x7f0fa2219fc0
+Device 13 : LE1 Device ID is 0x7f0fa221a0d0
+Device 14 : LE1 Device ID is 0x7f0fa221a1e0
+Device 15 : LE1 Device ID is 0x7f0fa221a2f0
+Device 16 : LE1 Device ID is 0x7f0fa221a400
+Device 17 : LE1 Device ID is 0x7f0fa221a510
+Device 18 : LE1 Device ID is 0x7f0fa221a620
+Device 19 : LE1 Device ID is 0x7f0fa221a730
+Device 20 : LE1 Device ID is 0x7f0fa221a840
+Device 21 : LE1 Device ID is 0x7f0fa221a950
+Device 22 : LE1 Device ID is 0x7f0fa221aa60
+Device 23 : LE1 Device ID is 0x7f0fa221ab70
+Device 24 : LE1 Device ID is 0x7f0fa221ac80
+Device 25 : LE1 Device ID is 0x7f0fa221ad90
+Device 26 : LE1 Device ID is 0x7f0fa221aea0
+Device 27 : LE1 Device ID is 0x7f0fa221afb0
+Device 28 : LE1 Device ID is 0x7f0fa221b0c0
+Device 29 : LE1 Device ID is 0x7f0fa221b1d0
+Device 30 : LE1 Device ID is 0x7f0fa221b2e0
+Device 31 : LE1 Device ID is 0x7f0fa221b3f0
+Device 32 : LE1 Device ID is 0x7f0fa221b500
+Device 33 : LE1 Device ID is 0x7f0fa221b610
+Device 34 : LE1 Device ID is 0x7f0fa221b720
+Device 35 : LE1 Device ID is 0x7f0fa221b830
+Device 36 : LE1 Device ID is 0x7f0fa221b940
+Device 37 : LE1 Device ID is 0x7f0fa221ba50
+Device 38 : LE1 Device ID is 0x7f0fa221bb60
+Device 39 : LE1 Device ID is 0x7f0fa221bc70
+Device 40 : LE1 Device ID is 0x7f0fa221bd80
+Device 41 : LE1 Device ID is 0x7f0fa221be90
+Device 42 : LE1 Device ID is 0x7f0fa221bfa0
+Device 43 : LE1 Device ID is 0x7f0fa221c0b0
+Device 44 : LE1 Device ID is 0x7f0fa221c1c0
+Device 45 : LE1 Device ID is 0x7f0fa221c2d0
+Device 46 : LE1 Device ID is 0x7f0fa221c3e0
+Device 47 : LE1 Device ID is 0x7f0fa221c4f0
+Device 48 : LE1 Device ID is 0x7f0fa221c600
+Device 49 : LE1 Device ID is 0x7f0fa221c710
+Device 50 : LE1 Device ID is 0x7f0fa221c820
+Device 51 : LE1 Device ID is 0x7f0fa221c930
+Device 52 : LE1 Device ID is 0x7f0fa221ca40
+Device 53 : LE1 Device ID is 0x7f0fa221cb50
+Device 54 : LE1 Device ID is 0x7f0fa221cc60
+Device 55 : LE1 Device ID is 0x7f0fa221cd70
+Device 56 : LE1 Device ID is 0x7f0fa221ce80
+Device 57 : LE1 Device ID is 0x7f0fa221cf90
+Device 58 : LE1 Device ID is 0x7f0fa221d0a0
+Device 59 : LE1 Device ID is 0x7f0fa221d1b0
+Device 60 : LE1 Device ID is 0x7f0fa221d2c0
+Device 61 : LE1 Device ID is 0x7f0fa221d3d0
+Device 62 : LE1 Device ID is 0x7f0fa221d4e0
+Device 63 : LE1 Device ID is 0x7f0fa221d5f0
+Device 64 : LE1 Device ID is 0x7f0fa221d700
+Device 65 : LE1 Device ID is 0x7f0fa221d810
+Device 66 : LE1 Device ID is 0x7f0fa221d920
+Device 67 : LE1 Device ID is 0x7f0fa221da30
+Device 68 : LE1 Device ID is 0x7f0fa221db40
+Device 69 : LE1 Device ID is 0x7f0fa221dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 16 core 2w2a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 262144
+mem align: 0
+dram_base_offset: 0
+Size of data area : 393336
+Size of bss area : 
+End of memory: 3146688
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  16C_2w_1ls_8b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 393336
+HALT operation received from [0][4][0] at cycle 20
+HALT operation received from [0][5][0] at cycle 23
+HALT operation received from [0][6][0] at cycle 25
+HALT operation received from [0][7][0] at cycle 27
+HALT operation received from [0][8][0] at cycle 29
+HALT operation received from [0][9][0] at cycle 31
+HALT operation received from [0][10][0] at cycle 33
+HALT operation received from [0][11][0] at cycle 35
+HALT operation received from [0][12][0] at cycle 36
+HALT operation received from [0][13][0] at cycle 37
+HALT operation received from [0][14][0] at cycle 39
+HALT operation received from [0][15][0] at cycle 40
+HALT operation received from [0][0][0] at cycle 35006
+HALT operation received from [0][1][0] at cycle 35873
+HALT operation received from [0][2][0] at cycle 36954
+HALT operation received from [0][3][0] at cycle 38441
+Simulation finished, cycleCount = 38442
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 38442
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7fa401779300
+Device 1 : LE1 Device ID is 0x7fa401779410
+Device 2 : LE1 Device ID is 0x7fa401779520
+Device 3 : LE1 Device ID is 0x7fa401779630
+Device 4 : LE1 Device ID is 0x7fa401779740
+Device 5 : LE1 Device ID is 0x7fa401779850
+Device 6 : LE1 Device ID is 0x7fa401779960
+Device 7 : LE1 Device ID is 0x7fa401779a70
+Device 8 : LE1 Device ID is 0x7fa401779b80
+Device 9 : LE1 Device ID is 0x7fa401779c90
+Device 10 : LE1 Device ID is 0x7fa401779da0
+Device 11 : LE1 Device ID is 0x7fa401779eb0
+Device 12 : LE1 Device ID is 0x7fa401779fc0
+Device 13 : LE1 Device ID is 0x7fa40177a0d0
+Device 14 : LE1 Device ID is 0x7fa40177a1e0
+Device 15 : LE1 Device ID is 0x7fa40177a2f0
+Device 16 : LE1 Device ID is 0x7fa40177a400
+Device 17 : LE1 Device ID is 0x7fa40177a510
+Device 18 : LE1 Device ID is 0x7fa40177a620
+Device 19 : LE1 Device ID is 0x7fa40177a730
+Device 20 : LE1 Device ID is 0x7fa40177a840
+Device 21 : LE1 Device ID is 0x7fa40177a950
+Device 22 : LE1 Device ID is 0x7fa40177aa60
+Device 23 : LE1 Device ID is 0x7fa40177ab70
+Device 24 : LE1 Device ID is 0x7fa40177ac80
+Device 25 : LE1 Device ID is 0x7fa40177ad90
+Device 26 : LE1 Device ID is 0x7fa40177aea0
+Device 27 : LE1 Device ID is 0x7fa40177afb0
+Device 28 : LE1 Device ID is 0x7fa40177b0c0
+Device 29 : LE1 Device ID is 0x7fa40177b1d0
+Device 30 : LE1 Device ID is 0x7fa40177b2e0
+Device 31 : LE1 Device ID is 0x7fa40177b3f0
+Device 32 : LE1 Device ID is 0x7fa40177b500
+Device 33 : LE1 Device ID is 0x7fa40177b610
+Device 34 : LE1 Device ID is 0x7fa40177b720
+Device 35 : LE1 Device ID is 0x7fa40177b830
+Device 36 : LE1 Device ID is 0x7fa40177b940
+Device 37 : LE1 Device ID is 0x7fa40177ba50
+Device 38 : LE1 Device ID is 0x7fa40177bb60
+Device 39 : LE1 Device ID is 0x7fa40177bc70
+Device 40 : LE1 Device ID is 0x7fa40177bd80
+Device 41 : LE1 Device ID is 0x7fa40177be90
+Device 42 : LE1 Device ID is 0x7fa40177bfa0
+Device 43 : LE1 Device ID is 0x7fa40177c0b0
+Device 44 : LE1 Device ID is 0x7fa40177c1c0
+Device 45 : LE1 Device ID is 0x7fa40177c2d0
+Device 46 : LE1 Device ID is 0x7fa40177c3e0
+Device 47 : LE1 Device ID is 0x7fa40177c4f0
+Device 48 : LE1 Device ID is 0x7fa40177c600
+Device 49 : LE1 Device ID is 0x7fa40177c710
+Device 50 : LE1 Device ID is 0x7fa40177c820
+Device 51 : LE1 Device ID is 0x7fa40177c930
+Device 52 : LE1 Device ID is 0x7fa40177ca40
+Device 53 : LE1 Device ID is 0x7fa40177cb50
+Device 54 : LE1 Device ID is 0x7fa40177cc60
+Device 55 : LE1 Device ID is 0x7fa40177cd70
+Device 56 : LE1 Device ID is 0x7fa40177ce80
+Device 57 : LE1 Device ID is 0x7fa40177cf90
+Device 58 : LE1 Device ID is 0x7fa40177d0a0
+Device 59 : LE1 Device ID is 0x7fa40177d1b0
+Device 60 : LE1 Device ID is 0x7fa40177d2c0
+Device 61 : LE1 Device ID is 0x7fa40177d3d0
+Device 62 : LE1 Device ID is 0x7fa40177d4e0
+Device 63 : LE1 Device ID is 0x7fa40177d5f0
+Device 64 : LE1 Device ID is 0x7fa40177d700
+Device 65 : LE1 Device ID is 0x7fa40177d810
+Device 66 : LE1 Device ID is 0x7fa40177d920
+Device 67 : LE1 Device ID is 0x7fa40177da30
+Device 68 : LE1 Device ID is 0x7fa40177db40
+Device 69 : LE1 Device ID is 0x7fa40177dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 2 core 3w3a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 163904
+Size of bss area : 
+End of memory: 1311232
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  2C_3w_1ls_2b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 163904
+HALT operation received from [0][0][0] at cycle 62109
+HALT operation received from [0][1][0] at cycle 66058
+Simulation finished, cycleCount = 66059
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 66059
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f25b3549300
+Device 1 : LE1 Device ID is 0x7f25b3549410
+Device 2 : LE1 Device ID is 0x7f25b3549520
+Device 3 : LE1 Device ID is 0x7f25b3549630
+Device 4 : LE1 Device ID is 0x7f25b3549740
+Device 5 : LE1 Device ID is 0x7f25b3549850
+Device 6 : LE1 Device ID is 0x7f25b3549960
+Device 7 : LE1 Device ID is 0x7f25b3549a70
+Device 8 : LE1 Device ID is 0x7f25b3549b80
+Device 9 : LE1 Device ID is 0x7f25b3549c90
+Device 10 : LE1 Device ID is 0x7f25b3549da0
+Device 11 : LE1 Device ID is 0x7f25b3549eb0
+Device 12 : LE1 Device ID is 0x7f25b3549fc0
+Device 13 : LE1 Device ID is 0x7f25b354a0d0
+Device 14 : LE1 Device ID is 0x7f25b354a1e0
+Device 15 : LE1 Device ID is 0x7f25b354a2f0
+Device 16 : LE1 Device ID is 0x7f25b354a400
+Device 17 : LE1 Device ID is 0x7f25b354a510
+Device 18 : LE1 Device ID is 0x7f25b354a620
+Device 19 : LE1 Device ID is 0x7f25b354a730
+Device 20 : LE1 Device ID is 0x7f25b354a840
+Device 21 : LE1 Device ID is 0x7f25b354a950
+Device 22 : LE1 Device ID is 0x7f25b354aa60
+Device 23 : LE1 Device ID is 0x7f25b354ab70
+Device 24 : LE1 Device ID is 0x7f25b354ac80
+Device 25 : LE1 Device ID is 0x7f25b354ad90
+Device 26 : LE1 Device ID is 0x7f25b354aea0
+Device 27 : LE1 Device ID is 0x7f25b354afb0
+Device 28 : LE1 Device ID is 0x7f25b354b0c0
+Device 29 : LE1 Device ID is 0x7f25b354b1d0
+Device 30 : LE1 Device ID is 0x7f25b354b2e0
+Device 31 : LE1 Device ID is 0x7f25b354b3f0
+Device 32 : LE1 Device ID is 0x7f25b354b500
+Device 33 : LE1 Device ID is 0x7f25b354b610
+Device 34 : LE1 Device ID is 0x7f25b354b720
+Device 35 : LE1 Device ID is 0x7f25b354b830
+Device 36 : LE1 Device ID is 0x7f25b354b940
+Device 37 : LE1 Device ID is 0x7f25b354ba50
+Device 38 : LE1 Device ID is 0x7f25b354bb60
+Device 39 : LE1 Device ID is 0x7f25b354bc70
+Device 40 : LE1 Device ID is 0x7f25b354bd80
+Device 41 : LE1 Device ID is 0x7f25b354be90
+Device 42 : LE1 Device ID is 0x7f25b354bfa0
+Device 43 : LE1 Device ID is 0x7f25b354c0b0
+Device 44 : LE1 Device ID is 0x7f25b354c1c0
+Device 45 : LE1 Device ID is 0x7f25b354c2d0
+Device 46 : LE1 Device ID is 0x7f25b354c3e0
+Device 47 : LE1 Device ID is 0x7f25b354c4f0
+Device 48 : LE1 Device ID is 0x7f25b354c600
+Device 49 : LE1 Device ID is 0x7f25b354c710
+Device 50 : LE1 Device ID is 0x7f25b354c820
+Device 51 : LE1 Device ID is 0x7f25b354c930
+Device 52 : LE1 Device ID is 0x7f25b354ca40
+Device 53 : LE1 Device ID is 0x7f25b354cb50
+Device 54 : LE1 Device ID is 0x7f25b354cc60
+Device 55 : LE1 Device ID is 0x7f25b354cd70
+Device 56 : LE1 Device ID is 0x7f25b354ce80
+Device 57 : LE1 Device ID is 0x7f25b354cf90
+Device 58 : LE1 Device ID is 0x7f25b354d0a0
+Device 59 : LE1 Device ID is 0x7f25b354d1b0
+Device 60 : LE1 Device ID is 0x7f25b354d2c0
+Device 61 : LE1 Device ID is 0x7f25b354d3d0
+Device 62 : LE1 Device ID is 0x7f25b354d4e0
+Device 63 : LE1 Device ID is 0x7f25b354d5f0
+Device 64 : LE1 Device ID is 0x7f25b354d700
+Device 65 : LE1 Device ID is 0x7f25b354d810
+Device 66 : LE1 Device ID is 0x7f25b354d920
+Device 67 : LE1 Device ID is 0x7f25b354da30
+Device 68 : LE1 Device ID is 0x7f25b354db40
+Device 69 : LE1 Device ID is 0x7f25b354dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 4 core 3w3a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 65536
+mem align: 0
+dram_base_offset: 0
+Size of data area : 196680
+Size of bss area : 
+End of memory: 1573440
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  4C_3w_1ls_2b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 196680
+HALT operation received from [0][0][0] at cycle 44899
+HALT operation received from [0][1][0] at cycle 46241
+HALT operation received from [0][2][0] at cycle 48092
+HALT operation received from [0][3][0] at cycle 49261
+Simulation finished, cycleCount = 49262
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 49262
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7fd0e82e1300
+Device 1 : LE1 Device ID is 0x7fd0e82e1410
+Device 2 : LE1 Device ID is 0x7fd0e82e1520
+Device 3 : LE1 Device ID is 0x7fd0e82e1630
+Device 4 : LE1 Device ID is 0x7fd0e82e1740
+Device 5 : LE1 Device ID is 0x7fd0e82e1850
+Device 6 : LE1 Device ID is 0x7fd0e82e1960
+Device 7 : LE1 Device ID is 0x7fd0e82e1a70
+Device 8 : LE1 Device ID is 0x7fd0e82e1b80
+Device 9 : LE1 Device ID is 0x7fd0e82e1c90
+Device 10 : LE1 Device ID is 0x7fd0e82e1da0
+Device 11 : LE1 Device ID is 0x7fd0e82e1eb0
+Device 12 : LE1 Device ID is 0x7fd0e82e1fc0
+Device 13 : LE1 Device ID is 0x7fd0e82e20d0
+Device 14 : LE1 Device ID is 0x7fd0e82e21e0
+Device 15 : LE1 Device ID is 0x7fd0e82e22f0
+Device 16 : LE1 Device ID is 0x7fd0e82e2400
+Device 17 : LE1 Device ID is 0x7fd0e82e2510
+Device 18 : LE1 Device ID is 0x7fd0e82e2620
+Device 19 : LE1 Device ID is 0x7fd0e82e2730
+Device 20 : LE1 Device ID is 0x7fd0e82e2840
+Device 21 : LE1 Device ID is 0x7fd0e82e2950
+Device 22 : LE1 Device ID is 0x7fd0e82e2a60
+Device 23 : LE1 Device ID is 0x7fd0e82e2b70
+Device 24 : LE1 Device ID is 0x7fd0e82e2c80
+Device 25 : LE1 Device ID is 0x7fd0e82e2d90
+Device 26 : LE1 Device ID is 0x7fd0e82e2ea0
+Device 27 : LE1 Device ID is 0x7fd0e82e2fb0
+Device 28 : LE1 Device ID is 0x7fd0e82e30c0
+Device 29 : LE1 Device ID is 0x7fd0e82e31d0
+Device 30 : LE1 Device ID is 0x7fd0e82e32e0
+Device 31 : LE1 Device ID is 0x7fd0e82e33f0
+Device 32 : LE1 Device ID is 0x7fd0e82e3500
+Device 33 : LE1 Device ID is 0x7fd0e82e3610
+Device 34 : LE1 Device ID is 0x7fd0e82e3720
+Device 35 : LE1 Device ID is 0x7fd0e82e3830
+Device 36 : LE1 Device ID is 0x7fd0e82e3940
+Device 37 : LE1 Device ID is 0x7fd0e82e3a50
+Device 38 : LE1 Device ID is 0x7fd0e82e3b60
+Device 39 : LE1 Device ID is 0x7fd0e82e3c70
+Device 40 : LE1 Device ID is 0x7fd0e82e3d80
+Device 41 : LE1 Device ID is 0x7fd0e82e3e90
+Device 42 : LE1 Device ID is 0x7fd0e82e3fa0
+Device 43 : LE1 Device ID is 0x7fd0e82e40b0
+Device 44 : LE1 Device ID is 0x7fd0e82e41c0
+Device 45 : LE1 Device ID is 0x7fd0e82e42d0
+Device 46 : LE1 Device ID is 0x7fd0e82e43e0
+Device 47 : LE1 Device ID is 0x7fd0e82e44f0
+Device 48 : LE1 Device ID is 0x7fd0e82e4600
+Device 49 : LE1 Device ID is 0x7fd0e82e4710
+Device 50 : LE1 Device ID is 0x7fd0e82e4820
+Device 51 : LE1 Device ID is 0x7fd0e82e4930
+Device 52 : LE1 Device ID is 0x7fd0e82e4a40
+Device 53 : LE1 Device ID is 0x7fd0e82e4b50
+Device 54 : LE1 Device ID is 0x7fd0e82e4c60
+Device 55 : LE1 Device ID is 0x7fd0e82e4d70
+Device 56 : LE1 Device ID is 0x7fd0e82e4e80
+Device 57 : LE1 Device ID is 0x7fd0e82e4f90
+Device 58 : LE1 Device ID is 0x7fd0e82e50a0
+Device 59 : LE1 Device ID is 0x7fd0e82e51b0
+Device 60 : LE1 Device ID is 0x7fd0e82e52c0
+Device 61 : LE1 Device ID is 0x7fd0e82e53d0
+Device 62 : LE1 Device ID is 0x7fd0e82e54e0
+Device 63 : LE1 Device ID is 0x7fd0e82e55f0
+Device 64 : LE1 Device ID is 0x7fd0e82e5700
+Device 65 : LE1 Device ID is 0x7fd0e82e5810
+Device 66 : LE1 Device ID is 0x7fd0e82e5920
+Device 67 : LE1 Device ID is 0x7fd0e82e5a30
+Device 68 : LE1 Device ID is 0x7fd0e82e5b40
+Device 69 : LE1 Device ID is 0x7fd0e82e5c50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 8 core 3w3a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 131072
+mem align: 0
+dram_base_offset: 0
+Size of data area : 262232
+Size of bss area : 
+End of memory: 2097856
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  8C_3w_1ls_4b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 262232
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 19
+HALT operation received from [0][6][0] at cycle 20
+HALT operation received from [0][7][0] at cycle 21
+HALT operation received from [0][0][0] at cycle 34478
+HALT operation received from [0][1][0] at cycle 35594
+HALT operation received from [0][2][0] at cycle 37157
+HALT operation received from [0][3][0] at cycle 38451
+Simulation finished, cycleCount = 38452
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 38452
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f613b721300
+Device 1 : LE1 Device ID is 0x7f613b721410
+Device 2 : LE1 Device ID is 0x7f613b721520
+Device 3 : LE1 Device ID is 0x7f613b721630
+Device 4 : LE1 Device ID is 0x7f613b721740
+Device 5 : LE1 Device ID is 0x7f613b721850
+Device 6 : LE1 Device ID is 0x7f613b721960
+Device 7 : LE1 Device ID is 0x7f613b721a70
+Device 8 : LE1 Device ID is 0x7f613b721b80
+Device 9 : LE1 Device ID is 0x7f613b721c90
+Device 10 : LE1 Device ID is 0x7f613b721da0
+Device 11 : LE1 Device ID is 0x7f613b721eb0
+Device 12 : LE1 Device ID is 0x7f613b721fc0
+Device 13 : LE1 Device ID is 0x7f613b7220d0
+Device 14 : LE1 Device ID is 0x7f613b7221e0
+Device 15 : LE1 Device ID is 0x7f613b7222f0
+Device 16 : LE1 Device ID is 0x7f613b722400
+Device 17 : LE1 Device ID is 0x7f613b722510
+Device 18 : LE1 Device ID is 0x7f613b722620
+Device 19 : LE1 Device ID is 0x7f613b722730
+Device 20 : LE1 Device ID is 0x7f613b722840
+Device 21 : LE1 Device ID is 0x7f613b722950
+Device 22 : LE1 Device ID is 0x7f613b722a60
+Device 23 : LE1 Device ID is 0x7f613b722b70
+Device 24 : LE1 Device ID is 0x7f613b722c80
+Device 25 : LE1 Device ID is 0x7f613b722d90
+Device 26 : LE1 Device ID is 0x7f613b722ea0
+Device 27 : LE1 Device ID is 0x7f613b722fb0
+Device 28 : LE1 Device ID is 0x7f613b7230c0
+Device 29 : LE1 Device ID is 0x7f613b7231d0
+Device 30 : LE1 Device ID is 0x7f613b7232e0
+Device 31 : LE1 Device ID is 0x7f613b7233f0
+Device 32 : LE1 Device ID is 0x7f613b723500
+Device 33 : LE1 Device ID is 0x7f613b723610
+Device 34 : LE1 Device ID is 0x7f613b723720
+Device 35 : LE1 Device ID is 0x7f613b723830
+Device 36 : LE1 Device ID is 0x7f613b723940
+Device 37 : LE1 Device ID is 0x7f613b723a50
+Device 38 : LE1 Device ID is 0x7f613b723b60
+Device 39 : LE1 Device ID is 0x7f613b723c70
+Device 40 : LE1 Device ID is 0x7f613b723d80
+Device 41 : LE1 Device ID is 0x7f613b723e90
+Device 42 : LE1 Device ID is 0x7f613b723fa0
+Device 43 : LE1 Device ID is 0x7f613b7240b0
+Device 44 : LE1 Device ID is 0x7f613b7241c0
+Device 45 : LE1 Device ID is 0x7f613b7242d0
+Device 46 : LE1 Device ID is 0x7f613b7243e0
+Device 47 : LE1 Device ID is 0x7f613b7244f0
+Device 48 : LE1 Device ID is 0x7f613b724600
+Device 49 : LE1 Device ID is 0x7f613b724710
+Device 50 : LE1 Device ID is 0x7f613b724820
+Device 51 : LE1 Device ID is 0x7f613b724930
+Device 52 : LE1 Device ID is 0x7f613b724a40
+Device 53 : LE1 Device ID is 0x7f613b724b50
+Device 54 : LE1 Device ID is 0x7f613b724c60
+Device 55 : LE1 Device ID is 0x7f613b724d70
+Device 56 : LE1 Device ID is 0x7f613b724e80
+Device 57 : LE1 Device ID is 0x7f613b724f90
+Device 58 : LE1 Device ID is 0x7f613b7250a0
+Device 59 : LE1 Device ID is 0x7f613b7251b0
+Device 60 : LE1 Device ID is 0x7f613b7252c0
+Device 61 : LE1 Device ID is 0x7f613b7253d0
+Device 62 : LE1 Device ID is 0x7f613b7254e0
+Device 63 : LE1 Device ID is 0x7f613b7255f0
+Device 64 : LE1 Device ID is 0x7f613b725700
+Device 65 : LE1 Device ID is 0x7f613b725810
+Device 66 : LE1 Device ID is 0x7f613b725920
+Device 67 : LE1 Device ID is 0x7f613b725a30
+Device 68 : LE1 Device ID is 0x7f613b725b40
+Device 69 : LE1 Device ID is 0x7f613b725c50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 16 core 3w3a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 262144
+mem align: 0
+dram_base_offset: 0
+Size of data area : 393336
+Size of bss area : 
+End of memory: 3146688
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  16C_3w_1ls_8b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 393336
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 21
+HALT operation received from [0][6][0] at cycle 23
+HALT operation received from [0][7][0] at cycle 25
+HALT operation received from [0][8][0] at cycle 26
+HALT operation received from [0][9][0] at cycle 29
+HALT operation received from [0][10][0] at cycle 31
+HALT operation received from [0][11][0] at cycle 33
+HALT operation received from [0][12][0] at cycle 34
+HALT operation received from [0][13][0] at cycle 35
+HALT operation received from [0][14][0] at cycle 39
+HALT operation received from [0][15][0] at cycle 40
+HALT operation received from [0][0][0] at cycle 31366
+HALT operation received from [0][1][0] at cycle 32254
+HALT operation received from [0][2][0] at cycle 33190
+HALT operation received from [0][3][0] at cycle 34488
+Simulation finished, cycleCount = 34489
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 34489
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f2e19291300
+Device 1 : LE1 Device ID is 0x7f2e19291410
+Device 2 : LE1 Device ID is 0x7f2e19291520
+Device 3 : LE1 Device ID is 0x7f2e19291630
+Device 4 : LE1 Device ID is 0x7f2e19291740
+Device 5 : LE1 Device ID is 0x7f2e19291850
+Device 6 : LE1 Device ID is 0x7f2e19291960
+Device 7 : LE1 Device ID is 0x7f2e19291a70
+Device 8 : LE1 Device ID is 0x7f2e19291b80
+Device 9 : LE1 Device ID is 0x7f2e19291c90
+Device 10 : LE1 Device ID is 0x7f2e19291da0
+Device 11 : LE1 Device ID is 0x7f2e19291eb0
+Device 12 : LE1 Device ID is 0x7f2e19291fc0
+Device 13 : LE1 Device ID is 0x7f2e192920d0
+Device 14 : LE1 Device ID is 0x7f2e192921e0
+Device 15 : LE1 Device ID is 0x7f2e192922f0
+Device 16 : LE1 Device ID is 0x7f2e19292400
+Device 17 : LE1 Device ID is 0x7f2e19292510
+Device 18 : LE1 Device ID is 0x7f2e19292620
+Device 19 : LE1 Device ID is 0x7f2e19292730
+Device 20 : LE1 Device ID is 0x7f2e19292840
+Device 21 : LE1 Device ID is 0x7f2e19292950
+Device 22 : LE1 Device ID is 0x7f2e19292a60
+Device 23 : LE1 Device ID is 0x7f2e19292b70
+Device 24 : LE1 Device ID is 0x7f2e19292c80
+Device 25 : LE1 Device ID is 0x7f2e19292d90
+Device 26 : LE1 Device ID is 0x7f2e19292ea0
+Device 27 : LE1 Device ID is 0x7f2e19292fb0
+Device 28 : LE1 Device ID is 0x7f2e192930c0
+Device 29 : LE1 Device ID is 0x7f2e192931d0
+Device 30 : LE1 Device ID is 0x7f2e192932e0
+Device 31 : LE1 Device ID is 0x7f2e192933f0
+Device 32 : LE1 Device ID is 0x7f2e19293500
+Device 33 : LE1 Device ID is 0x7f2e19293610
+Device 34 : LE1 Device ID is 0x7f2e19293720
+Device 35 : LE1 Device ID is 0x7f2e19293830
+Device 36 : LE1 Device ID is 0x7f2e19293940
+Device 37 : LE1 Device ID is 0x7f2e19293a50
+Device 38 : LE1 Device ID is 0x7f2e19293b60
+Device 39 : LE1 Device ID is 0x7f2e19293c70
+Device 40 : LE1 Device ID is 0x7f2e19293d80
+Device 41 : LE1 Device ID is 0x7f2e19293e90
+Device 42 : LE1 Device ID is 0x7f2e19293fa0
+Device 43 : LE1 Device ID is 0x7f2e192940b0
+Device 44 : LE1 Device ID is 0x7f2e192941c0
+Device 45 : LE1 Device ID is 0x7f2e192942d0
+Device 46 : LE1 Device ID is 0x7f2e192943e0
+Device 47 : LE1 Device ID is 0x7f2e192944f0
+Device 48 : LE1 Device ID is 0x7f2e19294600
+Device 49 : LE1 Device ID is 0x7f2e19294710
+Device 50 : LE1 Device ID is 0x7f2e19294820
+Device 51 : LE1 Device ID is 0x7f2e19294930
+Device 52 : LE1 Device ID is 0x7f2e19294a40
+Device 53 : LE1 Device ID is 0x7f2e19294b50
+Device 54 : LE1 Device ID is 0x7f2e19294c60
+Device 55 : LE1 Device ID is 0x7f2e19294d70
+Device 56 : LE1 Device ID is 0x7f2e19294e80
+Device 57 : LE1 Device ID is 0x7f2e19294f90
+Device 58 : LE1 Device ID is 0x7f2e192950a0
+Device 59 : LE1 Device ID is 0x7f2e192951b0
+Device 60 : LE1 Device ID is 0x7f2e192952c0
+Device 61 : LE1 Device ID is 0x7f2e192953d0
+Device 62 : LE1 Device ID is 0x7f2e192954e0
+Device 63 : LE1 Device ID is 0x7f2e192955f0
+Device 64 : LE1 Device ID is 0x7f2e19295700
+Device 65 : LE1 Device ID is 0x7f2e19295810
+Device 66 : LE1 Device ID is 0x7f2e19295920
+Device 67 : LE1 Device ID is 0x7f2e19295a30
+Device 68 : LE1 Device ID is 0x7f2e19295b40
+Device 69 : LE1 Device ID is 0x7f2e19295c50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 2 core 4w4a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 163904
+Size of bss area : 
+End of memory: 1311232
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  2C_4w_1ls_2b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 163904
+HALT operation received from [0][0][0] at cycle 63444
+HALT operation received from [0][1][0] at cycle 69257
+Simulation finished, cycleCount = 69258
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 69258
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f422ec79300
+Device 1 : LE1 Device ID is 0x7f422ec79410
+Device 2 : LE1 Device ID is 0x7f422ec79520
+Device 3 : LE1 Device ID is 0x7f422ec79630
+Device 4 : LE1 Device ID is 0x7f422ec79740
+Device 5 : LE1 Device ID is 0x7f422ec79850
+Device 6 : LE1 Device ID is 0x7f422ec79960
+Device 7 : LE1 Device ID is 0x7f422ec79a70
+Device 8 : LE1 Device ID is 0x7f422ec79b80
+Device 9 : LE1 Device ID is 0x7f422ec79c90
+Device 10 : LE1 Device ID is 0x7f422ec79da0
+Device 11 : LE1 Device ID is 0x7f422ec79eb0
+Device 12 : LE1 Device ID is 0x7f422ec79fc0
+Device 13 : LE1 Device ID is 0x7f422ec7a0d0
+Device 14 : LE1 Device ID is 0x7f422ec7a1e0
+Device 15 : LE1 Device ID is 0x7f422ec7a2f0
+Device 16 : LE1 Device ID is 0x7f422ec7a400
+Device 17 : LE1 Device ID is 0x7f422ec7a510
+Device 18 : LE1 Device ID is 0x7f422ec7a620
+Device 19 : LE1 Device ID is 0x7f422ec7a730
+Device 20 : LE1 Device ID is 0x7f422ec7a840
+Device 21 : LE1 Device ID is 0x7f422ec7a950
+Device 22 : LE1 Device ID is 0x7f422ec7aa60
+Device 23 : LE1 Device ID is 0x7f422ec7ab70
+Device 24 : LE1 Device ID is 0x7f422ec7ac80
+Device 25 : LE1 Device ID is 0x7f422ec7ad90
+Device 26 : LE1 Device ID is 0x7f422ec7aea0
+Device 27 : LE1 Device ID is 0x7f422ec7afb0
+Device 28 : LE1 Device ID is 0x7f422ec7b0c0
+Device 29 : LE1 Device ID is 0x7f422ec7b1d0
+Device 30 : LE1 Device ID is 0x7f422ec7b2e0
+Device 31 : LE1 Device ID is 0x7f422ec7b3f0
+Device 32 : LE1 Device ID is 0x7f422ec7b500
+Device 33 : LE1 Device ID is 0x7f422ec7b610
+Device 34 : LE1 Device ID is 0x7f422ec7b720
+Device 35 : LE1 Device ID is 0x7f422ec7b830
+Device 36 : LE1 Device ID is 0x7f422ec7b940
+Device 37 : LE1 Device ID is 0x7f422ec7ba50
+Device 38 : LE1 Device ID is 0x7f422ec7bb60
+Device 39 : LE1 Device ID is 0x7f422ec7bc70
+Device 40 : LE1 Device ID is 0x7f422ec7bd80
+Device 41 : LE1 Device ID is 0x7f422ec7be90
+Device 42 : LE1 Device ID is 0x7f422ec7bfa0
+Device 43 : LE1 Device ID is 0x7f422ec7c0b0
+Device 44 : LE1 Device ID is 0x7f422ec7c1c0
+Device 45 : LE1 Device ID is 0x7f422ec7c2d0
+Device 46 : LE1 Device ID is 0x7f422ec7c3e0
+Device 47 : LE1 Device ID is 0x7f422ec7c4f0
+Device 48 : LE1 Device ID is 0x7f422ec7c600
+Device 49 : LE1 Device ID is 0x7f422ec7c710
+Device 50 : LE1 Device ID is 0x7f422ec7c820
+Device 51 : LE1 Device ID is 0x7f422ec7c930
+Device 52 : LE1 Device ID is 0x7f422ec7ca40
+Device 53 : LE1 Device ID is 0x7f422ec7cb50
+Device 54 : LE1 Device ID is 0x7f422ec7cc60
+Device 55 : LE1 Device ID is 0x7f422ec7cd70
+Device 56 : LE1 Device ID is 0x7f422ec7ce80
+Device 57 : LE1 Device ID is 0x7f422ec7cf90
+Device 58 : LE1 Device ID is 0x7f422ec7d0a0
+Device 59 : LE1 Device ID is 0x7f422ec7d1b0
+Device 60 : LE1 Device ID is 0x7f422ec7d2c0
+Device 61 : LE1 Device ID is 0x7f422ec7d3d0
+Device 62 : LE1 Device ID is 0x7f422ec7d4e0
+Device 63 : LE1 Device ID is 0x7f422ec7d5f0
+Device 64 : LE1 Device ID is 0x7f422ec7d700
+Device 65 : LE1 Device ID is 0x7f422ec7d810
+Device 66 : LE1 Device ID is 0x7f422ec7d920
+Device 67 : LE1 Device ID is 0x7f422ec7da30
+Device 68 : LE1 Device ID is 0x7f422ec7db40
+Device 69 : LE1 Device ID is 0x7f422ec7dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 2 core 4w4a1m2ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 32768
+mem align: 0
+dram_base_offset: 0
+Size of data area : 163904
+Size of bss area : 
+End of memory: 1311232
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  2C_4w_2ls_4b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 163904
+HALT operation received from [0][0][0] at cycle 49172
+HALT operation received from [0][1][0] at cycle 51502
+Simulation finished, cycleCount = 51503
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 51503
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f9d08441300
+Device 1 : LE1 Device ID is 0x7f9d08441410
+Device 2 : LE1 Device ID is 0x7f9d08441520
+Device 3 : LE1 Device ID is 0x7f9d08441630
+Device 4 : LE1 Device ID is 0x7f9d08441740
+Device 5 : LE1 Device ID is 0x7f9d08441850
+Device 6 : LE1 Device ID is 0x7f9d08441960
+Device 7 : LE1 Device ID is 0x7f9d08441a70
+Device 8 : LE1 Device ID is 0x7f9d08441b80
+Device 9 : LE1 Device ID is 0x7f9d08441c90
+Device 10 : LE1 Device ID is 0x7f9d08441da0
+Device 11 : LE1 Device ID is 0x7f9d08441eb0
+Device 12 : LE1 Device ID is 0x7f9d08441fc0
+Device 13 : LE1 Device ID is 0x7f9d084420d0
+Device 14 : LE1 Device ID is 0x7f9d084421e0
+Device 15 : LE1 Device ID is 0x7f9d084422f0
+Device 16 : LE1 Device ID is 0x7f9d08442400
+Device 17 : LE1 Device ID is 0x7f9d08442510
+Device 18 : LE1 Device ID is 0x7f9d08442620
+Device 19 : LE1 Device ID is 0x7f9d08442730
+Device 20 : LE1 Device ID is 0x7f9d08442840
+Device 21 : LE1 Device ID is 0x7f9d08442950
+Device 22 : LE1 Device ID is 0x7f9d08442a60
+Device 23 : LE1 Device ID is 0x7f9d08442b70
+Device 24 : LE1 Device ID is 0x7f9d08442c80
+Device 25 : LE1 Device ID is 0x7f9d08442d90
+Device 26 : LE1 Device ID is 0x7f9d08442ea0
+Device 27 : LE1 Device ID is 0x7f9d08442fb0
+Device 28 : LE1 Device ID is 0x7f9d084430c0
+Device 29 : LE1 Device ID is 0x7f9d084431d0
+Device 30 : LE1 Device ID is 0x7f9d084432e0
+Device 31 : LE1 Device ID is 0x7f9d084433f0
+Device 32 : LE1 Device ID is 0x7f9d08443500
+Device 33 : LE1 Device ID is 0x7f9d08443610
+Device 34 : LE1 Device ID is 0x7f9d08443720
+Device 35 : LE1 Device ID is 0x7f9d08443830
+Device 36 : LE1 Device ID is 0x7f9d08443940
+Device 37 : LE1 Device ID is 0x7f9d08443a50
+Device 38 : LE1 Device ID is 0x7f9d08443b60
+Device 39 : LE1 Device ID is 0x7f9d08443c70
+Device 40 : LE1 Device ID is 0x7f9d08443d80
+Device 41 : LE1 Device ID is 0x7f9d08443e90
+Device 42 : LE1 Device ID is 0x7f9d08443fa0
+Device 43 : LE1 Device ID is 0x7f9d084440b0
+Device 44 : LE1 Device ID is 0x7f9d084441c0
+Device 45 : LE1 Device ID is 0x7f9d084442d0
+Device 46 : LE1 Device ID is 0x7f9d084443e0
+Device 47 : LE1 Device ID is 0x7f9d084444f0
+Device 48 : LE1 Device ID is 0x7f9d08444600
+Device 49 : LE1 Device ID is 0x7f9d08444710
+Device 50 : LE1 Device ID is 0x7f9d08444820
+Device 51 : LE1 Device ID is 0x7f9d08444930
+Device 52 : LE1 Device ID is 0x7f9d08444a40
+Device 53 : LE1 Device ID is 0x7f9d08444b50
+Device 54 : LE1 Device ID is 0x7f9d08444c60
+Device 55 : LE1 Device ID is 0x7f9d08444d70
+Device 56 : LE1 Device ID is 0x7f9d08444e80
+Device 57 : LE1 Device ID is 0x7f9d08444f90
+Device 58 : LE1 Device ID is 0x7f9d084450a0
+Device 59 : LE1 Device ID is 0x7f9d084451b0
+Device 60 : LE1 Device ID is 0x7f9d084452c0
+Device 61 : LE1 Device ID is 0x7f9d084453d0
+Device 62 : LE1 Device ID is 0x7f9d084454e0
+Device 63 : LE1 Device ID is 0x7f9d084455f0
+Device 64 : LE1 Device ID is 0x7f9d08445700
+Device 65 : LE1 Device ID is 0x7f9d08445810
+Device 66 : LE1 Device ID is 0x7f9d08445920
+Device 67 : LE1 Device ID is 0x7f9d08445a30
+Device 68 : LE1 Device ID is 0x7f9d08445b40
+Device 69 : LE1 Device ID is 0x7f9d08445c50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 4 core 4w4a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 65536
+mem align: 0
+dram_base_offset: 0
+Size of data area : 196680
+Size of bss area : 
+End of memory: 1573440
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  4C_4w_1ls_2b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 196680
+HALT operation received from [0][0][0] at cycle 44314
+HALT operation received from [0][1][0] at cycle 45977
+HALT operation received from [0][2][0] at cycle 47888
+HALT operation received from [0][3][0] at cycle 49059
+Simulation finished, cycleCount = 49060
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 49060
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7ff657c09300
+Device 1 : LE1 Device ID is 0x7ff657c09410
+Device 2 : LE1 Device ID is 0x7ff657c09520
+Device 3 : LE1 Device ID is 0x7ff657c09630
+Device 4 : LE1 Device ID is 0x7ff657c09740
+Device 5 : LE1 Device ID is 0x7ff657c09850
+Device 6 : LE1 Device ID is 0x7ff657c09960
+Device 7 : LE1 Device ID is 0x7ff657c09a70
+Device 8 : LE1 Device ID is 0x7ff657c09b80
+Device 9 : LE1 Device ID is 0x7ff657c09c90
+Device 10 : LE1 Device ID is 0x7ff657c09da0
+Device 11 : LE1 Device ID is 0x7ff657c09eb0
+Device 12 : LE1 Device ID is 0x7ff657c09fc0
+Device 13 : LE1 Device ID is 0x7ff657c0a0d0
+Device 14 : LE1 Device ID is 0x7ff657c0a1e0
+Device 15 : LE1 Device ID is 0x7ff657c0a2f0
+Device 16 : LE1 Device ID is 0x7ff657c0a400
+Device 17 : LE1 Device ID is 0x7ff657c0a510
+Device 18 : LE1 Device ID is 0x7ff657c0a620
+Device 19 : LE1 Device ID is 0x7ff657c0a730
+Device 20 : LE1 Device ID is 0x7ff657c0a840
+Device 21 : LE1 Device ID is 0x7ff657c0a950
+Device 22 : LE1 Device ID is 0x7ff657c0aa60
+Device 23 : LE1 Device ID is 0x7ff657c0ab70
+Device 24 : LE1 Device ID is 0x7ff657c0ac80
+Device 25 : LE1 Device ID is 0x7ff657c0ad90
+Device 26 : LE1 Device ID is 0x7ff657c0aea0
+Device 27 : LE1 Device ID is 0x7ff657c0afb0
+Device 28 : LE1 Device ID is 0x7ff657c0b0c0
+Device 29 : LE1 Device ID is 0x7ff657c0b1d0
+Device 30 : LE1 Device ID is 0x7ff657c0b2e0
+Device 31 : LE1 Device ID is 0x7ff657c0b3f0
+Device 32 : LE1 Device ID is 0x7ff657c0b500
+Device 33 : LE1 Device ID is 0x7ff657c0b610
+Device 34 : LE1 Device ID is 0x7ff657c0b720
+Device 35 : LE1 Device ID is 0x7ff657c0b830
+Device 36 : LE1 Device ID is 0x7ff657c0b940
+Device 37 : LE1 Device ID is 0x7ff657c0ba50
+Device 38 : LE1 Device ID is 0x7ff657c0bb60
+Device 39 : LE1 Device ID is 0x7ff657c0bc70
+Device 40 : LE1 Device ID is 0x7ff657c0bd80
+Device 41 : LE1 Device ID is 0x7ff657c0be90
+Device 42 : LE1 Device ID is 0x7ff657c0bfa0
+Device 43 : LE1 Device ID is 0x7ff657c0c0b0
+Device 44 : LE1 Device ID is 0x7ff657c0c1c0
+Device 45 : LE1 Device ID is 0x7ff657c0c2d0
+Device 46 : LE1 Device ID is 0x7ff657c0c3e0
+Device 47 : LE1 Device ID is 0x7ff657c0c4f0
+Device 48 : LE1 Device ID is 0x7ff657c0c600
+Device 49 : LE1 Device ID is 0x7ff657c0c710
+Device 50 : LE1 Device ID is 0x7ff657c0c820
+Device 51 : LE1 Device ID is 0x7ff657c0c930
+Device 52 : LE1 Device ID is 0x7ff657c0ca40
+Device 53 : LE1 Device ID is 0x7ff657c0cb50
+Device 54 : LE1 Device ID is 0x7ff657c0cc60
+Device 55 : LE1 Device ID is 0x7ff657c0cd70
+Device 56 : LE1 Device ID is 0x7ff657c0ce80
+Device 57 : LE1 Device ID is 0x7ff657c0cf90
+Device 58 : LE1 Device ID is 0x7ff657c0d0a0
+Device 59 : LE1 Device ID is 0x7ff657c0d1b0
+Device 60 : LE1 Device ID is 0x7ff657c0d2c0
+Device 61 : LE1 Device ID is 0x7ff657c0d3d0
+Device 62 : LE1 Device ID is 0x7ff657c0d4e0
+Device 63 : LE1 Device ID is 0x7ff657c0d5f0
+Device 64 : LE1 Device ID is 0x7ff657c0d700
+Device 65 : LE1 Device ID is 0x7ff657c0d810
+Device 66 : LE1 Device ID is 0x7ff657c0d920
+Device 67 : LE1 Device ID is 0x7ff657c0da30
+Device 68 : LE1 Device ID is 0x7ff657c0db40
+Device 69 : LE1 Device ID is 0x7ff657c0dc50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 4 core 4w4a1m2ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 65536
+mem align: 0
+dram_base_offset: 0
+Size of data area : 196680
+Size of bss area : 
+End of memory: 1573440
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  4C_4w_2ls_4b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 196680
+HALT operation received from [0][0][0] at cycle 28415
+HALT operation received from [0][1][0] at cycle 29900
+HALT operation received from [0][2][0] at cycle 31459
+HALT operation received from [0][3][0] at cycle 32909
+Simulation finished, cycleCount = 32910
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 32910
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f5e3a961300
+Device 1 : LE1 Device ID is 0x7f5e3a961410
+Device 2 : LE1 Device ID is 0x7f5e3a961520
+Device 3 : LE1 Device ID is 0x7f5e3a961630
+Device 4 : LE1 Device ID is 0x7f5e3a961740
+Device 5 : LE1 Device ID is 0x7f5e3a961850
+Device 6 : LE1 Device ID is 0x7f5e3a961960
+Device 7 : LE1 Device ID is 0x7f5e3a961a70
+Device 8 : LE1 Device ID is 0x7f5e3a961b80
+Device 9 : LE1 Device ID is 0x7f5e3a961c90
+Device 10 : LE1 Device ID is 0x7f5e3a961da0
+Device 11 : LE1 Device ID is 0x7f5e3a961eb0
+Device 12 : LE1 Device ID is 0x7f5e3a961fc0
+Device 13 : LE1 Device ID is 0x7f5e3a9620d0
+Device 14 : LE1 Device ID is 0x7f5e3a9621e0
+Device 15 : LE1 Device ID is 0x7f5e3a9622f0
+Device 16 : LE1 Device ID is 0x7f5e3a962400
+Device 17 : LE1 Device ID is 0x7f5e3a962510
+Device 18 : LE1 Device ID is 0x7f5e3a962620
+Device 19 : LE1 Device ID is 0x7f5e3a962730
+Device 20 : LE1 Device ID is 0x7f5e3a962840
+Device 21 : LE1 Device ID is 0x7f5e3a962950
+Device 22 : LE1 Device ID is 0x7f5e3a962a60
+Device 23 : LE1 Device ID is 0x7f5e3a962b70
+Device 24 : LE1 Device ID is 0x7f5e3a962c80
+Device 25 : LE1 Device ID is 0x7f5e3a962d90
+Device 26 : LE1 Device ID is 0x7f5e3a962ea0
+Device 27 : LE1 Device ID is 0x7f5e3a962fb0
+Device 28 : LE1 Device ID is 0x7f5e3a9630c0
+Device 29 : LE1 Device ID is 0x7f5e3a9631d0
+Device 30 : LE1 Device ID is 0x7f5e3a9632e0
+Device 31 : LE1 Device ID is 0x7f5e3a9633f0
+Device 32 : LE1 Device ID is 0x7f5e3a963500
+Device 33 : LE1 Device ID is 0x7f5e3a963610
+Device 34 : LE1 Device ID is 0x7f5e3a963720
+Device 35 : LE1 Device ID is 0x7f5e3a963830
+Device 36 : LE1 Device ID is 0x7f5e3a963940
+Device 37 : LE1 Device ID is 0x7f5e3a963a50
+Device 38 : LE1 Device ID is 0x7f5e3a963b60
+Device 39 : LE1 Device ID is 0x7f5e3a963c70
+Device 40 : LE1 Device ID is 0x7f5e3a963d80
+Device 41 : LE1 Device ID is 0x7f5e3a963e90
+Device 42 : LE1 Device ID is 0x7f5e3a963fa0
+Device 43 : LE1 Device ID is 0x7f5e3a9640b0
+Device 44 : LE1 Device ID is 0x7f5e3a9641c0
+Device 45 : LE1 Device ID is 0x7f5e3a9642d0
+Device 46 : LE1 Device ID is 0x7f5e3a9643e0
+Device 47 : LE1 Device ID is 0x7f5e3a9644f0
+Device 48 : LE1 Device ID is 0x7f5e3a964600
+Device 49 : LE1 Device ID is 0x7f5e3a964710
+Device 50 : LE1 Device ID is 0x7f5e3a964820
+Device 51 : LE1 Device ID is 0x7f5e3a964930
+Device 52 : LE1 Device ID is 0x7f5e3a964a40
+Device 53 : LE1 Device ID is 0x7f5e3a964b50
+Device 54 : LE1 Device ID is 0x7f5e3a964c60
+Device 55 : LE1 Device ID is 0x7f5e3a964d70
+Device 56 : LE1 Device ID is 0x7f5e3a964e80
+Device 57 : LE1 Device ID is 0x7f5e3a964f90
+Device 58 : LE1 Device ID is 0x7f5e3a9650a0
+Device 59 : LE1 Device ID is 0x7f5e3a9651b0
+Device 60 : LE1 Device ID is 0x7f5e3a9652c0
+Device 61 : LE1 Device ID is 0x7f5e3a9653d0
+Device 62 : LE1 Device ID is 0x7f5e3a9654e0
+Device 63 : LE1 Device ID is 0x7f5e3a9655f0
+Device 64 : LE1 Device ID is 0x7f5e3a965700
+Device 65 : LE1 Device ID is 0x7f5e3a965810
+Device 66 : LE1 Device ID is 0x7f5e3a965920
+Device 67 : LE1 Device ID is 0x7f5e3a965a30
+Device 68 : LE1 Device ID is 0x7f5e3a965b40
+Device 69 : LE1 Device ID is 0x7f5e3a965c50
+Could not open file (/opt/esdg-opencl/machines/8C_4w_1ls_2b.xml)
+!!! ERROR reading machine model file : /opt/esdg-opencl/machines/8C_4w_1ls_2b.xml
+ERROR: Failed to initialise simulator!
+!!!ERROR: Device initialisation failed!
+Error: clCreateCommandQueue failed.
+Location : MatrixTranspose.cpp:147
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f44b6dc9300
+Device 1 : LE1 Device ID is 0x7f44b6dc9410
+Device 2 : LE1 Device ID is 0x7f44b6dc9520
+Device 3 : LE1 Device ID is 0x7f44b6dc9630
+Device 4 : LE1 Device ID is 0x7f44b6dc9740
+Device 5 : LE1 Device ID is 0x7f44b6dc9850
+Device 6 : LE1 Device ID is 0x7f44b6dc9960
+Device 7 : LE1 Device ID is 0x7f44b6dc9a70
+Device 8 : LE1 Device ID is 0x7f44b6dc9b80
+Device 9 : LE1 Device ID is 0x7f44b6dc9c90
+Device 10 : LE1 Device ID is 0x7f44b6dc9da0
+Device 11 : LE1 Device ID is 0x7f44b6dc9eb0
+Device 12 : LE1 Device ID is 0x7f44b6dc9fc0
+Device 13 : LE1 Device ID is 0x7f44b6dca0d0
+Device 14 : LE1 Device ID is 0x7f44b6dca1e0
+Device 15 : LE1 Device ID is 0x7f44b6dca2f0
+Device 16 : LE1 Device ID is 0x7f44b6dca400
+Device 17 : LE1 Device ID is 0x7f44b6dca510
+Device 18 : LE1 Device ID is 0x7f44b6dca620
+Device 19 : LE1 Device ID is 0x7f44b6dca730
+Device 20 : LE1 Device ID is 0x7f44b6dca840
+Device 21 : LE1 Device ID is 0x7f44b6dca950
+Device 22 : LE1 Device ID is 0x7f44b6dcaa60
+Device 23 : LE1 Device ID is 0x7f44b6dcab70
+Device 24 : LE1 Device ID is 0x7f44b6dcac80
+Device 25 : LE1 Device ID is 0x7f44b6dcad90
+Device 26 : LE1 Device ID is 0x7f44b6dcaea0
+Device 27 : LE1 Device ID is 0x7f44b6dcafb0
+Device 28 : LE1 Device ID is 0x7f44b6dcb0c0
+Device 29 : LE1 Device ID is 0x7f44b6dcb1d0
+Device 30 : LE1 Device ID is 0x7f44b6dcb2e0
+Device 31 : LE1 Device ID is 0x7f44b6dcb3f0
+Device 32 : LE1 Device ID is 0x7f44b6dcb500
+Device 33 : LE1 Device ID is 0x7f44b6dcb610
+Device 34 : LE1 Device ID is 0x7f44b6dcb720
+Device 35 : LE1 Device ID is 0x7f44b6dcb830
+Device 36 : LE1 Device ID is 0x7f44b6dcb940
+Device 37 : LE1 Device ID is 0x7f44b6dcba50
+Device 38 : LE1 Device ID is 0x7f44b6dcbb60
+Device 39 : LE1 Device ID is 0x7f44b6dcbc70
+Device 40 : LE1 Device ID is 0x7f44b6dcbd80
+Device 41 : LE1 Device ID is 0x7f44b6dcbe90
+Device 42 : LE1 Device ID is 0x7f44b6dcbfa0
+Device 43 : LE1 Device ID is 0x7f44b6dcc0b0
+Device 44 : LE1 Device ID is 0x7f44b6dcc1c0
+Device 45 : LE1 Device ID is 0x7f44b6dcc2d0
+Device 46 : LE1 Device ID is 0x7f44b6dcc3e0
+Device 47 : LE1 Device ID is 0x7f44b6dcc4f0
+Device 48 : LE1 Device ID is 0x7f44b6dcc600
+Device 49 : LE1 Device ID is 0x7f44b6dcc710
+Device 50 : LE1 Device ID is 0x7f44b6dcc820
+Device 51 : LE1 Device ID is 0x7f44b6dcc930
+Device 52 : LE1 Device ID is 0x7f44b6dcca40
+Device 53 : LE1 Device ID is 0x7f44b6dccb50
+Device 54 : LE1 Device ID is 0x7f44b6dccc60
+Device 55 : LE1 Device ID is 0x7f44b6dccd70
+Device 56 : LE1 Device ID is 0x7f44b6dcce80
+Device 57 : LE1 Device ID is 0x7f44b6dccf90
+Device 58 : LE1 Device ID is 0x7f44b6dcd0a0
+Device 59 : LE1 Device ID is 0x7f44b6dcd1b0
+Device 60 : LE1 Device ID is 0x7f44b6dcd2c0
+Device 61 : LE1 Device ID is 0x7f44b6dcd3d0
+Device 62 : LE1 Device ID is 0x7f44b6dcd4e0
+Device 63 : LE1 Device ID is 0x7f44b6dcd5f0
+Device 64 : LE1 Device ID is 0x7f44b6dcd700
+Device 65 : LE1 Device ID is 0x7f44b6dcd810
+Device 66 : LE1 Device ID is 0x7f44b6dcd920
+Device 67 : LE1 Device ID is 0x7f44b6dcda30
+Device 68 : LE1 Device ID is 0x7f44b6dcdb40
+Device 69 : LE1 Device ID is 0x7f44b6dcdc50
+Could not open file (/opt/esdg-opencl/machines/8C_4w_2ls_4b.xml)
+!!! ERROR reading machine model file : /opt/esdg-opencl/machines/8C_4w_2ls_4b.xml
+ERROR: Failed to initialise simulator!
+!!!ERROR: Device initialisation failed!
+Error: clCreateCommandQueue failed.
+Location : MatrixTranspose.cpp:147
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f3fe0a41300
+Device 1 : LE1 Device ID is 0x7f3fe0a41410
+Device 2 : LE1 Device ID is 0x7f3fe0a41520
+Device 3 : LE1 Device ID is 0x7f3fe0a41630
+Device 4 : LE1 Device ID is 0x7f3fe0a41740
+Device 5 : LE1 Device ID is 0x7f3fe0a41850
+Device 6 : LE1 Device ID is 0x7f3fe0a41960
+Device 7 : LE1 Device ID is 0x7f3fe0a41a70
+Device 8 : LE1 Device ID is 0x7f3fe0a41b80
+Device 9 : LE1 Device ID is 0x7f3fe0a41c90
+Device 10 : LE1 Device ID is 0x7f3fe0a41da0
+Device 11 : LE1 Device ID is 0x7f3fe0a41eb0
+Device 12 : LE1 Device ID is 0x7f3fe0a41fc0
+Device 13 : LE1 Device ID is 0x7f3fe0a420d0
+Device 14 : LE1 Device ID is 0x7f3fe0a421e0
+Device 15 : LE1 Device ID is 0x7f3fe0a422f0
+Device 16 : LE1 Device ID is 0x7f3fe0a42400
+Device 17 : LE1 Device ID is 0x7f3fe0a42510
+Device 18 : LE1 Device ID is 0x7f3fe0a42620
+Device 19 : LE1 Device ID is 0x7f3fe0a42730
+Device 20 : LE1 Device ID is 0x7f3fe0a42840
+Device 21 : LE1 Device ID is 0x7f3fe0a42950
+Device 22 : LE1 Device ID is 0x7f3fe0a42a60
+Device 23 : LE1 Device ID is 0x7f3fe0a42b70
+Device 24 : LE1 Device ID is 0x7f3fe0a42c80
+Device 25 : LE1 Device ID is 0x7f3fe0a42d90
+Device 26 : LE1 Device ID is 0x7f3fe0a42ea0
+Device 27 : LE1 Device ID is 0x7f3fe0a42fb0
+Device 28 : LE1 Device ID is 0x7f3fe0a430c0
+Device 29 : LE1 Device ID is 0x7f3fe0a431d0
+Device 30 : LE1 Device ID is 0x7f3fe0a432e0
+Device 31 : LE1 Device ID is 0x7f3fe0a433f0
+Device 32 : LE1 Device ID is 0x7f3fe0a43500
+Device 33 : LE1 Device ID is 0x7f3fe0a43610
+Device 34 : LE1 Device ID is 0x7f3fe0a43720
+Device 35 : LE1 Device ID is 0x7f3fe0a43830
+Device 36 : LE1 Device ID is 0x7f3fe0a43940
+Device 37 : LE1 Device ID is 0x7f3fe0a43a50
+Device 38 : LE1 Device ID is 0x7f3fe0a43b60
+Device 39 : LE1 Device ID is 0x7f3fe0a43c70
+Device 40 : LE1 Device ID is 0x7f3fe0a43d80
+Device 41 : LE1 Device ID is 0x7f3fe0a43e90
+Device 42 : LE1 Device ID is 0x7f3fe0a43fa0
+Device 43 : LE1 Device ID is 0x7f3fe0a440b0
+Device 44 : LE1 Device ID is 0x7f3fe0a441c0
+Device 45 : LE1 Device ID is 0x7f3fe0a442d0
+Device 46 : LE1 Device ID is 0x7f3fe0a443e0
+Device 47 : LE1 Device ID is 0x7f3fe0a444f0
+Device 48 : LE1 Device ID is 0x7f3fe0a44600
+Device 49 : LE1 Device ID is 0x7f3fe0a44710
+Device 50 : LE1 Device ID is 0x7f3fe0a44820
+Device 51 : LE1 Device ID is 0x7f3fe0a44930
+Device 52 : LE1 Device ID is 0x7f3fe0a44a40
+Device 53 : LE1 Device ID is 0x7f3fe0a44b50
+Device 54 : LE1 Device ID is 0x7f3fe0a44c60
+Device 55 : LE1 Device ID is 0x7f3fe0a44d70
+Device 56 : LE1 Device ID is 0x7f3fe0a44e80
+Device 57 : LE1 Device ID is 0x7f3fe0a44f90
+Device 58 : LE1 Device ID is 0x7f3fe0a450a0
+Device 59 : LE1 Device ID is 0x7f3fe0a451b0
+Device 60 : LE1 Device ID is 0x7f3fe0a452c0
+Device 61 : LE1 Device ID is 0x7f3fe0a453d0
+Device 62 : LE1 Device ID is 0x7f3fe0a454e0
+Device 63 : LE1 Device ID is 0x7f3fe0a455f0
+Device 64 : LE1 Device ID is 0x7f3fe0a45700
+Device 65 : LE1 Device ID is 0x7f3fe0a45810
+Device 66 : LE1 Device ID is 0x7f3fe0a45920
+Device 67 : LE1 Device ID is 0x7f3fe0a45a30
+Device 68 : LE1 Device ID is 0x7f3fe0a45b40
+Device 69 : LE1 Device ID is 0x7f3fe0a45c50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 16 core 4w4a1m1ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 262144
+mem align: 0
+dram_base_offset: 0
+Size of data area : 393336
+Size of bss area : 
+End of memory: 3146688
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  16C_4w_1ls_8b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 393336
+HALT operation received from [0][4][0] at cycle 18
+HALT operation received from [0][5][0] at cycle 22
+HALT operation received from [0][6][0] at cycle 23
+HALT operation received from [0][7][0] at cycle 26
+HALT operation received from [0][8][0] at cycle 28
+HALT operation received from [0][9][0] at cycle 29
+HALT operation received from [0][10][0] at cycle 30
+HALT operation received from [0][11][0] at cycle 33
+HALT operation received from [0][12][0] at cycle 34
+HALT operation received from [0][13][0] at cycle 36
+HALT operation received from [0][14][0] at cycle 38
+HALT operation received from [0][15][0] at cycle 39
+HALT operation received from [0][0][0] at cycle 31089
+HALT operation received from [0][1][0] at cycle 32001
+HALT operation received from [0][2][0] at cycle 33270
+HALT operation received from [0][3][0] at cycle 34781
+Simulation finished, cycleCount = 34782
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 34782
+
+Output
+15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
+
+Passed!
+
+Platform 0 : ESDG
+
+Input
+15.3732 201.81 51.9855 89.2322 92.572 34.4675 96.2478 66.3863 11.345 225.168 161.374 96.5491 81.8505 211.932 108.827 124.578 202.418 244.549 182.722 90.1216 215.537 92.7693 98.0533 20.0925 44.5603 225.408 55.9775 247.995 202.92 0.896856 45.4356 218.293 202.706 97.4211 51.5251 39.2784 131.889 147.773 105.665 143.234 116.941 11.0383 239.783 198.791 222.97 92.6095 67.3688 169.388 81.1586 250.091 3.50951 40.6953 86.8598 101.563 60.7878 131.42 70.9705 116.765 123.415 17.8903 117.662 168.851 236.183 64.3685 10.2721 31.7083 103.647 142.161 179.481 209.312 29.3943 40.4218 220.35 13.1769 239.213 187.32 105.786 50.5818 100.708 186.945 44.6723 104.217 227.64 131.532 205.78 32.4282 6.95232 20.7507 149.194 130.368 38.6409 10.8557 43.2188 18.8241 75.2242 53.4909 50.5324 178.871 195.652 230.014 132.183 225.046 14.4353 96.5328 238.223 253.648 27.8528 88.0092 48.23 128.561 18.9543 92.9023 232.778 246.595 224.434 182.558 23.0229 231.387 203.309 172.216 105.755 241.95 183.072 148.973 4.77387 2.2963 202.464 55.3062 
+
+Found 1 platform(s)
+Platform found : ESDG
+
+Selected Platform Vendor : ESDG
+Device 0 : LE1 Device ID is 0x7f737de21300
+Device 1 : LE1 Device ID is 0x7f737de21410
+Device 2 : LE1 Device ID is 0x7f737de21520
+Device 3 : LE1 Device ID is 0x7f737de21630
+Device 4 : LE1 Device ID is 0x7f737de21740
+Device 5 : LE1 Device ID is 0x7f737de21850
+Device 6 : LE1 Device ID is 0x7f737de21960
+Device 7 : LE1 Device ID is 0x7f737de21a70
+Device 8 : LE1 Device ID is 0x7f737de21b80
+Device 9 : LE1 Device ID is 0x7f737de21c90
+Device 10 : LE1 Device ID is 0x7f737de21da0
+Device 11 : LE1 Device ID is 0x7f737de21eb0
+Device 12 : LE1 Device ID is 0x7f737de21fc0
+Device 13 : LE1 Device ID is 0x7f737de220d0
+Device 14 : LE1 Device ID is 0x7f737de221e0
+Device 15 : LE1 Device ID is 0x7f737de222f0
+Device 16 : LE1 Device ID is 0x7f737de22400
+Device 17 : LE1 Device ID is 0x7f737de22510
+Device 18 : LE1 Device ID is 0x7f737de22620
+Device 19 : LE1 Device ID is 0x7f737de22730
+Device 20 : LE1 Device ID is 0x7f737de22840
+Device 21 : LE1 Device ID is 0x7f737de22950
+Device 22 : LE1 Device ID is 0x7f737de22a60
+Device 23 : LE1 Device ID is 0x7f737de22b70
+Device 24 : LE1 Device ID is 0x7f737de22c80
+Device 25 : LE1 Device ID is 0x7f737de22d90
+Device 26 : LE1 Device ID is 0x7f737de22ea0
+Device 27 : LE1 Device ID is 0x7f737de22fb0
+Device 28 : LE1 Device ID is 0x7f737de230c0
+Device 29 : LE1 Device ID is 0x7f737de231d0
+Device 30 : LE1 Device ID is 0x7f737de232e0
+Device 31 : LE1 Device ID is 0x7f737de233f0
+Device 32 : LE1 Device ID is 0x7f737de23500
+Device 33 : LE1 Device ID is 0x7f737de23610
+Device 34 : LE1 Device ID is 0x7f737de23720
+Device 35 : LE1 Device ID is 0x7f737de23830
+Device 36 : LE1 Device ID is 0x7f737de23940
+Device 37 : LE1 Device ID is 0x7f737de23a50
+Device 38 : LE1 Device ID is 0x7f737de23b60
+Device 39 : LE1 Device ID is 0x7f737de23c70
+Device 40 : LE1 Device ID is 0x7f737de23d80
+Device 41 : LE1 Device ID is 0x7f737de23e90
+Device 42 : LE1 Device ID is 0x7f737de23fa0
+Device 43 : LE1 Device ID is 0x7f737de240b0
+Device 44 : LE1 Device ID is 0x7f737de241c0
+Device 45 : LE1 Device ID is 0x7f737de242d0
+Device 46 : LE1 Device ID is 0x7f737de243e0
+Device 47 : LE1 Device ID is 0x7f737de244f0
+Device 48 : LE1 Device ID is 0x7f737de24600
+Device 49 : LE1 Device ID is 0x7f737de24710
+Device 50 : LE1 Device ID is 0x7f737de24820
+Device 51 : LE1 Device ID is 0x7f737de24930
+Device 52 : LE1 Device ID is 0x7f737de24a40
+Device 53 : LE1 Device ID is 0x7f737de24b50
+Device 54 : LE1 Device ID is 0x7f737de24c60
+Device 55 : LE1 Device ID is 0x7f737de24d70
+Device 56 : LE1 Device ID is 0x7f737de24e80
+Device 57 : LE1 Device ID is 0x7f737de24f90
+Device 58 : LE1 Device ID is 0x7f737de250a0
+Device 59 : LE1 Device ID is 0x7f737de251b0
+Device 60 : LE1 Device ID is 0x7f737de252c0
+Device 61 : LE1 Device ID is 0x7f737de253d0
+Device 62 : LE1 Device ID is 0x7f737de254e0
+Device 63 : LE1 Device ID is 0x7f737de255f0
+Device 64 : LE1 Device ID is 0x7f737de25700
+Device 65 : LE1 Device ID is 0x7f737de25810
+Device 66 : LE1 Device ID is 0x7f737de25920
+Device 67 : LE1 Device ID is 0x7f737de25a30
+Device 68 : LE1 Device ID is 0x7f737de25b40
+Device 69 : LE1 Device ID is 0x7f737de25c50
+homogeneous system
+Executing kernel for 1 iterations
+-------------------------------------------
+Device: 16 core 4w4a1m2ls1b
+Compiling kernel: matrixTranspose
+
+Dimension 0: Global work size = 32, Local work size = 16
+Dimension 1: Global work size = 32, Local work size = 16
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+extern int BufferArg_2;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 4;
+  int workgroupX = 2;
+  int workgroupY = 2;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    matrixTranspose(&BufferArg_0, &BufferArg_1, (&BufferArg_2 + (__builtin_le1_read_cpuid() * 4096)));
+    id += num_cores;
+  }
+  return id;
+}
+
+Setting the buffer size kernel arg 2, which is a local, to 262144
+mem align: 0
+dram_base_offset: 0
+Size of data area : 393336
+Size of bss area : 
+End of memory: 3146688
+Second Pass Completed
+Run Simulation with:
+  binaries/final_matrixTranspose.s.bin  
+  binaries/final_matrixTranspose.data.bin  
+  16C_4w_2ls_16b.xml
+IRAMFileSize = 1520
+DRAMFileSize = 393336
+HALT operation received from [0][4][0] at cycle 14
+HALT operation received from [0][5][0] at cycle 16
+HALT operation received from [0][6][0] at cycle 18
+HALT operation received from [0][7][0] at cycle 20
+HALT operation received from [0][8][0] at cycle 22
+HALT operation received from [0][9][0] at cycle 26
+HALT operation received from [0][10][0] at cycle 27
+HALT operation received from [0][11][0] at cycle 28
+HALT operation received from [0][12][0] at cycle 29
+HALT operation received from [0][13][0] at cycle 30
+HALT operation received from [0][14][0] at cycle 31
+HALT operation received from [0][15][0] at cycle 32
+HALT operation received from [0][0][0] at cycle 24384
+HALT operation received from [0][1][0] at cycle 25045
+HALT operation received from [0][2][0] at cycle 25664
+HALT operation received from [0][3][0] at cycle 26213
+Simulation finished, cycleCount = 26214
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 26214
 
 Output
 15.3732 181.167 84.2237 212.02 85.7142 227.415 49.3404 73.2614 55.296 132.112 248.478 79.2271 97.3562 201.82 12.2258 127.607 204.373 146.435 135.35 53.5909 18.224 30.536 69.5611 231.067 133.508 157.096 110.799 235.859 174.623 219.75 249.72 89.3481 158.606 87.1613 2.48008 7.93596 210.4 236.116 49.4927 211.968 223.345 101.303 17.6749 252.276 133.294 165.53 36.443 2.53767 219.977 59.2011 40.1552 12.036 205.469 175.506 238.3 244.69 0.328713 251.276 3.46576 180.131 131.044 231.181 118.082 185.364 4.13337 49.2134 157.784 189.808 67.5717 131.827 43.9838 55.769 1.51084 65.3294 2.58835 202.321 57.2127 103.522 184.704 200.513 118.609 140.362 34.3584 12.5644 51.9022 41.2653 227.785 194.488 44.6996 160.496 235.276 104.849 235.346 58.3888 94.8069 223.27 45.9928 253.95 80.645 146.04 164.477 153.92 253.786 38.2053 42.704 77.3027 51.5527 143.231 15.123 235.498 242.845 22.8064 173.976 154.88 6.67587 17.4138 174.998 180.857 43.5742 146.664 133.996 254.199 85.4453 55.3256 164.381 67.8804 240.64 74.6443 
