@@ -100,7 +100,8 @@ bool LE1Device::init()
     return false;
   }
 
-  p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
+  //p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
+  p_workers = (pthread_t*) ::operator new(sizeof(pthread_t));
   pthread_create(&p_workers[0], 0, &worker, this);
 
   p_initialized = true;
@@ -131,7 +132,8 @@ LE1Device::~LE1Device()
   // for (unsigned int i = 0; i < numLE1s(); ++i)
   //  pthread_join(p_workers[i], 0);
 
-  std::free((void*)p_workers);
+  //std::free((void*)p_workers);
+  ::operator delete(p_workers);
   pthread_mutex_destroy(&p_events_mutex);
   pthread_cond_destroy(&p_events_cond);
 
@@ -233,10 +235,12 @@ DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)
   // FIXME This shouldn't close the program, it needs to somehow get an error
   // back to the user
   if((global_base_addr + buffer->size()) > LE1Device::MaxGlobalAddr) {
-    std::cerr << "Error: Device doesn't have enough free memory to allocate \
+#ifdef DBG_OUTPUT
+    std::cout << "Error: Device doesn't have enough free memory to allocate \
       buffer. global_base = " << global_base_addr << ", buffer size = " <<
       buffer->size() << " and max_global = " << LE1Device::MaxGlobalAddr
       << std::endl;
+#endif
     exit(1);
   }
   else {

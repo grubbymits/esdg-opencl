@@ -92,7 +92,8 @@ LE1Buffer::~LE1Buffer()
       std::cerr << "freeing data at " << std::hex << (unsigned long)p_data
         << std::endl;
 #endif
-        std::free((void *)p_data);
+        //std::free((void *)p_data);
+      ::operator delete(p_data);
     }
 }
 
@@ -126,7 +127,9 @@ bool LE1Buffer::allocate()
     if (!p_data)
     {
         // We don't use a host ptr, we need to allocate a buffer
-        p_data = std::malloc(buf_size);
+        //p_data = std::malloc(buf_size);
+        //p_data = (void*) new unsigned char[buf_size]();
+      p_data = ::operator new(buf_size);
 
         if (!p_data) {
 #ifdef DBG_OUTPUT

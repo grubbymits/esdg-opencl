@@ -47,7 +47,9 @@ using namespace Coal;
 MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
                      cl_int *errcode_ret)
 : Object(Object::T_MemObject, ctx), p_num_devices(0), p_flags(flags),
-  p_host_ptr(host_ptr), p_devicebuffers(0), p_dtor_callback(0)
+  p_host_ptr(host_ptr),
+  //p_devicebuffers(0),
+  p_dtor_callback(0)
 {
 #ifdef DBG_BUFFER
   std::cerr << "Creating MemObject" << std::endl;
@@ -95,16 +97,20 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
 
 MemObject::~MemObject()
 {
+#ifdef DBG_OBJ
+  std::cerr << "Destructing MemObject" << std::endl;
+#endif
     if (p_dtor_callback)
         p_dtor_callback((cl_mem)this, p_dtor_userdata);
 
-    if (p_devicebuffers)
+    //if (p_devicebuffers)
+    if (p_devicebuffers.size() != 0)
     {
         // Also delete our children in the device
         for (unsigned int i=0; i<p_num_devices; ++i)
             delete p_devicebuffers[i];
 
-        std::free((void *)p_devicebuffers);
+        //std::free((void *)p_devicebuffers);
     }
 }
 
@@ -125,11 +131,14 @@ cl_int MemObject::init()
         return rs;
 
     p_devices_to_allocate = p_num_devices;
-    devices = (DeviceInterface **)std::malloc(p_num_devices *
-                                        sizeof(DeviceInterface *));
+    //devices = (DeviceInterface **)std::malloc(p_num_devices *
+      //                                  sizeof(DeviceInterface *));
+    // Hack to stop using malloc...
+    devices = (DeviceInterface**)
+      ::operator new(sizeof(DeviceInterface*) * p_num_devices);
 
     if (!devices)
-        return CL_OUT_OF_HOST_MEMORY;
+      return CL_OUT_OF_HOST_MEMORY;
 
     rs = ((Context *)parent())->info(CL_CONTEXT_DEVICES,
                                      p_num_devices * sizeof(DeviceInterface *),
@@ -137,19 +146,22 @@ cl_int MemObject::init()
 
     if (rs != CL_SUCCESS)
     {
-        std::free((void *)devices);
-        return rs;
+      //std::free((void *)devices);
+      //delete[] devices;
+      ::operator delete(devices);
+      return rs;
     }
 
     // Allocate a table of DeviceBuffers
-    p_devicebuffers = (DeviceBuffer **)std::malloc(p_num_devices *
-                                             sizeof(DeviceBuffer *));
+    //p_devicebuffers = (DeviceBuffer **)std::malloc(p_num_devices *
+      //                                       sizeof(DeviceBuffer *));
 
-    if (!p_devicebuffers)
-    {
-        std::free((void *)devices);
-        return CL_OUT_OF_HOST_MEMORY;
-    }
+    //if (!p_devicebuffers)
+    //{
+      //std::free((void *)devices);
+      //delete[] devices;
+      //return CL_OUT_OF_HOST_MEMORY;
+    //}
 
     // If we have more than one device, the allocation on the devices is
     // defered to first use, so host_ptr can become invalid. So, copy it in
@@ -159,12 +171,15 @@ cl_int MemObject::init()
     // FIXME - So when do we actually allocate?!
     if (p_num_devices > 1 && (p_flags & CL_MEM_COPY_HOST_PTR))
     {
-        void *tmp_hostptr = std::malloc(size());
+        //void *tmp_hostptr = std::malloc(size());
+        void *tmp_hostptr = ::operator new(size());
 
         if (!tmp_hostptr)
         {
-            std::free((void *)devices);
-            return CL_OUT_OF_HOST_MEMORY;
+          //std::free((void *)devices);
+          //delete[] devices;
+          ::operator delete(devices);
+          return CL_OUT_OF_HOST_MEMORY;
         }
 
         std::memcpy(tmp_hostptr, p_host_ptr, size());
@@ -181,7 +196,8 @@ cl_int MemObject::init()
         DeviceInterface *device = devices[i];
 
         rs = CL_SUCCESS;
-        p_devicebuffers[i] = device->createDeviceBuffer(this, &rs);
+        //p_devicebuffers[i] = device->createDeviceBuffer(this, &rs);
+        p_devicebuffers.push_back(device->createDeviceBuffer(this, &rs));
 
         if (rs != CL_SUCCESS)
         {
@@ -192,12 +208,16 @@ cl_int MemObject::init()
 
     if (failed_devices == p_num_devices)
     {
-        // Each device found a reason to reject the buffer, so it's invalid
-        std::free((void *)devices);
-        return rs;
+      // Each device found a reason to reject the buffer, so it's invalid
+      //std::free((void *)devices);
+      //delete[] devices;
+      ::operator delete(devices);
+      return rs;
     }
 
-    std::free((void *)devices);
+    //std::free((void *)devices);
+    //delete[] devices;
+    ::operator delete(devices);
     devices = 0;
 
     // If we have only one device, already allocate the buffer
@@ -271,7 +291,8 @@ void MemObject::deviceAllocated(DeviceBuffer *buffer)
         p_num_devices > 1 &&
         (p_flags & CL_MEM_COPY_HOST_PTR))
     {
-        std::free(p_host_ptr);
+        //std::free(p_host_ptr);
+        ::operator delete(p_host_ptr);
         p_host_ptr = 0;
     }
 

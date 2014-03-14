@@ -516,7 +516,10 @@ Event **CommandQueue::events(unsigned int &count)
     pthread_mutex_lock(&p_event_list_mutex);
 
     count = p_events.size();
-    result = (Event **)std::malloc(count * sizeof(Event *));
+    //result = (Event **)std::malloc(count * sizeof(Event *));
+    // Hack for not avoiding malloc
+    //result = (Event**)new unsigned long[count]();
+    result = (Event**) ::operator new(sizeof(Event*) * count);
 
     // Copy each event of the list into result, retaining them
     unsigned int index = 0;
@@ -603,7 +606,10 @@ Event::Event(CommandQueue *parent,
     if (num_events_in_wait_list)
     {
         const unsigned int len = num_events_in_wait_list * sizeof(Event *);
-        p_event_wait_list = (const Event **)std::malloc(len);
+        //p_event_wait_list = (const Event **)std::malloc(len);
+        // Hack for not using malloc
+        p_event_wait_list = (const Event**)
+          ::operator new(sizeof(Event*) * num_events_in_wait_list);
 
         if (!p_event_wait_list)
         {
@@ -641,7 +647,8 @@ Event::~Event()
         clReleaseEvent((cl_event)p_event_wait_list[i]);
 
     if (p_event_wait_list)
-        std::free((void *)p_event_wait_list);
+      //std::free((void *)p_event_wait_list);
+      ::operator delete(p_event_wait_list);
 
     pthread_mutex_destroy(&p_state_mutex);
     pthread_cond_destroy(&p_state_change_cond);
@@ -670,10 +677,12 @@ void Event::setStatus(Status status)
 #ifdef DBG_QUEUE
   std::cerr << "Entering Event::setStatus in thread " << pthread_self()
     << std::endl;
-  if(status == Event::Submit)
-    std::cerr << "Event::Submit\n";
+  if(status == Event::Failed)
+    std::cerr << "Event::Failed" << std::endl;
   else if(status == Event::Submitted)
-    std::cerr << "Event::Submitted\n";
+    std::cerr << "Event::Submitted" << std::endl;
+  else if (status == Event::Complete)
+    std::cerr << "Event::Complete" << std::endl;
 #endif
     // TODO: If status < 0, terminate all the events depending on us.
     pthread_mutex_lock(&p_state_mutex);

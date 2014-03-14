@@ -74,6 +74,7 @@ class Kernel : public Object
          */
         Kernel(Program *program);
         ~Kernel();
+        Kernel(const Kernel& kernel);
 
         /**
          * \brief Kernel argument
@@ -310,7 +311,7 @@ class Kernel : public Object
         cl_int setArg(cl_uint index, size_t size, const void *value);
 
         unsigned int numArgs() const;             /*!< \brief Number of arguments of this kernel */
-        const Arg &arg(unsigned int index) const; /*!< \brief \c Arg at the given \p index */
+        const Arg *arg(unsigned int index) const; /*!< \brief \c Arg at the given \p index */
 
         /*! \brief \c Coal::DeviceKernel for the specified \p device */
         DeviceKernel *deviceDependentKernel(DeviceInterface *device) const;
@@ -357,7 +358,7 @@ class Kernel : public Object
         };
 
         std::vector<DeviceDependent> p_device_dependent;
-        std::vector<Arg> p_args;
+        std::vector<Arg*> p_args;
         DeviceDependent null_dep;
 
         const DeviceDependent &deviceDependent(DeviceInterface *device) const;

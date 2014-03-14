@@ -181,7 +181,7 @@ class LE1KernelWorkGroup
          *                       \c free()'ed at the end of \c run().
          * \return address of a memory location containing the arguments
          */
-        void *callArgs(std::vector<void *> &locals_to_free);
+        //void *callArgs(std::vector<void *> &locals_to_free);
 
         /**
          * \brief Run the work-group
@@ -325,9 +325,9 @@ class LE1KernelEvent
         LE1KernelWorkGroup *takeInstance();
 
         /*!< \brief Return the cached kernel arguments */
-        void *kernelArgs() const;
+        //void *kernelArgs() const;
         /*!< \brief Cache pre-built kernel arguments */
-        void cacheKernelArgs(void *args);
+        //void cacheKernelArgs(void *args);
         /*!< \brief A work-group has just finished */
         void workGroupFinished();
 

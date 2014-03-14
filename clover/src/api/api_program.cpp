@@ -118,8 +118,9 @@ clCreateProgramWithBinary(cl_context            context,
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
-    context_devices =
-        (cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
+    context_devices = (cl_device_id*)
+      ::operator new(sizeof(cl_device_id*) * context_num_devices);
+        //(cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
 
     *errcode_ret = context->info(CL_CONTEXT_DEVICES,
                                  context_num_devices * sizeof(cl_device_id),
@@ -256,8 +257,10 @@ clBuildProgram(cl_program           program,
         if (result != CL_SUCCESS)
             return result;
 
-        context_devices =
-            (cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
+        context_devices = (cl_device_id*)
+          ::operator new(sizeof(cl_device_id) * context_num_devices);
+            //(cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
+
 
         result = context->info(CL_CONTEXT_DEVICES,
                                      context_num_devices * sizeof(cl_device_id),

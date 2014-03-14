@@ -826,17 +826,17 @@ KernelEvent::KernelEvent(CommandQueue *parent,
 #ifdef DBG_EVENT
       std::cerr << "Checking argument " << i << std::endl;
 #endif
-        const Kernel::Arg &a = kernel->arg(i);
-        if (a.file() == Kernel::Arg::Local)
+        const Kernel::Arg *arg = kernel->arg(i);
+        if (arg->file() == Kernel::Arg::Local)
           continue;
 
-        if (a.kind() == Kernel::Arg::Buffer)
+        if (arg->kind() == Kernel::Arg::Buffer)
         {
 #ifdef DBG_EVENT
           std::cerr << "Arg is a buffer\n";
 #endif
             //const MemObject *buffer = *(const MemObject **)(a.value(0));
-          const MemObject *buffer = *(a.getMemObject());
+          const MemObject *buffer = *(arg->getMemObject());
 
             if (!BufferEvent::isSubBufferAligned(buffer, device))
             {
@@ -844,9 +844,9 @@ KernelEvent::KernelEvent(CommandQueue *parent,
                 return;
             }
         }
-        else if (a.kind() == Kernel::Arg::Image2D)
+        else if (arg->kind() == Kernel::Arg::Image2D)
         {
-            const Image2D *image = *(const Image2D **)(a.value(0));
+            const Image2D *image = *(const Image2D **)(arg->value(0));
             size_t maxWidth, maxHeight;
 
             *errcode_ret = device->info(CL_DEVICE_IMAGE2D_MAX_WIDTH,
@@ -863,9 +863,9 @@ KernelEvent::KernelEvent(CommandQueue *parent,
                 return;
             }
         }
-        else if (a.kind() == Kernel::Arg::Image3D)
+        else if (arg->kind() == Kernel::Arg::Image3D)
         {
-            const Image3D *image = *(const Image3D **)a.value(0);
+            const Image3D *image = *(const Image3D **)arg->value(0);
             size_t maxWidth, maxHeight, maxDepth;
 
             *errcode_ret = device->info(CL_DEVICE_IMAGE3D_MAX_WIDTH,

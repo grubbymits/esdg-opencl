@@ -31,8 +31,8 @@ private:
   void WriteKernelAttr(std::ostringstream &Output,
                        unsigned addr,
                        size_t attr);
-  void InitialiseLocal(const Kernel::Arg &arg, unsigned Addr);
-  bool HandleBufferArg(const Kernel::Arg &arg);
+  void InitialiseLocal(const Kernel::Arg *arg, unsigned Addr);
+  bool HandleBufferArg(const Kernel::Arg *arg);
   void PrintData(const void *data,
                  size_t addr,
                  size_t offset,

@@ -148,10 +148,10 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 
   // Calculate buffer addresses
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = TheKernel->arg(i);
+    const Kernel::Arg* arg = TheKernel->arg(i);
 
-    if (arg.kind() == Kernel::Arg::Buffer) {
-      llvm::Type *type = arg.type();
+    if (arg->kind() == Kernel::Arg::Buffer) {
+      llvm::Type *type = arg->type();
       unsigned bytes = 0;
       if (type->isIntegerTy(8))
         bytes = 1;
@@ -168,16 +168,14 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 #endif
       ArgAddrs.push_back(CurrentAddr);
 
-      if (arg.file() != Kernel::Arg::Local) {
-        //LE1Buffer* buffer = static_cast<LE1Buffer*>((*(MemObject**)
-          //                            arg.data())->deviceBuffer(TheDevice));
+      if (arg->file() != Kernel::Arg::Local) {
         LE1Buffer *buffer =
-          static_cast<LE1Buffer*>((*(arg.getMemObject()))->deviceBuffer(TheDevice));
+          static_cast<LE1Buffer*>(arg->getDeviceBuffer(TheDevice));
         buffer->setAddr(CurrentAddr);
       }
 
-      if (arg.file() == Kernel::Arg::Local) {
-        unsigned size = arg.allocAtKernelRuntime() * NumCores;
+      if (arg->file() == Kernel::Arg::Local) {
+        unsigned size = arg->allocAtKernelRuntime() * NumCores;
 #ifdef DBG_OUTPUT
         std::cout << "Setting the buffer size kernel arg " << i
           << ", which is a local, to " << size << std::endl;
@@ -186,7 +184,7 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
       }
       else {
         //CurrentAddr += (*(MemObject**)arg.data())->size();
-        CurrentAddr += (*(arg.getMemObject()))->size();
+        CurrentAddr += arg->getMemSize();
       }
     }
   }
@@ -250,18 +248,15 @@ bool LE1DataPrinter::AppendDataArea() {
 
   // Print labels for buffers
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = TheKernel->arg(i);
+    const Kernel::Arg* arg = TheKernel->arg(i);
 
-    if (arg.kind() == Kernel::Arg::Buffer) {
+    if (arg->kind() == Kernel::Arg::Buffer) {
 
       // Sanity check
-      if (arg.file() != Kernel::Arg::Local) {
+      if (arg->file() != Kernel::Arg::Local) {
 
-        //LE1Buffer* buffer =
-          //static_cast<LE1Buffer*>((*(MemObject**)
-            //                     arg.data())->deviceBuffer(TheDevice));
         LE1Buffer *buffer = static_cast<LE1Buffer*>(
-          (*(arg.getMemObject()))->deviceBuffer(TheDevice));
+          arg->getDeviceBuffer(TheDevice));
 
         if (buffer->addr() != ArgAddrs[j]) {
 #ifdef DBG_OUTPUT
@@ -404,13 +399,13 @@ bool LE1DataPrinter::AppendDataArea() {
 
   // Handle buffers
   for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
-    const Kernel::Arg& Arg = TheKernel->arg(i);
+    const Kernel::Arg* Arg = TheKernel->arg(i);
 
     // TODO This will need to check for images too
-    if (Arg.kind() != Kernel::Arg::Buffer)
+    if (Arg->kind() != Kernel::Arg::Buffer)
       continue;
 
-    if (Arg.file() != Kernel::Arg::Local) {
+    if (Arg->file() != Kernel::Arg::Local) {
       if (!HandleBufferArg(Arg)) {
 #ifdef DBG_OUTPUT
         std::cout << "ERROR: HandleBufferArg failed" << std::endl;
@@ -438,9 +433,9 @@ void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
     //addr += 4;
 }
 
-void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
-  unsigned TotalSize = arg.allocAtKernelRuntime() * NumCores;
-  llvm::Type* type = arg.type();
+void LE1DataPrinter::InitialiseLocal(const Kernel::Arg *arg, unsigned Addr) {
+  unsigned TotalSize = arg->allocAtKernelRuntime() * NumCores;
+  llvm::Type* type = arg->type();
 
   void *Data = new unsigned char[TotalSize]();
   PrintData(Data, Addr, 0, sizeof(char), TotalSize);
@@ -461,19 +456,19 @@ void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
       }
   }*/
 
-  delete (unsigned char*)Data;
+  delete[] (unsigned char*)Data;
 }
 
-bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
+bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg *arg) {
 #ifdef DBG_KERNEL
   std::cerr << "HandleBufferArg\n";
 #endif
 
-  llvm::Type* type = arg.type();
-  LE1Buffer *buffer = static_cast<LE1Buffer*>(arg.getDeviceBuffer(TheDevice));
+  llvm::Type* type = arg->type();
+  LE1Buffer *buffer = static_cast<LE1Buffer*>(arg->getDeviceBuffer(TheDevice));
 
   //unsigned TotalSize = (*(MemObject**)arg.data())->size();
-  unsigned TotalSize = arg.getMemSize();
+  unsigned TotalSize = arg->getMemSize();
   unsigned Addr = buffer->addr();
   void *Data = buffer->data();
 

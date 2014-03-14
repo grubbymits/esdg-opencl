@@ -75,6 +75,8 @@ class Object
         Object(Type type, Object *parent = 0);
         virtual ~Object();
 
+        Object(const Object& obj);
+
         /**
          * \brief Increments the reference counter
          */

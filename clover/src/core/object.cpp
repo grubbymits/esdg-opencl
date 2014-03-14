@@ -78,6 +78,12 @@ Object::~Object()
 #endif
 }
 
+Object::Object(const Object& obj) {
+#ifdef DBG_OUTPUT
+  std::cout << "Calling object copy constructor" << std::endl;
+#endif
+}
+
 void Object::reference()
 {
     p_references++;

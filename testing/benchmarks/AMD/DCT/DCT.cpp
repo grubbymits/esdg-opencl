@@ -173,8 +173,8 @@ DCT::setupCL(void)
                                   &status);
 
     CHECK_OPENCL_ERROR(status, "clCreateBuffer failed. (group buffers)");
-    delete groupsX;
-    delete groupsY;
+    delete [] groupsX;
+    delete [] groupsY;
 
     // create a CL program using the kernel source 
     streamsdk::buildProgramData buildData;
@@ -416,8 +416,8 @@ DCT::runCLKernels(void)
     for (unsigned y = 0; y < height; y+=8) {
       std::cout << groupsY[y] << " ";
     }
-    delete groupsX;
-    delete groupsY;
+    delete[] groupsX;
+    delete[] groupsY;
 
     status = clFlush(commandQueue);
     CHECK_OPENCL_ERROR(status, "clFlush failed.");

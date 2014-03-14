@@ -71,6 +71,7 @@ Kernel::~Kernel()
 #ifdef DBG_KERNEL
   std::cerr << "Destructing Kernel" << std::endl;
 #endif
+
   while (p_device_dependent.size())
   {
       DeviceDependent &dep = p_device_dependent.back();
@@ -79,8 +80,18 @@ Kernel::~Kernel()
 
       p_device_dependent.pop_back();
   }
+
+  for (unsigned i = 0; i < p_args.size(); ++i)
+    delete p_args[i];
+
 #ifdef DBG_KERNEL
   std::cerr << "Successfully destructed kernel" << std::endl;
+#endif
+}
+
+Kernel::Kernel(const Kernel& kernel) : Object(kernel) {
+#ifdef DBG_OUTPUT
+  std::cout << "Kernel copy constructor" << std::endl;
 #endif
 }
 
@@ -232,7 +243,7 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
             return CL_INVALID_KERNEL_DEFINITION;
 
         // Create arg
-        Arg a(vec_dim, file, kind, arg_type);
+        Arg* a = new Arg(vec_dim, file, kind, arg_type);
 
         // If we also have a function registered, check for signature compliance
         if (!append && a != p_args[i])
@@ -269,13 +280,13 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
     if (index > p_args.size())
         return CL_INVALID_ARG_INDEX;
 
-    Arg &arg = p_args[index];
+    Arg *arg = p_args[index];
 #ifdef DBG_KERNEL
     std::cerr << "p_args.size = " << p_args.size() << std::endl;
 #endif
 
     // Special case for __local pointers
-    if (arg.file() == Arg::Local)
+    if (arg->file() == Arg::Local)
     {
 #ifdef DBG_KERNEL
       std::cerr << "Arg::Local\n";
@@ -286,13 +297,13 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
         if (value != 0)
             return CL_INVALID_ARG_VALUE;
 
-        arg.setAllocAtKernelRuntime(size);
+        arg->setAllocAtKernelRuntime(size);
 
         return CL_SUCCESS;
     }
 
     // Check that size corresponds to the arg type
-    size_t arg_size = arg.valueSize();
+    size_t arg_size = arg->valueSize();
 #ifdef DBG_KERNEL
     std::cerr << "arg_size = " << arg_size << std::endl;
 #endif
@@ -325,7 +336,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
 
     if (!value)
     {
-        switch (arg.kind())
+        switch (arg->kind())
         {
             case Arg::Buffer:
             case Arg::Image2D:
@@ -343,7 +354,7 @@ cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
 
     // Copy the data
     //arg.alloc();
-    arg.loadData(value);
+    arg->loadData(value);
 
   // Loop through dependent devices and check whether any of them (the LE1) need
   // to perform anything involving moving the data out. Then we can pass the
@@ -363,7 +374,7 @@ unsigned int Kernel::numArgs() const
     return p_args.size();
 }
 
-const Kernel::Arg &Kernel::arg(unsigned int index) const
+const Kernel::Arg *Kernel::arg(unsigned int index) const
 {
     return p_args.at(index);
 }
@@ -372,7 +383,7 @@ bool Kernel::argsSpecified() const
 {
     for (size_t i=0; i<p_args.size(); ++i)
     {
-        if (!p_args[i].defined()) {
+        if (!p_args[i]->defined()) {
 #ifdef DBG_OUTPUT
           std::cout << "ERROR: arg " << i << " is not defined!\n";
 #endif
@@ -536,6 +547,7 @@ Kernel::Arg::Arg(unsigned short vec_dim, File file, Kind kind, llvm::Type* type)
     pointer = true;
 }
 
+/*
 Kernel::Arg::Arg(const Kernel::Arg& arg) {
   p_vec_dim = arg.vecDim();
   p_file = arg.file();
@@ -549,6 +561,12 @@ Kernel::Arg::Arg(const Kernel::Arg& arg) {
   //}
 
   argData = arg.getData();
+}
+*/
+Kernel::Arg::Arg(const Kernel::Arg& arg) {
+#ifdef DBG_OUTPUT
+  std::cout << "Arg copy constructor" << std::endl;
+#endif
 }
 
 Kernel::Arg::~Arg()

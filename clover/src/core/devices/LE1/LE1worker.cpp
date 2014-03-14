@@ -110,6 +110,12 @@ thread " << pthread_self() << std::endl;
                   std::cerr << "ReadBuffer\n";
 #endif
                   device->getSimulator()->LockAccess();
+                  if (!buf->allocated()) {
+#ifdef DBG_OUTPUT
+                    std::cout << "!! ERROR: Buffer is not allocated for a write"
+                      << std::endl;
+#endif
+                  }
                   std::memcpy(e->ptr(), buf->data(), e->cb());
                   device->getSimulator()->UnlockAccess();
                 }
