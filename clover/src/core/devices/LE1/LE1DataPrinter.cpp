@@ -470,11 +470,11 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg *arg) {
   //unsigned TotalSize = (*(MemObject**)arg.data())->size();
   unsigned TotalSize = arg->getMemSize();
   unsigned Addr = buffer->addr();
-  void *Data = buffer->data();
-
-  // FIXME Check we actually have data?
-  if (Data == NULL)
-    Data = new unsigned char [TotalSize]();
+  void *Data = NULL;
+  if (!buffer->allocated())
+    Data = ::operator new(TotalSize);
+  else
+    Data = buffer->data();
 
   /*
   // FIXME - Does this work when using local buffers?
@@ -560,6 +560,9 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg *arg) {
 #endif
   //if (isBufferOnDevice)
     //free(Data);
+
+  if (!buffer->allocated())
+    delete((unsigned char*)Data);
 
   return true;
 }
