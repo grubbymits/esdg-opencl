@@ -185,31 +185,21 @@ LE1Device::~LE1Device()
     filename.append(".csv");
 
     if(!std::ifstream(filename.c_str())) {
-      Line << "Model, Target, Contexts, Dram, Iram, Cycles,"
+      Line << "Model, Cycles, Contexts, Target, Dram, Iram, Cycles,"
         << "Total Stalls, Decode Stalls, Branches Taken, Iterations"
         << std::endl;
-
-      /*
-      Line << "Config, Contexts, Total Cycles, Total Stalls, Decode Stalls,"
-        << " Branches Taken, Branches not Taken, Cycle to complete, Iterations"
-        << ", Average Cycles, Average Decode, Model"
-        << std::endl;*/
     }
-    Line << simulatorModel << ", " << CPU << ", " << NumCores << ", "
+    Line << simulatorModel << ", "
+      << completionCycles << ", "
+      << NumCores << ", "
+      << CPU << ", "
       << DramSize / NumCores << ", "
       << IramSize / NumCores << ", "
-      << completionCycles << ", " << TotalStalls << ", " << TotalDecodeStalls
-      << ", " << TotalBranchesTaken << ", " << numIterations << std::endl;
-
-    /*
-    Line << CPU << ", " << NumCores << ", " << TotalCycles << ", "
-      << TotalStalls << ", " << TotalDecodeStalls << ", "
-      << TotalBranchesTaken << ", " << TotalBranchesNotTaken << ", "
-      << completionCycles << ", " << numIterations << ", "
-      << completionCycles / numIterations << ", "
-      << TotalDecodeStalls / numIterations << ", "
-      << simulatorModel
-      << std::endl;*/
+      << completionCycles << ", "
+      << TotalStalls << ", "
+      << TotalDecodeStalls << ", "
+      << TotalBranchesTaken << ", "
+      << numIterations << std::endl;
 
     std::ofstream Results;
     Results.open(filename.c_str(), std::ios_base::app);

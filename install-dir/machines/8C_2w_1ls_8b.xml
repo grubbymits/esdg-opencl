@@ -2,14 +2,14 @@
 	<systems>1</systems>
 	<type>homogeneous</type>
 	<system>
-		<contexts>4</contexts>
+		<contexts>8</contexts>
 		<SCALARSYS_PRESENT>1</SCALARSYS_PRESENT>
 		<PERIPH_PRESENT>0</PERIPH_PRESENT>
 		<DARCH>DRAM_SHARED</DARCH>
 		<DRAM_BLK_SIZE>16</DRAM_BLK_SIZE>
 		<DRAM_SIZE>0x1000</DRAM_SIZE>
 		<STACK_SIZE>0x100</STACK_SIZE> <!-- 8 KiB -->
-		<DRAM_BANKS>1</DRAM_BANKS>
+		<DRAM_BANKS>8</DRAM_BANKS>
 		<context>
 			<ISSUE_WIDTH_MAX>2</ISSUE_WIDTH_MAX>
 			<ISA_PRSPCTV>VT32PP</ISA_PRSPCTV>
@@ -37,7 +37,7 @@
 
 				<IALUS>2</IALUS>
 				<IMULTS>1</IMULTS>
-				<LSU_CHANNELS>2</LSU_CHANNELS>
+				<LSU_CHANNELS>1</LSU_CHANNELS>
 				<BRUS>1</BRUS>
 			</clusterTemplate>
 
