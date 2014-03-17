@@ -83,6 +83,7 @@ class LE1Kernel : public DeviceKernel
          * \param function \c llvm::Function to run
          */
         LE1Kernel(LE1Device *device, Kernel *kernel, llvm::Function *function);
+        LE1Kernel(const LE1Kernel& kernel);
         ~LE1Kernel();
 
         size_t workGroupSize() const;

@@ -52,7 +52,7 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
   p_dtor_callback(0)
 {
 #ifdef DBG_BUFFER
-  std::cerr << "Creating MemObject" << std::endl;
+  std::cerr << "Creating MemObject at " << std::hex << this << std::endl;
 #endif
 
     // Check the flags value
@@ -98,7 +98,7 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
 MemObject::~MemObject()
 {
 #ifdef DBG_OBJ
-  std::cerr << "Destructing MemObject" << std::endl;
+  std::cerr << "Destructing MemObject at " << std::hex << this << std::endl;
 #endif
     if (p_dtor_callback)
         p_dtor_callback((cl_mem)this, p_dtor_userdata);

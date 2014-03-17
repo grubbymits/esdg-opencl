@@ -39,6 +39,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 namespace llvm
 {
@@ -217,7 +218,26 @@ class Kernel : public Object
                 const void *data() const;
                 bool isPointer() const { return pointer; }
 
-                MemObject **getMemObject() const { return argData.mem; }
+                MemObject *getMemObject() const {
+                  if (p_kind != Buffer) {
+#ifdef DBG_OUTPUT
+                    std::cout << "!! ERROR: Arg is not a buffer" << std::endl;
+#endif
+                    exit(-1);
+                  }
+                  if (!p_defined) {
+#ifdef DBG_OUTPUT
+                    std::cout << "!! ERROR: Arg is not defined" << std::endl;
+#endif
+                    exit(-1);
+                  }
+#ifdef DBG_KERNEL
+                  std::cerr << "Arg addr = " << std::hex << this
+                    << ", getMemObject at " << std::hex << argData.mem
+                    << std::endl;
+#endif
+                  return argData.mem;
+                }
 
                 DeviceBuffer *getDeviceBuffer(DeviceInterface *device) const;
 
@@ -247,7 +267,7 @@ class Kernel : public Object
 
                 // Everything can fit within 64-bits
                 union ArgData {
-                  MemObject **mem;
+                  MemObject *mem;
                   unsigned char i8;
                   unsigned short i16;
                   unsigned int i32;

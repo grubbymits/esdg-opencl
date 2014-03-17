@@ -669,7 +669,8 @@ KernelEvent::KernelEvent(CommandQueue *parent,
   // TODO This is where everything else needs to be handled. Need to try to use
   // device specific methods though.
 #ifdef DBG_EVENT
-  std::cerr << "Entering KernelEvent::KernelEvent\n";
+  std::cerr << "Entering KernelEvent::KernelEvent with kernel at "
+    << std::hex << (unsigned long) kernel << std::endl;
 #endif
     if (*errcode_ret != CL_SUCCESS) return;
 
@@ -836,7 +837,7 @@ KernelEvent::KernelEvent(CommandQueue *parent,
           std::cerr << "Arg is a buffer\n";
 #endif
             //const MemObject *buffer = *(const MemObject **)(a.value(0));
-          const MemObject *buffer = *(arg->getMemObject());
+          const MemObject *buffer = arg->getMemObject();
 
             if (!BufferEvent::isSubBufferAligned(buffer, device))
             {

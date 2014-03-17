@@ -1,6 +1,6 @@
 #!/bin/sh
 (
-for device in `seq 0 49`;
+for device in `seq 0 59`;
 do
   ./bfs ../data/bfs/graph4096.txt $device
 done

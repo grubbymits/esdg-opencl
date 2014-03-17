@@ -3,9 +3,11 @@
 sub.0 r0.1, r0.1, 0x10
 ;
 stw.0 r0.1[0xc], l0.0
+;
 stw.0 r0.1[0x8], r0.57
 ;
 stw.0 r0.1[0x4], r0.58
+;
 stw.0 r0.1[0x0], r0.59
 cpuid.0 r0.2
 ;
@@ -36,11 +38,12 @@ mov.0 r0.3, r0.0
 add.0 r0.4, r0.2, 0x1
 ;
 stb.0 r0.3, r0.4[0x0]
+;
 stb.0 r0.59, r0.2[0x0]
 mov.0 r0.3, BufferArg_0
 mov.0 r0.4, 0x800
-;
 add.0 r0.59, r0.59, 0x10
+;
 call.0 l0.0, FUNC_fastWalshTransform
 ;
 cmplt.0 b0.0, r0.59, 0x8
@@ -53,9 +56,11 @@ add.0 r0.57, r0.2, 0x10
 ;
 -- temp_fastWalshTransform_L0?4
 ldw.0 r0.59, r0.1[0x0]
+;
 ldw.0 r0.58, r0.1[0x4]
 ;
 ldw.0 r0.57, r0.1[0x8]
+;
 ldw.0 l0.0, r0.1[0xc]
 .call exit, caller, arg($r0.3:s32), ret($r0.3:s32)
 call.0 l0.0, FUNC_exit
@@ -64,15 +69,19 @@ call.0 l0.0, FUNC_exit
 sub.0 r0.1, r0.1, 0x28
 ;
 stw.0 r0.1[0x24], l0.0
+;
 stw.0 r0.1[0x20], r0.57
 ;
 stw.0 r0.1[0x1c], r0.58
+;
 stw.0 r0.1[0x18], r0.59
 ;
 stw.0 r0.1[0x14], r0.60
+;
 stw.0 r0.1[0x10], r0.61
 ;
 stw.0 r0.1[0xc], r0.62
+;
 stw.0 r0.1[0x8], r0.63
 cpuid.0 r0.2
 ;
@@ -239,9 +248,10 @@ sh2add.0 r0.62, r0.3, r0.63
 sh2add.0 r0.58, r0.2, r0.63
 ;
 ldw.0 r0.59, r0.58[0x0]
-ldw.0 r0.60, r0.62[0x0]
 ;
+ldw.0 r0.60, r0.62[0x0]
 mov.0 r0.3, r0.59
+;
 mov.0 r0.4, r0.60
 call.0 l0.0, FUNC___addsf3
 ;
@@ -258,15 +268,19 @@ cmpne.0 b0.0, r0.61, 0x100
 br.0 b0.0, (temp_fastWalshTransform_L1?1)
 ;
 ldw.0 r0.63, r0.1[0x8]
+;
 ldw.0 r0.62, r0.1[0xc]
 ;
 ldw.0 r0.61, r0.1[0x10]
+;
 ldw.0 r0.60, r0.1[0x14]
 ;
 ldw.0 r0.59, r0.1[0x18]
+;
 ldw.0 r0.58, r0.1[0x1c]
 ;
 ldw.0 r0.57, r0.1[0x20]
+;
 ldw.0 l0.0, r0.1[0x24]
 ;
 return.0 r0.1, r0.1, 0x28, l0.0

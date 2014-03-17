@@ -74,6 +74,12 @@ LE1Kernel::LE1Kernel(LE1Device *device, Kernel *kernel, llvm::Function *function
     pthread_mutex_init(&p_call_function_mutex, 0);
 }
 
+LE1Kernel::LE1Kernel(const LE1Kernel& kernel) {
+#ifdef DBG_OUTPUT
+  std::cout << "LE1Kernel copy constructor!" << std::endl;
+#endif
+}
+
 LE1Kernel::~LE1Kernel()
 {
 #ifdef DBG_KERNEL
@@ -421,7 +427,7 @@ bool LE1KernelEvent::AllocateBuffers() {
         //(*(Arg.getMemObject()))->deviceBuffer(p_device));
 
       if (buffer->data() == NULL) {
-        if (!(static_cast<Buffer*>(*(Arg->getMemObject())))->allocate(p_device))
+        if (!(static_cast<Buffer*>(Arg->getMemObject()))->allocate(p_device))
           return false;
       }
     }

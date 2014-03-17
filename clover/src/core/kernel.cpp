@@ -273,8 +273,8 @@ llvm::Function *Kernel::function(DeviceInterface *device) const
 cl_int Kernel::setArg(cl_uint index, size_t size, const void *value)
 {
 #ifdef DBG_KERNEL
-  std::cerr << "Entering Kernel::setArg\n";
-  std::cerr << "index = " << index << " size = " << size << std::endl;
+  std::cerr << "Entering Kernel::setArg for kernel at " << std::hex << this
+    << ", index = " << index << " size = " << size << std::endl;
 #endif
 
     if (index > p_args.size())
@@ -541,6 +541,11 @@ Kernel::Arg::Arg(unsigned short vec_dim, File file, Kind kind, llvm::Type* type)
   //p_data(0),
   p_defined(false), p_runtime_alloc(0)
 {
+#ifdef DBG_KERNEL
+  std::cerr << "Created Arg at " << std::hex << (unsigned long)this
+    << std::endl;
+#endif
+
   pointer = false;
   // FIXME Add more types to this? 
   if (type->getTypeID() == llvm::Type::PointerTyID)
@@ -607,12 +612,17 @@ void Kernel::Arg::alloc()
 void Kernel::Arg::loadData(const void *data)
 {
 #ifdef DBG_KERNEL
-  std::cerr << "Kernel::Arg::loadData\n";
-  std::cerr << "copying " << p_vec_dim * valueSize() << " bytes of data\n";
+  std::cerr << "Kernel::Arg::loadData for Arg at " << std::hex << this
+    << ", copying " << p_vec_dim * valueSize() << " bytes of data\n";
 #endif
 
-  if (p_kind == Arg::Buffer)
-    argData.mem = static_cast<MemObject**>(const_cast<void*>(data));
+  if (p_kind == Arg::Buffer) {
+    argData.mem = *(static_cast<MemObject**>((const_cast<void*>(data))));
+#ifdef DBG_KERNEL
+    std::cerr << "Arg is a buffer, set addr to = " << std::hex <<
+      (unsigned long) argData.mem << std::endl;
+#endif
+  }
   else if (p_kind == Arg::Int8)
     argData.i8 = *(static_cast<unsigned char*>(const_cast<void*>(data)));
   else if (p_kind == Arg::Int16)
@@ -630,11 +640,11 @@ void Kernel::Arg::loadData(const void *data)
 }
 
 DeviceBuffer *Kernel::Arg::getDeviceBuffer(DeviceInterface *device) const {
-  return (*argData.mem)->deviceBuffer(device);
+  return argData.mem->deviceBuffer(device);
 }
 
 unsigned Kernel::Arg::getMemSize() const {
-  return (*argData.mem)->size();
+  return argData.mem->size();
 }
 
 void Kernel::Arg::setAllocAtKernelRuntime(size_t size)

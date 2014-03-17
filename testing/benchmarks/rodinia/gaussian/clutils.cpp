@@ -365,9 +365,11 @@ cl_context cl_init_context(int platform, int dev,int quiet) {
 
 	cl_context_properties *cprops = cps;
 
-	context = clCreateContextFromType(
-					cprops, (cl_device_type)dtype,
-					NULL, NULL, &status);
+	//context = clCreateContextFromType(
+	//				cprops, (cl_device_type)dtype,
+	//				NULL, NULL, &status);
+        context = clCreateContext(cprops, 1, &devices[device_touse], NULL, NULL,
+                                  &status);
 	if(cl_errChk(status, "creating Context",true)) {
 		exit(1);
 	}
