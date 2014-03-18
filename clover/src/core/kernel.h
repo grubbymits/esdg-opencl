@@ -181,7 +181,7 @@ class Kernel : public Object
                  * \param b other argument to compare
                  * \return true if the this arguments doesn't match \p b
                  */
-                bool operator !=(const Arg &b);
+                bool operator !=(const Arg *b);
 
                 /**
                  * \brief Size of a field of this arg

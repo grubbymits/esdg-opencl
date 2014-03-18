@@ -1,6 +1,7 @@
 Number of records: 42764
 Finding the 5 closest neighbors.
 Using Platform 0 	 Device No 0 
+Creating ACCELERATOR Context
 	NearestNeighbor.cl
 Device: 1 core scalar
 Compiling kernel: NearestNeighbor
@@ -31,7 +32,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -46,20 +47,209 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  Default_1wide.xml
-HALT operation received from [0][0][0] at cycle 36052434
-Simulation finished, cycleCount = 36052435
+  1C_1w.xml
+IRAMFileSize = 3504
+DRAMFileSize = 514268
+HALT operation received from [0][0][0] at cycle 36304927
+Simulation finished, cycleCount = 36304928
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 36052435
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 36304928
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
 Number of records: 42764
 Finding the 5 closest neighbors.
 Using Platform 0 	 Device No 1 
+Creating ACCELERATOR Context
+	NearestNeighbor.cl
+Device: 1 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 42816
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514268
+Size of bss area : 
+End of memory: 4114144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  1C_2w_1ls_1b.xml
+IRAMFileSize = 3500
+DRAMFileSize = 514268
+HALT operation received from [0][0][0] at cycle 29975473
+Simulation finished, cycleCount = 29975474
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 29975474
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 2 
+Creating ACCELERATOR Context
+	NearestNeighbor.cl
+Device: 1 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 42816
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514268
+Size of bss area : 
+End of memory: 4114144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  1C_3w_1ls_1b.xml
+IRAMFileSize = 3500
+DRAMFileSize = 514268
+HALT operation received from [0][0][0] at cycle 28536227
+Simulation finished, cycleCount = 28536228
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 28536228
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 3 
+Creating ACCELERATOR Context
+	NearestNeighbor.cl
+Device: 1 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 42816
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 1;
+  int total_workgroups = 1;
+  int workgroupX = 1;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514268
+Size of bss area : 
+End of memory: 4114144
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  1C_4w_1ls_1b.xml
+IRAMFileSize = 3500
+DRAMFileSize = 514268
+HALT operation received from [0][0][0] at cycle 25507305
+Simulation finished, cycleCount = 25507306
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 25507306
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 4 
+Creating ACCELERATOR Context
 homogeneous system
 	NearestNeighbor.cl
 Device: 2 core scalar
@@ -91,7 +281,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -106,285 +296,24 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  2Context_1wide.xml
-HALT operation received from [0][1][0] at cycle 18003973
-HALT operation received from [0][0][0] at cycle 18048560
-Simulation finished, cycleCount = 18048561
+  2C_1w.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514272
+HALT operation received from [0][1][0] at cycle 18173324
+HALT operation received from [0][0][0] at cycle 18187089
+Simulation finished, cycleCount = 18187090
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 18048561
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 2 
-homogeneous system
-	NearestNeighbor.cl
-Device: 4 core scalar
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 10704
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 4;
-  int total_workgroups = 4;
-  int workgroupX = 4;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514280
-Size of bss area : 
-End of memory: 4114240
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  4Context_1wide.xml
-HALT operation received from [0][3][0] at cycle 8981279
-HALT operation received from [0][2][0] at cycle 9022781
-HALT operation received from [0][1][0] at cycle 9023636
-HALT operation received from [0][0][0] at cycle 9025011
-Simulation finished, cycleCount = 9025012
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 9025012
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 3 
-homogeneous system
-	NearestNeighbor.cl
-Device: 8 core scalar
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 5352
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 8;
-  int total_workgroups = 8;
-  int workgroupX = 8;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514296
-Size of bss area : 
-End of memory: 4114368
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  8Context_1wide.xml
-HALT operation received from [0][7][0] at cycle 4470411
-HALT operation received from [0][2][0] at cycle 4510738
-HALT operation received from [0][0][0] at cycle 4510928
-HALT operation received from [0][6][0] at cycle 4510955
-HALT operation received from [0][5][0] at cycle 4511066
-HALT operation received from [0][4][0] at cycle 4511802
-HALT operation received from [0][3][0] at cycle 4512985
-HALT operation received from [0][1][0] at cycle 4514170
-Simulation finished, cycleCount = 4514171
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 4514171
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 4 
-homogeneous system
-	NearestNeighbor.cl
-Device: 16 core scalar
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 2676
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 16;
-  int workgroupX = 16;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514328
-Size of bss area : 
-End of memory: 4114624
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  16Context_1wide.xml
-HALT operation received from [0][15][0] at cycle 2214374
-HALT operation received from [0][5][0] at cycle 2254357
-HALT operation received from [0][1][0] at cycle 2254480
-HALT operation received from [0][6][0] at cycle 2254522
-HALT operation received from [0][13][0] at cycle 2254530
-HALT operation received from [0][10][0] at cycle 2255420
-HALT operation received from [0][11][0] at cycle 2255733
-HALT operation received from [0][12][0] at cycle 2255735
-HALT operation received from [0][9][0] at cycle 2255913
-HALT operation received from [0][8][0] at cycle 2255976
-HALT operation received from [0][14][0] at cycle 2256124
-HALT operation received from [0][4][0] at cycle 2256468
-HALT operation received from [0][0][0] at cycle 2256535
-HALT operation received from [0][2][0] at cycle 2256796
-HALT operation received from [0][3][0] at cycle 2257461
-HALT operation received from [0][7][0] at cycle 2258550
-Simulation finished, cycleCount = 2258551
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 2258551
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 18187090
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
 Number of records: 42764
 Finding the 5 closest neighbors.
 Using Platform 0 	 Device No 5 
-	NearestNeighbor.cl
-Device: 1 core 2w2a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 42816
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 1;
-  int total_workgroups = 1;
-  int workgroupX = 1;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514268
-Size of bss area : 
-End of memory: 4114144
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  Default_2wide_1ls.xml
-HALT operation received from [0][0][0] at cycle 29650727
-Simulation finished, cycleCount = 29650728
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 29650728
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 6 
+Creating ACCELERATOR Context
 homogeneous system
 	NearestNeighbor.cl
 Device: 2 core 2w2a1m1ls1b
@@ -416,7 +345,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -431,285 +360,24 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  2Context_2wide.xml
-HALT operation received from [0][1][0] at cycle 14807036
-HALT operation received from [0][0][0] at cycle 14843776
-Simulation finished, cycleCount = 14843777
+  2C_2w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514272
+HALT operation received from [0][1][0] at cycle 15022877
+HALT operation received from [0][0][0] at cycle 15025491
+Simulation finished, cycleCount = 15025492
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 14843777
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 15025492
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
 Number of records: 42764
 Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 7 
-homogeneous system
-	NearestNeighbor.cl
-Device: 4 core 2w2a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 10704
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 4;
-  int total_workgroups = 4;
-  int workgroupX = 4;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514280
-Size of bss area : 
-End of memory: 4114240
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  4Context_2wide.xml
-HALT operation received from [0][3][0] at cycle 7386572
-HALT operation received from [0][2][0] at cycle 7420537
-HALT operation received from [0][1][0] at cycle 7421279
-HALT operation received from [0][0][0] at cycle 7422570
-Simulation finished, cycleCount = 7422571
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 7422571
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 8 
-homogeneous system
-	NearestNeighbor.cl
-Device: 8 core 2w2a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 5352
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 8;
-  int total_workgroups = 8;
-  int workgroupX = 8;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514296
-Size of bss area : 
-End of memory: 4114368
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  8Context_2wide.xml
-HALT operation received from [0][7][0] at cycle 3676742
-HALT operation received from [0][2][0] at cycle 3709655
-HALT operation received from [0][5][0] at cycle 3709853
-HALT operation received from [0][0][0] at cycle 3709859
-HALT operation received from [0][6][0] at cycle 3709903
-HALT operation received from [0][4][0] at cycle 3710757
-HALT operation received from [0][3][0] at cycle 3711697
-HALT operation received from [0][1][0] at cycle 3712784
-Simulation finished, cycleCount = 3712785
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 3712785
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 9 
-homogeneous system
-	NearestNeighbor.cl
-Device: 16 core 2w2a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 2676
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 16;
-  int workgroupX = 16;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514328
-Size of bss area : 
-End of memory: 4114624
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  16Context_2wide.xml
-HALT operation received from [0][15][0] at cycle 1821303
-HALT operation received from [0][5][0] at cycle 1853993
-HALT operation received from [0][6][0] at cycle 1854081
-HALT operation received from [0][13][0] at cycle 1854131
-HALT operation received from [0][1][0] at cycle 1854171
-HALT operation received from [0][10][0] at cycle 1854803
-HALT operation received from [0][11][0] at cycle 1855123
-HALT operation received from [0][12][0] at cycle 1855267
-HALT operation received from [0][9][0] at cycle 1855336
-HALT operation received from [0][8][0] at cycle 1855494
-HALT operation received from [0][14][0] at cycle 1855512
-HALT operation received from [0][4][0] at cycle 1855735
-HALT operation received from [0][0][0] at cycle 1855761
-HALT operation received from [0][2][0] at cycle 1856164
-HALT operation received from [0][3][0] at cycle 1856693
-HALT operation received from [0][7][0] at cycle 1857689
-Simulation finished, cycleCount = 1857690
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 1857690
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 10 
-	NearestNeighbor.cl
-Device: 1 core 3w3a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 42816
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 1;
-  int total_workgroups = 1;
-  int workgroupX = 1;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514268
-Size of bss area : 
-End of memory: 4114144
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  Default_3wide_1ls.xml
-HALT operation received from [0][0][0] at cycle 27840263
-Simulation finished, cycleCount = 27840264
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 27840264
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 11 
+Using Platform 0 	 Device No 6 
+Creating ACCELERATOR Context
 homogeneous system
 	NearestNeighbor.cl
 Device: 2 core 3w3a1m1ls1b
@@ -741,7 +409,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -756,285 +424,24 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  2Context_3wide.xml
-HALT operation received from [0][1][0] at cycle 13902874
-HALT operation received from [0][0][0] at cycle 13937465
-Simulation finished, cycleCount = 13937466
+  2C_3w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514272
+HALT operation received from [0][0][0] at cycle 14296296
+HALT operation received from [0][1][0] at cycle 14297440
+Simulation finished, cycleCount = 14297441
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 13937466
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 14297441
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
 Number of records: 42764
 Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 12 
-homogeneous system
-	NearestNeighbor.cl
-Device: 4 core 3w3a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 10704
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 4;
-  int total_workgroups = 4;
-  int workgroupX = 4;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514280
-Size of bss area : 
-End of memory: 4114240
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  4Context_3wide.xml
-HALT operation received from [0][3][0] at cycle 6935455
-HALT operation received from [0][2][0] at cycle 6967485
-HALT operation received from [0][1][0] at cycle 6968132
-HALT operation received from [0][0][0] at cycle 6969399
-Simulation finished, cycleCount = 6969400
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 6969400
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 13 
-homogeneous system
-	NearestNeighbor.cl
-Device: 8 core 3w3a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 5352
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 8;
-  int total_workgroups = 8;
-  int workgroupX = 8;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514296
-Size of bss area : 
-End of memory: 4114368
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  8Context_3wide.xml
-HALT operation received from [0][7][0] at cycle 3452326
-HALT operation received from [0][2][0] at cycle 3483162
-HALT operation received from [0][6][0] at cycle 3483195
-HALT operation received from [0][0][0] at cycle 3483432
-HALT operation received from [0][5][0] at cycle 3483599
-HALT operation received from [0][4][0] at cycle 3483952
-HALT operation received from [0][3][0] at cycle 3485036
-HALT operation received from [0][1][0] at cycle 3486033
-Simulation finished, cycleCount = 3486034
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 3486034
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 14 
-homogeneous system
-	NearestNeighbor.cl
-Device: 16 core 3w3a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 2676
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 16;
-  int total_workgroups = 16;
-  int workgroupX = 16;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514328
-Size of bss area : 
-End of memory: 4114624
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  16Context_3wide.xml
-HALT operation received from [0][15][0] at cycle 1710196
-HALT operation received from [0][5][0] at cycle 1740584
-HALT operation received from [0][1][0] at cycle 1740705
-HALT operation received from [0][6][0] at cycle 1740717
-HALT operation received from [0][13][0] at cycle 1740756
-HALT operation received from [0][10][0] at cycle 1741703
-HALT operation received from [0][12][0] at cycle 1741871
-HALT operation received from [0][11][0] at cycle 1741962
-HALT operation received from [0][8][0] at cycle 1742003
-HALT operation received from [0][9][0] at cycle 1742015
-HALT operation received from [0][14][0] at cycle 1742196
-HALT operation received from [0][4][0] at cycle 1742644
-HALT operation received from [0][2][0] at cycle 1742692
-HALT operation received from [0][0][0] at cycle 1742793
-HALT operation received from [0][3][0] at cycle 1743407
-HALT operation received from [0][7][0] at cycle 1744385
-Simulation finished, cycleCount = 1744386
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 1744386
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 15 
-	NearestNeighbor.cl
-Device: 1 core 4w4a1m1ls1b
-Compiling kernel: NearestNeighbor
-
-Dimension 0: Global work size = 42816, Local work size = 42816
-
-Kernel launcher function:
-extern int BufferArg_0;
-extern int BufferArg_1;
-int main(void) {
-  int id = 0;
-  int num_cores = 1;
-  int total_workgroups = 1;
-  int workgroupX = 1;
-  int workgroupY = 0;
-  int x = 0;
-  int y = 0;
-  id = __builtin_le1_read_cpuid();
-
-  while (id < total_workgroups) {
-    x = id;
-    if (x >= workgroupX) {
-      y = x / workgroupX;
-      x = x % workgroupX;
-    }
-    if (y > workgroupY)
-      return 0;
-
-    __builtin_le1_set_group_id_1(y);
-    __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
-    id += num_cores;
-  }
-  return id;
-}
-
-mem align: 0
-dram_base_offset: 0
-Size of data area : 514268
-Size of bss area : 
-End of memory: 4114144
-Second Pass Completed
-Run Simulation with:
-  binaries/final_NearestNeighbor.s.bin  
-  binaries/final_NearestNeighbor.data.bin  
-  Default_4wide_1ls.xml
-HALT operation received from [0][0][0] at cycle 26357332
-Simulation finished, cycleCount = 26357333
- -------------------------------------------------------- 
-Iteration = 1
-Total cycles = 26357333
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
-Number of records: 42764
-Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 16 
+Using Platform 0 	 Device No 7 
+Creating ACCELERATOR Context
 homogeneous system
 	NearestNeighbor.cl
 Device: 2 core 4w4a1m1ls1b
@@ -1066,7 +473,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -1081,21 +488,478 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  2Context_4wide.xml
-HALT operation received from [0][1][0] at cycle 13162429
-HALT operation received from [0][0][0] at cycle 13194978
-Simulation finished, cycleCount = 13194979
+  2C_4w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514272
+HALT operation received from [0][0][0] at cycle 12786166
+HALT operation received from [0][1][0] at cycle 12789105
+Simulation finished, cycleCount = 12789106
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 13194979
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 12789106
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
 Number of records: 42764
 Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 17 
+Using Platform 0 	 Device No 8 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 2 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 21408
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 2;
+  int workgroupX = 2;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514272
+Size of bss area : 
+End of memory: 4114176
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  2C_1w_2b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514272
+HALT operation received from [0][1][0] at cycle 18153961
+HALT operation received from [0][0][0] at cycle 18175946
+Simulation finished, cycleCount = 18175947
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 18175947
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 9 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 2 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 21408
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 2;
+  int workgroupX = 2;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514272
+Size of bss area : 
+End of memory: 4114176
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  2C_2w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514272
+HALT operation received from [0][1][0] at cycle 14998111
+HALT operation received from [0][0][0] at cycle 15008466
+Simulation finished, cycleCount = 15008467
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 15008467
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 10 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 2 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 21408
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 2;
+  int workgroupX = 2;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514272
+Size of bss area : 
+End of memory: 4114176
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  2C_3w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514272
+HALT operation received from [0][1][0] at cycle 14279051
+HALT operation received from [0][0][0] at cycle 14286380
+Simulation finished, cycleCount = 14286381
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 14286381
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 11 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 2 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 21408
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 2;
+  int total_workgroups = 2;
+  int workgroupX = 2;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514272
+Size of bss area : 
+End of memory: 4114176
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  2C_4w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514272
+HALT operation received from [0][1][0] at cycle 12765243
+HALT operation received from [0][0][0] at cycle 12770340
+Simulation finished, cycleCount = 12770341
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 12770341
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 12 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_1w.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514280
+HALT operation received from [0][0][0] at cycle 9108710
+HALT operation received from [0][3][0] at cycle 9111204
+HALT operation received from [0][1][0] at cycle 9123389
+HALT operation received from [0][2][0] at cycle 9140348
+Simulation finished, cycleCount = 9140349
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 9140349
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 13 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_2w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][0][0] at cycle 7535571
+HALT operation received from [0][1][0] at cycle 7552367
+HALT operation received from [0][3][0] at cycle 7552748
+HALT operation received from [0][2][0] at cycle 7570711
+Simulation finished, cycleCount = 7570712
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 7570712
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 14 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_3w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][0][0] at cycle 7166544
+HALT operation received from [0][1][0] at cycle 7183801
+HALT operation received from [0][3][0] at cycle 7195306
+HALT operation received from [0][2][0] at cycle 7206334
+Simulation finished, cycleCount = 7206335
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 7206335
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 15 
+Creating ACCELERATOR Context
 homogeneous system
 	NearestNeighbor.cl
 Device: 4 core 4w4a1m1ls1b
@@ -1127,7 +991,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -1142,23 +1006,764 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  4Context_4wide.xml
-HALT operation received from [0][3][0] at cycle 6565852
-HALT operation received from [0][2][0] at cycle 6596641
-HALT operation received from [0][1][0] at cycle 6597094
-HALT operation received from [0][0][0] at cycle 6597948
-Simulation finished, cycleCount = 6597949
+  4C_4w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][0][0] at cycle 6419001
+HALT operation received from [0][1][0] at cycle 6437134
+HALT operation received from [0][3][0] at cycle 6448887
+HALT operation received from [0][2][0] at cycle 6458844
+Simulation finished, cycleCount = 6458845
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 6597949
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 6458845
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 16 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_1w_2b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514280
+HALT operation received from [0][3][0] at cycle 9079345
+HALT operation received from [0][0][0] at cycle 9090106
+HALT operation received from [0][1][0] at cycle 9100691
+HALT operation received from [0][2][0] at cycle 9113405
+Simulation finished, cycleCount = 9113406
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 9113406
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 17 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_2w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][0][0] at cycle 7507846
+HALT operation received from [0][3][0] at cycle 7512214
+HALT operation received from [0][1][0] at cycle 7520752
+HALT operation received from [0][2][0] at cycle 7535467
+Simulation finished, cycleCount = 7535468
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 7535468
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
 Number of records: 42764
 Finding the 5 closest neighbors.
 Using Platform 0 	 Device No 18 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_3w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][0][0] at cycle 7145387
+HALT operation received from [0][3][0] at cycle 7153747
+HALT operation received from [0][1][0] at cycle 7158522
+HALT operation received from [0][2][0] at cycle 7174295
+Simulation finished, cycleCount = 7174296
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 7174296
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 19 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_4w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][0][0] at cycle 6387816
+HALT operation received from [0][1][0] at cycle 6400845
+HALT operation received from [0][3][0] at cycle 6401532
+HALT operation received from [0][2][0] at cycle 6416544
+Simulation finished, cycleCount = 6416545
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 6416545
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 20 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_1w_4b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514280
+HALT operation received from [0][3][0] at cycle 9061988
+HALT operation received from [0][0][0] at cycle 9088939
+HALT operation received from [0][1][0] at cycle 9094472
+HALT operation received from [0][2][0] at cycle 9101342
+Simulation finished, cycleCount = 9101343
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 9101343
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 21 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_2w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][3][0] at cycle 7489014
+HALT operation received from [0][0][0] at cycle 7504951
+HALT operation received from [0][1][0] at cycle 7511554
+HALT operation received from [0][2][0] at cycle 7519402
+Simulation finished, cycleCount = 7519403
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 7519403
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 22 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_3w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][3][0] at cycle 7131454
+HALT operation received from [0][0][0] at cycle 7143987
+HALT operation received from [0][1][0] at cycle 7150971
+HALT operation received from [0][2][0] at cycle 7159682
+Simulation finished, cycleCount = 7159683
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 7159683
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 23 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 4 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 10704
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 4;
+  int total_workgroups = 4;
+  int workgroupX = 4;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514280
+Size of bss area : 
+End of memory: 4114240
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  4C_4w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514280
+HALT operation received from [0][3][0] at cycle 6378467
+HALT operation received from [0][0][0] at cycle 6385765
+HALT operation received from [0][1][0] at cycle 6392963
+HALT operation received from [0][2][0] at cycle 6401926
+Simulation finished, cycleCount = 6401927
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 6401927
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 24 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_1w.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514296
+HALT operation received from [0][0][0] at cycle 4578250
+HALT operation received from [0][1][0] at cycle 4585066
+HALT operation received from [0][7][0] at cycle 4588684
+HALT operation received from [0][2][0] at cycle 4592466
+HALT operation received from [0][3][0] at cycle 4599998
+HALT operation received from [0][4][0] at cycle 4607824
+HALT operation received from [0][5][0] at cycle 4615362
+HALT operation received from [0][6][0] at cycle 4622263
+Simulation finished, cycleCount = 4622264
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 4622264
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 25 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_2w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][0][0] at cycle 3800038
+HALT operation received from [0][1][0] at cycle 3809315
+HALT operation received from [0][2][0] at cycle 3817290
+HALT operation received from [0][3][0] at cycle 3826117
+HALT operation received from [0][7][0] at cycle 3826344
+HALT operation received from [0][4][0] at cycle 3835976
+HALT operation received from [0][5][0] at cycle 3844382
+HALT operation received from [0][6][0] at cycle 3853189
+Simulation finished, cycleCount = 3853190
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3853190
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 26 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_3w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][0][0] at cycle 3617625
+HALT operation received from [0][1][0] at cycle 3626554
+HALT operation received from [0][2][0] at cycle 3635840
+HALT operation received from [0][3][0] at cycle 3644791
+HALT operation received from [0][7][0] at cycle 3654711
+HALT operation received from [0][4][0] at cycle 3656375
+HALT operation received from [0][5][0] at cycle 3666516
+HALT operation received from [0][6][0] at cycle 3678470
+Simulation finished, cycleCount = 3678471
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3678471
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 27 
+Creating ACCELERATOR Context
 homogeneous system
 	NearestNeighbor.cl
 Device: 8 core 4w4a1m1ls1b
@@ -1190,7 +1795,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -1205,27 +1810,1104 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  8Context_4wide.xml
-HALT operation received from [0][7][0] at cycle 3268216
-HALT operation received from [0][6][0] at cycle 3297700
-HALT operation received from [0][2][0] at cycle 3297755
-HALT operation received from [0][0][0] at cycle 3297840
-HALT operation received from [0][5][0] at cycle 3298124
-HALT operation received from [0][4][0] at cycle 3298581
-HALT operation received from [0][3][0] at cycle 3299403
-HALT operation received from [0][1][0] at cycle 3300172
-Simulation finished, cycleCount = 3300173
+  8C_4w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][0][0] at cycle 3254075
+HALT operation received from [0][1][0] at cycle 3263261
+HALT operation received from [0][2][0] at cycle 3271210
+HALT operation received from [0][3][0] at cycle 3282252
+HALT operation received from [0][4][0] at cycle 3292021
+HALT operation received from [0][7][0] at cycle 3295174
+HALT operation received from [0][5][0] at cycle 3303638
+HALT operation received from [0][6][0] at cycle 3313517
+Simulation finished, cycleCount = 3313518
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 3300173
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 3313518
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
 Number of records: 42764
 Finding the 5 closest neighbors.
-Using Platform 0 	 Device No 19 
+Using Platform 0 	 Device No 28 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_1w_2b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 4546024
+HALT operation received from [0][0][0] at cycle 4550064
+HALT operation received from [0][1][0] at cycle 4555555
+HALT operation received from [0][2][0] at cycle 4561115
+HALT operation received from [0][3][0] at cycle 4566154
+HALT operation received from [0][4][0] at cycle 4572944
+HALT operation received from [0][5][0] at cycle 4577831
+HALT operation received from [0][6][0] at cycle 4583141
+Simulation finished, cycleCount = 4583142
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 4583142
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 29 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_2w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][0][0] at cycle 3761180
+HALT operation received from [0][1][0] at cycle 3767673
+HALT operation received from [0][7][0] at cycle 3772268
+HALT operation received from [0][2][0] at cycle 3774416
+HALT operation received from [0][3][0] at cycle 3780370
+HALT operation received from [0][4][0] at cycle 3787282
+HALT operation received from [0][5][0] at cycle 3793786
+HALT operation received from [0][6][0] at cycle 3799346
+Simulation finished, cycleCount = 3799347
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3799347
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 30 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_3w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][0][0] at cycle 3579656
+HALT operation received from [0][1][0] at cycle 3586764
+HALT operation received from [0][2][0] at cycle 3593605
+HALT operation received from [0][7][0] at cycle 3597334
+HALT operation received from [0][3][0] at cycle 3600392
+HALT operation received from [0][4][0] at cycle 3609166
+HALT operation received from [0][5][0] at cycle 3616946
+HALT operation received from [0][6][0] at cycle 3622813
+Simulation finished, cycleCount = 3622814
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3622814
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 31 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_4w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][0][0] at cycle 3203155
+HALT operation received from [0][1][0] at cycle 3209717
+HALT operation received from [0][2][0] at cycle 3217287
+HALT operation received from [0][3][0] at cycle 3224699
+HALT operation received from [0][7][0] at cycle 3226424
+HALT operation received from [0][4][0] at cycle 3232950
+HALT operation received from [0][5][0] at cycle 3240642
+HALT operation received from [0][6][0] at cycle 3247796
+Simulation finished, cycleCount = 3247797
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3247797
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 32 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_1w_4b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 4524000
+HALT operation received from [0][0][0] at cycle 4545566
+HALT operation received from [0][1][0] at cycle 4548745
+HALT operation received from [0][2][0] at cycle 4552021
+HALT operation received from [0][3][0] at cycle 4554883
+HALT operation received from [0][4][0] at cycle 4558881
+HALT operation received from [0][5][0] at cycle 4561293
+HALT operation received from [0][6][0] at cycle 4563907
+Simulation finished, cycleCount = 4563908
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 4563908
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 33 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_2w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 3743977
+HALT operation received from [0][0][0] at cycle 3753894
+HALT operation received from [0][1][0] at cycle 3757579
+HALT operation received from [0][2][0] at cycle 3761503
+HALT operation received from [0][3][0] at cycle 3764891
+HALT operation received from [0][4][0] at cycle 3769449
+HALT operation received from [0][5][0] at cycle 3772815
+HALT operation received from [0][6][0] at cycle 3775657
+Simulation finished, cycleCount = 3775658
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3775658
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 34 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_3w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 3566796
+HALT operation received from [0][0][0] at cycle 3573454
+HALT operation received from [0][1][0] at cycle 3577282
+HALT operation received from [0][2][0] at cycle 3580961
+HALT operation received from [0][3][0] at cycle 3584788
+HALT operation received from [0][4][0] at cycle 3589955
+HALT operation received from [0][5][0] at cycle 3593362
+HALT operation received from [0][6][0] at cycle 3597059
+Simulation finished, cycleCount = 3597060
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3597060
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 35 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_4w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 3193514
+HALT operation received from [0][0][0] at cycle 3194448
+HALT operation received from [0][1][0] at cycle 3198586
+HALT operation received from [0][2][0] at cycle 3202577
+HALT operation received from [0][3][0] at cycle 3206647
+HALT operation received from [0][4][0] at cycle 3211455
+HALT operation received from [0][5][0] at cycle 3215828
+HALT operation received from [0][6][0] at cycle 3220126
+Simulation finished, cycleCount = 3220127
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3220127
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 36 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_1w_8b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 4513984
+HALT operation received from [0][0][0] at cycle 4544931
+HALT operation received from [0][1][0] at cycle 4546890
+HALT operation received from [0][2][0] at cycle 4548717
+HALT operation received from [0][3][0] at cycle 4550239
+HALT operation received from [0][4][0] at cycle 4552714
+HALT operation received from [0][5][0] at cycle 4554743
+HALT operation received from [0][6][0] at cycle 4555282
+Simulation finished, cycleCount = 4555283
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 4555283
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 37 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_2w_1ls_8b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 3732252
+HALT operation received from [0][0][0] at cycle 3752991
+HALT operation received from [0][1][0] at cycle 3755154
+HALT operation received from [0][2][0] at cycle 3757341
+HALT operation received from [0][3][0] at cycle 3759382
+HALT operation received from [0][4][0] at cycle 3762153
+HALT operation received from [0][5][0] at cycle 3764181
+HALT operation received from [0][6][0] at cycle 3765532
+Simulation finished, cycleCount = 3765533
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3765533
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 38 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_3w_1ls_8b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 3555992
+HALT operation received from [0][0][0] at cycle 3572636
+HALT operation received from [0][1][0] at cycle 3575063
+HALT operation received from [0][2][0] at cycle 3577688
+HALT operation received from [0][3][0] at cycle 3579875
+HALT operation received from [0][4][0] at cycle 3583017
+HALT operation received from [0][5][0] at cycle 3585512
+HALT operation received from [0][6][0] at cycle 3586989
+Simulation finished, cycleCount = 3586990
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3586990
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 39 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 8 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 5352
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 8;
+  int total_workgroups = 8;
+  int workgroupX = 8;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514296
+Size of bss area : 
+End of memory: 4114368
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  8C_4w_1ls_8b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514296
+HALT operation received from [0][7][0] at cycle 3180903
+HALT operation received from [0][0][0] at cycle 3193394
+HALT operation received from [0][1][0] at cycle 3196334
+HALT operation received from [0][2][0] at cycle 3198544
+HALT operation received from [0][3][0] at cycle 3201313
+HALT operation received from [0][4][0] at cycle 3204082
+HALT operation received from [0][5][0] at cycle 3206692
+HALT operation received from [0][6][0] at cycle 3208184
+Simulation finished, cycleCount = 3208185
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 3208185
+1980  3 12  0  2 SANDY       7.1   1.2  107   38 --> Distance=7.200694
+1985 12 11  0 18 DEBBY       7.5   0.7   93  501 --> Distance=7.532596
+1986 10 13 12 24 HELENE      7.5   1.3  113  437 --> Distance=7.611833
+1958 10 25  6 20 OSCAR       7.8   0.5   57  540 --> Distance=7.816010
+1973  2 26  6 28 DEBBY       7.6   2.7   35  654 --> Distance=8.065358
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 40 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_1w.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 2344528
+HALT operation received from [0][1][0] at cycle 2346314
+HALT operation received from [0][2][0] at cycle 2350280
+HALT operation received from [0][15][0] at cycle 2351027
+HALT operation received from [0][3][0] at cycle 2353906
+HALT operation received from [0][4][0] at cycle 2355976
+HALT operation received from [0][5][0] at cycle 2360543
+HALT operation received from [0][6][0] at cycle 2363055
+HALT operation received from [0][7][0] at cycle 2366193
+HALT operation received from [0][8][0] at cycle 2370666
+HALT operation received from [0][9][0] at cycle 2374305
+HALT operation received from [0][10][0] at cycle 2377562
+HALT operation received from [0][11][0] at cycle 2379287
+HALT operation received from [0][12][0] at cycle 2382369
+HALT operation received from [0][13][0] at cycle 2387403
+HALT operation received from [0][14][0] at cycle 2392568
+Simulation finished, cycleCount = 2392569
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 2392569
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+1994  9 17 18 11 WILLIAM    22.3 209.0  100  558 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 41 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_2w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 1986168
+HALT operation received from [0][1][0] at cycle 1989278
+HALT operation received from [0][2][0] at cycle 1993238
+HALT operation received from [0][3][0] at cycle 1995910
+HALT operation received from [0][4][0] at cycle 1999778
+HALT operation received from [0][15][0] at cycle 2002915
+HALT operation received from [0][5][0] at cycle 2003383
+HALT operation received from [0][6][0] at cycle 2007442
+HALT operation received from [0][7][0] at cycle 2010231
+HALT operation received from [0][8][0] at cycle 2013294
+HALT operation received from [0][9][0] at cycle 2017146
+HALT operation received from [0][10][0] at cycle 2020335
+HALT operation received from [0][11][0] at cycle 2023497
+HALT operation received from [0][12][0] at cycle 2025042
+HALT operation received from [0][13][0] at cycle 2030730
+HALT operation received from [0][14][0] at cycle 2035139
+Simulation finished, cycleCount = 2035140
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 2035140
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 42 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_3w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 1909561
+HALT operation received from [0][1][0] at cycle 1913191
+HALT operation received from [0][2][0] at cycle 1916929
+HALT operation received from [0][3][0] at cycle 1919735
+HALT operation received from [0][4][0] at cycle 1922917
+HALT operation received from [0][5][0] at cycle 1926809
+HALT operation received from [0][15][0] at cycle 1929338
+HALT operation received from [0][6][0] at cycle 1930594
+HALT operation received from [0][7][0] at cycle 1933606
+HALT operation received from [0][8][0] at cycle 1938543
+HALT operation received from [0][9][0] at cycle 1942045
+HALT operation received from [0][10][0] at cycle 1946305
+HALT operation received from [0][11][0] at cycle 1950358
+HALT operation received from [0][12][0] at cycle 1951829
+HALT operation received from [0][13][0] at cycle 1955687
+HALT operation received from [0][14][0] at cycle 1958909
+Simulation finished, cycleCount = 1958910
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1958910
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 43 
+Creating ACCELERATOR Context
 homogeneous system
 	NearestNeighbor.cl
 Device: 16 core 4w4a1m1ls1b
@@ -1257,7 +2939,7 @@ int main(void) {
 
     __builtin_le1_set_group_id_1(y);
     __builtin_le1_set_group_id_0(x);
-    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 1106247680, 1119092736);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
     id += num_cores;
   }
   return id;
@@ -1272,29 +2954,1279 @@ Second Pass Completed
 Run Simulation with:
   binaries/final_NearestNeighbor.s.bin  
   binaries/final_NearestNeighbor.data.bin  
-  16Context_4wide.xml
-HALT operation received from [0][15][0] at cycle 1618914
-HALT operation received from [0][5][0] at cycle 1648110
-HALT operation received from [0][13][0] at cycle 1648117
-HALT operation received from [0][1][0] at cycle 1648153
-HALT operation received from [0][6][0] at cycle 1648213
-HALT operation received from [0][10][0] at cycle 1648963
-HALT operation received from [0][12][0] at cycle 1649101
-HALT operation received from [0][11][0] at cycle 1649225
-HALT operation received from [0][8][0] at cycle 1649278
-HALT operation received from [0][14][0] at cycle 1649366
-HALT operation received from [0][9][0] at cycle 1649367
-HALT operation received from [0][4][0] at cycle 1649709
-HALT operation received from [0][0][0] at cycle 1649751
-HALT operation received from [0][2][0] at cycle 1649883
-HALT operation received from [0][3][0] at cycle 1650353
-HALT operation received from [0][7][0] at cycle 1651254
-Simulation finished, cycleCount = 1651255
+  16C_4w_1ls_1b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 1758369
+HALT operation received from [0][1][0] at cycle 1761057
+HALT operation received from [0][2][0] at cycle 1764896
+HALT operation received from [0][3][0] at cycle 1768039
+HALT operation received from [0][4][0] at cycle 1770610
+HALT operation received from [0][5][0] at cycle 1773917
+HALT operation received from [0][15][0] at cycle 1777181
+HALT operation received from [0][6][0] at cycle 1778253
+HALT operation received from [0][7][0] at cycle 1781611
+HALT operation received from [0][8][0] at cycle 1784227
+HALT operation received from [0][9][0] at cycle 1786935
+HALT operation received from [0][10][0] at cycle 1790978
+HALT operation received from [0][11][0] at cycle 1794388
+HALT operation received from [0][12][0] at cycle 1796479
+HALT operation received from [0][13][0] at cycle 1799990
+HALT operation received from [0][14][0] at cycle 1805452
+Simulation finished, cycleCount = 1805453
  -------------------------------------------------------- 
 Iteration = 1
-Total cycles = 1651255
-1988 12 27  0 18 TONY       30.0  89.8  113   39 --> Distance=0.199997
-1980 10 22 18  3 ISAAC      30.1  90.4  110  778 --> Distance=0.412312
-1997 11 14 12 24 HELENE     30.5  89.8  134  529 --> Distance=0.538515
-2003  8 27 12 10 TONY       29.9  89.4  160  286 --> Distance=0.608275
-1974 12 22 18 24 JOYCE      30.6  89.9   80  593 --> Distance=0.608276
+Total cycles = 1805453
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 44 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_1w_2b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 2283028
+HALT operation received from [0][0][0] at cycle 2288380
+HALT operation received from [0][1][0] at cycle 2291091
+HALT operation received from [0][2][0] at cycle 2293007
+HALT operation received from [0][3][0] at cycle 2295307
+HALT operation received from [0][4][0] at cycle 2298132
+HALT operation received from [0][5][0] at cycle 2300826
+HALT operation received from [0][6][0] at cycle 2303392
+HALT operation received from [0][7][0] at cycle 2305677
+HALT operation received from [0][8][0] at cycle 2308382
+HALT operation received from [0][9][0] at cycle 2311995
+HALT operation received from [0][10][0] at cycle 2314646
+HALT operation received from [0][11][0] at cycle 2316776
+HALT operation received from [0][12][0] at cycle 2317759
+HALT operation received from [0][13][0] at cycle 2321482
+HALT operation received from [0][14][0] at cycle 2325378
+Simulation finished, cycleCount = 2325379
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 2325379
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+1994  9 17 18 11 WILLIAM    22.3 209.0  100  558 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 45 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_2w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 1900209
+HALT operation received from [0][1][0] at cycle 1902996
+HALT operation received from [0][2][0] at cycle 1906018
+HALT operation received from [0][15][0] at cycle 1908304
+HALT operation received from [0][3][0] at cycle 1908382
+HALT operation received from [0][4][0] at cycle 1910541
+HALT operation received from [0][5][0] at cycle 1913784
+HALT operation received from [0][6][0] at cycle 1918093
+HALT operation received from [0][7][0] at cycle 1919369
+HALT operation received from [0][8][0] at cycle 1923909
+HALT operation received from [0][9][0] at cycle 1926698
+HALT operation received from [0][10][0] at cycle 1929446
+HALT operation received from [0][11][0] at cycle 1932009
+HALT operation received from [0][12][0] at cycle 1934422
+HALT operation received from [0][13][0] at cycle 1937535
+HALT operation received from [0][14][0] at cycle 1942324
+Simulation finished, cycleCount = 1942325
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1942325
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 46 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_3w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 1812325
+HALT operation received from [0][1][0] at cycle 1815095
+HALT operation received from [0][2][0] at cycle 1818417
+HALT operation received from [0][3][0] at cycle 1821499
+HALT operation received from [0][4][0] at cycle 1824714
+HALT operation received from [0][15][0] at cycle 1827400
+HALT operation received from [0][5][0] at cycle 1827790
+HALT operation received from [0][6][0] at cycle 1830992
+HALT operation received from [0][7][0] at cycle 1833939
+HALT operation received from [0][8][0] at cycle 1838123
+HALT operation received from [0][9][0] at cycle 1840531
+HALT operation received from [0][10][0] at cycle 1845513
+HALT operation received from [0][11][0] at cycle 1847232
+HALT operation received from [0][12][0] at cycle 1850141
+HALT operation received from [0][13][0] at cycle 1854524
+HALT operation received from [0][14][0] at cycle 1859376
+Simulation finished, cycleCount = 1859377
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1859377
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 47 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_4w_1ls_2b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 1630609
+HALT operation received from [0][1][0] at cycle 1633435
+HALT operation received from [0][2][0] at cycle 1636549
+HALT operation received from [0][3][0] at cycle 1639390
+HALT operation received from [0][4][0] at cycle 1642571
+HALT operation received from [0][5][0] at cycle 1645355
+HALT operation received from [0][6][0] at cycle 1648406
+HALT operation received from [0][15][0] at cycle 1649391
+HALT operation received from [0][7][0] at cycle 1652232
+HALT operation received from [0][8][0] at cycle 1654559
+HALT operation received from [0][9][0] at cycle 1658163
+HALT operation received from [0][10][0] at cycle 1662756
+HALT operation received from [0][11][0] at cycle 1665558
+HALT operation received from [0][12][0] at cycle 1667499
+HALT operation received from [0][13][0] at cycle 1672163
+HALT operation received from [0][14][0] at cycle 1675433
+Simulation finished, cycleCount = 1675434
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1675434
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 48 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_1w_4b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 2255245
+HALT operation received from [0][0][0] at cycle 2275198
+HALT operation received from [0][1][0] at cycle 2276918
+HALT operation received from [0][2][0] at cycle 2278640
+HALT operation received from [0][3][0] at cycle 2280120
+HALT operation received from [0][4][0] at cycle 2281730
+HALT operation received from [0][5][0] at cycle 2283466
+HALT operation received from [0][6][0] at cycle 2284886
+HALT operation received from [0][7][0] at cycle 2285670
+HALT operation received from [0][8][0] at cycle 2288221
+HALT operation received from [0][9][0] at cycle 2290016
+HALT operation received from [0][10][0] at cycle 2292316
+HALT operation received from [0][11][0] at cycle 2292899
+HALT operation received from [0][12][0] at cycle 2293072
+HALT operation received from [0][13][0] at cycle 2295560
+HALT operation received from [0][14][0] at cycle 2297729
+Simulation finished, cycleCount = 2297730
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 2297730
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+1994  9 17 18 11 WILLIAM    22.3 209.0  100  558 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 49 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_2w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1871986
+HALT operation received from [0][0][0] at cycle 1880654
+HALT operation received from [0][1][0] at cycle 1882688
+HALT operation received from [0][2][0] at cycle 1884690
+HALT operation received from [0][3][0] at cycle 1886027
+HALT operation received from [0][4][0] at cycle 1887828
+HALT operation received from [0][5][0] at cycle 1889892
+HALT operation received from [0][6][0] at cycle 1891818
+HALT operation received from [0][7][0] at cycle 1892908
+HALT operation received from [0][8][0] at cycle 1895582
+HALT operation received from [0][9][0] at cycle 1897654
+HALT operation received from [0][10][0] at cycle 1899553
+HALT operation received from [0][11][0] at cycle 1900482
+HALT operation received from [0][12][0] at cycle 1901294
+HALT operation received from [0][13][0] at cycle 1903942
+HALT operation received from [0][14][0] at cycle 1906474
+Simulation finished, cycleCount = 1906475
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1906475
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 50 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_3w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1786146
+HALT operation received from [0][0][0] at cycle 1791083
+HALT operation received from [0][1][0] at cycle 1792953
+HALT operation received from [0][2][0] at cycle 1794643
+HALT operation received from [0][3][0] at cycle 1796549
+HALT operation received from [0][4][0] at cycle 1798605
+HALT operation received from [0][5][0] at cycle 1800412
+HALT operation received from [0][6][0] at cycle 1802429
+HALT operation received from [0][7][0] at cycle 1803959
+HALT operation received from [0][8][0] at cycle 1806935
+HALT operation received from [0][9][0] at cycle 1808981
+HALT operation received from [0][10][0] at cycle 1811267
+HALT operation received from [0][11][0] at cycle 1812319
+HALT operation received from [0][12][0] at cycle 1813017
+HALT operation received from [0][13][0] at cycle 1816928
+HALT operation received from [0][14][0] at cycle 1819257
+Simulation finished, cycleCount = 1819258
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1819258
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 51 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_4w_1ls_4b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][0][0] at cycle 1602231
+HALT operation received from [0][15][0] at cycle 1603932
+HALT operation received from [0][1][0] at cycle 1604135
+HALT operation received from [0][2][0] at cycle 1606262
+HALT operation received from [0][3][0] at cycle 1608475
+HALT operation received from [0][4][0] at cycle 1610387
+HALT operation received from [0][5][0] at cycle 1612346
+HALT operation received from [0][6][0] at cycle 1615103
+HALT operation received from [0][7][0] at cycle 1616514
+HALT operation received from [0][8][0] at cycle 1619164
+HALT operation received from [0][9][0] at cycle 1621127
+HALT operation received from [0][10][0] at cycle 1623524
+HALT operation received from [0][11][0] at cycle 1625654
+HALT operation received from [0][12][0] at cycle 1626804
+HALT operation received from [0][13][0] at cycle 1629905
+HALT operation received from [0][14][0] at cycle 1632401
+Simulation finished, cycleCount = 1632402
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1632402
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 52 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_1w_8b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 2244681
+HALT operation received from [0][0][0] at cycle 2273649
+HALT operation received from [0][1][0] at cycle 2274774
+HALT operation received from [0][2][0] at cycle 2275981
+HALT operation received from [0][3][0] at cycle 2276577
+HALT operation received from [0][4][0] at cycle 2277421
+HALT operation received from [0][5][0] at cycle 2278539
+HALT operation received from [0][6][0] at cycle 2279691
+HALT operation received from [0][7][0] at cycle 2280105
+HALT operation received from [0][8][0] at cycle 2281706
+HALT operation received from [0][9][0] at cycle 2282497
+HALT operation received from [0][10][0] at cycle 2283647
+HALT operation received from [0][12][0] at cycle 2283792
+HALT operation received from [0][11][0] at cycle 2284084
+HALT operation received from [0][13][0] at cycle 2285865
+HALT operation received from [0][14][0] at cycle 2287047
+Simulation finished, cycleCount = 2287048
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 2287048
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+1994  9 17 18 11 WILLIAM    22.3 209.0  100  558 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 53 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_2w_1ls_8b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1858664
+HALT operation received from [0][0][0] at cycle 1878057
+HALT operation received from [0][1][0] at cycle 1879257
+HALT operation received from [0][2][0] at cycle 1880759
+HALT operation received from [0][3][0] at cycle 1881132
+HALT operation received from [0][4][0] at cycle 1882397
+HALT operation received from [0][5][0] at cycle 1883953
+HALT operation received from [0][6][0] at cycle 1885209
+HALT operation received from [0][7][0] at cycle 1885400
+HALT operation received from [0][8][0] at cycle 1887340
+HALT operation received from [0][9][0] at cycle 1888692
+HALT operation received from [0][10][0] at cycle 1889476
+HALT operation received from [0][11][0] at cycle 1890039
+HALT operation received from [0][12][0] at cycle 1890250
+HALT operation received from [0][13][0] at cycle 1892280
+HALT operation received from [0][14][0] at cycle 1894059
+Simulation finished, cycleCount = 1894060
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1894060
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 54 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_3w_1ls_8b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1542111
+HALT operation received from [0][0][0] at cycle 1788117
+HALT operation received from [0][1][0] at cycle 1789553
+HALT operation received from [0][2][0] at cycle 1791140
+HALT operation received from [0][3][0] at cycle 1791942
+HALT operation received from [0][4][0] at cycle 1793222
+HALT operation received from [0][5][0] at cycle 1794379
+HALT operation received from [0][6][0] at cycle 1796101
+HALT operation received from [0][7][0] at cycle 1796583
+HALT operation received from [0][8][0] at cycle 1798933
+HALT operation received from [0][9][0] at cycle 1799956
+HALT operation received from [0][10][0] at cycle 1801293
+HALT operation received from [0][11][0] at cycle 1802117
+HALT operation received from [0][12][0] at cycle 1802724
+HALT operation received from [0][13][0] at cycle 1805291
+HALT operation received from [0][14][0] at cycle 1806772
+Simulation finished, cycleCount = 1806773
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1806773
+1967 12 19  0 10 BERYL      45.7  23.5   20  847 --> Distance=-0.000000
+1954 11  5  6 22 CHRIS      60.5 308.1   74  115 --> Distance=-0.000000
+1956 12  2 12 17 KIRK       65.4 121.4   85  509 --> Distance=-0.000000
+2004  8 10 18  1 CHRIS      50.2 167.0   71  699 --> Distance=-0.000000
+1976  5  9  0 13 ALBERTO    23.7 302.0   33  349 --> Distance=-0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 55 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_4w_1ls_8b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1588262
+HALT operation received from [0][0][0] at cycle 1599005
+HALT operation received from [0][1][0] at cycle 1600440
+HALT operation received from [0][2][0] at cycle 1601668
+HALT operation received from [0][3][0] at cycle 1602871
+HALT operation received from [0][4][0] at cycle 1604002
+HALT operation received from [0][5][0] at cycle 1605144
+HALT operation received from [0][6][0] at cycle 1606542
+HALT operation received from [0][7][0] at cycle 1607812
+HALT operation received from [0][8][0] at cycle 1609701
+HALT operation received from [0][9][0] at cycle 1610968
+HALT operation received from [0][10][0] at cycle 1612374
+HALT operation received from [0][11][0] at cycle 1613292
+HALT operation received from [0][12][0] at cycle 1613737
+HALT operation received from [0][13][0] at cycle 1615964
+HALT operation received from [0][14][0] at cycle 1617782
+Simulation finished, cycleCount = 1617783
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1617783
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 56 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core scalar
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_1w_16b.xml
+IRAMFileSize = 3552
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 2242481
+HALT operation received from [0][0][0] at cycle 2273589
+HALT operation received from [0][1][0] at cycle 2274548
+HALT operation received from [0][2][0] at cycle 2275528
+HALT operation received from [0][3][0] at cycle 2275836
+HALT operation received from [0][4][0] at cycle 2277177
+HALT operation received from [0][5][0] at cycle 2278170
+HALT operation received from [0][7][0] at cycle 2279270
+HALT operation received from [0][6][0] at cycle 2279320
+HALT operation received from [0][8][0] at cycle 2281049
+HALT operation received from [0][9][0] at cycle 2281504
+HALT operation received from [0][12][0] at cycle 2282460
+HALT operation received from [0][10][0] at cycle 2282681
+HALT operation received from [0][11][0] at cycle 2283069
+HALT operation received from [0][13][0] at cycle 2284457
+HALT operation received from [0][14][0] at cycle 2285960
+Simulation finished, cycleCount = 2285961
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 2285961
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+1994  9 17 18 11 WILLIAM    22.3 209.0  100  558 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 57 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 2w2a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_2w_1ls_16b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1857024
+HALT operation received from [0][0][0] at cycle 1877968
+HALT operation received from [0][1][0] at cycle 1879033
+HALT operation received from [0][2][0] at cycle 1880386
+HALT operation received from [0][3][0] at cycle 1880994
+HALT operation received from [0][4][0] at cycle 1882053
+HALT operation received from [0][5][0] at cycle 1883526
+HALT operation received from [0][6][0] at cycle 1884522
+HALT operation received from [0][7][0] at cycle 1884637
+HALT operation received from [0][8][0] at cycle 1886309
+HALT operation received from [0][9][0] at cycle 1887755
+HALT operation received from [0][10][0] at cycle 1888658
+HALT operation received from [0][11][0] at cycle 1889070
+HALT operation received from [0][12][0] at cycle 1889207
+HALT operation received from [0][13][0] at cycle 1890989
+HALT operation received from [0][14][0] at cycle 1892524
+Simulation finished, cycleCount = 1892525
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1892525
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 58 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 3w3a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_3w_1ls_16b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1771661
+HALT operation received from [0][0][0] at cycle 1788017
+HALT operation received from [0][1][0] at cycle 1789298
+HALT operation received from [0][2][0] at cycle 1790801
+HALT operation received from [0][3][0] at cycle 1791600
+HALT operation received from [0][4][0] at cycle 1792865
+HALT operation received from [0][5][0] at cycle 1793854
+HALT operation received from [0][6][0] at cycle 1795477
+HALT operation received from [0][7][0] at cycle 1795953
+HALT operation received from [0][8][0] at cycle 1797655
+HALT operation received from [0][9][0] at cycle 1798791
+HALT operation received from [0][10][0] at cycle 1800199
+HALT operation received from [0][12][0] at cycle 1800415
+HALT operation received from [0][11][0] at cycle 1801162
+HALT operation received from [0][13][0] at cycle 1803141
+HALT operation received from [0][14][0] at cycle 1804772
+Simulation finished, cycleCount = 1804773
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1804773
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000
+Number of records: 42764
+Finding the 5 closest neighbors.
+Using Platform 0 	 Device No 59 
+Creating ACCELERATOR Context
+homogeneous system
+	NearestNeighbor.cl
+Device: 16 core 4w4a1m1ls1b
+Compiling kernel: NearestNeighbor
+
+Dimension 0: Global work size = 42816, Local work size = 2676
+
+Kernel launcher function:
+extern int BufferArg_0;
+extern int BufferArg_1;
+int main(void) {
+  int id = 0;
+  int num_cores = 16;
+  int total_workgroups = 16;
+  int workgroupX = 16;
+  int workgroupY = 0;
+  int x = 0;
+  int y = 0;
+  id = __builtin_le1_read_cpuid();
+
+  while (id < total_workgroups) {
+    x = id;
+    if (x >= workgroupX) {
+      y = x / workgroupX;
+      x = x % workgroupX;
+    }
+    if (y > workgroupY)
+      return 0;
+
+    __builtin_le1_set_group_id_1(y);
+    __builtin_le1_set_group_id_0(x);
+    NearestNeighbor(&BufferArg_0, &BufferArg_1, 42764, 30, 90);
+    id += num_cores;
+  }
+  return id;
+}
+
+mem align: 0
+dram_base_offset: 0
+Size of data area : 514328
+Size of bss area : 
+End of memory: 4114624
+Second Pass Completed
+Run Simulation with:
+  binaries/final_NearestNeighbor.s.bin  
+  binaries/final_NearestNeighbor.data.bin  
+  16C_4w_1ls_16b.xml
+IRAMFileSize = 3548
+DRAMFileSize = 514328
+HALT operation received from [0][15][0] at cycle 1586274
+HALT operation received from [0][0][0] at cycle 1598677
+HALT operation received from [0][1][0] at cycle 1599662
+HALT operation received from [0][2][0] at cycle 1601137
+HALT operation received from [0][3][0] at cycle 1601932
+HALT operation received from [0][4][0] at cycle 1603015
+HALT operation received from [0][5][0] at cycle 1604222
+HALT operation received from [0][6][0] at cycle 1606289
+HALT operation received from [0][7][0] at cycle 1606847
+HALT operation received from [0][8][0] at cycle 1608547
+HALT operation received from [0][9][0] at cycle 1609376
+HALT operation received from [0][10][0] at cycle 1610973
+HALT operation received from [0][11][0] at cycle 1611955
+HALT operation received from [0][12][0] at cycle 1611971
+HALT operation received from [0][13][0] at cycle 1614036
+HALT operation received from [0][14][0] at cycle 1615548
+Simulation finished, cycleCount = 1615549
+ -------------------------------------------------------- 
+Iteration = 1
+Total cycles = 1615549
+1974  5 13  6 26 PATTY      42.8 104.4   83  233 --> Distance=0.000000
+1972  1 14 12 18 OSCAR      19.7 291.9   57  223 --> Distance=0.000000
+1959  2  4 18 17 JOYCE      29.8  36.8   87  344 --> Distance=0.000000
+1977  3 21 12 19 PATTY      59.9 113.6   78  438 --> Distance=0.000000
+2000 11 16  6 18 CHRIS      44.3 274.3   95  724 --> Distance=0.000000

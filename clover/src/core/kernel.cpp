@@ -141,8 +141,14 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
     llvm::FunctionType *f = function->getFunctionType();
     bool append = (p_args.size() == 0);
 
-    if (!append && p_args.size() != f->getNumParams())
+    if (!append && p_args.size() != f->getNumParams()) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: p_args.size != f->getNumParams : "
+        << p_args.size() << " ! = " << f->getNumParams()
+        << std::endl;
+#endif
         return CL_INVALID_KERNEL_DEFINITION;
+    }
 
     for (unsigned int i=0; i<f->getNumParams(); ++i)
     {
@@ -239,19 +245,30 @@ cl_int Kernel::addFunction(DeviceInterface *device, llvm::Function *function,
         }
 
         // Check if we recognized the type
-        if (kind == Arg::Invalid)
-            return CL_INVALID_KERNEL_DEFINITION;
+        if (kind == Arg::Invalid) {
+#ifdef DBG_OUTPUT
+          std::cout << "!! ERROR: Arg kind == Invalid" << std::endl;
+#endif
+          return CL_INVALID_KERNEL_DEFINITION;
+        }
 
-        // Create arg
-        Arg* a = new Arg(vec_dim, file, kind, arg_type);
+        if (append) {
+          // Create arg
+          Arg* a = new Arg(vec_dim, file, kind, arg_type);
+          p_args.push_back(a);
+        }
 
         // If we also have a function registered, check for signature compliance
-        if (!append && a != p_args[i])
-            return CL_INVALID_KERNEL_DEFINITION;
+        //if (!append && a != p_args[i]) {
+//#ifdef DBG_OUTPUT
+  //        std::cout << "!! ERROR: !append && a p_args[i]" << std::endl;
+//#endif
+  //        return CL_INVALID_KERNEL_DEFINITION;
+    //    }
 
         // Append arg if needed
-        if (append)
-            p_args.push_back(a);
+      //  if (append)
+        //  p_args.push_back(a);
     }
 
     dep.kernel = device->createDeviceKernel(this, dep.function);
@@ -658,11 +675,11 @@ void Kernel::Arg::refineKind (Kernel::Arg::Kind kind)
     p_kind = kind;
 }
 
-bool Kernel::Arg::operator!=(const Arg &b)
+bool Kernel::Arg::operator!=(const Arg *b)
 {
-    bool same = (p_vec_dim == b.p_vec_dim) &&
-                (p_file == b.p_file) &&
-                (p_kind == b.p_kind);
+    bool same = (p_vec_dim == b->p_vec_dim) &&
+                (p_file == b->p_file) &&
+                (p_kind == b->p_kind);
 
     return !same;
 }
