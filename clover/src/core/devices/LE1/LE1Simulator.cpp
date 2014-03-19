@@ -22,11 +22,9 @@ extern "C" {
 
 using namespace Coal;
 
-unsigned LE1Simulator::iteration = 0;
+//unsigned LE1Simulator::iteration = 0;
 
-SimulationStats::SimulationStats(hyperContextT *HyperContext,
-                                 unsigned dram, unsigned iram) {
-                                 //unsigned disabled) {
+ContextStats::ContextStats(hyperContextT *HyperContext) {
   TotalCycles = HyperContext->cycleCount;
   Stalls = HyperContext->stallCount;
   NOPs = HyperContext->nopCount;
@@ -36,8 +34,21 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext,
   BranchesNotTaken = HyperContext->branchNotTaken;
   ControlFlowChange = HyperContext->controlFlowChange;
   MemoryAccessCount = HyperContext->memoryAccessCount;
-  DramSize = dram;
-  IramSize = iram;
+#ifdef DBG_OUTPUT
+  std::cout << "Creating Stats:" << std::endl;
+  std::cout << "TotalCycles = " << HyperContext->cycleCount << std::endl;
+  std::cout << "Stalls = " << HyperContext->stallCount << std::endl;
+  std::cout << "NOPs = " << HyperContext->nopCount << std::endl;
+  std::cout << "IdleCycles = " << HyperContext->idleCount << std::endl;
+  std::cout << "DecodeStalls = " << HyperContext->decodeStallCount << std::endl;
+  std::cout << "BranchesTaken = " << HyperContext->branchTaken << std::endl;
+  std::cout << "BranchesNotTaken = " << HyperContext->branchNotTaken
+    << std::endl;
+  std::cout << "ControlFlowChange = " << HyperContext->controlFlowChange
+    << std::endl;
+  std::cout << "MemoryAccessCount = " << HyperContext->memoryAccessCount
+    << std::endl;
+#endif
 
   // Reset the values
   HyperContext->cycleCount = 0;
@@ -51,6 +62,14 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext,
   HyperContext->memoryAccessCount = 0;
 }
 
+IterationStats::IterationStats(unsigned iram, unsigned dram,
+                               unsigned long cycles) {
+  this->iram = iram;
+  this->dram = dram;
+  completionCycles = cycles;
+}
+
+/*
 SimulationStats::SimulationStats(const SimulationStats &Stats) {
   TotalCycles = Stats.TotalCycles;
   Stalls = Stats.Stalls;
@@ -64,7 +83,7 @@ SimulationStats::SimulationStats(const SimulationStats &Stats) {
   DramSize = Stats.DramSize;
   IramSize = Stats.IramSize;
   //disabledCores = Stats.disabledCores;
-}
+}*/
 
 LE1Simulator::LE1Simulator() {
   pthread_mutex_init(&p_simulator_mutex, 0);
@@ -88,6 +107,19 @@ LE1Simulator::~LE1Simulator() {
       << std::endl;
 #endif
     exit(-1);
+  }
+
+  for (KernelStats::iterator KSI = kernelStats.begin(),
+       KSE = kernelStats.end(); KSI != KSE; ++KSI) {
+
+    std::vector<IterationStats*> *iStats = &(KSI->second);
+    for (std::vector<IterationStats*>::iterator ISI = iStats->begin(),
+         ISE = iStats->end(); ISI != ISE; ++ISI) {
+
+      (*ISI)->contextStats.clear();
+
+    }
+    iStats->clear();
   }
 }
 
@@ -195,10 +227,17 @@ void LE1Simulator::Reset() {
 }
 
 // Save the execution statistics and resets the device
-void LE1Simulator::SaveStats(unsigned cycles) {
+void LE1Simulator::SaveStats(unsigned long cycles, std::string &kernel) {
   SYS = (systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
   LE1System = (systemT *)((size_t)galaxyT + (0 * sizeof(systemT)));
 
+  // Record the completion cycles and ram sizes for this iteration.
+  IterationStats *iterationStats = new IterationStats(IRAMFileSize,
+                                                      DRAMFileSize,
+                                                      cycles);
+
+  // Then populate the iteration stats with the individual stats from all the
+  // available contexts.
   for (unsigned c = 0; c < (SYS->SYSTEM_CONFIG & 0xFF); ++c) {
     contextConfig *CNT
       = (contextConfig *)((size_t)SYS->CONTEXT + (c * sizeof(contextConfig)));
@@ -213,15 +252,22 @@ void LE1Simulator::SaveStats(unsigned cycles) {
                           + (k * sizeof(hyperContextT)));
 
       // Save the execution statistics
-      SimulationStats NewStat(hypercontext, DRAMFileSize, IRAMFileSize);
-      statVector.push_back(NewStat);
+      ContextStats *contextStat = new ContextStats(hypercontext);
+      iterationStats->contextStats.push_back(contextStat);
     }
   }
 
-  Reset();
+  // Create a new item in the map if this is the first time the kernel has
+  // ran.
+  if (kernelStats.find(kernel) == kernelStats.end()) {
+    std::vector<IterationStats*> stats;
+    stats.push_back(iterationStats);
+    kernelStats.insert(std::make_pair(kernel, stats));
+  }
+  else
+    kernelStats[kernel].push_back(iterationStats);
 
-  // pair cycles with StatVector
-  statSet = new std::pair<unsigned, StatVector>(cycles, statVector);
+  Reset();
 }
 
 void LE1Simulator::LockAccess(void) {
@@ -277,8 +323,8 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::Run(const char *iram, const char *dram) {
-                       //const unsigned disabled) {
+bool LE1Simulator::Run(const char *iram, const char *dram,
+                       std::string &kernel) {
 #ifdef DBG_SIM
   std::cerr << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
     << std::endl << machineModel << std::endl;
@@ -563,16 +609,6 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
-    std::ostringstream CopyDump;
-    CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
-      << "-" << LE1Simulator::iteration<< ".dat";
-
-    ++LE1Simulator::iteration;
-    if (system(CopyDump.str().c_str()) != 0) {
-#ifdef DBG_SIM
-      std::cerr << "Memory dump copy failed!" << std::endl;
-#endif
-    }
   }
 
 #ifdef DBG_OUTPUT
@@ -580,7 +616,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
   std::cout << " -------------------------------------------------------- "
     << std::endl;
 #endif
-  SaveStats(cycleCount);
+  SaveStats(cycleCount, kernel);
 
   //pthread_mutex_unlock(&p_simulator_mutex);
 

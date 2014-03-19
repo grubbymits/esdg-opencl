@@ -1,6 +1,6 @@
 #!/bin/sh
 (
-for device in `seq 0 59`;
+for device in `seq 60 64`;
 do
   ./matrix-transpose -e -x 128 -y 128 -d $device
 done

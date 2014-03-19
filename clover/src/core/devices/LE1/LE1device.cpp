@@ -137,12 +137,17 @@ LE1Device::~LE1Device()
   pthread_mutex_destroy(&p_events_mutex);
   pthread_cond_destroy(&p_events_cond);
 
+  const KernelStats *kernelStats = Simulator->GetStats();
+
   // For each kernel
-  for (StatsMap::iterator SMI = ExecutionStats.begin(),
-       SME = ExecutionStats.end(); SMI != SME; ++SMI) {
+  for (KernelStats::const_iterator KSI = kernelStats->begin(),
+       KSE = kernelStats->end(); KSI != KSE; ++KSI) {
+
+    std::string kernelName = KSI->first;
+    std::vector<IterationStats*> iterationStats = KSI->second;
 
 #ifdef DEBUGCL
-    std::cerr << "Kernel Stats for " << SMI->first << std::endl;
+    std::cerr << "Kernel Stats for " << kernelName << std::endl;
 #endif
 
     unsigned long TotalCycles = 0;
@@ -151,55 +156,76 @@ LE1Device::~LE1Device()
     unsigned long TotalDecodeStalls = 0;
     unsigned long TotalBranchesTaken = 0;
     unsigned long TotalBranchesNotTaken = 0;
-    unsigned DramSize = 0;
+    unsigned long TotalMemoryOps = 0;
     unsigned IramSize = 0;
-
-    StatSet statSet = SMI->second.second;
-    StatVector statVector = statSet.second;
-    unsigned numIterations = SMI->second.first;
-    unsigned completionCycles = statSet.first;
+    unsigned DramSize = 0;
+    unsigned long CompletionCycles = 0;
 
     // For each iteration
-    for (StatVector::iterator SI = statVector.begin(),
-         SE = statVector.end(); SI != SE; ++SI) {
+    for (std::vector<IterationStats*>::iterator ISI = iterationStats.begin(),
+         ISE = iterationStats.end(); ISI != ISE; ++ISI) {
 
-      SimulationStats Stats = *SI;
-      TotalCycles += Stats.TotalCycles;
-      TotalStalls += Stats.Stalls;
-      TotalIdle += Stats.IdleCycles;
-      TotalDecodeStalls += Stats.DecodeStalls;
-      TotalBranchesTaken += Stats.BranchesTaken;
-      TotalBranchesNotTaken += Stats.BranchesNotTaken;
-      DramSize += Stats.DramSize;
-      IramSize += Stats.IramSize;
+      IterationStats *iterationStat = *ISI;
+      // Accumulate a total for the RAM sizes and completion cycles which we can
+      // then average out into a single iteration.
+      IramSize += iterationStat->iram;
+      DramSize += iterationStat->dram;
+      CompletionCycles += iterationStat->completionCycles;
+      std::vector<ContextStats*> contextStats = iterationStat->contextStats;
+
+      // Accumalate total cycles across all contexts
+      for (std::vector<ContextStats*>::iterator CSI = contextStats.begin(),
+           CSE = contextStats.end(); CSI != CSE; ++CSI) {
+
+        ContextStats *contextStats = *CSI;
+        TotalCycles += contextStats->TotalCycles;
+        TotalStalls += contextStats->Stalls;
+        TotalIdle += contextStats->IdleCycles;
+        TotalDecodeStalls += contextStats->DecodeStalls;
+        TotalBranchesTaken += contextStats->BranchesTaken;
+        TotalBranchesNotTaken += contextStats->BranchesNotTaken;
+        TotalMemoryOps += contextStats->MemoryAccessCount;
+      }
     }
-    DramSize /= numIterations;
-    IramSize /= numIterations;
+
+    unsigned iterations = iterationStats.size();
+    // Make an average for a single iteration
+    IramSize /= iterations;
+    DramSize /= iterations;
+    CompletionCycles /= iterations;
+    TotalCycles /= iterations;
+    TotalStalls /= iterations;
+    TotalIdle /= iterations;
+    TotalDecodeStalls /= iterations;
+    TotalBranchesTaken /= iterations;
+    TotalBranchesNotTaken /= iterations;
+    TotalMemoryOps /= iterations;
 
     // Write results to a CSV file
     // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
     // If this is the first device to be destructed, add column headers to the
     // files.
     std::ostringstream Line;
-    std::string filename = SMI->first;
+    std::string filename = kernelName;
     filename.append(".csv");
 
     if(!std::ifstream(filename.c_str())) {
       Line << "Model, Cycles, Contexts, Target, Dram, Iram, Cycles,"
-        << "Total Stalls, Decode Stalls, Branches Taken, Iterations"
+        << "Total Stalls, Decode Stalls, Branches Taken, Memory Ops, Iterations"
         << std::endl;
     }
     Line << simulatorModel << ", "
-      << completionCycles << ", "
+      << CompletionCycles << ", "
       << NumCores << ", "
       << CPU << ", "
-      << DramSize / NumCores << ", "
-      << IramSize / NumCores << ", "
-      << completionCycles << ", "
+      << DramSize << ", "
+      << IramSize << ", "
+      << CompletionCycles << ", "
       << TotalStalls << ", "
       << TotalDecodeStalls << ", "
       << TotalBranchesTaken << ", "
-      << numIterations << std::endl;
+      << TotalMemoryOps << ", "
+      << iterations << std::endl;
 
     std::ofstream Results;
     Results.open(filename.c_str(), std::ios_base::app);
@@ -210,9 +236,9 @@ LE1Device::~LE1Device()
   if(Simulator)
     delete Simulator;
 
-  StatsMap::iterator MapItr = ExecutionStats.begin();
-  while (MapItr != ExecutionStats.end())
-    ExecutionStats.erase(MapItr++);
+  //StatsMap::iterator MapItr = ExecutionStats.begin();
+  //while (MapItr != ExecutionStats.end())
+    //ExecutionStats.erase(MapItr++);
 
 }
 
@@ -252,6 +278,7 @@ void LE1Device::incrGlobalBaseAddr(unsigned mem_incr) {
     global_base_addr = global_base_addr + 2;
 }
 
+/*
 void LE1Device::SaveStats(std::string &Kernel) {
   StatSet *NewStats = Simulator->GetStats();
 
@@ -273,7 +300,7 @@ void LE1Device::SaveStats(std::string &Kernel) {
 #endif
 
   Simulator->ClearStats();
-}
+}*/
 
 DeviceProgram *LE1Device::createDeviceProgram(Program *program)
 {

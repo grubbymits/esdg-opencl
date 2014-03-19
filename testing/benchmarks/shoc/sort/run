@@ -1,6 +1,6 @@
 #!/bin/sh
 (
-for device in `seq 0 49`;
+for device in `seq 58 59`;
 do
   ./sort $device
 done

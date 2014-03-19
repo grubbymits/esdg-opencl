@@ -93,7 +93,6 @@ class LE1Device : public DeviceInterface
 
         DeviceBuffer *createDeviceBuffer(MemObject *buffer, cl_int *rs);
         void incrGlobalBaseAddr(unsigned mem_incr);
-        void SaveStats(std::string &Kernel);
         DeviceProgram *createDeviceProgram(Program *program);
         DeviceKernel *createDeviceKernel(Kernel *kernel,
                                          llvm::Function *function);
@@ -123,7 +122,7 @@ class LE1Device : public DeviceInterface
         float p_cpu_mhz;
         pthread_t *p_workers;
         LE1Simulator* Simulator;
-        StatsMap ExecutionStats;
+        //StatsMap ExecutionStats;
 
         std::list<Event *> p_events;
         pthread_cond_t p_events_cond;

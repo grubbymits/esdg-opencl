@@ -784,7 +784,7 @@ bool LE1KernelEvent::run() {
   std::string dram = "binaries/final_" + KernelName + ".data.bin";
   std::string iram = "binaries/final_" + KernelName + ".s.bin";
 
-  wasSuccess = simulator->Run(iram.c_str(), dram.c_str());//, disabledCores);
+  wasSuccess = simulator->Run(iram.c_str(), dram.c_str(), KernelName);
   if (!wasSuccess) {
 #ifdef DBG_OUTPUT
     std::cout << "Simulaton failed!" << std::endl;
@@ -967,7 +967,6 @@ bool LE1KernelEvent::run() {
     }
   }
 
-  p_device->SaveStats(KernelName);
   simulator->UnlockAccess();
 
   // Release event
