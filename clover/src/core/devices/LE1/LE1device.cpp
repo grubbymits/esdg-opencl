@@ -210,7 +210,7 @@ LE1Device::~LE1Device()
     filename.append(".csv");
 
     if(!std::ifstream(filename.c_str())) {
-      Line << "Model, Cycles, Contexts, Target, Dram, Iram, Cycles,"
+      Line << "Model, Cycles, Contexts, Target, Dram, Iram, Total Cycles,"
         << "Total Stalls, Decode Stalls, Branches Taken, Memory Ops, Iterations"
         << std::endl;
     }
@@ -220,7 +220,7 @@ LE1Device::~LE1Device()
       << CPU << ", "
       << DramSize << ", "
       << IramSize << ", "
-      << CompletionCycles << ", "
+      << TotalCycles << ", "
       << TotalStalls << ", "
       << TotalDecodeStalls << ", "
       << TotalBranchesTaken << ", "
