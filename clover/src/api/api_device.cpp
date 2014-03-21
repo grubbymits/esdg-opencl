@@ -36,49 +36,49 @@
 #include <core/devices/LE1/LE1device.h>
 
 static Coal::LE1Device LE1Devices[TotalLE1Devices] = {
-  Coal::LE1Device("1C_1w.xml",          "scalar",       1),
-  Coal::LE1Device("1C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  1),          // 5
-  Coal::LE1Device("1C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  1),          // 20
-  Coal::LE1Device("1C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  1),          // 35
+  Coal::LE1Device("1C_1w.xml",          "scalar",       1),           // 0
+  Coal::LE1Device("1C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  1),           // 1
+  Coal::LE1Device("1C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  1),           // 2
+  Coal::LE1Device("1C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  1),           // 3
 
-  Coal::LE1Device("2C_1w.xml",          "scalar",       2),
-  Coal::LE1Device("2C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  2),          // 8
-  Coal::LE1Device("2C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  2),          // 23
-  Coal::LE1Device("2C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  2),          // 38
-  Coal::LE1Device("2C_1w_2b.xml",       "scalar",       2),
-  Coal::LE1Device("2C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  2),
-  Coal::LE1Device("2C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  2),
-  Coal::LE1Device("2C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  2),
+  Coal::LE1Device("2C_1w.xml",          "scalar",       2),           // 4
+  Coal::LE1Device("2C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  2),           // 5
+  Coal::LE1Device("2C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  2),           // 6
+  Coal::LE1Device("2C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  2),           // 7
+  Coal::LE1Device("2C_1w_2b.xml",       "scalar",       2),           // 8
+  Coal::LE1Device("2C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  2),           // 9
+  Coal::LE1Device("2C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  2),           // 10
+  Coal::LE1Device("2C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  2),           // 11
 
-  Coal::LE1Device("4C_1w.xml",          "scalar",       4),
-  Coal::LE1Device("4C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  4),          // 11
-  Coal::LE1Device("4C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  4),          // 26
-  Coal::LE1Device("4C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  4),          // 41
-  Coal::LE1Device("4C_1w_2b.xml",       "scalar",       4),
-  Coal::LE1Device("4C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  4),
-  Coal::LE1Device("4C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  4),
-  Coal::LE1Device("4C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  4),
-  Coal::LE1Device("4C_1w_4b.xml",       "scalar",       4),
-  Coal::LE1Device("4C_2w_1ls_4b.xml",   "2w2a1m1ls1b",  4),
-  Coal::LE1Device("4C_3w_1ls_4b.xml",   "3w3a1m1ls1b",  4),
-  Coal::LE1Device("4C_4w_1ls_4b.xml",   "4w4a1m1ls1b",  4),
+  Coal::LE1Device("4C_1w.xml",          "scalar",       4),           // 12
+  Coal::LE1Device("4C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  4),           // 13
+  Coal::LE1Device("4C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  4),           // 14
+  Coal::LE1Device("4C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  4),           // 15
+  Coal::LE1Device("4C_1w_2b.xml",       "scalar",       4),           // 16
+  Coal::LE1Device("4C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  4),           // 17
+  Coal::LE1Device("4C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  4),           // 18
+  Coal::LE1Device("4C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  4),           // 19
+  Coal::LE1Device("4C_1w_4b.xml",       "scalar",       4),           // 20
+  Coal::LE1Device("4C_2w_1ls_4b.xml",   "2w2a1m1ls1b",  4),           // 21
+  Coal::LE1Device("4C_3w_1ls_4b.xml",   "3w3a1m1ls1b",  4),           // 22
+  Coal::LE1Device("4C_4w_1ls_4b.xml",   "4w4a1m1ls1b",  4),           // 23
 
-  Coal::LE1Device("8C_1w.xml",          "scalar",       8),
-  Coal::LE1Device("8C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  8),          // 14
-  Coal::LE1Device("8C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  8),          // 29
-  Coal::LE1Device("8C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  8),          // 44
-  Coal::LE1Device("8C_1w_2b.xml",       "scalar",       8),
-  Coal::LE1Device("8C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  8),          // 14
-  Coal::LE1Device("8C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  8),          // 29
-  Coal::LE1Device("8C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  8),          // 44
-  Coal::LE1Device("8C_1w_4b.xml",       "scalar",       8),
-  Coal::LE1Device("8C_2w_1ls_4b.xml",   "2w2a1m1ls1b",  8),
-  Coal::LE1Device("8C_3w_1ls_4b.xml",   "3w3a1m1ls1b",  8),
-  Coal::LE1Device("8C_4w_1ls_4b.xml",   "4w4a1m1ls1b",  8),
-  Coal::LE1Device("8C_1w_8b.xml",       "scalar",       8),
-  Coal::LE1Device("8C_2w_1ls_8b.xml",   "2w2a1m1ls1b",  8),
-  Coal::LE1Device("8C_3w_1ls_8b.xml",   "3w3a1m1ls1b",  8),
-  Coal::LE1Device("8C_4w_1ls_8b.xml",   "4w4a1m1ls1b",  8),
+  Coal::LE1Device("8C_1w.xml",          "scalar",       8),           // 24
+  Coal::LE1Device("8C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  8),           // 25
+  Coal::LE1Device("8C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  8),           // 26
+  Coal::LE1Device("8C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  8),           // 27
+  Coal::LE1Device("8C_1w_2b.xml",       "scalar",       8),           // 28
+  Coal::LE1Device("8C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  8),           // 29
+  Coal::LE1Device("8C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  8),           // 30
+  Coal::LE1Device("8C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  8),           // 31
+  Coal::LE1Device("8C_1w_4b.xml",       "scalar",       8),           // 32
+  Coal::LE1Device("8C_2w_1ls_4b.xml",   "2w2a1m1ls1b",  8),           // 33
+  Coal::LE1Device("8C_3w_1ls_4b.xml",   "3w3a1m1ls1b",  8),           // 34
+  Coal::LE1Device("8C_4w_1ls_4b.xml",   "4w4a1m1ls1b",  8),           // 35
+  Coal::LE1Device("8C_1w_8b.xml",       "scalar",       8),           // 36
+  Coal::LE1Device("8C_2w_1ls_8b.xml",   "2w2a1m1ls1b",  8),           // 37
+  Coal::LE1Device("8C_3w_1ls_8b.xml",   "3w3a1m1ls1b",  8),           // 38
+  Coal::LE1Device("8C_4w_1ls_8b.xml",   "4w4a1m1ls1b",  8),           // 39
 
   Coal::LE1Device("16C_1w.xml",         "scalar",       16),
   Coal::LE1Device("16C_2w_1ls_1b.xml",  "2w2a1m1ls1b",  16),        // 17
