@@ -235,7 +235,8 @@ class ArithLogic_R_RR<bits<5> opcode, string instr_asm, SDNode OpNode,
   (outs CPURegs:$rd),
   (ins CPURegs:$src1, CPURegs:$src2),
   !strconcat(instr_asm, " $rd, $src1, $src2"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], II> {
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], II>,
+  Sched<[WriteA]> {
     let isCommutable = isComm;
 }
 
@@ -246,7 +247,8 @@ class ArithLogic_R_I32R<bits<5> opcode, string instr_asm, SDNode OpNode,
   (outs CPURegs:$rd),
   (ins CPURegs:$src, immediate:$imm32),
   !strconcat(instr_asm, " $rd, $src, $imm32"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src, immPat:$imm32))], II> {
+  [(set CPURegs:$rd, (OpNode CPURegs:$src, immPat:$imm32))], II>,
+  Sched<[WriteAI]> {
     let isCommutable = isComm;
 }
 
@@ -257,7 +259,8 @@ class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
   (outs CPURegs:$rd),
   (ins CPURegs:$src1, immediate:$imm9),
   !strconcat(instr_asm, " $rd, $src1, $imm9"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, immPat:$imm9))], II> {
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, immPat:$imm9))], II>,
+  Sched<[WriteA]> {
     let isCommutable = isComm;
 }
 
@@ -301,7 +304,8 @@ class LogicCompare_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   (outs CPURegs:$rd),
   (ins CPURegs:$src1, CPURegs:$src2),
   !strconcat(instr_asm, " $rd, $src1, $src2"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>,
+  Sched<[WriteA]>;
 
 class LogicCompare_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_RoB_I32R<
@@ -309,7 +313,8 @@ class LogicCompare_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
   (outs CPURegs:$rd),
   (ins CPURegs:$src1, immediate:$imm32),
   !strconcat(instr_asm, " $rd, $src1, $imm32"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>;
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>,
+  Sched<[WriteAI]>;
 
 class LogicCompare_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_RoB_I9R<
@@ -317,7 +322,8 @@ class LogicCompare_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   (outs CPURegs:$rd),
   (ins CPURegs:$src1, immediate:$imm9),
   !strconcat(instr_asm, "  $rd, $src1, $imm9"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>,
+  Sched<[WriteA]>;
 
 class LogicCompare_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_P_RR<
@@ -325,7 +331,8 @@ class LogicCompare_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   (outs BRegs:$prd),
   (ins CPURegs:$src1, CPURegs:$src2),
   !strconcat(instr_asm, " $prd, $src1, $src2"),
-  [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
+  [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>,
+  Sched<[WriteA]>;
 
 //===----------------------------------------------------------------------===//
 // Instruction Classes that utilise the Load/Store units
@@ -337,7 +344,8 @@ class LoadMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
     (outs CPURegs:$rd),
     (ins mem:$addr),
     !strconcat(instr_asm, "  $rd, $addr"),
-    [(set CPURegs:$rd, (OpNode addr_i32:$addr))], IILoadStore>;
+    [(set CPURegs:$rd, (OpNode addr_i32:$addr))], IILoadStore>,
+    Sched<[WriteLSI]>;
 
 class LoadMem_I12<bits<2> opcode, bits<4> format, string instr_asm,
                   PatFrag OpNode>
@@ -347,7 +355,8 @@ class LoadMem_I12<bits<2> opcode, bits<4> format, string instr_asm,
   (outs CPURegs:$rd),
   (ins mem:$addr),
   !strconcat(instr_asm, " $rd, $addr"),
-  [(set CPURegs:$rd, (OpNode addr_i12:$addr))], IILoadStore>;
+  [(set CPURegs:$rd, (OpNode addr_i12:$addr))], IILoadStore>,
+  Sched<[WriteLS]>;
 
 class LoadMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
   : LE1Format_LDST_I8<
@@ -355,7 +364,8 @@ class LoadMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
   (outs CPURegs:$rd),
   (ins mem:$addr),
   !strconcat(instr_asm, " $rd, $addr"),
-  [(set CPURegs:$rd, (OpNode addr_i8:$addr))], IILoadStore>;
+  [(set CPURegs:$rd, (OpNode addr_i8:$addr))], IILoadStore>,
+  Sched<[WriteLS]>;
 
 // Stores
 class StoreMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
@@ -364,7 +374,8 @@ class StoreMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
     (outs),
     (ins CPURegs:$src1, mem:$addr),
     !strconcat(instr_asm, "  $addr, $src1"),
-    [(OpNode CPURegs:$src1, addr_i32:$addr)], IILoadStore>;
+    [(OpNode CPURegs:$src1, addr_i32:$addr)], IILoadStore>,
+    Sched<[WriteLSI]>;
 
 class StoreMem_I12<bits<2> opcode, string instr_asm, PatFrag OpNode>
   : LE1Format_ST_S<
@@ -373,7 +384,8 @@ class StoreMem_I12<bits<2> opcode, string instr_asm, PatFrag OpNode>
   (outs),
   (ins CPURegs:$rd, mem:$addr),
   !strconcat(instr_asm, " $rd, $addr"),
-  [(OpNode CPURegs:$rd, addr_i12:$addr)], IILoadStore>;
+  [(OpNode CPURegs:$rd, addr_i12:$addr)], IILoadStore>,
+  Sched<[WriteLS]>;
 
 class StoreMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
   : LE1Format_LDST_I8<
@@ -381,7 +393,8 @@ class StoreMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
   (outs),
   (ins CPURegs:$rd, mem:$addr),
   !strconcat(instr_asm, " $rd, $addr"),
-  [(OpNode CPURegs:$rd, addr_i8:$addr)], IILoadStore>;
+  [(OpNode CPURegs:$rd, addr_i8:$addr)], IILoadStore>,
+  Sched<[WriteLS]>;
 
 class Extend<bits<5> opcode, string instr_asm, SDNode OpNode, ValueType vt>
   : LE1Format_R_R<
@@ -389,7 +402,8 @@ class Extend<bits<5> opcode, string instr_asm, SDNode OpNode, ValueType vt>
     (outs CPURegs:$rd),
     (ins CPURegs:$src1),
     !strconcat(instr_asm, "  $rd, $src1"),
-    [(set CPURegs:$rd, (OpNode CPURegs:$src1, vt))], IIAlu>;
+    [(set CPURegs:$rd, (OpNode CPURegs:$src1, vt))], IIAlu>,
+    Sched<[WriteA]>;
 
 
 // ------------------- END OF NEW IMPLEMENTATIONS ----------------------- //
@@ -399,39 +413,45 @@ class MoveR<string instr_asm, SDNode OpNode, RegisterClass OutReg,
            RegisterClass InReg>:
       LE1Inst<(outs OutReg:$dst),(ins InReg:$src),
       !strconcat(instr_asm, "  $dst, $src"),
-      [(set OutReg:$dst, (OpNode InReg:$src))], IIAlu>;
+      [(set OutReg:$dst, (OpNode InReg:$src))], IIAlu>,
+      Sched<[WriteA]>;
 
 let isMoveImm =1 in
 class MoveI<string instr_asm, SDNode OpNode, RegisterClass OutReg, Operand Opr,
             SDNode I> :
       LE1Inst<(outs OutReg:$dst), (ins Opr:$src),
       !strconcat(instr_asm, "  $dst, $src"),
-      [(set OutReg:$dst, (OpNode I:$src))], IIAlu>;
+      [(set OutReg:$dst, (OpNode I:$src))], IIAlu>,
+      Sched<[WriteA]>;
 
 // Comparisons
 class SetCCR<string instr_asm, PatFrag cond_op, RegisterClass DestRegs>:
       LE1Inst<(outs DestRegs:$res), (ins CPURegs:$lhs, CPURegs:$rhs),
       !strconcat(instr_asm, "  $res, $lhs, $rhs"),
-      [(set DestRegs:$res, (cond_op CPURegs:$lhs, CPURegs:$rhs))], IIAlu>;
+      [(set DestRegs:$res, (cond_op CPURegs:$lhs, CPURegs:$rhs))], IIAlu>,
+      Sched<[WriteA]>;
 
 let isReMaterializable = 1, neverHasSideEffects = 1 in
 class SetCCI<string instr_asm, PatFrag cond_op, RegisterClass DestRegs>:
       LE1Inst<(outs DestRegs:$res), (ins CPURegs:$lhs, i32imm:$rhs),
       !strconcat(instr_asm, "  $res, $lhs, $rhs"),
-      [(set DestRegs:$res, (cond_op CPURegs:$lhs, imm:$rhs))], IIAlu>;
+      [(set DestRegs:$res, (cond_op CPURegs:$lhs, imm:$rhs))], IIAlu>,
+      Sched<[WriteA]>;
 
 // Selects
 class SelectRR<string instr_asm, SDNode OpNode>:
       LE1Inst<(outs CPURegs:$res), (ins BRegs:$cond, CPURegs:$T, CPURegs:$F),
       !strconcat(instr_asm, "  $res, $cond, $T, $F"),
       [(set CPURegs:$res, (OpNode BRegs:$cond, CPURegs:$T, CPURegs:$F))],
-      IIAlu>;
+      IIAlu>,
+      Sched<[WriteA]>;
 
 class SelectRI<string instr_asm, SDNode OpNode>:
       LE1Inst<(outs CPURegs:$res), (ins BRegs:$cond, CPURegs:$T, i32imm:$F),
       !strconcat(instr_asm, "  $res, $cond, $T, $F"),
       [(set CPURegs:$res, (OpNode BRegs:$cond, CPURegs:$T, imm:$F))],
-      IIAlu>;
+      IIAlu>,
+      Sched<[WriteA]>;
 
 
 
@@ -445,7 +465,8 @@ class CBranch<string instr_asm, SDNode OpNode>:
       LE1Inst<(outs),
       (ins BRegs:$cond, brtarget:$dst),
       !strconcat(instr_asm, "  $cond, $dst"),
-      [(OpNode BRegs:$cond, bb:$dst)], IIBranch>;
+      [(OpNode BRegs:$cond, bb:$dst)], IIBranch>,
+      Sched<[WriteBR]>;
 
 //===----------------------------------------------------------------------===//
 // Instruction definition
@@ -464,7 +485,7 @@ defm ANDC     : ARITH_LOGIC<0x2,   "andc.0", le1_andc, IIAlu>;
 defm MAXS     : ARITH_LOGIC<0x3,   "max.0", le1_maxs, IIAlu>;
 defm MAXU     : ARITH_LOGIC<0x4,   "maxu.0", le1_maxu, IIAlu>;
 defm MINS     : ARITH_LOGIC<0x5,   "min.0", le1_mins, IIAlu>;
-defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_mins, IIAlu>;
+defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_minu, IIAlu>;
 defm OR       : ARITH_LOGIC<0x7,   "or.0",  or, IIAlu, 1>;
 defm ORC      : ARITH_LOGIC<0x8,   "orc.0", le1_orc, IIAlu>;
 defm SH1ADD   : ARITH_LOGIC<0x9,   "sh1add.0", le1_sh1add, IIAlu>;
@@ -617,21 +638,22 @@ def ADDCG : LE1Format_RP_PRR<
             (outs CPURegs:$rd, BRegs:$prd2),
             (ins CPURegs:$src1, CPURegs:$src2, BRegs:$prs),
             "addcg.0  $rd, $prd2, $src1, $src2, $prs",
-            [], IIAlu>;
+            [], IIAlu>, Sched<[WriteA]>;
 
 def DIVS  : LE1Format_RP_PRR<
             0x1,
             (outs CPURegs:$rd, BRegs:$prd2),
             (ins CPURegs:$src1, CPURegs:$src2, BRegs:$prs),
             "divs.0  $rd, $prd2, $src1, $src2, $prs",
-            [], IIAlu>;
+            [], IIAlu>, Sched<[WriteA]>;
 
 def MFB   : LE1Format_RP_PRR<
             0x2,
             (outs CPURegs:$rd),
             (ins BRegs:$prs),
             "mfb.0  $rd, $prs",
-            [(set CPURegs:$rd, (le1_mfb BRegs:$prs))], IIAlu> {
+            [(set CPURegs:$rd, (le1_mfb BRegs:$prs))], IIAlu>,
+            Sched<[WriteA]> {
   let prd2 = 0;
   let src1 = 0;
   let src2 = 0;
@@ -699,13 +721,13 @@ def LDL : LE1Inst<(outs LReg:$dst),
           (ins globaladdress:$addr, globaladdroffset:$offset),
           "ldw.0 L0.0, r0.0[($addr+$offset)]",
           [/*(set LReg:$dst, (add (le1_loadlink tglobaladdr:$addr), imm:$offset))*/],
-          IILoadStore>;
+          IILoadStore>, Sched<[WriteLS]>;
 //let Uses = [L0] in
 def STL : LE1Inst<(outs),
           (ins LReg:$src, globaladdress:$addr, globaladdroffset:$offset),
           "stw.0 r0.0[($addr+$offset)], L0.0",
           [(store LReg:$src, (add (i32 tglobaladdr:$addr), imm:$offset))],
-          IILoadStore>;
+          IILoadStore>, Sched<[WriteLS]>;
 
 //===----------------------------------------------------------------------===//
 // Control-Flow Instructions
@@ -716,7 +738,7 @@ def BRF    : CBranch<"brf.0", le1_brf>;
 let isBranch=1, isTerminator=1, isBarrier=1 in
 def GOTO :  LE1Inst<(outs), (ins brtarget:$target),
             "goto.0  $target",
-            [(le1_goto bb:$target)], IIBranch>;
+            [(le1_goto bb:$target)], IIBranch>, Sched<[WriteBR]>;
 
 // Call
 let isCall=1,
@@ -730,12 +752,12 @@ let isCall=1,
   def CALL :  LE1Inst<(outs),
               (ins LReg:$lnk, calltarget:$target, variable_ops),
               "call.0  $lnk, $target",
-              [(le1_call LReg:$lnk, imm:$target)], IIBranch>;
+              [(le1_call LReg:$lnk, imm:$target)], IIBranch>, Sched<[WriteBR]>;
 
   def LNKCALL : LE1Inst<(outs), (ins LReg:$lnk, variable_ops),
   "call.0  $lnk, $lnk",
   [/*(le1_linkcall LReg:$lnk)*/],
-  IIBranch>;
+  IIBranch>, Sched<[WriteBR]>;
 }
 
 //let Constraints = "$src = $dst",
@@ -747,7 +769,7 @@ def Ret : LE1Inst<(outs),
           (ins CPURegs:$src, i32imm:$frame, LReg:$lnk),
           "return.0  $src, $src, $frame, $lnk",
           [(le1_ret CPURegs:$src, imm:$frame, LReg:$lnk)],
-          IIBranch>;
+          IIBranch>, Sched<[WriteBR]>;
 
 
 //def : Pat<(le1_call L0, (load (i32 tglobaladdr:$addr))),
@@ -794,7 +816,7 @@ def CLK : LE1Pseudo < (outs), (ins), "NOP", []>;
 // Instruction created to exit main
 let isReturn=1, isTerminator=1, isBarrier=1 in
 def Exit : LE1Inst< (outs), (ins LReg:$lnk),
-          "call.0  $lnk, exit", [], IIBranch>;
+          "call.0  $lnk, exit", [], IIBranch>, Sched<[WriteBR]>;
 
 let isReturn=1, isTerminator=1, isBarrier=1, hasCtrlDep=1 in
 def RetFlag : LE1Pseudo < (outs), (ins), ";", [(le1_retflag)]>;

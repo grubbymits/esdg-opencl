@@ -91,3 +91,4 @@ def : Processor< "5w5a1m1ls1b", LE15w5a1m1ls1bItineraries, []>;
 def : Processor< "5w5a1m2ls1b", LE15w5a1m2ls1bItineraries, []>;
 def : Processor< "5w5a1m4ls1b", LE15w5a1m4ls1bItineraries, []>;
 def : Processor< "4w4a1m3ls1b", LE14w4a1m3ls1bItineraries, []>;
+def : ProcessorModel< "new", LE1NewModel, []>;

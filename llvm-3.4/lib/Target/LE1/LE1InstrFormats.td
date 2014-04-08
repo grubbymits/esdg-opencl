@@ -33,7 +33,7 @@ class LE1Inst<dag outs, dag ins, string asmstr, list<dag> pattern,
 
   let AsmString   = asmstr;
   let Pattern     = pattern;
-  let Itinerary   = itin;
+  //let Itinerary   = itin;
 }
 
 // LE1 Pseudo Instructions Format

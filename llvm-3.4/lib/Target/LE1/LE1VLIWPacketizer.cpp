@@ -99,7 +99,7 @@ namespace {
 bool LE1PacketizerList::needsNops() {
   return MF.getTarget().getSubtarget<LE1Subtarget>().needsNops();
 }*/
-
+/*
 static bool canReserveResources(const llvm::MCInstrDesc *MID) {
   unsigned InsnClass = MID->getSchedClass();
   const llvm::InstrStage *IS = InstrItins->beginStage(InsnClass);
@@ -179,7 +179,7 @@ void LE1Packetizer::PacketizeMIs(MachineBasicBlock *MBB,
   VLIWScheduler->exitRegion();
   VLIWScheduler->finishBlock();
 }
-
+*/
 bool LE1Packetizer::runOnMachineFunction(MachineFunction &MF) {
   const TargetInstrInfo *TII = MF.getTarget().getInstrInfo();
   MachineLoopInfo &MLI = getAnalysis<MachineLoopInfo>();

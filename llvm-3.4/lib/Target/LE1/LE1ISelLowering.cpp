@@ -37,7 +37,7 @@
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Target/TargetLibraryInfo.h"
 
-//#include <iostream>
+#include <iostream>
 
 using namespace llvm;
 
@@ -582,13 +582,12 @@ SDValue static PerformADDCombine(SDNode *N, SelectionDAG &DAG) {
 
   uint64_t ShiftVal = 0;
   if (LHS.getOpcode() == ISD::SHL) {
-    if (ConstantSDNode *CN = cast<ConstantSDNode>(LHS.getOperand(1)))
-      ShiftVal = CN->getConstantOperandVal(0);
+    if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(LHS.getOperand(1)))
+      ShiftVal = CN->getZExtValue();
   }
-  else if (RHS.getOpcode() == ISD::SHL) {
-    if (ConstantSDNode *CN = cast<ConstantSDNode>(RHS.getOperand(1)))
-      ShiftVal = CN->getConstantOperandVal(0);
-  }
+  else if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(RHS.getOperand(1)))
+    ShiftVal = CN->getZExtValue();
+
   unsigned Opcode = 0;
   switch (ShiftVal) {
   default:
@@ -878,6 +877,9 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
   SelectionDAG &DAG = DCI.DAG;
   switch(N->getOpcode()) {
   default:
+    DEBUG(dbgs() << "Unhandled Node!\n");
+    if (N->isTargetOpcode())
+      DEBUG(dbgs() << getTargetNodeName(N->getOpcode()) << "\n");
     break;
   case ISD::ADD:          return PerformADDCombine(N, DAG);
   case ISD::AND:          return PerformANDCombine(N, DAG);
@@ -887,7 +889,7 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
   case ISD::SELECT_CC:    return PerformSELECT_CCCombine(N, DAG);
   case ISD::ZERO_EXTEND:  return PerformZERO_EXTENDCombine(N, DAG);
   }
-  return SDValue();
+  return SDValue(N, 0);
 }
 
 EVT LE1TargetLowering::getSetCCResultType(EVT VT) const {
@@ -918,7 +920,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
     case ISD::INTRINSIC_W_CHAIN:  return LowerIntrinsicWChain(Op, DAG);
     case ISD::INTRINSIC_WO_CHAIN: return LowerINTRINSIC_WO_CHAIN(Op, DAG);
   }
-  return SDValue();
+  return Op;
 }
 
 //===----------------------------------------------------------------------===//
@@ -1356,7 +1358,7 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
   // ORL and NORL
   if (LHS.getOpcode() == ISD::OR) {
     if (ConstantSDNode* CSN = cast<ConstantSDNode>(RHS.getNode())) {
-      if (CSN->getConstantOperandVal(0) == 0) {
+      if (CSN->getZExtValue() == 0) {
 
         if (CC == ISD::SETEQ)
           Opcode = LE1ISD::NORL;
@@ -1389,7 +1391,6 @@ SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
   SDValue Op3 = Op.getOperand(3);
   ISD::CondCode CC = cast<CondCodeSDNode>(Op.getOperand(4))->get();
   SDLoc dl(Op.getNode());
-  EVT VT = Op.getValueType();
 
   unsigned Opcode = 0;
 
@@ -1397,7 +1398,7 @@ SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
   if ((Op0 == Op2) && (Op1 == Op3)) {
     switch(CC) {
     default:
-      return SDValue();
+      break;
     case ISD::SETGT:
     case ISD::SETGE:
       Opcode = LE1ISD::MAXS;
@@ -1415,9 +1416,37 @@ SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
       Opcode = LE1ISD::MINU;
       break;
     }
+    DEBUG(dbgs() << "Lowered selectcc to " << getTargetNodeName(Opcode)
+          << "\n");
     return DAG.getNode(Opcode, dl, Op.getValueType(), Op0, Op1);
   }
-  return SDValue();
+  else if ((Op0 == Op3) && (Op1 == Op2)) {
+    switch(CC) {
+    default:
+      break;
+    case ISD::SETGT:
+    case ISD::SETGE:
+      Opcode = LE1ISD::MINS;
+      break;
+    case ISD::SETLT:
+    case ISD::SETLE:
+      Opcode = LE1ISD::MAXS;
+      break;
+    case ISD::SETUGT:
+    case ISD::SETUGE:
+      Opcode = LE1ISD::MINU;
+      break;
+    case ISD::SETULT:
+    case ISD::SETULE:
+      Opcode = LE1ISD::MAXU;
+      break;
+    }
+    DEBUG(dbgs() << "Lowered selectcc to " << getTargetNodeName(Opcode)
+          << "\n");
+    return DAG.getNode(Opcode, dl, Op.getValueType(), Op0, Op1);
+  }
+  else
+    return Op;
 }
 
 SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,

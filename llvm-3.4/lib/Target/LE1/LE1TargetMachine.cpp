@@ -151,7 +151,7 @@ bool LE1PassConfig::addPostRegAlloc() {
 bool LE1PassConfig::addPreEmitPass()
 {
   addPass(createLE1ExpandPredSpillCode(getLE1TargetMachine()));
-  addPass(createLE1Packetizer(getLE1TargetMachine()));
+  //addPass(createLE1Packetizer(getLE1TargetMachine()));
   return false;
 }
 

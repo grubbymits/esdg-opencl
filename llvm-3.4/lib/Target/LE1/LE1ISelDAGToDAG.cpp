@@ -214,19 +214,6 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
  case LE1ISD::MFB:
     return CurDAG->getMachineNode(LE1::MFB, dl, MVT::i32, Node->getOperand(0));
     break;
-    /*
- case LE1ISD::Sh1Add: {
-    SDValue LHS = Node->getOperand(0);
-    SDValue RHS = Node->getOperand(1);
-    return CurDAG->getMachineNode(LE1::SH1ADD, dl, MVT::i32, LHS, RHS);
-    break;
-  }
-  case LE1ISD::Orc: {
-    SDValue LHS = Node->getOperand(0);
-    SDValue RHS = Node->getOperand(1);
-    return CurDAG->getMachineNode(LE1::ORC, dl, MVT::i32, LHS, RHS);
-    break;
-  }*/
   case LE1ISD::SET_ATTR: {
     SDValue Chain = Node->getOperand(0);
     SDValue Value = Node->getOperand(1);
@@ -240,6 +227,7 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
   case LE1ISD::NUM_CORES:
     return CurDAG->getMachineNode(LE1::LE1_NUM_CORES, dl, MVT::i32);
   }
+  return SelectCode(N);
 }
 
 bool LE1DAGToDAGISel::
