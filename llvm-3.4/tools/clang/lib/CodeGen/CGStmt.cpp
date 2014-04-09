@@ -639,6 +639,7 @@ void CodeGenFunction::EmitForStmt(const ForStmt &S) {
   // Create a cleanup scope for the condition variable cleanups.
   RunCleanupsScope ConditionScope(*this);
 
+  CondBlock->dump();
   if (S.getCond()) {
     // If the for statement has a condition scope, emit the local variable
     // declaration.
@@ -665,6 +666,8 @@ void CodeGenFunction::EmitForStmt(const ForStmt &S) {
     }
 
     EmitBlock(ForBody);
+    ForBody->dump();
+    ExitBlock->dump();
   } else {
     // Treat it as a non-zero constant.  Don't even create a new block for the
     // body, just fall into it.
@@ -705,6 +708,7 @@ void CodeGenFunction::EmitForStmt(const ForStmt &S) {
 
   // Emit the fall-through block.
   EmitBlock(LoopExit.getBlock(), true);
+  LoopExit.getBlock()->dump();
 }
 
 void CodeGenFunction::EmitCXXForRangeStmt(const CXXForRangeStmt &S) {

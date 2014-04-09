@@ -119,10 +119,76 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
       return true;
     }
   }
-  if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
+  else if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
     Base   = CurDAG->getTargetFrameIndex(FIN->getIndex(), ValTy);
     Offset = CurDAG->getTargetConstant(0, ValTy);
     return true;
+  }
+  else {
+    SDValue LHS = Addr.getOperand(0);
+    SDValue RHS = Addr.getOperand(1);
+    EVT VT = Addr.getValueType();
+    SDLoc dl(Addr.getNode());
+    Offset = getI32Imm(0);
+
+    // The address may be stored in a single register
+    if (LHS.getValueType() == MVT::Other) {
+      Base = RHS;
+      return true;
+    }
+    else if (RHS.getValueType() == MVT::Other) {
+      Base = LHS;
+      return true;
+    }
+
+    // Address has bee calculated which the base and offset stored in registers.
+    // Add these values to create the base, and use a zero offset. We also check
+    // whether we are adding the result of a shift, if so we can possibly use
+    // one of our SHADD instructions.
+    if ((LHS.getOpcode() != ISD::SHL) && (RHS.getOpcode() != ISD::SHL)) {
+      Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
+      return true;
+    }
+    else {
+      unsigned ShiftVal = 0;
+      unsigned Opcode = 0;
+      SDValue ShiftOp0;
+      SDValue ShiftOp1;
+      if (LHS.getOpcode() == ISD::SHL) {
+        if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(LHS.getOperand(1))) {
+          ShiftOp0 = LHS.getOperand(0);
+          ShiftOp1 = RHS;
+          ShiftVal = CN->getZExtValue();
+        }
+      }
+      else if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(RHS.getOperand(1)))
+      {
+        ShiftOp0 = RHS.getOperand(0);
+        ShiftOp1 = LHS;
+        ShiftVal = CN->getZExtValue();
+      }
+
+      switch (ShiftVal) {
+      default:
+        Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
+        return true;
+      case 1:
+        Opcode = LE1::SH1ADDr;
+        break;
+      case 2:
+        Opcode = LE1::SH2ADDr;
+        break;
+      case 3:
+        Opcode = LE1::SH3ADDr;
+        break;
+      case 4:
+        Opcode = LE1::SH4ADDr;
+        break;
+      }
+      Base = SDValue(CurDAG->getMachineNode(Opcode, dl, VT, ShiftOp0,
+                                            ShiftOp1), 0);
+      return true;
+    }
   }
   return false;
 }
@@ -142,12 +208,18 @@ bool LE1DAGToDAGISel::SelectAddri12(SDValue Addr, SDValue &Base,
 
 bool LE1DAGToDAGISel::SelectAddri32(SDValue Addr, SDValue &Base,
                                     SDValue &Offset) {
-  DEBUG(dbgs() << "SelectAddri32 with " << Addr.getNode()->getOperationName()
-        << "\n");
+  DEBUG(dbgs() << "SelectAddri32 with ");
+  if (Addr.getNode()->isTargetOpcode())
+    DEBUG(dbgs() <<
+          TM.getTargetLowering()->getTargetNodeName(Addr.getOpcode()));
+  else
+    DEBUG(dbgs() << Addr.getNode()->getOperationName());
+  DEBUG(dbgs() << "\n");
+
   SDLoc dl(Addr.getNode());
   if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr))
     return false;
-  if (GlobalAddressSDNode *GA = cast<GlobalAddressSDNode>(Addr)) {
+  if (GlobalAddressSDNode *GA = dyn_cast<GlobalAddressSDNode>(Addr)) {
     Base = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32, 0);
     Offset = CurDAG->getTargetConstant(GA->getOffset(), MVT::i32);
     return true;

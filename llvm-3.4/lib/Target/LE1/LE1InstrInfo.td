@@ -405,6 +405,24 @@ class Extend<bits<5> opcode, string instr_asm, SDNode OpNode, ValueType vt>
     [(set CPURegs:$rd, (OpNode CPURegs:$src1, vt))], IIAlu>,
     Sched<[WriteA]>;
 
+class Select_R<bits<5> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_R_RR_PT<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins BRegs:$prs, CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, "  $rd, $prs, $src1, $src2"),
+  [(set CPURegs:$rd, (OpNode BRegs:$prs, CPURegs:$src1, CPURegs:$src2))],
+  IIAlu>, Sched<[WriteA]>;
+
+class Select_I32<bits<5> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_R_I32_RP<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins BRegs:$prs, CPURegs:$src1, immediate:$src2),
+  !strconcat(instr_asm, "  $rd, $prs, $src1, $src2"),
+  [(set CPURegs:$rd, (OpNode BRegs:$prs, CPURegs:$src1, imm32:$src2))],
+  IIAlu>, Sched<[WriteAI]>;
+
 
 // ------------------- END OF NEW IMPLEMENTATIONS ----------------------- //
 
@@ -466,7 +484,7 @@ class CBranch<string instr_asm, SDNode OpNode>:
       (ins BRegs:$cond, brtarget:$dst),
       !strconcat(instr_asm, "  $cond, $dst"),
       [(OpNode BRegs:$cond, bb:$dst)], IIBranch>,
-      Sched<[WriteBR]>;
+      Sched<[WriteB]>;
 
 //===----------------------------------------------------------------------===//
 // Instruction definition
@@ -659,15 +677,20 @@ def MFB   : LE1Format_RP_PRR<
   let src2 = 0;
 }
 
+// FIXME Currently no way of using selectf
+def SLCTi   : Select_I32<0x1C, "slct.0", select>;
+def SLCTFi  : Select_I32<0x1D, "slctf.0", le1_selectf>;
+def SLCTr   : Select_R<0x1C, "slct.0", select>;
+def SLCTFr  : Select_R<0x1D, "slctf.0", le1_selectf>;
 
 // ------------------------- END OF NEW IMPLEMENTATION ---------------------- //
 
 ///===---------------------------------------------------------------------===//
 /// Select Instructions
-def SLCTrr  : SelectRR<"slct.0", select>;
-def SLCTFrr : SelectRR<"slctf.0", le1_selectf>;
-def SLCTri  : SelectRI<"slct.0", select>;
-def SLCTFri : SelectRI<"slctf.0", le1_selectf>;
+//def SLCTrr  : SelectRR<"slct.0", select>;
+//def SLCTFrr : SelectRR<"slctf.0", le1_selectf>;
+//def SLCTri  : SelectRI<"slct.0", select>;
+//def SLCTFri : SelectRI<"slctf.0", le1_selectf>;
 
 ///===---------------------------------------------------------------------===//
 /// Extending Instructions
@@ -738,7 +761,7 @@ def BRF    : CBranch<"brf.0", le1_brf>;
 let isBranch=1, isTerminator=1, isBarrier=1 in
 def GOTO :  LE1Inst<(outs), (ins brtarget:$target),
             "goto.0  $target",
-            [(le1_goto bb:$target)], IIBranch>, Sched<[WriteBR]>;
+            [(le1_goto bb:$target)], IIBranch>, Sched<[WriteB]>;
 
 // Call
 let isCall=1,
@@ -752,12 +775,12 @@ let isCall=1,
   def CALL :  LE1Inst<(outs),
               (ins LReg:$lnk, calltarget:$target, variable_ops),
               "call.0  $lnk, $target",
-              [(le1_call LReg:$lnk, imm:$target)], IIBranch>, Sched<[WriteBR]>;
+              [(le1_call LReg:$lnk, imm:$target)], IIBranch>, Sched<[WriteB]>;
 
   def LNKCALL : LE1Inst<(outs), (ins LReg:$lnk, variable_ops),
   "call.0  $lnk, $lnk",
   [/*(le1_linkcall LReg:$lnk)*/],
-  IIBranch>, Sched<[WriteBR]>;
+  IIBranch>, Sched<[WriteB]>;
 }
 
 //let Constraints = "$src = $dst",
@@ -769,7 +792,7 @@ def Ret : LE1Inst<(outs),
           (ins CPURegs:$src, i32imm:$frame, LReg:$lnk),
           "return.0  $src, $src, $frame, $lnk",
           [(le1_ret CPURegs:$src, imm:$frame, LReg:$lnk)],
-          IIBranch>, Sched<[WriteBR]>;
+          IIBranch>, Sched<[WriteB]>;
 
 
 //def : Pat<(le1_call L0, (load (i32 tglobaladdr:$addr))),
@@ -816,7 +839,7 @@ def CLK : LE1Pseudo < (outs), (ins), "NOP", []>;
 // Instruction created to exit main
 let isReturn=1, isTerminator=1, isBarrier=1 in
 def Exit : LE1Inst< (outs), (ins LReg:$lnk),
-          "call.0  $lnk, exit", [], IIBranch>, Sched<[WriteBR]>;
+          "call.0  $lnk, exit", [], IIBranch>, Sched<[WriteB]>;
 
 let isReturn=1, isTerminator=1, isBarrier=1, hasCtrlDep=1 in
 def RetFlag : LE1Pseudo < (outs), (ins), ";", [(le1_retflag)]>;
@@ -846,7 +869,7 @@ def : Pat<(le1_call LReg:$lnk, (i32 (load addr_i32:$src))),
 
 // Patterns to deal with extending branch registers
 def : Pat<(sext BRegs:$src),
-          (SLCTFri BRegs:$src, ZERO, (i32 0xFFFFFFFF))>;
+          (SLCTFi BRegs:$src, ZERO, (i32 0xFFFFFFFF))>;
 
 // LE1 does not have "not", so we expand our way
 def : Pat<(not CPURegs:$in),
@@ -1093,6 +1116,7 @@ defm : SlctPats<CMPGEU, CMPGEUi,  SETUGE>;
 */
 
 //Select Patterns
+/*
 def : Pat<(select (i1 BRegs:$cond), (i32 CPURegs:$T), (i32 CPURegs:$F)),
           (SLCTrr BRegs:$cond, CPURegs:$T, CPURegs:$F)>;
 def : Pat<(select (i1 BRegs:$cond), (i32 CPURegs:$T), (imm:$F)),
@@ -1106,6 +1130,7 @@ def : Pat<(select (i1 BRegs:$cond), imm:$T, (i32 0)),
           (SLCTFri BRegs:$cond, ZERO, imm:$T)>;
 def : Pat<(select (i1 BRegs:$cond), (i32 0), imm:$F),
           (SLCTri BRegs:$cond, ZERO, imm:$F)>;
+*/
 
 // Branch Regs Move Patterns
 def : Pat<(zext BRegs:$src),
@@ -1114,6 +1139,9 @@ def : Pat<(trunc CPURegs:$src),
           (MTB CPURegs:$src)>;
 def : Pat<(not (trunc CPURegs:$src)),
           (MTBF CPURegs:$src)>;
+
+//def : Pat<(trunc CPURegs:$src),
+  //        (ANDi32 CPURegs:$src, (i32 0xFFFFFFFF))>;
 
 // FIXME don't understand the i1 Constant<-1> thing and I think i1 0 is also
 // causing inefficient code gen

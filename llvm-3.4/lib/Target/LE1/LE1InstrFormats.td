@@ -201,6 +201,22 @@ class LE1Format_R_I32R<bits<5> opcode, dag outs, dag ins, string asmstr,
   let Inst{5-0} = src1;
 }
 
+class LE1Format_R_I32_RP<bits<5> opc5, dag outs, dag ins, string asmstr,
+                         list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  bits<6> rd;
+  bits<3> prs;
+  bits<6> src1;
+  bits<32> src2;
+
+  let fmt = 2;
+  let Inst{25-21} = opc5;
+  let Inst{20-15} = rd;
+  let Inst{14-12} = prs;
+  let Inst{5-0} = src1;
+}
+
 class LE1Format_R_I9R<bits<5> opc5, dag outs, dag ins, string asmstr,
                  list<dag> pattern, InstrItinClass itin>
   : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
@@ -247,6 +263,23 @@ class LE1Format_P_RR<bits<4> opc4, dag outs, dag ins, string asmstr,
   let Inst{20-18} = 0;
   let Inst{17-15} = prd;
   let Inst{14-12} = 0;
+  let Inst{11-6} = src2;
+  let Inst{5-0} = src1;
+}
+
+class LE1Format_R_RR_PT<bits<5> opc5, dag outs, dag ins, string asmstr,
+                        list<dag> pattern, InstrItinClass itin>
+  : LE1FormatBase<outs, ins, asmstr, pattern, itin> {
+
+  bits<3> prs;
+  bits<6> rd;
+  bits<6> src1;
+  bits<6> src2;
+
+  let fmt = 9;
+  let Inst{25-21} = opc5;
+  let Inst{20-15} = rd;
+  let Inst{14-12} = prs;
   let Inst{11-6} = src2;
   let Inst{5-0} = src1;
 }
