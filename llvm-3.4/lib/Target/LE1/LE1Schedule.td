@@ -51,17 +51,18 @@ def LE1ScalarItineraries : ProcessorItineraries<
 
 def LE1ModelScalar : SchedMachineModel {
   let IssueWidth = 1;
+  let LoadLatency = 3;
   let Itineraries = LE1ScalarItineraries;
 }
-include "MachineModels/LE12w2a1m1ls1b.td"
-include "MachineModels/LE12w2a1m2ls1b.td"
-include "MachineModels/LE13w3a1m1ls1b.td"
-include "MachineModels/LE13w3a1m2ls1b.td"
-include "MachineModels/LE14w4a1m1ls1b.td"
-include "MachineModels/LE14w4a1m2ls1b.td"
-include "MachineModels/LE14w4a1m4ls1b.td"
-include "MachineModels/LE15w5a1m1ls1b.td"
-include "MachineModels/LE15w5a1m2ls1b.td"
-include "MachineModels/LE15w5a1m4ls1b.td"
-include "MachineModels/LE14w4a1m3ls1b.td"
+//include "MachineModels/LE12w2a1m1ls1b.td"
+//include "MachineModels/LE12w2a1m2ls1b.td"
+//include "MachineModels/LE13w3a1m1ls1b.td"
+//include "MachineModels/LE13w3a1m2ls1b.td"
+//include "MachineModels/LE14w4a1m1ls1b.td"
+//include "MachineModels/LE14w4a1m2ls1b.td"
+//include "MachineModels/LE14w4a1m4ls1b.td"
+//include "MachineModels/LE15w5a1m1ls1b.td"
+//include "MachineModels/LE15w5a1m2ls1b.td"
+//include "MachineModels/LE15w5a1m4ls1b.td"
+//include "MachineModels/LE14w4a1m3ls1b.td"
 include "LE1ScheduleModel.td"

@@ -3,6 +3,8 @@ def LE1NewModel : SchedMachineModel {
   let LoadLatency = 3;
 }
 
+// TODO May not need to use the IssueSlot as a Super resource as IssueWidth
+// should be able to control this!
 def IssueSlot : ProcResource<4>;
 
 def ALU   : ProcResource<4> {
