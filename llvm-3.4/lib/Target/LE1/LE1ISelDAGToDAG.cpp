@@ -227,7 +227,7 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
   case LE1ISD::NUM_CORES:
     return CurDAG->getMachineNode(LE1::LE1_NUM_CORES, dl, MVT::i32);
   }
-  return SelectCode(N);
+  return SelectCode(Node);
 }
 
 bool LE1DAGToDAGISel::

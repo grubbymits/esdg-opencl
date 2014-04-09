@@ -1298,6 +1298,10 @@ DivStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
   }
 }
 
+//static SDValue CreateCMP(SDValue LHS, SDValue RHS, SDValue Cond) {
+
+//}
+
 static SDValue CreateCMP(SDValue Op, SelectionDAG &DAG) {
   if (Op.getOpcode() != ISD::SETCC)
     return Op;
@@ -1445,8 +1449,26 @@ SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
           << "\n");
     return DAG.getNode(Opcode, dl, Op.getValueType(), Op0, Op1);
   }
-  else
-    return Op;
+  else {
+    switch(CC) {
+    default:
+      return Op;
+    case ISD::SETGT:  Opcode = LE1ISD::CMPGT;   break;
+    case ISD::SETGE:  Opcode = LE1ISD::CMPGE;   break;
+    case ISD::SETLT:  Opcode = LE1ISD::CMPLT;   break;
+    case ISD::SETLE:  Opcode = LE1ISD::CMPLE;   break;
+    case ISD::SETUGT: Opcode = LE1ISD::CMPGTU;  break;
+    case ISD::SETUGE: Opcode = LE1ISD::CMPGEU;  break;
+    case ISD::SETULT: Opcode = LE1ISD::CMPLTU;  break;
+    case ISD::SETULE: Opcode = LE1ISD::CMPLEU;  break;
+    case ISD::SETNE:  Opcode = LE1ISD::CMPNE;   break;
+    case ISD::SETEQ:  Opcode = LE1ISD::CMPEQ;   break;
+    }
+    DEBUG(dbgs() << "Lowered selectcc to" << getTargetNodeName(Opcode)
+          << " and SELECT\n");
+    return DAG.getNode(ISD::SELECT, dl, Op.getValueType(), Cmp,
+                       Op2, Op3);
+  }
 }
 
 SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
