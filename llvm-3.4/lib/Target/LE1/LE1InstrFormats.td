@@ -55,7 +55,7 @@ class LE1FormatBase<dag outs, dag ins, string asmstr, list<dag> pattern,
   let InOperandList  = ins;
   let AsmString   = asmstr;
   let Pattern     = pattern;
-  let Itinerary   = itin;
+  //let Itinerary   = itin;
 
   let Inst{31} = is;
   let Inst{30} = cs;

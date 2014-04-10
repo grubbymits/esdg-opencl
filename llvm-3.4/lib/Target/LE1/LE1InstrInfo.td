@@ -229,38 +229,38 @@ def addr_i32  : ComplexPattern<iPTR, 2, "SelectAddri32", [frameindex], []>;
 
 // Arithmetic
 class ArithLogic_R_RR<bits<5> opcode, string instr_asm, SDNode OpNode,
-                      InstrItinClass II, bit isComm = 0>
+                      SchedWrite SC, bit isComm = 0>
   : LE1Format_R_RR<
   opcode,
   (outs CPURegs:$rd),
   (ins CPURegs:$src1, CPURegs:$src2),
   !strconcat(instr_asm, " $rd, $src1, $src2"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], II>,
-  Sched<[WriteA]> {
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>,
+  Sched<[SC]> {
     let isCommutable = isComm;
 }
 
 class ArithLogic_R_I32R<bits<5> opcode, string instr_asm, SDNode OpNode,
-                        ImmLeaf immPat, InstrItinClass II, bit isComm = 0>
+                        ImmLeaf immPat, SchedWrite SC, bit isComm = 0>
   : LE1Format_R_I32R<
   opcode,
   (outs CPURegs:$rd),
   (ins CPURegs:$src, immediate:$imm32),
   !strconcat(instr_asm, " $rd, $src, $imm32"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src, immPat:$imm32))], II>,
-  Sched<[WriteAI]> {
+  [(set CPURegs:$rd, (OpNode CPURegs:$src, immPat:$imm32))], IIAlu>,
+  Sched<[SC]> {
     let isCommutable = isComm;
 }
 
 class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
-                       ImmLeaf immPat, InstrItinClass II, bit isComm = 0>
+                       ImmLeaf immPat, SchedWrite SC, bit isComm = 0>
   : LE1Format_R_I9R<
   opcode,
   (outs CPURegs:$rd),
   (ins CPURegs:$src1, immediate:$imm9),
   !strconcat(instr_asm, " $rd, $src1, $imm9"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, immPat:$imm9))], II>,
-  Sched<[WriteA]> {
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, immPat:$imm9))], IIAlu>,
+  Sched<[SC]> {
     let isCommutable = isComm;
 }
 
@@ -492,9 +492,11 @@ class CBranch<string instr_asm, SDNode OpNode>:
 // Arithmetic and Logic Instructions
 multiclass ARITH_LOGIC<bits<5> opcode, string instr_asm, SDNode OpNode,
                        InstrItinClass II, bit isComm = 0> {
-  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, II, isComm>;
-  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, imm32, II, isComm>;
-  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, imm9, II, isComm>;
+  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteA, isComm>;
+  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, imm32, WriteAI,
+                                    isComm>;
+  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, imm9, WriteA,
+                                   isComm>;
 }
 
 defm ADD      : ARITH_LOGIC<0x0,   "add.0", add, IIAlu, 1>;
@@ -516,28 +518,37 @@ defm SHRU     : ARITH_LOGIC<0xF,   "shru.0", srl, IIAlu>;
 defm SUB      : ARITH_LOGIC<0x10,  "sub.0", sub, IIAlu>;
 defm XOR      : ARITH_LOGIC<0x11,  "xor.0", xor, IIAlu, 1>;
 
+multiclass MULTS<bits<5> opcode, string instr_asm, SDNode OpNode,
+                       InstrItinClass II, bit isComm = 0> {
+  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteM, isComm>;
+  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, imm32, WriteMI,
+                                    isComm>;
+  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, imm9, WriteM,
+                                   isComm>;
+}
+
 // i16(s1) * i16(s2)
-defm MULLL    : ARITH_LOGIC<0x12,  "mulll.0", le1_mulll, IIMul>;
+defm MULLL    : MULTS<0x12,  "mulll.0", le1_mulll, IIMul>;
 // ui16(s1) * ui16(s2)
-defm MULLLU   : ARITH_LOGIC<0x13,  "mulllu.0", le1_mulllu, IIMul>;
+defm MULLLU   : MULTS<0x13,  "mulllu.0", le1_mulllu, IIMul>;
 // i16(s1) * i16(s2 >> 16)
-defm MULLH    : ARITH_LOGIC<0x14,  "mullh.0", le1_mullh, IIMul>;
+defm MULLH    : MULTS<0x14,  "mullh.0", le1_mullh, IIMul>;
 // ui16(s1) * ui16(s2 >> 16)
-defm MULLHU   : ARITH_LOGIC<0x15,  "mullhu.0", le1_mullhu, IIMul>;
+defm MULLHU   : MULTS<0x15,  "mullhu.0", le1_mullhu, IIMul>;
 // i16(s1 >> 16) * i16(s2 >> 16)
-defm MULHH    : ARITH_LOGIC<0x16,  "mulhh.0", le1_mulhh, IIMul>;
+defm MULHH    : MULTS<0x16,  "mulhh.0", le1_mulhh, IIMul>;
 // ui16(s1 >> 16) * ui16(s2 >> 16)
-defm MULHHU   : ARITH_LOGIC<0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
+defm MULHHU   : MULTS<0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
 // s1 * i16(s2)
-defm MULL     : ARITH_LOGIC<0x18,  "mull.0", le1_mull, IIMul>;
+defm MULL     : MULTS<0x18,  "mull.0", le1_mull, IIMul>;
 // s1 * ui16(s2)
-defm MULLU    : ARITH_LOGIC<0x19,  "mullu.0", le1_mullu, IIMul>;
+defm MULLU    : MULTS<0x19,  "mullu.0", le1_mullu, IIMul>;
 // s1 * i16(s2 >> 16)
-defm MULH     : ARITH_LOGIC<0x1A,  "mulh.0", le1_mulh, IIMul>;
+defm MULH     : MULTS<0x1A,  "mulh.0", le1_mulh, IIMul>;
 // s1 * ui16(s2 >> 16)
-defm MULHU    : ARITH_LOGIC<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
+defm MULHU    : MULTS<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
 // s1 * ui16(s2 >> 16) << 16
-defm MULHS    : ARITH_LOGIC<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
+defm MULHS    : MULTS<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
 
 /*
 let isCompare = 1 in {
