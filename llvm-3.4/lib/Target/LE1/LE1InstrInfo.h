@@ -114,6 +114,10 @@ public:
     CreateTargetMIHazardRecognizer(const InstrItineraryData *II,
                                    const ScheduleDAG *DAG) const;
 
+  virtual ScheduleHazardRecognizer*
+    CreateTargetPostRAHazardRecognizer(const InstrItineraryData *II,
+                                       const ScheduleDAG *DAG) const;
+
   virtual
     bool isSchedulingBoundary(const MachineInstr *MI,
                               const MachineBasicBlock *MBB,

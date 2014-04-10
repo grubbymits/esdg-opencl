@@ -79,16 +79,17 @@ def LE1 : Target {
 //===----------------------------------------------------------------------===//
 // LE1 processors supported.
 //===----------------------------------------------------------------------===//
-def : Processor< "scalar", LE1ScalarItineraries, []>;
-def : Processor< "2w2a1m1ls1b", LE12w2a1m1ls1bItineraries, []>;
-def : Processor< "2w2a1m2ls1b", LE12w2a1m2ls1bItineraries, []>;
-def : Processor< "3w3a1m1ls1b", LE13w3a1m1ls1bItineraries, []>;
-def : Processor< "3w3a1m2ls1b", LE13w3a1m2ls1bItineraries, []>;
-def : Processor< "4w4a1m1ls1b", LE14w4a1m1ls1bItineraries, []>;
-def : Processor< "4w4a1m2ls1b", LE14w4a1m2ls1bItineraries, []>;
-def : Processor< "4w4a1m4ls1b", LE14w4a1m4ls1bItineraries, []>;
-def : Processor< "5w5a1m1ls1b", LE15w5a1m1ls1bItineraries, []>;
-def : Processor< "5w5a1m2ls1b", LE15w5a1m2ls1bItineraries, []>;
-def : Processor< "5w5a1m4ls1b", LE15w5a1m4ls1bItineraries, []>;
-def : Processor< "4w4a1m3ls1b", LE14w4a1m3ls1bItineraries, []>;
+//def : Processor< "scalar", LE1ScalarItineraries, []>;
+//def : Processor< "2w2a1m1ls1b", LE12w2a1m1ls1bItineraries, []>;
+//def : Processor< "2w2a1m2ls1b", LE12w2a1m2ls1bItineraries, []>;
+//def : Processor< "3w3a1m1ls1b", LE13w3a1m1ls1bItineraries, []>;
+//def : Processor< "3w3a1m2ls1b", LE13w3a1m2ls1bItineraries, []>;
+//def : Processor< "4w4a1m1ls1b", LE14w4a1m1ls1bItineraries, []>;
+//def : Processor< "4w4a1m2ls1b", LE14w4a1m2ls1bItineraries, []>;
+//def : Processor< "4w4a1m4ls1b", LE14w4a1m4ls1bItineraries, []>;
+//def : Processor< "5w5a1m1ls1b", LE15w5a1m1ls1bItineraries, []>;
+//def : Processor< "5w5a1m2ls1b", LE15w5a1m2ls1bItineraries, []>;
+//def : Processor< "5w5a1m4ls1b", LE15w5a1m4ls1bItineraries, []>;
+//def : Processor< "4w4a1m3ls1b", LE14w4a1m3ls1bItineraries, []>;
+def : ProcessorModel<"scalar", LE1ModelScalar, []>;
 def : ProcessorModel< "new", LE1NewModel, []>;

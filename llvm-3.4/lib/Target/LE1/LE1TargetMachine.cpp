@@ -13,8 +13,10 @@
 
 #include "LE1.h"
 #include "LE1TargetMachine.h"
+#include "LE1MachineScheduler.h"
 #include "llvm/PassManager.h"
 #include "llvm/PassSupport.h"
+#include "llvm/CodeGen/ScheduleDAGInstrs.h"
 #include "llvm/CodeGen/MachineScheduler.h"
 #include "llvm/CodeGen/SchedulerRegistry.h"
 #include "llvm/CodeGen/Passes.h"
@@ -30,6 +32,14 @@ extern "C" void LLVMInitializeLE1Target() {
   //RegisterTargetMachine<LE1v1TargetMachine> X(TheLE1Target);
   RegisterTargetMachine<LE1TargetMachine> X(TheLE1Target);
 }
+
+static ScheduleDAGInstrs *createLE1Scheduler(MachineSchedContext *C) {
+  return new ScheduleDAGMI(C, new LE1SchedStrategy(C));
+}
+
+static MachineSchedRegistry
+SchedCustomRegistry("le1", "Run LE1's custom scheduler",
+                    createLE1Scheduler);
 
 // DataLayout --> Big-endian, 32-bit pointer/ABI/alignment
 // The stack is always 8 byte aligned 
@@ -88,6 +98,11 @@ public:
   const LE1Subtarget &getLE1Subtarget() const {
     return *getLE1TargetMachine().getSubtargetImpl();
   }
+
+  virtual ScheduleDAGInstrs
+    *createMachineScheduler(MachineSchedContext *C) const {
+      return createLE1Scheduler(C);
+    }
 
   virtual bool addPreISel();
   virtual bool addInstSelector();
@@ -152,6 +167,7 @@ bool LE1PassConfig::addPreEmitPass()
 {
   addPass(createLE1ExpandPredSpillCode(getLE1TargetMachine()));
   //addPass(createLE1Packetizer(getLE1TargetMachine()));
+  addPass(createLE1MIPacker(getLE1TargetMachine()));
   return false;
 }
 

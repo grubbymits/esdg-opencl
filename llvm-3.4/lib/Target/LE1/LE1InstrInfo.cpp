@@ -458,6 +458,13 @@ CreateTargetMIHazardRecognizer(const InstrItineraryData *II,
   return new ScoreboardHazardRecognizer(II, DAG, "sched-instrs");
 }
 
+ScheduleHazardRecognizer *LE1InstrInfo::
+CreateTargetPostRAHazardRecognizer(const InstrItineraryData *II,
+                                   const ScheduleDAG *DAG) const {
+  DEBUG(dbgs() << "LE1InstrInfo::CreateTargetPostRAHazardRecognizer\n");
+  TargetInstrInfo::CreateTargetPostRAHazardRecognizer(II, DAG);
+}
+
 bool LE1InstrInfo::
 isSchedulingBoundary(const MachineInstr *MI,
                      const MachineBasicBlock *MBB,

@@ -19,6 +19,8 @@ add_llvm_target(LE1CodeGen
   LE1ISelLowering.cpp
   LE1FrameLowering.cpp
   LE1MCInstLower.cpp
+  LE1MIPacker.cpp
+  LE1MachineScheduler.cpp
   LE1RegisterInfo.cpp
   LE1Subtarget.cpp
   LE1TargetMachine.cpp
