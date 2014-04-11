@@ -36,7 +36,8 @@ LE1Subtarget::LE1Subtarget(const std::string &TT, const std::string &CPU,
   // Parse features string.
   ParseSubtargetFeatures(CPUName, FS);
   //std::cout << "SubtargetFeatures parsed\n";
-  InstrItins = getInstrItineraryForCPU(CPUName);
+  //InstrItins = getInstrItineraryForCPU(CPUName);
+  //SchedModel = getSchedModelForCPU(CPUName);
 
   // Initialize scheduling itinerary for the specified CPU.
   switch(CPU[0]) {

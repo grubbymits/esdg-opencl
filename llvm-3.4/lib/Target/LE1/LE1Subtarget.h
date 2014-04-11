@@ -39,6 +39,9 @@ public:
 
   InstrItineraryData InstrItins;
 
+private:
+  const MCSchedModel *SchedModel;
+
   bool HasExpandDiv;
   bool NeedsNops;
   unsigned issueWidth;
@@ -56,6 +59,10 @@ public:
 
   const InstrItineraryData *getInstrItineraryData() const 
   {  return &InstrItins; }
+
+  const MCSchedModel *getSchedModel() const {
+    return SchedModel;
+  }
 
   const LE1ArchEnum &getLE1ArchVersion() const { return LE1ArchVersion; }
 

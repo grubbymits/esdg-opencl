@@ -14,6 +14,8 @@
 #include "llvm/Target/TargetInstrInfo.h"
 #include "LE1.h"
 
+#include <iostream>
+
 using namespace llvm;
 
 namespace {
@@ -38,14 +40,19 @@ namespace {
     }
     static char ID;
   private:
-    ScheduleDAGInstrs *createMachineScheduler();
+    bool ResourcesAvailable(const MCSchedClassDesc *SchedDesc);
+    void AddToPacket(MachineInstr *MI);
     void EndPacket(MachineBasicBlock *MBB, MachineInstr *MI);
     bool isPseudo(MachineInstr *MI);
     bool isSolo(MachineInstr *MI);
-    const TargetSchedModel *SchedModel;
-    ScheduleHazardRecognizer *HazardRec;
-    std::vector<MachineInstr*> CurrentPacketMIs;
+
+    const MCSchedModel *SchedModel;
+    const MCSubtargetInfo *MCSubtarget;
+    std::vector<MachineInstr*> CurrentPacket;
+    unsigned CurrentPacketSize;
     std::map<MachineInstr*, SUnit*> MIToSUnit;
+    unsigned *ResourceTable;
+    unsigned NumResources;
   };
 
 }
@@ -60,6 +67,7 @@ PackerScheduler::PackerScheduler(MachineFunction &MF,
 void PackerScheduler::schedule() {
   // Build the scheduling graph.
   buildSchedGraph(0);
+  initSUnits();
 }
 
 char LE1MIPacker::ID = 0;
@@ -78,15 +86,7 @@ void LE1MIPacker::getAnalysisUsage(AnalysisUsage &AU) const {
   AU.addRequired<TargetPassConfig>();
   AU.addPreserved<MachineDominatorTree>();
   AU.addPreserved<MachineLoopInfo>();
-  //AU.addRequired<SlotIndexes>();
-  //AU.addPreserved<SlotIndexes>();
-  //AU.addRequired<LiveIntervals>();
-  //AU.addPreserved<LiveIntervals>();
   MachineFunctionPass::getAnalysisUsage(AU);
-}
-
-ScheduleDAGInstrs *LE1MIPacker::createMachineScheduler() {
-  //return PassConfig->createMachineScheduler(this);
 }
 
 bool LE1MIPacker::isPseudo(MachineInstr *MI) {
@@ -98,13 +98,56 @@ bool LE1MIPacker::isSolo(MachineInstr *MI) {
 }
 
 void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
-  DEBUG(dbgs() << "EndPacket, size = " << CurrentPacketMIs.size() << "\n");
-  if (CurrentPacketMIs.size() > 1) {
-    MachineInstr *MIFirst = CurrentPacketMIs.front();
+  DEBUG(dbgs() << "EndPacket, size = " << CurrentPacket.size() << "\n");
+  if (CurrentPacket.size() > 1) {
+    MachineInstr *MIFirst = CurrentPacket.front();
     finalizeBundle(*MBB, MIFirst, MI);
   }
-  HazardRec->AdvanceCycle();
-  CurrentPacketMIs.clear();
+  CurrentPacket.clear();
+  CurrentPacketSize = 0;
+  for (unsigned i = 0; i < NumResources; ++i)
+    ResourceTable[i] = 0;
+}
+
+void LE1MIPacker::AddToPacket(MachineInstr *MI) {
+  SUnit *SU = MIToSUnit[MI];
+  const MCSchedClassDesc *SchedDesc = SU->SchedClass;
+  const MCWriteProcResEntry *WriteProc =
+    MCSubtarget->getWriteProcResBegin(SchedDesc);
+  ResourceTable[WriteProc->ProcResourceIdx]++;
+  CurrentPacket.push_back(MI);
+  CurrentPacketSize += SU->SchedClass->NumMicroOps;
+}
+
+bool LE1MIPacker::ResourcesAvailable(const MCSchedClassDesc *SchedDesc) {
+  if (!SchedDesc) {
+    std::cout << "Failed to retrieve SchedDesc" << std::endl;
+    DEBUG(dbgs() << "Failed to retrieve SchedDesc\n");
+    return false;
+  }
+  unsigned NumMicroOps = SchedDesc->NumMicroOps;
+  std::cout << "NumMicroOps = " << NumMicroOps << std::endl;
+  std::cout << "CurrentPacketSize = " << CurrentPacketSize << std::endl;
+
+  if ((CurrentPacketSize + NumMicroOps) > SchedModel->IssueWidth) {
+    std::cout << "CurrentPacket size + MicroOps > IssueWidth"
+      << std::endl;
+    return false;
+  }
+
+  const MCWriteProcResEntry *WriteProc =
+    MCSubtarget->getWriteProcResBegin(SchedDesc);
+  unsigned ProcResId = WriteProc->ProcResourceIdx;
+  const MCProcResourceDesc *ProcRes =
+    SchedModel->getProcResource(ProcResId);
+
+  if (ProcRes->NumUnits < (ResourceTable[ProcResId] + 1)) {
+    std::cout << "No resources left" << std::endl;
+    return false;
+  }
+
+  std::cout << "Resources are available" << std::endl;
+  return true;
 }
 
 bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
@@ -112,25 +155,44 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
 
   MF = &mf;
   const TargetMachine *TM = &(MF->getTarget());
-  const TargetInstrInfo *TII = TM->getInstrInfo();
+  MCSubtarget = TM->getSubtargetImpl();
+
+  if (!MCSubtarget) {
+    std::cout << "Failed to retrieve SubtargetImpl" << std::endl;
+    DEBUG(dbgs() << "Failed to retrieve SubtargetImpl\n");
+    return false;
+  }
+
   MLI = &getAnalysis<MachineLoopInfo>();
   MDT = &getAnalysis<MachineDominatorTree>();
   PassConfig = &getAnalysis<TargetPassConfig>();
   AA = &getAnalysis<AliasAnalysis>();
-  //LIS = &getAnalysis<LiveIntervals>();
   RegClassInfo->runOnMachineFunction(*MF);
 
-  // Instantiate the selected scheduler for this target, function, and
-  // optimization level.
   OwningPtr<ScheduleDAGInstrs>
     Scheduler(new PackerScheduler(*MF, *MLI, *MDT));
 
   if (!Scheduler.get()) {
     DEBUG(dbgs() << "Failed to create ScheduleDAG\n");
+    std::cout << "Failed to create ScheduleDAG" << std::endl;
     return false;
   }
 
   DEBUG(dbgs() << "Created Schedule DAG\n");
+  SchedModel = Scheduler->getSchedModel()->getMCSchedModel();
+  if (!SchedModel) {
+    std::cout << "Failed to retrieve SchedModel" << std::endl;
+    DEBUG(dbgs() << "Failed to retreive SchedModel\n");
+    return false;
+  }
+
+  NumResources = SchedModel->getNumProcResourceKinds();
+  ResourceTable = new unsigned[NumResources];
+  std::cout << "Created ResourceTable with "
+        << SchedModel->getNumProcResourceKinds() << " entries" << std::endl;
+  DEBUG(dbgs() << "Create ResourceTable with "
+        << SchedModel->getNumProcResourceKinds() << " entries\n");
+
   // Visit all machine basic blocks.
   //
   // TODO: Visit blocks in global postorder or postorder within the bottom-up
@@ -142,16 +204,6 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
     Scheduler->enterRegion(MBB, MBB->begin(), MBB->end(),
                            std::distance(MBB->begin(), MBB->end()));
     Scheduler->schedule();
-    SchedModel = Scheduler->getSchedModel();
-    //TRI = Scheduler->TRI;
-    if (!SchedModel) {
-      DEBUG(dbgs() << "No SchedModel\n");
-      return false;
-    }
-
-    const InstrItineraryData *Itin = SchedModel->getInstrItineraries();
-    //HazardRec = TII->CreateTargetMIHazardRecognizer(Itin, Scheduler.get());
-    HazardRec = TII->CreateTargetPostRAHazardRecognizer(Itin, Scheduler.get());
 
     // Create a map of MachineInstrs to SUnits
     for (unsigned i = 0, e = Scheduler->SUnits.size(); i != e; ++i) {
@@ -175,19 +227,16 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
         continue;
       }
 
-      if (HazardRec->getHazardType(SU) == ScheduleHazardRecognizer::NoHazard) {
-        HazardRec->EmitInstruction(SU);
-      }
-      else {
+      if (ResourcesAvailable(Scheduler->getSchedClass(SU)))
+        AddToPacket(MI);
+      else
         EndPacket(MBB, MI);
-      }
     }
     EndPacket(MBB, MBB->end());
-    // HazardRec->Reset();
-    // delete HazardRec;
     Scheduler->exitRegion();
     Scheduler->finishBlock();
   }
+  delete ResourceTable;
   return true;
 }
 
