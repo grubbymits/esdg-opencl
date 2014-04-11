@@ -30,7 +30,7 @@
 
 #define GET_INSTRINFO_CTOR_DTOR
 #include "LE1GenInstrInfo.inc"
-#include "LE1GenDFAPacketizer.inc"
+//#include "LE1GenDFAPacketizer.inc"
 
 using namespace llvm;
 
@@ -434,6 +434,7 @@ void LE1InstrInfo::insertNoop(MachineBasicBlock &MBB,
   BuildMI(MBB, MI, dl, get(LE1::CLK));
 }
 
+/*
 DFAPacketizer *LE1InstrInfo::
 CreateTargetScheduleState(const TargetMachine *TM,
                            const ScheduleDAG *DAG) const {
@@ -441,6 +442,7 @@ CreateTargetScheduleState(const TargetMachine *TM,
   const InstrItineraryData *II = TM->getInstrItineraryData();
   return TM->getSubtarget<LE1GenSubtargetInfo>().createDFAPacketizer(II);
 }
+*/
 
 ScheduleHazardRecognizer *LE1InstrInfo::
 CreateTargetHazardRecognizer(const TargetMachine *TM,

@@ -102,10 +102,12 @@ public:
 
   virtual void insertNoop(MachineBasicBlock &MBB,
                           MachineBasicBlock::iterator MI) const;
- 
-  virtual 
+
+  /*
+  virtual
   DFAPacketizer* CreateTargetScheduleState(const TargetMachine *TM,
                            const ScheduleDAG *DAG) const;
+  */
 
   virtual ScheduleHazardRecognizer*
     CreateTargetHazardRecognizer(const TargetMachine *TM,

@@ -20,49 +20,64 @@ def IILoadStore : InstrItinClass;
 def IIBranch    : InstrItinClass;
 def IIPseudo    : InstrItinClass;
 
-// Functional Units
-def ALU_0   : FuncUnit;
-def MUL_0   : FuncUnit;
-def LSU_0   : FuncUnit;
-def BRU_0    : FuncUnit;
+def ALU1  : ProcResource<1>;
+def ALU2  : ProcResource<2>;
+def ALU3  : ProcResource<3>;
+def ALU4  : ProcResource<4>;
+def MULT1 : ProcResource<1>;
+def MULT2 : ProcResource<2>;
+def LSU1  : ProcResource<1>;
+def LSU2  : ProcResource<2>;
+def BRU   : ProcResource<1>;
+def IMM1  : ProcResource<1>;
+def IMM2  : ProcResource<2>;
 
-// IntAlus  - arithmetic, boolean logic, compares, shifts : latency 1-2 cycles
-// IntMuls  - multiplication : latency 2-3 cycles
-// 1Branch  - branch, calls : 5 cycles
-// LSU      - loads, store : latency 3-4 cycles
-
-//===----------------------------------------------------------------------===//
-// LE1 Generic instruction itineraries.
-//===----------------------------------------------------------------------===//
-def LE1ScalarItineraries : ProcessorItineraries<
-                            [ALU_0, MUL_0, LSU_0, BRU_0], [], [
-
-    InstrItinData<IIAlu, [
-                          InstrStage<1, [ALU_0]>], [2, 1]>,
-
-    InstrItinData<IILoadStore, [
-                                InstrStage<1, [LSU_0]>], [2, 1]>,
-
-    InstrItinData<IIMul, [
-                          InstrStage<1, [MUL_0]>], [2, 1]>,
-
-    InstrItinData<IIBranch, [
-                             InstrStage<5, [BRU_0]>], [6, 1]> ]>;
+def WriteA    : SchedWrite;
+def WriteAI   : SchedWrite;
+def WriteM    : SchedWrite;
+def WriteMI   : SchedWrite;
+def WriteLS   : SchedWrite;
+def WriteLSI  : SchedWrite;
+def WriteB    : SchedWrite;
+def WriteBI   : SchedWrite;
 
 def LE1ModelScalar : SchedMachineModel {
   let IssueWidth = 1;
   let LoadLatency = 3;
-  let Itineraries = LE1ScalarItineraries;
 }
-//include "MachineModels/LE12w2a1m1ls1b.td"
-//include "MachineModels/LE12w2a1m2ls1b.td"
-//include "MachineModels/LE13w3a1m1ls1b.td"
-//include "MachineModels/LE13w3a1m2ls1b.td"
-//include "MachineModels/LE14w4a1m1ls1b.td"
-//include "MachineModels/LE14w4a1m2ls1b.td"
-//include "MachineModels/LE14w4a1m4ls1b.td"
-//include "MachineModels/LE15w5a1m1ls1b.td"
-//include "MachineModels/LE15w5a1m2ls1b.td"
-//include "MachineModels/LE15w5a1m4ls1b.td"
-//include "MachineModels/LE14w4a1m3ls1b.td"
-include "LE1ScheduleModel.td"
+
+let SchedModel = LE1ModelScalar in {
+
+  def : WriteRes<WriteA, [ALU1]> {
+    let Latency = 2;
+  }
+  def : WriteRes<WriteAI, [ALU1, IMM1]> {
+    let Latency = 2;
+    let NumMicroOps = 2;
+  }
+  def : WriteRes<WriteM, [MULT1]> {
+    let Latency = 2;
+  }
+  def : WriteRes<WriteMI, [MULT1, IMM1]> {
+    let Latency = 2;
+    let NumMicroOps = 2;
+  }
+  def : WriteRes<WriteLS, [LSU1]> {
+    let Latency = 3;
+  }
+  def : WriteRes<WriteLSI, [LSU1, IMM1]> {
+    let Latency = 3;
+    let NumMicroOps = 2;
+  }
+  def : WriteRes<WriteB, [BRU]> {
+    let Latency = 5;
+  }
+  def : WriteRes<WriteBI, [BRU, IMM1]> {
+    let Latency = 5;
+    let NumMicroOps = 2;
+  }
+}
+
+include "MachineModels/LE1Schedule2w1m1ls.td"
+include "MachineModels/LE1Schedule3w1m1ls.td"
+include "MachineModels/LE1Schedule4w1m1ls.td"
