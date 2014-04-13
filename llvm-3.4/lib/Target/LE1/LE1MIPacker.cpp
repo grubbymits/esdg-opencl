@@ -29,6 +29,8 @@ namespace {
     void schedule();
   };
 
+  typedef std::vector<MachineInstr*>::iterator packet_iterator;
+
   class LE1MIPacker : public MachineSchedContext,
                       public MachineFunctionPass {
   public:
@@ -41,6 +43,7 @@ namespace {
     static char ID;
   private:
     bool ResourcesAvailable(const MCSchedClassDesc *SchedDesc);
+    bool PacketDependences(SUnit *NewSU);
     void AddToPacket(MachineInstr *MI);
     void EndPacket(MachineBasicBlock *MBB, MachineInstr *MI);
     bool isPseudo(MachineInstr *MI);
@@ -67,7 +70,6 @@ PackerScheduler::PackerScheduler(MachineFunction &MF,
 void PackerScheduler::schedule() {
   // Build the scheduling graph.
   buildSchedGraph(0);
-  initSUnits();
 }
 
 char LE1MIPacker::ID = 0;
@@ -150,12 +152,49 @@ bool LE1MIPacker::ResourcesAvailable(const MCSchedClassDesc *SchedDesc) {
   return true;
 }
 
-bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
+bool LE1MIPacker::PacketDependences(SUnit *NewSU) {
+  for (packet_iterator I = CurrentPacket.begin(), E = CurrentPacket.end();
+       I != E; ++I) {
+
+    SUnit *PackagedSU = MIToSUnit[*I];
+    std::cout << "Checking packet dependencies" << std::endl;
+    std::cout << "PackagedSU has " << PackagedSU->Succs.size() <<
+      " successors" << std::endl;
+    std::cout << "NewSU has " << NewSU->Succs.size() <<
+      " successors" << std::endl;
+
+    if (PackagedSU->isSucc(NewSU)) {
+      std::cout << "PackagedSU isSucc NewSU" << std::endl;
+      for (unsigned i = 0; i < PackagedSU->Succs.size(); ++i) {
+
+        if (PackagedSU->Succs[i].getSUnit() != NewSU)
+          continue;
+
+        SDep::Kind DepKind = PackagedSU->Succs[i].getKind();
+        if (DepKind == SDep::Data) {
+          std::cout << "Found dependency" << std::endl;
+          return true;
+        }
+        else if (DepKind == SDep::Order)
+          std::cout << "Order dependency" << std::endl;
+        else if (DepKind == SDep::Anti)
+          std::cout << "Anti dependency" << std::endl;
+        else if (DepKind == SDep::Output)
+          std::cout << "Output dependency" << std::endl;
+      }
+    }
+  }
+  // No data dependences found
+  std::cout << "No dependencies found" << std::endl;
+  return false;
+}
+
+bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
   DEBUG(dbgs() << "LE1MIPacker::runOnMachineFunction\n");
 
-  MF = &mf;
-  const TargetMachine *TM = &(MF->getTarget());
-  MCSubtarget = TM->getSubtargetImpl();
+  //MF = &mf;
+  const TargetMachine &TM = MF.getTarget();
+  MCSubtarget = TM.getSubtargetImpl();
 
   if (!MCSubtarget) {
     std::cout << "Failed to retrieve SubtargetImpl" << std::endl;
@@ -163,14 +202,14 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
     return false;
   }
 
-  MLI = &getAnalysis<MachineLoopInfo>();
-  MDT = &getAnalysis<MachineDominatorTree>();
+  MachineLoopInfo &MLI = getAnalysis<MachineLoopInfo>();
+  MachineDominatorTree &MDT = getAnalysis<MachineDominatorTree>();
   PassConfig = &getAnalysis<TargetPassConfig>();
   AA = &getAnalysis<AliasAnalysis>();
-  RegClassInfo->runOnMachineFunction(*MF);
+  //RegClassInfo->runOnMachineFunction(*MF);
 
   OwningPtr<ScheduleDAGInstrs>
-    Scheduler(new PackerScheduler(*MF, *MLI, *MDT));
+    Scheduler(new PackerScheduler(MF, MLI, MDT));
 
   if (!Scheduler.get()) {
     DEBUG(dbgs() << "Failed to create ScheduleDAG\n");
@@ -197,7 +236,7 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
   //
   // TODO: Visit blocks in global postorder or postorder within the bottom-up
   // loop tree. Then we can optionally compute global RegPressure.
-  for (MachineFunction::iterator MBB = MF->begin(), MBBEnd = MF->end();
+  for (MachineFunction::iterator MBB = MF.begin(), MBBEnd = MF.end();
        MBB != MBBEnd; ++MBB) {
 
     Scheduler->startBlock(MBB);
@@ -206,6 +245,7 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
     Scheduler->schedule();
 
     // Create a map of MachineInstrs to SUnits
+    MIToSUnit.clear();
     for (unsigned i = 0, e = Scheduler->SUnits.size(); i != e; ++i) {
       SUnit *SU = &Scheduler->SUnits[i];
       MIToSUnit[SU->getInstr()] = SU;
@@ -227,7 +267,8 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &mf) {
         continue;
       }
 
-      if (ResourcesAvailable(Scheduler->getSchedClass(SU)))
+      if ((ResourcesAvailable(Scheduler->getSchedClass(SU))) &&
+          (!PacketDependences(SU)))
         AddToPacket(MI);
       else
         EndPacket(MBB, MI);
