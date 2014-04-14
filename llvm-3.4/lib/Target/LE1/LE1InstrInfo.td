@@ -499,14 +499,14 @@ multiclass ARITH_LOGIC<bits<5> opcode, string instr_asm, SDNode OpNode,
                                    isComm>;
 }
 
-defm ADD      : ARITH_LOGIC<0x0,   "add.0", add, IIAlu, 1>;
-defm AND      : ARITH_LOGIC<0x1,   "and.0", and, IIAlu, 1>;
+defm ADD      : ARITH_LOGIC<0x0,   "add.0", add, IIAlu>;
+defm AND      : ARITH_LOGIC<0x1,   "and.0", and, IIAlu>;
 defm ANDC     : ARITH_LOGIC<0x2,   "andc.0", le1_andc, IIAlu>;
 defm MAXS     : ARITH_LOGIC<0x3,   "max.0", le1_maxs, IIAlu>;
 defm MAXU     : ARITH_LOGIC<0x4,   "maxu.0", le1_maxu, IIAlu>;
 defm MINS     : ARITH_LOGIC<0x5,   "min.0", le1_mins, IIAlu>;
 defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_minu, IIAlu>;
-defm OR       : ARITH_LOGIC<0x7,   "or.0",  or, IIAlu, 1>;
+defm OR       : ARITH_LOGIC<0x7,   "or.0",  or, IIAlu>;
 defm ORC      : ARITH_LOGIC<0x8,   "orc.0", le1_orc, IIAlu>;
 defm SH1ADD   : ARITH_LOGIC<0x9,   "sh1add.0", le1_sh1add, IIAlu>;
 defm SH2ADD   : ARITH_LOGIC<0xA,   "sh2add.0", le1_sh2add, IIAlu>;
@@ -516,8 +516,9 @@ defm SHL      : ARITH_LOGIC<0xD,   "shl.0", shl, IIAlu>;
 defm SHR      : ARITH_LOGIC<0xE,   "shr.0", sra, IIAlu>;
 defm SHRU     : ARITH_LOGIC<0xF,   "shru.0", srl, IIAlu>;
 defm SUB      : ARITH_LOGIC<0x10,  "sub.0", sub, IIAlu>;
-defm XOR      : ARITH_LOGIC<0x11,  "xor.0", xor, IIAlu, 1>;
+defm XOR      : ARITH_LOGIC<0x11,  "xor.0", xor, IIAlu>;
 
+// TODO Some of these are commutable
 multiclass MULTS<bits<5> opcode, string instr_asm, SDNode OpNode,
                        InstrItinClass II, bit isComm = 0> {
   def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteM, isComm>;
@@ -958,34 +959,6 @@ def : Pat<(brcond BRegs:$cond, bb:$dst),
           (BR BRegs:$cond, bb:$dst)>;
 
 /*
-// Max and Min Patterns
-multiclass MaxMinPats<Instruction OpR, Instruction OpI, CondCode CC,
-                      CondCode AltCC> {
-  def : Pat<(selectcc CPURegs:$lhs, CPURegs:$rhs, CPURegs:$lhs, CPURegs:$rhs,
-                                                                          CC),
-            (OpR CPURegs:$lhs, CPURegs:$rhs)>;
-  def : Pat<(selectcc CPURegs:$lhs, imm:$rhs, CPURegs:$lhs, imm:$rhs, CC),
-            (OpI CPURegs:$lhs, imm:$rhs)>;
-
-  def : Pat<(selectcc CPURegs:$lhs, CPURegs:$rhs, CPURegs:$rhs, CPURegs:$lhs, AltCC),
-            (OpR CPURegs:$lhs, imm:$rhs)>;
-
-  def : Pat<(selectcc CPURegs:$lhs, imm:$rhs, imm:$rhs, CPURegs:$lhs, AltCC),
-            (OpI CPURegs:$lhs, imm:$rhs)>;
-
-}
-
-defm : MaxMinPats<MAX,  MAXi,   SETGT,  SETLE>;
-defm : MaxMinPats<MAX,  MAXi,   SETGE,  SETLT>;
-defm : MaxMinPats<MIN,  MINi,   SETLT,  SETGE>;
-defm : MaxMinPats<MIN,  MINi,   SETLE,  SETGT>;
-defm : MaxMinPats<MAXU, MAXUi,  SETUGT, SETULE>;
-defm : MaxMinPats<MAXU, MAXUi,  SETUGE, SETULT>;
-defm : MaxMinPats<MINU, MINUi,  SETULT, SETUGE>;
-defm : MaxMinPats<MINU, MINUi,  SETULE, SETUGT>;
-*/
-
-
 // setcc patterns
 multiclass ExtendCmpPats<Instruction CmpOpR, Instruction CmpOpI, CondCode CC> {
   def : Pat<(anyext (setcc CPURegs:$lhs, CPURegs:$rhs, CC)),
@@ -1009,41 +982,6 @@ multiclass ExtendCmpPats<Instruction CmpOpR, Instruction CmpOpI, CondCode CC> {
             (CmpOpR CPURegs:$lhs, 0)>;
 
 }
-
-/*
-multiclass CmpPats<Instruction CmpOpR, Instruction CmpOpI, CondCode CC> {
-  // Peepholes
-  def : Pat<(setcc CPURegs:$lhs, 0, CC),
-            (CmpOpR CPURegs:$lhs, ZERO)>;
-
-  def : Pat<(setcc CPURegs:$lhs, CPURegs:$rhs, CC),
-            (CmpOpR CPURegs:$lhs, CPURegs:$rhs)>;
-  def : Pat<(setcc CPURegs:$lhs, imm:$rhs, CC),
-            (CmpOpI CPURegs:$lhs, imm:$rhs)>;
-
-}
-
-defm : ExtendCmpPats<CMPEQr,  CMPEQri,  SETEQ>;
-defm : ExtendCmpPats<CMPNEr,  CMPNEri,  SETNE>;
-defm : ExtendCmpPats<CMPLTr,  CMPLTri,  SETLT>;
-defm : ExtendCmpPats<CMPLTUr, CMPLTUri, SETULT>;
-defm : ExtendCmpPats<CMPLEr,  CMPLEri,  SETLE>;
-defm : ExtendCmpPats<CMPLEUr, CMPLEUri, SETULE>;
-defm : ExtendCmpPats<CMPGTr,  CMPGTri,  SETGT>;
-defm : ExtendCmpPats<CMPGTUr, CMPGTUri, SETUGT>;
-defm : ExtendCmpPats<CMPGEr,  CMPGEri,  SETGE>;
-defm : ExtendCmpPats<CMPGEUr, CMPGEUri, SETUGE>;
-
-defm : CmpPats<CMPEQ,   CMPEQi,   SETEQ>;
-defm : CmpPats<CMPNE,   CMPNEi,   SETNE>;
-defm : CmpPats<CMPLT,   CMPLTi,   SETLT>;
-defm : CmpPats<CMPLTU,  CMPLTUi,  SETULT>;
-defm : CmpPats<CMPLE,   CMPLEi,   SETLE>;
-defm : CmpPats<CMPLEU,  CMPLEUi,  SETULE>;
-defm : CmpPats<CMPGT,   CMPGTi,   SETGT>;
-defm : CmpPats<CMPGTU,  CMPGTUi,  SETUGT>;
-defm : CmpPats<CMPGE,   CMPGEi,   SETGE>;
-defm : CmpPats<CMPGEU,  CMPGEUi,  SETUGE>;
 */
 
 // Setcc Patterns to handle trying to compare i1s

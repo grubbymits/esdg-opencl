@@ -153,13 +153,17 @@ bool LE1PassConfig::addPreSched2() {
 }
 
 bool LE1PassConfig::addPreRegAlloc() {
-  //addPass(createLE1BBMerger(getLE1TargetMachine()));
   addPass(&MachineBlockPlacementID);
+  addPass(&MachineCSEID);
   addPass(&DeadMachineInstructionElimID);
   return false;
 }
 
 bool LE1PassConfig::addPostRegAlloc() {
+  addPass(&MachineBlockPlacementID);
+  addPass(&BranchFolderPassID);
+  addPass(&MachineCopyPropagationID);
+  addPass(&DeadMachineInstructionElimID);
   return false;
 }
 

@@ -8,9 +8,10 @@ void bitonicSort(uint * theArray,
                  const uint direction)
 {
   unsigned __esdg_idx = 0;
+  unsigned group_id = get_group_id(0);
 for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
     uint sortIncreasing = direction;
-    uint threadId = get_group_id(0) * 256 + __esdg_idx;//get_global_id(0);
+    uint threadId = group_id * 256 + __esdg_idx;//get_global_id(0);
     
     uint pairDistance = 1 << (stage - passOfStage);
     uint blockWidth   = 2 * pairDistance;

@@ -73,7 +73,6 @@ void PackerScheduler::schedule() {
 }
 
 char LE1MIPacker::ID = 0;
-//char &llvm::LE1MIPackerID = LE1MIPacker::ID;
 
 LE1MIPacker::LE1MIPacker() : MachineFunctionPass(ID) {
   DEBUG(dbgs() << "LE1MIPacker Constructor\n");
@@ -92,6 +91,9 @@ void LE1MIPacker::getAnalysisUsage(AnalysisUsage &AU) const {
 }
 
 bool LE1MIPacker::isPseudo(MachineInstr *MI) {
+  unsigned Opcode = MI->getOpcode();
+  if (MI->isTransient())
+    return true;
   return false;
 }
 
@@ -101,6 +103,7 @@ bool LE1MIPacker::isSolo(MachineInstr *MI) {
 
 void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   DEBUG(dbgs() << "EndPacket, size = " << CurrentPacket.size() << "\n");
+  std::cout << "EndPacket with " << MI->getOpcode() << std::endl;
   if (CurrentPacket.size() > 1) {
     MachineInstr *MIFirst = CurrentPacket.front();
     finalizeBundle(*MBB, MIFirst, MI);
@@ -113,6 +116,7 @@ void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
 
 void LE1MIPacker::AddToPacket(MachineInstr *MI) {
   SUnit *SU = MIToSUnit[MI];
+  std::cout << "Adding " << MI->getOpcode() << " to packet" << std::endl;
   const MCSchedClassDesc *SchedDesc = SU->SchedClass;
   const MCWriteProcResEntry *WriteProc =
     MCSubtarget->getWriteProcResBegin(SchedDesc);
@@ -127,9 +131,10 @@ bool LE1MIPacker::ResourcesAvailable(const MCSchedClassDesc *SchedDesc) {
     DEBUG(dbgs() << "Failed to retrieve SchedDesc\n");
     return false;
   }
+  std::cout << "CurrentPacketSize = " << CurrentPacketSize << std::endl;
+
   unsigned NumMicroOps = SchedDesc->NumMicroOps;
   std::cout << "NumMicroOps = " << NumMicroOps << std::endl;
-  std::cout << "CurrentPacketSize = " << CurrentPacketSize << std::endl;
 
   if ((CurrentPacketSize + NumMicroOps) > SchedModel->IssueWidth) {
     std::cout << "CurrentPacket size + MicroOps > IssueWidth"
@@ -258,7 +263,10 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
          MI != ME; ++MI) {
       SUnit *SU = MIToSUnit[MI];
 
+      std::cout << "Attempting to pack  " << MI->getOpcode() << std::endl;
+
       if (isPseudo(MI)) {
+        std::cout << "isPseudo" << std::endl;
         continue;
       }
 
@@ -272,7 +280,10 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
         AddToPacket(MI);
       else
         EndPacket(MBB, MI);
+
+      std::cout << std::endl;
     }
+    std::cout << "End of basic block\n" << std::endl;
     EndPacket(MBB, MBB->end());
     Scheduler->exitRegion();
     Scheduler->finishBlock();
