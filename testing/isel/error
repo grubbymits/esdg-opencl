@@ -1,0 +1,122 @@
+Type-legalized selection DAG: BB#8 'expm1:if.then33'
+SelectionDAG has 10 nodes:
+  0x1ce7708: ch = EntryToken [ID=-3]
+
+      0x1ce7708: <multiple use>
+          0x1ce7708: <multiple use>
+          0x1d25450: i1 = Register %vreg3 [ID=-3]
+
+        0x1d25150: i1,ch = CopyFromReg 0x1ce7708, 0x1d25450 [ORD=91] [ID=-3]
+
+        0x1d208e0: i1 = Constant<-1> [ID=-3]
+
+        0x1d1b100: ch = setne [ID=-3]
+
+      0x1d24340: i1 = setcc 0x1d25150, 0x1d208e0, 0x1d1b100 [ORD=91] [ID=-3]
+
+      0x1d1f460: ch = BasicBlock<if.else37 0x1d16910> [ID=-3]
+
+    0x1d25c50: ch = brcond 0x1ce7708, 0x1d24340, 0x1d1f460 [ORD=91] [ID=-3]
+
+    0x1d1af00: ch = BasicBlock<if.then35 0x1d16860> [ID=-3]
+
+  0x1d1b000: ch = br 0x1d25c50, 0x1d1af00 [ORD=91] [ID=-3]
+
+
+LowerBRCOND
+Legalized selection DAG: BB#8 'expm1:if.then33'
+SelectionDAG has 10 nodes:
+  0x1ce7708: ch = EntryToken [ID=0]
+
+      0x1ce7708: <multiple use>
+          0x1ce7708: <multiple use>
+          0x1d25450: i1 = Register %vreg3 [ID=1]
+
+        0x1d25150: i1,ch = CopyFromReg 0x1ce7708, 0x1d25450 [ORD=91] [ID=6]
+
+        0x1d208e0: i1 = Constant<-1> [ID=2]
+
+        0x1d1b100: ch = setne [ID=5]
+
+      0x1d24340: i1 = setcc 0x1d25150, 0x1d208e0, 0x1d1b100 [ORD=91] [ID=7]
+
+      0x1d1f460: ch = BasicBlock<if.else37 0x1d16910> [ID=3]
+
+    0x1d20ae0: ch = LE1ISD::BR 0x1ce7708, 0x1d24340, 0x1d1f460 [ORD=91]
+
+    0x1d1af00: ch = BasicBlock<if.then35 0x1d16860> [ID=4]
+
+  0x1d1b000: ch = br 0x1d20ae0, 0x1d1af00 [ORD=91] [ID=9]
+
+
+PeformDAGCombine
+PerformBRCONDCombine
+
+Replacing.3 0x1d24340: i1 = setcc 0x1d25150, 0x1d208e0, 0x1d1b100 [ORD=91] [ID=7]
+
+With: 0x1d25c50: i1 = xor 0x1d25150, 0x1d208e0 [ORD=91]
+
+PeformDAGCombine
+PerformBRCONDCombine
+Optimized legalized selection DAG: BB#8 'expm1:if.then33'
+SelectionDAG has 9 nodes:
+  0x1ce7708: ch = EntryToken [ID=0]
+
+      0x1ce7708: <multiple use>
+          0x1ce7708: <multiple use>
+          0x1d25450: i1 = Register %vreg3 [ID=1]
+
+        0x1d25150: i1,ch = CopyFromReg 0x1ce7708, 0x1d25450 [ORD=91] [ID=6]
+
+        0x1d208e0: i1 = Constant<-1> [ID=2]
+
+      0x1d25c50: i1 = xor 0x1d25150, 0x1d208e0 [ORD=91]
+
+      0x1d1f460: ch = BasicBlock<if.else37 0x1d16910> [ID=3]
+
+    0x1d20ae0: ch = LE1ISD::BR 0x1ce7708, 0x1d25c50, 0x1d1f460 [ORD=91]
+
+    0x1d1af00: ch = BasicBlock<if.then35 0x1d16860> [ID=4]
+
+  0x1d1b000: ch = br 0x1d20ae0, 0x1d1af00 [ORD=91] [ID=9]
+
+
+===== Instruction selection begins: BB#8 'if.then33'
+Selecting:146
+0x1d1b000: ch = br 0x1d20ae0, 0x1d1af00 [ORD=91] [ID=8]
+ISEL: Starting pattern match on root node: 0x1d1b000: ch = br 0x1d20ae0, 0x1d1af00 [ORD=91] [ID=8]
+
+  Initial Opcode index to 4753
+  Morphed node: 0x1d1b000: ch = GOTO 0x1d1af00, 0x1d20ae0 [ORD=91]
+
+ISEL: Match complete!
+Selecting:194
+0x1d20ae0: ch = LE1ISD::BR 0x1ce7708, 0x1d25c50, 0x1d1f460 [ORD=91] [ID=7]
+ISEL: Starting pattern match on root node: 0x1d20ae0: ch = LE1ISD::BR 0x1ce7708, 0x1d25c50, 0x1d1f460 [ORD=91] [ID=7]
+
+  Initial Opcode index to 4652
+  Morphed node: 0x1d20ae0: ch = BR 0x1d25c50, 0x1d1f460, 0x1ce7708 [ORD=91]
+
+ISEL: Match complete!
+Selecting:87
+0x1d25c50: i1 = xor 0x1d25150, 0x1d208e0 [ORD=91] [ID=6]
+ISEL: Starting pattern match on root node: 0x1d25c50: i1 = xor 0x1d25150, 0x1d208e0 [ORD=91] [ID=6]
+
+  Initial Opcode index to 1214
+  Match failed at index 1218
+  Continuing at 1245
+  Match failed at index 1263
+  Continuing at 1277
+  Match failed at index 1291
+  Continuing at 1304
+  Match failed at index 1305
+  Continuing at 1321
+  Continuing at 1322
+  Match failed at index 1323
+  Continuing at 1334
+  Continuing at 1335
+  Continuing at 1336
+LLVM ERROR: Cannot select: 0x1d25c50: i1 = xor 0x1d25150, 0x1d208e0 [ORD=91] [ID=6]
+  0x1d25150: i1,ch = CopyFromReg 0x1ce7708, 0x1d25450 [ORD=91] [ID=5]
+    0x1d25450: i1 = Register %vreg3 [ID=1]
+  0x1d208e0: i1 = Constant<-1> [ID=2]

@@ -4857,8 +4857,8 @@ namespace {
       PointerAlign = 32;
       SuitableAlign = 32;
       SizeType = UnsignedInt;
-      IntMaxType = SignedLong;
-      UIntMaxType = UnsignedLong;
+      IntMaxType = SignedInt;
+      UIntMaxType = UnsignedInt;
       IntPtrType = SignedInt;
       PtrDiffType = SignedInt;
       FloatWidth = 32;
@@ -4870,10 +4870,7 @@ namespace {
       FloatFormat = &llvm::APFloat::IEEEsingle;
       DoubleFormat = &llvm::APFloat::IEEEsingle;
       LongDoubleFormat = &llvm::APFloat::IEEEsingle;
-      DescriptionString = "E-p:32:32:32-i1:8:8-i8:8:32-"
-                          "i16:16:32-i32:32:32-i64:32:32-"
-                          "f32:32:32-f64:32:32-v64:32:32-"
-                          "v128:32:32-a0:0:32-n32";
+      //DescriptionString = "E-p:32:32:i8:8-i16:16-i32:32";
       AddrSpaceMap = &LE1OpenCLAddrSpaceMap;
     }
 
@@ -4891,8 +4888,9 @@ namespace {
     virtual bool setCPU(const std::string &Name) {
       bool CPUKnown = llvm::StringSwitch<bool>(Name)
         .Case("scalar", true)
-        .Case("2w2a2m2ls1b", true)
-        .Case("3w3a3m3ls1b", true)
+        .Case("2w1m1ls", true)
+        .Case("3w1m1ls", true)
+        .Case("4w1m1ls", true)
         .Default(false);
 
       if (CPUKnown)

@@ -153,10 +153,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   MaxStoresPerMemcpy = 100;
   MaxStoresPerMemcpyOptSize = 100;
 
-  // Load extended operations for i1 types must be promoted
-  setLoadExtAction(ISD::EXTLOAD,  MVT::i1,  Promote);
-  setLoadExtAction(ISD::ZEXTLOAD, MVT::i1,  Promote);
-  setLoadExtAction(ISD::SEXTLOAD, MVT::i1,  Promote);
 
   /*
   setCondCodeAction(ISD::SETUGT,  MVT::i1,  Expand);
@@ -172,6 +168,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   // Handle Vectors Comparisons
   // FIXME This screws with legalisation of boolean SetCC? Bug?
+  /*
   for (unsigned i = (unsigned)MVT::FIRST_VECTOR_VALUETYPE;
        i <= (unsigned)MVT::LAST_VECTOR_VALUETYPE; ++i) {
     MVT VT((MVT::SimpleValueType)i);
@@ -191,29 +188,13 @@ LE1TargetLowering(LE1TargetMachine &TM)
     setCondCodeAction(ISD::SETOGT,  VT, Expand);
     setCondCodeAction(ISD::SETOLT,  VT, Expand);
     setCondCodeAction(ISD::SETOLE,  VT, Expand);
-    setOperationAction(ISD::SETCC,   VT, Expand);
-  }
+    //setOperationAction(ISD::SETCC,   VT, Expand);
+  }*/
 
   // LE1 doesn't have extending float->double load/store
   //setLoadExtAction(ISD::EXTLOAD, MVT::f32, Expand);
   //setTruncStoreAction(MVT::f64, MVT::f32, Expand);
 
-  // LE1 Custom Operations
-  setOperationAction(ISD::SDIV,               MVT::i32,   Custom);
-  setOperationAction(ISD::UDIV,               MVT::i32,   Custom);
-  setOperationAction(ISD::SREM,               MVT::i32,   Custom);
-  setOperationAction(ISD::UREM,               MVT::i32,   Custom);
-  setOperationAction(ISD::MULHS,              MVT::i32,   Custom);
-  setOperationAction(ISD::MULHU,              MVT::i32,   Custom);
-  setOperationAction(ISD::MUL,                MVT::i32,   Custom);
-  setOperationAction(ISD::SETCC,              MVT::i32,   Custom);
-  setOperationAction(ISD::SELECT_CC,          MVT::i1,    Custom);
-  setOperationAction(ISD::SELECT_CC,          MVT::i32,   Custom);
-  setOperationAction(ISD::BRCOND,             MVT::Other, Custom);
-  setOperationAction(ISD::INTRINSIC_VOID,     MVT::Other, Custom);
-  setOperationAction(ISD::INTRINSIC_W_CHAIN,  MVT::Other, Custom);
-  setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
-  setOperationAction(ISD::Constant,           MVT::i32,   Custom);
 
     /*
   // Softfloat Floating Point Library Calls
@@ -362,7 +343,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //float64_lt_quiet
   //float64_is_signaling_nan
 
-  setOperationAction(ISD::VASTART,            MVT::Other, Custom);
 
   // FIXME This should use ADDCG and be custom
   setOperationAction(ISD::ADDE,             MVT::i32, Expand);
@@ -387,16 +367,15 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::UMUL_LOHI,        MVT::i32, Expand);
 
   setOperationAction(ISD::BR_JT,            MVT::Other, Expand);
-  setOperationAction(ISD::BR_CC,            MVT::Other, Expand);
-  setOperationAction(ISD::BR_CC,            MVT::i32,  Expand);
+  //setOperationAction(ISD::BR_CC,            MVT::Other, Expand);
   setOperationAction(ISD::BRIND,            MVT::Other, Expand);
-  //setOperationAction(ISD::SELECT_CC,         MVT::Other, Expand);
-  setOperationAction(ISD::BSWAP,            MVT::i32, Expand);
-  setOperationAction(ISD::CTPOP,            MVT::i32, Expand);
-  setOperationAction(ISD::CTTZ,             MVT::i32, Expand);
-  setOperationAction(ISD::CTLZ,             MVT::i32, Expand);
-  setOperationAction(ISD::CTTZ_ZERO_UNDEF,  MVT::i32, Expand);
-  setOperationAction(ISD::CTLZ_ZERO_UNDEF,  MVT::i32, Expand);
+
+  setOperationAction(ISD::BSWAP,            MVT::i32,   Expand);
+  setOperationAction(ISD::CTPOP,            MVT::i32,   Expand);
+  setOperationAction(ISD::CTTZ,             MVT::i32,   Expand);
+  setOperationAction(ISD::CTLZ,             MVT::i32,   Expand);
+  setOperationAction(ISD::CTTZ_ZERO_UNDEF,  MVT::i32,   Expand);
+  setOperationAction(ISD::CTLZ_ZERO_UNDEF,  MVT::i32,   Expand);
 
   setOperationAction(ISD::SHL_PARTS,        MVT::i32,   Expand);
   setOperationAction(ISD::SRA_PARTS,        MVT::i32,   Expand);
@@ -406,6 +385,22 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   //setOperationAction(ISD::EXCEPTIONADDR,     MVT::i32, Expand);
   //setOperationAction(ISD::EHSELECTION,       MVT::i32, Expand);
+
+  /*
+  setOperationAction(ISD::SETCC,            MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETUGT,            MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETUGE,            MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETULT,            MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETULE,            MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETGT,             MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETGE,             MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETLT,             MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETLE,             MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETEQ,             MVT::i64,   Expand);
+  setCondCodeAction(ISD::SETNE,             MVT::i64,   Expand);
+  setOperationAction(ISD::BUILD_PAIR,       MVT::i32,   Expand);
+  setOperationAction(ISD::BUILD_PAIR,       MVT::i64,   Expand);
+  */
 
   setOperationAction(ISD::VAARG,             MVT::Other, Expand);
   setOperationAction(ISD::VACOPY,            MVT::Other, Expand);
@@ -417,18 +412,52 @@ LE1TargetLowering(LE1TargetMachine &TM)
 
   //setOperationAction(ISD::MEMBARRIER,        MVT::Other, Custom);
   //setOperationAction(ISD::Constant,            MVT::i1, Promote); 
-  setOperationAction(ISD::SIGN_EXTEND_INREG,  MVT::i1, Expand); 
-  setOperationAction(ISD::ANY_EXTEND,         MVT::i1, Expand);
-
-  setOperationAction(ISD::ADD,                MVT::i1, Promote);
-  setOperationAction(ISD::AND,                MVT::i1, Promote);
-  setOperationAction(ISD::OR,                 MVT::i1, Promote);
-  setOperationAction(ISD::SELECT_CC,          MVT::i1, Promote);
-  setOperationAction(ISD::SRA,                MVT::i1, Promote);
-  setOperationAction(ISD::SHL,                MVT::i1, Promote);
-  setOperationAction(ISD::SRL,                MVT::i1, Promote);
-  setOperationAction(ISD::SUB,                MVT::i1, Promote);
-  setOperationAction(ISD::XOR,                MVT::i1, Promote);
+  setOperationAction(ISD::SIGN_EXTEND_INREG,  MVT::i1,    Promote);
+  setOperationAction(ISD::ANY_EXTEND,         MVT::i1,    Promote);
+  setLoadExtAction(ISD::EXTLOAD,              MVT::i1,    Promote);
+  setLoadExtAction(ISD::ZEXTLOAD,             MVT::i1,    Promote);
+  setLoadExtAction(ISD::SEXTLOAD,             MVT::i1,    Promote);
+  setOperationAction(ISD::ADD,                MVT::i1,    Promote);
+  setOperationAction(ISD::AND,                MVT::i1,    Promote);
+  setOperationAction(ISD::OR,                 MVT::i1,    Promote);
+  setOperationAction(ISD::SELECT_CC,          MVT::i1,    Promote);
+  setOperationAction(ISD::SRA,                MVT::i1,    Promote);
+  setOperationAction(ISD::SHL,                MVT::i1,    Promote);
+  setOperationAction(ISD::SRL,                MVT::i1,    Promote);
+  setOperationAction(ISD::SUB,                MVT::i1,    Promote);
+  setOperationAction(ISD::XOR,                MVT::i1,    Promote);
+  /*
+  setOperationAction(ISD::SETCC,              MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETUGT,              MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETUGE,              MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETULT,              MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETULE,              MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETGT,               MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETGE,               MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETLT,               MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETLE,               MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETEQ,               MVT::i1,    Promote);
+  setCondCodeAction(ISD::SETNE,               MVT::i1,    Promote);
+  */
+  // LE1 Custom Operations
+  setOperationAction(ISD::SDIV,               MVT::i32,   Custom);
+  setOperationAction(ISD::UDIV,               MVT::i32,   Custom);
+  setOperationAction(ISD::SREM,               MVT::i32,   Custom);
+  setOperationAction(ISD::UREM,               MVT::i32,   Custom);
+  setOperationAction(ISD::MULHS,              MVT::i32,   Custom);
+  setOperationAction(ISD::MULHU,              MVT::i32,   Custom);
+  setOperationAction(ISD::MUL,                MVT::i32,   Custom);
+  //setOperationAction(ISD::SETCC,              MVT::i1,    Custom);
+  setOperationAction(ISD::SETCC,              MVT::i32,   Custom);
+  setOperationAction(ISD::SELECT_CC,          MVT::i1,    Custom);
+  setOperationAction(ISD::SELECT_CC,          MVT::i32,   Custom);
+  setOperationAction(ISD::BRCOND,             MVT::Other, Custom);
+  setOperationAction(ISD::BR_CC,              MVT::i32,   Custom);
+  setOperationAction(ISD::INTRINSIC_VOID,     MVT::Other, Custom);
+  setOperationAction(ISD::INTRINSIC_W_CHAIN,  MVT::Other, Custom);
+  setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
+  setOperationAction(ISD::Constant,           MVT::i32,   Custom);
+  setOperationAction(ISD::VASTART,            MVT::Other, Custom);
 
   setTargetDAGCombine(ISD::ADD);
   setTargetDAGCombine(ISD::AND);
@@ -569,6 +598,50 @@ static inline SDValue getMulOperand(SDValue Op) {
     return Op.getOperand(0);
   else
     return Op;
+}
+
+static SDValue CreateTargetCompare(SelectionDAG &DAG, SDLoc dl, EVT VT,
+                                   SDValue LHS, SDValue RHS, SDValue Cond) {
+  ISD::CondCode CC = cast<CondCodeSDNode>(Cond)->get();
+  unsigned Opcode = 0;
+  switch(CC) {
+  default:
+    DEBUG(dbgs() << "Unhandled CondCode in CreateTargetCompare\n");
+    return DAG.getNode(ISD::SETCC, dl, VT, LHS, RHS, Cond);
+  case ISD::SETEQ:
+    Opcode = LE1ISD::CMPEQ;
+    break;
+  case ISD::SETNE:
+    Opcode = LE1ISD::CMPNE;
+    break;
+  case ISD::SETLT:
+    Opcode = LE1ISD::CMPLT;
+    break;
+  case ISD::SETULT:
+    Opcode = LE1ISD::CMPLTU;
+    break;
+  case ISD::SETLE:
+    Opcode = LE1ISD::CMPLE;
+    break;
+  case ISD::SETULE:
+    Opcode = LE1ISD::CMPLEU;
+    break;
+  case ISD::SETGT:
+    Opcode = LE1ISD::CMPGT;
+    break;
+  case ISD::SETUGT:
+    Opcode = LE1ISD::CMPGTU;
+    break;
+  case ISD::SETGE:
+    Opcode = LE1ISD::CMPGE;
+    break;
+  case ISD::SETUGE:
+    Opcode = LE1ISD::CMPGEU;
+    break;
+  }
+
+  DEBUG(dbgs() << "Created TargetCompare\n");
+  return DAG.getNode(Opcode, dl, VT, LHS, RHS);
 }
 
 SDValue static PerformADDCombine(SDNode *N, SelectionDAG &DAG) {
@@ -853,6 +926,7 @@ SDValue static PerformZERO_EXTENDCombine(SDNode *N,
   SDLoc dl(N);
   SDValue Op = N->getOperand(0);
   unsigned Opcode = Op.getOpcode();
+  DEBUG(dbgs() << "PerformZERO_EXTENDCombine\n");
 
   // TODO Maybe we should lower SETCC nodes to our specific ones, and also
   // combine them here too.
@@ -869,10 +943,30 @@ SDValue static PerformZERO_EXTENDCombine(SDNode *N,
       (Opcode == LE1ISD::CMPLEU) ||
       (Opcode == LE1ISD::CMPLT) ||
       (Opcode == LE1ISD::CMPLTU) ||
-      (Opcode == LE1ISD::CMPNE))
+      (Opcode == LE1ISD::CMPNE)) {
+    DEBUG(dbgs() << "PerformZERO_EXTENDCombine to i32 instead of i1\n");
     return DAG.getNode(Opcode, dl, MVT::i32, Op.getOperand(0),
                        Op.getOperand(1));
+  }
   return SDValue(N, 0);
+}
+
+SDValue static PerformLE1BRCombine(SDNode *N,
+                                   SelectionDAG &DAG) {
+  DEBUG(dbgs() << "PerformBRCONDCombine\n");
+  if (N->getOperand(0).getOpcode() != ISD::SETCC)
+    return SDValue(N, 0);
+
+  SDLoc dl(N);
+  SDValue Setcc = N->getOperand(0);
+  SDValue Cond = CreateTargetCompare(DAG, dl, MVT::i1,
+                                     Setcc->getOperand(0),
+                                     Setcc->getOperand(1),
+                                     Setcc->getOperand(2));
+
+  DEBUG(dbgs() << "Combined to LE1ISD::BR with a TargetCombine\n");
+  return DAG.getNode(LE1ISD::BR, dl, MVT::Other, Cond, N->getOperand(1),
+                     N->getOperand(2));
 }
 
 SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
@@ -893,6 +987,7 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
   case ISD::MUL:          return PerformMULCombine(N, DAG);
   case ISD::SHL:          return PerformSHLCombine(N, DAG);
   case ISD::SELECT_CC:    return PerformSELECT_CCCombine(N, DAG);
+  case LE1ISD::BR:        return PerformLE1BRCombine(N, DAG);
   case ISD::ZERO_EXTEND:  return PerformZERO_EXTENDCombine(N, DAG);
   }
   return SDValue(N, 0);
@@ -920,6 +1015,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
     case ISD::VASTART:            return LowerVASTART(Op, DAG);
     case ISD::SELECT_CC:          return LowerSELECT_CC(Op, DAG);
     case ISD::SETCC:              return LowerSETCC(Op, DAG);
+    case ISD::BR_CC:              return LowerBR_CC(Op, DAG);
     case ISD::BRCOND:             return LowerBRCOND(Op, DAG);
     case ISD::FRAMEADDR:          return LowerFRAMEADDR(Op, DAG);
     case ISD::INTRINSIC_VOID:
@@ -1305,88 +1401,11 @@ DivStep(SDValue DivArg1, SDValue DivArg2, SDValue DivCin, SDValue AddArg,
   }
 }
 
-static SDValue CreateTargetCompare(SelectionDAG &DAG, SDLoc dl, EVT VT,
-                                   SDValue LHS, SDValue RHS, SDValue Cond) {
-  ISD::CondCode CC = cast<CondCodeSDNode>(Cond)->get();
-  unsigned Opcode = 0;
-  switch(CC) {
-  default:
-    DEBUG(dbgs() << "Unhandled CondCode in CreateTargetCompare\n");
-    return DAG.getNode(ISD::SETCC, dl, VT, LHS, RHS, Cond);
-  case ISD::SETEQ:
-    Opcode = LE1ISD::CMPEQ;
-    break;
-  case ISD::SETNE:
-    Opcode = LE1ISD::CMPNE;
-    break;
-  case ISD::SETLT:
-    Opcode = LE1ISD::CMPLT;
-    break;
-  case ISD::SETULT:
-    Opcode = LE1ISD::CMPLTU;
-    break;
-  case ISD::SETLE:
-    Opcode = LE1ISD::CMPLE;
-    break;
-  case ISD::SETULE:
-    Opcode = LE1ISD::CMPLEU;
-    break;
-  case ISD::SETGT:
-    Opcode = LE1ISD::CMPGT;
-    break;
-  case ISD::SETUGT:
-    Opcode = LE1ISD::CMPGTU;
-    break;
-  case ISD::SETGE:
-    Opcode = LE1ISD::CMPGE;
-    break;
-  case ISD::SETUGE:
-    Opcode = LE1ISD::CMPGEU;
-    break;
-  }
-  // Can't seem to stop LLVM from trying to compare i1 values, and we
-  // can't compare i1's easily, these used to get lowered to a combination
-  // of moves to and from branch registers. The only way I can think of handling
-  // it is my manually promoting to i32's and use AND to trunc the value(s)
-  // stored in registers.
-  /*
-  if (LHS.getValueType() == MVT::i1) {
-    SDValue NewLHS;
-    SDValue NewRHS;
-    if (ConstantSDNode* CSN = dyn_cast<ConstantSDNode>(LHS)) {
-      NewLHS = DAG.getTargetConstant(CSN->getZExtValue(), MVT::i32);
-      SDValue Promoted = DAG.getNode(RHS.getOpcode(), dl, MVT::i32,
-                                     RHS.getOperand(0), RHS.getOperand(1));
-      NewRHS = DAG.getNode(ISD::AND, dl, MVT::i32, Promoted,
-                           DAG.getTargetConstant(0xFFFFFFFF, MVT::i32));
-    }
-    else if (ConstantSDNode* CSN = dyn_cast<ConstantSDNode>(RHS)) {
-      NewRHS = DAG.getTargetConstant(CSN->getZExtValue(), MVT::i32);
-      SDValue Promoted = DAG.getNode(LHS.getOpcode(), dl, MVT::i32,
-                                     LHS.getOperand(0), LHS.getOperand(1));
-      NewLHS = DAG.getNode(ISD::AND, dl, MVT::i32, Promoted,
-                           DAG.getTargetConstant(0xFFFFFFFF, MVT::i32));
-    }
-    else {
-      SDValue PromotedL = DAG.getNode(LHS.getOpcode(), dl, MVT::i32,
-                                      LHS.getOperand(0), LHS.getOperand(1));
-      SDValue PromotedR = DAG.getNode(RHS.getOpcode(), dl, MVT::i32,
-                                      RHS.getOperand(0), RHS.getOperand(1));
-      NewRHS = DAG.getNode(ISD::AND, dl, MVT::i32, PromotedR,
-                           DAG.getTargetConstant(0xFFFFFFFF, MVT::i32));
-      NewLHS = DAG.getNode(ISD::AND, dl, MVT::i32, PromotedL,
-                           DAG.getTargetConstant(0xFFFFFFFF, MVT::i32));
-    }
-    return DAG.getNode(Opcode, dl, VT, NewLHS, NewRHS);
-  }*/
-
-  return DAG.getNode(Opcode, dl, VT, LHS, RHS);
-}
 
 SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
                                       SelectionDAG &DAG) const {
-  SDValue LHS = Op.getOperand(1);
-  SDValue RHS = Op.getOperand(2);
+  SDValue LHS = Op.getOperand(0);
+  SDValue RHS = Op.getOperand(1);
   SDLoc dl(Op.getNode());
   SDNode* Node = Op.getNode();
   ISD::CondCode CC = cast<CondCodeSDNode>(Node->getOperand(2))->get();
@@ -1402,26 +1421,39 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
         else if (CC == ISD::SETNE)
           Opcode = LE1ISD::ORL;
         else
-          return SDValue();
+          return Op;
 
+        DEBUG(dbgs() << "LowerSETCC to " << getTargetNodeName(Opcode)
+              << "\n");
         return DAG.getNode(Opcode, dl, Op.getValueType(), LHS, RHS);
       }
     }
   }
+  DEBUG(dbgs() << "LowerSETCC to TargetCompare\n");
   return CreateTargetCompare(DAG, dl, Op.getValueType(), LHS, RHS,
-                             Op.getOperand(3));
+                             Op.getOperand(2));
   //return SDValue();
 }
 
 SDValue LE1TargetLowering::LowerBRCOND(SDValue Op, SelectionDAG &DAG) const {
-  SDValue Chain = Op.getOperand(0);
-  SDValue Dest = Op.getOperand(2);
+  DEBUG(dbgs() << "LowerBRCOND\n");
   SDLoc dl(Op.getNode());
+  SDValue Chain = Op.getOperand(0);
+  SDValue Cond = Op.getOperand(1);
+  SDValue Dest = Op.getOperand(2);
+
+  return DAG.getNode(LE1ISD::BR, dl, MVT::Other, Chain, Cond, Dest);
+}
+
+SDValue LE1TargetLowering::LowerBR_CC(SDValue Op, SelectionDAG &DAG) const {
+  DEBUG(dbgs() << "LowerBR_CC\n");
+  SDLoc dl(Op.getNode());
+  SDValue Chain = Op.getOperand(0);
   SDValue CC = Op.getOperand(1);
-  SDValue Cond = CreateTargetCompare(DAG, dl, CC.getValueType(),
-                                     CC.getOperand(0),
-                                     CC.getOperand(1),
-                                     CC.getOperand(2));
+  SDValue LHS = Op.getOperand(2);
+  SDValue RHS = Op.getOperand(3);
+  SDValue Dest = Op.getOperand(4);
+  SDValue Cond = CreateTargetCompare(DAG, dl, MVT::i1, LHS, RHS, CC);
 
   return DAG.getNode(LE1ISD::BR, dl, Op.getValueType(), Chain, Cond, Dest);
 }
