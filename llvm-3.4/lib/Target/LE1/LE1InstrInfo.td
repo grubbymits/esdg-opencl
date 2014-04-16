@@ -218,7 +218,6 @@ def addr_i32  : ComplexPattern<iPTR, 2, "SelectAddri32", [frameindex], []>;
 //===----------------------------------------------------------------------===//
 // Pattern fragment for load/store
 //===----------------------------------------------------------------------===//
-
 //===----------------------------------------------------------------------===//
 // Instructions specific format
 //===----------------------------------------------------------------------===//
@@ -629,6 +628,13 @@ def : Pat<(sext_inreg CPURegs:$src, i8),
 def : Pat<(sext_inreg CPURegs:$src, i16),
           (SXTH CPURegs:$src)>;
 
+/*
+multiclass LOADS<bits<4> opc, string instr_asm, SDNode OpNode> {
+  def NAME#i32  : LoadMem_I32<opc, instr_asm, OpNode>;
+  def NAME#i12  : LoadMem_I12<opc, instr_asm, OpNode>;
+  def NAME#i8   : LoadMem_I8<opc, instr_asm, OpNode>;
+}
+*/
 
 def LDSBi32   : LoadMem_I32<0x3, "ldb.0",  sextloadi8>;
 def LDUBi32   : LoadMem_I32<0x7, "ldbu.0", zextloadi8>;
@@ -648,6 +654,16 @@ def LDSBi8    : LoadMem_I8<0x1,"ldb.0",  sextloadi8>;
 def LDUHi8    : LoadMem_I8<0x2, "ldhu.0", zextloadi16>;
 def LDSHi8    : LoadMem_I8<0x3, "ldh.0",  sextloadi16>;
 def LDWi8     : LoadMem_I8<0x4, "ldw.0",  load>;
+
+// Patterns to happen extending loads
+def : Pat<(extloadi8 addr_i8:$addr),
+          (LDUBi8 addr_i8:$addr)>;
+def : Pat<(extloadi8 addr_i12:$addr),
+          (LDUBi12 addr_i12:$addr)>;
+def : Pat<(extloadi16 addr_i8:$addr),
+          (LDUHi8 addr_i8:$addr)>;
+def : Pat<(extloadi16 addr_i12:$addr),
+          (LDUHi12 addr_i12:$addr)>;
 
 def STBi32    : StoreMem_I32<0x0, "stb.0", truncstorei8>;
 def STHi32    : StoreMem_I32<0x1, "sth.0", truncstorei16>;

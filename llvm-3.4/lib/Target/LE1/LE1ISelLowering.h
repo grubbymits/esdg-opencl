@@ -161,6 +161,7 @@ namespace llvm {
     SDValue LowerBRCOND(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerBR_CC(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerSETCC(SDValue Op, SelectionDAG &DAG) const;
+    SDValue LowerSELECT(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerINTRINSIC_WO_CHAIN(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerIntrinsicWChain(SDValue Op, SelectionDAG &DAG) const;

@@ -101,6 +101,8 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
   case LE1ISD::ADDCG:         return "LE1ISD::ADDCG";
   case LE1ISD::DIVS:          return "LE1ISD::DIVS";
 
+  //case LE1ISD::SLCT:          return "LE1ISD::SLCT";
+  case LE1ISD::SLCTF:         return "LE1ISD::SLCTF";
   case LE1ISD::MAXS:           return "LE1ISD::MAXS";
   case LE1ISD::MAXU:           return "LE1ISD::MAXU";
   case LE1ISD::MINS:           return "LE1ISD::MINS";
@@ -449,7 +451,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::MUL,                MVT::i32,   Custom);
   //setOperationAction(ISD::SETCC,              MVT::i1,    Custom);
   setOperationAction(ISD::SETCC,              MVT::i32,   Custom);
-  setOperationAction(ISD::SELECT_CC,          MVT::i1,    Custom);
+  setOperationAction(ISD::SELECT,             MVT::i32,   Custom);
+  //setOperationAction(ISD::SELECT_CC,          MVT::i1,    Custom);
   setOperationAction(ISD::SELECT_CC,          MVT::i32,   Custom);
   setOperationAction(ISD::BRCOND,             MVT::Other, Custom);
   setOperationAction(ISD::BR_CC,              MVT::i32,   Custom);
@@ -692,10 +695,15 @@ SDValue static PerformANDCombine(SDNode *N, SelectionDAG &DAG) {
   SDLoc dl(N);
   EVT VT = N->getValueType(0);
 
-  // ANDC
-  if (RHS.getOpcode() == ISD::XOR)
-    if (isNeg1(RHS.getOperand(1)))
-      return DAG.getNode(LE1ISD::ANDC, dl, VT, LHS, RHS.getOperand(0));
+  // ANDC = ~(LHS) & RHS
+  if ((RHS.getOpcode() == ISD::XOR) &&
+      (isNeg1(RHS.getOperand(1)))) {
+    return DAG.getNode(LE1ISD::ANDC, dl, VT, LHS, RHS.getOperand(0));
+  }
+  else if ((LHS.getOpcode() == ISD::XOR) &&
+           (isNeg1(LHS.getOperand(1)))) {
+    return DAG.getNode(LE1ISD::ANDC, dl, VT, RHS, LHS.getOperand(0));
+  }
 
   // NANDL = and (or (any_extend (select_cc a, 0, -1, 0, b, seteq)),
   //                 (any_extend (select_cc c, 0, -1, 0, d, seteq))),
@@ -783,12 +791,18 @@ SDValue static PerformANDCombine(SDNode *N, SelectionDAG &DAG) {
 SDValue static PerformORCombine(SDNode *N, SelectionDAG &DAG) {
   SDLoc dl(N);
   EVT VT = N->getValueType(0);
+  SDValue LHS = N->getOperand(0);
+  SDValue RHS = N->getOperand(1);
 
-  if (N->getOperand(1).getOpcode() == ISD::XOR) {
-    SDValue Xor = N->getOperand(1);
-    if (isNeg1(Xor.getOperand(1)))
-      return DAG.getNode(LE1ISD::ORC, dl, VT, N->getOperand(0),
-                         Xor.getOperand(0));
+  if (RHS.getOpcode() == ISD::XOR) {
+    if (isNeg1(RHS.getOperand(1)))
+      return DAG.getNode(LE1ISD::ORC, dl, VT, LHS,
+                         RHS.getOperand(0));
+  }
+  else if (LHS.getOpcode() == ISD::XOR) {
+    if (isNeg1(LHS.getOperand(1)))
+      return DAG.getNode(LE1ISD::ORC, dl, VT, RHS,
+                         LHS.getOperand(0));
   }
   return SDValue(N, 0);
 }
@@ -1014,6 +1028,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
     case ISD::UREM:               return LowerUREM(Op, DAG);
     case ISD::VASTART:            return LowerVASTART(Op, DAG);
     case ISD::SELECT_CC:          return LowerSELECT_CC(Op, DAG);
+    case ISD::SELECT:             return LowerSELECT(Op, DAG);
     case ISD::SETCC:              return LowerSETCC(Op, DAG);
     case ISD::BR_CC:              return LowerBR_CC(Op, DAG);
     case ISD::BRCOND:             return LowerBRCOND(Op, DAG);
@@ -1442,6 +1457,9 @@ SDValue LE1TargetLowering::LowerBRCOND(SDValue Op, SelectionDAG &DAG) const {
   SDValue Cond = Op.getOperand(1);
   SDValue Dest = Op.getOperand(2);
 
+  if (Cond.getValueType() == MVT::i32)
+    Cond = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, Cond);
+
   return DAG.getNode(LE1ISD::BR, dl, MVT::Other, Chain, Cond, Dest);
 }
 
@@ -1456,6 +1474,24 @@ SDValue LE1TargetLowering::LowerBR_CC(SDValue Op, SelectionDAG &DAG) const {
   SDValue Cond = CreateTargetCompare(DAG, dl, MVT::i1, LHS, RHS, CC);
 
   return DAG.getNode(LE1ISD::BR, dl, Op.getValueType(), Chain, Cond, Dest);
+}
+
+SDValue LE1TargetLowering::LowerSELECT(SDValue Op, SelectionDAG &DAG) const {
+  EVT VT = Op.getValueType();
+  SDLoc dl(Op.getNode());
+  SDValue Op0 = Op.getOperand(0);
+  SDValue Op1 = Op.getOperand(1);
+  SDValue Op2 = Op.getOperand(2);
+
+  // Move value to predicate register
+  if (Op0.getValueType() != MVT::i1)
+    Op0 = DAG.getNode(ISD::TRUNCATE, dl, MVT::i1, Op0);
+
+  // Immediates can only be the RHS, so use slctf
+  if (dyn_cast<ConstantSDNode>(Op1))
+    return DAG.getNode(LE1ISD::SLCTF, dl, MVT::i32, Op0, Op2, Op1);
+  else
+    return Op;
 }
 
 SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
@@ -1525,7 +1561,16 @@ SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
     SDValue Cmp = CreateTargetCompare(DAG, dl, MVT::i1, Op0, Op1, Op4);
     DEBUG(dbgs() << "Lowered selectcc to" << getTargetNodeName(Cmp.getOpcode())
           << " and SELECT\n");
-    return DAG.getNode(ISD::SELECT, dl, VT, Cmp, Op2, Op3);
+
+    if (Op2.getValueType() == MVT::i1)
+      Op2 = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, Op2);
+    if (Op3.getValueType() == MVT::i1)
+      Op3 = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, Op3);
+
+    if (dyn_cast<ConstantSDNode>(Op2))
+      return DAG.getNode(LE1ISD::SLCTF, dl, VT, Cmp, Op3, Op2);
+    else
+      return DAG.getNode(ISD::SELECT, dl, VT, Cmp, Op2, Op3);
   }
 }
 
