@@ -145,13 +145,13 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
 
     // The address may be stored in a single register
     if (LHS.getValueType() == MVT::Other) {
+      std::cout << "SelectAddri8 pass with MVT::Other" << std::endl;
       Base = RHS;
-      std::cout << "MVT::OTHER?!" << std::endl;
       return true;
     }
     else if (RHS.getValueType() == MVT::Other) {
+      std::cout << "SelectAddri8 pass with MVT::Other" << std::endl;
       Base = LHS;
-      std::cout << "MVT::OTHER?!" << std::endl;
       return true;
     }
 
@@ -160,9 +160,22 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
     // whether we are adding the result of a shift, if so we can possibly use
     // one of our SHADD instructions.
     if ((LHS.getOpcode() != ISD::SHL) && (RHS.getOpcode() != ISD::SHL)) {
-      Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
-      std::cout << "Creating ADDr node for address, SelectAddri8 pass"
-        << std::endl;
+      std::cout << "LHS = ";
+      //LHS.dump();
+      std::cout << "RHS = ";
+      //RHS.dump();
+      if (RHS.getOpcode() == ISD::UNDEF)
+        Base = LHS;
+      else {
+        Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
+        std::cout << "Creating ADDr node for address, SelectAddri8 pass"
+          << std::endl;
+        std::cout << "Base = " << std::endl;
+        //Base.dump();
+        std::cout << "Offset = " << std::endl;
+        //Offset.dump();
+        return true;
+      }
       return true;
     }
     else {

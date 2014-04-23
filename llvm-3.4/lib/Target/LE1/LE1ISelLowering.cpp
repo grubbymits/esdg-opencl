@@ -461,6 +461,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
   setOperationAction(ISD::Constant,           MVT::i32,   Custom);
   setOperationAction(ISD::VASTART,            MVT::Other, Custom);
+  setOperationAction(ISD::GlobalAddress,      MVT::i32,   Custom);
 
   setTargetDAGCombine(ISD::ADD);
   setTargetDAGCombine(ISD::AND);
@@ -794,6 +795,13 @@ SDValue static PerformORCombine(SDNode *N, SelectionDAG &DAG) {
   SDValue LHS = N->getOperand(0);
   SDValue RHS = N->getOperand(1);
 
+  // Had problems with i1 being compared, may also have to duplicate this
+  // for other lowered instructions.
+  if (LHS.getValueType() == MVT::i1)
+    LHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, LHS);
+  if (RHS.getValueType() == MVT::i1)
+    RHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, RHS);
+
   if (RHS.getOpcode() == ISD::XOR) {
     if (isNeg1(RHS.getOperand(1)))
       return DAG.getNode(LE1ISD::ORC, dl, VT, LHS,
@@ -967,12 +975,12 @@ SDValue static PerformZERO_EXTENDCombine(SDNode *N,
 
 SDValue static PerformLE1BRCombine(SDNode *N,
                                    SelectionDAG &DAG) {
-  DEBUG(dbgs() << "PerformBRCONDCombine\n");
-  if (N->getOperand(0).getOpcode() != ISD::SETCC)
+  DEBUG(dbgs() << "PerformLE1BRCombine\n");
+  if (N->getOperand(1).getOpcode() != ISD::SETCC)
     return SDValue(N, 0);
 
   SDLoc dl(N);
-  SDValue Setcc = N->getOperand(0);
+  SDValue Setcc = N->getOperand(1);
   SDValue Cond = CreateTargetCompare(DAG, dl, MVT::i1,
                                      Setcc->getOperand(0),
                                      Setcc->getOperand(1),
@@ -1037,6 +1045,7 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
     case ISD::INTRINSIC_W_CHAIN:  return LowerIntrinsicWChain(Op, DAG);
     case ISD::INTRINSIC_WO_CHAIN: return LowerINTRINSIC_WO_CHAIN(Op, DAG);
     case ISD::Constant:           return LowerConstant(Op, DAG);
+    case ISD::GlobalAddress:      return LowerGlobalAddress(Op, DAG);
   }
   return Op;
 }
@@ -1457,6 +1466,10 @@ SDValue LE1TargetLowering::LowerBRCOND(SDValue Op, SelectionDAG &DAG) const {
   SDValue Cond = Op.getOperand(1);
   SDValue Dest = Op.getOperand(2);
 
+  if (Cond.getOpcode() == ISD::SETCC)
+    Cond = CreateTargetCompare(DAG, dl, MVT::i1, Cond.getOperand(0),
+                               Cond.getOperand(1), Cond.getOperand(2));
+
   if (Cond.getValueType() == MVT::i32)
     Cond = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, Cond);
 
@@ -1703,6 +1716,14 @@ SDValue LE1TargetLowering::LowerConstant(SDValue Op, SelectionDAG &DAG) const {
   //if (CSN->getZExtValue() == 0)
     //return DAG.getRegister(LE1::ZERO, MVT::i32);
   return Op;
+}
+
+SDValue
+LE1TargetLowering::LowerGlobalAddress(SDValue Op, SelectionDAG &DAG) const {
+  SDLoc dl(Op.getNode());
+  GlobalAddressSDNode *GA = dyn_cast<GlobalAddressSDNode>(Op);
+  return DAG.getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32,
+                                    GA->getOffset());
 }
 
 SDValue LE1TargetLowering::LowerVASTART(SDValue Op, SelectionDAG &DAG) const {

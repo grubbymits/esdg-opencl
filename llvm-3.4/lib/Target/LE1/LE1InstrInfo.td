@@ -760,12 +760,15 @@ let AddedComplexity = 100 in {
 def MOVg : LE1Inst<(outs CPURegs:$dst), (ins globaladdress:$addr),
                     "mov.0 $dst, $addr",
                     [(set CPURegs:$dst, (le1_targetglobal tglobaladdr:$addr))],
-                    IIAlu>;
+                    IIAlu>, Sched<[WriteAI]>;
 def MOVg2 : LE1Inst<(outs CPURegs:$dst), (ins globaladdress:$addr),
                     "mov.0 $dst, $addr",
                     [(set CPURegs:$dst, (le1_globalconst tglobaladdr:$addr))],
                     IIAlu>;
 }
+
+def : Pat<(tglobaladdr:$addr),
+          (MOVg tglobaladdr:$addr)>;
 
 //let Defs = [L0] in
 def LDL : LE1Inst<(outs LReg:$dst),
@@ -1097,6 +1100,11 @@ def : Pat<(select (i1 BRegs:$cond), (i32 0), imm:$F),
           (SLCTri BRegs:$cond, ZERO, imm:$F)>;
 */
 
+def : Pat<(zext (trunc CPURegs:$src)),
+          (ORLr CPURegs:$src, ZERO)>;
+def : Pat<(anyext (trunc CPURegs:$src)),
+          (ORLr CPURegs:$src, ZERO)>;
+
 // Branch Regs Move Patterns
 def : Pat<(zext BRegs:$src),
           (MFB BRegs:$src)>;
@@ -1116,7 +1124,6 @@ def : Pat<(i1 -1),
           (MTBF ZERO)>;
 def : Pat<(anyext BRegs:$in),
           (MFB BRegs:$in)>;
-
 
 // Peepholes using the zero reg
 //def : Pat<(i32 0),
