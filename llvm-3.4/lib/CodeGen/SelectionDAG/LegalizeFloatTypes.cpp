@@ -743,8 +743,20 @@ SDValue DAGTypeLegalizer::SoftenFloatOp_SETCC(SDNode *N) {
 
   // If softenSetCCOperands returned a scalar, use it.
   if (NewRHS.getNode() == 0) {
-    assert(NewLHS.getValueType() == N->getValueType(0) &&
-           "Unexpected setcc expansion!");
+    if (NewLHS.getValueType() == MVT::i1)
+      DEBUG(dbgs() << "NewLHS = MVT::i1\n");
+    else if (NewLHS.getValueType() == MVT::f32)
+      DEBUG(dbgs() << "NewLHS == MVT::f32\n");
+    else if (NewLHS.getValueType() == MVT::i32)
+      DEBUG(dbgs() << "NewLHS == MVT::i32\n");
+    if (N->getValueType(0) == MVT::i1)
+      DEBUG(dbgs() << "N == MVT::i1\n");
+    if (N->getValueType(0) == MVT::i32)
+      DEBUG(dbgs() << "N == MVT::i32\n");
+    if (N->getValueType(0) == MVT::f32)
+      DEBUG(dbgs() << "N == MVT::f32\n");
+    //assert(NewLHS.getValueType() == N->getValueType(0) &&
+      //     "Unexpected setcc expansion!");
     return NewLHS;
   }
 

@@ -155,6 +155,8 @@ LE1TargetLowering(LE1TargetMachine &TM)
   MaxStoresPerMemcpy = 100;
   MaxStoresPerMemcpyOptSize = 100;
 
+  setBooleanContents(ZeroOrOneBooleanContent);
+  //AddPromotedToType(ISD::SETCC, MVT::i1, MVT::i32);
 
   /*
   setCondCodeAction(ISD::SETUGT,  MVT::i1,  Expand);
@@ -198,7 +200,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setTruncStoreAction(MVT::f64, MVT::f32, Expand);
 
 
-    /*
+  /*
   // Softfloat Floating Point Library Calls
   // Integer to Float conversions
   setLibcallName(RTLIB::SINTTOFP_I32_F32, "int32_to_float32");
@@ -455,6 +457,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   //setOperationAction(ISD::SELECT_CC,          MVT::i1,    Custom);
   setOperationAction(ISD::SELECT_CC,          MVT::i32,   Custom);
   setOperationAction(ISD::BRCOND,             MVT::Other, Custom);
+  setOperationAction(ISD::BR_CC,              MVT::i1,    Custom);
   setOperationAction(ISD::BR_CC,              MVT::i32,   Custom);
   setOperationAction(ISD::INTRINSIC_VOID,     MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_W_CHAIN,  MVT::Other, Custom);
@@ -1016,10 +1019,18 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
 }
 
 EVT LE1TargetLowering::getSetCCResultType(EVT VT) const {
+  //return MVT::i32;
+
+  if (VT == MVT::f32)
+    return MVT::i32;
   if (!VT.isVector())
     return MVT::i1;
   else
     return VT;
+}
+
+MVT::SimpleValueType LE1TargetLowering::getCmpLibcallReturnType() const {
+  return MVT::i1;
 }
 
 SDValue LE1TargetLowering::
@@ -1430,6 +1441,7 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
                                       SelectionDAG &DAG) const {
   SDValue LHS = Op.getOperand(0);
   SDValue RHS = Op.getOperand(1);
+
   SDLoc dl(Op.getNode());
   SDNode* Node = Op.getNode();
   ISD::CondCode CC = cast<CondCodeSDNode>(Node->getOperand(2))->get();
@@ -1484,6 +1496,12 @@ SDValue LE1TargetLowering::LowerBR_CC(SDValue Op, SelectionDAG &DAG) const {
   SDValue LHS = Op.getOperand(2);
   SDValue RHS = Op.getOperand(3);
   SDValue Dest = Op.getOperand(4);
+
+  if (LHS.getValueType() == MVT::i1)
+    LHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, LHS);
+  if (RHS.getValueType() == MVT::i1)
+    RHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, RHS);
+
   SDValue Cond = CreateTargetCompare(DAG, dl, MVT::i1, LHS, RHS, CC);
 
   return DAG.getNode(LE1ISD::BR, dl, Op.getValueType(), Chain, Cond, Dest);
@@ -1962,6 +1980,9 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
     SDValue Arg = OutVals[i];
     CCValAssign &VA = ArgLocs[i];
 
+    if (VA.isRegLoc())
+      assert(Arg.getValueType() != MVT::i1 && "Cannot pass i1 as an argument!");
+
     // ByVal Arg.
     ISD::ArgFlagsTy Flags = Outs[i].Flags;
     if (Flags.isByVal()) {
@@ -2165,9 +2186,13 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
 
   // Add argument registers to the end of the list so that they are
   // known live into the call.
-  for (unsigned i = 0, e = RegsToPass.size(); i != e; ++i)
+  for (unsigned i = 0, e = RegsToPass.size(); i != e; ++i) {
+    assert (RegsToPass[i].second.getValueType() != MVT::i1 &&
+            "Trying to pass i1 in reg!");
+
     Ops.push_back(DAG.getRegister(RegsToPass[i].first,
                                   RegsToPass[i].second.getValueType()));
+  }
 
   if (InFlag.getNode())
     Ops.push_back(InFlag);
@@ -2211,6 +2236,8 @@ LE1TargetLowering::LowerCallResult(SDValue Chain, SDValue InFlag,
 
   // Copy all of the result registers out of their specified physreg.
   for (unsigned i = 0; i != RVLocs.size(); ++i) {
+    assert (RVLocs[i].getValVT() != MVT::i1 &&
+            "Trying to return an i1 in register!");
     Chain = DAG.getCopyFromReg(Chain, dl, RVLocs[i].getLocReg(),
                                RVLocs[i].getValVT(), InFlag).getValue(1);
     InFlag = Chain.getValue(2);
@@ -2310,6 +2337,8 @@ LE1TargetLowering::LowerFormalArguments(SDValue Chain,
     if (IsRegLoc) {
       //std::cout << "isRegLoc\n";
       EVT RegVT = VA.getLocVT();
+      assert (RegVT != MVT::i1 && "Cannot pass i1's as function arguments!");
+
       unsigned ArgReg = VA.getLocReg();
       const TargetRegisterClass *RC = &LE1::CPURegsRegClass;
 
@@ -2613,6 +2642,9 @@ LE1TargetLowering::LowerReturn(SDValue Chain,
   for (unsigned i = 0; i != RVLocs.size(); ++i) {
     CCValAssign &VA = RVLocs[i];
     //assert(VA.isRegLoc() && "Can only return in registers!");
+    if (VA.isRegLoc())
+      assert (OutVals[i].getValueType() != MVT::i1 &&
+              "Cannot return i1's in registers!");
 
     // FIXME - This isn't necessarily a register now!
     Chain = DAG.getCopyToReg(Chain, dl, VA.getLocReg(),

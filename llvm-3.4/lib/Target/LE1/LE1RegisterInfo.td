@@ -154,5 +154,5 @@ def LocalIdz  : RegisterClass<"LE1", [i32], 32, (add IdZ)>;*/
 
 def BRegs : RegisterClass<"LE1", [i1], 32, (add
   B0, B1, B2, B3, B4, B5, B6, B7)> {
-    let Size = 32;
+    //let Size = 32;
   }

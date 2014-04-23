@@ -17,6 +17,7 @@
 #include "llvm/CodeGen/MachineRegisterInfo.h"
 #include "llvm/CodeGen/VirtRegMap.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/Debug.h"
 
 using namespace llvm;
 
@@ -116,6 +117,12 @@ TargetRegisterInfo::getMinimalPhysRegClass(unsigned reg, EVT VT) const {
   const TargetRegisterClass* BestRC = 0;
   for (regclass_iterator I = regclass_begin(), E = regclass_end(); I != E; ++I){
     const TargetRegisterClass* RC = *I;
+    if (VT == MVT::i1)
+      DEBUG(dbgs() << "VT = i1\n");
+    if (VT == MVT::i32)
+      DEBUG(dbgs() << "VT = i32\n");
+    DEBUG(dbgs() << "Reg = " << reg << "\n");
+
     if ((VT == MVT::Other || RC->hasType(VT)) && RC->contains(reg) &&
         (!BestRC || BestRC->hasSubClass(RC)))
       BestRC = RC;
