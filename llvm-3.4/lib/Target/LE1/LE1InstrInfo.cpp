@@ -464,7 +464,7 @@ ScheduleHazardRecognizer *LE1InstrInfo::
 CreateTargetPostRAHazardRecognizer(const InstrItineraryData *II,
                                    const ScheduleDAG *DAG) const {
   DEBUG(dbgs() << "LE1InstrInfo::CreateTargetPostRAHazardRecognizer\n");
-  TargetInstrInfo::CreateTargetPostRAHazardRecognizer(II, DAG);
+  return TargetInstrInfo::CreateTargetPostRAHazardRecognizer(II, DAG);
 }
 
 bool LE1InstrInfo::

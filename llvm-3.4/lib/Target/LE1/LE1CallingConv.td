@@ -17,6 +17,7 @@
 
 def RetCC_LE1 : CallingConv<[
   CCIfType<[i1, i8, i16], CCPromoteToType<i32>>,
+  //CCIfType<[i1], CCAssignToReg<[B0, B1]>>,
   CCIfType<[i32], CCAssignToReg<[AR0, AR1, AR2, AR3, AR4, AR5, AR6, AR7]>>,
   CCIfType<[i32], CCAssignToStack<4, 32>>
 ]>;

@@ -640,6 +640,14 @@ bool DAGTypeLegalizer::SoftenFloatOperand(SDNode *N, unsigned OpNo) {
   if (Res.getNode() == N)
     return true;
 
+  if (Res.getValueType() == MVT::i1)
+    DEBUG(dbgs() << "Res VT = i1\n");
+  if (Res.getValueType() == MVT::i32)
+    DEBUG(dbgs() << "Res VT = i32\n");
+  if (N->getValueType(0) == MVT::i1)
+    DEBUG(dbgs() << "N VT = i1\n");
+  if (N->getValueType(0) == MVT::i32)
+    DEBUG(dbgs() << "N VT = i32\n");
   assert(Res.getValueType() == N->getValueType(0) && N->getNumValues() == 1 &&
          "Invalid operand expansion");
 
@@ -755,8 +763,8 @@ SDValue DAGTypeLegalizer::SoftenFloatOp_SETCC(SDNode *N) {
       DEBUG(dbgs() << "N == MVT::i32\n");
     if (N->getValueType(0) == MVT::f32)
       DEBUG(dbgs() << "N == MVT::f32\n");
-    //assert(NewLHS.getValueType() == N->getValueType(0) &&
-      //     "Unexpected setcc expansion!");
+    assert(NewLHS.getValueType() == N->getValueType(0) &&
+           "Unexpected setcc expansion!");
     return NewLHS;
   }
 

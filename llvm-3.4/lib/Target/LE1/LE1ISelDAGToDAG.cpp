@@ -115,27 +115,28 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
   if (CurDAG->isBaseWithConstantOffset(Addr)) {
     ConstantSDNode *CN = cast<ConstantSDNode>(Addr.getOperand(1));
 
-    if (CN->getZExtValue() == (CN->getZExtValue() & 0xFF)) {
+    if ((CN->getZExtValue() == (CN->getZExtValue() & 0xFF) ||
+         Addr.getOperand(1).getOpcode() == ISD::UNDEF)) {
       if (FrameIndexSDNode *FIN =
           dyn_cast<FrameIndexSDNode>(Addr.getOperand(0)))
         Base = CurDAG->getTargetFrameIndex(FIN->getIndex(), VT);
       else
         Base = Addr.getOperand(0);
+
       if (Addr.getOperand(1).getOpcode() == ISD::UNDEF)
         Offset = getI32Imm(0);
       else
         Offset = Addr.getOperand(1);
 
-      std::cout << "SelectAddri8 pass, BaseWithConstantOFfset" << std::endl;
+      DEBUG(dbgs() << "SelectAddri8 pass, BaseWithConstantOFfset\n");
       return true;
     }
-    std::cout << "BaseWithConstantOffset > 8 bits, SelectAddri8 fail"
-      << std::endl;
+    DEBUG(dbgs() << "BaseWithConstantOffset > 8 bits, SelectAddri8 fail\n");
   }
   else if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
     Base   = CurDAG->getTargetFrameIndex(FIN->getIndex(), VT);
     Offset = CurDAG->getTargetConstant(0, VT);
-    std::cout << "Addr is FrameIndex, SelectAddri8 pass" << std::endl;
+    DEBUG(dbgs() << "Addr is FrameIndex, SelectAddri8 pass\n");
     return true;
   }
   else {
@@ -143,14 +144,17 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
     SDValue RHS = Addr.getOperand(1);
     Offset = getI32Imm(0);
 
+    if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(RHS))
+      RHS = CurDAG->getTargetFrameIndex(FIN->getIndex(), VT);
+
     // The address may be stored in a single register
     if (LHS.getValueType() == MVT::Other) {
-      std::cout << "SelectAddri8 pass with MVT::Other" << std::endl;
+      DEBUG(dbgs() << "SelectAddri8 pass with MVT::Other\n");
       Base = RHS;
       return true;
     }
     else if (RHS.getValueType() == MVT::Other) {
-      std::cout << "SelectAddri8 pass with MVT::Other" << std::endl;
+      DEBUG(dbgs() << "SelectAddri8 pass with MVT::Other");
       Base = LHS;
       return true;
     }
@@ -168,12 +172,7 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
         Base = LHS;
       else {
         Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
-        std::cout << "Creating ADDr node for address, SelectAddri8 pass"
-          << std::endl;
-        std::cout << "Base = " << std::endl;
-        //Base.dump();
-        std::cout << "Offset = " << std::endl;
-        //Offset.dump();
+        DEBUG(dbgs() << "Creating ADDr node for address, SelectAddri8 pass\n");
         return true;
       }
       return true;
@@ -200,7 +199,7 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
       switch (ShiftVal) {
       default:
         Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
-        std::cout << "SelectAddri8 success, using ADDr" << std::endl;
+        DEBUG(dbgs() << "SelectAddri8 success, using ADDr\n");
         return true;
       case 1:
         Opcode = LE1::SH1ADDr;
@@ -217,11 +216,12 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
       }
       Base = SDValue(CurDAG->getMachineNode(Opcode, dl, VT, ShiftOp0,
                                             ShiftOp1), 0);
-      std::cout << "Created shl op for addr, SelectAddri8 pass" << std::endl;
+
+      DEBUG(dbgs() << "Created shl op for addr, SelectAddri8 pass\n");
       return true;
     }
   }
-  std::cout << "Fail on SelectAddri8" << std::endl;
+  DEBUG(dbgs() << "Fail on SelectAddri8\n");
   return false;
 }
 
@@ -241,11 +241,11 @@ bool LE1DAGToDAGISel::SelectAddri12(SDValue Addr, SDValue &Base,
         Base = Addr.getOperand(0);
 
       Offset = Addr.getOperand(1);
-      std::cout << "SelectAddri12 success" << std::endl;
+      DEBUG(dbgs() << "SelectAddri12 success\n");
       return true;
     }
   }
-  std::cout << "SelectAddri12 fail" << std::endl;
+  DEBUG(dbgs() << "SelectAddri12 fail\n");
   return false;
 }
 
@@ -261,16 +261,19 @@ bool LE1DAGToDAGISel::SelectAddri32(SDValue Addr, SDValue &Base,
 
   SDLoc dl(Addr.getNode());
   if (dyn_cast<FrameIndexSDNode>(Addr)) {
-    std::cout << "Addr is FrameIndex, SelectAddri32 fail" << std::endl;
+    DEBUG(dbgs() << "Addr is FrameIndex, SelectAddri32 fail\n");
     return false;
   }
   if (GlobalAddressSDNode *GA = dyn_cast<GlobalAddressSDNode>(Addr)) {
-    Base = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32, 0);
-    Offset = CurDAG->getTargetConstant(GA->getOffset(), MVT::i32);
-    std::cout << "GlobalAddress, SelectAddri32 success" << std::endl;
+    //Base = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32, 0);
+    //Offset = CurDAG->getTargetConstant(GA->getOffset(), MVT::i32);
+    Base = CurDAG->getRegister(LE1::ZERO, MVT::i32);
+    Offset = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32,
+                                            GA->getOffset());
+    DEBUG(dbgs() << "GlobalAddress, SelectAddri32 success\n");
     return true;
   }
-  std::cout << "SelectAddri32 fail" << std::endl;
+  DEBUG(dbgs() << "SelectAddri32 fail\n");
   return false;
 }
 
@@ -290,25 +293,19 @@ SDNode* LE1DAGToDAGISel::Select(SDNode *Node) {
     // Select the default instruction
     return SelectCode(Node);
     break;
-    // FIXME ADDE should take a valid carry flag. This is an expanded op
-    // in TargetLowering, should try to make it custom
-  case ISD::ADDE: {
-    /*
-    // Lower ADDC to ADDCG but with zero moved in BReg
-    SDValue InFlag = Node->getOperand(2);
-    SDValue CmpLHS = Node->getOperand(0);
-    SDValue LHS = Node->getOperand(0);
-    SDValue RHS = Node->getOperand(1);
-    EVT VT = LHS.getValueType();
-
-    SDNode *Carry = CurDAG->getMachineNode(LE1::CMPLTU, dl, VT,
-                                           CmpLHS, InFlag.getOperand(1));
-    SDNode *AddCarry = CurDAG->getMachineNode(LE1::ADD, dl, VT,
-                                              SDValue(Carry,0), RHS);
-    return CurDAG->SelectNodeTo(Node, LE1::ADD, VT, MVT::Glue,
-                                LHS, SDValue(AddCarry,0));
-    */
-    break;
+  case ISD::GlobalAddress: {
+    GlobalAddressSDNode *GA = cast<GlobalAddressSDNode>(Node);
+    SDValue Addr = CurDAG->getTargetGlobalAddress(GA->getGlobal(),
+                                                  dl, MVT::i32,
+                                                  GA->getOffset());
+    return CurDAG->getMachineNode(LE1::MOVi, dl, MVT::i32, Addr);
+  }
+  case ISD::FrameIndex: {
+    FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Node);
+    if (FIN->getIndex() == 0)
+      return CurDAG->getRegister(LE1::ZERO, MVT::i32).getNode();
+    SDValue Index = CurDAG->getTargetConstant(FIN->getIndex(), MVT::i32);
+    return CurDAG->getMachineNode(LE1::MOVi, dl, MVT::i32, Index);
   }
   case LE1ISD::ADDCG: {
     SDValue LHS = Node->getOperand(0);

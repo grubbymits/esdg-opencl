@@ -155,7 +155,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   MaxStoresPerMemcpy = 100;
   MaxStoresPerMemcpyOptSize = 100;
 
-  setBooleanContents(ZeroOrOneBooleanContent);
+  //setBooleanContents(ZeroOrOneBooleanContent);
   //AddPromotedToType(ISD::SETCC, MVT::i1, MVT::i32);
 
   /*
@@ -1018,8 +1018,7 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
   return SDValue(N, 0);
 }
 
-EVT LE1TargetLowering::getSetCCResultType(EVT VT) const {
-  //return MVT::i32;
+EVT LE1TargetLowering::getSetCCResultType(LLVMContext &Context, EVT VT) const {
 
   if (VT == MVT::f32)
     return MVT::i32;
@@ -1030,7 +1029,7 @@ EVT LE1TargetLowering::getSetCCResultType(EVT VT) const {
 }
 
 MVT::SimpleValueType LE1TargetLowering::getCmpLibcallReturnType() const {
-  return MVT::i1;
+  return MVT::i32;
 }
 
 SDValue LE1TargetLowering::
@@ -1728,7 +1727,7 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
   return Result;
 }
 
-// TODO Is this a good idea?
+// TODO REMOVE this and LowerGlobal
 SDValue LE1TargetLowering::LowerConstant(SDValue Op, SelectionDAG &DAG) const {
   //ConstantSDNode *CSN = cast<ConstantSDNode>(Op.getNode());
   //if (CSN->getZExtValue() == 0)
@@ -1738,6 +1737,8 @@ SDValue LE1TargetLowering::LowerConstant(SDValue Op, SelectionDAG &DAG) const {
 
 SDValue
 LE1TargetLowering::LowerGlobalAddress(SDValue Op, SelectionDAG &DAG) const {
+  return Op;
+
   SDLoc dl(Op.getNode());
   GlobalAddressSDNode *GA = dyn_cast<GlobalAddressSDNode>(Op);
   return DAG.getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32,

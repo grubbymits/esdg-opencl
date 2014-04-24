@@ -289,6 +289,10 @@ unsigned InstrEmitter::getVR(SDValue Op,
   }
 
   DenseMap<SDValue, unsigned>::iterator I = VRBaseMap.find(Op);
+  if (I == VRBaseMap.end()) {
+    MBB->dump();
+    Op.dump();
+  }
   assert(I != VRBaseMap.end() && "Node emitted out of order - late");
   return I->second;
 }

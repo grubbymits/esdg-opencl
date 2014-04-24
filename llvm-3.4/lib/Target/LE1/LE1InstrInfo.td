@@ -914,6 +914,8 @@ def : Pat<(i32 0),
           (MOVr ZERO)>;
 def : Pat<(i32 imm:$in),
           (MOVi imm:$in)>;
+//def : Pat<(i32 tglobaladdr:$addr),
+  //        (MOVi tglobaladdr:$addr)>;
 
 // peepholes
 //def : Pat<(store (i32 0), addr:$dst), (STW ZERO, addr:$dst)>;
