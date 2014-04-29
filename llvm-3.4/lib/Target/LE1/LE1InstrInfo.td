@@ -263,40 +263,6 @@ class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
     let isCommutable = isComm;
 }
 
-// Comparisons
-/*
-class Compare_R_RR<bits<4> opcode, string instr_asm, PatFrag OpNode>
-  : LE1Format_R_RR_1<
-  opcode,
-  (outs CPURegs:$rd),
-  (ins CPURegs:$src1, CPURegs:$src2),
-  !strconcat(instr_asm, " $rd, $src1, $src2"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
-
-class Compare_P_RR<bits<4> opcode, string instr_asm, PatFrag OpNode>
-  : LE1Format_P_RR<
-  opcode,
-  (outs BRegs:$prd),
-  (ins CPURegs:$src1, CPURegs:$src2),
-  !strconcat(instr_asm, " $prd, $src1, $src2"),
-  [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>;
-
-class Compare_R_I32R<bits<4> opcode, string instr_asm, PatFrag OpNode>
-  : LE1Format_RoB_I32R<
-  opcode,
-  (outs CPURegs:$rd),
-  (ins CPURegs:$src1, immediate:$imm32),
-  !strconcat(instr_asm, " $rd, $src1, $imm32"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>;
-
-class Compare_R_I9R<bits<4> opcode, string instr_asm, PatFrag OpNode>
-  : LE1Format_RoB_I9R<
-  opcode,
-  (outs CPURegs:$rd),
-  (ins CPURegs:$src1, immediate:$imm9),
-  !strconcat(instr_asm, "  $rd, $src1, $imm9"),
-  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>;
-*/
 class LogicCompare_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_R_RR_1<
   opcode,
@@ -313,7 +279,9 @@ class LogicCompare_R_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
   (ins CPURegs:$src1, immediate:$imm32),
   !strconcat(instr_asm, " $rd, $src1, $imm32"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>,
-  Sched<[WriteAI]>;
+  Sched<[WriteAI]> {
+    let B = 0;
+  }
 
 class LogicCompare_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_RoB_I9R<
@@ -322,7 +290,9 @@ class LogicCompare_R_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
   (ins CPURegs:$src1, immediate:$imm9),
   !strconcat(instr_asm, "  $rd, $src1, $imm9"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>,
-  Sched<[WriteA]>;
+  Sched<[WriteA]> {
+    let B = 0;
+  }
 
 class LogicCompare_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_P_RR<
@@ -332,6 +302,28 @@ class LogicCompare_P_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   !strconcat(instr_asm, " $prd, $src1, $src2"),
   [(set BRegs:$prd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIAlu>,
   Sched<[WriteA]>;
+
+class LogicCompare_P_I9R<bits<4> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_RoB_I9R<
+  opcode,
+  (outs BRegs:$rd),
+  (ins CPURegs:$src1, immediate:$imm9),
+  !strconcat(instr_asm, "  $rd, $src1, $imm9"),
+  [(set BRegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIAlu>,
+  Sched<[WriteA]> {
+    let B = 1;
+  }
+
+class LogicCompare_P_I32R<bits<4> opcode, string instr_asm, SDNode OpNode>
+  : LE1Format_RoB_I32R<
+  opcode,
+  (outs BRegs:$rd),
+  (ins CPURegs:$src1, immediate:$imm32),
+  !strconcat(instr_asm, "  $rd, $src1, $imm32"),
+  [(set BRegs:$rd, (OpNode CPURegs:$src1, imm32:$imm32))], IIAlu>,
+  Sched<[WriteAI]> {
+    let B = 1;
+  }
 
 //===----------------------------------------------------------------------===//
 // Instruction Classes that utilise the Load/Store units
@@ -423,6 +415,16 @@ class Select_I32<bits<5> opcode, string instr_asm, SDNode OpNode>
   IIAlu>, Sched<[WriteAI]>;
 
 
+// TODO Use or create a proper format
+let isBranch = 1, isTerminator = 1 in //isBarrier = 1 in
+class CBranch<string instr_asm, SDNode OpNode>:
+      LE1Inst<(outs),
+      (ins BRegs:$cond, brtarget:$dst),
+      !strconcat(instr_asm, "  $cond, $dst"),
+      [(OpNode BRegs:$cond, bb:$dst)], IIBranch>,
+      Sched<[WriteB]>;
+
+
 // ------------------- END OF NEW IMPLEMENTATIONS ----------------------- //
 
 let isAsCheapAsAMove = 1 in
@@ -440,50 +442,6 @@ class MoveI<string instr_asm, SDNode OpNode, RegisterClass OutReg, Operand Opr,
       !strconcat(instr_asm, "  $dst, $src"),
       [(set OutReg:$dst, (OpNode I:$src))], IIAlu>,
       Sched<[WriteA]>;
-
-// Comparisons
-class SetCCR<string instr_asm, PatFrag cond_op, RegisterClass DestRegs>:
-      LE1Inst<(outs DestRegs:$res), (ins CPURegs:$lhs, CPURegs:$rhs),
-      !strconcat(instr_asm, "  $res, $lhs, $rhs"),
-      [(set DestRegs:$res, (cond_op CPURegs:$lhs, CPURegs:$rhs))], IIAlu>,
-      Sched<[WriteA]>;
-
-let isReMaterializable = 1, neverHasSideEffects = 1 in
-class SetCCI<string instr_asm, PatFrag cond_op, RegisterClass DestRegs>:
-      LE1Inst<(outs DestRegs:$res), (ins CPURegs:$lhs, i32imm:$rhs),
-      !strconcat(instr_asm, "  $res, $lhs, $rhs"),
-      [(set DestRegs:$res, (cond_op CPURegs:$lhs, imm:$rhs))], IIAlu>,
-      Sched<[WriteA]>;
-
-// Selects
-class SelectRR<string instr_asm, SDNode OpNode>:
-      LE1Inst<(outs CPURegs:$res), (ins BRegs:$cond, CPURegs:$T, CPURegs:$F),
-      !strconcat(instr_asm, "  $res, $cond, $T, $F"),
-      [(set CPURegs:$res, (OpNode BRegs:$cond, CPURegs:$T, CPURegs:$F))],
-      IIAlu>,
-      Sched<[WriteA]>;
-
-class SelectRI<string instr_asm, SDNode OpNode>:
-      LE1Inst<(outs CPURegs:$res), (ins BRegs:$cond, CPURegs:$T, i32imm:$F),
-      !strconcat(instr_asm, "  $res, $cond, $T, $F"),
-      [(set CPURegs:$res, (OpNode BRegs:$cond, CPURegs:$T, imm:$F))],
-      IIAlu>,
-      Sched<[WriteA]>;
-
-
-
-// -----------------------------------------------------------------------//
-// Instruction Class that use the Branch unit
-// -----------------------------------------------------------------------//
-
-// Conditional Branch
-let isBranch = 1, isTerminator = 1 in //isBarrier = 1 in
-class CBranch<string instr_asm, SDNode OpNode>:
-      LE1Inst<(outs),
-      (ins BRegs:$cond, brtarget:$dst),
-      !strconcat(instr_asm, "  $cond, $dst"),
-      [(OpNode BRegs:$cond, bb:$dst)], IIBranch>,
-      Sched<[WriteB]>;
 
 //===----------------------------------------------------------------------===//
 // Instruction definition
@@ -563,42 +521,41 @@ let isCompare = 1 in {
 }
 */
 
-multiclass LOGICCOMPARE<bits<4> opc, string instr_asm, SDNode OpNode> {
+multiclass COMPARE<bits<4> opc, string instr_asm, SDNode OpNode> {
   // Results into BRegs
   def NAME#p    : LogicCompare_P_RR<opc, instr_asm, OpNode>;
+  def NAME#pi9  : LogicCompare_P_I9R<opc, instr_asm, OpNode>;
+  def NAME#pi32 : LogicCompare_P_I32R<opc, instr_asm, OpNode>;
   // Results into CPURegs
   def NAME#r    : LogicCompare_R_RR<opc, instr_asm, OpNode>;
   def NAME#i32  : LogicCompare_R_I32R<opc, instr_asm, OpNode>;
   def NAME#i9   : LogicCompare_R_I9R<opc, instr_asm, OpNode>;
 }
-/*
-defm CMPEQ  : COMPARE<0x0, "cmpeq.0", seteq>;
-defm CMPGE  : COMPARE<0x1, "cmpge.0", setge>;
-defm CMPGEU : COMPARE<0x2, "cmpgeu.0", setuge>;
-defm CMPGT  : COMPARE<0x3, "cmpgt.0", setgt>;
-defm CMPGTU : COMPARE<0x4, "cmpgtu.0", setugt>;
-defm CMPLE  : COMPARE<0x5, "cmple.0", setle>;
-defm CMPLEU : COMPARE<0x6, "cmpleu.0", setule>;
-defm CMPLT  : COMPARE<0x7, "cmplt.0", setlt>;
-defm CMPLTU : COMPARE<0x8, "cmpltu.0", setult>;
-defm CMPNE  : COMPARE<0x9, "cmpne.0", setne>;
-*/
-let isCompare = 1 in {
-  defm CMPEQ  : LOGICCOMPARE<0x0, "cmpeq.0", le1_cmpeq>;
-  defm CMPGE  : LOGICCOMPARE<0x1, "cmpge.0", le1_cmpge>;
-  defm CMPGEU : LOGICCOMPARE<0x2, "cmpgeu.0", le1_cmpgeu>;
-  defm CMPGT  : LOGICCOMPARE<0x3, "cmpgt.0", le1_cmpgt>;
-  defm CMPGTU : LOGICCOMPARE<0x4, "cmpgtu.0", le1_cmpgtu>;
-  defm CMPLE  : LOGICCOMPARE<0x5, "cmple.0", le1_cmple>;
-  defm CMPLEU : LOGICCOMPARE<0x6, "cmpleu.0", le1_cmpleu>;
-  defm CMPLT  : LOGICCOMPARE<0x7, "cmplt.0", le1_cmplt>;
-  defm CMPLTU : LOGICCOMPARE<0x8, "cmpltu.0", le1_cmpltu>;
-  defm CMPNE  : LOGICCOMPARE<0x9, "cmpne.0", le1_cmpne>;
+
+multiclass LOGIC<bits<4> opc, string instr_asm, SDNode OpNode> {
+  // Results into CPURegs
+  def NAME#r    : LogicCompare_R_RR<opc, instr_asm, OpNode>;
+  def NAME#i32  : LogicCompare_R_I32R<opc, instr_asm, OpNode>;
+  def NAME#i9   : LogicCompare_R_I9R<opc, instr_asm, OpNode>;
 }
-defm NANDL  : LOGICCOMPARE<0xA, "nandl.0", le1_nandl>;
-defm NORL   : LOGICCOMPARE<0xB, "norl.0", le1_norl>;
-defm ORL    : LOGICCOMPARE<0xC, "orl.0", le1_orl>;
-defm ANDL   : LOGICCOMPARE<0xD, "andl.0", le1_andl>;
+
+let isCompare = 1 in {
+  defm CMPEQ  : COMPARE<0x0, "cmpeq.0", le1_cmpeq>;
+  defm CMPGE  : COMPARE<0x1, "cmpge.0", le1_cmpge>;
+  defm CMPGEU : COMPARE<0x2, "cmpgeu.0", le1_cmpgeu>;
+  defm CMPGT  : COMPARE<0x3, "cmpgt.0", le1_cmpgt>;
+  defm CMPGTU : COMPARE<0x4, "cmpgtu.0", le1_cmpgtu>;
+  defm CMPLE  : COMPARE<0x5, "cmple.0", le1_cmple>;
+  defm CMPLEU : COMPARE<0x6, "cmpleu.0", le1_cmpleu>;
+  defm CMPLT  : COMPARE<0x7, "cmplt.0", le1_cmplt>;
+  defm CMPLTU : COMPARE<0x8, "cmpltu.0", le1_cmpltu>;
+  defm CMPNE  : COMPARE<0x9, "cmpne.0", le1_cmpne>;
+}
+
+defm NANDL  : LOGIC<0xA, "nandl.0", le1_nandl>;
+defm NORL   : LOGIC<0xB, "norl.0", le1_norl>;
+defm ORL    : LOGIC<0xC, "orl.0", le1_orl>;
+defm ANDL   : LOGIC<0xD, "andl.0", le1_andl>;
 
 //def : Pat<(zext (le1_norl CPURegs:$src1, CPURegs:$src2)),
   //        (NORLr CPURegs:$src1, CPURegs:$src2)>;
@@ -711,17 +668,10 @@ def SLCTFi  : Select_I32<0x1D, "slctf.0", le1_selectf>;
 def SLCTr   : Select_R<0x1C, "slct.0", select>;
 def SLCTFr  : Select_R<0x1D, "slctf.0", le1_selectf>;
 
+
+
+
 // ------------------------- END OF NEW IMPLEMENTATION ---------------------- //
-
-///===---------------------------------------------------------------------===//
-/// Select Instructions
-//def SLCTrr  : SelectRR<"slct.0", select>;
-//def SLCTFrr : SelectRR<"slctf.0", le1_selectf>;
-//def SLCTri  : SelectRI<"slct.0", select>;
-//def SLCTFri : SelectRI<"slctf.0", le1_selectf>;
-
-///===---------------------------------------------------------------------===//
-/// Extending Instructions
 
 
 ///===---------------------------------------------------------------------===//
@@ -767,8 +717,13 @@ def MOVg2 : LE1Inst<(outs CPURegs:$dst), (ins globaladdress:$addr),
                     IIAlu>;
 }
 
+// immediates
 def : Pat<(tglobaladdr:$addr),
-          (MOVg tglobaladdr:$addr)>;
+          (ADDi32 ZERO, tglobaladdr:$addr)>;
+//def : Pat<(i32 0),
+  //        (ADDr ZERO, ZERO)>;
+def : Pat<(i32 imm:$in),
+          (ADDi32 ZERO, imm:$in)>;
 
 //let Defs = [L0] in
 def LDL : LE1Inst<(outs LReg:$dst),
@@ -909,11 +864,6 @@ def : Pat<(not CPURegs:$in),
 def : Pat<(le1_loadlink tglobaladdr:$addr, imm:$offset),
           (LDL tglobaladdr:$addr, imm:$offset)>;
 
-// immediates
-def : Pat<(i32 0),
-          (MOVr ZERO)>;
-def : Pat<(i32 imm:$in),
-          (MOVi imm:$in)>;
 //def : Pat<(i32 tglobaladdr:$addr),
   //        (MOVi tglobaladdr:$addr)>;
 
