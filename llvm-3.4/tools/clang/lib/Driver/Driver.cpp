@@ -1918,8 +1918,6 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
   llvm::Triple Target = computeTargetTriple(DefaultTargetTriple, Args,
                                             DarwinArchName);
 
-  std::cout << "getToolChain: " << Target.str() << std::endl;
-
   ToolChain *&TC = ToolChains[Target.str()];
   if (!TC) {
     switch (Target.getOS()) {
@@ -1982,7 +1980,6 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
       }
       if ((Target.getArchName() == "le1") ||
           (Target.getArch() == llvm::Triple::le1)) {
-        std::cout << "Creating LE1ToolChain" << std::endl;
         TC = new toolchains::LE1ToolChain(*this, Target, Args);
         break;
       }

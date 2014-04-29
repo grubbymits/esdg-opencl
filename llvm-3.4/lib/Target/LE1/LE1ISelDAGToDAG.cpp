@@ -109,36 +109,42 @@ private:
 
 bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
                                     SDValue &Offset) {
+  DEBUG(dbgs() << "SelectAddri8\n");
   EVT VT = Addr.getValueType();
   SDLoc dl(Addr.getNode());
 
-  if (CurDAG->isBaseWithConstantOffset(Addr)) {
-    ConstantSDNode *CN = cast<ConstantSDNode>(Addr.getOperand(1));
+  if (dyn_cast<GlobalAddressSDNode>(Addr))
+    return false;
 
-    if ((CN->getZExtValue() == (CN->getZExtValue() & 0xFF) ||
-         Addr.getOperand(1).getOpcode() == ISD::UNDEF)) {
-      if (FrameIndexSDNode *FIN =
-          dyn_cast<FrameIndexSDNode>(Addr.getOperand(0)))
-        Base = CurDAG->getTargetFrameIndex(FIN->getIndex(), VT);
-      else
-        Base = Addr.getOperand(0);
-
-      if (Addr.getOperand(1).getOpcode() == ISD::UNDEF)
-        Offset = getI32Imm(0);
-      else
-        Offset = Addr.getOperand(1);
-
-      DEBUG(dbgs() << "SelectAddri8 pass, BaseWithConstantOFfset\n");
-      return true;
-    }
-    DEBUG(dbgs() << "BaseWithConstantOffset > 8 bits, SelectAddri8 fail\n");
-  }
-  else if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
+  if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
     Base   = CurDAG->getTargetFrameIndex(FIN->getIndex(), VT);
     Offset = CurDAG->getTargetConstant(0, VT);
     DEBUG(dbgs() << "Addr is FrameIndex, SelectAddri8 pass\n");
     return true;
   }
+
+  if (CurDAG->isBaseWithConstantOffset(Addr)) {
+    DEBUG(dbgs() << "isBaseWithConstantOffset\n");
+    if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(Addr.getOperand(1)))
+    {
+      DEBUG(dbgs() << "Offset = " << CN->getZExtValue() << "\n");
+
+      if (CN->getZExtValue() == (CN->getZExtValue() & 0xFF)) {
+        Base = Addr.getOperand(0);
+        Offset = Addr.getOperand(1);
+        DEBUG(dbgs() << "SelectAddri8 pass, BaseWithConstantOFfset\n");
+        return true;
+      }
+    }
+    DEBUG(dbgs() << "BaseWithConstantOffset, SelectAddri8 fail\n");
+  }
+  else {
+    DEBUG(dbgs() << "SelectAddri8 pass, just using default\n");
+    Base = Addr.getOperand(1);
+    Offset = getI32Imm(0);
+    return true;
+  }
+  /*
   else {
     SDValue LHS = Addr.getOperand(0);
     SDValue RHS = Addr.getOperand(1);
@@ -220,7 +226,7 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
       DEBUG(dbgs() << "Created shl op for addr, SelectAddri8 pass\n");
       return true;
     }
-  }
+  }*/
   DEBUG(dbgs() << "Fail on SelectAddri8\n");
   return false;
 }
@@ -230,16 +236,19 @@ bool LE1DAGToDAGISel::SelectAddri12(SDValue Addr, SDValue &Base,
                                     SDValue &Offset) {
   EVT ValTy = Addr.getValueType();
 
+  if (dyn_cast<GlobalAddressSDNode>(Addr))
+    return false;
+
+  if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(Addr)) {
+    Base = CurDAG->getTargetFrameIndex(FIN->getIndex(), ValTy);
+    Offset = getI32Imm(0);
+    DEBUG(dbgs() << "SelectAddri12 success\n");
+    return true;
+  }
   if (CurDAG->isBaseWithConstantOffset(Addr)) {
     ConstantSDNode *CN = cast<ConstantSDNode>(Addr.getOperand(1));
     if (CN->getZExtValue() == (CN->getZExtValue() & 0xFFF)) {
-
-      if (FrameIndexSDNode *FIN =
-          dyn_cast<FrameIndexSDNode>(Addr.getOperand(0)))
-        Base = CurDAG->getTargetFrameIndex(FIN->getIndex(), ValTy);
-      else
-        Base = Addr.getOperand(0);
-
+      Base = Addr.getOperand(0);
       Offset = Addr.getOperand(1);
       DEBUG(dbgs() << "SelectAddri12 success\n");
       return true;
@@ -252,6 +261,8 @@ bool LE1DAGToDAGISel::SelectAddri12(SDValue Addr, SDValue &Base,
 bool LE1DAGToDAGISel::SelectAddri32(SDValue Addr, SDValue &Base,
                                     SDValue &Offset) {
   DEBUG(dbgs() << "SelectAddri32 with ");
+  SDLoc dl(Addr.getNode());
+
   if (Addr.getNode()->isTargetOpcode())
     DEBUG(dbgs() <<
           TM.getTargetLowering()->getTargetNodeName(Addr.getOpcode()));
@@ -259,18 +270,29 @@ bool LE1DAGToDAGISel::SelectAddri32(SDValue Addr, SDValue &Base,
     DEBUG(dbgs() << Addr.getNode()->getOperationName());
   DEBUG(dbgs() << "\n");
 
-  SDLoc dl(Addr.getNode());
   if (dyn_cast<FrameIndexSDNode>(Addr)) {
     DEBUG(dbgs() << "Addr is FrameIndex, SelectAddri32 fail\n");
     return false;
   }
   if (GlobalAddressSDNode *GA = dyn_cast<GlobalAddressSDNode>(Addr)) {
-    //Base = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32, 0);
-    //Offset = CurDAG->getTargetConstant(GA->getOffset(), MVT::i32);
     Base = CurDAG->getRegister(LE1::ZERO, MVT::i32);
     Offset = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32,
                                             GA->getOffset());
     DEBUG(dbgs() << "GlobalAddress, SelectAddri32 success\n");
+    return true;
+  }
+  else if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(Addr.getOperand(1))) {
+    DEBUG(dbgs() << "Offset = " << CN->getZExtValue() << "\n");
+
+    if ((CN->getZExtValue() == (CN->getZExtValue() & 0xFF)) ||
+       (CN->getZExtValue() == (CN->getZExtValue() & 0xFFF))) {
+      DEBUG(dbgs() << "SelectAddri32 fail\n");
+      return false;
+    }
+
+    Base = Addr.getOperand(0);
+    Offset = CurDAG->getTargetConstant(CN->getZExtValue(), MVT::i32);
+    DEBUG(dbgs() << "SelectAddri32 pass with Base + ConstantOffset\n");
     return true;
   }
   DEBUG(dbgs() << "SelectAddri32 fail\n");

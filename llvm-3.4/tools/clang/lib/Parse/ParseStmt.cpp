@@ -2159,7 +2159,6 @@ StmtResult Parser::ParseMicrosoftAsmStatement(SourceLocation AsmLoc) {
   if (buildMSAsmString(PP, AsmLoc, AsmToks, TokOffsets, AsmString))
     return StmtError();
 
-  std::cout << "Gonna create MCTarget stuff" << std::endl;
   OwningPtr<llvm::MCRegisterInfo> MRI(TheTarget->createMCRegInfo(TT));
   OwningPtr<llvm::MCAsmInfo> MAI(TheTarget->createMCAsmInfo(*MRI, TT));
   // Get the instruction descriptor.

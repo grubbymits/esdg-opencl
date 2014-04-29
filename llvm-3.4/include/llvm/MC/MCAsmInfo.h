@@ -518,7 +518,6 @@ namespace llvm {
       return ExceptionsType != ExceptionHandling::None;
     }
     ExceptionHandling::ExceptionsType getExceptionHandlingType() const {
-      std::cout << "getExceptionHandlingType" << std::endl;
       return ExceptionsType;
     }
     bool isExceptionHandlingDwarf() const {
