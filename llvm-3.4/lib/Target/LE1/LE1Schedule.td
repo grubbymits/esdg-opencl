@@ -29,8 +29,6 @@ def MULT2 : ProcResource<2>;
 def LSU1  : ProcResource<1>;
 def LSU2  : ProcResource<2>;
 def BRU   : ProcResource<1>;
-def IMM1  : ProcResource<1>;
-def IMM2  : ProcResource<2>;
 
 def WriteA    : SchedWrite;
 def WriteAI   : SchedWrite;
@@ -51,28 +49,28 @@ let SchedModel = LE1ModelScalar in {
   def : WriteRes<WriteA, [ALU1]> {
     let Latency = 2;
   }
-  def : WriteRes<WriteAI, [ALU1, IMM1]> {
+  def : WriteRes<WriteAI, [ALU1]> {
     let Latency = 2;
     let NumMicroOps = 2;
   }
   def : WriteRes<WriteM, [MULT1]> {
     let Latency = 2;
   }
-  def : WriteRes<WriteMI, [MULT1, IMM1]> {
+  def : WriteRes<WriteMI, [MULT1]> {
     let Latency = 2;
     let NumMicroOps = 2;
   }
   def : WriteRes<WriteLS, [LSU1]> {
     let Latency = 3;
   }
-  def : WriteRes<WriteLSI, [LSU1, IMM1]> {
+  def : WriteRes<WriteLSI, [LSU1]> {
     let Latency = 3;
     let NumMicroOps = 2;
   }
   def : WriteRes<WriteB, [BRU]> {
     let Latency = 5;
   }
-  def : WriteRes<WriteBI, [BRU, IMM1]> {
+  def : WriteRes<WriteBI, [BRU]> {
     let Latency = 5;
     let NumMicroOps = 2;
   }

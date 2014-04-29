@@ -116,7 +116,7 @@ void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
 
 void LE1MIPacker::AddToPacket(MachineInstr *MI) {
   SUnit *SU = MIToSUnit[MI];
-  //std::cout << "Adding " << MI->getOpcode() << " to packet" << std::endl;
+  DEBUG(dbgs() << "Adding to " << MI->getOpcode() << " to packet\n");
   const MCSchedClassDesc *SchedDesc = SU->SchedClass;
   const MCWriteProcResEntry *WriteProc =
     MCSubtarget->getWriteProcResBegin(SchedDesc);
@@ -127,18 +127,16 @@ void LE1MIPacker::AddToPacket(MachineInstr *MI) {
 
 bool LE1MIPacker::ResourcesAvailable(const MCSchedClassDesc *SchedDesc) {
   if (!SchedDesc) {
-    //std::cout << "Failed to retrieve SchedDesc" << std::endl;
     DEBUG(dbgs() << "Failed to retrieve SchedDesc\n");
     return false;
   }
-  //std::cout << "CurrentPacketSize = " << CurrentPacketSize << std::endl;
+  DEBUG(dbgs() << "Are resources available for?\n");
 
   unsigned NumMicroOps = SchedDesc->NumMicroOps;
-  //std::cout << "NumMicroOps = " << NumMicroOps << std::endl;
+  DEBUG(dbgs() << "Number of micro ops = " << NumMicroOps << "\n");
 
   if ((CurrentPacketSize + NumMicroOps) > SchedModel->IssueWidth) {
-    //std::cout << "CurrentPacket size + MicroOps > IssueWidth"
-      //<< std::endl;
+    DEBUG(dbgs() << "Too many micro ops for current packet size\n");
     return false;
   }
 
@@ -148,12 +146,14 @@ bool LE1MIPacker::ResourcesAvailable(const MCSchedClassDesc *SchedDesc) {
   const MCProcResourceDesc *ProcRes =
     SchedModel->getProcResource(ProcResId);
 
+  DEBUG(dbgs() << "ProcRes->NumUnits = " << ProcRes->NumUnits
+        << " and current usage = " << ResourceTable[ProcResId] << "\n");
   if (ProcRes->NumUnits < (ResourceTable[ProcResId] + 1)) {
-    //std::cout << "No resources left" << std::endl;
+    DEBUG(dbgs() << "No resources left\n");
     return false;
   }
 
-  //std::cout << "Resources are available" << std::endl;
+  DEBUG(dbgs() << "Resource are available\n");
   return true;
 }
 
@@ -177,6 +177,7 @@ bool LE1MIPacker::PacketDependences(SUnit *NewSU) {
 
         SDep::Kind DepKind = PackagedSU->Succs[i].getKind();
         if (DepKind == SDep::Data) {
+          DEBUG(dbgs() << "Data dependency found\n");
         //  std::cout << "Found dependency" << std::endl;
           return true;
         }
@@ -258,6 +259,10 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
       SUnit *SU = MIToSUnit[MI];
 
       //std::cout << "Attempting to pack  " << MI->getOpcode() << std::endl;
+      DEBUG(dbgs() << "Attempting to pack: " << MI->getOpcode() << "\n");
+#ifndef NDEBUG
+      MI->dump();
+#endif
 
       if (isPseudo(MI)) {
         //std::cout << "isPseudo" << std::endl;
@@ -272,12 +277,11 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
       if ((ResourcesAvailable(Scheduler->getSchedClass(SU))) &&
           (!PacketDependences(SU)))
         AddToPacket(MI);
-      else
+      else {
         EndPacket(MBB, MI);
-
-      std::cout << std::endl;
+        AddToPacket(MI);
+      }
     }
-    //std::cout << "End of basic block\n" << std::endl;
     EndPacket(MBB, MBB->end());
     Scheduler->exitRegion();
     Scheduler->finishBlock();
