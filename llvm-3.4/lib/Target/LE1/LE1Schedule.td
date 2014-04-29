@@ -79,3 +79,5 @@ let SchedModel = LE1ModelScalar in {
 include "MachineModels/LE1Schedule2w1m1ls.td"
 include "MachineModels/LE1Schedule3w1m1ls.td"
 include "MachineModels/LE1Schedule4w1m1ls.td"
+include "MachineModels/LE1Schedule4w2m1ls.td"
+include "MachineModels/LE1Schedule4w2m2ls.td"

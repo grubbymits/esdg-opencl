@@ -415,7 +415,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::STACKRESTORE,      MVT::Other, Expand);
 
   //setOperationAction(ISD::MEMBARRIER,        MVT::Other, Custom);
-  //setOperationAction(ISD::Constant,            MVT::i1, Promote); 
   setOperationAction(ISD::SIGN_EXTEND_INREG,  MVT::i1,    Promote);
   setOperationAction(ISD::ANY_EXTEND,         MVT::i1,    Promote);
   setLoadExtAction(ISD::EXTLOAD,              MVT::i1,    Promote);
@@ -430,6 +429,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::SRL,                MVT::i1,    Promote);
   setOperationAction(ISD::SUB,                MVT::i1,    Promote);
   setOperationAction(ISD::XOR,                MVT::i1,    Promote);
+  setOperationAction(ISD::Constant,           MVT::i1,    Promote);
   /*
   setOperationAction(ISD::SETCC,              MVT::i1,    Promote);
   setCondCodeAction(ISD::SETUGT,              MVT::i1,    Promote);
@@ -462,7 +462,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::INTRINSIC_VOID,     MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_W_CHAIN,  MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
-  setOperationAction(ISD::Constant,           MVT::i32,   Custom);
+  //setOperationAction(ISD::Constant,           MVT::i32,   Custom);
   setOperationAction(ISD::VASTART,            MVT::Other, Custom);
   setOperationAction(ISD::GlobalAddress,      MVT::i32,   Custom);
 
@@ -648,6 +648,11 @@ static SDValue CreateTargetCompare(SelectionDAG &DAG, SDLoc dl, EVT VT,
     break;
   }
 
+  if (LHS.getValueType() == MVT::i1)
+    LHS = DAG.getNode(ISD::ANY_EXTEND, dl, MVT::i32, LHS);
+  if (RHS.getValueType() == MVT::i1)
+    RHS = DAG.getNode(ISD::ANY_EXTEND, dl, MVT::i32, RHS);
+
   DEBUG(dbgs() << "Created TargetCompare\n");
   return DAG.getNode(Opcode, dl, VT, LHS, RHS);
 }
@@ -802,9 +807,9 @@ SDValue static PerformORCombine(SDNode *N, SelectionDAG &DAG) {
   // Had problems with i1 being compared, may also have to duplicate this
   // for other lowered instructions.
   if (LHS.getValueType() == MVT::i1)
-    LHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, LHS);
+    LHS = DAG.getNode(ISD::ANY_EXTEND, dl, MVT::i32, LHS);
   if (RHS.getValueType() == MVT::i1)
-    RHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, RHS);
+    RHS = DAG.getNode(ISD::ANY_EXTEND, dl, MVT::i32, RHS);
 
   if (RHS.getOpcode() == ISD::XOR) {
     if (isNeg1(RHS.getOperand(1)))
@@ -1466,6 +1471,7 @@ SDValue LE1TargetLowering::LowerSETCC(SDValue Op,
       }
     }
   }
+
   DEBUG(dbgs() << "LowerSETCC to TargetCompare\n");
   return CreateTargetCompare(DAG, dl, Op.getValueType(), LHS, RHS,
                              Op.getOperand(2));
@@ -1484,7 +1490,8 @@ SDValue LE1TargetLowering::LowerBRCOND(SDValue Op, SelectionDAG &DAG) const {
                                Cond.getOperand(1), Cond.getOperand(2));
 
   if (Cond.getValueType() == MVT::i32)
-    Cond = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, Cond);
+    //Cond = DAG.getNode(LE1ISD::MTB, dl, MVT::i1, Cond);
+    Cond = DAG.getNode(ISD::TRUNCATE, dl, MVT::i1, Cond);
 
   return DAG.getNode(LE1ISD::BR, dl, MVT::Other, Chain, Cond, Dest);
 }
@@ -1497,11 +1504,6 @@ SDValue LE1TargetLowering::LowerBR_CC(SDValue Op, SelectionDAG &DAG) const {
   SDValue LHS = Op.getOperand(2);
   SDValue RHS = Op.getOperand(3);
   SDValue Dest = Op.getOperand(4);
-
-  if (LHS.getValueType() == MVT::i1)
-    LHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, LHS);
-  if (RHS.getValueType() == MVT::i1)
-    RHS = DAG.getNode(ISD::ZERO_EXTEND, dl, MVT::i32, RHS);
 
   SDValue Cond = CreateTargetCompare(DAG, dl, MVT::i1, LHS, RHS, CC);
 
