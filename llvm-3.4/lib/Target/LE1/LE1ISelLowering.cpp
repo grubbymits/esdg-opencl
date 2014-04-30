@@ -450,7 +450,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::UREM,               MVT::i32,   Custom);
   setOperationAction(ISD::MULHS,              MVT::i32,   Custom);
   setOperationAction(ISD::MULHU,              MVT::i32,   Custom);
-  setOperationAction(ISD::MUL,                MVT::i32,   Custom);
   //setOperationAction(ISD::SETCC,              MVT::i1,    Custom);
   setOperationAction(ISD::SETCC,              MVT::i32,   Custom);
   setOperationAction(ISD::SELECT,             MVT::i32,   Custom);
@@ -466,7 +465,6 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::VASTART,            MVT::Other, Custom);
   setOperationAction(ISD::GlobalAddress,      MVT::i32,   Custom);
 
-  setTargetDAGCombine(ISD::ADD);
   setTargetDAGCombine(ISD::AND);
   setTargetDAGCombine(ISD::OR);
   setTargetDAGCombine(ISD::MUL);
@@ -508,8 +506,8 @@ static inline bool isZero(SDValue Op) {
 
 static inline bool isImm16(SDValue Imm) {
   if (ConstantSDNode *CSN = dyn_cast<ConstantSDNode>(Imm)) {
-    unsigned value = CSN->getZExtValue();
-    if (value == (unsigned short)value)
+    int value = CSN->getSExtValue();
+    if (value == (short)value)
       return (value == 16);
   }
   return false;
@@ -541,16 +539,17 @@ static inline bool isSEXT_16(SDValue Op) {
 
 static inline bool is16BitSImm(SDValue Op) {
   if (ConstantSDNode *CSN = dyn_cast<ConstantSDNode>(Op)) {
-    int value = CSN->getSExtValue();
-    return (value == (value & 0xFFFF));
+    return (isInt<16>(CSN->getSExtValue()));
+    //return (value == (value & 0xFFFF));
   }
   return false;
 }
 
 static inline bool is16BitUImm(SDValue Op) {
   if (ConstantSDNode *CSN = dyn_cast<ConstantSDNode>(Op)) {
-    unsigned value = CSN->getZExtValue();
-    return (value == (value & 0xFFFF));
+    //unsigned value = CSN->getZExtValue();
+    //return (value == (value & 0xFFFF));
+    return (isInt<16>(CSN->getZExtValue()));
   }
   return false;
 }
@@ -655,47 +654,6 @@ static SDValue CreateTargetCompare(SelectionDAG &DAG, SDLoc dl, EVT VT,
 
   DEBUG(dbgs() << "Created TargetCompare\n");
   return DAG.getNode(Opcode, dl, VT, LHS, RHS);
-}
-
-SDValue static PerformADDCombine(SDNode *N, SelectionDAG &DAG) {
-  DEBUG(dbgs() << "PerformADDCombine\n");
-  SDValue LHS = N->getOperand(0);
-  SDValue RHS = N->getOperand(1);
-  SDLoc dl(N);
-  EVT VT = N->getValueType(0);
-
-  if ((LHS.getOpcode() != ISD::SHL) && (RHS.getOpcode() != ISD::SHL))
-    return SDValue(N, 0);
-
-  uint64_t ShiftVal = 0;
-  if (LHS.getOpcode() == ISD::SHL) {
-    if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(LHS.getOperand(1)))
-      ShiftVal = CN->getZExtValue();
-  }
-  else if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(RHS.getOperand(1)))
-    ShiftVal = CN->getZExtValue();
-
-  unsigned Opcode = 0;
-  switch (ShiftVal) {
-  default:
-    return SDValue(N, 0);
-  case 1:
-    Opcode = LE1ISD::SH1ADD;
-    break;
-  case 2:
-    Opcode = LE1ISD::SH2ADD;
-    break;
-  case 3:
-    Opcode = LE1ISD::SH3ADD;
-    break;
-  case 4:
-    Opcode = LE1ISD::SH4ADD;
-    break;
-  }
-  if (LHS.getOpcode() == ISD::SHL)
-    return DAG.getNode(Opcode, dl, VT, LHS, RHS);
-  else
-    return DAG.getNode(Opcode, dl, VT, RHS, LHS);
 }
 
 SDValue static PerformANDCombine(SDNode *N, SelectionDAG &DAG) {
@@ -1012,7 +970,6 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
     else
       DEBUG(dbgs() << "\n");
     break;
-  case ISD::ADD:          return PerformADDCombine(N, DAG);
   case ISD::AND:          return PerformANDCombine(N, DAG);
   case ISD::OR:           return PerformORCombine(N, DAG);
   case ISD::MUL:          return PerformMULCombine(N, DAG);
@@ -1046,7 +1003,6 @@ LowerOperation(SDValue Op, SelectionDAG &DAG) const
   {
     case ISD::MULHS:              return LowerMULHS(Op, DAG);
     case ISD::MULHU:              return LowerMULHU(Op, DAG);
-    case ISD::MUL:                return LowerMUL(Op, DAG);
     case ISD::SDIV:               return LowerSDIV(Op, DAG);
     case ISD::UDIV:               return LowerUDIV(Op, DAG);
     case ISD::SREM:               return LowerSREM(Op, DAG);
@@ -1081,18 +1037,6 @@ AddLiveIn(MachineFunction &MF, unsigned PReg, const TargetRegisterClass *RC)
   unsigned VReg = MF.getRegInfo().createVirtualRegister(RC);
   MF.getRegInfo().addLiveIn(PReg, VReg);
   return VReg;
-}
-
-SDValue LE1TargetLowering::LowerMUL(SDValue Op, SelectionDAG &DAG) const {
-  SDValue LHS = Op.getOperand(0);
-  SDValue RHS = Op.getOperand(1);
-  SDLoc dl(Op.getNode());
-
-  SDValue Mullu = DAG.getNode(LE1ISD::MULLU, dl, Op.getValueType(),
-                              LHS, RHS);
-  SDValue Mulhs = DAG.getNode(LE1ISD::MULHS, dl, Op.getValueType(),
-                              LHS, RHS);
-  return DAG.getNode(ISD::ADD, dl, Op.getValueType(), Mullu, Mulhs);
 }
 
 SDValue LE1TargetLowering::

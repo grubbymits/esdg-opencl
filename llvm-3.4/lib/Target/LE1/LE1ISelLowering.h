@@ -151,7 +151,6 @@ namespace llvm {
     SDValue PerformDAGCombine(SDNode *N, DAGCombinerInfo &DCI) const;
     SDValue LowerMULHS(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerMULHU(SDValue Op, SelectionDAG &DAG) const;
-    SDValue LowerMUL(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerSDIV(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerSREM(SDValue Op, SelectionDAG &DAG) const;
     SDValue LowerUDIV(SDValue Op, SelectionDAG &DAG) const;

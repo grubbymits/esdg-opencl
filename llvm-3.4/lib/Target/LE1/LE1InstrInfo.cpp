@@ -223,6 +223,19 @@ LE1InstrInfo::emitFrameIndexDebugValue(MachineFunction &MF, int FrameIx,
   return &*MIB;
 }
 
+/*
+MachineInstr*
+LE1InstrInfo::commuteInstruction(MachineInstr *MI, bool NewMI) const {
+  switch (MI->getOpcode()) {
+  case LE1::ADDi9:
+  case LE1::ADDi32: {
+    if (NewMI) {
+      MachineFunction &MF = *MI->getParent()->getParent();
+      MI = MF.CloneMachineInstr(MI);
+      NewMI = false;
+    }
+*/
+
 //===----------------------------------------------------------------------===//
 // Branch Analysis
 //===----------------------------------------------------------------------===//

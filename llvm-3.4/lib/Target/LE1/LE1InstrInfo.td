@@ -176,16 +176,29 @@ def simm16      : Operand<i32>;
 def globaladdress : Operand<i32>;
 
 //def i32imm      : Operand<i32>;
-def uimm32      : Operand<i32> {
-  let PrintMethod = "printUnsignedImm";
-}
+//def uimm32      : Operand<i32> {
+  //let PrintMethod = "printUnsignedImm";
+//}
 
 // Unsigned Operand
-def uimm16      : Operand<i32> {
+//def uimm16      : Operand<i32> {
+  //let PrintMethod = "printUnsignedImm";
+//}
+
+def immediate : Operand<i32> {
   let PrintMethod = "printUnsignedImm";
 }
 
-def immediate : Operand<i32> {
+def Op_simm9 : Operand<i32>;
+def Op_uimm9 : Operand<i32> {
+  let PrintMethod = "printUnsignedImm";
+}
+def Op_simm12 : Operand<i32>;
+def Op_uimm12 : Operand<i32> {
+  let PrintMethod = "printUnsignedImm";
+}
+def Op_simm32 : Operand<i32>;
+def Op_uimm32 : Operand<i32> {
   let PrintMethod = "printUnsignedImm";
 }
 
@@ -196,20 +209,33 @@ def globaladdroffset : Operand<i32> {
 // Address operand
 def mem : Operand<i32> {
   let PrintMethod = "printMemOperand";
-  let MIOperandInfo = (ops CPURegs, simm16);
+  let MIOperandInfo = (ops CPURegs, Op_simm32);
   let EncoderMethod = "getMemEncoding";
 }
-
+/*
 def mem_ea : Operand<i32> {
   let PrintMethod = "printMemOperandEA";
   let MIOperandInfo = (ops CPURegs, simm16);
   let EncoderMethod = "getMemEncoding";
-}
+}*/
 
-def imm9  : ImmLeaf<i32, [{ return (Imm == (Imm & 0x1F)); }]>;
+def imm9    : ImmLeaf<i32, [{ return (isUInt<9>(Imm)); }]>;
+def imm12   : ImmLeaf<i32, [{ return (isUInt<12>(Imm)); }]>;
+def imm32   : ImmLeaf<i32, [{ return (isUInt<32>(Imm)); }]>;
+
+def simm9   : ImmLeaf<i32, [{ return (isInt<9>(Imm)); }]>;
+def uimm9   : ImmLeaf<i32, [{ return (isUInt<9>(Imm)); }]>;
+def simm12  : ImmLeaf<i32, [{ return (isInt<12>(Imm)); }]>;
+def uimm12  : ImmLeaf<i32, [{ return (isUInt<12>(Imm)); }]>;
+def simm32  : ImmLeaf<i32, [{ return (isInt<32>(Imm)); }]>;
+def uimm32  : ImmLeaf<i32, [{ return (isUInt<32>(Imm)); }]>;
+
+/*
+def imm9  : ImmLeaf<i32, [{ return (Imm == (Imm & 0x1FF)); }]>;
 def imm12 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFF)); }]>;
 def imm16 : ImmLeaf<i32, [{ return (Imm == (Imm & 0xFFFF)); }]>;
-def imm32 : ImmLeaf<i32, [{ return (Imm != (Imm & 0x1F)); }]>;
+def imm32 : ImmLeaf<i32, [{ return ((Imm != (Imm & 0x1FF)) &&
+                                    (Imm != (Imm & 0xFFF))); }]>;*/
 
 def addr_i8   : ComplexPattern<iPTR, 2, "SelectAddri8", [frameindex], []>;
 def addr_i12  : ComplexPattern<iPTR, 2, "SelectAddri12", [frameindex], []>;
@@ -240,11 +266,12 @@ class ArithLogic_R_RR<bits<5> opcode, string instr_asm, SDNode OpNode,
 }
 
 class ArithLogic_R_I32R<bits<5> opcode, string instr_asm, SDNode OpNode,
-                        ImmLeaf immPat, SchedWrite SC, bit isComm = 0>
+                        ImmLeaf immPat, Operand immType, SchedWrite SC,
+                        bit isComm = 0>
   : LE1Format_R_I32R<
   opcode,
   (outs CPURegs:$rd),
-  (ins CPURegs:$src, immediate:$imm32),
+  (ins CPURegs:$src, immType:$imm32),
   !strconcat(instr_asm, " $rd, $src, $imm32"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src, immPat:$imm32))], IIAlu>,
   Sched<[SC]> {
@@ -252,11 +279,12 @@ class ArithLogic_R_I32R<bits<5> opcode, string instr_asm, SDNode OpNode,
 }
 
 class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
-                       ImmLeaf immPat, SchedWrite SC, bit isComm = 0>
+                       ImmLeaf immPat, Operand immType, SchedWrite SC,
+                       bit isComm = 0>
   : LE1Format_R_I9R<
   opcode,
   (outs CPURegs:$rd),
-  (ins CPURegs:$src1, immediate:$imm9),
+  (ins CPURegs:$src1, immType:$imm9),
   !strconcat(instr_asm, " $rd, $src1, $imm9"),
   [(set CPURegs:$rd, (OpNode CPURegs:$src1, immPat:$imm9))], IIAlu>,
   Sched<[SC]> {
@@ -364,7 +392,7 @@ class StoreMem_I32<bits<5>opcode, string instr_asm, PatFrag OpNode>
     opcode,
     (outs),
     (ins CPURegs:$src1, mem:$addr),
-    !strconcat(instr_asm, "  $addr, $src1"),
+    !strconcat(instr_asm, "  $src1, $addr"),
     [(OpNode CPURegs:$src1, addr_i32:$addr)], IILoadStore>,
     Sched<[WriteLSI]>;
 
@@ -374,7 +402,7 @@ class StoreMem_I12<bits<2> opcode, string instr_asm, PatFrag OpNode>
   0x7,
   (outs),
   (ins CPURegs:$rd, mem:$addr),
-  !strconcat(instr_asm, " $rd, $addr"),
+  !strconcat(instr_asm, "  $addr, $rd"),
   [(OpNode CPURegs:$rd, addr_i12:$addr)], IILoadStore>,
   Sched<[WriteLS]>;
 
@@ -383,7 +411,7 @@ class StoreMem_I8<bits<6> opcode, string instr_asm, PatFrag OpNode>
   opcode,
   (outs),
   (ins CPURegs:$rd, mem:$addr),
-  !strconcat(instr_asm, " $rd, $addr"),
+  !strconcat(instr_asm, "  $addr, $rd"),
   [(OpNode CPURegs:$rd, addr_i8:$addr)], IILoadStore>,
   Sched<[WriteLS]>;
 
@@ -449,21 +477,29 @@ class MoveI<string instr_asm, SDNode OpNode, RegisterClass OutReg, Operand Opr,
 // Arithmetic and Logic Instructions
 multiclass ARITH_LOGIC<bits<5> opcode, string instr_asm, SDNode OpNode,
                        InstrItinClass II, bit isComm = 0> {
-  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteA, isComm>;
-  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, imm32, WriteAI,
-                                    isComm>;
-  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, imm9, WriteA,
-                                   isComm>;
+  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteA, 1>;
+
+  def NAME#si32 : ArithLogic_R_I32R<opcode, instr_asm, OpNode, simm32,
+                                    Op_simm32, WriteAI, 0>;
+
+  def NAME#si9  : ArithLogic_R_I9R<opcode, instr_asm, OpNode, simm9, Op_simm9,
+                                   WriteA, 0>;
+
+  def NAME#i32 : ArithLogic_R_I32R<opcode, instr_asm, OpNode, uimm32,
+                                   Op_uimm32, WriteAI, 0>;
+
+  def NAME#i9  : ArithLogic_R_I9R<opcode, instr_asm, OpNode, uimm9, Op_uimm9,
+                                  WriteA, 0>;
 }
 
-defm ADD      : ARITH_LOGIC<0x0,   "add.0", add, IIAlu>;
-defm AND      : ARITH_LOGIC<0x1,   "and.0", and, IIAlu>;
+defm ADD      : ARITH_LOGIC<0x0,   "add.0", add, IIAlu, 1>;
+defm AND      : ARITH_LOGIC<0x1,   "and.0", and, IIAlu, 1>;
 defm ANDC     : ARITH_LOGIC<0x2,   "andc.0", le1_andc, IIAlu>;
-defm MAXS     : ARITH_LOGIC<0x3,   "max.0", le1_maxs, IIAlu>;
-defm MAXU     : ARITH_LOGIC<0x4,   "maxu.0", le1_maxu, IIAlu>;
-defm MINS     : ARITH_LOGIC<0x5,   "min.0", le1_mins, IIAlu>;
-defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_minu, IIAlu>;
-defm OR       : ARITH_LOGIC<0x7,   "or.0",  or, IIAlu>;
+defm MAXS     : ARITH_LOGIC<0x3,   "max.0", le1_maxs, IIAlu, 1>;
+defm MAXU     : ARITH_LOGIC<0x4,   "maxu.0", le1_maxu, IIAlu, 1>;
+defm MINS     : ARITH_LOGIC<0x5,   "min.0", le1_mins, IIAlu, 1>;
+defm MINU     : ARITH_LOGIC<0x6,   "minu.0", le1_minu, IIAlu, 1>;
+defm OR       : ARITH_LOGIC<0x7,   "or.0",  or, IIAlu, 1>;
 defm ORC      : ARITH_LOGIC<0x8,   "orc.0", le1_orc, IIAlu>;
 defm SH1ADD   : ARITH_LOGIC<0x9,   "sh1add.0", le1_sh1add, IIAlu>;
 defm SH2ADD   : ARITH_LOGIC<0xA,   "sh2add.0", le1_sh2add, IIAlu>;
@@ -473,53 +509,129 @@ defm SHL      : ARITH_LOGIC<0xD,   "shl.0", shl, IIAlu>;
 defm SHR      : ARITH_LOGIC<0xE,   "shr.0", sra, IIAlu>;
 defm SHRU     : ARITH_LOGIC<0xF,   "shru.0", srl, IIAlu>;
 defm SUB      : ARITH_LOGIC<0x10,  "sub.0", sub, IIAlu>;
-defm XOR      : ARITH_LOGIC<0x11,  "xor.0", xor, IIAlu>;
+defm XOR      : ARITH_LOGIC<0x11,  "xor.0", xor, IIAlu, 1>;
+
+// TODO Need to sort out commutable instructions to avoid situations like this:
+//  mov.0 r0.9, 0x4
+//  ;
+//  add.0 r0.10, r0.9, r0.16
+
+/*
+multiclass CommutePats<Instruction InstI9, Instruction InstI32, SDNode OpNode> {
+  def : Pat<(OpNode imm9:$src0, CPURegs:$src1),
+            (InstI9 CPURegs:$src1, imm9:$src0)>;
+  def : Pat<(OpNode imm32:$src0, CPURegs:$src1),
+            (InstI32 CPURegs:$src1, imm32:$src0)>;
+}
+
+defm : CommutePats<ADDi9, ADDi32, add>;
+defm : CommutePats<ANDi9, ANDi32, and>;
+defm : CommutePats<ORi9, ORi32, or>;
+defm : CommutePats<MAXUi9, MAXUi32, le1_maxu>;
+defm : CommutePats<MAXSi9, MAXSi32, le1_maxs>;
+defm : CommutePats<MINUi9, MINUi32, le1_minu>;
+defm : CommutePats<MINSi9, MINSi32, le1_mins>;
+defm : CommutePats<XORi9, XORi32, xor>;
+*/
+
+// TODO Must be way of using the specific shift value in the variable pattern.
+multiclass SH1ADD_PATS<Instruction InstR, Instruction InstI9,
+                      Instruction InstI32> {
+  def : Pat<(add (shl CPURegs:$src0, (i32 1)), CPURegs:$src1),
+            (InstR CPURegs:$src0, CPURegs:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 1)), imm9:$src1),
+            (InstI9 CPURegs:$src0, imm9:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 1)), imm32:$src1),
+            (InstI32 CPURegs:$src0, imm32:$src1)>;
+}
+multiclass SH2ADD_PATS<Instruction InstR, Instruction InstI9,
+                      Instruction InstI32> {
+  def : Pat<(add (shl CPURegs:$src0, (i32 2)), CPURegs:$src1),
+            (InstR CPURegs:$src0, CPURegs:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 2)), imm9:$src1),
+            (InstI9 CPURegs:$src0, imm9:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 2)), imm32:$src1),
+            (InstI32 CPURegs:$src0, imm32:$src1)>;
+}
+multiclass SH3ADD_PATS<Instruction InstR, Instruction InstI9,
+                      Instruction InstI32> {
+  def : Pat<(add (shl CPURegs:$src0, (i32 3)), CPURegs:$src1),
+            (InstR CPURegs:$src0, CPURegs:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 3)), imm9:$src1),
+            (InstI9 CPURegs:$src0, imm9:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 3)), imm32:$src1),
+            (InstI32 CPURegs:$src0, imm32:$src1)>;
+}
+multiclass SH4ADD_PATS<Instruction InstR, Instruction InstI9,
+                      Instruction InstI32> {
+  def : Pat<(add (shl CPURegs:$src0, (i32 4)), CPURegs:$src1),
+            (InstR CPURegs:$src0, CPURegs:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 4)), imm9:$src1),
+            (InstI9 CPURegs:$src0, imm9:$src1)>;
+  def : Pat<(add (shl CPURegs:$src0, (i32 4)), imm32:$src1),
+            (InstI32 CPURegs:$src0, imm32:$src1)>;
+}
+
+defm : SH1ADD_PATS<SH1ADDr, SH1ADDi9, SH1ADDi32>;
+defm : SH2ADD_PATS<SH2ADDr, SH2ADDi9, SH2ADDi32>;
+defm : SH3ADD_PATS<SH3ADDr, SH3ADDi9, SH3ADDi32>;
+defm : SH4ADD_PATS<SH4ADDr, SH4ADDi9, SH4ADDi32>;
+
 
 // TODO Some of these are commutable
 multiclass MULTS<bits<5> opcode, string instr_asm, SDNode OpNode,
                        InstrItinClass II, bit isComm = 0> {
   def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteM, isComm>;
-  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, imm32, WriteMI,
-                                    isComm>;
-  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, imm9, WriteM,
-                                   isComm>;
+
+  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, simm32,
+                                    Op_simm32, WriteMI, isComm>;
+
+  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, simm9, Op_simm9,
+                                   WriteM, isComm>;
+}
+multiclass MULTU<bits<5> opcode, string instr_asm, SDNode OpNode,
+                       InstrItinClass II, bit isComm = 0> {
+  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteM, isComm>;
+
+  def NAME#i32  : ArithLogic_R_I32R<opcode, instr_asm, OpNode, uimm32,
+                                    Op_uimm32, WriteMI, isComm>;
+
+  def NAME#i9   : ArithLogic_R_I9R<opcode, instr_asm, OpNode, uimm9, Op_uimm9,
+                                   WriteM, isComm>;
 }
 
 // i16(s1) * i16(s2)
 defm MULLL    : MULTS<0x12,  "mulll.0", le1_mulll, IIMul>;
 // ui16(s1) * ui16(s2)
-defm MULLLU   : MULTS<0x13,  "mulllu.0", le1_mulllu, IIMul>;
+defm MULLLU   : MULTU<0x13,  "mulllu.0", le1_mulllu, IIMul>;
 // i16(s1) * i16(s2 >> 16)
 defm MULLH    : MULTS<0x14,  "mullh.0", le1_mullh, IIMul>;
 // ui16(s1) * ui16(s2 >> 16)
-defm MULLHU   : MULTS<0x15,  "mullhu.0", le1_mullhu, IIMul>;
+defm MULLHU   : MULTU<0x15,  "mullhu.0", le1_mullhu, IIMul>;
 // i16(s1 >> 16) * i16(s2 >> 16)
 defm MULHH    : MULTS<0x16,  "mulhh.0", le1_mulhh, IIMul>;
 // ui16(s1 >> 16) * ui16(s2 >> 16)
-defm MULHHU   : MULTS<0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
+defm MULHHU   : MULTU<0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
 // s1 * i16(s2)
 defm MULL     : MULTS<0x18,  "mull.0", le1_mull, IIMul>;
 // s1 * ui16(s2)
-defm MULLU    : MULTS<0x19,  "mullu.0", le1_mullu, IIMul>;
+defm MULLU    : MULTU<0x19,  "mullu.0", le1_mullu, IIMul>;
 // s1 * i16(s2 >> 16)
 defm MULH     : MULTS<0x1A,  "mulh.0", le1_mulh, IIMul>;
 // s1 * ui16(s2 >> 16)
-defm MULHU    : MULTS<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
+defm MULHU    : MULTU<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
 // s1 * ui16(s2 >> 16) << 16
-defm MULHS    : MULTS<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
+defm MULHS    : MULTU<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
 
-/*
-let isCompare = 1 in {
-  multiclass COMPARE<bits<4> opc, string instr_asm, PatFrag OpNode> {
-    // Results into BRegs
-    def NAME#p    : Compare_P_RR<opc, instr_asm, OpNode>;
-    // Results into CPURegs
-    def NAME#r    : Compare_R_RR<opc, instr_asm, OpNode>;
-    def NAME#i32  : Compare_R_I32R<opc, instr_asm, OpNode>;
-    def NAME#i9   : Compare_R_I9R<opc, instr_asm, OpNode>;
-  }
-}
-*/
+def : Pat<(mul CPURegs:$src1, CPURegs:$src2),
+          (ADDr (MULLUr CPURegs:$src1, CPURegs:$src2),
+                (MULHSr CPURegs:$src1, CPURegs:$src2))>;
+def : Pat<(mul CPURegs:$src1, imm9:$src2),
+          (ADDr (MULLUi9 CPURegs:$src1, imm9:$src2),
+                (MULHSi9 CPURegs:$src1, imm9:$src2))>;
+def : Pat<(mul CPURegs:$src1, imm32:$src2),
+          (ADDr (MULLUi32 CPURegs:$src1, imm32:$src2),
+                (MULHSi32 CPURegs:$src1, imm32:$src2))>;
 
 multiclass COMPARE<bits<4> opc, string instr_asm, SDNode OpNode> {
   // Results into BRegs
@@ -641,14 +753,14 @@ def ADDCG : LE1Format_RP_PRR<
             (outs CPURegs:$rd, BRegs:$prd2),
             (ins CPURegs:$src1, CPURegs:$src2, BRegs:$prs),
             "addcg.0  $rd, $prd2, $src1, $src2, $prs",
-            [], IIAlu>, Sched<[WriteA]>;
+            [], IIAlu>, Sched<[WriteA, WriteP]>;
 
 def DIVS  : LE1Format_RP_PRR<
             0x1,
             (outs CPURegs:$rd, BRegs:$prd2),
             (ins CPURegs:$src1, CPURegs:$src2, BRegs:$prs),
             "divs.0  $rd, $prd2, $src1, $src2, $prs",
-            [], IIAlu>, Sched<[WriteA]>;
+            [], IIAlu>, Sched<[WriteA, WriteP]>;
 
 def MFB   : LE1Format_RP_PRR<
             0x2,
@@ -722,8 +834,10 @@ def : Pat<(tglobaladdr:$addr),
           (ADDi32 ZERO, tglobaladdr:$addr)>;
 //def : Pat<(i32 0),
   //        (ADDr ZERO, ZERO)>;
-def : Pat<(i32 imm:$in),
-          (ADDi32 ZERO, imm:$in)>;
+def : Pat<(i32 imm9:$in),
+          (ADDi9 ZERO, imm9:$in)>;
+def : Pat<(i32 imm32:$in),
+          (ADDi32 ZERO, imm32:$in)>;
 
 //let Defs = [L0] in
 def LDL : LE1Inst<(outs LReg:$dst),
@@ -796,10 +910,10 @@ def Ret : LE1Inst<(outs),
 
 // As stack alignment is always done with addiu, we need a 16-bit immediate
 let Defs = [SP], Uses = [SP], isPseudo=1 in {
-def ADJCALLSTACKDOWN : LE1Pseudo<(outs), (ins uimm16:$amt),
+def ADJCALLSTACKDOWN : LE1Pseudo<(outs), (ins Op_uimm32:$amt),
                                   "!ADJCALLSTACKDOWN $amt",
                                   [(callseq_start timm:$amt)]>;
-def ADJCALLSTACKUP   : LE1Pseudo<(outs), (ins uimm16:$amt1, uimm16:$amt2),
+def ADJCALLSTACKUP   : LE1Pseudo<(outs), (ins Op_uimm32:$amt1, Op_uimm32:$amt2),
                                   "!ADJCALLSTACKUP $amt1",
                                   [(callseq_end timm:$amt1, timm:$amt2)]>;
 }

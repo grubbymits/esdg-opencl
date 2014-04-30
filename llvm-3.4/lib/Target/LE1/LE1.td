@@ -37,33 +37,6 @@ def ExpandDiv : SubtargetFeature<"expand-div", "HasExpandDiv", "true",
                                   []>;
 def NeedsNops : SubtargetFeature<"needs-nops", "NeedsNops", "true",
                                   "Inserting Nops for simulator", []>;
-/*
-def 1HContext : SubtargetFeature<"1hc", "HyperContext1", "true",
-                                 "Single Hyper Context - Default", []>;
-def 2HContext : SubtargetFeature<"2hc", "HyperContext2", "true",
-                                 "Two Hyper Contexts", []>;
-def 3HContext : SubtargetFeature<"3hc", "HyperContext3", "true",
-                                 "Three Hyper Contexts", []>;
-def 4HContext : SubtargetFeature<"4hc", "HyperContext4", "true",
-                                 "Four Hyper Contexts", []>;
-def 5HContext : SubtargetFeature<"5hc", "HyperContext5", "true",
-                                 "Five Hyper Contexts", []>;
-def 6HContext : SubtargetFeature<"6hc", "HyperContext6", "true",
-                                 "Six Hyper Contexts", []>;
-def 7HContext : SubtargetFeature<"7hc", "HyperContext7", "true",
-                                 "Seven Hyper Contexts", []>;
-def 8HContext : SubtargetFeature<"8hc", "HyperContext8", "true",
-                                 "Eight Hyper Contexts", []>;
-def 9HContext : SubtargetFeature<"9hc", "HyperContext9", "true",
-                                 "Nine Hyper Contexts", []>;
-def 10HContext : SubtargetFeature<"10hc", "HyperContext10", "true",
-                                 "Ten Hyper Contexts", []>;
-def 11HContext : SubtargetFeature<"11hc", "HyperContext5", "true",
-                                 "Eleven Hyper Contexts", []>;
-def 12HContext : SubtargetFeature<"12hc", "HyperContext12", "true",
-                                 "Twelve Hyper Contexts", []>;
-def 13HContext : SubtargetFeature<"13hc", "HyperContext13", "true",
-                                 "Thirteen Hyper Contexts", []>;*/
 
 def LE1AsmWriter : AsmWriter {
   string AsmWriterClassName  = "InstPrinter";

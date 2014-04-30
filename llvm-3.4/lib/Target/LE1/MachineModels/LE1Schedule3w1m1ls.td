@@ -5,6 +5,9 @@ def LE1Model3w1m1ls : SchedMachineModel {
 
 let SchedModel = LE1Model3w1m1ls in {
 
+  def : WriteRes<WriteP, [PRED3]> {
+    let NumMicroOps = 0;
+  }
   def : WriteRes<WriteA, [ALU3]> {
     let Latency = 2;
   }

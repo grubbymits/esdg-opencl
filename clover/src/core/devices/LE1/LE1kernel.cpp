@@ -629,7 +629,7 @@ bool LE1KernelEvent::CompileSource() {
     << " > " << FinalAsmName;
   // FIXME return false?
   if (system(pre_asm_command.str().c_str()) != 0) {
-    std::cerr << "LLVM Transform failed\n";
+    std::cout << "!!ERROR: LLVM Transform failed\n";
     return false;
   }
 

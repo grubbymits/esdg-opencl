@@ -76,8 +76,10 @@ void LE1InstPrinter::printOperand(const MCInst *MI, unsigned OpNo,
 void LE1InstPrinter::printUnsignedImm(const MCInst *MI, int opNum,
                                        raw_ostream &O) {
   const MCOperand &MO = MI->getOperand(opNum);
-  if (MO.isImm())
-    O << (unsigned int)MO.getImm();
+  if (MO.isImm()) {
+    O << "0x";
+    O.write_hex(MO.getImm());
+  }
   else
     printOperand(MI, opNum, O);
 }
@@ -92,11 +94,13 @@ printMemOperand(const MCInst *MI, int opNum, raw_ostream &O) {
     O << "]";
   }
   else {
-    O << "(";
+    // Way for us to load from global address
+    // TODO Need to be this properly so r0 is encoded in the instruction
+    O << "r0.0[(";
     printOperand(MI, opNum, O);
     O << "+";
     printOperand(MI, opNum+1, O);
-    O <<")";
+    O <<")]";
   }
 }
 

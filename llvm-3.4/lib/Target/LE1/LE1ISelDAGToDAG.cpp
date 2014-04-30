@@ -96,7 +96,7 @@ private:
 
   // getI32Imm - Return a target constant with the specified
   // value, of type i32.
-  inline SDValue getI32Imm(unsigned Imm) {
+  inline SDValue getI32Imm(int Imm) {
     return CurDAG->getTargetConstant(Imm, MVT::i32);
   }
 
@@ -112,6 +112,8 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
   DEBUG(dbgs() << "SelectAddri8\n");
   EVT VT = Addr.getValueType();
   SDLoc dl(Addr.getNode());
+  SDValue Op0 = Addr.getOperand(0);
+  SDValue Op1 = Addr.getOperand(1);
 
   if (dyn_cast<GlobalAddressSDNode>(Addr))
     return false;
@@ -127,11 +129,11 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
     DEBUG(dbgs() << "isBaseWithConstantOffset\n");
     if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(Addr.getOperand(1)))
     {
-      DEBUG(dbgs() << "Offset = " << CN->getZExtValue() << "\n");
+      DEBUG(dbgs() << "Offset = " << CN->getSExtValue() << "\n");
 
-      if (CN->getZExtValue() == (CN->getZExtValue() & 0xFF)) {
+      if (isInt<8>(CN->getSExtValue())) {
         Base = Addr.getOperand(0);
-        Offset = Addr.getOperand(1);
+        Offset = getI32Imm(CN->getSExtValue()); //Addr.getOperand(1);
         DEBUG(dbgs() << "SelectAddri8 pass, BaseWithConstantOFfset\n");
         return true;
       }
@@ -139,94 +141,14 @@ bool LE1DAGToDAGISel::SelectAddri8(SDValue Addr, SDValue &Base,
     DEBUG(dbgs() << "BaseWithConstantOffset, SelectAddri8 fail\n");
   }
   else {
-    DEBUG(dbgs() << "SelectAddri8 pass, just using default\n");
-    Base = Addr.getOperand(1);
+    DEBUG(dbgs() << "SelectAddri8 pass, just using default. Addr = \n");
+#ifndef NDEBUG
+    Addr.dump();
+#endif
+    Base = Addr;
     Offset = getI32Imm(0);
     return true;
   }
-  /*
-  else {
-    SDValue LHS = Addr.getOperand(0);
-    SDValue RHS = Addr.getOperand(1);
-    Offset = getI32Imm(0);
-
-    if (FrameIndexSDNode *FIN = dyn_cast<FrameIndexSDNode>(RHS))
-      RHS = CurDAG->getTargetFrameIndex(FIN->getIndex(), VT);
-
-    // The address may be stored in a single register
-    if (LHS.getValueType() == MVT::Other) {
-      DEBUG(dbgs() << "SelectAddri8 pass with MVT::Other\n");
-      Base = RHS;
-      return true;
-    }
-    else if (RHS.getValueType() == MVT::Other) {
-      DEBUG(dbgs() << "SelectAddri8 pass with MVT::Other");
-      Base = LHS;
-      return true;
-    }
-
-    // Address has bee calculated which the base and offset stored in registers.
-    // Add these values to create the base, and use a zero offset. We also check
-    // whether we are adding the result of a shift, if so we can possibly use
-    // one of our SHADD instructions.
-    if ((LHS.getOpcode() != ISD::SHL) && (RHS.getOpcode() != ISD::SHL)) {
-      std::cout << "LHS = ";
-      //LHS.dump();
-      std::cout << "RHS = ";
-      //RHS.dump();
-      if (RHS.getOpcode() == ISD::UNDEF)
-        Base = LHS;
-      else {
-        Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
-        DEBUG(dbgs() << "Creating ADDr node for address, SelectAddri8 pass\n");
-        return true;
-      }
-      return true;
-    }
-    else {
-      unsigned ShiftVal = 0;
-      unsigned Opcode = 0;
-      SDValue ShiftOp0;
-      SDValue ShiftOp1;
-      if (LHS.getOpcode() == ISD::SHL) {
-        if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(LHS.getOperand(1))) {
-          ShiftOp0 = LHS.getOperand(0);
-          ShiftOp1 = RHS;
-          ShiftVal = CN->getZExtValue();
-        }
-      }
-      else if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(RHS.getOperand(1)))
-      {
-        ShiftOp0 = RHS.getOperand(0);
-        ShiftOp1 = LHS;
-        ShiftVal = CN->getZExtValue();
-      }
-
-      switch (ShiftVal) {
-      default:
-        Base = SDValue(CurDAG->getMachineNode(LE1::ADDr, dl, VT, LHS, RHS), 0);
-        DEBUG(dbgs() << "SelectAddri8 success, using ADDr\n");
-        return true;
-      case 1:
-        Opcode = LE1::SH1ADDr;
-        break;
-      case 2:
-        Opcode = LE1::SH2ADDr;
-        break;
-      case 3:
-        Opcode = LE1::SH3ADDr;
-        break;
-      case 4:
-        Opcode = LE1::SH4ADDr;
-        break;
-      }
-      Base = SDValue(CurDAG->getMachineNode(Opcode, dl, VT, ShiftOp0,
-                                            ShiftOp1), 0);
-
-      DEBUG(dbgs() << "Created shl op for addr, SelectAddri8 pass\n");
-      return true;
-    }
-  }*/
   DEBUG(dbgs() << "Fail on SelectAddri8\n");
   return false;
 }
@@ -247,9 +169,9 @@ bool LE1DAGToDAGISel::SelectAddri12(SDValue Addr, SDValue &Base,
   }
   if (CurDAG->isBaseWithConstantOffset(Addr)) {
     ConstantSDNode *CN = cast<ConstantSDNode>(Addr.getOperand(1));
-    if (CN->getZExtValue() == (CN->getZExtValue() & 0xFFF)) {
+    if (isInt<12>(CN->getSExtValue())) { //== (CN->getZExtValue() & 0xFFF)) {
       Base = Addr.getOperand(0);
-      Offset = Addr.getOperand(1);
+      Offset = getI32Imm(CN->getSExtValue()); //Addr.getOperand(1);
       DEBUG(dbgs() << "SelectAddri12 success\n");
       return true;
     }
@@ -275,23 +197,25 @@ bool LE1DAGToDAGISel::SelectAddri32(SDValue Addr, SDValue &Base,
     return false;
   }
   if (GlobalAddressSDNode *GA = dyn_cast<GlobalAddressSDNode>(Addr)) {
-    Base = CurDAG->getRegister(LE1::ZERO, MVT::i32);
-    Offset = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32,
-                                            GA->getOffset());
+    //Base = CurDAG->getRegister(LE1::ZERO, MVT::i32);
+    //Offset = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32,
+      //                                      GA->getOffset());
+    Base = CurDAG->getTargetGlobalAddress(GA->getGlobal(), dl, MVT::i32, 0);
+    Offset = CurDAG->getTargetConstant(GA->getOffset(), MVT::i32);
     DEBUG(dbgs() << "GlobalAddress, SelectAddri32 success\n");
     return true;
   }
   else if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(Addr.getOperand(1))) {
     DEBUG(dbgs() << "Offset = " << CN->getZExtValue() << "\n");
 
-    if ((CN->getZExtValue() == (CN->getZExtValue() & 0xFF)) ||
-       (CN->getZExtValue() == (CN->getZExtValue() & 0xFFF))) {
+    if (isInt<8>(CN->getSExtValue()) ||
+       (isInt<12>(CN->getSExtValue()))) {
       DEBUG(dbgs() << "SelectAddri32 fail\n");
       return false;
     }
 
     Base = Addr.getOperand(0);
-    Offset = CurDAG->getTargetConstant(CN->getZExtValue(), MVT::i32);
+    Offset = getI32Imm(CN->getSExtValue());
     DEBUG(dbgs() << "SelectAddri32 pass with Base + ConstantOffset\n");
     return true;
   }

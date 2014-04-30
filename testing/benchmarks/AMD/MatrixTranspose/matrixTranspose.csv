@@ -1,7 +1,0 @@
-Config, Contexts, Total Cycles, Total Stalls, Decode Stalls, Branches Taken, Branches not Taken, Cycle to complete, Iterations, Average Cycles, Average Decode
-2w2a2m2ls1b, 1, 108415, 33396, 27234, 2045, 144, 108415, 1, 108415, 27234
-2w2a2m2ls1b, 2, 108432, 33400, 27238, 2044, 146, 54216, 1, 54216, 27238
-2w2a2m2ls1b, 4, 108458, 33404, 27242, 2042, 150, 27117, 1, 27117, 27242
-2w2a2m2ls1b, 6, 108492, 33418, 27250, 2044, 150, 27119, 1, 27119, 27250
-2w2a2m2ls1b, 8, 108518, 33428, 27254, 2046, 150, 27119, 1, 27119, 27254
-2w2a2m2ls1b, 10, 108544, 33438, 27258, 2048, 150, 27119, 1, 27119, 27258

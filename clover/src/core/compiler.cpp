@@ -688,7 +688,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   const llvm::Target *TheTarget = llvm::TargetRegistry::lookupTarget(Triple,
                                                                      Error);
   if (!TheTarget) {
-    std::cerr << "Target not available: " << Error;
+    std::cout << "!!ERROR: Target not available: " << Error;
     return false;
   }
 
@@ -724,18 +724,17 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   //PM.add(createLoopUnrollPass(10, 2, 1));
 
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
-                                                             0);
-  /*
+                                                             Error);
   if (!Error.empty()) {
     std::cerr << Error;
     delete FDOut;
     delete TLI;
     return false;
-  }*/
+  }
 
   llvm::OwningPtr<llvm::tool_output_file> Out(FDOut);
   if (!Out) {
-    std::cerr << "Couldn't create output file\n";
+    std::cout << "!!ERROR: Couldn't create output file\n";
     return false;
   }
   llvm::formatted_raw_ostream FOS(Out->os());
@@ -746,7 +745,8 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
   if (Target.addPassesToEmitFile(PM, FOS,
                                  llvm::TargetMachine::CGFT_AssemblyFile,
                                  false, 0, 0)) {
-    std::cerr << "Target does not support generation of this filetype!\n";
+    std::cout
+      << "!!ERROR: Target does not support generation of this filetype!\n";
     return false;
   }
 

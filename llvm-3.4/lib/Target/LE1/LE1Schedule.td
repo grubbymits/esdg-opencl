@@ -29,6 +29,10 @@ def MULT2 : ProcResource<2>;
 def LSU1  : ProcResource<1>;
 def LSU2  : ProcResource<2>;
 def BRU   : ProcResource<1>;
+def PRED1 : ProcResource<1>;
+def PRED2 : ProcResource<2>;
+def PRED3 : ProcResource<3>;
+def PRED4 : ProcResource<4>;
 
 def WriteA    : SchedWrite;
 def WriteAI   : SchedWrite;
@@ -38,6 +42,7 @@ def WriteLS   : SchedWrite;
 def WriteLSI  : SchedWrite;
 def WriteB    : SchedWrite;
 def WriteBI   : SchedWrite;
+def WriteP    : SchedWrite;
 
 def LE1ModelScalar : SchedMachineModel {
   let IssueWidth = 1;
@@ -46,6 +51,9 @@ def LE1ModelScalar : SchedMachineModel {
 
 let SchedModel = LE1ModelScalar in {
 
+  def : WriteRes<WriteP, [PRED1]> {
+    let NumMicroOps = 0;
+  }
   def : WriteRes<WriteA, [ALU1]> {
     let Latency = 2;
   }
