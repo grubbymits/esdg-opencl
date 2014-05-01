@@ -28,114 +28,13 @@
 
 using namespace llvm;
 
-
-//===----------------------------------------------------------------------===//
-//
-// Stack Frame Processing methods
-// +----------------------------+
-//
-// The stack is allocated decrementing the stack pointer on
-// the first instruction of a function prologue. Once decremented,
-// all stack references are done thought a positive offset
-// from the stack/frame pointer, so the stack is considering
-// to grow up! Otherwise terrible hacks would have to be made
-// to get this stack ABI compliant :)
-//
-//  The stack frame required by the ABI (after call):
-//  Offset
-//
-//  0                 ----------
-//  4                 Args to pass
-//  .                 saved $GP  (used in PIC)
-//  .                 Alloca allocations
-//  .                 Local Area
-//  .                 CPU "Callee Saved" Registers
-//  .                 saved FP
-//  .                 saved RA
-//  .                 FPU "Callee Saved" Registers
-//  StackSize         -----------
-//
-// Offset - offset from sp after stack allocation on function prologue
-//
-// The sp is the stack pointer subtracted/added from the stack size
-// at the Prologue/Epilogue
-//
-// References to the previous stack (to obtain arguments) are done
-// with offsets that exceeds the stack size: (stacksize+(4*(num_arg-1))
-//
-// Examples:
-// - reference to the actual stack frame
-//   for any local area var there is smt like : FI >= 0, StackOffset: 4
-//     sw REGX, 4(SP)
-//
-// - reference to previous stack frame
-//   suppose there's a load to the 5th arguments : FI < 0, StackOffset: 16.
-//   The emitted instruction will be something like:
-//     lw REGX, 16+StackSize(SP)
-//
-// Since the total stack size is unknown on LowerFormalArguments, all
-// stack references (ObjectOffset) created to reference the function
-// arguments, are negative numbers. This way, on eliminateFrameIndex it's
-// possible to detect those references and the offsets are adjusted to
-// their real location.
-//
-//===----------------------------------------------------------------------===//
-
-// hasFP - Return true if the specified function should have a dedicated frame
-// pointer register.  This is true if the function has variable sized allocas or
-// if frame pointer elimination is disabled.
-//bool LE1FrameLowering::hasFP(const MachineFunction &MF) const {
-  //const MachineFrameInfo *MFI = MF.getFrameInfo();
-  //return DisableFramePointerElim(MF) || MFI->hasVarSizedObjects()
-    //  || MFI->isFrameAddressTaken();
-//}
-
 bool LE1FrameLowering::targetHandlesStackFrameRounding() const {
   return true;
 }
 
 static unsigned AlignOffset(unsigned Offset, unsigned Align) {
-  return (Offset + Align - 1) / Align * Align; 
-} 
-
-// expand pair of register and immediate if the immediate doesn't fit in the
-// 16-bit offset field.
-// e.g.
-//  if OrigImm = 0x10000, OrigReg = $sp:
-//    generate the following sequence of instrs:
-//      lui  $at, hi(0x10000)
-//      addu $at, $sp, $at
-//
-//    (NewReg, NewImm) = ($at, lo(Ox10000))
-//    return true
-//static bool expandRegLargeImmPair(unsigned OrigReg, int OrigImm,
-  //                                unsigned& NewReg, int& NewImm,
-    //                              MachineBasicBlock& MBB,
-      //                            MachineBasicBlock::iterator I) {
-  // OrigImm fits in the 16-bit field
-  //if (OrigImm < 0x8000 && OrigImm >= -0x8000) {
-    //NewReg = OrigReg;
-    //NewImm = OrigImm;
-    //return false;
-  //}
-
-  //MachineFunction* MF = MBB.getParent();
-  //const TargetInstrInfo *TII = MF->getTarget().getInstrInfo();
-  //DebugLoc DL = I->getDebugLoc();
-  //int ImmLo = (short)(OrigImm & 0xffff);
-  //int ImmHi = (((unsigned)OrigImm & 0xffff0000) >> 16) +
-    //          ((OrigImm & 0x8000) != 0);
-
-  // FIXME: change this when le1 goes MC".
-  //BuildMI(MBB, I, DL, TII->get(LE1::NOAT));
-  //BuildMI(MBB, I, DL, TII->get(LE1::LUi), LE1::T45).addImm(ImmHi);
-  //BuildMI(MBB, I, DL, TII->get(LE1::ADDu), LE1::T45).addReg(OrigReg)
-    //                                                 .addReg(LE1::T45);
-  //NewReg = LE1::T45;
-  //NewImm = ImmLo;
-
-  //return true;
-//}
+  return (Offset + Align - 1) / Align * Align;
+}
 
 void LE1FrameLowering::emitPrologue(MachineFunction &MF) const {
   //std::cout << "Entering LE1FrameLowering::emitPrologue\n";
@@ -197,7 +96,7 @@ void LE1FrameLowering::emitEpilogue(MachineFunction &MF,
 
   if(MF.getFunction()->getName() == "main") {
     MachineInstrBuilder Builder = BuildMI(MBB, MBBI, dl, TII.get(LE1::Exit),
-                                          LE1::L0);
+                                          LE1::LNK);
     MBBI->eraseFromParent();
     // TODO Handle the fact that the stack restore instruction isn't handled
   }
@@ -252,9 +151,9 @@ processFunctionBeforeCalleeSavedScan(MachineFunction &MF,
   // To correct this, $ra is explicitly marked unused if there is no
   // function call.
   if (MF.getFrameInfo()->hasCalls())
-    MRI.setPhysRegUsed(LE1::L0);
+    MRI.setPhysRegUsed(LE1::LNK);
   else
-    MRI.setPhysRegUnused(LE1::L0);
+    MRI.setPhysRegUnused(LE1::LNK);
 }
 
 // Just delete ADJCALLSTACK pseudo instructions

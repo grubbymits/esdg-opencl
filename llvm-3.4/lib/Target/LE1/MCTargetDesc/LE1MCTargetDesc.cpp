@@ -43,7 +43,7 @@ static MCInstrInfo *createLE1MCInstrInfo() {
 
 static MCRegisterInfo *createLE1MCRegisterInfo(StringRef TT) {
   MCRegisterInfo *X = new MCRegisterInfo();
-  InitLE1MCRegisterInfo(X, LE1::L0);
+  InitLE1MCRegisterInfo(X, LE1::LNK);
   return X;
 }
 

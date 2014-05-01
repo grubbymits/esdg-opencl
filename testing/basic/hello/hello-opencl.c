@@ -65,21 +65,31 @@
  
 // Use a static data size for simplicity
 //
-#define DATA_SIZE (256)
+#define DATA_SIZE (2)
  
 ////////////////////////////////////////////////////////////////////////////////
  
 // Simple compute kernel which computes the square of an input array 
 //
-const char *KernelSource =
-"const int refarray[] = { 20, 50, 80, 100 };\n"
+const char *KernelSourceFloat =
 "__kernel void array_mult(\n" \
 "   __global float* input1,\n" \
 "   __global float* input2,\n" \
 "   __global float* output)\n" \
 "{\n" \
 "   int i = get_global_id(0);\n" \
-"   output[i] = (input1[i] / input2[i]);\n" \
+"   output[i] = (input1[i] * input2[i]);\n" \
+"}\n" \
+"\n";
+
+const char *KernelSourceInt =
+"__kernel void array_mult(\n" \
+"   __global int* input1,\n" \
+"   __global int* input2,\n" \
+"   __global int* output)\n" \
+"{\n" \
+"   int i = get_global_id(0);\n" \
+"   output[i] = (input1[i] * input2[i]);\n" \
 "}\n" \
 "\n";
  
@@ -88,10 +98,15 @@ const char *KernelSource =
 int main(int argc, char** argv)
 {
     int err;                            // error code returned from api calls
-      
+#ifdef TEST_FLOAT 
     float data1[DATA_SIZE]; //= {0,1,2,3,4,5,6,7,8,9};              // original data set given to device
     float data2[DATA_SIZE]; //= {0,10,20,30,40,50,60,70,80,90};              // original data set given to device
     float results[DATA_SIZE]; //= {0,0,0,0,0,0,0,0,0,0};           // results returned from device
+#else
+    int data1[DATA_SIZE]; //= {0,1,2,3,4,5,6,7,8,9};              // original data set given to device
+    int data2[DATA_SIZE]; //= {0,10,20,30,40,50,60,70,80,90};              // original data set given to device
+    int results[DATA_SIZE]; //= {0,0,0,0,0,0,0,0,0,0};           // results returned from device
+#endif
     unsigned int correct;               // number of correct results returned
 
     srand(time(NULL));
@@ -150,7 +165,15 @@ int main(int argc, char** argv)
  
     // Create the compute program from the source buffer
     //
-    program = clCreateProgramWithSource(context, 1, (const char **) & KernelSource, NULL, &err);
+#ifdef TEST_FLOAT
+    program = clCreateProgramWithSource(context, 1,
+                                        (const char **)&KernelSourceFloat,
+                                        NULL, &err);
+#else
+    program = clCreateProgramWithSource(context, 1,
+                                        (const char **)&KernelSourceInt,
+                                        NULL, &err);
+#endif
     if (!program)
     {
         printf("Error: Failed to create compute program!\n");
@@ -182,25 +205,46 @@ int main(int argc, char** argv)
  
     // Create the input and output arrays in device memory for our calculation
     //
-    input1 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(float) * count, NULL, NULL);
-    input2 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(float) * count, NULL, NULL);
-    output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(float) * count, NULL, NULL);
+#ifdef TEST_FLOAT
+    input1 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(float) * count,
+                            NULL, NULL);
+    input2 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(float) * count,
+                            NULL, NULL);
+    output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(float) * count,
+                            NULL, NULL);
+#else
+    input1 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(int) * count,
+                            NULL, NULL);
+    input2 = clCreateBuffer(context,  CL_MEM_READ_ONLY,  sizeof(int) * count,
+                            NULL, NULL);
+    output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(int) * count,
+                            NULL, NULL);
+#endif
     if (!input1 || !input2 || !output)
     {
         printf("Error: Failed to allocate device memory!\n");
         exit(1);
-    }    
-    
+    }
+
     // Write our data set into the input array in device memory 
     //
-    err = clEnqueueWriteBuffer(commands, input1, CL_TRUE, 0, sizeof(float) * count, data1, 0, NULL, NULL);
-    err = clEnqueueWriteBuffer(commands, input2, CL_TRUE, 0, sizeof(float) * count, data2, 0, NULL, NULL);
+#ifdef TEST_FLOAT
+    err = clEnqueueWriteBuffer(commands, input1, CL_TRUE, 0,
+                               sizeof(float) * count, data1, 0, NULL, NULL);
+    err = clEnqueueWriteBuffer(commands, input2, CL_TRUE, 0,
+                               sizeof(float) * count, data2, 0, NULL, NULL);
+#else
+    err = clEnqueueWriteBuffer(commands, input1, CL_TRUE, 0,
+                               sizeof(int) * count, data1, 0, NULL, NULL);
+    err = clEnqueueWriteBuffer(commands, input2, CL_TRUE, 0,
+                               sizeof(int) * count, data2, 0, NULL, NULL);
+#endif
     if (err != CL_SUCCESS)
     {
         printf("Error: Failed to write to source array!\n");
         exit(1);
     }
- 
+
     //err = clEnqueueWriteBuffer(commands, BufferB, CL_TRUE, 0,
       //                         sizeof(int) * DATA_SIZE, B, 0, NULL, NULL);
     if (err != CL_SUCCESS)
@@ -264,10 +308,16 @@ int main(int argc, char** argv)
     correct = 0;
     for(i = 0; i < count; i++)
     {
-      float expected = data1[i] / data2[i];
+#ifdef TEST_FLOAT
+      float expected = data1[i] * data2[i];
       float res = results[i];
+#else
+      int expected = data1[i] * data2[i];
+      int res = results[i];
+#endif
       //printf("    data1 = %x, data2 = %x\n", data1[i], data2[i]);
 
+#ifdef TEST_FLOAT
       if(res == expected) {
         correct++;
         printf("[%d] - CORRECT: %f\n", i, res);
@@ -278,6 +328,18 @@ int main(int argc, char** argv)
         printf("data1 = %f, data2 = %f\n", data1[i], data2[i]);
       }
     }
+#else
+      if(res == expected) {
+        correct++;
+        printf("[%d] - CORRECT: %d\n", i, res);
+      }
+      else {
+        printf("[%d] - FAIL: %d, and expected = %d : ", i, res,
+               expected);
+        printf("data1 = %d, data2 = %d\n", data1[i], data2[i]);
+      }
+    }
+#endif
     
     // Print a brief summary detailing the results
     //

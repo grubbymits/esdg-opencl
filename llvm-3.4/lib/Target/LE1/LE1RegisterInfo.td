@@ -22,11 +22,6 @@ class GPR<bits<6> num, string n> : LE1Reg<n> {
   let Num = num;
 }
 
-class LNK<bits<6> num, string n> : LE1Reg<n> {
-  field bits<6> Num;
-  let Namespace = "LE1";
-}
-
 // LE1 1-bit Branch Registers
 class BRR<bits<6> num, string n> : LE1Reg<n> {
   field bits<6> Num;
@@ -105,7 +100,7 @@ let Namespace = "LE1" in {
   def TS5   : GPR<62, "r0.62">, DwarfRegNum<[62]>;
   def TS6   : GPR<63, "r0.63">, DwarfRegNum<[63]>;
   
-  def L0    : LNK<0, "l0.0">, DwarfRegNum<[64]>;
+  def LNK   : GPR<0, "l0.0">, DwarfRegNum<[64]>;
 
   // Branch Registers
   def B0    : BRR<0, "b0.0">, DwarfRegNum<[65]>;
@@ -140,17 +135,7 @@ def CPURegs : RegisterClass<"LE1", [i32], 32, (add
   // Callee save
   TS0, TS1, TS2, TS3, TS4, TS5, TS6,
   // Reserved
-  ZERO, SP)>;
-
-//def CLRegs : RegisterClass<"LE1", [i32], 32, (add
-  //T42, T43, T44)>;
-
-def LReg : RegisterClass<"LE1", [i32], 32, (add L0)>;
-
-/*
-def LocalIdx  : RegisterClass<"LE1", [i32], 32, (add IdX)>;
-def LocalIdy  : RegisterClass<"LE1", [i32], 32, (add IdY)>;
-def LocalIdz  : RegisterClass<"LE1", [i32], 32, (add IdZ)>;*/
+  ZERO, SP, LNK)>;
 
 def BRegs : RegisterClass<"LE1", [i1], 32, (add
   B0, B1, B2, B3, B4, B5, B6, B7)> {

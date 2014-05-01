@@ -461,14 +461,14 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setOperationAction(ISD::INTRINSIC_VOID,     MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_W_CHAIN,  MVT::Other, Custom);
   setOperationAction(ISD::INTRINSIC_WO_CHAIN, MVT::Other, Custom);
-  //setOperationAction(ISD::Constant,           MVT::i32,   Custom);
+  setOperationAction(ISD::Constant,           MVT::i32,   Custom);
   setOperationAction(ISD::VASTART,            MVT::Other, Custom);
   setOperationAction(ISD::GlobalAddress,      MVT::i32,   Custom);
 
   setTargetDAGCombine(ISD::AND);
   setTargetDAGCombine(ISD::OR);
-  setTargetDAGCombine(ISD::MUL);
-  setTargetDAGCombine(ISD::SHL);
+  //setTargetDAGCombine(ISD::MUL);
+  //setTargetDAGCombine(ISD::SHL);
   setTargetDAGCombine(ISD::SELECT_CC);
   setTargetDAGCombine(ISD::ANY_EXTEND);
   setTargetDAGCombine(ISD::ZERO_EXTEND);
@@ -972,8 +972,8 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
     break;
   case ISD::AND:          return PerformANDCombine(N, DAG);
   case ISD::OR:           return PerformORCombine(N, DAG);
-  case ISD::MUL:          return PerformMULCombine(N, DAG);
-  case ISD::SHL:          return PerformSHLCombine(N, DAG);
+  //case ISD::MUL:          return PerformMULCombine(N, DAG);
+  //case ISD::SHL:          return PerformSHLCombine(N, DAG);
   case ISD::SELECT_CC:    return PerformSELECT_CCCombine(N, DAG);
   case LE1ISD::BR:        return PerformLE1BRCombine(N, DAG);
   case ISD::ANY_EXTEND:
@@ -1469,7 +1469,7 @@ SDValue LE1TargetLowering::LowerSELECT(SDValue Op, SelectionDAG &DAG) const {
   if (dyn_cast<ConstantSDNode>(Op1))
     return DAG.getNode(LE1ISD::SLCTF, dl, MVT::i32, Op0, Op2, Op1);
   else
-    return Op;
+    return DAG.getNode(ISD::SELECT, dl, MVT::i32, Op0, Op1, Op2);
 }
 
 SDValue LE1TargetLowering::LowerSELECT_CC(SDValue Op, SelectionDAG &DAG) const {
@@ -1677,9 +1677,9 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
 
 // TODO REMOVE this and LowerGlobal
 SDValue LE1TargetLowering::LowerConstant(SDValue Op, SelectionDAG &DAG) const {
-  //ConstantSDNode *CSN = cast<ConstantSDNode>(Op.getNode());
-  //if (CSN->getZExtValue() == 0)
-    //return DAG.getRegister(LE1::ZERO, MVT::i32);
+  ConstantSDNode *CSN = cast<ConstantSDNode>(Op.getNode());
+  if (CSN->getZExtValue() == 0)
+    return DAG.getRegister(LE1::ZERO, MVT::i32);
   return Op;
 }
 
@@ -2079,11 +2079,11 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
         //std::cout << "Operand " << i << " isTargetOpcode\n";
     //}
     //Callee.getNode()
-    Chain = DAG.getCopyToReg(Chain, dl, LE1::L0, Callee, SDValue(0,0));
+    Chain = DAG.getCopyToReg(Chain, dl, LE1::LNK, Callee, SDValue(0,0));
     //Callee = DAG.getNode(LE1ISD::MTL, dl, MVT::i32,
               //          DAG.getRegister(LE1::L0, MVT::i32), Callee);
     InFlag = Chain.getValue(1);
-    Callee = DAG.getRegister(LE1::L0, MVT::i32);
+    Callee = DAG.getRegister(LE1::LNK, MVT::i32);
   }
 
   // Create nodes that load address of callee and copy it to T9
@@ -2129,7 +2129,7 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
   SDVTList NodeTys = DAG.getVTList(MVT::Other, MVT::Glue);
   SmallVector<SDValue, 8> Ops;
   Ops.push_back(Chain);
-  SDValue LinkReg = DAG.getRegister(LE1::L0, MVT::i32);
+  SDValue LinkReg = DAG.getRegister(LE1::LNK, MVT::i32);
   Ops.push_back(LinkReg);
   Ops.push_back(Callee);
 
@@ -2628,12 +2628,12 @@ LE1TargetLowering::LowerReturn(SDValue Chain,
                        Chain, 
                        DAG.getRegister(LE1::SP, MVT::i32), 
                        DAG.getConstant(0, MVT::i32),
-                       DAG.getRegister(LE1::L0, MVT::i32), 
+                       DAG.getRegister(LE1::LNK, MVT::i32), 
                        Flag);
 
   return DAG.getNode(LE1ISD::Ret, dl, MVT::Other, Chain,
                      DAG.getRegister(LE1::SP, MVT::i32),
                      DAG.getConstant(0, MVT::i32),
-                     DAG.getRegister(LE1::L0, MVT::i32));
+                     DAG.getRegister(LE1::LNK, MVT::i32));
 
 }

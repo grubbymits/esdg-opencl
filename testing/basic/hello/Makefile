@@ -1,5 +1,5 @@
 UNAME = $(shell uname)
-CC = clang
+CC = clang -DTEST_FLOAT
 SRC = hello-opencl.c
 LIBPATH = /usr/lib:/opt/esdg-opencl/lib
 LIBS = -lm `xml2-config --libs` -lpcre -L/opt/esdg-opencl/lib -lInsizzleAPI -lOpenCL -lclangFrontendTool \

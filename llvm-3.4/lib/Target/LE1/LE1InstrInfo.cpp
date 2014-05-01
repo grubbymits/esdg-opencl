@@ -97,35 +97,32 @@ copyPhysReg(MachineBasicBlock &MBB,
             MachineBasicBlock::iterator I, DebugLoc DL,
             unsigned DestReg, unsigned SrcReg,
             bool KillSrc) const {
-  //std::cout << "Entering copyPhysReg\n";
-  unsigned Opc = 0, ZeroReg = 0;
 
-  if (LE1::CPURegsRegClass.contains(DestReg)) { // Copy to CPU Reg.
-    if (LE1::CPURegsRegClass.contains(SrcReg))
-      Opc = LE1::MOVr;
-    else if (LE1::BRegsRegClass.contains(SrcReg)) {
-      //std::cout << "Moving from branch\n";
-      Opc = LE1::MFB;
-    }
-    else if (LE1::LRegRegClass.contains(SrcReg)) {
-      //std::cout << "Moving from Link\n";
-      Opc = LE1::MFL;
-    }
+  // Copy to and from CPU Reg
+  if ((LE1::CPURegsRegClass.contains(DestReg)) &&
+      (LE1::CPURegsRegClass.contains(SrcReg))) {
+    MachineInstrBuilder MIB = BuildMI(MBB, I, DL, get(LE1::ADDr));
+    MIB.addReg(DestReg, RegState::Define);
+    MIB.addReg(LE1::ZERO);
+    MIB.addReg(SrcReg, getKillRegState(KillSrc));
+    return;
   }
-  else if (LE1::CPURegsRegClass.contains(SrcReg)) { // Copy from CPU Reg.
-    if(LE1::BRegsRegClass.contains(DestReg)) {
-      //std::cout << "Moving to branch\n";
-      Opc = LE1::MTB;
-    }
-    else 
-    if(LE1::LRegRegClass.contains(DestReg)) {
-      //std::cout << "Moving from link\n";
-      Opc = LE1::MTL;
-    }
+  // Copy to CPU Reg from Branch Reg
+  else if ((LE1::CPURegsRegClass.contains(DestReg)) &&
+           (LE1::BRegsRegClass.contains(SrcReg))) {
+    MachineInstrBuilder MIB = BuildMI(MBB, I, DL, get(LE1::MFB));
+    MIB.addReg(DestReg, RegState::Define);
+    MIB.addReg(SrcReg, getKillRegState(KillSrc));
   }
+  // Copy from CPU Reg
+  else if ((LE1::CPURegsRegClass.contains(SrcReg)) &&
+           (LE1::BRegsRegClass.contains(DestReg))) {
+    MachineInstrBuilder MIB = BuildMI(MBB, I, DL, get(LE1::MTB));
+    MIB.addReg(DestReg, RegState::Define);
+    MIB.addReg(SrcReg, getKillRegState(KillSrc));
+  }
+  // Copy Branch Registers
   else if(LE1::BRegsRegClass.contains(SrcReg, DestReg)) {
-    /*unsigned TmpReg = MBB.getParent()->getRegInfo().
-      createVirtualRegister(&LE1::CPURegsRegClass);*/
     unsigned TmpReg = LE1::T45;
     MachineInstrBuilder MIB1 = BuildMI(MBB, I, DL, get(LE1::MFB), TmpReg);
     MIB1.addReg(SrcReg, getKillRegState(KillSrc));
@@ -133,21 +130,9 @@ copyPhysReg(MachineBasicBlock &MBB,
     MIB2.addReg(TmpReg, RegState::Kill);
     return;
   }
-  
-  assert(Opc && "Cannot copy registers");
+  else
+    assert(0 && "Cannot copy registers");
 
-  MachineInstrBuilder MIB = BuildMI(MBB, I, DL, get(Opc));
-  
-  if (DestReg)
-    MIB.addReg(DestReg, RegState::Define);
-
-  if (ZeroReg)
-    MIB.addReg(ZeroReg);
-
-  if (SrcReg)
-    MIB.addReg(SrcReg, getKillRegState(KillSrc));
-
-  //std::cout << "Leaving copyPhysReg\n";
 }
 
 static MachineMemOperand*
@@ -170,9 +155,15 @@ storeRegToStackSlot(MachineBasicBlock &MBB, MachineBasicBlock::iterator I,
   MachineMemOperand *MMO = GetMemOperand(MBB, FI, MachineMemOperand::MOStore);
   unsigned Opc = 0;
 
-  if (LE1::CPURegsRegClass.hasSubClassEq(RC) ||
-      LE1::LRegRegClass.hasSubClassEq(RC)) {
-    Opc = LE1::STWi8;
+  if (LE1::CPURegsRegClass.hasSubClassEq(RC)) {
+    if (SrcReg == LE1::LNK)
+      Opc = LE1::STWi32;
+    else if (isInt<8>(FI))
+      Opc = LE1::STWi8;
+    else if (isInt<12>(FI))
+      Opc = LE1::STWi12;
+    else
+      Opc = LE1::STWi32;
     BuildMI(MBB, I, DL, get(Opc)).addReg(SrcReg, getKillRegState(isKill))
       .addFrameIndex(FI).addImm(0).addMemOperand(MMO);
   }
@@ -195,11 +186,12 @@ loadRegFromStackSlot(MachineBasicBlock &MBB, MachineBasicBlock::iterator I,
   MachineMemOperand *MMO = GetMemOperand(MBB, FI, MachineMemOperand::MOLoad);
   unsigned Opc = 0;
 
-  if (LE1::CPURegsRegClass.hasSubClassEq(RC) ||
-      LE1::LRegRegClass.hasSubClassEq(RC)) {
-    if (FI == (FI & 0xFF))
+  if (LE1::CPURegsRegClass.hasSubClassEq(RC)) {
+    if (DestReg == LE1::LNK)
+      Opc = LE1::LDWi32;
+    else if (isInt<8>(FI))
       Opc = LE1::LDWi8;
-    else if (FI == (FI & 0xFFF))
+    else if (isInt<12>(FI))
       Opc = LE1::LDWi12;
     else
       Opc = LE1::LDWi32;
@@ -494,30 +486,3 @@ isSchedulingBoundary(const MachineInstr *MI,
     return false;
 }
 
-
-/// getGlobalBaseReg - Return a virtual register initialized with the
-/// the global base register value. Output instructions required to
-/// initialize the register in the function entry block, if necessary.
-///
-//unsigned LE1InstrInfo::getGlobalBaseReg(MachineFunction *MF) const {
-  //LE1FunctionInfo *LE1FI = MF->getInfo<LE1FunctionInfo>();
-  //unsigned GlobalBaseReg = LE1FI->getGlobalBaseReg();
-  //if (GlobalBaseReg != 0)
-    //return GlobalBaseReg;
-
-  // Insert the set of GlobalBaseReg into the first MBB of the function
-  //MachineBasicBlock &FirstMBB = MF->front();
-  //MachineBasicBlock::iterator MBBI = FirstMBB.begin();
-  //MachineRegisterInfo &RegInfo = MF->getRegInfo();
-  //const TargetInstrInfo *TII = MF->getTarget().getInstrInfo();
-
-  //GlobalBaseReg = RegInfo.createVirtualRegister(LE1::CPURegsRegisterClass);
-  //BuildMI(FirstMBB, MBBI, DebugLoc(), TII->get(TargetOpcode::COPY),
-          //GlobalBaseReg).addReg(LE1::GP);
-    //        GlobalBaseReg).addReg(LE1::ZERO);
-  //RegInfo.addLiveIn(LE1::GP);
-  //RegInfo.addLiveIn(LE1::ZERO);
-
-  //LE1FI->setGlobalBaseReg(GlobalBaseReg);
-  //return GlobalBaseReg;
-//}

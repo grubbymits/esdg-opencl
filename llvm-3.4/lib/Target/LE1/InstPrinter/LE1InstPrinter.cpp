@@ -99,7 +99,7 @@ printMemOperand(const MCInst *MI, int opNum, raw_ostream &O) {
     O << "r0.0[(";
     printOperand(MI, opNum, O);
     O << "+";
-    printOperand(MI, opNum+1, O);
+    printGlobalOffset(MI, opNum+1, O);
     O <<")]";
   }
 }

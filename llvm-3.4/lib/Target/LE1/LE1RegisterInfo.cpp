@@ -42,7 +42,7 @@ using namespace llvm;
 
 LE1RegisterInfo::LE1RegisterInfo(const LE1Subtarget &ST,
                                    const TargetInstrInfo &tii)
-  : LE1GenRegisterInfo(LE1::L0), Subtarget(ST), TII(tii) {}
+  : LE1GenRegisterInfo(LE1::LNK), Subtarget(ST), TII(tii) {}
 
 //unsigned LE1RegisterInfo::getPICCallReg() { return LE1::T9; }
 
@@ -56,7 +56,7 @@ getCalleeSavedRegs(const MachineFunction *MF) const
 {
   // LE1 callee-save register range is $16-$23, $f20-$f30
   static const uint16_t CalleeSavedRegs[] = {
-    LE1::L0, LE1::TS0, LE1::TS1, LE1::TS2, LE1::TS3,
+    LE1::LNK, LE1::TS0, LE1::TS1, LE1::TS2, LE1::TS3,
     LE1::TS4, LE1::TS5, LE1::TS6, 0
   };
 
@@ -66,7 +66,7 @@ getCalleeSavedRegs(const MachineFunction *MF) const
 BitVector LE1RegisterInfo::
 getReservedRegs(const MachineFunction &MF) const {
   static const unsigned ReservedCPURegs[] = {
-    LE1::ZERO, LE1::SP, LE1::L0, LE1::T45, 0
+    LE1::ZERO, LE1::SP, LE1::LNK, LE1::T45, 0
   };
 
   BitVector Reserved(getNumRegs());
