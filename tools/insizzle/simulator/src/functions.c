@@ -1027,6 +1027,7 @@ int serviceThreadRequests(systemT *system)
 static inline void ErrorOBB(unsigned addr) {
   //if(suppressOOB != 1) {
   printf("!!! ERROR OBB: %X\n", addr); //}
+  exit(-1);
 }
 
 /*

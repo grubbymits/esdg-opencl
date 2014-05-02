@@ -68,3 +68,4 @@ Model, Cycles, Contexts, Target, Dram, Iram, Cycles,Total Stalls, Decode Stalls,
 8C_4w_1ls_2b.xml, 1349, 8, 4w4a1m1ls1b, 2097256, 416, 10726, 7245, 1080, 2039, 810, 1
 8C_4w_1ls_4b.xml, 1334, 8, 4w4a1m1ls1b, 2097256, 416, 10631, 7245, 1080, 2039, 744, 1
 8C_4w_1ls_8b.xml, 1334, 8, 4w4a1m1ls1b, 2097256, 416, 10631, 7245, 1080, 2039, 745, 1
+1C_1w.xml, 12561, 1, scalar, 2097228, 292, 12561, 6244, 58, 2046, 0, 1

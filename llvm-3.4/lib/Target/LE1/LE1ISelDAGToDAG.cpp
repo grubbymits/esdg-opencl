@@ -208,7 +208,8 @@ bool LE1DAGToDAGISel::SelectAddri32(SDValue Addr, SDValue &Base,
     DEBUG(dbgs() << "GlobalAddress, SelectAddri32 success\n");
     return true;
   }
-  else if (ConstantSDNode *CN = dyn_cast<ConstantSDNode>(Addr.getOperand(1))) {
+  else if (CurDAG->isBaseWithConstantOffset(Addr)) {
+    ConstantSDNode *CN = dyn_cast<ConstantSDNode>(Addr.getOperand(1));
     DEBUG(dbgs() << "Offset = " << CN->getZExtValue() << "\n");
 
     if (isInt<8>(CN->getSExtValue()) ||
