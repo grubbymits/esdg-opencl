@@ -50,7 +50,7 @@ clCreateContext(const cl_context_properties  *properties,
                 void *                        user_data,
                 cl_int *                      errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clCreateContext for " << num_devices << " devices"
     << std::endl;
 #endif
@@ -71,7 +71,7 @@ clCreateContext(const cl_context_properties  *properties,
     *errcode_ret = CL_SUCCESS;
     Coal::Context *ctx = new Coal::Context(properties, num_devices, devices,
                                            pfn_notify, user_data, errcode_ret);
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Got Context" << std::endl;
 #endif
 
@@ -82,7 +82,7 @@ clCreateContext(const cl_context_properties  *properties,
         return 0;
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Leaving clCreateContext" << std::endl;
 #endif
     return (_cl_context *)ctx;
@@ -98,7 +98,7 @@ clCreateContextFromType(const cl_context_properties   *properties,
                         void *                  user_data,
                         cl_int *                errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clCreateContextFromType" << std::endl;
 #endif
   const cl_uint num_entries = TotalLE1Devices;
@@ -121,7 +121,7 @@ clCreateContextFromType(const cl_context_properties   *properties,
       clCreateContext(properties, num_devices, device, pfn_notify,
                            user_data,
                            errcode_ret);
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Leaving clCreateContextFromType" << std::endl;
 #endif
     return Context;
@@ -157,7 +157,7 @@ clGetContextInfo(cl_context         context,
                  void *             param_value,
                  size_t *           param_value_size_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clGetContextInfo\n";
 #endif
     if (!context->isA(Coal::Object::T_Context))

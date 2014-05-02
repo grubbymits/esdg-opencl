@@ -38,7 +38,8 @@ int main(int argc, char *argv[]) {
 
   context = cl_init_context(platform,device,quiet);
   
-  recordDistances = OpenClFindNearestNeighbors(context,numRecords,locations,lat,lng,timing);
+  recordDistances = OpenClFindNearestNeighbors(context, device, numRecords,
+                                               locations,lat,lng,timing);
 
   // find the resultsCount least distances
   findLowest(records,recordDistances,numRecords,resultsCount);
@@ -54,6 +55,7 @@ int main(int argc, char *argv[]) {
 
 float *OpenClFindNearestNeighbors(
 	cl_context context,
+        cl_uint device,
 	int numRecords,
 	std::vector<LatLong> &locations,float lat,float lng,
 	int timing) {
@@ -63,7 +65,7 @@ float *OpenClFindNearestNeighbors(
         cl_int status;
         cl_program cl_NN_program;
         cl_NN_program = cl_compileProgram(
-            (char *)"NearestNeighbor.cl",NULL);
+            (char *)"NearestNeighbor.cl", device, NULL);
        
         NN_kernel = clCreateKernel(
             cl_NN_program, "NearestNeighbor", &status);

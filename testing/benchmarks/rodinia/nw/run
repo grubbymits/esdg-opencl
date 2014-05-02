@@ -1,6 +1,6 @@
 #!/bin/sh
 (
-for device in `seq 0 19`;
+for device in `seq 0 59`;
 do
   ./nw 256 10 ./nw.cl $device
 done

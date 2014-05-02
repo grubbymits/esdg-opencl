@@ -1,0 +1,50 @@
+<galaxy>
+	<systems>1</systems>
+	<type>homogeneous</type>
+	<system>
+		<contexts>4</contexts>
+		<SCALARSYS_PRESENT>1</SCALARSYS_PRESENT>
+		<PERIPH_PRESENT>0</PERIPH_PRESENT>
+		<DARCH>DRAM_SHARED</DARCH>
+		<DRAM_BLK_SIZE>1</DRAM_BLK_SIZE>
+		<DRAM_SIZE>0x100</DRAM_SIZE>
+		<STACK_SIZE>0x8</STACK_SIZE> <!-- 8 KiB -->
+		<DRAM_BANKS>1</DRAM_BANKS>
+		<context>
+			<ISSUE_WIDTH_MAX>4</ISSUE_WIDTH_MAX>
+			<ISA_PRSPCTV>VT32PP</ISA_PRSPCTV>
+			<IARCH>IFE_SIMPLE_IRAM_PRIV</IARCH>
+			<CLUST_TEMPL>1</CLUST_TEMPL>
+			<HYPERCONTEXTS>1</HYPERCONTEXTS>
+			<IFETCH_WIDTH>4</IFETCH_WIDTH>
+			<IRAM_SIZE>0x100</IRAM_SIZE>
+
+			<clusterTemplate>
+				<name>Cluster0</name>
+				<SCORE_PRESENT>1</SCORE_PRESENT>
+				<VCORE_PRESENT>0</VCORE_PRESENT>
+				<FPCORE_PRESENT>0</FPCORE_PRESENT>
+				<CCORE_PRESENT>0</CCORE_PRESENT>
+
+				<INSTANTIATE>1</INSTANTIATE>
+				<INSTANCES>1</INSTANCES>
+				<ISSUE_WIDTH>4</ISSUE_WIDTH>
+
+				<S_GPR_FILE_SIZE>64</S_GPR_FILE_SIZE>
+				<S_FPR_FILE_SIZE>0</S_FPR_FILE_SIZE>
+				<S_VR_FILE_SIZE>0</S_VR_FILE_SIZE>
+				<S_PR_FILE_SIZE>8</S_PR_FILE_SIZE>
+
+				<IALUS>4</IALUS>
+				<IMULTS>2</IMULTS>
+				<LSU_CHANNELS>1</LSU_CHANNELS>
+				<BRUS>1</BRUS>
+			</clusterTemplate>
+
+			<hypercontext>
+				<name>HyperContext0</name>
+				<cluster>0_0</cluster>
+			</hypercontext>
+		</context>
+	</system>
+</galaxy>

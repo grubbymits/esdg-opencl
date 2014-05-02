@@ -68,8 +68,8 @@ static cl_platform_id* platforms = NULL;
 static cl_uint numPlatforms;
 
 //! All discoverable OpenCL devices (one pointer per platform)
-static cl_device_id** devices = NULL;
-static cl_uint* numDevices;
+static cl_device_id* devices = NULL;
+static cl_uint numDevices;
 
 //! The chosen OpenCL platform
 static cl_platform_id platform = NULL;
@@ -98,6 +98,7 @@ static bool eventsEnabled = false;
     Init function for one device. Looks for supported devices and creates a context
     \return returns a context initialized 
 */
+/*
 cl_context cl_init(char devicePreference) 
 {
     cl_int status;   
@@ -132,7 +133,7 @@ cl_context cl_init(char devicePreference)
         deviceType = CL_DEVICE_TYPE_CPU;
     }
     if(devicePreference == 'g') {
-        deviceType = CL_DEVICE_TYPE_GPU;
+        deviceType = CL_DEVICE_TYPE_ACCELERATOR;
     }
 
     // Traverse the platforms array printing information and
@@ -238,13 +239,14 @@ cl_context cl_init(char devicePreference)
 
     return context;
 }
+*/
 cl_context cl_init_context(int platform, int dev,int quiet) {
     int printInfo=1;
     if (platform >= 0 && dev >= 0) printInfo = 0;
 	cl_int status;
 	// Used to iterate through the platforms and devices, respectively
-	cl_uint numPlatforms;
-	cl_uint numDevices;
+	//cl_uint numPlatforms;
+	//cl_uint numDevices;
 
 	// These will hold the platform and device we select (can potentially be
 	// multiple, but we're just doing one for now)
@@ -254,8 +256,8 @@ cl_context cl_init_context(int platform, int dev,int quiet) {
 	if (printInfo) printf("Number of platforms detected:%d\n", numPlatforms);
 
 	// Print some information about the available platforms
-	cl_platform_id *platforms = NULL;
-	cl_device_id * devices = NULL;
+	//cl_platform_id *platforms = NULL;
+	//cl_device_id * devices = NULL;
 	if (numPlatforms > 0)
 	{
 		// get all the platforms
@@ -355,8 +357,12 @@ cl_context cl_init_context(int platform, int dev,int quiet) {
 	if(dtype == CL_DEVICE_TYPE_GPU) {
 	  if (!quiet) printf("Creating GPU Context\n\n");
 	}
+        else if (dtype == CL_DEVICE_TYPE_ACCELERATOR) {
+          if (!quiet)
+            printf("Creating ACCELERATOR Context\n");
+        }
 	else if (dtype == CL_DEVICE_TYPE_CPU) {
-      if (!quiet) printf("Creating CPU Context\n\n");
+          if (!quiet) printf("Creating CPU Context\n\n");
 	}
 	else perror("This Context Type Not Supported\n");
 
@@ -407,7 +413,7 @@ void  cl_cleanup()
     }
 
     free(devices);
-    free(numDevices);
+    //free(numDevices);
 
     // Free the platforms
     free(platforms);
@@ -775,7 +781,8 @@ Compile Opencl source file into a cl_program. The cl_program will be made into a
 \param compileoptions Compilation options
 \param verbosebuild Switch to enable verbose Output
 */
-cl_program cl_compileProgram(char* kernelPath, char* compileoptions, bool verbosebuild )
+cl_program cl_compileProgram(char* kernelPath, cl_uint dev,
+                             char* compileoptions, bool verbosebuild )
 {
     cl_int status;          
     FILE *fp = NULL;
@@ -827,7 +834,9 @@ cl_program cl_compileProgram(char* kernelPath, char* compileoptions, bool verbos
     fclose(fp);
 
     // Try to compile the program
-    status = clBuildProgram(clProgramReturn, 0, NULL, compileoptions, NULL, NULL);
+    //status = clBuildProgram(clProgramReturn, 0, NULL, compileoptions, NULL, NULL);
+    status = clBuildProgram(clProgramReturn, 1, &devices[dev],
+                            compileoptions, NULL, NULL);
     if(cl_errChk(status, "Building program", false) || verbosebuild == 1) 
     {
 

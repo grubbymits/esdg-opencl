@@ -1,8 +1,8 @@
 #!/bin/sh
 
 (
-for device in `seq 0 19`;
+for device in `seq 0 59`;
 do
-  ./binary-search -d $device
+  ./binary-search -e -d $device
 done
 )

@@ -10,9 +10,8 @@ extern "C" { struct hyperContextT; }
 
 namespace Coal {
 
-  struct SimulationStats {
-    SimulationStats(hyperContextT *HyperContext);
-    SimulationStats(const SimulationStats &Stats);
+  struct ContextStats {
+    ContextStats(hyperContextT *HyperContext);
     unsigned long TotalCycles;
     unsigned long Stalls;
     unsigned long NOPs;
@@ -22,12 +21,17 @@ namespace Coal {
     unsigned long BranchesNotTaken;
     unsigned long ControlFlowChange;
     unsigned long MemoryAccessCount;
-    //unsigned disabledCores;
   };
 
-  typedef std::vector<SimulationStats> StatVector;
-  typedef std::pair<unsigned, StatVector> StatSet;
-  typedef std::map<std::string, std::pair<unsigned, StatSet> > StatsMap;
+  struct IterationStats {
+    IterationStats(unsigned iram, unsigned dram, unsigned long cycles);
+    unsigned iram;
+    unsigned dram;
+    unsigned long completionCycles;
+    std::vector<ContextStats*> contextStats;
+  };
+
+  typedef std::map<std::string, std::vector<IterationStats*> > KernelStats;
 
   class LE1Simulator {
 
@@ -35,17 +39,20 @@ namespace Coal {
     LE1Simulator();
     ~LE1Simulator();
     bool Initialise(const std::string &Machine);
-    void SaveStats(unsigned disabled);
-    //std::vector<SimulationStats> *GetStats() { return &Stats; }
-    StatSet *GetStats() { return statSet; }
-    unsigned GetIterations() const { return LE1Simulator::iteration; }
-    void ClearStats() {
-      statVector.clear();
-      if (statSet)
-        delete statSet;
-    }
+    void Reset();
+    void SaveStats(unsigned long cycles, std::string &kernel);
+
+    const KernelStats *GetStats() const { return &kernelStats; }
+    //unsigned GetIterations() const { return LE1Simulator::iteration; }
+
+    //void ClearStats() {
+      //statVector.clear();
+      //if (statSet)
+        //delete statSet;
+    //}
+
     int checkStatus(void);
-    bool Run(const char *iram, const char *dram);//, const unsigned disabled);
+    bool Run(const char *iram, const char *dram, std::string &kernel);
     void LockAccess();
     void UnlockAccess();
     bool readByteData(unsigned int addr,
@@ -58,18 +65,19 @@ namespace Coal {
                       unsigned int numBytes,
                       unsigned int* data);
 private:
-  static unsigned iteration;
-  std::string machineModel;
-  bool isInitialised;
-  pthread_mutex_t p_simulator_mutex;
-  unsigned dram_size;
-  unsigned IRAMFileSize;
-  unsigned DRAMFileSize;
-  unsigned KernelNumber;
-  systemConfig *SYS;
-  systemT *LE1System;
-  StatVector statVector;
-  StatSet *statSet;
+    //static unsigned iteration;
+    std::string machineModel;
+    bool isInitialised;
+    pthread_mutex_t p_simulator_mutex;
+    unsigned dram_size;
+    unsigned IRAMFileSize;
+    unsigned DRAMFileSize;
+    unsigned KernelNumber;
+    systemConfig *SYS;
+    systemT *LE1System;
+    //StatVector statVector;
+    //StatSet *statSet;
+    KernelStats kernelStats;
   };
 
   //typedef std::vector<SimulationStats> StatsSet;

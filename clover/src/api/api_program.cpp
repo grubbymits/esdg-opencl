@@ -45,7 +45,7 @@ clCreateProgramWithSource(cl_context        context,
                           const size_t *    lengths,
                           cl_int *          errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clCreateProgramWithSource\n";
 #endif
     cl_int dummy_errcode;
@@ -88,7 +88,7 @@ clCreateProgramWithBinary(cl_context            context,
                           cl_int *              binary_status,
                           cl_int *              errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clCreateProgramWithBinary\n";
 #endif
     cl_int dummy_errcode;
@@ -118,8 +118,9 @@ clCreateProgramWithBinary(cl_context            context,
     if (*errcode_ret != CL_SUCCESS)
         return 0;
 
-    context_devices =
-        (cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
+    context_devices = (cl_device_id*)
+      ::operator new(sizeof(cl_device_id*) * context_num_devices);
+        //(cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
 
     *errcode_ret = context->info(CL_CONTEXT_DEVICES,
                                  context_num_devices * sizeof(cl_device_id),
@@ -189,7 +190,7 @@ clRetainProgram(cl_program program)
 cl_int
 clReleaseProgram(cl_program program)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clReleaseProgram\n";
 #endif
     if (!program->isA(Coal::Object::T_Program))
@@ -197,7 +198,7 @@ clReleaseProgram(cl_program program)
 
     if (program->dereference())
         delete program;
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Leaving clReleaseProgram\n";
 #endif
     return CL_SUCCESS;
@@ -211,7 +212,7 @@ clBuildProgram(cl_program           program,
                void (*pfn_notify)(cl_program program, void * user_data),
                void *               user_data)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clBuildProgram. Building for " << num_devices
     << " devices\n";
 #endif
@@ -239,7 +240,7 @@ clBuildProgram(cl_program           program,
     if (program->state() != Coal::Program::Loaded)
       return CL_INVALID_OPERATION;
 
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Checking " << num_devices << " devices\n";
 #endif
     // Check the devices for compliance
@@ -256,42 +257,44 @@ clBuildProgram(cl_program           program,
         if (result != CL_SUCCESS)
             return result;
 
-        context_devices =
-            (cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
+        context_devices = (cl_device_id*)
+          ::operator new(sizeof(cl_device_id) * context_num_devices);
+            //(cl_device_id *)std::malloc(context_num_devices * sizeof(cl_device_id));
+
 
         result = context->info(CL_CONTEXT_DEVICES,
                                      context_num_devices * sizeof(cl_device_id),
                                      context_devices, 0);
 
         if (result != CL_SUCCESS) {
-#ifdef DEBUGCL
+#ifdef DBG_API
           std::cerr << "context->info != CL_SUCCESS\n";
 #endif
             return result;
         }
 
-#ifdef DEBUGCL
+#ifdef DBG_API
         std::cerr << "Checking " << context_num_devices << " context devices\n";
 #endif
 
         if (num_devices) {
           for (cl_uint i=0; i < num_devices; ++i) {
             bool found = false;
-#ifdef DEBUGCL
+#ifdef DBG_API
             std::cerr << "device_list[" << i << "] addr = "
               << device_list[i] << std::endl;
 #endif
 
             for (cl_uint j=0; j<context_num_devices; ++j)
             {
-#ifdef DEBUGCL
+#ifdef DBG_API
               std::cerr << "context_device [" << j << "] addr = "
                 << context_devices[j] << std::endl;
 #endif
                 if (device_list[i] == context_devices[j])
                 {
                     found = true;
-#ifdef DEBUGCL
+#ifdef DBG_API
                     std::cerr << "Found device, break out\n";
 #endif
                     break;
@@ -336,7 +339,7 @@ clGetProgramInfo(cl_program         program,
                  void *             param_value,
                  size_t *           param_value_size_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clGetProgramInfo\n";
 #endif
 

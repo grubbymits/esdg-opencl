@@ -148,10 +148,10 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 
   // Calculate buffer addresses
   for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = TheKernel->arg(i);
+    const Kernel::Arg* arg = TheKernel->arg(i);
 
-    if (arg.kind() == Kernel::Arg::Buffer) {
-      llvm::Type *type = arg.type();
+    if (arg->kind() == Kernel::Arg::Buffer) {
+      llvm::Type *type = arg->type();
       unsigned bytes = 0;
       if (type->isIntegerTy(8))
         bytes = 1;
@@ -168,22 +168,24 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
 #endif
       ArgAddrs.push_back(CurrentAddr);
 
-      if (arg.file() != Kernel::Arg::Local) {
-        LE1Buffer* buffer = static_cast<LE1Buffer*>((*(MemObject**)
-                                      arg.data())->deviceBuffer(TheDevice));
+      if (arg->file() != Kernel::Arg::Local) {
+        LE1Buffer *buffer =
+          static_cast<LE1Buffer*>(arg->getDeviceBuffer(TheDevice));
         buffer->setAddr(CurrentAddr);
       }
 
-      if (arg.file() == Kernel::Arg::Local) {
-        unsigned size = arg.allocAtKernelRuntime() * NumCores;
+      if (arg->file() == Kernel::Arg::Local) {
+        unsigned size = arg->allocAtKernelRuntime() * NumCores;
 #ifdef DBG_OUTPUT
         std::cout << "Setting the buffer size kernel arg " << i
           << ", which is a local, to " << size << std::endl;
 #endif
         CurrentAddr += size;
       }
-      else
-        CurrentAddr += (*(MemObject**)arg.data())->size();
+      else {
+        //CurrentAddr += (*(MemObject**)arg.data())->size();
+        CurrentAddr += arg->getMemSize();
+      }
     }
   }
 
@@ -201,9 +203,11 @@ bool LE1DataPrinter::AppendDataArea() {
 #endif
 
   if (DataSize >= LE1Device::MaxGlobalAddr) {
-    std::cerr << "!! ERROR: DataSize is too great, maximum address = "
+#ifdef DBG_OUTPUT
+    std::cout << "!! ERROR: DataSize is too great, maximum address = "
       << LE1Device::MaxGlobalAddr << ", but DataSize = " << DataSize
       << std::endl;
+#endif
     return false;
   }
 
@@ -244,19 +248,21 @@ bool LE1DataPrinter::AppendDataArea() {
 
   // Print labels for buffers
   for (unsigned i = 0, j = 0; i < TheKernel->numArgs(); ++i) {
-    const Kernel::Arg& arg = TheKernel->arg(i);
+    const Kernel::Arg* arg = TheKernel->arg(i);
 
-    if (arg.kind() == Kernel::Arg::Buffer) {
+    if (arg->kind() == Kernel::Arg::Buffer) {
 
       // Sanity check
-      if (arg.file() != Kernel::Arg::Local) {
+      if (arg->file() != Kernel::Arg::Local) {
 
-        LE1Buffer* buffer =
-          static_cast<LE1Buffer*>((*(MemObject**)
-                                 arg.data())->deviceBuffer(TheDevice));
+        LE1Buffer *buffer = static_cast<LE1Buffer*>(
+          arg->getDeviceBuffer(TheDevice));
+
         if (buffer->addr() != ArgAddrs[j]) {
+#ifdef DBG_OUTPUT
           std::cout << "!! ERROR: Mismatch in buffer argument addresses!: "
             << std::hex << buffer->addr() << " != " << ArgAddrs[j] << std::endl;
+#endif
           return false;
         }
       }
@@ -340,9 +346,11 @@ bool LE1DataPrinter::AppendDataArea() {
   }
 
   if (AttrAddrEnd != PrintAddr) {
+#ifdef DBG_OUTPUT
     std::cout << "Miscalculation in kernel attribute addresses!" << std::endl;
     std::cout << "AttrAddrEnd = " << AttrAddrEnd << " while PrintAddr = "
       << PrintAddr << std::endl;
+#endif
     return false;
   }
 
@@ -380,7 +388,10 @@ bool LE1DataPrinter::AppendDataArea() {
     llvm::ConstantStruct* const *CS = (*I)->getData();
     unsigned numElements = (*I)->getNumElements();
     if (!WriteStructData(CS, numElements, PrintAddr)) {
-      std::cerr << "Failed for " << (*I)->getName() << std::endl;
+#ifdef DBG_OUTPUT
+      std::cout << "ERROR: WriteStruct failed for "
+        << (*I)->getName() << std::endl;
+#endif
       return false;
     }
     PrintAddr += totalBytes;
@@ -388,15 +399,19 @@ bool LE1DataPrinter::AppendDataArea() {
 
   // Handle buffers
   for(unsigned i = 0; i < TheKernel->numArgs(); ++i) {
-    const Kernel::Arg& Arg = TheKernel->arg(i);
+    const Kernel::Arg* Arg = TheKernel->arg(i);
 
     // TODO This will need to check for images too
-    if (Arg.kind() != Kernel::Arg::Buffer)
+    if (Arg->kind() != Kernel::Arg::Buffer)
       continue;
 
-    if (Arg.file() != Kernel::Arg::Local) {
-      if (!HandleBufferArg(Arg))
+    if (Arg->file() != Kernel::Arg::Local) {
+      if (!HandleBufferArg(Arg)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: HandleBufferArg failed" << std::endl;
+#endif
         return false;
+      }
     }
     else InitialiseLocal(Arg, ArgAddrs[i]);
   }
@@ -418,9 +433,9 @@ void LE1DataPrinter::WriteKernelAttr(std::ostringstream &Output,
     //addr += 4;
 }
 
-void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
-  unsigned TotalSize = arg.allocAtKernelRuntime() * NumCores;
-  llvm::Type* type = arg.type();
+void LE1DataPrinter::InitialiseLocal(const Kernel::Arg *arg, unsigned Addr) {
+  unsigned TotalSize = arg->allocAtKernelRuntime() * NumCores;
+  llvm::Type* type = arg->type();
 
   void *Data = new unsigned char[TotalSize]();
   PrintData(Data, Addr, 0, sizeof(char), TotalSize);
@@ -441,25 +456,25 @@ void LE1DataPrinter::InitialiseLocal(const Kernel::Arg &arg, unsigned Addr) {
       }
   }*/
 
-  delete (unsigned char*)Data;
+  delete[] (unsigned char*)Data;
 }
 
-bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
+bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg *arg) {
 #ifdef DBG_KERNEL
   std::cerr << "HandleBufferArg\n";
 #endif
 
-  llvm::Type* type = arg.type();
-  LE1Buffer* buffer =
-    static_cast<LE1Buffer*>((*(MemObject**)arg.data())->deviceBuffer(TheDevice));
+  llvm::Type* type = arg->type();
+  LE1Buffer *buffer = static_cast<LE1Buffer*>(arg->getDeviceBuffer(TheDevice));
 
-  unsigned TotalSize = (*(MemObject**)arg.data())->size();
+  //unsigned TotalSize = (*(MemObject**)arg.data())->size();
+  unsigned TotalSize = arg->getMemSize();
   unsigned Addr = buffer->addr();
-  void *Data = buffer->data();
-
-  // FIXME Check we actually have data?
-  if (Data == NULL)
-    Data = new unsigned char [TotalSize]();
+  void *Data = NULL;
+  if (!buffer->allocated())
+    Data = ::operator new(TotalSize);
+  else
+    Data = buffer->data();
 
   /*
   // FIXME - Does this work when using local buffers?
@@ -509,7 +524,9 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
           PrintData(Data, Addr, 0, sizeof(int), TotalSize);
         }
         else {
-          std::cerr << "!! unhandled vector element type!!\n";
+#ifdef DBG_OUTPUT
+          std::cout << "!! ERROR: unhandled vector element type!!" << std::endl;
+#endif
           return false;
         }
       }
@@ -517,7 +534,9 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
         PrintData(Data, Addr, 0, sizeof(int), TotalSize);
       }
       else {
-        std::cerr << "!! Unhandled vector element type!" << std::endl;
+#ifdef DBG_OUTPUT
+        std::cout << "!! ERROR: unhandled vector element type!!" << std::endl;
+#endif
         return false;
       }
     }
@@ -530,8 +549,10 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
       //addr += TotalSize;
     }
     else {
-      std::cerr << "!! Unhandled argument type of size = " << TotalSize
+#ifdef DBG_OUTPUT
+      std::cout << "!! Unhandled argument type of size = " << TotalSize
         << std::endl;
+#endif
       return false;
     }
 #ifdef DBG_KERNEL
@@ -539,6 +560,9 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg &arg) {
 #endif
   //if (isBufferOnDevice)
     //free(Data);
+
+  if (!buffer->allocated())
+    delete((unsigned char*)Data);
 
   return true;
 }
@@ -602,8 +626,12 @@ bool LE1DataPrinter::WriteStructData(llvm::ConstantStruct* const* CSArray,
   // increasing the base address should work to maintain addresses.
     for (unsigned i = 0; i < numFields; ++i) {
       llvm::Type *fieldType = type->getTypeAtIndex(i);
-      if (!WriteField(CS->getAggregateElement(i), fieldType, &addr))
+      if (!WriteField(CS->getAggregateElement(i), fieldType, &addr)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: WriteField failed" << std::endl;
+#endif
         return false;
+      }
     }
   }
   return true;
@@ -649,8 +677,12 @@ bool LE1DataPrinter::WriteField(llvm::Constant *C, llvm::Type *fieldType,
     llvm::Type *elementType = arrayType->getElementType();
     unsigned numArrayElements = arrayType->getNumElements();
     for (unsigned i = 0; i < numArrayElements; ++i) {
-      if (!WriteField(CA->getAggregateElement(i), elementType, addr))
+      if (!WriteField(CA->getAggregateElement(i), elementType, addr)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: WriteField failed" << std::endl;
+#endif
         return false;
+      }
     }
   }
   else if (fieldType->isStructTy()) {
@@ -659,12 +691,18 @@ bool LE1DataPrinter::WriteField(llvm::Constant *C, llvm::Type *fieldType,
     unsigned numFields = structType->getNumElements();
     for (unsigned i = 0; i < numFields; ++i) {
       llvm::Type *type = structType->getTypeAtIndex(i);
-      if (!WriteField(CS->getAggregateElement(i), type, addr))
+      if (!WriteField(CS->getAggregateElement(i), type, addr)) {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: WriteField failed" << std::endl;
+#endif
         return false;
+      }
     }
   }
   else {
-    std::cerr << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
+#ifdef DBG_OUTPUT
+    std::cout << "!! ERROR: Unhandled ConstructStruct field" << std::endl;
+#endif
     return false;
   }
   return true;
@@ -830,7 +868,9 @@ void LE1DataPrinter::PrintData(const void* data,
 
     switch(size) {
     default:
-      std::cerr << "!!! ERROR: Unhandled type!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Unhandled type!" << std::endl;
+#endif
       exit(-1);
       break;
     case sizeof(char): {

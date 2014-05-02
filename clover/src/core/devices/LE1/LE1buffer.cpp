@@ -88,7 +88,12 @@ LE1Buffer::~LE1Buffer()
 #endif
     if (p_data_malloced)
     {
-        std::free((void *)p_data);
+#ifdef DBG_BUFFER
+      std::cerr << "freeing data at " << std::hex << (unsigned long)p_data
+        << std::endl;
+#endif
+        //std::free((void *)p_data);
+      ::operator delete(p_data);
     }
 }
 
@@ -112,8 +117,8 @@ bool LE1Buffer::allocate()
     size_t buf_size = p_buffer->size();
 
     if (buf_size == 0) {
-#ifdef DBG_BUFFER
-      std::cerr << "Error, buffer size = 0" << std::endl;
+#ifdef DBG_OUTPUT
+      std::cout << "ERROR, buffer size = 0" << std::endl;
 #endif
         // Something went wrong...
         return false;
@@ -122,10 +127,16 @@ bool LE1Buffer::allocate()
     if (!p_data)
     {
         // We don't use a host ptr, we need to allocate a buffer
-        p_data = std::malloc(buf_size);
+        //p_data = std::malloc(buf_size);
+        //p_data = (void*) new unsigned char[buf_size]();
+      p_data = ::operator new(buf_size);
 
-        if (!p_data)
+        if (!p_data) {
+#ifdef DBG_OUTPUT
+          std::cout << "ERROR: malloc failed for p_data" << std::endl;
+#endif
             return false;
+        }
 
         p_data_malloced = true;
     }

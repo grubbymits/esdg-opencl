@@ -44,7 +44,7 @@ static inline cl_int queueEvent(Coal::CommandQueue *queue,
                                 cl_event *event,
                                 cl_bool blocking)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering static queueEvent\n";
 #endif
     cl_int rs;
@@ -53,14 +53,26 @@ static inline cl_int queueEvent(Coal::CommandQueue *queue,
 
     if (rs != CL_SUCCESS)
     {
-        delete command;
-        return rs;
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: queueEvent failed" << std::endl;
+#endif
+      delete command;
+      return rs;
     }
 
     if (event)
     {
+#ifdef DBG_API
+      std::cerr << "Assigning cl_event with Coal::Event at "
+        << std::hex << (unsigned long)command << std::endl;
+#endif
         *event = (cl_event)command;
         command->reference();
+    }
+    else {
+#ifdef DBG_API
+      std::cerr << "Not assigning event" << std::endl;
+#endif
     }
 
     if (blocking)
@@ -73,7 +85,7 @@ static inline cl_int queueEvent(Coal::CommandQueue *queue,
             return rs;
         }
     }
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Leaving static queueEvent\n";
 #endif
     return CL_SUCCESS;
@@ -91,7 +103,7 @@ clEnqueueReadBuffer(cl_command_queue    command_queue,
                     const cl_event *    event_wait_list,
                     cl_event *          event)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clEnqueueReadBuffer\n";
 #endif
     cl_int rs = CL_SUCCESS;
@@ -112,7 +124,7 @@ clEnqueueReadBuffer(cl_command_queue    command_queue,
         return rs;
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Will leave clEnqueueReadBuffer after creating queueEvent\n";
 #endif
     return queueEvent(command_queue, command, event, blocking_read);
@@ -129,16 +141,25 @@ clEnqueueWriteBuffer(cl_command_queue   command_queue,
                      const cl_event *   event_wait_list,
                      cl_event *         event)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clEnqueueWriteBuffer\n";
 #endif
     cl_int rs = CL_SUCCESS;
 
-    if (!command_queue->isA(Coal::Object::T_CommandQueue))
-        return CL_INVALID_COMMAND_QUEUE;
+    if (!command_queue->isA(Coal::Object::T_CommandQueue)) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Command Queue is not a CommandQueue!?"
+        << std::endl;
+#endif
+      return CL_INVALID_COMMAND_QUEUE;
+    }
 
-    if (ptr == NULL)
+    if (ptr == NULL) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: NULL pointer" << std::endl;
+#endif
       return CL_INVALID_HOST_PTR;
+    }
 
     Coal::WriteBufferEvent *command = new Coal::WriteBufferEvent(
         (Coal::CommandQueue *)command_queue,
@@ -149,11 +170,14 @@ clEnqueueWriteBuffer(cl_command_queue   command_queue,
 
     if (rs != CL_SUCCESS)
     {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Failed to create WriteBufferEvent" << std::endl;
+#endif
         delete command;
         return rs;
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Will leave clEnqueueWriteBuffer after creating queueEvent\n";
 #endif
     return queueEvent(command_queue, command, event, blocking_write);
@@ -512,8 +536,11 @@ clEnqueueMapBuffer(cl_command_queue command_queue,
 
     if (*errcode_ret != CL_SUCCESS)
     {
-        delete command;
-        return 0;
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Failed for create MapBufferEvent" << std::endl;
+#endif
+      delete command;
+      return 0;
     }
 
     // We need command to be valid after queueEvent, so don't let the command
@@ -615,27 +642,35 @@ clEnqueueUnmapMemObject(cl_command_queue command_queue,
                         const cl_event *  event_wait_list,
                         cl_event *        event)
 {
-    cl_int rs = CL_SUCCESS;
+#ifdef DBG_API
+  std::cerr << "clEnqueueUnmapMemObject" << std::endl;
+#endif
+  cl_int rs = CL_SUCCESS;
 
-    if (!command_queue->isA(Coal::Object::T_CommandQueue))
-    {
-        return CL_INVALID_COMMAND_QUEUE;
-    }
+  if (!command_queue->isA(Coal::Object::T_CommandQueue))
+  {
+    return CL_INVALID_COMMAND_QUEUE;
+  }
 
-    Coal::UnmapBufferEvent *command = new Coal::UnmapBufferEvent(
+  Coal::UnmapBufferEvent *command = new Coal::UnmapBufferEvent(
         (Coal::CommandQueue *)command_queue,
         (Coal::MemObject *)memobj,
         mapped_ptr,
         num_events_in_wait_list, (const Coal::Event **)event_wait_list, &rs
     );
 
-    if (rs != CL_SUCCESS)
-    {
-        delete command;
-        return rs;
-    }
-
-    return queueEvent(command_queue, command, event, false);
+  if (rs != CL_SUCCESS)
+  {
+#ifdef DBG_OUTPUT
+    std::cerr << "!! ERROR: Failed to create UnmapBufferEvent" << std::endl;
+#endif
+    delete command;
+    return rs;
+  }
+#ifdef DBG_API
+  std::cerr << "returning queueEvent from clEnqueueUnmapMemObject" << std::endl;
+#endif
+  return queueEvent(command_queue, command, event, false);
 }
 
 cl_int
@@ -649,40 +684,40 @@ clEnqueueNDRangeKernel(cl_command_queue command_queue,
                        const cl_event * event_wait_list,
                        cl_event *       event)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clEnqueueNDRangeKernel\n";
 #endif
-    cl_int rs = CL_SUCCESS;
+  cl_int rs = CL_SUCCESS;
 
-    if (!command_queue->isA(Coal::Object::T_CommandQueue))
-    {
-#ifdef DEBUGCL
-      std::cerr << "ERROR, command queue is invalid\n";
+  if (!command_queue->isA(Coal::Object::T_CommandQueue))
+  {
+#ifdef DBG_OUTPUT
+    std::cout << "!!!ERROR: command queue is invalid\n";
 #endif
-        return CL_INVALID_COMMAND_QUEUE;
-    }
+    return CL_INVALID_COMMAND_QUEUE;
+  }
 
     Coal::KernelEvent *command = new Coal::KernelEvent(
-        (Coal::CommandQueue *)command_queue,
-        (Coal::Kernel *)kernel,
-        work_dim, global_work_offset, global_work_size, local_work_size,
-        num_events_in_wait_list, (const Coal::Event **)event_wait_list, &rs
+       (Coal::CommandQueue *)command_queue,
+       (Coal::Kernel *)kernel,
+       work_dim, global_work_offset, global_work_size, local_work_size,
+       num_events_in_wait_list, (const Coal::Event **)event_wait_list, &rs
     );
 
-    if (rs != CL_SUCCESS)
-    {
-#ifdef DEBUGCL
-      std::cerr << "ERROR, creating KernelEvent failed!\n";
+  if (rs != CL_SUCCESS)
+  {
+#ifdef DBG_OUTPUT
+    std::cerr << "!!!ERROR: creating KernelEvent failed!\n";
 #endif
-        delete command;
-        return rs;
-    }
+    delete command;
+    return rs;
+  }
 
-#ifdef DEBUGCL
-    std::cerr << "Returning from clEnqueueNDRangeKernel after queueEvent\n";
+#ifdef DBG_API
+  std::cerr << "Returning from clEnqueueNDRangeKernel after queueEvent\n";
 #endif
 
-    return queueEvent(command_queue, command, event, false);
+  return queueEvent(command_queue, command, event, false);
 }
 
 cl_int
@@ -791,8 +826,13 @@ clEnqueueWaitForEvents(cl_command_queue command_queue,
 {
     cl_int rs = CL_SUCCESS;
 
-    if (!command_queue->isA(Coal::Object::T_CommandQueue))
-        return CL_INVALID_COMMAND_QUEUE;
+    if (!command_queue->isA(Coal::Object::T_CommandQueue)) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Command queue is not a CommandQueue?!"
+        << std::endl;
+#endif
+      return CL_INVALID_COMMAND_QUEUE;
+    }
 
     Coal::WaitForEventsEvent *command = new Coal::WaitForEventsEvent(
         (Coal::CommandQueue *)command_queue,
@@ -800,8 +840,11 @@ clEnqueueWaitForEvents(cl_command_queue command_queue,
 
     if (rs != CL_SUCCESS)
     {
-        delete command;
-        return rs;
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: Failed to create WaitForEventEvent" << std::endl;
+#endif
+      delete command;
+      return rs;
     }
 
     return queueEvent(command_queue, command, 0, false);

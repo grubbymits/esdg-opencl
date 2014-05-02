@@ -68,7 +68,7 @@ CommandQueue::CommandQueue(Context *ctx,
 : Object(Object::T_CommandQueue, ctx), p_device(device),
   p_properties(properties), p_flushed(true), errcode(CL_SUCCESS)
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "CommandQueue::CommandQueue in thread " << pthread_self()
     << std::endl;
 #endif
@@ -79,11 +79,17 @@ CommandQueue::CommandQueue(Context *ctx,
     // Check that the device belongs to the context
     if (!ctx->hasDevice(device))
     {
-        *errcode_ret = CL_INVALID_DEVICE;
-        return;
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Invalid device" << std::endl;
+#endif
+      *errcode_ret = CL_INVALID_DEVICE;
+      return;
     }
 
     if (!device->init()) {
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Invalid device" << std::endl;
+#endif
       *errcode_ret = CL_INVALID_DEVICE;
       return;
     }
@@ -103,7 +109,7 @@ cl_int CommandQueue::info(cl_command_queue_info param_name,
                           void *param_value,
                           size_t *param_value_size_ret) const
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering CommandQueue::info\n";
 #endif
     void *value = 0;
@@ -146,7 +152,7 @@ cl_int CommandQueue::info(cl_command_queue_info param_name,
 
     if (param_value)
         std::memcpy(param_value, value, value_length);
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving CommandQueue::info\n";
 #endif
     return CL_SUCCESS;
@@ -169,7 +175,7 @@ cl_int CommandQueue::setProperty(cl_command_queue_properties properties,
 
 cl_int CommandQueue::checkProperties() const
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering CommandQueue::checkProperties\n";
 #endif
     // Check that all the properties are valid
@@ -199,7 +205,7 @@ cl_int CommandQueue::checkProperties() const
 
 void CommandQueue::flush()
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering CommandQueue::flush in thread " << pthread_self()
     << std::endl;
 #endif
@@ -208,26 +214,28 @@ void CommandQueue::flush()
 
     // Wait for the command queue to be in state "flushed".
     if (pthread_mutex_lock(&p_event_list_mutex) != 0) {
-      std::cerr << "p_event_list_mutex lock failed!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "p_event_list_mutex lock failed!\n";
+#endif
       exit(EXIT_FAILURE);
     }
 
     while (!p_flushed) {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
       std::cerr << "Waiting on p_flushed\n";
 #endif
       pthread_cond_wait(&p_event_list_cond, &p_event_list_mutex);
     }
 
     pthread_mutex_unlock(&p_event_list_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving CommandQueue::flush\n";
 #endif
 }
 
 cl_int CommandQueue::finish()
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering CommandQueue::finish\n";
 #endif
     // As pushEventsOnDevice doesn't remove SUCCESS events, we may need
@@ -239,8 +247,8 @@ cl_int CommandQueue::finish()
     pthread_mutex_lock(&p_event_list_mutex);
 
     if (errcode != CL_SUCCESS) {
-#ifdef DEBUGCL
-      std::cerr << "!! cleanEvents returned a failure !!!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: cleanEvents returned a failure !!!\n";
 #endif
       pthread_cond_broadcast(&p_event_list_cond);
       p_flushed = true;
@@ -249,14 +257,14 @@ cl_int CommandQueue::finish()
     }
 
     while (p_events.size() != 0) {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
       std::cerr << "while p_events.size() != 0\n";
 #endif
         pthread_cond_wait(&p_event_list_cond, &p_event_list_mutex);
     }
 
     pthread_mutex_unlock(&p_event_list_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving CommandQueue::finish\n";
 #endif
     return CL_SUCCESS;
@@ -264,20 +272,26 @@ cl_int CommandQueue::finish()
 
 cl_int CommandQueue::queueEvent(Event *event)
 {
-#ifdef DEBUGCL
-  std::cerr << "Entering CommandQueue::queueEvent in thread " << pthread_self()
-    << std::endl;
+#ifdef DBG_QUEUE
+  std::cerr << "Entering CommandQueue::queueEvent with event at"
+    << std::hex << (unsigned long)event << std::endl;
 #endif
     // Let the device initialize the event (for instance, a pointer at which
     // memory would be mapped)
     cl_int rs = p_device->initEventDeviceData(event);
 
-    if (rs != CL_SUCCESS)
-        return rs;
+    if (rs != CL_SUCCESS) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: initEventDeviceData failed" << std::endl;
+#endif
+      return rs;
+    }
 
     // Append the event at the end of the list
     if (pthread_mutex_lock(&p_event_list_mutex) != 0) {
-      std::cerr << "p_event_list_mutext lock failed!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "p_event_list_mutext lock failed!\n";
+#endif
       exit(EXIT_FAILURE);
     }
 
@@ -285,7 +299,9 @@ cl_int CommandQueue::queueEvent(Event *event)
     p_flushed = false;
 
     if (pthread_mutex_unlock(&p_event_list_mutex) != 0) {
-      std::cerr << "p_event_list_mutex unlock failed!\n";
+#ifdef DBG_OUTPUT
+      std::cout << "p_event_list_mutex unlock failed!\n";
+#endif
       exit(EXIT_FAILURE);
     }
 
@@ -296,7 +312,7 @@ cl_int CommandQueue::queueEvent(Event *event)
     // Explore the list for events we can push on the device
     pushEventsOnDevice();
 
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving CommandQueue::queueEvent\n";
 #endif
     return CL_SUCCESS;
@@ -304,7 +320,7 @@ cl_int CommandQueue::queueEvent(Event *event)
 
 cl_int CommandQueue::cleanEvents()
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering CommandQueue::cleanEvents in thread " << pthread_self()
     << std::endl;
 #endif
@@ -314,7 +330,7 @@ cl_int CommandQueue::cleanEvents()
 
     while (it != p_events.end())
     {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
       std::cerr << "iterating through events to check if they're finished\n";
 #endif
         Event *event = *it;
@@ -328,11 +344,11 @@ cl_int CommandQueue::cleanEvents()
             ++it;
 
             p_events.erase(oldit);
-            clReleaseEvent((cl_event)event);
+            //clReleaseEvent((cl_event)event);
         }
         else if (event->status() == Event::Failed) {
-#ifdef DEBUGCL
-          std::cerr << "!!! Event Failed !!!\n";
+#ifdef DBG_OUTPUT
+          std::cout << "!! ERROR: Event Failed !!!" << std::endl;
 #endif
           errcode = event->status();
           event->setReleaseParent(false);
@@ -340,7 +356,7 @@ cl_int CommandQueue::cleanEvents()
           ++it;
 
           p_events.erase(oldit);
-          clReleaseEvent((cl_event)event);
+          //clReleaseEvent((cl_event)event);
         }
         else
         {
@@ -350,7 +366,7 @@ cl_int CommandQueue::cleanEvents()
 
     // We have cleared the list, so wake up the sleeping threads
     if (p_events.size() == 0) {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
       std::cerr << "have cleared p_events in thread " << pthread_self()
         << std::endl;
 #endif
@@ -361,13 +377,13 @@ cl_int CommandQueue::cleanEvents()
 
     // Check now if we have to be deleted
     if (references() == 0) {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
       std::cerr << "No more references to itself, so deleting command queue in \
 thread " << pthread_self() << std::endl;
 #endif
         delete this;
     }
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving CommandQueue::cleanEvents\n";
 #endif
     return errcode;
@@ -375,7 +391,7 @@ thread " << pthread_self() << std::endl;
 
 void CommandQueue::pushEventsOnDevice()
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "CommandQueue::pushEventsOnDevice in thread " << pthread_self()
     << std::endl;;
 #endif
@@ -488,7 +504,7 @@ void CommandQueue::pushEventsOnDevice()
         pthread_cond_broadcast(&p_event_list_cond);
 
     pthread_mutex_unlock(&p_event_list_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving CommandQueue::pushEventsOnDevice\n";
 #endif
 }
@@ -500,7 +516,10 @@ Event **CommandQueue::events(unsigned int &count)
     pthread_mutex_lock(&p_event_list_mutex);
 
     count = p_events.size();
-    result = (Event **)std::malloc(count * sizeof(Event *));
+    //result = (Event **)std::malloc(count * sizeof(Event *));
+    // Hack for not avoiding malloc
+    //result = (Event**)new unsigned long[count]();
+    result = (Event**) ::operator new(sizeof(Event*) * count);
 
     // Copy each event of the list into result, retaining them
     unsigned int index = 0;
@@ -536,7 +555,7 @@ Event::Event(CommandQueue *parent,
   p_num_events_in_wait_list(num_events_in_wait_list), p_event_wait_list(0),
   p_status(status), p_device_data(0)
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Event::Event in thread " << pthread_self() << std::endl;
 #endif
   p_state_mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -587,7 +606,10 @@ Event::Event(CommandQueue *parent,
     if (num_events_in_wait_list)
     {
         const unsigned int len = num_events_in_wait_list * sizeof(Event *);
-        p_event_wait_list = (const Event **)std::malloc(len);
+        //p_event_wait_list = (const Event **)std::malloc(len);
+        // Hack for not using malloc
+        p_event_wait_list = (const Event**)
+          ::operator new(sizeof(Event*) * num_events_in_wait_list);
 
         if (!p_event_wait_list)
         {
@@ -625,7 +647,8 @@ Event::~Event()
         clReleaseEvent((cl_event)p_event_wait_list[i]);
 
     if (p_event_wait_list)
-        std::free((void *)p_event_wait_list);
+      //std::free((void *)p_event_wait_list);
+      ::operator delete(p_event_wait_list);
 
     pthread_mutex_destroy(&p_state_mutex);
     pthread_cond_destroy(&p_state_change_cond);
@@ -651,13 +674,15 @@ bool Event::isDummy() const
 
 void Event::setStatus(Status status)
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering Event::setStatus in thread " << pthread_self()
     << std::endl;
-  if(status == Event::Submit)
-    std::cerr << "Event::Submit\n";
+  if(status == Event::Failed)
+    std::cerr << "Event::Failed" << std::endl;
   else if(status == Event::Submitted)
-    std::cerr << "Event::Submitted\n";
+    std::cerr << "Event::Submitted" << std::endl;
+  else if (status == Event::Complete)
+    std::cerr << "Event::Complete" << std::endl;
 #endif
     // TODO: If status < 0, terminate all the events depending on us.
     pthread_mutex_lock(&p_state_mutex);
@@ -689,14 +714,14 @@ void Event::setStatus(Status status)
         ((UserEvent *)this)->flushQueues();
     }
 
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving Event::setStatus\n";
 #endif
 }
 
 void Event::setDeviceData(void *data)
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Event::setDeviceData\n";
 #endif
     p_device_data = data;
@@ -704,7 +729,7 @@ void Event::setDeviceData(void *data)
 
 void Event::updateTiming(Timing timing)
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering Event::updateTiming\n";
 #endif
     if (timing >= Max)
@@ -716,7 +741,7 @@ void Event::updateTiming(Timing timing)
     if (p_timing[timing])
     {
         pthread_mutex_unlock(&p_state_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
       std::cerr << "Leaving Event::updateTiming\n";
 #endif
         return;
@@ -735,7 +760,7 @@ void Event::updateTiming(Timing timing)
     p_timing[timing] = rs;
 
     pthread_mutex_unlock(&p_state_mutex);
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
     std::cerr << "Leaving Event::updateTiming\n";
 #endif
 }
@@ -756,7 +781,7 @@ Event::Status Event::status() const
 
 void Event::waitForStatus(Status status)
 {
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Entering Event::waitForStatus in thread " << pthread_self()
     << std::endl;
 #endif
@@ -776,7 +801,7 @@ void Event::waitForStatus(Status status)
       std::cerr << "p_state_mutext unlock failed!\n";
       exit(EXIT_FAILURE);
     }
-#ifdef DEBUGCL
+#ifdef DBG_QUEUE
   std::cerr << "Leaving Event::waitForStatus\n";
 #endif
 }

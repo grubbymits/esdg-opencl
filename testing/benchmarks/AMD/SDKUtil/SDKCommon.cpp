@@ -91,23 +91,21 @@ void SDKCommon::printArray(
 
 int SDKCommon::waitForEventAndRelease(cl_event *event)
 {
-    cl_int status = CL_SUCCESS;
-    cl_int eventStatus = CL_QUEUED;
-	while(eventStatus != CL_COMPLETE)
-    {
-        status = clGetEventInfo(
-                        *event, 
-                        CL_EVENT_COMMAND_EXECUTION_STATUS, 
-                        sizeof(cl_int),
-                        &eventStatus,
-                        NULL);
-		CHECK_OPENCL_ERROR(status, "clGetEventEventInfo Failed with Error Code:");
-	}
+  cl_int status = CL_SUCCESS;
+  cl_int eventStatus = CL_QUEUED;
+  while(eventStatus != CL_COMPLETE){
+    status = clGetEventInfo(*event,
+                            CL_EVENT_COMMAND_EXECUTION_STATUS,
+                            sizeof(cl_int),
+                            &eventStatus,
+                            NULL);
+    CHECK_OPENCL_ERROR(status, "clGetEventEventInfo Failed with Error Code:");
+  }
 
-    status = clReleaseEvent(*event);
-    CHECK_OPENCL_ERROR(status, "clReleaseEvent Failed with Error Code:");
+  status = clReleaseEvent(*event);
+  CHECK_OPENCL_ERROR(status, "clReleaseEvent Failed with Error Code:");
 
-    return SDK_SUCCESS;
+  return SDK_SUCCESS;
 }
 
 template<typename T> 
@@ -466,7 +464,9 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
     CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS) failed");
 
     //Get max work item sizes
-    delete maxWorkItemSizes;
+    if (maxWorkItemSizes)
+      delete [] maxWorkItemSizes;
+
     maxWorkItemSizes = new size_t[maxWorkItemDims];
     CHECK_ALLOCATION(maxWorkItemSizes, "Failed to allocate memory(maxWorkItemSizes)");
 
@@ -869,7 +869,8 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
                     &tempSize);
     CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_VENDOR) failed");
 
-    delete vendorName;
+    if (vendorName)
+      delete[] vendorName;
     vendorName = new char[tempSize];
     CHECK_ALLOCATION(vendorName, "Failed to allocate memory(venderName)");
 
@@ -890,7 +891,8 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
                     &tempSize);
     CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DRIVER_VERSION) failed");
 
-    delete driverVersion;
+    if (driverVersion)
+      delete[] driverVersion;
     driverVersion = new char[tempSize];
     CHECK_ALLOCATION(driverVersion, "Failed to allocate memory(driverVersion)");
 
@@ -911,7 +913,8 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
                     &tempSize);
     CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_PROFILE) failed");
 
-    delete profileType;
+    if (profileType)
+      delete[] profileType;
     profileType = new char[tempSize];
     CHECK_ALLOCATION(profileType, "Failed to allocate memory(profileType)");
 
@@ -932,7 +935,8 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
                     &tempSize);
     CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_VERSION) failed");
 
-    delete deviceVersion;
+    if (deviceVersion)
+      delete[] deviceVersion;
     deviceVersion = new char[tempSize];
     CHECK_ALLOCATION(deviceVersion, "Failed to allocate memory(deviceVersion)");
 
@@ -953,7 +957,8 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
                     &tempSize);
     CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_EXTENSIONS) failed");
 
-    delete extensions;
+    if (extensions)
+      delete[] extensions;
     extensions = new char[tempSize];
     CHECK_ALLOCATION(extensions, "Failed to allocate memory(extensions)");
 
@@ -1048,7 +1053,8 @@ SDKDeviceInfo::setDeviceInfo(cl_device_id deviceId)
                         &tempSize);
         CHECK_OPENCL_ERROR(status, "clGetDeviceIDs(CL_DEVICE_OPENCL_C_VERSION) failed");
 
-        delete openclCVersion;
+        if (openclCVersion)
+          delete[] openclCVersion;
         openclCVersion = new char[tempSize];
         CHECK_ALLOCATION(openclCVersion, "Failed to allocate memory(openclCVersion)");
 

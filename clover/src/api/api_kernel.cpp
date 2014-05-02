@@ -43,7 +43,7 @@ clCreateKernel(cl_program      program,
                const char *    kernel_name,
                cl_int *        errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clCreateKernel\n";
 #endif
     cl_int dummy_errcode;
@@ -160,15 +160,21 @@ clRetainKernel(cl_kernel    kernel)
 cl_int
 clReleaseKernel(cl_kernel   kernel)
 {
-#ifdef DEBUGCL
-  std::cerr << "Entering clReleaseKernel\n";
+#ifdef DBG_API
+  std::cerr << "Entering clReleaseKernel for kernel at "
+    << std::hex << (unsigned long)kernel->getAddress() << std::endl;
 #endif
-    if (!kernel->isA(Coal::Object::T_Kernel))
-        return CL_INVALID_KERNEL;
+    if (!kernel->isA(Coal::Object::T_Kernel)) {
+#ifdef DBG_OUTPUT
+      std::cout << "!! ERROR: kernel is not an object?!" << std::endl;
+#endif
+      return CL_INVALID_KERNEL;
+    }
 
     if (kernel->dereference())
         delete kernel;
-#ifdef DEBUGCL
+
+#ifdef DBG_API
     std::cerr << "Leaving clReleaseKernel\n";
 #endif
     return CL_SUCCESS;
@@ -180,7 +186,7 @@ clSetKernelArg(cl_kernel    kernel,
                size_t       arg_size,
                const void * arg_value)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clSetKernelArg\n";
 #endif
     if (!kernel->isA(Coal::Object::T_Kernel))

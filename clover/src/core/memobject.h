@@ -34,7 +34,7 @@
 #define __MEMOBJECT_H__
 
 #include "object.h"
-
+#include <vector>
 #include <CL/cl.h>
 
 namespace Coal
@@ -128,7 +128,8 @@ class MemObject : public Object
         unsigned int p_num_devices, p_devices_to_allocate;
         cl_mem_flags p_flags;
         void *p_host_ptr;
-        DeviceBuffer **p_devicebuffers;
+        //DeviceBuffer **p_devicebuffers;
+        std::vector<DeviceBuffer*> p_devicebuffers;
 
         void (CL_CALLBACK *p_dtor_callback)(cl_mem memobj, void *user_data);
         void *p_dtor_userdata;

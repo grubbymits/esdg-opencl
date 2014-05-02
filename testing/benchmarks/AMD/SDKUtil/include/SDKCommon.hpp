@@ -457,14 +457,22 @@ namespace streamsdk
 		 */
 		~SDKDeviceInfo()
 		{
-			delete maxWorkItemSizes;
-			delete name;
-			delete vendorName;
-			delete driverVersion;
-			delete profileType;
-			delete deviceVersion;
-			delete openclCVersion;
-			delete extensions;
+                  if (maxWorkItemSizes)
+		    delete[] maxWorkItemSizes;
+                  if (name)
+		    delete[] name;
+                  if (vendorName)
+		    delete[] vendorName;
+                  if (driverVersion)
+		    delete[] driverVersion;
+                  if (profileType)
+		    delete[] profileType;
+                  if (deviceVersion)
+		    delete[] deviceVersion;
+                  if (openclCVersion)
+		    delete[] openclCVersion;
+                  if (extensions)
+		    delete[] extensions;
 		};
 
 		/**

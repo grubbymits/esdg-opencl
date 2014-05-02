@@ -22,10 +22,9 @@ extern "C" {
 
 using namespace Coal;
 
-unsigned LE1Simulator::iteration = 0;
+//unsigned LE1Simulator::iteration = 0;
 
-SimulationStats::SimulationStats(hyperContextT *HyperContext) {
-                                 //unsigned disabled) {
+ContextStats::ContextStats(hyperContextT *HyperContext) {
   TotalCycles = HyperContext->cycleCount;
   Stalls = HyperContext->stallCount;
   NOPs = HyperContext->nopCount;
@@ -35,6 +34,21 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext) {
   BranchesNotTaken = HyperContext->branchNotTaken;
   ControlFlowChange = HyperContext->controlFlowChange;
   MemoryAccessCount = HyperContext->memoryAccessCount;
+#ifdef DBG_OUTPUT
+  std::cout << "Creating Stats:" << std::endl;
+  std::cout << "TotalCycles = " << HyperContext->cycleCount << std::endl;
+  std::cout << "Stalls = " << HyperContext->stallCount << std::endl;
+  std::cout << "NOPs = " << HyperContext->nopCount << std::endl;
+  std::cout << "IdleCycles = " << HyperContext->idleCount << std::endl;
+  std::cout << "DecodeStalls = " << HyperContext->decodeStallCount << std::endl;
+  std::cout << "BranchesTaken = " << HyperContext->branchTaken << std::endl;
+  std::cout << "BranchesNotTaken = " << HyperContext->branchNotTaken
+    << std::endl;
+  std::cout << "ControlFlowChange = " << HyperContext->controlFlowChange
+    << std::endl;
+  std::cout << "MemoryAccessCount = " << HyperContext->memoryAccessCount
+    << std::endl;
+#endif
 
   // Reset the values
   HyperContext->cycleCount = 0;
@@ -48,6 +62,14 @@ SimulationStats::SimulationStats(hyperContextT *HyperContext) {
   HyperContext->memoryAccessCount = 0;
 }
 
+IterationStats::IterationStats(unsigned iram, unsigned dram,
+                               unsigned long cycles) {
+  this->iram = iram;
+  this->dram = dram;
+  completionCycles = cycles;
+}
+
+/*
 SimulationStats::SimulationStats(const SimulationStats &Stats) {
   TotalCycles = Stats.TotalCycles;
   Stalls = Stats.Stalls;
@@ -58,8 +80,10 @@ SimulationStats::SimulationStats(const SimulationStats &Stats) {
   BranchesNotTaken = Stats.BranchesNotTaken;
   ControlFlowChange = Stats.ControlFlowChange;
   MemoryAccessCount = Stats.MemoryAccessCount;
+  DramSize = Stats.DramSize;
+  IramSize = Stats.IramSize;
   //disabledCores = Stats.disabledCores;
-}
+}*/
 
 LE1Simulator::LE1Simulator() {
   pthread_mutex_init(&p_simulator_mutex, 0);
@@ -75,35 +99,44 @@ LE1Simulator::~LE1Simulator() {
 #endif
   pthread_mutex_destroy(&p_simulator_mutex);
 
-  /* LE1device ends up owning the pointers
-  for (std::vector<SimulationStats*>::iterator SI = Stats.begin(),
-       SE = Stats.end(); SI != SE; ++SI) {
-    delete *(SI);
-  }
-  */
-
   /* Clean up */
   // FIXME Probably need to do this after each run
   if(freeMem() == -1) {
-    fprintf(stderr, "!!! ERROR freeing memory !!!\n");
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: trying to free memory in LE1Simulator"
+      << std::endl;
+#endif
     exit(-1);
+  }
+
+  for (KernelStats::iterator KSI = kernelStats.begin(),
+       KSE = kernelStats.end(); KSI != KSE; ++KSI) {
+
+    std::vector<IterationStats*> *iStats = &(KSI->second);
+    for (std::vector<IterationStats*>::iterator ISI = iStats->begin(),
+         ISE = iStats->end(); ISI != ISE; ++ISI) {
+
+      (*ISI)->contextStats.clear();
+
+    }
+    iStats->clear();
   }
 }
 
 bool LE1Simulator::Initialise(const std::string &Machine) {
+#ifdef DBG_SIM
+  std::cerr << "Entering LE1Simulator::Initialise" << std::endl;
+#endif
 
   LockAccess();
 
-  if (LE1Simulator::isInitialised) {
-    std::cerr << "ERROR: Simulator is already initialised!\n";
+  if (isInitialised) {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Simulator is already initialised!\n";
+#endif
     return false;
   }
   machineModel = Machine;
-  /*
-  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
-    exit(EXIT_FAILURE);
-  }*/
   /* Setup global struct */
   /* readConf reads xml file and sets up global SYSTEM variable
      SYSTEM is a global pointer to systemConfig defined in inc/galaxyConfig.h
@@ -112,7 +145,10 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
   std::string FullPath = LE1Device::MachinesDir;
   FullPath.append(Machine);
   if(readConf(const_cast<char*>(FullPath.c_str())) == -1) {
-    fprintf(stderr, "!!! ERROR reading machine model file !!!\n");
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR reading machine model file : " << FullPath
+      << std::endl;
+#endif
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;
   }
@@ -123,61 +159,15 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
      galaxyT is a global pointer of type systemT
   */
   if(setupGalaxy() == -1) {
-    fprintf(stderr, "!!! ERROR setting up galaxy !!!\n");
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR setting up galaxy" << std::endl;
+#endif
+    //fprintf(stderr, "!!! ERROR setting up galaxy !!!\n");
     pthread_mutex_unlock(&p_simulator_mutex);
     return false;
   }
 
-  /* Set the stack pointer and program counter of an available hypercontext */
-  {
-    //extern unsigned int STACK_SIZE; /* global var in Insizzle required for stack checking */
-
-    /* system, context, hypercontext, cluster */
-    unsigned char s = 0;
-    unsigned char c = 0;
-    unsigned char hc = 0;
-    unsigned char cl = 0;
-
-    SYS = (systemConfig *)((size_t)SYSTEM +
-                                         (s * sizeof(systemConfig)));
-    LE1System = (systemT *)((size_t)galaxyT + (s * sizeof(systemT)));
-
-    /* This is a value defined in the xml config file */
-    // FIXME This needs to come from the device
-    STACK_SIZE = SYS->STACK_SIZE;
-    dram_size = ((SYS->DRAM_SHARED_CONFIG >> 8) & 0xFFFF) * 1024;
-#ifdef DBG_SIM
-    std::cerr << "dram_size = " << dram_size << std::endl;
-#endif
-
-    unsigned int totalHC = 0;
-    /* loop through all contexts and hypercontexts */
-    for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff);  ++c){
-      contextConfig *CNT = (contextConfig *)((size_t)SYS->CONTEXT +
-                                             (c * sizeof(contextConfig)));
-      contextT *context = (contextT *)((size_t)LE1System->context
-                                       + (c * sizeof(contextT)));
-
-      for (hc=0; hc<((CNT->CONTEXT_CONFIG >> 4) & 0xf); ++hc) {
-        hyperContextT *hypercontext =
-          (hyperContextT *)((size_t)context->hypercontext
-                            + (hc * sizeof(hyperContextT)));
-
-        /* Set current hypercontext to interact with */
-        insizzleAPISetCurrent(s, c, hc, cl); /* (system, context, hypercontext, cluster) */
-        /* Write stack pointer (SGPR 1) */
-        insizzleAPIWrOneSGpr(1, (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC));
-        /* Set original stack pointer and stack size for Insizzle to perform stack check */
-        hypercontext->initialStackPointer
-          = (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC);
-
-        /* Write Program Counter */
-        insizzleAPIWrPC(0x0);
-
-        ++totalHC;
-      }
-    }
-  }
+  Reset();
 
   isInitialised = true;
 
@@ -186,18 +176,68 @@ bool LE1Simulator::Initialise(const std::string &Machine) {
   return true;
 }
 
+void LE1Simulator::Reset() {
+  /* Set the stack pointer and program counter of an available hypercontext */
+
+  /* system, context, hypercontext, cluster */
+  unsigned char s = 0;
+  unsigned char c = 0;
+  unsigned char hc = 0;
+  unsigned char cl = 0;
+
+  SYS = (systemConfig *)((size_t)SYSTEM +
+                                       (s * sizeof(systemConfig)));
+  LE1System = (systemT *)((size_t)galaxyT + (s * sizeof(systemT)));
+
+  /* This is a value defined in the xml config file */
+  // FIXME This needs to come from the device
+  STACK_SIZE = SYS->STACK_SIZE;
+  dram_size = ((SYS->DRAM_SHARED_CONFIG >> 8) & 0xFFFF) * 1024;
+#ifdef DBG_SIM
+  std::cerr << "dram_size = " << dram_size << std::endl;
+#endif
+
+  unsigned int totalHC = 0;
+  /* loop through all contexts and hypercontexts */
+  for (c=0; c<(SYS->SYSTEM_CONFIG & 0xff);  ++c){
+    contextConfig *CNT = (contextConfig *)((size_t)SYS->CONTEXT +
+                                           (c * sizeof(contextConfig)));
+    contextT *context = (contextT *)((size_t)LE1System->context
+                                     + (c * sizeof(contextT)));
+
+    for (hc=0; hc<((CNT->CONTEXT_CONFIG >> 4) & 0xf); ++hc) {
+      hyperContextT *hypercontext =
+        (hyperContextT *)((size_t)context->hypercontext
+                          + (hc * sizeof(hyperContextT)));
+
+      /* Set current hypercontext to interact with */
+      insizzleAPISetCurrent(s, c, hc, cl); /* (system, context, hypercontext, cluster) */
+      /* Write stack pointer (SGPR 1) */
+      insizzleAPIWrOneSGpr(1, (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC));
+      /* Set original stack pointer and stack size for Insizzle to perform stack check */
+      hypercontext->initialStackPointer
+        = (dram_size - 256) - ((STACK_SIZE * 1024) * totalHC);
+
+      /* Write Program Counter */
+      insizzleAPIWrPC(0x0);
+
+      ++totalHC;
+    }
+  }
+}
+
 // Save the execution statistics and resets the device
-void LE1Simulator::SaveStats(unsigned cycles) {
-  // 0 = Single system
-    /* system, context, hypercontext, cluster */
-    //unsigned char s = 0;
-    //unsigned char c = 0;
-    //unsigned char hc = 0;
-    //unsigned char cl = 0;
+void LE1Simulator::SaveStats(unsigned long cycles, std::string &kernel) {
   SYS = (systemConfig *)((size_t)SYSTEM + (0 * sizeof(systemConfig)));
   LE1System = (systemT *)((size_t)galaxyT + (0 * sizeof(systemT)));
 
-  //unsigned int totalHC = 0;
+  // Record the completion cycles and ram sizes for this iteration.
+  IterationStats *iterationStats = new IterationStats(IRAMFileSize,
+                                                      DRAMFileSize,
+                                                      cycles);
+
+  // Then populate the iteration stats with the individual stats from all the
+  // available contexts.
   for (unsigned c = 0; c < (SYS->SYSTEM_CONFIG & 0xFF); ++c) {
     contextConfig *CNT
       = (contextConfig *)((size_t)SYS->CONTEXT + (c * sizeof(contextConfig)));
@@ -207,23 +247,27 @@ void LE1Simulator::SaveStats(unsigned cycles) {
 
     for(unsigned k=0;k<((CNT->CONTEXT_CONFIG >> 4) & 0xf);k++) {
 
-  //    hyperContextConfig *HCNT = (hyperContextConfig *)((size_t)CNT->HCONTEXT
-    //                                + (k * sizeof(hyperContextConfig)));
       hyperContextT *hypercontext =
         (hyperContextT *)((size_t)context->hypercontext
                           + (k * sizeof(hyperContextT)));
 
       // Save the execution statistics
-      SimulationStats NewStat(hypercontext); //, disabled);
-      statVector.push_back(NewStat);
-
-      memset(hypercontext->S_GPR, 0,
-             (hypercontext->sGPRCount * sizeof(unsigned)));
-      hypercontext->programCounter = 0;
+      ContextStats *contextStat = new ContextStats(hypercontext);
+      iterationStats->contextStats.push_back(contextStat);
     }
   }
-  // pair cycles with StatVector
-  statSet = new std::pair<unsigned, StatVector>(cycles, statVector);
+
+  // Create a new item in the map if this is the first time the kernel has
+  // ran.
+  if (kernelStats.find(kernel) == kernelStats.end()) {
+    std::vector<IterationStats*> stats;
+    stats.push_back(iterationStats);
+    kernelStats.insert(std::make_pair(kernel, stats));
+  }
+  else
+    kernelStats[kernel].push_back(iterationStats);
+
+  Reset();
 }
 
 void LE1Simulator::LockAccess(void) {
@@ -231,7 +275,9 @@ void LE1Simulator::LockAccess(void) {
   std::cerr << "Trying to lock access to simulator\n";
 #endif
   if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
+#ifdef DBG_OUTPUT
+    std::cout << "!!! p_simulator_mutex lock failed !!!\n";
+#endif
     exit(EXIT_FAILURE);
   }
 #ifdef DBG_SIM
@@ -277,8 +323,8 @@ int LE1Simulator::checkStatus(void) {
   return 0;
 }
 
-bool LE1Simulator::Run(const char *iram, const char *dram) {
-                       //const unsigned disabled) {
+bool LE1Simulator::Run(const char *iram, const char *dram,
+                       std::string &kernel) {
 #ifdef DBG_SIM
   std::cerr << "Entered LE1Simulator::run with:\n" << iram << std::endl << dram
     << std::endl << machineModel << std::endl;
@@ -303,19 +349,27 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 
       FILE *inst = fopen(iram, "rb");
       if(inst == NULL) {
-        fprintf(stderr, "!!! ERROR Could not open file (%s) !!!\n", iram);
+#ifdef DBG_OUTPUT
+        std::cout << "!!! ERROR: Could not open file " << iram << std::endl;
+#endif
         //pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
       fseek(inst, 0L, SEEK_END);
       IRAMFileSize = ftell(inst);
       //printf("Filesize = %d\n", fileSize);
+#ifdef DBG_OUTPUT
+    std::cout << "IRAMFileSize = " << IRAMFileSize << std::endl;
+#endif
       fseek(inst, 0L, SEEK_SET);
 
       /* Create local data and copy content of file into it */
       i_data = (char *)calloc(sizeof(char), IRAMFileSize);
       if(i_data == NULL) {
-        fprintf(stderr, "!!! ERROR Could not allocate memory (i_data) !!!\n");
+#ifdef DBG_OUTPUT
+        std::cout << "!!! ERROR: Could not allocate memory for i_data"
+          << std::endl;
+#endif
         //pthread_mutex_unlock(&p_simulator_mutex);
         return false;
       }
@@ -357,10 +411,12 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
             for (i=0; i<IRAMFileSize; i+=4) {
               insizzleAPIRdOneIramLocation(i, &word);
               /* Need to perform an endian flip */
-              if(MSB2LSBDW(word) != (unsigned int)*(unsigned int *)(i_data + i)) {
-                fprintf(stderr, "!!! ERROR: 0x%08x != 0x%08x !!!\n", word,
-                        (unsigned int)*(unsigned int *)(i_data + i));
-                //pthread_mutex_unlock(&p_simulator_mutex);
+              if(MSB2LSBDW(word) != (unsigned int)*(unsigned int *)(i_data + i))
+              {
+#ifdef DBG_OUTPUT
+                std::cout << "!! ERROR: " << word << " != " <<
+                  (unsigned*)(unsigned*)(i_data + i) << std::endl;
+#endif
                 return false;
               }
             }
@@ -381,12 +437,13 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
 #ifdef DBG_SIM
     std::cerr << "Loading DRAM\n";
 #endif
-    unsigned int DRAMFileSize = 0;
     char *d_data = NULL;
 
     FILE *data = fopen(dram, "rb");
     if(data == NULL) {
-      fprintf(stderr, "!!! ERROR Could not open file (%s) !!!\n", dram);
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Could not open file - " << dram << std::endl;
+#endif
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -397,11 +454,16 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     std::cerr << "Machine DRAM = " << dram_size << ", total used = "
       << DRAMFileSize << std::endl;
 #endif
+#ifdef DBG_OUTPUT
+    std::cout << "DRAMFileSize = " << DRAMFileSize << std::endl;
+#endif
 
     if(DRAMFileSize > dram_size) {
+#ifdef DBG_OUTPUT
       std::cout << "!!! ERROR DRAM is larger than the size specified !!!\n"
         << "DRAM = " << dram_size << " and fileSize = " << DRAMFileSize
         << std::endl;
+#endif
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -409,7 +471,10 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
     /* Create local data and copy content of file into it */
     d_data = (char *)calloc(sizeof(char), dram_size);
     if(d_data == NULL) {
-      fprintf(stderr, "!!! ERROR Could not allocate memory (d_data) !!!\n");
+#ifdef DBG_OUTPUT
+      std::cout << "!!! ERROR: Could not allocate memory for d_data"
+        << std::endl;
+#endif
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
@@ -520,7 +585,9 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
         // Something has gone wrong...
         printf("-------------------------------------------- end of cycle %lld\n",
           cycleCount);
-        std::cout << "!!ERROR - Simulation failed!" << std::endl;
+#ifdef DBG_OUTPUT
+        std::cout << "!!! ERROR - Simulation failed!" << std::endl;
+#endif
         return false;
       }
 
@@ -542,12 +609,6 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
       //pthread_mutex_unlock(&p_simulator_mutex);
       return false;
     }
-    std::ostringstream CopyDump;
-    CopyDump << "mv memoryDump_0.dat memoryDump_" << KernelNumber 
-      << "-" << LE1Simulator::iteration<< ".dat";
-
-    ++LE1Simulator::iteration;
-    system(CopyDump.str().c_str());
   }
 
 #ifdef DBG_OUTPUT
@@ -555,7 +616,7 @@ bool LE1Simulator::Run(const char *iram, const char *dram) {
   std::cout << " -------------------------------------------------------- "
     << std::endl;
 #endif
-  SaveStats(cycleCount);
+  SaveStats(cycleCount, kernel);
 
   //pthread_mutex_unlock(&p_simulator_mutex);
 
@@ -622,8 +683,10 @@ bool LE1Simulator::readHalfData(unsigned addr,
     }
   }
   else {
-    std::cerr << "!!ERROR: Unhandled number of bytes to read back from device!"
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: Unhandled number of bytes to read back from device"
       << std::endl;
+#endif
     return false;
   }
   return true;
@@ -637,11 +700,6 @@ bool LE1Simulator::readWordData(unsigned int addr,
     << "Read from 0x" << std::hex << addr << ", " << std::dec << numBytes
     << " bytes.\n";
 #endif
-  /*
-  if (pthread_mutex_lock(&p_simulator_mutex) != 0) {
-    std::cerr << "!!! p_simulator_mutex lock failed !!!\n";
-    exit(EXIT_FAILURE);
-  }*/
   unsigned int num = numBytes >> 2;
   unsigned int word = 0;
   for(unsigned i = 0; i < num; addr = (addr + 4), ++i) {

@@ -52,7 +52,7 @@ using namespace Coal;
 
 void *worker(void *data)
 {
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
   std::cerr << "Entering worker in thread " << pthread_self() << std::endl;
 #endif
     LE1Device *device = (LE1Device *)data;
@@ -93,7 +93,7 @@ void *worker(void *data)
             case Event::ReadBuffer:
             case Event::WriteBuffer:
             {
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
               std::cerr << "Worker : Event::ReadBuffer or Event::WriteBuffer in\
 thread " << pthread_self() << std::endl;
 #endif
@@ -106,10 +106,16 @@ thread " << pthread_self() << std::endl;
                 //data += e->offset();
 
                 if (t == Event::ReadBuffer) {
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
                   std::cerr << "ReadBuffer\n";
 #endif
                   device->getSimulator()->LockAccess();
+                  if (!buf->allocated()) {
+#ifdef DBG_OUTPUT
+                    std::cout << "!! ERROR: Buffer is not allocated for a write"
+                      << std::endl;
+#endif
+                  }
                   std::memcpy(e->ptr(), buf->data(), e->cb());
                   device->getSimulator()->UnlockAccess();
                 }
@@ -128,7 +134,7 @@ thread " << pthread_self() << std::endl;
                   }
                 }*/
                 else {
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
                   std::cerr << "WriteBuffer: write " << e->cb() << " bytes\n";
 #endif
                   device->getSimulator()->LockAccess();
@@ -136,7 +142,7 @@ thread " << pthread_self() << std::endl;
 
                   // Ensure we have a good pointer
                   if (e->ptr() == NULL) {
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
                     std::cerr << "!ERROR: Bad data pointer\n";
 #endif
                     device->getSimulator()->UnlockAccess();
@@ -245,7 +251,7 @@ thread " << pthread_self() << std::endl;
             }*/
             case Event::MapBuffer:
             case Event::MapImage:
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
         std::cerr << "Event::MapBuffer or Event::MapImage\n";
 #endif
                 // All was already done in CPUBuffer::initEventDeviceData()
@@ -264,7 +270,7 @@ thread " << pthread_self() << std::endl;
             case Event::NDRangeKernel:
             case Event::TaskKernel:
             {
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
               std::cerr << "Event::NDRangeKernel or Event::TaskKernel\n";
 #endif
               // TODO Send code to simulator here
@@ -308,19 +314,26 @@ thread " << pthread_self() << std::endl;
 
             if (finished)
             {
+#ifdef DBG_WORKER
+              std::cerr << "LE1worker finished event" << std::endl;
+#endif
                 event->setStatus(Event::Complete);
 
                 if (queue_props & CL_QUEUE_PROFILING_ENABLE)
                     event->updateTiming(Event::End);
 
                 // Clean the queue
-                if (queue)
-                    queue->cleanEvents();
+                if (queue) {
+#ifdef DBG_WORKER
+                  std::cerr << "LE1worker cleaning queue..." << std::endl;
+#endif
+                  queue->cleanEvents();
+                }
             }
         }
         else
         {
-#ifdef DEBUGCL
+#ifdef DBG_WORKER
           std::cerr << "!ERROR: Event failed\n";
 #endif
             // The event failed

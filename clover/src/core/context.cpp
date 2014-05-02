@@ -100,7 +100,8 @@ Context::Context(const cl_context_properties *properties,
 
         // properties may be allocated on the stack of the client application
         // copy it into a real buffer
-        p_properties = (cl_context_properties *)std::malloc(props_len);
+        //p_properties = (cl_context_properties *)std::malloc(props_len);
+        p_properties = (cl_context_properties*) ::operator new(props_len);
         p_props_len = props_len;
 
         if (!p_properties)
@@ -123,7 +124,9 @@ Context::Context(const cl_context_properties *properties,
     }
 
     // Explore the devices
-    p_devices = (DeviceInterface **)std::malloc(num_devices * sizeof(DeviceInterface *));
+    //p_devices = (DeviceInterface **)std::malloc(num_devices * sizeof(DeviceInterface *));
+    p_devices = (DeviceInterface**)
+      ::operator new(sizeof(DeviceInterface*) * num_devices);
     p_num_devices = num_devices;
 
     if (!p_devices)
@@ -195,10 +198,12 @@ Context::Context(const cl_context_properties *properties,
 Context::~Context()
 {
     if (p_properties)
-        std::free((void *)p_properties);
+        //std::free((void *)p_properties);
+      ::operator delete(p_properties);
 
     if (p_devices)
-        std::free((void *)p_devices);
+        //std::free((void *)p_devices);
+      ::operator delete(p_devices);
 }
 
 cl_int Context::info(cl_context_info param_name,

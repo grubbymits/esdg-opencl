@@ -1,0 +1,18 @@
+# Makefile for API
+
+CC = gcc
+CFLAGS = -c -fPIC -Wall -pedantic -Wextra -DAPI -I../../le1_driver -I../inc `xml2-config --cflags` -std=c99
+LDFLAGS = -lm `xml2-config --libs` -lpcre
+
+
+all:
+	$(CC) simulate.c $(CFLAGS)
+	$(CC) -shared -o libInsizzleWrapper.so simulate.o -L/usr/lib \
+	-lInsizzleAPI $(LDFLAGS)
+
+test:
+	./TEST -i test_data/iram0.bin -d test_data/dram.bin -m test_data/model_1lsu_1.xml
+
+clean:
+	cd ../ && make clean && cd .
+	rm -f *~ simulate.o libInsizzleWrapper.so

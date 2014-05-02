@@ -69,7 +69,7 @@ typedef double cl_time;
 //-------------------------------------------------------
 
 // Detects platforms and devices, creates context and command queue
-cl_context cl_init(char devicePreference='\0');
+//cl_context cl_init(char devicePreference='\0');
 
 // Creates a context given a platform and a device
 cl_context cl_init_context(int platform,int dev,int quiet=0);
@@ -161,8 +161,8 @@ void    cl_writeToZCBuffer(cl_mem mem, void* data, size_t size);
 //-------------------------------------------------------
 
 // Compiles a program
-cl_program  cl_compileProgram(char* kernelPath, char* compileoptions, 
-                bool verboseoptions = 0);
+cl_program  cl_compileProgram(char* kernelPath, cl_uint dev,
+                              char* compileoptions, bool verboseoptions = 0);
 
 // Creates a kernel
 cl_kernel   cl_createKernel(cl_program program, const char* kernelName);

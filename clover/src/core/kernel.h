@@ -39,6 +39,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 namespace llvm
 {
@@ -53,6 +54,8 @@ namespace Coal
 class Program;
 class DeviceInterface;
 class DeviceKernel;
+class DeviceBuffer;
+class MemObject;
 
 /**
  * \brief Kernel
@@ -72,6 +75,7 @@ class Kernel : public Object
          */
         Kernel(Program *program);
         ~Kernel();
+        Kernel(const Kernel& kernel);
 
         /**
          * \brief Kernel argument
@@ -83,6 +87,9 @@ class Kernel : public Object
         class Arg
         {
           friend class Kernel;
+
+
+
             public:
                 /**
                  * \brief Memory address space qualifier
@@ -122,6 +129,8 @@ class Kernel : public Object
                 Arg(unsigned short vec_dim, File file, Kind kind,
                     llvm::Type* type);
                 ~Arg();
+
+                Arg(const Arg& arg);
 
                 /**
                  * \brief Allocate the argument
@@ -172,7 +181,7 @@ class Kernel : public Object
                  * \param b other argument to compare
                  * \return true if the this arguments doesn't match \p b
                  */
-                bool operator !=(const Arg &b);
+                bool operator !=(const Arg *b);
 
                 /**
                  * \brief Size of a field of this arg
@@ -198,7 +207,9 @@ class Kernel : public Object
                 bool defined() const;
                 /*!< \brief Size of the \c __local buffer to allocate at kernel
                   runtime */
+
                 size_t allocAtKernelRuntime() const;
+
                 /*!< \brief Pointer to the value of this argument, for the \p
                   index vector element */
                 const void *value(unsigned short index) const;
@@ -206,6 +217,42 @@ class Kernel : public Object
                   <tt>value(0)</tt> */
                 const void *data() const;
                 bool isPointer() const { return pointer; }
+
+                MemObject *getMemObject() const {
+                  if (p_kind != Buffer) {
+#ifdef DBG_OUTPUT
+                    std::cout << "!! ERROR: Arg is not a buffer" << std::endl;
+#endif
+                    exit(-1);
+                  }
+                  if (!p_defined) {
+#ifdef DBG_OUTPUT
+                    std::cout << "!! ERROR: Arg is not defined" << std::endl;
+#endif
+                    exit(-1);
+                  }
+#ifdef DBG_KERNEL
+                  std::cerr << "Arg addr = " << std::hex << this
+                    << ", getMemObject at " << std::hex << argData.mem
+                    << std::endl;
+#endif
+                  return argData.mem;
+                }
+
+                DeviceBuffer *getDeviceBuffer(DeviceInterface *device) const;
+
+                unsigned getMemSize() const;
+
+                unsigned getValue() const {
+                 if (p_kind == Int8)
+                  return argData.i8;
+                 else if (p_kind == Int16)
+                  return argData.i16;
+                 else if (p_kind == Int32)
+                   return argData.i32;
+                 else
+                   return argData.f32;
+                }
 
             private:
                 unsigned short p_vec_dim;
@@ -217,6 +264,19 @@ class Kernel : public Object
                 size_t p_runtime_alloc;
                 unsigned start_addr;
                 bool pointer;
+
+                // Everything can fit within 64-bits
+                union ArgData {
+                  MemObject *mem;
+                  unsigned char i8;
+                  unsigned short i16;
+                  unsigned int i32;
+                  unsigned long i64;
+                  float f32;
+                  double f64;
+                } argData;
+
+                ArgData getData() const { return argData; }
         };
 
         /**
@@ -271,7 +331,7 @@ class Kernel : public Object
         cl_int setArg(cl_uint index, size_t size, const void *value);
 
         unsigned int numArgs() const;             /*!< \brief Number of arguments of this kernel */
-        const Arg &arg(unsigned int index) const; /*!< \brief \c Arg at the given \p index */
+        const Arg *arg(unsigned int index) const; /*!< \brief \c Arg at the given \p index */
 
         /*! \brief \c Coal::DeviceKernel for the specified \p device */
         DeviceKernel *deviceDependentKernel(DeviceInterface *device) const;
@@ -318,7 +378,7 @@ class Kernel : public Object
         };
 
         std::vector<DeviceDependent> p_device_dependent;
-        std::vector<Arg> p_args;
+        std::vector<Arg*> p_args;
         DeviceDependent null_dep;
 
         const DeviceDependent &deviceDependent(DeviceInterface *device) const;

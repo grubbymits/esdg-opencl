@@ -1,6 +1,6 @@
 #!/bin/sh
 (
-for device in `seq 0 19`;
+for device in `seq 0 49`;
 do
   ./dct -p 0 -d $device
 done

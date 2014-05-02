@@ -71,7 +71,7 @@ public:
             setupTime = 0;
             totalKernelTime = 0;
             iterations = 1;
-            verify = true;
+            //verify = true;
             //deviceId = device;
         }
 
@@ -89,7 +89,7 @@ public:
             setupTime = 0;
             totalKernelTime = 0;
             iterations = 1;
-            verify = true;
+            //verify = true;
             //deviceId = device;
         }
 

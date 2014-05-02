@@ -38,6 +38,7 @@ typedef struct record
 
 float *OpenClFindNearestNeighbors(
 	cl_context context,
+        cl_uint device,
 	int numRecords,
 	std::vector<LatLong> &locations,float lat,float lng,
 	int timing);

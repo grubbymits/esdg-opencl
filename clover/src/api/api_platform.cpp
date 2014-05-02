@@ -34,11 +34,11 @@
 #include <cstring>
 #include <core/config.h>
 
-static const char platform_profile[] = "FULL_PROFILE";
-static const char platform_version[] = "OpenCL 1.1 MESA " COAL_VERSION;
-static const char platform_name[] = "Default";
-static const char platform_vendor[] = "Mesa";
-static const char platform_extensions[] = "cl_khr_fp64 cl_khr_int64_base_atomics cl_khr_int64_extended_atomics";
+static const char platform_profile[] = "EMBEDDED_PROFILE";
+static const char platform_version[] = "OpenCL 1.1 " COAL_VERSION;
+static const char platform_name[] = "ESDG-CL";
+static const char platform_vendor[] = "ESDG";
+static const char platform_extensions[] = "";
 
 // Platform API
 
@@ -47,7 +47,7 @@ clGetPlatformIDs(cl_uint          num_entries,
                  cl_platform_id * platforms,
                  cl_uint *        num_platforms)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clGetPlatformIDs\n";
 #endif
     if (num_platforms)
@@ -61,7 +61,7 @@ clGetPlatformIDs(cl_uint          num_entries,
     if (platforms != 0)
         // Only one "default" platform, identified by NULL
         *platforms = 0;
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Returning CL_SUCCESS from clGetPlatformIDS\n";
 #endif
     return CL_SUCCESS;
@@ -74,14 +74,14 @@ clGetPlatformInfo(cl_platform_id   platform,
                   void *           param_value,
                   size_t *         param_value_size_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clGetPlatformInfo\n";
 #endif
     const char *string = 0;
     unsigned long len = 0;
 
     if (platform != 0) {
-#ifdef DEBUGCL
+#ifdef DBG_API
       std::cerr << "Returning CL_INVALID_PLATFORM from clGetPlatformInfo\n";
 #endif
         // NULL or what is returned by clGetPlatformIDs, that's to say also NULL

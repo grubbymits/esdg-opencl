@@ -75,6 +75,8 @@ class Object
         Object(Type type, Object *parent = 0);
         virtual ~Object();
 
+        Object(const Object& obj);
+
         /**
          * \brief Increments the reference counter
          */
@@ -120,6 +122,8 @@ class Object
          * \return true if this object exists and has the correct type
          */
         bool isA(Type type) const;
+
+        const Object* getAddress() const { return this; }
 
     private:
         unsigned int p_references;

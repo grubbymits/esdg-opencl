@@ -45,7 +45,7 @@ clCreateBuffer(cl_context   context,
                void *       host_ptr,
                cl_int *     errcode_ret)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "clCreateBuffer\n";
 #endif
     cl_int dummy_errcode;
@@ -218,7 +218,7 @@ clRetainMemObject(cl_mem memobj)
 cl_int
 clReleaseMemObject(cl_mem memobj)
 {
-#ifdef DEBUGCL
+#ifdef DBG_API
   std::cerr << "Entering clReleaseMemObject\n";
 #endif
     if (!memobj->isA(Coal::Object::T_MemObject))
@@ -226,7 +226,7 @@ clReleaseMemObject(cl_mem memobj)
 
     if (memobj->dereference())
         delete memobj;
-#ifdef DEBUGCL
+#ifdef DBG_API
     std::cerr << "Leaving clReleaseMemObject\n";
 #endif
     return CL_SUCCESS;
