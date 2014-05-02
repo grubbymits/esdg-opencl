@@ -1,2 +1,0 @@
-Model, Cycles, Contexts, Target, Dram, Iram, Total Cycles,Total Stalls, Decode Stalls, Branches Taken, Memory Ops, Iterations
-1C_1w.xml, 150856, 1, scalar, 147516, 1520, 150856, 11401, 5239, 2045, 0, 1
