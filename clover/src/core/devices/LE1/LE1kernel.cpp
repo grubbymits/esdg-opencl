@@ -568,15 +568,15 @@ bool LE1KernelEvent::CompileSource() {
   Compiler LE1Compiler(p_device);
   std::string Opts = "-O3 ";
   Opts.append("-fno-builtin ");
-  Opts.append("-funroll-loops ");
+  //Opts.append("-funroll-loops ");
   //Opts.append("-mllvm -unroll-threshold=10 ");
   //Opts.append("-mllvm -loop-unroll ");
-  if ((merge_dims[0] % 8) == 0)
-    Opts.append("-mllvm -unroll-count=8 ");
-  else if ((merge_dims[0] % 4) == 0)
-    Opts.append("-mllvm -unroll-count=4 ");
-  else
-    Opts.append("-mllvm -unroll-count=2 ");
+  //if ((merge_dims[0] % 8) == 0)
+    //Opts.append("-mllvm -unroll-count=8 ");
+  //else if ((merge_dims[0] % 4) == 0)
+    //Opts.append("-mllvm -unroll-count=4 ");
+  //else
+    //Opts.append("-mllvm -unroll-count=2 ");
   //Opts.append("-mllvm -unroll-allow-partial ");
   //Opts.append("-mllvm -unroll-runtime ");
   //Opts.append("-mllvm -disable-tail-calls ");
@@ -633,8 +633,15 @@ bool LE1KernelEvent::CompileSource() {
   std::cerr << "Extracted any embedded data" << std::endl;
 #endif
 
+  unsigned unrollCount = 2;
+  if ((merge_dims[0] % 8) == 0)
+    unrollCount = 8;
+  else if ((merge_dims[0] % 4) == 0)
+    unrollCount = 4;
+
   // Output a single assembly file
-  if(!MainCompiler.CompileToAssembly(TempAsmName, CompleteModule)) {
+  if(!MainCompiler.CompileToAssembly(TempAsmName, CompleteModule, unrollCount))
+  {
 #ifdef DBG_OUTPUT
     std::cout << "ERROR: CompileToAssembly failed" << std::endl;
 #endif

@@ -98,7 +98,8 @@ class Compiler
         bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind,
                               const std::string &Opts);
 
-        bool CompileToAssembly(std::string &Filename, llvm::Module *Code);
+        bool CompileToAssembly(std::string &Filename, llvm::Module *Code,
+                               unsigned unrollCount);
         /**
          * \brief Compile \p source to produce a LLVM module
          * \param options options given to the compiler, described in the OpenCL spec

@@ -39,14 +39,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
  */
 
 __kernel 
-void bitonicSort(uint * restrict theArray,
+void bitonicSort(uint * theArray,
                  const uint stage, 
                  const uint passOfStage,
                  const uint direction)
 {
   unsigned __esdg_idx = 0;
-#pragma clang loop vectorize_width(2)
-#pragma clang loop interleave_count(8)
 for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
     uint sortIncreasing = direction;
     uint threadId = get_group_id(0) * 256 + __esdg_idx;//get_global_id(0);

@@ -1,9 +1,13 @@
+#define DEBUG_TYPE "le1tti"
 #include "LE1.h"
 #include "LE1TargetMachine.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Target/TargetLowering.h"
 #include "llvm/Target/CostTable.h"
+
+#include <iostream>
+
 using namespace llvm;
 
 namespace llvm {
@@ -48,11 +52,29 @@ namespace {
       return this;
     }
 
-    virtual unsigned getMaximumUnrollFactor() const;
+    virtual unsigned getIntImmCost(const APInt &Imm, Type *Ty) const;
 
-    virtual unsigned getNumberOfRegisters(bool Vector) const;
+    unsigned getMaximumUnrollFactor() const;
 
-    virtual unsigned getRegisterBitWidth(bool Vector) const;
+    unsigned getNumberOfRegisters(bool Vector) const;
+
+    unsigned getRegisterBitWidth(bool Vector) const;
+
+    unsigned
+      getCmpSelInstrCost(unsigned Opcode, Type *ValTy, Type *CondTy) const;
+
+    unsigned
+      getVectorInstrCost(unsigned Opcode, Type *ValTy, unsigned Index) const;
+
+    unsigned getAddressComputationCost(Type *Val, bool IsComplex) const;
+
+    unsigned getArithmeticInstrCost(unsigned Opcode, Type *Ty,
+                                    OperandValueKind Op1Info = OK_AnyValue,
+                                    OperandValueKind Op2Info = OK_AnyValue)
+      const;
+
+    unsigned getMemoryOpCost(unsigned Opcode, Type *Src, unsigned Alignment,
+                             unsigned AddressSpace) const;
 
   };
 
@@ -69,6 +91,7 @@ llvm::createLE1TargetTransformInfoPass(const LE1TargetMachine *TM) {
 }
 
 unsigned LE1TTI::getNumberOfRegisters(bool Vector) const {
+  std::cerr << "getNumberOfRegister" << std::endl;
   if (Vector)
     return 24;
   else
@@ -76,6 +99,7 @@ unsigned LE1TTI::getNumberOfRegisters(bool Vector) const {
 }
 
 unsigned LE1TTI::getRegisterBitWidth(bool Vector) const {
+  std::cerr << "getRegisterBitWidth" << std::endl;
   if (Vector)
     return 64;
   else
@@ -83,5 +107,49 @@ unsigned LE1TTI::getRegisterBitWidth(bool Vector) const {
 }
 
 unsigned LE1TTI::getMaximumUnrollFactor() const {
+  std::cerr << "getMaximumUnrollFactor" << std::endl;
   return 8;
+}
+
+unsigned LE1TTI::getIntImmCost(const APInt &Imm, Type *Ty) const {
+  assert(Ty->isIntegerTy());
+
+  std::cerr << "getIntImmCost" << std::endl;
+
+  unsigned Bits = Ty->getPrimitiveSizeInBits();
+  if (Bits > 16)
+    return 4;
+  else
+    return 1;
+}
+
+unsigned LE1TTI::getAddressComputationCost(Type *Ty, bool isComplex) const {
+  std::cerr << "getAddressComputationCost" << std::endl;
+  return 1;
+}
+
+unsigned
+LE1TTI::getCmpSelInstrCost(unsigned Opcode, Type *ValTy, Type *CondTy) const {
+  std::cerr << "getCmpIselInstrCost" << std::endl;
+  return 2;
+}
+
+unsigned
+LE1TTI::getVectorInstrCost(unsigned Opcode, Type *ValTy, unsigned Index) const {
+  std::cerr << "getVectorInstrCost" << std::endl;
+  return 1;
+}
+
+unsigned
+LE1TTI::getArithmeticInstrCost(unsigned Opcode, Type *Ty,
+                               OperandValueKind Op1Info,
+                               OperandValueKind Op2Info) const {
+  std::cerr << "getArithmeticInstrCost" << std::endl;
+  return 1;
+}
+
+unsigned LE1TTI::getMemoryOpCost(unsigned Opcode, Type *src, unsigned Alignment,
+                                 unsigned AddressSpace) const {
+  std::cerr << "getMemoryOpCost" << std::endl;
+  return 1;
 }

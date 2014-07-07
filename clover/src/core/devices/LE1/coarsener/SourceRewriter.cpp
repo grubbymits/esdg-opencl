@@ -179,9 +179,10 @@ WorkitemCoarsen::ASTVisitorBase<T>::ASTVisitorBase(Rewriter &R,
   if (LocalX > 0) {
     //OpenWhile << "while (__kernel_local_id[0] < " << LocalX << ") {\n";
     unsigned interleave = (LocalX % 8 == 0) ? 8 : (LocalX % 4 == 0) ? 4 : 2;
-    OpenWhile << "#pragma clang loop vectorize_width(2)" << std::endl;
-    OpenWhile << "#pragma clang loop interleave_count(" << interleave << ")"
-      << std::endl << "for (__esdg_idx = 0; __esdg_idx < " << LocalX
+    //OpenWhile << "#pragma clang loop vectorize_width(2)" << std::endl;
+    //OpenWhile << "#pragma clang loop interleave_count(" << interleave << ")"
+      //<< std::endl 
+    OpenWhile << "for (__esdg_idx = 0; __esdg_idx < " << LocalX
       << "; ++__esdg_idx) {\n";
   }
 

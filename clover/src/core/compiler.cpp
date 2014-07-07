@@ -684,7 +684,8 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData *theData) {
 
 // BackendUtil.cpp
 // CodeGenOptions
-bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
+bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M,
+                                 unsigned unrollCount) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering CompileToAssembly\n";
 #endif
@@ -737,7 +738,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
     PM.add(new llvm::DataLayout(M));
 
   //PM.add(createIndVarSimplifyPass());
-  //PM.add(createLoopUnrollPass(10, 2, 1));
+  PM.add(createLoopUnrollPass(1024, unrollCount, 0));
 
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
                                                              Error);
