@@ -44,6 +44,8 @@ namespace llvm {
                       Reloc::Model RM, CodeModel::Model CM,
                       CodeGenOpt::Level OL);
 
+    virtual void addAnalysisPasses(PassManagerBase &PM);
+
     virtual bool addPassesForOptimizations(PassManagerBase &PM);
 
     virtual const LE1InstrInfo   *getInstrInfo()     const

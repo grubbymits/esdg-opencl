@@ -9,8 +9,7 @@ void bitonicSort(uint * theArray,
 {
   unsigned __esdg_idx = 0;
   unsigned group_id = get_group_id(0);
-#pragma clang loop vectorize_width(2)
-//#pragma clang loop interleave_count(8)
+#pragma clang loop interleave_count(2)
 for (__esdg_idx = 0; __esdg_idx < 256; ++__esdg_idx) {
     uint sortIncreasing = direction;
     uint threadId = group_id * 256 + __esdg_idx;//get_global_id(0);

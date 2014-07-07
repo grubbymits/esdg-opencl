@@ -21,6 +21,7 @@
 namespace llvm {
   class LE1TargetMachine;
   class FunctionPass;
+  class ImmutablePass;
   class MachineCodeEmitter;
   class formatted_raw_ostream;
 
@@ -33,6 +34,7 @@ namespace llvm {
   //FunctionPass *createLE1ExpandPseudoPass(LE1TargetMachine &TM);
   FunctionPass *createLE1CFGOptimiser(LE1TargetMachine &TM);
   FunctionPass *createLE1ExpandPredSpillCode(LE1TargetMachine &TM);
+  ImmutablePass *createLE1TargetTransformInfoPass(const LE1TargetMachine *TM);
   //FunctionPass *createLE1EmitGPRestorePass(LE1TargetMachine &TM);
 
   //FunctionPass *createLE1JITCodeEmitterPass(LE1TargetMachine &TM,

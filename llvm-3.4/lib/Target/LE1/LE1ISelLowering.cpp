@@ -472,6 +472,7 @@ LE1TargetLowering(LE1TargetMachine &TM)
   setTargetDAGCombine(ISD::SELECT_CC);
   setTargetDAGCombine(ISD::ANY_EXTEND);
   setTargetDAGCombine(ISD::ZERO_EXTEND);
+  setTargetDAGCombine(ISD::SIGN_EXTEND);
 
 
   setOperationAction(ISD::FSQRT, MVT::f32, Expand);
@@ -976,6 +977,7 @@ SDValue LE1TargetLowering::PerformDAGCombine(SDNode *N,
   //case ISD::SHL:          return PerformSHLCombine(N, DAG);
   case ISD::SELECT_CC:    return PerformSELECT_CCCombine(N, DAG);
   case LE1ISD::BR:        return PerformLE1BRCombine(N, DAG);
+  case ISD::SIGN_EXTEND:
   case ISD::ANY_EXTEND:
   case ISD::ZERO_EXTEND:  return PerformZERO_EXTENDCombine(N, DAG);
   }

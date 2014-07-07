@@ -569,11 +569,17 @@ bool LE1KernelEvent::CompileSource() {
   std::string Opts = "-O3 ";
   Opts.append("-fno-builtin ");
   Opts.append("-funroll-loops ");
-  Opts.append("-mllvm -unroll-threshold=10 ");
-  //Opts.append("-mllvm -unroll-count=2 ");
-  Opts.append("-mllvm -unroll-allow-partial ");
-  Opts.append("-mllvm -unroll-runtime ");
-  Opts.append("-mllvm -disable-tail-calls ");
+  //Opts.append("-mllvm -unroll-threshold=10 ");
+  //Opts.append("-mllvm -loop-unroll ");
+  if ((merge_dims[0] % 8) == 0)
+    Opts.append("-mllvm -unroll-count=8 ");
+  else if ((merge_dims[0] % 4) == 0)
+    Opts.append("-mllvm -unroll-count=4 ");
+  else
+    Opts.append("-mllvm -unroll-count=2 ");
+  //Opts.append("-mllvm -unroll-allow-partial ");
+  //Opts.append("-mllvm -unroll-runtime ");
+  //Opts.append("-mllvm -disable-tail-calls ");
 
   if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts)) {
 #ifdef DBG_OUTPUT

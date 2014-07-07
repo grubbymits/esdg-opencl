@@ -318,7 +318,7 @@ FloydWarshall::runCLKernels(void)
                             (void*)&numNodes);
     CHECK_OPENCL_ERROR(status, "clSetKernelArg failed. (numNodes)");
 
-    for(cl_uint i = 0; i < numPasses; i += 1)
+    for(cl_uint i = 0; i < 1; i += 1)
     {
         /*
          * Kernel needs which pass of the algorithm is running 

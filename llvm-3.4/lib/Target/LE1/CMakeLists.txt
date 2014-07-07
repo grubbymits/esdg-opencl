@@ -25,6 +25,7 @@ add_llvm_target(LE1CodeGen
   LE1TargetMachine.cpp
   LE1TargetTransformInfo.cpp
   LE1SelectionDAGInfo.cpp
+  LE1TargetTransformInfo.cpp
   )
 
 

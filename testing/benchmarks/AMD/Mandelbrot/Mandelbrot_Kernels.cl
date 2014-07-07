@@ -27,7 +27,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 */
 
 __kernel void mandelbrot_vector_float(
-				__global uchar4 * mandelbrotImage,
+				__global uchar4* restrict mandelbrotImage,
                 const    float posx, 
                 const    float posy, 
                 const    float stepSizeX,

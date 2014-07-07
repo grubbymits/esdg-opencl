@@ -1,7 +1,3 @@
-// Refer to X86TargetTransformInfo of llvm-3.3 to get implementation details.
-// We should be able to use this to vectorize some of the kernel loops if we
-// backport the loop vectorizer code, or update the driver to 3.3
-/*
 #include "LE1.h"
 #include "LE1TargetMachine.h"
 #include "llvm/Analysis/TargetTransformInfo.h"
@@ -22,6 +18,10 @@ namespace {
     const LE1TargetLowering *TLI;
 
   public:
+    LE1TTI() : ImmutablePass(ID), ST(0), TLI(0) {
+      llvm_unreachable("This pass cannot be directly constructed");
+    }
+
     LE1TTI(const LE1TargetMachine *TM)
       : ImmutablePass(ID), TM(TM), ST(TM->getSubtargetImpl()),
       TLI(TM->getTargetLowering()) {
@@ -42,11 +42,46 @@ namespace {
 
     static char ID;
 
+    virtual void *getAdjustedAnalysisPointer(const void *ID) {
+      if (ID == &TargetTransformInfo::ID)
+        return (TargetTransformInfo*)this;
+      return this;
+    }
+
+    virtual unsigned getMaximumUnrollFactor() const;
+
     virtual unsigned getNumberOfRegisters(bool Vector) const;
-    // Return the widest value.
+
     virtual unsigned getRegisterBitWidth(bool Vector) const;
 
   };
 
 } // end anonymous namespace
-*/
+
+char LE1TTI::ID = 0;
+
+INITIALIZE_AG_PASS(LE1TTI, TargetTransformInfo, "le1tti",
+                   "LE1 Target Transform Info", true, true, false)
+
+ImmutablePass *
+llvm::createLE1TargetTransformInfoPass(const LE1TargetMachine *TM) {
+  return new LE1TTI(TM);
+}
+
+unsigned LE1TTI::getNumberOfRegisters(bool Vector) const {
+  if (Vector)
+    return 24;
+  else
+    return 60;
+}
+
+unsigned LE1TTI::getRegisterBitWidth(bool Vector) const {
+  if (Vector)
+    return 64;
+  else
+    return 32;
+}
+
+unsigned LE1TTI::getMaximumUnrollFactor() const {
+  return 8;
+}

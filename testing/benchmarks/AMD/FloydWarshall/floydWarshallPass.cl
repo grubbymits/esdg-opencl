@@ -47,8 +47,8 @@ unsigned int uintMin(unsigned int a, unsigned int b)
  */
 
 __kernel 
-void floydWarshallPass(__global uint * pathDistanceBuffer, 
-                       __global uint * pathBuffer        , 
+void floydWarshallPass(__global uint* pathDistanceBuffer, 
+                       __global uint* pathBuffer        , 
                        const unsigned int numNodes                  , 
                        const unsigned int pass                   )
 {
@@ -58,7 +58,8 @@ void floydWarshallPass(__global uint * pathDistanceBuffer,
     int k = pass;
     int oldWeight = pathDistanceBuffer[yValue * numNodes + xValue];
     int tempWeight = (pathDistanceBuffer[yValue * numNodes + k] + pathDistanceBuffer[k * numNodes + xValue]);
-    
+    barrier(1); 
+
     if (tempWeight < oldWeight)
     {
         pathDistanceBuffer[yValue * numNodes + xValue] = tempWeight;
