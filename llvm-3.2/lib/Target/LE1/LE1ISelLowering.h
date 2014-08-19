@@ -178,6 +178,8 @@ namespace llvm {
     /// getSetCCResultType - get the ISD::SETCC result ValueType
     EVT getSetCCResultType(EVT VT) const;
 
+    MVT::SimpleValueType getCmpLibcallReturnType() const;
+
     //virtual SDValue PerformDAGCombine(SDNode *N, DAGCombinerInfo &DCI) const;
   private:
     // Subtarget Info

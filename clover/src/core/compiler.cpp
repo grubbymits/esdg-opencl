@@ -76,6 +76,7 @@
 #include <llvm/Target/TargetLibraryInfo.h>
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Transforms/Scalar.h>
+#include <llvm/Transforms/IPO.h>
 
 using namespace Coal;
 using namespace clang;
@@ -717,6 +718,8 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
 
   //PM.add(createIndVarSimplifyPass());
   //PM.add(createLoopUnrollPass(10, 2, 1));
+  //PM.add(createLoopUnrollPass(2048, 2, 0));
+  //PM.add(createLoopExtractorPass());
 
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
                                                              Error, 0);

@@ -37,7 +37,7 @@
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Target/TargetLibraryInfo.h"
 
-//#include <iostream>
+#include <iostream>
 
 using namespace llvm;
 
@@ -483,6 +483,10 @@ EVT LE1TargetLowering::getSetCCResultType(EVT VT) const {
     return MVT::i1;
   else
     return VT;
+}
+
+MVT::SimpleValueType LE1TargetLowering::getCmpLibcallReturnType() const {
+  return MVT::i32;
 }
 
 SDValue LE1TargetLowering::
@@ -1373,7 +1377,7 @@ WriteByValArg(SDValue& ByValChain, SDValue Chain, DebugLoc dl,
               MachineFrameInfo *MFI, SelectionDAG &DAG, SDValue Arg,
               const CCValAssign &VA, const ISD::ArgFlagsTy& Flags,
               MVT PtrType, bool isLittle) {
-  //std::cout << "Entering WriteByValArg\n";
+  std::cout << "Entering WriteByValArg\n";
 
   unsigned LocMemOffset = 0;
   if(VA.isMemLoc())
@@ -1481,6 +1485,8 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
   bool &isTailCall                      = CLI.IsTailCall;
   CallingConv::ID CallConv              = CLI.CallConv;
   bool isVarArg                         = CLI.IsVarArg;
+
+  std::cout << "LE1TargetLowering::LowerCall" << std::endl;
 
   isTailCall = false;
 
@@ -1797,7 +1803,7 @@ LE1TargetLowering::LowerCallResult(SDValue Chain, SDValue InFlag,
                                     const SmallVectorImpl<ISD::InputArg> &Ins,
                                     DebugLoc dl, SelectionDAG &DAG,
                                     SmallVectorImpl<SDValue> &InVals) const {
-  //std::cout << "Entering LE1TargetLowering::LowerCallResult\n";
+  std::cout << "Entering LE1TargetLowering::LowerCallResult\n";
   // Assign locations to each value returned by this call.
   SmallVector<CCValAssign, 16> RVLocs;
   CCState CCInfo(CallConv, isVarArg, DAG.getMachineFunction(),
@@ -1807,6 +1813,34 @@ LE1TargetLowering::LowerCallResult(SDValue Chain, SDValue InFlag,
 
   // Copy all of the result registers out of their specified physreg.
   for (unsigned i = 0; i != RVLocs.size(); ++i) {
+    std::cout << "i = " << i << std::endl;
+
+    CCValAssign &VA = RVLocs[i];
+    switch (VA.getLocInfo()) {
+    case CCValAssign::Full:
+      std::cout << "CCValAssign::Full";
+      break;
+    case CCValAssign::SExt:
+      std::cout << "CCValAssign == SExt" << std::endl;
+      break;
+    case CCValAssign::ZExt:
+      std::cout << "CCValAssign == ZExt" << std::endl;
+      break;
+    case CCValAssign::AExt:
+      std::cout << "CCValAssign == AExt" << std::endl;
+      break;
+    }
+    if (VA.getLocVT() == MVT::i32)
+      std::cout << "VA.getLocVT = MVT::i32" << std::endl;
+    else if (VA.getLocVT() == MVT::i16)
+      std::cout << "VA.getLocVT = MVT::i16" << std::endl;
+    else if (VA.getLocVT() == MVT::i8)
+      std::cout << "VA.getLocVT = MVT::i8" << std::endl;
+    else if (VA.getLocVT() == MVT::i1)
+      std::cout << "VA.getLocVT = MVT::i1" << std::endl;
+    else
+      std::cout << "Unknown LocVT?" << std::endl;
+
     Chain = DAG.getCopyFromReg(Chain, dl, RVLocs[i].getLocReg(),
                                RVLocs[i].getValVT(), InFlag).getValue(1);
     InFlag = Chain.getValue(2);
@@ -1825,7 +1859,7 @@ static void ReadByValArg(MachineFunction &MF, SDValue Chain, DebugLoc dl,
                          SelectionDAG &DAG, unsigned NumWords, SDValue FIN,
                          const CCValAssign &VA, const ISD::ArgFlagsTy& Flags) {
   // FIXME shouldn't have to copy values into the frame
-  //std::cout << "Entering ReadByValArg\n";
+  std::cout << "Entering ReadByValArg\n";
   unsigned LocMem = VA.getLocMemOffset();
   unsigned FirstWord = LocMem / 4;
 
@@ -2182,7 +2216,7 @@ LE1TargetLowering::LowerReturn(SDValue Chain,
                                 const SmallVectorImpl<ISD::OutputArg> &Outs,
                                 const SmallVectorImpl<SDValue> &OutVals,
                                 DebugLoc dl, SelectionDAG &DAG) const {
-  //std::cout << "Entering LE1TargetLowering::LowerReturn\n";
+  std::cout << "Entering LE1TargetLowering::LowerReturn\n";
   // CCValAssign - represent the assignment of
   // the return value to a location
   SmallVector<CCValAssign, 16> RVLocs;
@@ -2207,11 +2241,31 @@ LE1TargetLowering::LowerReturn(SDValue Chain,
   // Copy the result values into the output registers.
   for (unsigned i = 0; i != RVLocs.size(); ++i) {
     CCValAssign &VA = RVLocs[i];
+    SDValue OutVal;
     //assert(VA.isRegLoc() && "Can only return in registers!");
+    std::cout << "Copy result value " << i << " into output register";
+    std::cout << "VA.getLocReg() = " << VA.getLocReg();
+
+    switch (VA.getLocInfo()) {
+    default: llvm_unreachable("Unknown loc info!");
+    case CCValAssign::Full:
+      std::cout << "CCValAssign::Full";
+      OutVal = OutVals[i];
+      break;
+    case CCValAssign::SExt:
+      OutVal = DAG.getNode(ISD::SIGN_EXTEND, dl, VA.getLocVT(), OutVals[i]);
+      break;
+    case CCValAssign::ZExt:
+      OutVal = DAG.getNode(ISD::ZERO_EXTEND, dl, VA.getLocVT(), OutVals[i]);
+      break;
+    case CCValAssign::AExt:
+      OutVal = DAG.getNode(ISD::ANY_EXTEND, dl, VA.getLocVT(), OutVals[i]);
+      break;
+    }
 
     // FIXME - This isn't necessarily a register now!
     Chain = DAG.getCopyToReg(Chain, dl, VA.getLocReg(),
-                             OutVals[i], Flag);
+                             OutVal, Flag);
 
     // guarantee that all emitted copies are
     // stuck together, avoiding something bad

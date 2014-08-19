@@ -41,6 +41,7 @@ for($i=0;$i<=$#inFile;$i++) {
     }
     else {
 	chomp($inFile[$i]);
+
 	my ($inst, $comment) = split(/#/, $inFile[$i]);
 
 	# remove leading and trailing whitespace
@@ -48,9 +49,15 @@ for($i=0;$i<=$#inFile;$i++) {
 	$inst =~ s/\s+$//g;
 
 	if($inst =~ /^\./) { } # ignore any . instructions
-	elsif($inst =~ /^(\w+):/) { # function labels
-	    push @oper, '-- FUNC_' . $1;
-	    $instLabels{$1} = 'FUNC_' . $1; # keep track of functions
+        elsif ($inst =~ /^[^\$].+:$/) { # function labels
+	    #push @oper, '-- FUNC_' . $1;
+            #$instLabels{$1} = 'FUNC_' . $1;
+            chop($inst);
+            #print "pushing " . $inst . "\n";
+            my $formatted_label = $inst;
+            $formatted_label =~ s/\./_/g;
+	    push @oper, '-- FUNC_' . $formatted_label;
+	    $instLabels{$inst} = 'FUNC_' . $formatted_label; # keep track of functions
 	}
 	elsif($inst =~ /^\$BB(\d+)_(\d+):/) { # basic block labels
 	    push @oper, '-- ' . $filename . '_L' . $1 . '?' . $2;
@@ -73,8 +80,10 @@ for($i=0;$i<=$#inFile;$i++) {
 
 # perform some modifications
 for(my $j=0;$j<=$#oper;$j++) {
+
     # replace labels in instructions
     if($oper[$j] !~ /^--/) {
+      #print "Replace labels\n";
 	# TODO: the section below is not fully tested
 	# the transform now take 1.6% of the time as using the code in the if(0) section
 	if(0) {
@@ -87,8 +96,10 @@ for(my $j=0;$j<=$#oper;$j++) {
 	    $oper[$j] =~ s/\$BB(\d+)_(\d+)/$filename\_L$1\?$2/g;
 	    my @o = split(/\s+/, $oper[$j]);
 	    for(my $i=0;$i<@o;$i++) {
-		if($o[$i] =~ /^([a-zA-Z_]\w+)$/) {
+		if ($o[$i] =~ /^([a-zA-Z_].+)$/) {
+                #if ($o[$i] =~ /^[^\$].+:$/)
 		    # check if it is in %instLabels
+                    #print "instLables = " . $1 . " = " . $instLabels{$1} . "\n";
 		    if(defined($instLabels{$1})) {
 			$o[$i] = $instLabels{$1};
 		    }

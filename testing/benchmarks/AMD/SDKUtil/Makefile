@@ -2,7 +2,7 @@ CXX = clang++
 CXXFLAGS = -c -g -fPIC
 SRC = $(wildcard *.cpp)
 OBJ = $(patsubst %.cpp, %.o, $(SRC))
-INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
+INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.8/
 LIBS = -L/opt/esdg-opencl/lib/ -lOpenCL
 
 target = libSDKUtil.so
