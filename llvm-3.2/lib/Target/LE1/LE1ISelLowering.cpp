@@ -975,31 +975,6 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
   case Intrinsic::le1_read_cpuid: {
     return CPUId;
   }
-  case Intrinsic::le1_read_group_id_0: {
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
-    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
-    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
-    return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
-  }
-  case Intrinsic::le1_read_group_id_1: {
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
-    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-                        DAG.getConstant(1, MVT::i32));
-    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
-    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
-    return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
-  }
-  case Intrinsic::le1_read_group_id_2: {
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getConstant(4, MVT::i32));
-    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-                        DAG.getConstant(2, MVT::i32));
-    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
-    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
-    return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
-  }
   default:
     return SDValue();
     break;
@@ -1022,19 +997,38 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
   // local_size
   // local_id
   SDValue Result;
+  SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                              DAG.getTargetConstant(4, MVT::i32));
+  SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+  //SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl,
+    //                              DAG.getVTList(MVT::i32, MVT::Other), Chain);
+  //Chain = GroupAddr.getValue(1);
 
   switch(IntNo) {
-  case Intrinsic::le1_set_group_id_0: {
-    SDValue GroupId = Op.getOperand(2);
+  case Intrinsic::le1_read_group_id_0: {
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    return DAG.getNode(LE1ISD::READ_ATTR, dl,
+                       DAG.getVTList(MVT::i32, MVT::Other), Chain, GroupAddr);
+  }
+  case Intrinsic::le1_read_group_id_1: {
     SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
                                 DAG.getTargetConstant(4, MVT::i32));
-    //Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-      //                  DAG.getConstant(0, MVT::i32));
-    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
+    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
+                        DAG.getConstant(1, MVT::i32));
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
-    //SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
-    //SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
-    //Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
+    return DAG.getNode(LE1ISD::READ_ATTR, dl,
+                       DAG.getVTList(MVT::i32, MVT::Other), Chain, GroupAddr);
+  }
+  case Intrinsic::le1_read_group_id_2: {
+    Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
+                        DAG.getConstant(2, MVT::i32));
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
+    return DAG.getNode(LE1ISD::READ_ATTR, dl,
+                       DAG.getVTList(MVT::i32, MVT::Other), Chain, GroupAddr);
+  }
+  case Intrinsic::le1_set_group_id_0: {
+    SDValue GroupId = Op.getOperand(2);
+    GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
                          GroupId, GroupAddr);
     break;
@@ -1045,27 +1039,17 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
                                 DAG.getTargetConstant(4, MVT::i32));
     Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
                         DAG.getConstant(1, MVT::i32));
-    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
 
-    //SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
-    //SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
-    //Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
                          GroupId, GroupAddr);
     break;
   }
   case Intrinsic::le1_set_group_id_2: {
     SDValue GroupId = Op.getOperand(2);
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
     Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
                         DAG.getConstant(2, MVT::i32));
-    SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
-    //SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
-    //SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
-    //Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
                          GroupId, GroupAddr);
     break;
@@ -1377,7 +1361,7 @@ WriteByValArg(SDValue& ByValChain, SDValue Chain, DebugLoc dl,
               MachineFrameInfo *MFI, SelectionDAG &DAG, SDValue Arg,
               const CCValAssign &VA, const ISD::ArgFlagsTy& Flags,
               MVT PtrType, bool isLittle) {
-  std::cout << "Entering WriteByValArg\n";
+  //std::cout << "Entering WriteByValArg\n";
 
   unsigned LocMemOffset = 0;
   if(VA.isMemLoc())
@@ -1486,7 +1470,7 @@ LE1TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
   CallingConv::ID CallConv              = CLI.CallConv;
   bool isVarArg                         = CLI.IsVarArg;
 
-  std::cout << "LE1TargetLowering::LowerCall" << std::endl;
+  //std::cout << "LE1TargetLowering::LowerCall" << std::endl;
 
   isTailCall = false;
 
@@ -1803,7 +1787,7 @@ LE1TargetLowering::LowerCallResult(SDValue Chain, SDValue InFlag,
                                     const SmallVectorImpl<ISD::InputArg> &Ins,
                                     DebugLoc dl, SelectionDAG &DAG,
                                     SmallVectorImpl<SDValue> &InVals) const {
-  std::cout << "Entering LE1TargetLowering::LowerCallResult\n";
+  //std::cout << "Entering LE1TargetLowering::LowerCallResult\n";
   // Assign locations to each value returned by this call.
   SmallVector<CCValAssign, 16> RVLocs;
   CCState CCInfo(CallConv, isVarArg, DAG.getMachineFunction(),
@@ -1813,7 +1797,7 @@ LE1TargetLowering::LowerCallResult(SDValue Chain, SDValue InFlag,
 
   // Copy all of the result registers out of their specified physreg.
   for (unsigned i = 0; i != RVLocs.size(); ++i) {
-    std::cout << "i = " << i << std::endl;
+    /*std::cout << "i = " << i << std::endl;
 
     CCValAssign &VA = RVLocs[i];
     switch (VA.getLocInfo()) {
@@ -1839,7 +1823,7 @@ LE1TargetLowering::LowerCallResult(SDValue Chain, SDValue InFlag,
     else if (VA.getLocVT() == MVT::i1)
       std::cout << "VA.getLocVT = MVT::i1" << std::endl;
     else
-      std::cout << "Unknown LocVT?" << std::endl;
+      std::cout << "Unknown LocVT?" << std::endl;*/
 
     Chain = DAG.getCopyFromReg(Chain, dl, RVLocs[i].getLocReg(),
                                RVLocs[i].getValVT(), InFlag).getValue(1);
@@ -1859,7 +1843,7 @@ static void ReadByValArg(MachineFunction &MF, SDValue Chain, DebugLoc dl,
                          SelectionDAG &DAG, unsigned NumWords, SDValue FIN,
                          const CCValAssign &VA, const ISD::ArgFlagsTy& Flags) {
   // FIXME shouldn't have to copy values into the frame
-  std::cout << "Entering ReadByValArg\n";
+  //std::cout << "Entering ReadByValArg\n";
   unsigned LocMem = VA.getLocMemOffset();
   unsigned FirstWord = LocMem / 4;
 
@@ -2216,7 +2200,7 @@ LE1TargetLowering::LowerReturn(SDValue Chain,
                                 const SmallVectorImpl<ISD::OutputArg> &Outs,
                                 const SmallVectorImpl<SDValue> &OutVals,
                                 DebugLoc dl, SelectionDAG &DAG) const {
-  std::cout << "Entering LE1TargetLowering::LowerReturn\n";
+  //std::cout << "Entering LE1TargetLowering::LowerReturn\n";
   // CCValAssign - represent the assignment of
   // the return value to a location
   SmallVector<CCValAssign, 16> RVLocs;
@@ -2243,13 +2227,13 @@ LE1TargetLowering::LowerReturn(SDValue Chain,
     CCValAssign &VA = RVLocs[i];
     SDValue OutVal;
     //assert(VA.isRegLoc() && "Can only return in registers!");
-    std::cout << "Copy result value " << i << " into output register";
-    std::cout << "VA.getLocReg() = " << VA.getLocReg();
+    //std::cout << "Copy result value " << i << " into output register";
+    //std::cout << "VA.getLocReg() = " << VA.getLocReg();
 
     switch (VA.getLocInfo()) {
     default: llvm_unreachable("Unknown loc info!");
     case CCValAssign::Full:
-      std::cout << "CCValAssign::Full";
+      //std::cout << "CCValAssign::Full";
       OutVal = OutVals[i];
       break;
     case CCValAssign::SExt:

@@ -567,10 +567,10 @@ bool LE1KernelEvent::CompileSource() {
 
   Compiler LE1Compiler(p_device);
   std::string Opts = "-O3 ";
-  Opts.append("-fno-builtin ");
+  //Opts.append("-fno-builtin ");
   Opts.append("-funroll-loops ");
-  Opts.append("-mllvm -unroll-threshold=10 ");
-  //Opts.append("-mllvm -unroll-count=2 ");
+  //Opts.append("-mllvm -unroll-threshold=10 ");
+  Opts.append("-mllvm -unroll-count=2 ");
   Opts.append("-mllvm -unroll-allow-partial ");
   Opts.append("-mllvm -unroll-runtime ");
   Opts.append("-mllvm -disable-tail-calls ");
@@ -583,12 +583,13 @@ bool LE1KernelEvent::CompileSource() {
   }
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
-  //LE1Compiler.RunOptimisations(WorkgroupModule);
-
-
-#ifdef DBG_KERNEL
-  std::cerr << "Merged Kernel\n";
+  /*
+  if (!LE1Compiler.OptimiseKernel(*WorkgroupModule)) {
+#ifdef DBG_OUTPUT
+    std::cout << "!!! ERROR: OptimiseKernel failed!" << std::endl;
 #endif
+  }
+  */
 
   std::string LauncherString;
   //CreateLauncher(LauncherString, WorkgroupsPerCore, disabledCores);
@@ -603,6 +604,10 @@ bool LE1KernelEvent::CompileSource() {
     return false;
   }
   llvm::Module *MainModule = MainCompiler.module();
+
+#ifdef DBG_KERNEL
+  std::cerr << "Merged Kernel\n";
+#endif
 
   // Link the main module with the coarsened kernel code
   llvm::Module *CompleteModule =
@@ -676,6 +681,25 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
       launcher << "extern int BufferArg_" << i << ";" << std::endl;
     }
   }
+  launcher << "void " << KernelName << "(";
+  for (unsigned i = 0; i < kernel->numArgs(); ++i) {
+    const Kernel::Arg* arg = kernel->arg(i);
+    if (arg->kind() == Kernel::Arg::Buffer)
+      launcher << "int*";
+    else {
+      launcher << "unsigned int";
+    }
+    if (i < (kernel->numArgs()-1))
+      launcher << ", ";
+    else
+      launcher << ");\n\n";
+  }
+
+  //launcher << "typedef int int2 __attribute__((ext_vector_type(2)));\n";
+  //launcher << "typedef int int4 __attribute__((ext_vector_type(4)));\n";
+  //launcher << "extern int4 BufferArg_0;\n";
+  //launcher << "extern int2 BufferArg_1;\n";
+  //launcher << "extern void binarySearch(int4*, int2*, int);\n";
 
   // Create a main function to the launcher for the kernel
   launcher << "int main(void) {\n"
@@ -726,6 +750,7 @@ void LE1KernelEvent::CreateLauncher(std::string &LauncherString,
       launcher << ");\n";
   }
   launcher << "    id += num_cores;\n"
+  //launcher << "    id = __builtin_le1_read_group_id_0() + num_cores;\n"
    << "  }\n"
    << "  return id;\n"
    << "}\n";

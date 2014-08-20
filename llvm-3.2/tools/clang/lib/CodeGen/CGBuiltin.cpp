@@ -2655,18 +2655,21 @@ Value *CodeGenFunction::EmitLE1BuiltinExpr(unsigned BuiltinID,
   case LE1::BI__builtin_le1_read_cpuid:
     ID = Intrinsic::le1_read_cpuid;
     break;
+    /*
   case LE1::BI__builtin_le1_read_barrier:
     ID = Intrinsic::le1_read_barrier;
     break;
   case LE1::BI__builtin_le1_set_barrier:
     ID = Intrinsic::le1_set_barrier;
     break;
+    */
   case LE1::BI__builtin_le1_read_work_dim:
     ID = Intrinsic::le1_read_work_dim;
     break;
   case LE1::BI__builtin_le1_num_cores:
     ID = Intrinsic::le1_num_cores;
     break;
+    /*
   case LE1::BI__builtin_le1_read_local_idx:
     ID = Intrinsic::le1_read_local_idx;
     break;
@@ -2675,7 +2678,7 @@ Value *CodeGenFunction::EmitLE1BuiltinExpr(unsigned BuiltinID,
     break;
   case LE1::BI__builtin_le1_read_local_idz:
     ID = Intrinsic::le1_read_local_idz;
-    break;
+    break;*/
   case LE1::BI__builtin_le1_read_global_size_0:
     ID = Intrinsic::le1_read_global_size_0;
     break;
@@ -2730,6 +2733,7 @@ Value *CodeGenFunction::EmitLE1BuiltinExpr(unsigned BuiltinID,
   case LE1::BI__builtin_le1_read_global_offset_2:
     ID = Intrinsic::le1_read_global_offset_2;
     break;
+    /*
   case LE1::BI__builtin_le1_reset_local_idx:
     ID = Intrinsic::le1_reset_local_idx;
     break;
@@ -2757,6 +2761,7 @@ Value *CodeGenFunction::EmitLE1BuiltinExpr(unsigned BuiltinID,
   case LE1::BI__builtin_le1_read_global_idz:
     ID = Intrinsic::le1_read_global_idz;
     break;
+    */
 
   }
 

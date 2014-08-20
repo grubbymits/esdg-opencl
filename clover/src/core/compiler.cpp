@@ -64,6 +64,7 @@
 #include <llvm/ADT/SmallVector.h>
 #include <llvm/ADT/StringRef.h>
 #include <llvm/ADT/Triple.h>
+#include <llvm/Analysis/Verifier.h>
 #include <llvm/Bitcode/ReaderWriter.h>
 #include <llvm/Support/CodeGen.h>
 #include <llvm/Support/FormattedStream.h>
@@ -328,8 +329,9 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
   p_compiler.getCodeGenOpts().OptimizationLevel = 3;
   p_compiler.getCodeGenOpts().SimplifyLibCalls = false;
-  p_compiler.getCodeGenOpts().setInlining(
-    clang::CodeGenOptions::OnlyAlwaysInlining);
+  p_compiler.getCodeGenOpts().DisableTailCalls = true;
+  //p_compiler.getCodeGenOpts().setInlining(
+    //clang::CodeGenOptions::OnlyAlwaysInlining);
 
   p_compiler.getLangOpts().NoBuiltin = true;
   p_compiler.getTargetOpts().Triple = Triple;
@@ -357,6 +359,14 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
     //PrevKernels.push_back(name);
 #ifdef DBG_COMPILER
+  std::string error;
+  std::string filename;
+  if (SourceKind == clang::IK_OpenCL)
+    filename = "kernel.bc";
+  else
+    filename = "launcher.bc";
+  llvm::raw_fd_ostream bytecode(filename.c_str(), error);
+  llvm::WriteBitcodeToFile(p_module, bytecode);
   //p_module->dump();
   std::cerr << "Leaving Compiler::CompileToBitcode\n";
 #endif
@@ -404,6 +414,86 @@ llvm::Module *Compiler::LinkRuntime(llvm::Module *M) {
 #endif
   return ld.releaseModule();
 
+}
+
+bool Compiler::OptimiseKernel(llvm::Module &M) {
+  LLVMContext &Context = getGlobalContext();
+
+  InitializeAllTargets();
+  InitializeAllTargetMCs();
+
+  // Initialize passes
+  PassRegistry &Registry = *PassRegistry::getPassRegistry();
+  initializeCore(Registry);
+  initializeScalarOpts(Registry);
+  initializeVectorization(Registry);
+  initializeIPO(Registry);
+  initializeAnalysis(Registry);
+  initializeIPA(Registry);
+  initializeTransformUtils(Registry);
+  initializeInstCombine(Registry);
+  initializeInstrumentation(Registry);
+  initializeTarget(Registry);
+
+  std::string Error;
+  const llvm::Target *TheTarget = llvm::TargetRegistry::lookupTarget(Triple,
+                                                                     Error);
+  if (!TheTarget) {
+#ifdef DBG_OUTPUT
+    std::cout << "Target not available: " << Error;
+#endif
+    return false;
+  }
+
+  llvm::TargetOptions Options;
+  Options.DisableTailCalls = true;
+  std::string FeatureSet;
+  std::auto_ptr<llvm::TargetMachine>
+    target(TheTarget->createTargetMachine(Triple,
+                                          CPU, FeatureSet, Options,
+                                          llvm::Reloc::Static,
+                                          llvm::CodeModel::Default,
+                                          llvm::CodeGenOpt::Aggressive));
+
+  // Create a PassManager to hold and optimize the collection of passes we are
+  // about to build.
+  //
+  llvm::PassManager PM;
+  // Add an appropriate TargetLibraryInfo pass for the module's triple.
+  llvm::TargetLibraryInfo *TLI =
+    new llvm::TargetLibraryInfo(llvm::Triple(Triple));
+  PM.add(TLI);
+
+  // Add an appropriate DataLayout instance for this module.
+  llvm::DataLayout *TD = 0;
+  const std::string &ModuleDataLayout = M.getDataLayout();
+  if (!ModuleDataLayout.empty())
+    TD = new DataLayout(ModuleDataLayout);
+
+  if (TD)
+    PM.add(TD);
+  if (target.get()) {
+    PM.add(new llvm::TargetTransformInfo(target->getScalarTargetTransformInfo(),
+                                         target->getVectorTargetTransformInfo())
+           );
+  }
+
+  OwningPtr<FunctionPassManager> FPasses;
+  FPasses.reset(new FunctionPassManager(&M));
+
+  if (TD)
+    FPasses->add(new DataLayout(*TD));
+
+  FPasses->doInitialization();
+  for (llvm::Module::iterator F = M.begin(), E = M.end(); F != E; ++F)
+    FPasses->run(*F);
+  FPasses->doFinalization();
+
+  PM.add(createLoopUnrollPass(2048, 16, 0));
+  PM.add(createLoopExtractorPass());
+  PM.add(createVerifierPass());
+  PM.run(M);
+  return true;
 }
 
 void Compiler::ScanForSoftfloat() {
@@ -696,7 +786,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
     target(TheTarget->createTargetMachine(Triple,
                                           CPU, FeatureSet, Options,
                                           llvm::Reloc::Static,
-                                          llvm::CodeModel::Default,
+                                          llvm::CodeModel::Kernel,
                                           llvm::CodeGenOpt::Aggressive));
   llvm::TargetMachine &Target = *target.get();
 
@@ -718,7 +808,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
 
   //PM.add(createIndVarSimplifyPass());
   //PM.add(createLoopUnrollPass(10, 2, 1));
-  //PM.add(createLoopUnrollPass(2048, 2, 0));
+  //PM.add(createLoopUnrollPass(2048, 8, 0));
   //PM.add(createLoopExtractorPass());
 
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),

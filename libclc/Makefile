@@ -6,7 +6,7 @@ endif
 
 utils/prepare-builtins.o: ./utils/prepare-builtins.cpp
 	@echo CXX utils/prepare-builtins.o
-	$(Verb) c++ -MMD -MF utils/prepare-builtins.o.d -I/opt/esdg-opencl/include  -fPIC -fvisibility-inlines-hidden   -D_GNU_SOURCE -Wall -W -Wno-unused-parameter -Wwrite-strings -pedantic -Wno-long-long -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-exceptions -fno-rtti -c -o utils/prepare-builtins.o ./utils/prepare-builtins.cpp
+	$(Verb) c++ -MMD -MF utils/prepare-builtins.o.d -I/opt/esdg-opencl/include -g -fPIC -fvisibility-inlines-hidden -g -UNDEBUG  -D_GNU_SOURCE -Wall -W -Wno-unused-parameter -Wwrite-strings -pedantic -Wno-long-long -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-exceptions -fno-rtti -c -o utils/prepare-builtins.o ./utils/prepare-builtins.cpp
 -include utils/prepare-builtins.o.d
 
 utils/prepare-builtins: utils/prepare-builtins.o

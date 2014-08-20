@@ -712,7 +712,7 @@ let isCall=1,
   STRP, AR0, AR1, AR2, AR3, AR4, AR5, AR6, AR7, T0, T1, T2, T3, T4, T5,
   T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21,
   T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32, T33, T34, T35, T36,
-  T37, T38, T39, T40, T41], Uses = [L0] in {
+  T37, T38, T39, T40, T41, T42, T43, T44, T45], Uses = [L0] in {
 
   def CALL :  LE1Inst<(outs),
               (ins LReg:$lnk, calltarget:$target, variable_ops),

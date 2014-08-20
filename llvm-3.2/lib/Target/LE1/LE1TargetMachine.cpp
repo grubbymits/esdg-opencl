@@ -74,7 +74,7 @@ public:
   LE1PassConfig(LE1TargetMachine *TM, PassManagerBase &PM)
     : TargetPassConfig(TM, PM) {
       enablePass(&MachineSchedulerID);
-      setEnableTailMerge(true);
+      //setEnableTailMerge(true);
     }
 
   LE1TargetMachine &getLE1TargetMachine() const {
@@ -120,17 +120,17 @@ bool LE1PassConfig::addPreISel() {
   addPass(createIndVarSimplifyPass());
   addPass(createLoopSimplifyPass());
   addPass(createLoopRotatePass());
-  addPass(createLoopUnswitchPass());
+  //addPass(createLoopUnswitchPass());
   //addPass(createLoopUnrollPass(10, 2, 1));
   return true;
 }
 
 void LE1PassConfig::addMachineSSAOptimization() {
-  addPass(&EarlyTailDuplicateID);
+  //addPass(&EarlyTailDuplicateID);
 }
 
 bool LE1PassConfig::addPreSched2() {
-  addPass(&TailDuplicateID);
+  //addPass(&TailDuplicateID);
   return false;
 }
 

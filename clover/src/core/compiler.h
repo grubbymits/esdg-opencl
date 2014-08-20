@@ -83,6 +83,8 @@ class Compiler
 
         llvm::Module *LinkModules(llvm::Module *m1, llvm::Module *m2);
 
+        bool OptimiseKernel(llvm::Module &M);
+
         void ScanForSoftfloat();
 
         llvm::Module *LinkRuntime(llvm::Module *M);

@@ -11,9 +11,11 @@ def le1_cpuid             : SDNode<"LE1ISD::CPUID", SDTLE1ReadReg, []>;
 def le1_num_cores         : SDNode<"LE1ISD::NUM_CORES", SDTLE1LoadAttr, []>;
 def le1_read_local_size   : SDNode<"LE1ISD::LocalSize", SDTIntUnaryOp, []>;
 def le1_read_global_id    : SDNode<"LE1ISD::GlobalId", SDTIntUnaryOp, []>;
-def le1_group_id_addr     : SDNode<"LE1ISD::GROUP_ID_ADDR", SDTLE1ReadReg, []>;
+def le1_group_id_addr     : SDNode<"LE1ISD::GROUP_ID_ADDR", SDTLE1ReadReg,
+                                   []>;
 def le1_load_group_id     : SDNode<"LE1ISD::LOAD_GROUP_ID", SDTIntUnaryOp, []>;
-def le1_read_attr         : SDNode<"LE1ISD::READ_ATTR", SDTIntUnaryOp, []>;
+def le1_read_attr         : SDNode<"LE1ISD::READ_ATTR", SDTIntUnaryOp,
+                                    [SDNPMayLoad, SDNPHasChain]>;
 def le1_set_attr          : SDNode<"LE1ISD::SET_ATTR", SDTLE1FakeStore,
                                     [SDNPMayStore, SDNPHasChain]>;
 
