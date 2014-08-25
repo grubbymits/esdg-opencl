@@ -537,6 +537,8 @@ bool LE1KernelEvent::CompileSource() {
 #endif
   }
 
+  CheckForDisjointBuffers();
+
   // First, write the source string to a file
   std::ofstream SourceFile;
   SourceFile.open(OriginalSourceName.c_str());
@@ -568,12 +570,12 @@ bool LE1KernelEvent::CompileSource() {
   Compiler LE1Compiler(p_device);
   std::string Opts = "-O3 ";
   Opts.append("-fno-builtin ");
-  Opts.append("-funroll-loops ");
-  Opts.append("-mllvm -unroll-threshold=10 ");
+  //Opts.append("-funroll-loops ");
+  //Opts.append("-mllvm -unroll-threshold=10 ");
   //Opts.append("-mllvm -unroll-count=2 ");
-  Opts.append("-mllvm -unroll-allow-partial ");
-  Opts.append("-mllvm -unroll-runtime ");
-  Opts.append("-mllvm -disable-tail-calls ");
+  //Opts.append("-mllvm -unroll-allow-partial ");
+  //Opts.append("-mllvm -unroll-runtime ");
+  //Opts.append("-mllvm -disable-tail-calls ");
 
   if (!LE1Compiler.CompileToBitcode(WorkgroupSource, clang::IK_OpenCL, Opts)) {
 #ifdef DBG_OUTPUT
@@ -583,7 +585,15 @@ bool LE1KernelEvent::CompileSource() {
   }
   llvm::Module *WorkgroupModule = LE1Compiler.module();
 
-  //LE1Compiler.RunOptimisations(WorkgroupModule);
+#ifdef OPT_UNROLL
+  unsigned unrollCount = 2;
+  if (merge_dims[0] % 8 == 0)
+    unrollCount = 8;
+  else if (merge_dims[0] % 4 == 0)
+    unrollCount = 4;
+
+  LE1Compiler.OptimiseKernel(*WorkgroupModule, unrollCount);
+#endif
 
 
 #ifdef DBG_KERNEL
@@ -650,6 +660,58 @@ bool LE1KernelEvent::CompileSource() {
 
   p_event->kernel()->SetBuilt();
   return true;
+}
+
+void LE1KernelEvent::CheckForDisjointBuffers() {
+#ifdef DBG_KERNEL
+  std::cerr << " -------- Searching for disjoint buffer" << std::endl;
+#endif
+
+  Kernel* TheKernel = p_event->kernel();
+
+  for (unsigned i = 0; i < TheKernel->numArgs(); ++i) {
+
+    const Kernel::Arg* Arg = TheKernel->arg(i);
+
+    if ((Arg->kind() == Kernel::Arg::Buffer) &&
+        (Arg->file() != Kernel::Arg::Local)) {
+
+      // FIXME Need to handle when SubBuffers are used
+      if (Arg->getMemObject()->type() == MemObject::SubBuffer) {
+#ifdef DBG_KERNEL
+        std::cerr << "SubBuffer detected as argument" << std::endl;
+#endif
+#ifdef DBG_OUTPUT
+        std::cout << "!!! FIXME - SubBuffer used as Arg" << std::endl;
+#endif
+        continue;
+      }
+
+      LE1Buffer* buffer =
+        static_cast<LE1Buffer*>(Arg->getDeviceBuffer(p_device));
+
+      if (ArgBufferMap.find(buffer) == ArgBufferMap.end()) {
+        std::vector<unsigned> args;
+        args.push_back(i);
+        ArgBufferMap.insert(std::make_pair(buffer, args));
+      }
+      else {
+        ArgBufferMap[buffer].push_back(i);
+      }
+    }
+  }
+#ifdef DBG_KERNEL
+  for (std::map<LE1Buffer*, std::vector<unsigned> >::iterator BI =
+       ArgBufferMap.begin(), BE = ArgBufferMap.end(); BI != BE; ++BI) {
+    if ((*BI).second.size() == 1) {
+      std::cerr << "Buffer only has one arg reference" << std::endl;
+    }
+    else {
+      std::cerr << "Buffer has " << (*BI).second.size() << " arg references"
+        << std::endl;
+    }
+  }
+#endif
 }
 
 void LE1KernelEvent::CreateLauncher(std::string &LauncherString,

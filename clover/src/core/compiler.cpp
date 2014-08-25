@@ -76,6 +76,7 @@
 #include <llvm/Target/TargetLibraryInfo.h>
 #include <llvm/Target/TargetMachine.h>
 #include <llvm/Transforms/Scalar.h>
+#include <llvm/Transforms/IPO.h>
 
 using namespace Coal;
 using namespace clang;
@@ -361,6 +362,87 @@ bool Compiler::CompileToBitcode(std::string &Source,
 #endif
     return true;
 
+}
+
+bool Compiler::OptimiseKernel(llvm::Module &M, unsigned unrollCount) {
+  LLVMContext &Context = getGlobalContext();
+
+  InitializeAllTargets();
+  InitializeAllTargetMCs();
+
+  // Initialize passes
+  PassRegistry &Registry = *PassRegistry::getPassRegistry();
+  initializeCore(Registry);
+  initializeScalarOpts(Registry);
+  initializeVectorization(Registry);
+  initializeIPO(Registry);
+  initializeAnalysis(Registry);
+  initializeIPA(Registry);
+  initializeTransformUtils(Registry);
+  initializeInstCombine(Registry);
+  initializeInstrumentation(Registry);
+  initializeTarget(Registry);
+
+  std::string Error;
+  const llvm::Target *TheTarget = llvm::TargetRegistry::lookupTarget(Triple,
+                                                                     Error);
+  if (!TheTarget) {
+#ifdef DBG_OUTPUT
+    std::cout << "Target not available: " << Error;
+#endif
+    return false;
+  }
+
+  llvm::TargetOptions Options;
+  Options.DisableTailCalls = true;
+  std::string FeatureSet;
+  std::auto_ptr<llvm::TargetMachine>
+    target(TheTarget->createTargetMachine(Triple,
+                                          CPU, FeatureSet, Options,
+                                          llvm::Reloc::Static,
+                                          llvm::CodeModel::Kernel,
+                                          llvm::CodeGenOpt::Aggressive));
+
+  // Create a PassManager to hold and optimize the collection of passes we are
+  // about to build.
+  //
+  llvm::PassManager PM;
+  // Add an appropriate TargetLibraryInfo pass for the module's triple.
+  llvm::TargetLibraryInfo *TLI =
+    new llvm::TargetLibraryInfo(llvm::Triple(Triple));
+  PM.add(TLI);
+
+  // Add an appropriate DataLayout instance for this module.
+  llvm::DataLayout *TD = 0;
+  const std::string &ModuleDataLayout = M.getDataLayout();
+  if (!ModuleDataLayout.empty())
+    TD = new DataLayout(ModuleDataLayout);
+
+  if (TD)
+    PM.add(TD);
+  if (target.get()) {
+    PM.add(new llvm::TargetTransformInfo(target->getScalarTargetTransformInfo(),
+                                         target->getVectorTargetTransformInfo())
+           );
+  }
+
+  OwningPtr<FunctionPassManager> FPasses;
+  FPasses.reset(new FunctionPassManager(&M));
+
+  if (TD)
+    FPasses->add(new DataLayout(*TD));
+
+  FPasses->doInitialization();
+  for (llvm::Module::iterator F = M.begin(), E = M.end(); F != E; ++F)
+    FPasses->run(*F);
+  FPasses->doFinalization();
+
+  //PM.add(createLoopExtractorPass());
+  PM.add(createLoopUnrollPass(2048, unrollCount, 0));
+  PM.add(createCFGSimplificationPass());
+  //PM.add(createVerifierPass());
+  PM.run(M);
+  return true;
 }
 
 llvm::Module *Compiler::LinkModules(llvm::Module *m1, llvm::Module *m2) {

@@ -79,7 +79,7 @@ def LE1 : Target {
 //===----------------------------------------------------------------------===//
 // LE1 processors supported.
 //===----------------------------------------------------------------------===//
-def : Processor< "scalar", LE1ScalarItineraries, []>;
+def : Processor< "1w_1a_1m_1ls", LE1ScalarItineraries, []>;
 def : Processor< "2w2a1m1ls1b", LE12w2a1m1ls1bItineraries, []>;
 def : Processor< "2w2a1m2ls1b", LE12w2a1m2ls1bItineraries, []>;
 def : Processor< "3w3a1m1ls1b", LE13w3a1m1ls1bItineraries, []>;

@@ -39,6 +39,7 @@
 
 //#include <llvm/ExecutionEngine/GenericValue.h>
 #include <vector>
+#include <map>
 #include <string>
 #include <iostream>
 
@@ -313,7 +314,8 @@ class LE1KernelEvent
         bool AllocateBuffers();
         bool createFinalSource(LE1Program *prog);
         bool CompileSource(void);
-        bool CalculateBufferAddrs(unsigned Addr);
+        void CheckForDisjointBuffers(void);
+        //bool CalculateBufferAddrs(unsigned Addr);
         int checkStatus(void);
         bool run(void);
         /*!< \brief The next Work Group that will execute will be the last.
@@ -368,6 +370,7 @@ class LE1KernelEvent
         unsigned totalWorkgroups;
         //static unsigned int addr;
         //std::vector<unsigned> ArgAddrs;
+        std::map<LE1Buffer*, std::vector<unsigned> > ArgBufferMap;
         std::string OriginalSource;
         std::string OriginalSourceName;
         std::string KernelName;

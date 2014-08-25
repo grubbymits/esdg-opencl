@@ -41,7 +41,7 @@ static Coal::LE1Device LE1Devices[TotalLE1Devices] = {
   Coal::LE1Device("1C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  1),           // 2
   Coal::LE1Device("1C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  1),           // 3
 
-  Coal::LE1Device("2C_1w.xml",          "scalar",       2),           // 4
+  Coal::LE1Device("2C_1w.xml",          "1w_1a_1m_1ls", 2),           // 4
   Coal::LE1Device("2C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  2),           // 5
   Coal::LE1Device("2C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  2),           // 6
   Coal::LE1Device("2C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  2),           // 7

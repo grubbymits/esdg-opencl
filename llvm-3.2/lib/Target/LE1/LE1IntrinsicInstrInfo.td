@@ -38,43 +38,6 @@ def : Pat<(int_le1_inc_local_idy),
 def : Pat<(int_le1_inc_local_idz),
           (IncLocalIdz IdZ)>;*/
 
-
-let Defs = [IdX] in
-def ResetLocalIdX :
-  LE1Inst<(outs), (ins),
-  "mov.0  r0.53, r0.0",
-  [(int_le1_reset_local_idx)], IIAlu>;
-
-let Defs = [IdY] in
-def ResetLocalIdY :
-  LE1Inst<(outs), (ins),
-  "mov.0  r0.54, r0.0",
-  [(int_le1_reset_local_idy)], IIAlu>;
-
-let Defs = [IdZ] in
-def ResetLocalIdZ :
-  LE1Inst<(outs), (ins),
-  "mov.0  r0.55, r0.0",
-  [(int_le1_reset_local_idz)], IIAlu>;
-
-let Uses = [IdX], Defs = [IdX] in
-def IncLocalIdX :
-  LE1Inst<(outs), (ins),
-  "add.0  r0.53, r0.53, 1",
-  [(int_le1_inc_local_idx)], IIAlu>;
-
-let Uses = [IdY], Defs = [IdY] in
-def IncLocalIdY :
-  LE1Inst<(outs), (ins),
-  "add.0  r0.54, r0.54, 1",
-  [(int_le1_inc_local_idy)], IIAlu>;
-
-let Uses = [IdZ], Defs = [IdZ] in
-def IncLocalIdZ :
-  LE1Inst<(outs), (ins),
-  "add.0  r0.55, r0.55, 1",
-  [(int_le1_inc_local_idz)], IIAlu>;
-
 def GroupIdAddr :
   LE1Inst<
   (outs CPURegs:$dst),

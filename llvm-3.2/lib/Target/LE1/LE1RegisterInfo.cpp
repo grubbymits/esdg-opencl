@@ -73,7 +73,7 @@ getReservedRegs(const MachineFunction &MF) const {
   static const unsigned ReservedCPURegs[] = {
     //LE1::ZERO, LE1::AT, LE1::K0, LE1::K1, 
     //LE1::GP, LE1::SP, LE1::FP, LE1::RA, 0
-    LE1::ZERO, LE1::SP, LE1::L0, LE1::IdX, LE1::IdY, LE1::IdZ, LE1::T45, 0
+    LE1::ZERO, LE1::SP, LE1::L0, LE1::T45, 0
   };
 
   BitVector Reserved(getNumRegs());

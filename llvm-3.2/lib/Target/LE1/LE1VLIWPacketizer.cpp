@@ -85,11 +85,11 @@ namespace {
       virtual bool isSoloInstruction(MachineInstr *MI);
       virtual bool isLegalToPacketizeTogether(SUnit *SUI, SUnit *SUJ);
       //virtual bool needsNops();
-      //virtual void checkLatencies(MachineBasicBlock *MBB);
-      /*MachineBasicBlock::instr_iterator insertNops(MachineBasicBlock *MBB,
+      virtual void checkLatencies(MachineBasicBlock *MBB);
+      MachineBasicBlock::instr_iterator insertNops(MachineBasicBlock *MBB,
                                    MachineBasicBlock::instr_iterator I,
-                                    unsigned NumNops);*/
-      //void checkDeps(MachineInstr *MI, MachineInstr *MJ);
+                                    unsigned NumNops);
+      void checkDeps(MachineInstr *MI, MachineInstr *MJ);
       //virtual bool isLegalToPruneDependencies(SUnit *SUI, SUnit *SUJ);
 
   };
@@ -157,6 +157,7 @@ bool LE1Packetizer::runOnMachineFunction(MachineFunction &MF) {
       Packetizer.PacketizeMIs(MBBb, I, RegionEnd);
       RegionEnd = I;
     }
+    Packetizer.checkLatencies(MBBb);
   }
 
   return true;
@@ -545,14 +546,14 @@ static const char* getName(MachineInstr *MI) {
   case llvm::LE1::ZXTH:            return "ZXTH";
   }
 }
-/*
+
 MachineBasicBlock::instr_iterator
 LE1PacketizerList::insertNops(MachineBasicBlock *MBB,
                                    MachineBasicBlock::instr_iterator I,
                                     unsigned NumNops) {
   DebugLoc dl;
   ++I;
-  for(unsigned i = 0; i < NumNops; ++i) {
+  for(unsigned i = 1; i < NumNops; ++i) {
     // Create a clock instruction, ensure that its 'bundled'.
     DEBUG(dbgs() << "\nInserting clock");
     DEBUG(dbgs() << "\nIterator pointing at " << getName(I));
@@ -740,7 +741,6 @@ void LE1PacketizerList::checkLatencies(MachineBasicBlock *MBB) {
     ++II;
   }
 }
-*/
 /*
             // Check against the first inst, it may or may not be bundled
             checkDeps(II, TopII);
