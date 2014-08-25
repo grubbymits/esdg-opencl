@@ -31,7 +31,7 @@ LE1Subtarget::LE1Subtarget(const std::string &TT, const std::string &CPU,
   //std::cout << "Subtarget being created\n";
   std::string CPUName = CPU;
   if (CPUName.empty())
-    CPUName = "scalar";
+    CPUName = "1w_1a_1m_1ls";
 
   // Parse features string.
   ParseSubtargetFeatures(CPUName, FS);

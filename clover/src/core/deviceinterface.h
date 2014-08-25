@@ -169,11 +169,11 @@ class DeviceInterface : public Object
 
         virtual const std::string &getTriple() const { return Triple; }
 
-        virtual const std::string &getCPU() const { return CPU; }
+        virtual const std::string &getCPU() const { return Target; }
 
     protected:
         std::string Triple;
-        std::string CPU;
+        std::string Target;
 };
 
 /**
