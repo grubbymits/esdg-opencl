@@ -1,6 +1,6 @@
 #!/bin/sh
 (
-for device in `seq 0 59`;
+for device in `seq 0 239`;
 do
   ./floyd-warshall -e -d $device
 done

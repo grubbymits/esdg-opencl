@@ -154,6 +154,11 @@ bool Compiler::ExpandMacros(const char *filename) {
     return false;
   }*/
 
+  std::ifstream source(filename);
+  std::string str((std::istreambuf_iterator<char>(source)),
+                  std::istreambuf_iterator<char>());
+  FinalSource.assign(str);
+
 #ifdef DBG_COMPILER
   std::cerr << "Successfully leaving Compiler::ExpandMacros" << std::endl;
 #endif
@@ -329,7 +334,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
   p_compiler.getCodeGenOpts().OptimizationLevel = 3;
   p_compiler.getCodeGenOpts().SimplifyLibCalls = false;
   p_compiler.getCodeGenOpts().setInlining(
-    clang::CodeGenOptions::OnlyAlwaysInlining);
+    clang::CodeGenOptions::NormalInlining);
 
   p_compiler.getLangOpts().NoBuiltin = true;
   p_compiler.getTargetOpts().Triple = Triple;
@@ -357,6 +362,11 @@ bool Compiler::CompileToBitcode(std::string &Source,
 
     //PrevKernels.push_back(name);
 #ifdef DBG_COMPILER
+  std::string error;
+  if (SourceKind == clang::IK_OpenCL) {
+    llvm::raw_fd_ostream bytecode("kernel.bc", error);
+    llvm::WriteBitcodeToFile(ld.getModule(), bytecode);
+  }
   //p_module->dump();
   std::cerr << "Leaving Compiler::CompileToBitcode\n";
 #endif
@@ -571,6 +581,8 @@ void Compiler::ScanForSoftfloat() {
             FuncType = llvm::FunctionType::get(Int32Ty, ParamTys, false);
             p_module->getOrInsertFunction(FuncName, FuncType);
             FuncName = "__floatunsisf";
+            p_module->getOrInsertFunction(FuncName, FuncType);
+            FuncName = "__floatsisf";
             p_module->getOrInsertFunction(FuncName, FuncType);
             break;
           case llvm::Instruction::FPTrunc:

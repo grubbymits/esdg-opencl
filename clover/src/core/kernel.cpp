@@ -646,8 +646,15 @@ void Kernel::Arg::loadData(const void *data)
     argData.i16 = *(static_cast<unsigned short*>(const_cast<void*>(data)));
   else if (p_kind == Arg::Int32)
     argData.i32 = *(static_cast<unsigned*>(const_cast<void*>(data)));
-  else
+  else if (p_kind == (Arg::Float))
     argData.f32 = *(static_cast<float*>(const_cast<void*>(data)));
+  else {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR : Unhandled data type in Arg::loadData" << std::endl;
+#endif
+    return;
+  }
+
 
   /* TODO Use the p_type to decide how to write the data out instead of doing a
      memcpy. */

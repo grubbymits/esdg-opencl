@@ -24,9 +24,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
  */
 
 __kernel 
-void matrixTranspose(__global float4 * restrict output,
-					 __global float4 * restrict input,
-					 __local  float4 * restrict block
+void matrixTranspose(__global float4 * output,
+					 __global float4 * input,
+					 __local  float4 * block
                      )
 {
 	uint wiWidth  = get_global_size(0);

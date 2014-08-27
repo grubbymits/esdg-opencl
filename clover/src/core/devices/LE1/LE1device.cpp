@@ -348,11 +348,18 @@ LE1Device::~LE1Device()
     TotalMemoryOps /= iterations;
 
     // Write results to a CSV file
-    // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
     // If this is the first device to be destructed, add column headers to the
     // files.
     std::ostringstream Line;
     std::string filename = kernelName;
+
+#ifdef OPT_UNROLL
+    filename.append("_unroll");
+#endif
+#ifdef OPT_RESTRICT
+    filename.append("_restrict");
+#endif
+
     filename.append(".csv");
 
     if(!std::ifstream(filename.c_str())) {

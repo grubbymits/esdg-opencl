@@ -399,19 +399,7 @@ cl_int Program::build(const char *options,
             const llvm::StringRef s_data(p_source);
             const llvm::StringRef s_name("<source>");
 
-            // Write file
-            // Debug
-
-            //llvm::MemoryBuffer *buffer = llvm::MemoryBuffer::getMemBuffer(s_data,
-              //                                                          s_name);
-
-            // Compile
-            // compile(std::string source, std::string name, std::string triple,
-            //        std::string opts)
-            // compile(p_source, triple, options ? options : std::string())
-            //std::string triple = dep.device->getTriple();
-            //std::string name = "program.cl";
-            //if (!dep.compiler->compile(options ? options : std::string(), buffer))
+            // 'Compile' it first for symantic checking
             if (!dep.compiler->CompileToBitcode(p_source, clang::IK_OpenCL,
                                           options ? options : std::string()))
             {
@@ -432,7 +420,8 @@ cl_int Program::build(const char *options,
                 pfn_notify((cl_program)this, user_data);
               return CL_BUILD_PROGRAM_FAILURE;
             }
-
+            //else Skip inliner..?
+              //dep.program->SetSource(dep.compiler->getFinalSource());
 
             int inlineResult = dep.compiler->InlineSource(TEMP_NAME);
             if (inlineResult == -1) {

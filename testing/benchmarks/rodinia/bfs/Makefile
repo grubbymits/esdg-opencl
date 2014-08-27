@@ -3,8 +3,8 @@ CC = clang++
 
 SRC = bfs.cpp timer.cc
 LIBS = -L/opt/esdg-opencl/lib -lOpenCL
-INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
-CC_FLAGS = -g -DERRMSG
+INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.8/
+CC_FLAGS = -g -O2 -DERRMSG
 
 EXE = bfs
 

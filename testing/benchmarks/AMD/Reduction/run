@@ -1,8 +1,8 @@
 #!/bin/sh
 (
-for device in `seq 0 59`;
+for device in `seq 0 239`;
 do
-  ./reduction -x 131072 -i 5 -d $device
+  ./reduction -e -x 131072 -i 5 -d $device
 done
 )
 

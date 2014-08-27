@@ -3,7 +3,7 @@ CC = clang++
 
 SRC = clutils.cpp utils.cpp nearestNeighbor.cpp
 LIBS = -L/opt/esdg-opencl/lib -lOpenCL
-INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.7/
+INC = -I/opt/esdg-opencl/include/ -I/usr/include/x86_64-linux-gnu/c++/4.8/
 CC_FLAGS = -g
 
 EXE = nn 

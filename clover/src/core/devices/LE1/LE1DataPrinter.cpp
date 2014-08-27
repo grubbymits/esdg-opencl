@@ -496,6 +496,13 @@ bool LE1DataPrinter::HandleBufferArg(const Kernel::Arg *arg) {
       else if (type->isIntegerTy(32)) {
         PrintData(Data, Addr, 0, sizeof(int), TotalSize);
       }
+      else {
+#ifdef DBG_OUTPUT
+        std::cout << "ERROR: Unhandled data type in HandleBufferArg"
+          << std::endl;
+#endif
+        return false;
+      }
     }
     else if (type->getTypeID() == llvm::Type::FloatTyID) {
 #ifdef DBG_KERNEL

@@ -82,8 +82,12 @@ bool WorkitemCoarsen::CreateWorkgroup(std::string &Filename, std::string
   // At this point the rewriter's buffer should be full with the rewritten
   // file contents.
   const RewriteBuffer *RewriteBuf = InitCompiler.getRewriteBuf();
-  if (RewriteBuf == NULL)
+  if (RewriteBuf == NULL) {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: No RewriteBuf in CreateWorkgroup" << std::endl;
+#endif
     return false;
+  }
 
   // TODO Don't want to have to write the source string to a file before
   // passing it to this function.
@@ -124,6 +128,9 @@ bool WorkitemCoarsen::HandleBarriers() {
 
   const RewriteBuffer *RewriteBuf = SerialCompiler.getRewriteBuf();
   if (RewriteBuf == NULL) {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: No RewriteBuf in HandleBarriers" << std::endl;
+#endif
     return false;
   }
 
@@ -1016,7 +1023,12 @@ void WorkitemCoarsen::ThreadSerialiser::AccessNonScalar(DeclRefExpr *ref) {
   unsigned offset = ref->getDecl()->getName().str().length();
   SourceLocation Loc = ref->getLocEnd().getLocWithOffset(offset);
   //TheRewriter.InsertText(Loc, "[__kernel_local_id[0]]");
-  InsertText(Loc, "[__esdg_idx]"); //"[__kernel_local_id[0]]");
+
+  // FIXME This is weird, why is this separate from scalar?
+  if (LocalY > 0)
+    InsertText(Loc, "[__esdg_idx][__esdg_idx]"); //"[__kernel_local_id[0]]");
+  else
+    InsertText(Loc, "[__esdg_idx]"); //"[__kernel_local_id[0]]");
 }
 
 SourceLocation
