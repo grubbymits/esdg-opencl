@@ -726,10 +726,11 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M,
   TLI->disableAllFunctions();
   PM.add(TLI);
   if (target.get()) {
+    target->addAnalysisPasses(PM);
     //PM.add(new llvm::TargetTransformInfo(target->getScalarTargetTransformInfo(),
       //                                   target->getVectorTargetTransformInfo())
         //   );
-    PM.add(llvm::createBasicTargetTransformInfoPass(&Target));
+    //PM.add(llvm::createBasicTargetTransformInfoPass(&Target));
   }
 
   if (const llvm::DataLayout *TD = Target.getDataLayout())
@@ -738,7 +739,7 @@ bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M,
     PM.add(new llvm::DataLayout(M));
 
   //PM.add(createIndVarSimplifyPass());
-  PM.add(createLoopUnrollPass(1024, unrollCount, 0));
+  //PM.add(createLoopUnrollPass(1024, unrollCount, 0));
 
   llvm::tool_output_file *FDOut = new llvm::tool_output_file(Filename.c_str(),
                                                              Error);

@@ -134,17 +134,17 @@ bool LE1PassConfig::addInstSelector()
 }
 
 bool LE1PassConfig::addPreISel() {
-  //addPass(createPromoteMemoryToRegisterPass());
-  //addPass(createConstantPropagationPass());
-  //addPass(createCFGSimplificationPass());
-  //addPass(createDeadCodeEliminationPass());
+  addPass(createPromoteMemoryToRegisterPass());
+  addPass(createConstantPropagationPass());
+  addPass(createCFGSimplificationPass());
+  addPass(createDeadCodeEliminationPass());
   //addPass(createBlockPlacementPass());
-  //addPass(createDeadStoreEliminationPass());
-  //addPass(createConstantPropagationPass());
-  //addPass(createIndVarSimplifyPass());
-  //addPass(createLoopSimplifyPass());
-  //addPass(createLoopRotatePass());
-  //addPass(createLoopUnswitchPass());
+  addPass(createDeadStoreEliminationPass());
+  addPass(createConstantPropagationPass());
+  addPass(createIndVarSimplifyPass());
+  addPass(createLoopSimplifyPass());
+  addPass(createLoopRotatePass());
+  addPass(createLoopUnswitchPass());
   //addPass(createLoopUnrollPass(10, 2, 1));
   return true;
 }
@@ -159,17 +159,17 @@ bool LE1PassConfig::addPreSched2() {
 }
 
 bool LE1PassConfig::addPreRegAlloc() {
-  //addPass(&MachineBlockPlacementID);
-  //addPass(&MachineCSEID);
-  //addPass(&DeadMachineInstructionElimID);
+  addPass(&MachineBlockPlacementID);
+  addPass(&MachineCSEID);
+  addPass(&DeadMachineInstructionElimID);
   return false;
 }
 
 bool LE1PassConfig::addPostRegAlloc() {
-  //addPass(&MachineBlockPlacementID);
-  //addPass(&BranchFolderPassID);
-  //addPass(&MachineCopyPropagationID);
-  //addPass(&DeadMachineInstructionElimID);
+  addPass(&MachineBlockPlacementID);
+  addPass(&BranchFolderPassID);
+  addPass(&MachineCopyPropagationID);
+  addPass(&DeadMachineInstructionElimID);
   return false;
 }
 
