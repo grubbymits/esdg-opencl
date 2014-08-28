@@ -365,7 +365,7 @@ bool Compiler::CompileToBitcode(std::string &Source,
   std::string error;
   if (SourceKind == clang::IK_OpenCL) {
     llvm::raw_fd_ostream bytecode("kernel.bc", error);
-    llvm::WriteBitcodeToFile(ld.getModule(), bytecode);
+    llvm::WriteBitcodeToFile(p_module, bytecode);
   }
   //p_module->dump();
   std::cerr << "Leaving Compiler::CompileToBitcode\n";
