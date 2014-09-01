@@ -1,6 +1,7 @@
 #include "llvm/Analysis/AliasAnalysis.h"
 #include "llvm/CodeGen/LiveIntervalAnalysis.h"
 #include "llvm/CodeGen/MachineDominators.h"
+#include "llvm/CodeGen/MachineInstrBuilder.h"
 #include "llvm/CodeGen/MachineLoopInfo.h"
 #include "llvm/CodeGen/MachineScheduler.h"
 #include "llvm/CodeGen/MachinePassRegistry.h"
@@ -49,6 +50,7 @@ namespace {
     bool isPseudo(MachineInstr *MI);
     bool isSolo(MachineInstr *MI);
 
+    const TargetInstrInfo *TII;
     const MCSchedModel *SchedModel;
     const MCSubtargetInfo *MCSubtarget;
     std::vector<MachineInstr*> CurrentPacket;
@@ -56,6 +58,7 @@ namespace {
     std::map<MachineInstr*, SUnit*> MIToSUnit;
     unsigned *ResourceTable;
     unsigned NumResources;
+    int PacketLatency;
   };
 
 }
@@ -110,6 +113,7 @@ void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   }
   CurrentPacket.clear();
   CurrentPacketSize = 0;
+  PacketLatency = 0;
   for (unsigned i = 0; i < NumResources; ++i)
     ResourceTable[i] = 0;
 }
@@ -178,6 +182,7 @@ bool LE1MIPacker::PacketDependences(SUnit *NewSU) {
         SDep::Kind DepKind = PackagedSU->Succs[i].getKind();
         if (DepKind == SDep::Data) {
           DEBUG(dbgs() << "Data dependency found\n");
+          PacketLatency = PackagedSU->Succs[i].getLatency() - 1;
         //  std::cout << "Found dependency" << std::endl;
           return true;
         }
@@ -195,6 +200,7 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
   //MF = &mf;
   const TargetMachine &TM = MF.getTarget();
   MCSubtarget = TM.getSubtargetImpl();
+  TII = TM.getInstrInfo();
 
   if (!MCSubtarget) {
     //std::cout << "Failed to retrieve SubtargetImpl" << std::endl;
@@ -277,6 +283,15 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
       if ((ResourcesAvailable(Scheduler->getSchedClass(SU))) &&
           (!PacketDependences(SU)))
         AddToPacket(MI);
+      else if (PacketLatency != 0) {
+        // This approach assumes a two cycle latency for all instructions,
+        // which isn't how the loads are currently setup. With a three cycle
+        // latency, other checks need to be made to look across another block
+        DebugLoc dl;
+        BuildMI((*MBB), MI, dl, TII->get(LE1::CLK));
+        EndPacket(MBB, MI);
+        AddToPacket(MI);
+      }
       else {
         EndPacket(MBB, MI);
         AddToPacket(MI);

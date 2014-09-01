@@ -797,7 +797,7 @@ let Defs = [LNK], Uses = [LNK], isPseudo=1 in {
                               "!LINKCALL", []>;
 }
 
-def CLK : LE1Pseudo < (outs), (ins), "NOP", []>;
+def CLK : LE1Pseudo < (outs), (ins), ";;", []>;
 
 // Instruction created to exit main
 let isReturn=1, isTerminator=1, isBarrier=1 in

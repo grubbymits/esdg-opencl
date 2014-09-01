@@ -129,15 +129,15 @@ bool LE1Device::init()
     return false;
   case 1:
     SimModel.append("1w_");
-    Target.append("1w_");
+    Target.append("1w");
     break;
   case 2:
     SimModel.append("2w_");
-    Target.append("2w_");
+    Target.append("2w");
     break;
   case 4:
     SimModel.append("4w_");
-    Target.append("4w_");
+    Target.append("4w");
     break;
   }
   switch (NumALUs) {
@@ -148,19 +148,19 @@ bool LE1Device::init()
     return false;
   case 1:
     SimModel.append("1a_");
-    Target.append("1a_");
+    Target.append("1a");
     break;
   case 2:
     SimModel.append("2a_");
-    Target.append("2a_");
+    Target.append("2a");
     break;
   case 3:
     SimModel.append("3a_");
-    Target.append("3a_");
+    Target.append("3a");
     break;
   case 4:
     SimModel.append("4a_");
-    Target.append("4a_");
+    Target.append("4a");
     break;
   }
   switch (NumMULs) {
@@ -171,19 +171,19 @@ bool LE1Device::init()
     return false;
   case 1:
     SimModel.append("1m_");
-    Target.append("1m_");
+    Target.append("1m");
     break;
   case 2:
     SimModel.append("2m_");
-    Target.append("2m_");
+    Target.append("2m");
     break;
   case 3:
     SimModel.append("3m_");
-    Target.append("3m_");
+    Target.append("3m");
     break;
   case 4:
     SimModel.append("4m_");
-    Target.append("4m_");
+    Target.append("4m");
     break;
   }
   switch (NumLSUs) {
