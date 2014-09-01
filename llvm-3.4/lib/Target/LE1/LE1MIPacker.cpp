@@ -13,8 +13,10 @@
 #include "llvm/MC/MCSchedule.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Target/TargetInstrInfo.h"
+#include "llvm/Target/TargetLowering.h"
 #include "LE1.h"
 
+#include <algorithm>
 #include <iostream>
 
 using namespace llvm;
@@ -49,8 +51,14 @@ namespace {
     void EndPacket(MachineBasicBlock *MBB, MachineInstr *MI);
     bool isPseudo(MachineInstr *MI);
     bool isSolo(MachineInstr *MI);
+    void Finalise(MachineBasicBlock *MBB);
+    unsigned CheckBundleLatencies(MachineInstr *B1,
+                                  MachineInstr *B2);
+    unsigned CheckInstructionLatencies(MachineInstr *MI,
+                                       MachineInstr *M2);
 
     const TargetInstrInfo *TII;
+    const TargetLowering *TLI;
     const MCSchedModel *SchedModel;
     const MCSubtargetInfo *MCSubtarget;
     std::vector<MachineInstr*> CurrentPacket;
@@ -58,7 +66,6 @@ namespace {
     std::map<MachineInstr*, SUnit*> MIToSUnit;
     unsigned *ResourceTable;
     unsigned NumResources;
-    int PacketLatency;
   };
 
 }
@@ -113,7 +120,6 @@ void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   }
   CurrentPacket.clear();
   CurrentPacketSize = 0;
-  PacketLatency = 0;
   for (unsigned i = 0; i < NumResources; ++i)
     ResourceTable[i] = 0;
 }
@@ -182,8 +188,6 @@ bool LE1MIPacker::PacketDependences(SUnit *NewSU) {
         SDep::Kind DepKind = PackagedSU->Succs[i].getKind();
         if (DepKind == SDep::Data) {
           DEBUG(dbgs() << "Data dependency found\n");
-          PacketLatency = PackagedSU->Succs[i].getLatency() - 1;
-        //  std::cout << "Found dependency" << std::endl;
           return true;
         }
       }
@@ -201,6 +205,7 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
   const TargetMachine &TM = MF.getTarget();
   MCSubtarget = TM.getSubtargetImpl();
   TII = TM.getInstrInfo();
+  TLI = TM.getTargetLowering();
 
   if (!MCSubtarget) {
     //std::cout << "Failed to retrieve SubtargetImpl" << std::endl;
@@ -283,26 +288,117 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
       if ((ResourcesAvailable(Scheduler->getSchedClass(SU))) &&
           (!PacketDependences(SU)))
         AddToPacket(MI);
-      else if (PacketLatency != 0) {
-        // This approach assumes a two cycle latency for all instructions,
-        // which isn't how the loads are currently setup. With a three cycle
-        // latency, other checks need to be made to look across another block
-        DebugLoc dl;
-        BuildMI((*MBB), MI, dl, TII->get(LE1::CLK));
-        EndPacket(MBB, MI);
-        AddToPacket(MI);
-      }
       else {
         EndPacket(MBB, MI);
         AddToPacket(MI);
       }
     }
+
     EndPacket(MBB, MBB->end());
+    Finalise(MBB);
     Scheduler->exitRegion();
     Scheduler->finishBlock();
   }
   delete ResourceTable;
   return true;
+}
+
+void LE1MIPacker::Finalise(MachineBasicBlock *MBB) {
+  //std::cout << "Finalise" << std::endl;
+  for (MachineBasicBlock::iterator BI = MBB->begin(), BE = --MBB->end();
+       BI != BE; ++BI) {
+
+    MachineBasicBlock::iterator Next = BI;
+    ++Next;
+    unsigned Latency = CheckBundleLatencies(&(*BI), &(*Next));
+    //std::cout << "Latency = " << Latency << std::endl;
+    // Assumes latency of two for all instructions
+    if (Latency != 0) {
+      DebugLoc dl;
+      BuildMI(*MBB, Next, dl, TII->get(LE1::CLK));
+      ++BI;
+    }
+  }
+}
+
+unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
+                                           MachineInstr *B2) {
+
+  //std::cout << "CheckBundleLatencies" << std::endl;
+
+  MachineBasicBlock::instr_iterator M1 = B1;
+  MachineBasicBlock::instr_iterator M2 = B2;
+
+  unsigned PacketLatency = 0;
+
+  // First, handle the conditions where B1 and/or B2 are not bundled, (size = 0)
+  if (!M1->isBundled() && !M2->isBundled()) {
+    //std::cout << "Neither M1 or M2 are bundled" << std::endl;
+    return CheckInstructionLatencies(M1, M2);
+  }
+
+  else if (!M1->isBundled()) {
+    //std::cout << "M1 isnt bundled, but M2 is" << std::endl;
+    for (unsigned j = 0; j < M2->getBundleSize(); ++j) {
+      ++M2;
+      PacketLatency = std::max(CheckInstructionLatencies(M1, M2),
+                               PacketLatency);
+    }
+    return PacketLatency;
+  }
+  else if (M1->isBundled() && !M2->isBundled()) {
+    //std::cout << "M1 is bundled, M2 is not" << std::endl;
+    for (unsigned i = 0; i < M1->getBundleSize(); ++i) {
+      ++M1;
+      PacketLatency = std::max(CheckInstructionLatencies(M1, M2),
+                               PacketLatency);
+    }
+    return PacketLatency;
+  }
+
+  //std::cout << "Both are bundled" << std::endl;
+  // Iterate into bundles from the BUNDLE inst
+  for (unsigned i = 0; i < M1->getBundleSize(); ++i) {
+    ++M1;
+    for (unsigned j = 0; j < M2->getBundleSize(); ++j) {
+      ++M2;
+
+      PacketLatency = std::max(CheckInstructionLatencies(M1, M2),
+                               PacketLatency);
+    }
+  }
+  return PacketLatency;
+}
+
+unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
+                                                MachineInstr *M2) {
+  //std::cout << "CheckInstructionLatencies:\n  ";
+  unsigned Latency = 0;
+  if (isPseudo(M1)) {
+    //std::cout << "M1 isPseudo" << std::endl;
+    return Latency;
+  }
+  if (isPseudo(M2)) {
+    //std::cout << "M2 isPseudo" << std::endl;
+    return Latency;
+  }
+  std::cout << M1->getOpcode() << ",  ";
+  std::cout << M2->getOpcode() << std::endl;
+
+  SUnit *S1 = MIToSUnit[M1];
+  SUnit *S2 = MIToSUnit[M2];
+
+  for (unsigned i = 0; i < S1->Succs.size(); ++i) {
+    if (S1->Succs[i].getSUnit() != S2)
+      continue;
+
+    SDep::Kind DepKind = S1->Succs[i].getKind();
+    if (DepKind == SDep::Data) {
+      //std::cout << "Data dep found" << std::endl;
+      Latency = std::max(S1->Succs[i].getLatency(), Latency);
+    }
+  }
+  return Latency;
 }
 
 FunctionPass *llvm::createLE1MIPacker(LE1TargetMachine &TM) {

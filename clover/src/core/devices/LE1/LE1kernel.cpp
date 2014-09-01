@@ -591,6 +591,19 @@ bool LE1KernelEvent::CompileSource() {
 
   //LE1Compiler.RunOptimisations(WorkgroupModule);
 
+#ifdef OPT_UNROLL
+  unsigned unrollCount = 2;
+  if (merge_dims[0] % 8 == 0)
+    unrollCount = 8;
+  else if (merge_dims[0] % 4 == 0)
+    unrollCount = 4;
+
+  if (!LE1Compiler.OptimiseKernel(*WorkgroupModule, unrollCount)) {
+    std::cout << "!! ERROR: Failed to optimise kernel" << std::endl;
+    return false;
+  }
+#endif
+
 
 #ifdef DBG_KERNEL
   std::cerr << "Merged Kernel\n";

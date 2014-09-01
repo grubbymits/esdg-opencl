@@ -98,6 +98,8 @@ class Compiler
         bool CompileToBitcode(std::string &Source, clang::InputKind SourceKind,
                               const std::string &Opts);
 
+        bool OptimiseKernel(llvm::Module &M, unsigned unrollCount);
+
         bool CompileToAssembly(std::string &Filename, llvm::Module *Code,
                                unsigned unrollCount);
         /**

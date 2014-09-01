@@ -127,7 +127,7 @@ const char *LE1TargetLowering::getTargetNodeName(unsigned Opcode) const {
 
   case LE1ISD::TargetGlobal:  return "LE1ISD::TargetGlobal";
 
-  default:                         return NULL;
+  default:                         return "UNHANDLED NODE";
   }
 }
 
