@@ -65,8 +65,12 @@ std::string LE1Device::ScriptsDir = LE1Device::SysDir + "scripts/";
 
 unsigned LE1Device::MaxGlobalAddr = 0xFFFF * 1024;
 
-LE1Device::LE1Device(const std::string &SimModel, const std::string &Target,
-                     unsigned Cores)
+LE1Device::LE1Device(unsigned char Cores,
+                     unsigned char Width,
+                     unsigned char ALUs,
+                     unsigned char MULs,
+                     unsigned char LSUs,
+                     unsigned char Banks)
 : DeviceInterface(), p_num_events(0), p_workers(0), p_stop(false),
   p_initialized(false)
 {
@@ -74,16 +78,22 @@ LE1Device::LE1Device(const std::string &SimModel, const std::string &Target,
   std::cerr << "LE1Device::LE1Device at " << std::hex << this << std::endl;
 #endif
   Triple.assign("le1");
-  simulatorModel.assign(SimModel);
-  CPU.assign(Target);
+  //simulatorModel.assign(SimModel);
+  //CPU.assign(Target);
+
   NumCores = Cores;
+  IssueWidth = Width;
+  NumALUs = ALUs;
+  NumMULs = MULs;
+  NumLSUs = LSUs;
+  NumBanks = Banks;
 }
 
 // TODO Don't know where I should initialise the number of cores. For now, here.
 bool LE1Device::init()
 {
 #ifdef DEBUGCL
-  std::cerr << "Entering LE1Device::init for " << CPU << std::endl;
+  std::cerr << "Entering LE1Device::init for " << Target << std::endl;
 #endif
   if (p_initialized)
     return true;
@@ -91,9 +101,142 @@ bool LE1Device::init()
   pthread_cond_init(&p_events_cond, 0);
   pthread_mutex_init(&p_events_mutex, 0);
 
+  // Initialse simulator and compiler target strings
+  switch (NumCores) {
+  default:
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Num of cores not supported!" << std::endl;
+#endif
+    return false;
+  case 1:
+    SimModel = "1-core/";
+    break;
+  case 2:
+    SimModel = "2-core/";
+    break;
+  case 4:
+    SimModel = "4-core/";
+    break;
+  case 8:
+    SimModel = "8-core/";
+    break;
+  }
+  switch (IssueWidth) {
+  default:
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Issue width not supported!" << std::endl;
+#endif
+    return false;
+  case 1:
+    SimModel.append("1w_");
+    Target.append("1w_");
+    break;
+  case 2:
+    SimModel.append("2w_");
+    Target.append("2w_");
+    break;
+  case 4:
+    SimModel.append("4w_");
+    Target.append("4w_");
+    break;
+  }
+  switch (NumALUs) {
+  default:
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Number of ALUs not supported!" << std::endl;
+#endif
+    return false;
+  case 1:
+    SimModel.append("1a_");
+    Target.append("1a_");
+    break;
+  case 2:
+    SimModel.append("2a_");
+    Target.append("2a_");
+    break;
+  case 3:
+    SimModel.append("3a_");
+    Target.append("3a_");
+    break;
+  case 4:
+    SimModel.append("4a_");
+    Target.append("4a_");
+    break;
+  }
+  switch (NumMULs) {
+  default:
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Number of MULs not supported!" << std::endl;
+#endif
+    return false;
+  case 1:
+    SimModel.append("1m_");
+    Target.append("1m_");
+    break;
+  case 2:
+    SimModel.append("2m_");
+    Target.append("2m_");
+    break;
+  case 3:
+    SimModel.append("3m_");
+    Target.append("3m_");
+    break;
+  case 4:
+    SimModel.append("4m_");
+    Target.append("4m_");
+    break;
+  }
+  switch (NumLSUs) {
+  default:
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Number of LSUs not supported!" << std::endl;
+#endif
+    return false;
+  case 1:
+    SimModel.append("1ls_");
+    Target.append("1ls");
+    break;
+  case 2:
+    SimModel.append("2ls_");
+    Target.append("2ls");
+    break;
+  case 3:
+    SimModel.append("3ls_");
+    Target.append("3ls");
+    break;
+  case 4:
+    SimModel.append("4ls_");
+    Target.append("4ls");
+    break;
+  }
+  switch (NumBanks) {
+  default:
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Number of Banks not supported!" << std::endl;
+#endif
+    return false;
+  case 1:
+    SimModel.append("1b.xml");
+    break;
+  case 2:
+    SimModel.append("2b.xml");
+    break;
+  case 4:
+    SimModel.append("4b.xml");
+    break;
+  case 8:
+    SimModel.append("8b.xml");
+    break;
+  }
+
+#ifdef DBG_OUTPUT
+  std::cout << "Initialised for Target: " << Target << std::endl
+    << "Initialised for SimModel: " << SimModel << std::endl;
+#endif
+
   Simulator = new LE1Simulator();
 
-  if(!Simulator->Initialise(simulatorModel)) {
+  if(!Simulator->Initialise(SimModel)) {
 #ifdef DBG_OUTPUT
     std::cout << "ERROR: Failed to initialise simulator!\n";
 #endif
@@ -111,7 +254,7 @@ bool LE1Device::init()
 LE1Device::~LE1Device()
 {
 #ifdef DEBUGCL
-  std::cerr << "Destructing " << CPU << " target" << std::endl;
+  std::cerr << "Destructing " << Target << " target" << std::endl;
 #endif
 
   if (!p_initialized) {
@@ -152,6 +295,7 @@ LE1Device::~LE1Device()
 
     unsigned long TotalCycles = 0;
     unsigned long TotalStalls = 0;
+    unsigned long TotalNOPs = 0;
     unsigned long TotalIdle = 0;
     unsigned long TotalDecodeStalls = 0;
     unsigned long TotalBranchesTaken = 0;
@@ -180,6 +324,7 @@ LE1Device::~LE1Device()
         ContextStats *contextStats = *CSI;
         TotalCycles += contextStats->TotalCycles;
         TotalStalls += contextStats->Stalls;
+        TotalNOPs += contextStats->NOPs;
         TotalIdle += contextStats->IdleCycles;
         TotalDecodeStalls += contextStats->DecodeStalls;
         TotalBranchesTaken += contextStats->BranchesTaken;
@@ -195,6 +340,7 @@ LE1Device::~LE1Device()
     CompletionCycles /= iterations;
     TotalCycles /= iterations;
     TotalStalls /= iterations;
+    TotalNOPs /= iterations;
     TotalIdle /= iterations;
     TotalDecodeStalls /= iterations;
     TotalBranchesTaken /= iterations;
@@ -202,29 +348,41 @@ LE1Device::~LE1Device()
     TotalMemoryOps /= iterations;
 
     // Write results to a CSV file
-    // Config, NumCores, Total Cycles, Total Stallls, Decode Stalls, Branches
     // If this is the first device to be destructed, add column headers to the
     // files.
     std::ostringstream Line;
     std::string filename = kernelName;
+
+#ifdef OPT_UNROLL
+    filename.append("_unroll");
+#endif
+#ifdef OPT_RESTRICT
+    filename.append("_restrict");
+#endif
+
     filename.append(".csv");
 
     if(!std::ifstream(filename.c_str())) {
-      Line << "Model, Cycles, Contexts, Target, Dram, Iram, Total Cycles,"
-        << "Total Stalls, Decode Stalls, Branches Taken, Memory Ops, Iterations"
+      Line << "Contexts, Issue Width, ALUs, MULs, LSUs, Banks, Cycles, "
+        << "Total Cycles, Total Stalls, Decode Stalls, NOPs, Branches, "
+        << "Memory Ops, DRAM, IRAM, Iterations"
         << std::endl;
     }
-    Line << simulatorModel << ", "
+    Line << (unsigned)NumCores << ", "
+      << (unsigned)IssueWidth << ", "
+      << (unsigned)NumALUs << ", "
+      << (unsigned)NumMULs << ", "
+      << (unsigned)NumLSUs << ", "
+      << (unsigned)NumBanks << ", "
       << CompletionCycles << ", "
-      << NumCores << ", "
-      << CPU << ", "
-      << DramSize << ", "
-      << IramSize << ", "
       << TotalCycles << ", "
       << TotalStalls << ", "
       << TotalDecodeStalls << ", "
+      << TotalNOPs << ", "
       << TotalBranchesTaken << ", "
       << TotalMemoryOps << ", "
+      << DramSize << ", "
+      << IramSize << ", "
       << iterations << std::endl;
 
     std::ofstream Results;
@@ -241,7 +399,6 @@ LE1Device::~LE1Device()
     //ExecutionStats.erase(MapItr++);
 
 }
-
 
 DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)
 {

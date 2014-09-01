@@ -35,78 +35,250 @@
 #include <core/deviceinterface.h>
 #include <core/devices/LE1/LE1device.h>
 
-static Coal::LE1Device LE1Devices[TotalLE1Devices] = {
-  Coal::LE1Device("1C_1w.xml",          "scalar",       1),           // 0
-  Coal::LE1Device("1C_2w_1ls_1b.xml",   "2w1m1ls",  1),           // 1
-  Coal::LE1Device("1C_3w_1ls_1b.xml",   "3w1m1ls",  1),           // 2
-  Coal::LE1Device("1C_4w_2m_2ls_2b.xml",   "4w2m2ls",  1),           // 3
-
-  Coal::LE1Device("2C_1w.xml",          "scalar",       2),           // 4
-  Coal::LE1Device("2C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  2),           // 5
-  Coal::LE1Device("2C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  2),           // 6
-  Coal::LE1Device("2C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  2),           // 7
-  Coal::LE1Device("2C_1w_2b.xml",       "scalar",       2),           // 8
-  Coal::LE1Device("2C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  2),           // 9
-  Coal::LE1Device("2C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  2),           // 10
-  Coal::LE1Device("2C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  2),           // 11
-
-  Coal::LE1Device("4C_1w.xml",          "scalar",       4),           // 12
-  Coal::LE1Device("4C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  4),           // 13
-  Coal::LE1Device("4C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  4),           // 14
-  Coal::LE1Device("4C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  4),           // 15
-  Coal::LE1Device("4C_1w_2b.xml",       "scalar",       4),           // 16
-  Coal::LE1Device("4C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  4),           // 17
-  Coal::LE1Device("4C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  4),           // 18
-  Coal::LE1Device("4C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  4),           // 19
-  Coal::LE1Device("4C_1w_4b.xml",       "scalar",       4),           // 20
-  Coal::LE1Device("4C_2w_1ls_4b.xml",   "2w2a1m1ls1b",  4),           // 21
-  Coal::LE1Device("4C_3w_1ls_4b.xml",   "3w3a1m1ls1b",  4),           // 22
-  Coal::LE1Device("4C_4w_1ls_4b.xml",   "4w4a1m1ls1b",  4),           // 23
-
-  Coal::LE1Device("8C_1w.xml",          "scalar",       8),           // 24
-  Coal::LE1Device("8C_2w_1ls_1b.xml",   "2w2a1m1ls1b",  8),           // 25
-  Coal::LE1Device("8C_3w_1ls_1b.xml",   "3w3a1m1ls1b",  8),           // 26
-  Coal::LE1Device("8C_4w_1ls_1b.xml",   "4w4a1m1ls1b",  8),           // 27
-  Coal::LE1Device("8C_1w_2b.xml",       "scalar",       8),           // 28
-  Coal::LE1Device("8C_2w_1ls_2b.xml",   "2w2a1m1ls1b",  8),           // 29
-  Coal::LE1Device("8C_3w_1ls_2b.xml",   "3w3a1m1ls1b",  8),           // 30
-  Coal::LE1Device("8C_4w_1ls_2b.xml",   "4w4a1m1ls1b",  8),           // 31
-  Coal::LE1Device("8C_1w_4b.xml",       "scalar",       8),           // 32
-  Coal::LE1Device("8C_2w_1ls_4b.xml",   "2w2a1m1ls1b",  8),           // 33
-  Coal::LE1Device("8C_3w_1ls_4b.xml",   "3w3a1m1ls1b",  8),           // 34
-  Coal::LE1Device("8C_4w_1ls_4b.xml",   "4w4a1m1ls1b",  8),           // 35
-  Coal::LE1Device("8C_1w_8b.xml",       "scalar",       8),           // 36
-  Coal::LE1Device("8C_2w_1ls_8b.xml",   "2w2a1m1ls1b",  8),           // 37
-  Coal::LE1Device("8C_3w_1ls_8b.xml",   "3w3a1m1ls1b",  8),           // 38
-  Coal::LE1Device("8C_4w_1ls_8b.xml",   "4w4a1m1ls1b",  8),           // 39
-
-  Coal::LE1Device("16C_1w.xml",         "scalar",       16),
-  Coal::LE1Device("16C_2w_1ls_1b.xml",  "2w2a1m1ls1b",  16),        // 17
-  Coal::LE1Device("16C_3w_1ls_1b.xml",  "3w3a1m1ls1b",  16),        // 32
-  Coal::LE1Device("16C_4w_1ls_1b.xml",  "4w4a1m1ls1b",  16),        // 47
-  Coal::LE1Device("16C_1w_2b.xml",      "scalar",       16),
-  Coal::LE1Device("16C_2w_1ls_2b.xml",  "2w2a1m1ls1b",  16),        // 17
-  Coal::LE1Device("16C_3w_1ls_2b.xml",  "3w3a1m1ls1b",  16),        // 32
-  Coal::LE1Device("16C_4w_1ls_2b.xml",  "4w4a1m1ls1b",  16),        // 47
-  Coal::LE1Device("16C_1w_4b.xml",      "scalar",       16),
-  Coal::LE1Device("16C_2w_1ls_4b.xml",  "2w2a1m1ls1b",  16),        // 17
-  Coal::LE1Device("16C_3w_1ls_4b.xml",  "3w3a1m1ls1b",  16),        // 32
-  Coal::LE1Device("16C_4w_1ls_4b.xml",  "4w4a1m1ls1b",  16),        // 47
-  Coal::LE1Device("16C_1w_8b.xml",      "scalar",       16),
-  Coal::LE1Device("16C_2w_1ls_8b.xml",  "2w2a1m1ls1b",  16),
-  Coal::LE1Device("16C_3w_1ls_8b.xml",  "3w3a1m1ls1b",  16),
-  Coal::LE1Device("16C_4w_1ls_8b.xml",  "4w4a1m1ls1b",  16),
-  Coal::LE1Device("16C_1w_16b.xml",     "scalar",       16),
-  Coal::LE1Device("16C_2w_1ls_16b.xml", "2w2a1m1ls1b",  16),
-  Coal::LE1Device("16C_3w_1ls_16b.xml", "3w3a1m1ls1b",  16),
-  Coal::LE1Device("16C_4w_1ls_16b.xml", "4w4a1m1ls1b",  16),
-
-  Coal::LE1Device("1C_4w_2ls_2b.xml",   "4w4a1m2ls1b",  1),
-  Coal::LE1Device("2C_4w_2ls_4b.xml",   "4w4a1m2ls1b",  2),
-  Coal::LE1Device("4C_4w_2ls_8b.xml",   "4w4a1m2ls1b",  4),
-  Coal::LE1Device("8C_4w_2ls_8b.xml",   "4w4a1m2ls1b",  8),
-  Coal::LE1Device("16C_4w_2ls_8b.xml",  "4w4a1m2ls1b",  16)
+static Coal::LE1Device LE1Devices[240] = {
+//                cores,  width,  alus, muls, lsus, banks
+  Coal::LE1Device( 1,      1,        1,   1,     1,   1),    // 1
+  Coal::LE1Device( 1,      2,        1,   1,     1,   1),    // 2
+  Coal::LE1Device( 1,      2,        1,   1,     2,   1),    // 3
+  Coal::LE1Device( 1,      2,        1,   1,     2,   2),    // 4
+  Coal::LE1Device( 1,      2,        1,   2,     1,   1),    // 5
+  Coal::LE1Device( 1,      2,        1,   2,     2,   1),    // 6
+  Coal::LE1Device( 1,      2,        1,   2,     2,   2),    // 7
+  Coal::LE1Device( 1,      2,        2,   1,     1,   1),    // 8
+  Coal::LE1Device( 1,      2,        2,   1,     2,   1),    // 9
+  Coal::LE1Device( 1,      2,        2,   1,     2,   2),    // 10
+  Coal::LE1Device( 1,      2,        2,   2,     1,   1),    // 11
+  Coal::LE1Device( 1,      2,        2,   2,     2,   1),    // 12
+  Coal::LE1Device( 1,      2,        2,   2,     2,   2),    // 13
+  Coal::LE1Device( 1,      4,        2,   1,     1,   1),    // 14
+  Coal::LE1Device( 1,      4,        2,   1,     2,   1),    // 15
+  Coal::LE1Device( 1,      4,        2,   1,     2,   2),    // 16
+  Coal::LE1Device( 1,      4,        2,   2,     1,   1),    // 17
+  Coal::LE1Device( 1,      4,        2,   2,     2,   1),    // 18
+  Coal::LE1Device( 1,      4,        2,   2,     2,   2),    // 19
+  Coal::LE1Device( 1,      4,        3,   1,     1,   1),    // 20
+  Coal::LE1Device( 1,      4,        3,   1,     2,   1),    // 21
+  Coal::LE1Device( 1,      4,        3,   1,     2,   2),    // 22
+  Coal::LE1Device( 1,      4,        3,   2,     1,   1),    // 23
+  Coal::LE1Device( 1,      4,        3,   2,     2,   1),    // 24
+  Coal::LE1Device( 1,      4,        3,   2,     2,   2),    // 25
+  Coal::LE1Device( 1,      4,        4,   1,     1,   1),    // 26
+  Coal::LE1Device( 1,      4,        4,   1,     2,   1),    // 27
+  Coal::LE1Device( 1,      4,        4,   1,     2,   2),    // 28
+  Coal::LE1Device( 1,      4,        4,   2,     1,   1),    // 29
+  Coal::LE1Device( 1,      4,        4,   2,     2,   1),    // 30
+  Coal::LE1Device( 1,      4,        4,   2,     2,   2),    // 31
+  Coal::LE1Device( 2,      1,        1,   1,     1,   1),    // 32
+  Coal::LE1Device( 2,      1,        1,   1,     1,   2),    // 33
+  Coal::LE1Device( 2,      2,        1,   1,     1,   1),    // 34
+  Coal::LE1Device( 2,      2,        1,   1,     1,   2),    // 35
+  Coal::LE1Device( 2,      2,        1,   1,     2,   1),    // 36
+  Coal::LE1Device( 2,      2,        1,   1,     2,   2),    // 37
+  Coal::LE1Device( 2,      2,        1,   1,     2,   4),    // 38
+  Coal::LE1Device( 2,      2,        1,   2,     1,   1),    // 39
+  Coal::LE1Device( 2,      2,        1,   2,     1,   2),    // 40
+  Coal::LE1Device( 2,      2,        1,   2,     2,   1),    // 41
+  Coal::LE1Device( 2,      2,        1,   2,     2,   2),    // 42
+  Coal::LE1Device( 2,      2,        1,   2,     2,   4),    // 43
+  Coal::LE1Device( 2,      2,        2,   1,     1,   1),    // 44
+  Coal::LE1Device( 2,      2,        2,   1,     1,   2),    // 45
+  Coal::LE1Device( 2,      2,        2,   1,     2,   1),    // 46
+  Coal::LE1Device( 2,      2,        2,   1,     2,   2),    // 47
+  Coal::LE1Device( 2,      2,        2,   1,     2,   4),    // 48
+  Coal::LE1Device( 2,      2,        2,   2,     1,   1),    // 49
+  Coal::LE1Device( 2,      2,        2,   2,     1,   2),    // 50
+  Coal::LE1Device( 2,      2,        2,   2,     2,   1),    // 51
+  Coal::LE1Device( 2,      2,        2,   2,     2,   2),    // 52
+  Coal::LE1Device( 2,      2,        2,   2,     2,   4),    // 53
+  Coal::LE1Device( 2,      4,        2,   1,     1,   1),    // 54
+  Coal::LE1Device( 2,      4,        2,   1,     1,   2),    // 55
+  Coal::LE1Device( 2,      4,        2,   1,     2,   1),    // 56
+  Coal::LE1Device( 2,      4,        2,   1,     2,   2),    // 57
+  Coal::LE1Device( 2,      4,        2,   1,     2,   4),    // 58
+  Coal::LE1Device( 2,      4,        2,   2,     1,   1),    // 59
+  Coal::LE1Device( 2,      4,        2,   2,     1,   2),    // 60
+  Coal::LE1Device( 2,      4,        2,   2,     2,   1),    // 61
+  Coal::LE1Device( 2,      4,        2,   2,     2,   2),    // 62
+  Coal::LE1Device( 2,      4,        2,   2,     2,   4),    // 63
+  Coal::LE1Device( 2,      4,        3,   1,     1,   1),    // 64
+  Coal::LE1Device( 2,      4,        3,   1,     1,   2),    // 65
+  Coal::LE1Device( 2,      4,        3,   1,     2,   1),    // 66
+  Coal::LE1Device( 2,      4,        3,   1,     2,   2),    // 67
+  Coal::LE1Device( 2,      4,        3,   1,     2,   4),    // 68
+  Coal::LE1Device( 2,      4,        3,   2,     1,   1),    // 69
+  Coal::LE1Device( 2,      4,        3,   2,     1,   2),    // 70
+  Coal::LE1Device( 2,      4,        3,   2,     2,   1),    // 71
+  Coal::LE1Device( 2,      4,        3,   2,     2,   2),    // 72
+  Coal::LE1Device( 2,      4,        3,   2,     2,   4),    // 73
+  Coal::LE1Device( 2,      4,        4,   1,     1,   1),    // 74
+  Coal::LE1Device( 2,      4,        4,   1,     1,   2),    // 75
+  Coal::LE1Device( 2,      4,        4,   1,     2,   1),    // 76
+  Coal::LE1Device( 2,      4,        4,   1,     2,   2),    // 77
+  Coal::LE1Device( 2,      4,        4,   1,     2,   4),    // 78
+  Coal::LE1Device( 2,      4,        4,   2,     1,   1),    // 79
+  Coal::LE1Device( 2,      4,        4,   2,     1,   2),    // 80
+  Coal::LE1Device( 2,      4,        4,   2,     2,   1),    // 81
+  Coal::LE1Device( 2,      4,        4,   2,     2,   2),    // 82
+  Coal::LE1Device( 2,      4,        4,   2,     2,   4),    // 83
+  Coal::LE1Device( 4,      1,        1,   1,     1,   1),    // 84
+  Coal::LE1Device( 4,      1,        1,   1,     1,   2),    // 85
+  Coal::LE1Device( 4,      1,        1,   1,     1,   4),    // 86
+  Coal::LE1Device( 4,      2,        1,   1,     1,   1),    // 87
+  Coal::LE1Device( 4,      2,        1,   1,     1,   2),    // 88
+  Coal::LE1Device( 4,      2,        1,   1,     1,   4),    // 89
+  Coal::LE1Device( 4,      2,        1,   1,     2,   1),    // 90
+  Coal::LE1Device( 4,      2,        1,   1,     2,   2),    // 91
+  Coal::LE1Device( 4,      2,        1,   1,     2,   4),    // 92
+  Coal::LE1Device( 4,      2,        1,   1,     2,   8),    // 93
+  Coal::LE1Device( 4,      2,        1,   2,     1,   1),    // 94
+  Coal::LE1Device( 4,      2,        1,   2,     1,   2),    // 95
+  Coal::LE1Device( 4,      2,        1,   2,     1,   4),    // 96
+  Coal::LE1Device( 4,      2,        1,   2,     2,   1),    // 97
+  Coal::LE1Device( 4,      2,        1,   2,     2,   2),    // 98
+  Coal::LE1Device( 4,      2,        1,   2,     2,   4),    // 99
+  Coal::LE1Device( 4,      2,        1,   2,     2,   8),    // 100
+  Coal::LE1Device( 4,      2,        2,   1,     1,   1),    // 101
+  Coal::LE1Device( 4,      2,        2,   1,     1,   2),    // 102
+  Coal::LE1Device( 4,      2,        2,   1,     1,   4),    // 103
+  Coal::LE1Device( 4,      2,        2,   1,     2,   1),    // 104
+  Coal::LE1Device( 4,      2,        2,   1,     2,   2),    // 105
+  Coal::LE1Device( 4,      2,        2,   1,     2,   4),    // 106
+  Coal::LE1Device( 4,      2,        2,   1,     2,   8),    // 107
+  Coal::LE1Device( 4,      2,        2,   2,     1,   1),    // 108
+  Coal::LE1Device( 4,      2,        2,   2,     1,   2),    // 109
+  Coal::LE1Device( 4,      2,        2,   2,     1,   4),    // 110
+  Coal::LE1Device( 4,      2,        2,   2,     2,   1),    // 111
+  Coal::LE1Device( 4,      2,        2,   2,     2,   2),    // 112
+  Coal::LE1Device( 4,      2,        2,   2,     2,   4),    // 113
+  Coal::LE1Device( 4,      2,        2,   2,     2,   8),    // 114
+  Coal::LE1Device( 4,      4,        2,   1,     1,   1),    // 115
+  Coal::LE1Device( 4,      4,        2,   1,     1,   2),    // 116
+  Coal::LE1Device( 4,      4,        2,   1,     1,   4),    // 117
+  Coal::LE1Device( 4,      4,        2,   1,     2,   1),    // 118
+  Coal::LE1Device( 4,      4,        2,   1,     2,   2),    // 119
+  Coal::LE1Device( 4,      4,        2,   1,     2,   4),    // 120
+  Coal::LE1Device( 4,      4,        2,   1,     2,   8),    // 121
+  Coal::LE1Device( 4,      4,        2,   2,     1,   1),    // 122
+  Coal::LE1Device( 4,      4,        2,   2,     1,   2),    // 123
+  Coal::LE1Device( 4,      4,        2,   2,     1,   4),    // 124
+  Coal::LE1Device( 4,      4,        2,   2,     2,   1),    // 125
+  Coal::LE1Device( 4,      4,        2,   2,     2,   2),    // 126
+  Coal::LE1Device( 4,      4,        2,   2,     2,   4),    // 127
+  Coal::LE1Device( 4,      4,        2,   2,     2,   8),    // 128
+  Coal::LE1Device( 4,      4,        3,   1,     1,   1),    // 129
+  Coal::LE1Device( 4,      4,        3,   1,     1,   2),    // 130
+  Coal::LE1Device( 4,      4,        3,   1,     1,   4),    // 131
+  Coal::LE1Device( 4,      4,        3,   1,     2,   1),    // 132
+  Coal::LE1Device( 4,      4,        3,   1,     2,   2),    // 133
+  Coal::LE1Device( 4,      4,        3,   1,     2,   4),    // 134
+  Coal::LE1Device( 4,      4,        3,   1,     2,   8),    // 135
+  Coal::LE1Device( 4,      4,        3,   2,     1,   1),    // 136
+  Coal::LE1Device( 4,      4,        3,   2,     1,   2),    // 137
+  Coal::LE1Device( 4,      4,        3,   2,     1,   4),    // 138
+  Coal::LE1Device( 4,      4,        3,   2,     2,   1),    // 139
+  Coal::LE1Device( 4,      4,        3,   2,     2,   2),    // 140
+  Coal::LE1Device( 4,      4,        3,   2,     2,   4),    // 141
+  Coal::LE1Device( 4,      4,        3,   2,     2,   8),    // 142
+  Coal::LE1Device( 4,      4,        4,   1,     1,   1),    // 143
+  Coal::LE1Device( 4,      4,        4,   1,     1,   2),    // 144
+  Coal::LE1Device( 4,      4,        4,   1,     1,   4),    // 145
+  Coal::LE1Device( 4,      4,        4,   1,     2,   1),    // 146
+  Coal::LE1Device( 4,      4,        4,   1,     2,   2),    // 147
+  Coal::LE1Device( 4,      4,        4,   1,     2,   4),    // 148
+  Coal::LE1Device( 4,      4,        4,   1,     2,   8),    // 149
+  Coal::LE1Device( 4,      4,        4,   2,     1,   1),    // 150
+  Coal::LE1Device( 4,      4,        4,   2,     1,   2),    // 151
+  Coal::LE1Device( 4,      4,        4,   2,     1,   4),    // 152
+  Coal::LE1Device( 4,      4,        4,   2,     2,   1),    // 153
+  Coal::LE1Device( 4,      4,        4,   2,     2,   2),    // 154
+  Coal::LE1Device( 4,      4,        4,   2,     2,   4),    // 155
+  Coal::LE1Device( 4,      4,        4,   2,     2,   8),    // 156
+  Coal::LE1Device( 8,      1,        1,   1,     1,   1),    // 157
+  Coal::LE1Device( 8,      1,        1,   1,     1,   2),    // 158
+  Coal::LE1Device( 8,      1,        1,   1,     1,   4),    // 159
+  Coal::LE1Device( 8,      1,        1,   1,     1,   8),    // 160
+  Coal::LE1Device( 8,      2,        1,   1,     1,   1),    // 161
+  Coal::LE1Device( 8,      2,        1,   1,     1,   2),    // 162
+  Coal::LE1Device( 8,      2,        1,   1,     1,   4),    // 163
+  Coal::LE1Device( 8,      2,        1,   1,     1,   8),    // 164
+  Coal::LE1Device( 8,      2,        1,   1,     2,   1),    // 165
+  Coal::LE1Device( 8,      2,        1,   1,     2,   2),    // 166
+  Coal::LE1Device( 8,      2,        1,   1,     2,   4),    // 167
+  Coal::LE1Device( 8,      2,        1,   1,     2,   8),    // 168
+  Coal::LE1Device( 8,      2,        1,   2,     1,   1),    // 169
+  Coal::LE1Device( 8,      2,        1,   2,     1,   2),    // 170
+  Coal::LE1Device( 8,      2,        1,   2,     1,   4),    // 171
+  Coal::LE1Device( 8,      2,        1,   2,     1,   8),    // 172
+  Coal::LE1Device( 8,      2,        1,   2,     2,   1),    // 173
+  Coal::LE1Device( 8,      2,        1,   2,     2,   2),    // 174
+  Coal::LE1Device( 8,      2,        1,   2,     2,   4),    // 175
+  Coal::LE1Device( 8,      2,        1,   2,     2,   8),    // 176
+  Coal::LE1Device( 8,      2,        2,   1,     1,   1),    // 177
+  Coal::LE1Device( 8,      2,        2,   1,     1,   2),    // 178
+  Coal::LE1Device( 8,      2,        2,   1,     1,   4),    // 179
+  Coal::LE1Device( 8,      2,        2,   1,     1,   8),    // 180
+  Coal::LE1Device( 8,      2,        2,   1,     2,   1),    // 181
+  Coal::LE1Device( 8,      2,        2,   1,     2,   2),    // 182
+  Coal::LE1Device( 8,      2,        2,   1,     2,   4),    // 183
+  Coal::LE1Device( 8,      2,        2,   1,     2,   8),    // 184
+  Coal::LE1Device( 8,      2,        2,   2,     1,   1),    // 185
+  Coal::LE1Device( 8,      2,        2,   2,     1,   2),    // 186
+  Coal::LE1Device( 8,      2,        2,   2,     1,   4),    // 187
+  Coal::LE1Device( 8,      2,        2,   2,     1,   8),    // 188
+  Coal::LE1Device( 8,      2,        2,   2,     2,   1),    // 189
+  Coal::LE1Device( 8,      2,        2,   2,     2,   2),    // 190
+  Coal::LE1Device( 8,      2,        2,   2,     2,   4),    // 191
+  Coal::LE1Device( 8,      2,        2,   2,     2,   8),    // 192
+  Coal::LE1Device( 8,      4,        2,   1,     1,   1),    // 193
+  Coal::LE1Device( 8,      4,        2,   1,     1,   2),    // 194
+  Coal::LE1Device( 8,      4,        2,   1,     1,   4),    // 195
+  Coal::LE1Device( 8,      4,        2,   1,     1,   8),    // 196
+  Coal::LE1Device( 8,      4,        2,   1,     2,   1),    // 197
+  Coal::LE1Device( 8,      4,        2,   1,     2,   2),    // 198
+  Coal::LE1Device( 8,      4,        2,   1,     2,   4),    // 199
+  Coal::LE1Device( 8,      4,        2,   1,     2,   8),    // 200
+  Coal::LE1Device( 8,      4,        2,   2,     1,   1),    // 201
+  Coal::LE1Device( 8,      4,        2,   2,     1,   2),    // 202
+  Coal::LE1Device( 8,      4,        2,   2,     1,   4),    // 203
+  Coal::LE1Device( 8,      4,        2,   2,     1,   8),    // 204
+  Coal::LE1Device( 8,      4,        2,   2,     2,   1),    // 205
+  Coal::LE1Device( 8,      4,        2,   2,     2,   2),    // 206
+  Coal::LE1Device( 8,      4,        2,   2,     2,   4),    // 207
+  Coal::LE1Device( 8,      4,        2,   2,     2,   8),    // 208
+  Coal::LE1Device( 8,      4,        3,   1,     1,   1),    // 209
+  Coal::LE1Device( 8,      4,        3,   1,     1,   2),    // 210
+  Coal::LE1Device( 8,      4,        3,   1,     1,   4),    // 211
+  Coal::LE1Device( 8,      4,        3,   1,     1,   8),    // 212
+  Coal::LE1Device( 8,      4,        3,   1,     2,   1),    // 213
+  Coal::LE1Device( 8,      4,        3,   1,     2,   2),    // 214
+  Coal::LE1Device( 8,      4,        3,   1,     2,   4),    // 215
+  Coal::LE1Device( 8,      4,        3,   1,     2,   8),    // 216
+  Coal::LE1Device( 8,      4,        3,   2,     1,   1),    // 217
+  Coal::LE1Device( 8,      4,        3,   2,     1,   2),    // 218
+  Coal::LE1Device( 8,      4,        3,   2,     1,   4),    // 219
+  Coal::LE1Device( 8,      4,        3,   2,     1,   8),    // 220
+  Coal::LE1Device( 8,      4,        3,   2,     2,   1),    // 221
+  Coal::LE1Device( 8,      4,        3,   2,     2,   2),    // 222
+  Coal::LE1Device( 8,      4,        3,   2,     2,   4),    // 223
+  Coal::LE1Device( 8,      4,        3,   2,     2,   8),    // 224
+  Coal::LE1Device( 8,      4,        4,   1,     1,   1),    // 225
+  Coal::LE1Device( 8,      4,        4,   1,     1,   2),    // 226
+  Coal::LE1Device( 8,      4,        4,   1,     1,   4),    // 227
+  Coal::LE1Device( 8,      4,        4,   1,     1,   8),    // 228
+  Coal::LE1Device( 8,      4,        4,   1,     2,   1),    // 229
+  Coal::LE1Device( 8,      4,        4,   1,     2,   2),    // 230
+  Coal::LE1Device( 8,      4,        4,   1,     2,   4),    // 231
+  Coal::LE1Device( 8,      4,        4,   1,     2,   8),    // 232
+  Coal::LE1Device( 8,      4,        4,   2,     1,   1),    // 233
+  Coal::LE1Device( 8,      4,        4,   2,     1,   2),    // 234
+  Coal::LE1Device( 8,      4,        4,   2,     1,   4),    // 235
+  Coal::LE1Device( 8,      4,        4,   2,     1,   8),    // 236
+  Coal::LE1Device( 8,      4,        4,   2,     2,   1),    // 237
+  Coal::LE1Device( 8,      4,        4,   2,     2,   2),    // 238
+  Coal::LE1Device( 8,      4,        4,   2,     2,   4),    // 239
+  Coal::LE1Device( 8,      4,        4,   2,     2,   8)     // 240
 };
+
 
 cl_int
 clGetDeviceIDs(cl_platform_id   platform,

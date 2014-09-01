@@ -40,7 +40,7 @@
 #include <pthread.h>
 #include <list>
 
-#define   TotalLE1Devices  65
+#define   TotalLE1Devices 240
 namespace Coal
 {
 
@@ -66,8 +66,12 @@ class LE1Device;
 class LE1Device : public DeviceInterface
 {
     public:
-        LE1Device(const std::string &SimModel, const std::string &Target,
-                  unsigned Cores);
+        LE1Device(unsigned char Cores,
+                  unsigned char Width,
+                  unsigned char ALUs,
+                  unsigned char MULs,
+                  unsigned char LSUs,
+                  unsigned char Banks);
         ~LE1Device();
 
         /*
@@ -105,8 +109,8 @@ class LE1Device : public DeviceInterface
         LE1Simulator* getSimulator() const { return Simulator; }
 
         unsigned int numLE1s() const;   /*!< \brief Number of logical LE1 cores on the system */
-        const char* model() { return simulatorModel.c_str(); }
-        const char* target() { return CPU.c_str(); }
+        const char* model() { return SimModel.c_str(); }
+        const char* target() { return Target.c_str(); }
         float cpuMhz() const;           /*!< \brief Speed of the LE1 in Mhz */
 
         static std::string SysDir;
@@ -117,8 +121,15 @@ class LE1Device : public DeviceInterface
         static unsigned MaxGlobalAddr;
 
     private:
-        unsigned int NumCores, p_num_events;
-        std::string simulatorModel;
+        unsigned int p_num_events;
+        unsigned char NumCores;
+        unsigned char IssueWidth;
+        unsigned char NumALUs;
+        unsigned char NumMULs;
+        unsigned char NumLSUs;
+        unsigned char NumBanks;
+        std::string SimModel;
+
         float p_cpu_mhz;
         pthread_t *p_workers;
         LE1Simulator* Simulator;
