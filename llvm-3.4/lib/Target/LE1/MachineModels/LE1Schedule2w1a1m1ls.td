@@ -1,0 +1,28 @@
+def LE1Model2w1a1m1ls : SchedMachineModel {
+  let IssueWidth = 2;
+  let LoadLatency = 3;
+}
+let SchedModel = LE1Model2w1a1m1ls in {
+  def : WriteRes<WriteP, [PRED1]> {
+    let NumMicroOps = 0;
+  }  def : WriteRes<WriteA, [ALU1]> {
+    let Latency = 2;
+  }  def : WriteRes<WriteAI, [ALU1]> {
+    let Latency = 2;
+    let NumMicroOps = 2;
+  }  def : WriteRes<WriteM, [MULT1]> {
+    let Latency = 2;
+  }  def : WriteRes<WriteMI, [MULT1]> {
+    let Latency = 2;
+    let NumMicroOps = 2;
+  }  def : WriteRes<WriteLS, [LSU1]> {
+    let Latency = 3;
+  }  def : WriteRes<WriteLSI, [LSU1]> {
+    let Latency = 3;
+    let NumMicroOps = 2;
+  }  def : WriteRes<WriteB, [BRU]> {
+    let Latency = 5;
+  }  def : WriteRes<WriteBI, [BRU]> {
+    let Latency = 5;
+    let NumMicroOps = 2;
+  }}

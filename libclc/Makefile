@@ -6,12 +6,12 @@ endif
 
 utils/prepare-builtins.o: ./utils/prepare-builtins.cpp
 	@echo CXX utils/prepare-builtins.o
-	$(Verb) c++ -MMD -MF utils/prepare-builtins.o.d -I/opt/esdg-opencl/include -UNDEBUG -fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wno-missing-field-initializers -pedantic -Wno-long-long -Wno-maybe-uninitialized -Wnon-virtual-dtor -g  -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-exceptions -fno-rtti -c -o utils/prepare-builtins.o ./utils/prepare-builtins.cpp
+	$(Verb) c++ -MMD -MF utils/prepare-builtins.o.d -I/opt/esdg-opencl/include  -fPIC -fvisibility-inlines-hidden -Wall -W -Wno-unused-parameter -Wwrite-strings -Wno-missing-field-initializers -pedantic -Wno-long-long -Wno-maybe-uninitialized -Wnon-virtual-dtor   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -fno-exceptions -fno-rtti -c -o utils/prepare-builtins.o ./utils/prepare-builtins.cpp
 -include utils/prepare-builtins.o.d
 
 utils/prepare-builtins: utils/prepare-builtins.o
 	@echo LINK utils/prepare-builtins
-	$(Verb) c++ -o utils/prepare-builtins utils/prepare-builtins.o -L/opt/esdg-opencl/lib   -lrt -lz -lLLVMBitWriter -lLLVMBitReader -lLLVMCore -lLLVMSupport -ldl -lpthread 
+	$(Verb) c++ -o utils/prepare-builtins utils/prepare-builtins.o -L/opt/esdg-opencl/lib   -lrt  -lz -lLLVMBitWriter -lLLVMBitReader -lLLVMCore -lLLVMSupport -ldl -lpthread 
 
 le1-llvm-none/lib/synchronization/barrier.cl.bc: ./le1/lib/synchronization/barrier.cl
 	@echo LLVM-CC le1-llvm-none/lib/synchronization/barrier.cl.bc

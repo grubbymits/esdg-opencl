@@ -53,8 +53,24 @@ def LE1 : Target {
 // LE1 processors supported.
 //===----------------------------------------------------------------------===//
 def : ProcessorModel<"scalar", LE1ModelScalar, []>;
-def : ProcessorModel< "2w1m1ls", LE1Model2w1m1ls, []>;
-def : ProcessorModel< "3w1m1ls", LE1Model3w1m1ls, []>;
-def : ProcessorModel< "4w1m1ls", LE1Model4w1m1ls, []>;
-def : ProcessorModel<"4w2m1ls", LE1Model4w2m1ls, []>;
-def : ProcessorModel<"4w2m2ls", LE1Model4w2m2ls, []>;
+def : ProcessorModel<"1w1a1m1ls", LE1Model1w1a1m1ls, []>;
+def : ProcessorModel<"2w1a1m1ls", LE1Model2w1a1m1ls, []>;
+def : ProcessorModel<"2w1a1m2ls", LE1Model2w1a1m2ls, []>;
+def : ProcessorModel<"2w1a2m1ls", LE1Model2w1a2m1ls, []>;
+def : ProcessorModel<"2w1a2m2ls", LE1Model2w1a2m2ls, []>;
+def : ProcessorModel<"2w2a1m1ls", LE1Model2w2a1m1ls, []>;
+def : ProcessorModel<"2w2a1m2ls", LE1Model2w2a1m2ls, []>;
+def : ProcessorModel<"2w2a2m1ls", LE1Model2w2a2m1ls, []>;
+def : ProcessorModel<"2w2a2m2ls", LE1Model2w2a2m2ls, []>;
+def : ProcessorModel<"4w2a1m1ls", LE1Model4w2a1m1ls, []>;
+def : ProcessorModel<"4w2a1m2ls", LE1Model4w2a1m2ls, []>;
+def : ProcessorModel<"4w2a2m1ls", LE1Model4w2a2m1ls, []>;
+def : ProcessorModel<"4w2a2m2ls", LE1Model4w2a2m2ls, []>;
+def : ProcessorModel<"4w3a1m1ls", LE1Model4w3a1m1ls, []>;
+def : ProcessorModel<"4w3a1m2ls", LE1Model4w3a1m2ls, []>;
+def : ProcessorModel<"4w3a2m1ls", LE1Model4w3a2m1ls, []>;
+def : ProcessorModel<"4w3a2m2ls", LE1Model4w3a2m2ls, []>;
+def : ProcessorModel<"4w4a1m1ls", LE1Model4w4a1m1ls, []>;
+def : ProcessorModel<"4w4a1m2ls", LE1Model4w4a1m2ls, []>;
+def : ProcessorModel<"4w4a2m1ls", LE1Model4w4a2m1ls, []>;
+def : ProcessorModel<"4w4a2m2ls", LE1Model4w4a2m2ls, []>;
