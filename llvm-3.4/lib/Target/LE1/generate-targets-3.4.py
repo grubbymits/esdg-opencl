@@ -29,7 +29,7 @@ for width in [1, 2, 4] :
 
         file_content = "def " + model + " : SchedMachineModel {\n"
         file_content += "  let IssueWidth = " + issue_width + ";\n"
-        file_content += "  let LoadLatency = 3;\n}\n"
+        file_content += "  let LoadLatency = 2;\n}\n"
 
         file_content += "let SchedModel = " + model + " in {\n"
         file_content += "  def : WriteRes<WriteP, [PRED" + num_alus + "]> {\n"

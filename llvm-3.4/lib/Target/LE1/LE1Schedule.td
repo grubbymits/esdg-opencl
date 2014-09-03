@@ -46,7 +46,7 @@ def WriteP    : SchedWrite;
 
 def LE1ModelScalar : SchedMachineModel {
   let IssueWidth = 1;
-  let LoadLatency = 3;
+  let LoadLatency = 2;
 }
 
 let SchedModel = LE1ModelScalar in {
@@ -69,10 +69,10 @@ let SchedModel = LE1ModelScalar in {
     let NumMicroOps = 2;
   }
   def : WriteRes<WriteLS, [LSU1]> {
-    let Latency = 3;
+    let Latency = 2;
   }
   def : WriteRes<WriteLSI, [LSU1]> {
-    let Latency = 3;
+    let Latency = 2;
     let NumMicroOps = 2;
   }
   def : WriteRes<WriteB, [BRU]> {

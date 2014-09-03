@@ -1,6 +1,6 @@
 #!/bin/sh
 (
-for device in `seq 0 30`;
+for device in `seq 9 30`;
 do
   ./bitonic-sort -e -d $device
 done

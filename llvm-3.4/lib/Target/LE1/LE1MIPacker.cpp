@@ -304,14 +304,16 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
 }
 
 void LE1MIPacker::Finalise(MachineBasicBlock *MBB) {
-  //std::cout << "Finalise" << std::endl;
+  std::cout << "Finalise" << std::endl;
   for (MachineBasicBlock::iterator BI = MBB->begin(), BE = --MBB->end();
        BI != BE; ++BI) {
+
+    std::cout << "Bundle size = " << BI->getBundleSize() << std::endl;
 
     MachineBasicBlock::iterator Next = BI;
     ++Next;
     unsigned Latency = CheckBundleLatencies(&(*BI), &(*Next));
-    //std::cout << "Latency = " << Latency << std::endl;
+    std::cout << "Latency = " << Latency << std::endl;
     // Assumes latency of two for all instructions
     if (Latency != 0) {
       DebugLoc dl;
@@ -324,7 +326,7 @@ void LE1MIPacker::Finalise(MachineBasicBlock *MBB) {
 unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
                                            MachineInstr *B2) {
 
-  //std::cout << "CheckBundleLatencies" << std::endl;
+  std::cout << "CheckBundleLatencies" << std::endl;
 
   MachineBasicBlock::instr_iterator M1 = B1;
   MachineBasicBlock::instr_iterator M2 = B2;
@@ -333,13 +335,15 @@ unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
 
   // First, handle the conditions where B1 and/or B2 are not bundled, (size = 0)
   if (!M1->isBundled() && !M2->isBundled()) {
-    //std::cout << "Neither M1 or M2 are bundled" << std::endl;
+    std::cout << "Neither M1 or M2 are bundled" << std::endl;
     return CheckInstructionLatencies(M1, M2);
   }
 
   else if (!M1->isBundled()) {
-    //std::cout << "M1 isnt bundled, but M2 is" << std::endl;
-    for (unsigned j = 0; j < M2->getBundleSize(); ++j) {
+    std::cout << "M1 isnt bundled, but M2 is" << std::endl;
+    std::cout << "M2 BundleSize = " << M2->getBundleSize() << std::endl;
+    unsigned size = M2->getBundleSize();
+    for (unsigned j = 0; j < size; ++j) {
       ++M2;
       PacketLatency = std::max(CheckInstructionLatencies(M1, M2),
                                PacketLatency);
@@ -347,8 +351,10 @@ unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
     return PacketLatency;
   }
   else if (M1->isBundled() && !M2->isBundled()) {
-    //std::cout << "M1 is bundled, M2 is not" << std::endl;
-    for (unsigned i = 0; i < M1->getBundleSize(); ++i) {
+    std::cout << "M1 is bundled, M2 is not" << std::endl;
+    std::cout << "M1 BundleSize = " << M1->getBundleSize() << std::endl;
+    unsigned size = M1->getBundleSize();
+    for (unsigned i = 0; i < size; ++i) {
       ++M1;
       PacketLatency = std::max(CheckInstructionLatencies(M1, M2),
                                PacketLatency);
@@ -356,34 +362,40 @@ unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
     return PacketLatency;
   }
 
-  //std::cout << "Both are bundled" << std::endl;
+  std::cout << "Both are bundled" << std::endl;
   // Iterate into bundles from the BUNDLE inst
-  for (unsigned i = 0; i < M1->getBundleSize(); ++i) {
+  std::cout << "M1 BundleSize = " << M1->getBundleSize() << std::endl;
+  std::cout << "M2 BundleSize = " << M2->getBundleSize() << std::endl;
+  unsigned B1Size = M1->getBundleSize();
+  unsigned B2Size = M1->getBundleSize();
+
+  for (unsigned i = 0; i < B1Size; ++i) {
     ++M1;
-    for (unsigned j = 0; j < M2->getBundleSize(); ++j) {
+    for (unsigned j = 0; j < B2Size; ++j) {
       ++M2;
 
       PacketLatency = std::max(CheckInstructionLatencies(M1, M2),
                                PacketLatency);
     }
+    M2 = B2;
   }
   return PacketLatency;
 }
 
 unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
                                                 MachineInstr *M2) {
-  //std::cout << "CheckInstructionLatencies:\n  ";
+  std::cout << "CheckInstructionLatencies:\n  ";
   unsigned Latency = 0;
   if (isPseudo(M1)) {
-    //std::cout << "M1 isPseudo" << std::endl;
+    std::cout << "M1 isPseudo" << std::endl;
     return Latency;
   }
   if (isPseudo(M2)) {
-    //std::cout << "M2 isPseudo" << std::endl;
+    std::cout << "M2 isPseudo" << std::endl;
     return Latency;
   }
-  //std::cout << M1->getOpcode() << ",  ";
-  //std::cout << M2->getOpcode() << std::endl;
+  std::cout << M1->getOpcode() << ",  ";
+  std::cout << M2->getOpcode() << std::endl;
 
   SUnit *S1 = MIToSUnit[M1];
   SUnit *S2 = MIToSUnit[M2];
@@ -394,7 +406,7 @@ unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
 
     SDep::Kind DepKind = S1->Succs[i].getKind();
     if (DepKind == SDep::Data) {
-      //std::cout << "Data dep found" << std::endl;
+      std::cout << "Data dep found" << std::endl;
       Latency = std::max(S1->Succs[i].getLatency(), Latency);
     }
   }

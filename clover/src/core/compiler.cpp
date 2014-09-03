@@ -444,8 +444,8 @@ bool Compiler::OptimiseKernel(llvm::Module &M, unsigned unrollCount) {
   //PM.add(createLoopExtractorPass());
   PM.add(createLoopUnrollPass(2048, unrollCount, 0));
   PM.add(createCFGSimplificationPass());
-  PM.add(createConstantPropagationPass());
-  PM.add(createDeadCodeEliminationPass());
+  //PM.add(createConstantPropagationPass());
+  //PM.add(createDeadCodeEliminationPass());
   //PM.add(createVerifierPass());
   PM.run(M);
   return true;
