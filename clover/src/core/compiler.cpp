@@ -768,8 +768,7 @@ bool Compiler::ExtractKernelData(llvm::Module *M, EmbeddedData *theData) {
 
 // BackendUtil.cpp
 // CodeGenOptions
-bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M,
-                                 unsigned unrollCount) {
+bool Compiler::CompileToAssembly(std::string &Filename, llvm::Module *M) {
 #ifdef DBG_COMPILER
   std::cerr << "Entering CompileToAssembly\n";
 #endif

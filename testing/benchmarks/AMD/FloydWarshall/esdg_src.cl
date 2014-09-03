@@ -59,17 +59,10 @@ void floydWarshallPass(__global uint* pathDistanceBuffer,
     int oldWeight = pathDistanceBuffer[yValue * numNodes + xValue];
     int tempWeight = (pathDistanceBuffer[yValue * numNodes + k] + pathDistanceBuffer[k * numNodes + xValue]);
 
-    /*
     if (tempWeight < oldWeight)
     {
         pathDistanceBuffer[yValue * numNodes + xValue] = tempWeight;
         pathBuffer[yValue * numNodes + xValue] = k;
-    }*/
-
-    pathDistanceBuffer[yValue * numNodes + xValue] = (tempWeight < oldWeight) ?
-      tempWeight : pathDistanceBuffer[yValue * numNodes + xValue];
-
-    pathBuffer[yValue * numNodes + xValue] = (tempWeight < oldWeight) ?
-      k : pathBuffer[yValue * numNodes + xValue];
+    }
 }
 

@@ -100,8 +100,7 @@ class Compiler
 
         bool OptimiseKernel(llvm::Module &M, unsigned unrollCount);
 
-        bool CompileToAssembly(std::string &Filename, llvm::Module *Code,
-                               unsigned unrollCount);
+        bool CompileToAssembly(std::string &Filename, llvm::Module *Code);
         /**
          * \brief Compile \p source to produce a LLVM module
          * \param options options given to the compiler, described in the OpenCL spec

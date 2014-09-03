@@ -382,8 +382,8 @@ unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
     //std::cout << "M2 isPseudo" << std::endl;
     return Latency;
   }
-  std::cout << M1->getOpcode() << ",  ";
-  std::cout << M2->getOpcode() << std::endl;
+  //std::cout << M1->getOpcode() << ",  ";
+  //std::cout << M2->getOpcode() << std::endl;
 
   SUnit *S1 = MIToSUnit[M1];
   SUnit *S2 = MIToSUnit[M2];

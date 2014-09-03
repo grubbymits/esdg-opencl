@@ -646,14 +646,8 @@ bool LE1KernelEvent::CompileSource() {
   std::cerr << "Extracted any embedded data" << std::endl;
 #endif
 
-  unsigned unrollCount = 2;
-  if ((merge_dims[0] % 8) == 0)
-    unrollCount = 8;
-  else if ((merge_dims[0] % 4) == 0)
-    unrollCount = 4;
-
   // Output a single assembly file
-  if(!MainCompiler.CompileToAssembly(TempAsmName, CompleteModule, unrollCount))
+  if(!MainCompiler.CompileToAssembly(TempAsmName, CompleteModule))
   {
 #ifdef DBG_OUTPUT
     std::cout << "ERROR: CompileToAssembly failed" << std::endl;
