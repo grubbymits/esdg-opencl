@@ -66,6 +66,7 @@ namespace {
     std::map<MachineInstr*, SUnit*> MIToSUnit;
     unsigned *ResourceTable;
     unsigned NumResources;
+    unsigned IssueWidth;
   };
 
 }
@@ -113,15 +114,37 @@ bool LE1MIPacker::isSolo(MachineInstr *MI) {
 
 void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   DEBUG(dbgs() << "EndPacket, size = " << CurrentPacket.size() << "\n");
-  //std::cout << "EndPacket with " << MI->getOpcode() << std::endl;
+  std::cout << "EndPacket with " << MI->getOpcode()
+    << ", num insts = " << CurrentPacket.size()
+    << ", size = " << CurrentPacketSize << std::endl;
+
+  // Insert instructions to ensure that bundles are the maximum size
+  DebugLoc dl;
+  if (!CurrentPacket.empty()) {
+    MachineInstr *FinalInst = MI; //CurrentPacket.back();
+  while (CurrentPacketSize < IssueWidth) {
+    std::cout << "Inserting Padding instruction, CurrentPacketSize = "
+      << CurrentPacketSize << ", and IssueWidth = " << IssueWidth << std::endl;
+
+    FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
+      .addReg(LE1::ZERO).addImm(0);
+    CurrentPacket.push_back(FinalInst);
+    ++CurrentPacketSize;
+
+    std::cout << "Inserted the instruction" << std::endl;
+  }
+  }
   if (CurrentPacket.size() > 1) {
     MachineInstr *MIFirst = CurrentPacket.front();
+
     finalizeBundle(*MBB, MIFirst, MI);
   }
   CurrentPacket.clear();
   CurrentPacketSize = 0;
   for (unsigned i = 0; i < NumResources; ++i)
     ResourceTable[i] = 0;
+
+  std::cout << "Leaving EndPacket" << std::endl;
 }
 
 void LE1MIPacker::AddToPacket(MachineInstr *MI) {
@@ -145,7 +168,7 @@ bool LE1MIPacker::ResourcesAvailable(const MCSchedClassDesc *SchedDesc) {
   unsigned NumMicroOps = SchedDesc->NumMicroOps;
   DEBUG(dbgs() << "Number of micro ops = " << NumMicroOps << "\n");
 
-  if ((CurrentPacketSize + NumMicroOps) > SchedModel->IssueWidth) {
+  if ((CurrentPacketSize + NumMicroOps) > IssueWidth) {
     DEBUG(dbgs() << "Too many micro ops for current packet size\n");
     return false;
   }
@@ -238,6 +261,7 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
 
   NumResources = SchedModel->getNumProcResourceKinds();
   ResourceTable = new unsigned[NumResources];
+  IssueWidth = SchedModel->IssueWidth;
   //std::cout << "Created ResourceTable with "
     //    << SchedModel->getNumProcResourceKinds() << " entries" << std::endl;
   DEBUG(dbgs() << "Create ResourceTable with "
@@ -281,6 +305,11 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
       }
 
       if (isSolo(MI)) {
+        EndPacket(MBB, MI);
+        continue;
+      }
+
+      if (TII->isSchedulingBoundary(MI, MBB, MF)) {
         EndPacket(MBB, MI);
         continue;
       }
@@ -399,6 +428,13 @@ unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
 
   SUnit *S1 = MIToSUnit[M1];
   SUnit *S2 = MIToSUnit[M2];
+
+  // M1 or M2 maybe one of the instructions that has been inserted for padding,
+  // so S1 or S2 may not exist
+  if (!S1)
+    return Latency;
+  if (!S2)
+    return Latency;
 
   for (unsigned i = 0; i < S1->Succs.size(); ++i) {
     if (S1->Succs[i].getSUnit() != S2)

@@ -36,24 +36,28 @@ def ReadAttr :
   (outs CPURegs:$dst),
   (ins CPURegs:$addr),
   "ldbu.0 $dst, $addr[0x0]",
-  [(set CPURegs:$dst, (le1_read_attr CPURegs:$addr))], IILoadStore>;
+  [(set CPURegs:$dst, (le1_read_attr CPURegs:$addr))], IILoadStore>,
+  Sched<[WriteLS]>;
 
 def SetAttr :
   LE1Inst<
   (outs),
   (ins CPURegs:$src, CPURegs:$addr),
   "stb.0 $src, $addr[0x0]",
-  [(le1_set_attr CPURegs:$src, CPURegs:$addr)], IILoadStore>;
+  [(le1_set_attr CPURegs:$src, CPURegs:$addr)], IILoadStore>,
+  Sched<[WriteLS]>;
 
 class LE1_READ_CTRL_REG<string opcode, Intrinsic IntID>
   : LE1Inst<(outs CPURegs:$dst), (ins),
             !strconcat(opcode, "  $dst"),
-            [/*(set CPURegs:$dst, (IntID))*/], IIAlu>;
+            [/*(set CPURegs:$dst, (IntID))*/], IIAlu>,
+            Sched<[WriteA]>;
 
 class LE1_READ_KERNEL_ATTR<string addr, Intrinsic IntID>
   : LE1Inst<(outs CPURegs:$dst), (ins),
             !strconcat("ldw.0 $dst, r0.0[(", addr, ")]"),
-            [(set CPURegs:$dst, (IntID))], IILoadStore>;
+            [(set CPURegs:$dst, (IntID))], IILoadStore>,
+            Sched<[WriteLS]>;
 
 def LE1_READ_CPUID : LE1_READ_CTRL_REG<"cpuid.0", int_le1_read_cpuid>;
 

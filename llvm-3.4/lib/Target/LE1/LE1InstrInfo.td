@@ -221,15 +221,21 @@ def mem_ea : Operand<i32> {
 def imm9    : ImmLeaf<i32, [{ return (isUInt<9>(Imm)); }]>;
 def imm12   : ImmLeaf<i32, [{ return (isUInt<12>(Imm)); }]>;
 def imm16   : ImmLeaf<i32, [{ return (isUInt<16>(Imm)); }]>;
-def imm32   : ImmLeaf<i32, [{ return (isUInt<32>(Imm)); }]>;
+def imm32   : ImmLeaf<i32,
+[{  if (isUInt<9>(Imm)) return false;
+    return (isUInt<32>(Imm)); }]>;
 
 def simm9   : ImmLeaf<i32, [{ return (isInt<9>(Imm)); }]>;
 def uimm9   : ImmLeaf<i32, [{ return (isUInt<9>(Imm)); }]>;
 def simm12  : ImmLeaf<i32, [{ return (isInt<12>(Imm)); }]>;
 def simm16  : ImmLeaf<i32, [{ return (isInt<16>(Imm)); }]>;
 def uimm12  : ImmLeaf<i32, [{ return (isUInt<12>(Imm)); }]>;
-def simm32  : ImmLeaf<i32, [{ return (isInt<32>(Imm)); }]>;
-def uimm32  : ImmLeaf<i32, [{ return (isUInt<32>(Imm)); }]>;
+def simm32  : ImmLeaf<i32,
+[{  if (isInt<9>(Imm)) return false;
+    return (isInt<32>(Imm)); }]>;
+def uimm32  : ImmLeaf<i32,
+[{  if (isUInt<9>(Imm)) return false;
+    return (isUInt<32>(Imm)); }]>;
 
 /*
 def imm9  : ImmLeaf<i32, [{ return (Imm == (Imm & 0x1FF)); }]>;
