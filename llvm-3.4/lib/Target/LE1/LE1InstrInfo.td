@@ -745,7 +745,7 @@ def GOTO :  LE1Inst<(outs), (ins brtarget:$target),
             [(le1_goto bb:$target)], IIBranch>, Sched<[WriteB]>;
 
 // Call
-let isCall=1,
+let isCall=1, isBarrier=1,
   // All calls clobber the non-callee saved registers...
   Defs = [B0, B1, B2, B3, B4, B5, B6, B7,
   STRP, AR0, AR1, AR2, AR3, AR4, AR5, AR6, AR7, T0, T1, T2, T3, T4, T5,

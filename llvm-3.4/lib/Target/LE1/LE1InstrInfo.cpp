@@ -156,9 +156,9 @@ storeRegToStackSlot(MachineBasicBlock &MBB, MachineBasicBlock::iterator I,
   unsigned Opc = 0;
 
   if (LE1::CPURegsRegClass.hasSubClassEq(RC)) {
-    //if (SrcReg == LE1::LNK)
-      //Opc = LE1::STWi32;
-    if (isInt<8>(FI))
+    if (SrcReg == LE1::LNK)
+      Opc = LE1::STWi32;
+    else if (isInt<8>(FI))
       Opc = LE1::STWi8;
     else if (isInt<12>(FI))
       Opc = LE1::STWi12;
@@ -187,9 +187,9 @@ loadRegFromStackSlot(MachineBasicBlock &MBB, MachineBasicBlock::iterator I,
   unsigned Opc = 0;
 
   if (LE1::CPURegsRegClass.hasSubClassEq(RC)) {
-    //if (DestReg == LE1::LNK)
-      //Opc = LE1::LDWi32;
-    if (isInt<8>(FI))
+    if (DestReg == LE1::LNK)
+      Opc = LE1::LDWi32;
+    else if (isInt<8>(FI))
       Opc = LE1::LDWi8;
     else if (isInt<12>(FI))
       Opc = LE1::LDWi12;

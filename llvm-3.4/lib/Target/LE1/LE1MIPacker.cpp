@@ -19,6 +19,8 @@
 #include <algorithm>
 #include <iostream>
 
+#define DEBUG_TYPE "le1-mi-packer"
+
 using namespace llvm;
 
 namespace {
@@ -49,8 +51,11 @@ namespace {
     bool PacketDependences(SUnit *NewSU);
     void AddToPacket(MachineInstr *MI);
     void EndPacket(MachineBasicBlock *MBB, MachineInstr *MI);
+    void EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI);
     bool isPseudo(MachineInstr *MI);
     bool isSolo(MachineInstr *MI);
+    void CreateEmptyBundle(MachineBasicBlock *MBB,
+                           MachineInstr *MI);
     void Finalise(MachineBasicBlock *MBB);
     unsigned CheckBundleLatencies(MachineInstr *B1,
                                   MachineInstr *B2);
@@ -61,6 +66,7 @@ namespace {
     const TargetLowering *TLI;
     const MCSchedModel *SchedModel;
     const MCSubtargetInfo *MCSubtarget;
+    MachineFunction *Function;
     std::vector<MachineInstr*> CurrentPacket;
     unsigned CurrentPacketSize;
     std::map<MachineInstr*, SUnit*> MIToSUnit;
@@ -112,39 +118,82 @@ bool LE1MIPacker::isSolo(MachineInstr *MI) {
   return false;
 }
 
+void LE1MIPacker::EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
+  DebugLoc dl;
+  MachineInstr *FinalInst = MI; //CurrentPacket.back();
+  MachineBasicBlock::instr_iterator I = MI;
+  ++I;
+
+  if (!CurrentPacket.empty()) {
+
+    while (CurrentPacketSize < IssueWidth) {
+
+      FinalInst = BuildMI(*MBB, &(*I), dl, TII->get(LE1::ADDi9), LE1::ZERO)
+        .addReg(LE1::ZERO).addImm(0);
+      CurrentPacket.push_back(FinalInst);
+      ++CurrentPacketSize;
+    }
+  }
+  MachineInstr *MIFirst = CurrentPacket.front();
+  MachineInstr *MILast = &(*I);
+  finalizeBundle(*MBB, MIFirst, MILast);
+
+  CurrentPacket.clear();
+  CurrentPacketSize = 0;
+  for (unsigned i = 0; i < NumResources; ++i)
+    ResourceTable[i] = 0;
+}
+
 void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
-  DEBUG(dbgs() << "EndPacket, size = " << CurrentPacket.size() << "\n");
-  std::cout << "EndPacket with " << MI->getOpcode()
-    << ", num insts = " << CurrentPacket.size()
-    << ", size = " << CurrentPacketSize << std::endl;
+  DEBUG(dbgs() << "--- Entering EndPacket, CurrentPacket.size = "
+        << CurrentPacket.size() << ", CurrentPacketSize = " << CurrentPacketSize
+        << "\n");
+#ifndef NDEBUG
+  if (MI->getOpcode() >= LE1::ADDCG) {
+    DEBUG(dbgs() << "Ending packet at instruction: \n");
+    MI->dump();
+  }
+#endif
 
   // Insert instructions to ensure that bundles are the maximum size
   DebugLoc dl;
   if (!CurrentPacket.empty()) {
+    DEBUG(dbgs() << "CurrentPacket ! empty\n");
+    DEBUG(dbgs() << "Adding " << (IssueWidth - CurrentPacketSize)
+          << " padding instructions to:\n");
+#ifndef NDEBUG
+    MBB->dump();
+#endif
+
     MachineInstr *FinalInst = MI; //CurrentPacket.back();
-  while (CurrentPacketSize < IssueWidth) {
-    std::cout << "Inserting Padding instruction, CurrentPacketSize = "
-      << CurrentPacketSize << ", and IssueWidth = " << IssueWidth << std::endl;
+    while (CurrentPacketSize < IssueWidth) {
 
-    FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
-      .addReg(LE1::ZERO).addImm(0);
-    CurrentPacket.push_back(FinalInst);
-    ++CurrentPacketSize;
-
-    std::cout << "Inserted the instruction" << std::endl;
-  }
+      FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
+        .addReg(LE1::ZERO).addImm(0);
+      CurrentPacket.push_back(FinalInst);
+      ++CurrentPacketSize;
+    }
   }
   if (CurrentPacket.size() > 1) {
+    DEBUG(dbgs() << " ---- After inserting padding, but before finalisation\n");
+#ifndef NDEBUG
+    MBB->dump();
+#endif
     MachineInstr *MIFirst = CurrentPacket.front();
-
-    finalizeBundle(*MBB, MIFirst, MI);
+    MachineInstr *MILast = MI;
+    finalizeBundle(*MBB, MIFirst, MILast);
   }
+  DEBUG(dbgs() << "After finalising:\n");
+#ifndef NDEBUG
+  MBB->dump();
+#endif
+
   CurrentPacket.clear();
   CurrentPacketSize = 0;
   for (unsigned i = 0; i < NumResources; ++i)
     ResourceTable[i] = 0;
 
-  std::cout << "Leaving EndPacket" << std::endl;
+  DEBUG(dbgs() << "--- Leaving EndPacket\n");
 }
 
 void LE1MIPacker::AddToPacket(MachineInstr *MI) {
@@ -156,6 +205,7 @@ void LE1MIPacker::AddToPacket(MachineInstr *MI) {
   ResourceTable[WriteProc->ProcResourceIdx]++;
   CurrentPacket.push_back(MI);
   CurrentPacketSize += SU->SchedClass->NumMicroOps;
+  DEBUG(dbgs() << "NumMicroOps = " << SU->SchedClass->NumMicroOps << "\n");
 }
 
 bool LE1MIPacker::ResourcesAvailable(const MCSchedClassDesc *SchedDesc) {
@@ -224,7 +274,7 @@ bool LE1MIPacker::PacketDependences(SUnit *NewSU) {
 bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
   DEBUG(dbgs() << "LE1MIPacker::runOnMachineFunction\n");
 
-  //MF = &mf;
+  Function = &MF;
   const TargetMachine &TM = MF.getTarget();
   MCSubtarget = TM.getSubtargetImpl();
   TII = TM.getInstrInfo();
@@ -288,10 +338,15 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
     DEBUG(dbgs() << "Mapped MIToSUnit\n");
 
     // Iterate through the machine instructions, skip pseudos and end packet
-    // when there is a hazard or the instruction is a solo (branches)
+    // when there is a hazard
     for (MachineBasicBlock::iterator MI = MBB->begin(), ME = MBB->end();
          MI != ME; ++MI) {
       SUnit *SU = MIToSUnit[MI];
+
+      // SU may be an inserted padded instruction that has been added after a
+      // branch, so SU will be NULL
+      if (!SU)
+        continue;
 
       //std::cout << "Attempting to pack  " << MI->getOpcode() << std::endl;
       DEBUG(dbgs() << "Attempting to pack: " << MI->getOpcode() << "\n");
@@ -309,20 +364,21 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
         continue;
       }
 
-      if (TII->isSchedulingBoundary(MI, MBB, MF)) {
-        EndPacket(MBB, MI);
-        continue;
-      }
-
       if ((ResourcesAvailable(Scheduler->getSchedClass(SU))) &&
-          (!PacketDependences(SU)))
+          (!PacketDependences(SU))) {
         AddToPacket(MI);
+      }
       else {
         EndPacket(MBB, MI);
         AddToPacket(MI);
       }
+      if (TII->isSchedulingBoundary(MI, MBB, MF)) {
+        DEBUG(dbgs() << "MI isSchedulingBoundary\n");
+        EndBoundaryPacket(MBB, MI);
+      }
     }
 
+    DEBUG(dbgs() << " ----- Finishing MBB ----- \n");
     EndPacket(MBB, MBB->end());
     Finalise(MBB);
     Scheduler->exitRegion();
@@ -332,21 +388,58 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
   return true;
 }
 
+void LE1MIPacker::CreateEmptyBundle(MachineBasicBlock *MBB,
+                                    MachineInstr *MI) {
+#ifndef NDEBUG
+  DEBUG(dbgs() << " ------- CreateEmptyBundle at: \n");
+  MI->dump();
+#endif
+  MachineInstr *FinalInst = MI;
+  DebugLoc dl;
+
+  /*
+  FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
+    .addReg(LE1::ZERO).addImm(0);
+  CurrentPacket.push_back(FinalInst);
+  ++CurrentPacketSize;
+  EndPacket(MBB, MI);
+
+  return;*/
+
+  unsigned BundleSize = 0;
+  while (BundleSize < IssueWidth) {
+    FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
+      .addReg(LE1::ZERO).addImm(0);
+    CurrentPacket.push_back(FinalInst);
+    ++BundleSize;
+  }
+  if (CurrentPacket.size() > 1) {
+    MachineInstr *MIFirst = CurrentPacket.front();
+    finalizeBundle(*MBB, MIFirst, MI);
+  }
+  CurrentPacket.clear();
+  CurrentPacketSize = 0;
+
+  DEBUG(dbgs() << " ------- Finished creating EmptyBundle\n");
+}
+
 void LE1MIPacker::Finalise(MachineBasicBlock *MBB) {
-  std::cout << "Finalise" << std::endl;
+#ifndef NDEBUG
+  DEBUG(dbgs() << " --------- Finalise MBB: \n");
+  MBB->dump();
+#endif
   for (MachineBasicBlock::iterator BI = MBB->begin(), BE = --MBB->end();
        BI != BE; ++BI) {
-
-    std::cout << "Bundle size = " << BI->getBundleSize() << std::endl;
 
     MachineBasicBlock::iterator Next = BI;
     ++Next;
     unsigned Latency = CheckBundleLatencies(&(*BI), &(*Next));
-    std::cout << "Latency = " << Latency << std::endl;
     // Assumes latency of two for all instructions
     if (Latency != 0) {
-      DebugLoc dl;
-      BuildMI(*MBB, Next, dl, TII->get(LE1::CLK));
+      DEBUG(dbgs() << "Latency != 0 between bundles\n");
+      //DebugLoc dl;
+      //BuildMI(*MBB, Next, dl, TII->get(LE1::CLK));
+      CreateEmptyBundle(MBB, Next);
       ++BI;
     }
   }
@@ -355,8 +448,6 @@ void LE1MIPacker::Finalise(MachineBasicBlock *MBB) {
 unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
                                            MachineInstr *B2) {
 
-  std::cout << "CheckBundleLatencies" << std::endl;
-
   MachineBasicBlock::instr_iterator M1 = B1;
   MachineBasicBlock::instr_iterator M2 = B2;
 
@@ -364,13 +455,10 @@ unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
 
   // First, handle the conditions where B1 and/or B2 are not bundled, (size = 0)
   if (!M1->isBundled() && !M2->isBundled()) {
-    std::cout << "Neither M1 or M2 are bundled" << std::endl;
     return CheckInstructionLatencies(M1, M2);
   }
 
   else if (!M1->isBundled()) {
-    std::cout << "M1 isnt bundled, but M2 is" << std::endl;
-    std::cout << "M2 BundleSize = " << M2->getBundleSize() << std::endl;
     unsigned size = M2->getBundleSize();
     for (unsigned j = 0; j < size; ++j) {
       ++M2;
@@ -380,8 +468,6 @@ unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
     return PacketLatency;
   }
   else if (M1->isBundled() && !M2->isBundled()) {
-    std::cout << "M1 is bundled, M2 is not" << std::endl;
-    std::cout << "M1 BundleSize = " << M1->getBundleSize() << std::endl;
     unsigned size = M1->getBundleSize();
     for (unsigned i = 0; i < size; ++i) {
       ++M1;
@@ -391,10 +477,7 @@ unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
     return PacketLatency;
   }
 
-  std::cout << "Both are bundled" << std::endl;
   // Iterate into bundles from the BUNDLE inst
-  std::cout << "M1 BundleSize = " << M1->getBundleSize() << std::endl;
-  std::cout << "M2 BundleSize = " << M2->getBundleSize() << std::endl;
   unsigned B1Size = M1->getBundleSize();
   unsigned B2Size = M1->getBundleSize();
 
@@ -413,18 +496,13 @@ unsigned LE1MIPacker::CheckBundleLatencies(MachineInstr *B1,
 
 unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
                                                 MachineInstr *M2) {
-  std::cout << "CheckInstructionLatencies:\n  ";
   unsigned Latency = 0;
   if (isPseudo(M1)) {
-    std::cout << "M1 isPseudo" << std::endl;
     return Latency;
   }
   if (isPseudo(M2)) {
-    std::cout << "M2 isPseudo" << std::endl;
     return Latency;
   }
-  std::cout << M1->getOpcode() << ",  ";
-  std::cout << M2->getOpcode() << std::endl;
 
   SUnit *S1 = MIToSUnit[M1];
   SUnit *S2 = MIToSUnit[M2];
@@ -442,7 +520,6 @@ unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
 
     SDep::Kind DepKind = S1->Succs[i].getKind();
     if (DepKind == SDep::Data) {
-      std::cout << "Data dep found" << std::endl;
       Latency = std::max(S1->Succs[i].getLatency(), Latency);
     }
   }
