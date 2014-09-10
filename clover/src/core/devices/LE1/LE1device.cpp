@@ -266,20 +266,6 @@ LE1Device::~LE1Device()
     return;
   }
 
-  pthread_mutex_lock(&p_events_mutex);
-  p_stop = true;
-
-  pthread_cond_broadcast(&p_events_cond);
-  pthread_mutex_unlock(&p_events_mutex);
-
-  // for (unsigned int i = 0; i < numLE1s(); ++i)
-  //  pthread_join(p_workers[i], 0);
-
-  //std::free((void*)p_workers);
-  ::operator delete(p_workers);
-  pthread_mutex_destroy(&p_events_mutex);
-  pthread_cond_destroy(&p_events_cond);
-
   const KernelStats *kernelStats = Simulator->GetStats();
 
   // For each kernel
@@ -390,6 +376,21 @@ LE1Device::~LE1Device()
     Results << Line.str();
     Results.close();
   }
+
+
+  pthread_mutex_lock(&p_events_mutex);
+  p_stop = true;
+
+  pthread_cond_broadcast(&p_events_cond);
+  pthread_mutex_unlock(&p_events_mutex);
+
+  // for (unsigned int i = 0; i < numLE1s(); ++i)
+  //  pthread_join(p_workers[i], 0);
+
+  //std::free((void*)p_workers);
+  ::operator delete(p_workers);
+  pthread_mutex_destroy(&p_events_mutex);
+  pthread_cond_destroy(&p_events_cond);
 
   if(Simulator)
     delete Simulator;

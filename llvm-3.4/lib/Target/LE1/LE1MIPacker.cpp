@@ -120,22 +120,44 @@ bool LE1MIPacker::isSolo(MachineInstr *MI) {
 
 void LE1MIPacker::EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   DebugLoc dl;
-  MachineInstr *FinalInst = MI; //CurrentPacket.back();
+  MachineInstr *NewInst = MI;
+  MachineInstr *MIFirst = CurrentPacket.front();
   MachineBasicBlock::instr_iterator I = MI;
-  ++I;
+#ifndef NDEBUG
+  DEBUG(dbgs() << "-------- EndBoundaryPacket with: \n");
+  MI->dump();
+  DEBUG(dbgs() << "CurrentPacketSize = " << CurrentPacketSize << "\n");
+  DEBUG(dbgs() << "CurrentPacket.size() = " << CurrentPacket.size() << "\n");
+#endif
+
+  // Exits are handled differently because we don't want trailing operations
+  // since they get ADDEDNOPS inserted between itself the the HALT operation.
+  if (!MI->getOpcode() == LE1::Exit)
+    ++I;
 
   if (!CurrentPacket.empty()) {
 
     while (CurrentPacketSize < IssueWidth) {
 
-      FinalInst = BuildMI(*MBB, &(*I), dl, TII->get(LE1::ADDi9), LE1::ZERO)
+      NewInst = BuildMI(*MBB, &(*I), dl, TII->get(LE1::ADDi9), LE1::ZERO)
         .addReg(LE1::ZERO).addImm(0);
-      CurrentPacket.push_back(FinalInst);
+
+      if ((MI->getOpcode() == LE1::Exit))
+        CurrentPacket.insert(CurrentPacket.begin(), NewInst);
+      else
+        CurrentPacket.push_back(NewInst);
+
       ++CurrentPacketSize;
     }
+    MIFirst = NewInst;
   }
-  MachineInstr *MIFirst = CurrentPacket.front();
-  MachineInstr *MILast = &(*I);
+#ifndef NDEBUG
+  DEBUG(dbgs() << "MBB after inserting padding:\n");
+  MBB->dump();
+#endif
+
+  MIFirst = CurrentPacket.front();
+  MachineInstr *MILast = (MI->getOpcode() == LE1::Exit) ? MI : &(*I);
   finalizeBundle(*MBB, MIFirst, MILast);
 
   CurrentPacket.clear();

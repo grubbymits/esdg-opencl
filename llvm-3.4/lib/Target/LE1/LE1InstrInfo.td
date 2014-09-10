@@ -806,7 +806,7 @@ let Defs = [LNK], Uses = [LNK], isPseudo=1 in {
 def CLK : LE1Pseudo < (outs), (ins), ";;", []>;
 
 // Instruction created to exit main
-let isReturn=1, isTerminator=1, isBarrier=1 in
+let isReturn=1, isTerminator=1, isBarrier=1, Uses = [LNK] in
 def Exit : LE1Inst< (outs), (ins CPURegs:$lnk),
           "call.0  $lnk, exit", [], IIBranch>, Sched<[WriteB]>;
 
