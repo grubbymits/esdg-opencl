@@ -132,7 +132,7 @@ void LE1MIPacker::EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
 
   // Exits are handled differently because we don't want trailing operations
   // since they get ADDEDNOPS inserted between itself the the HALT operation.
-  if (!MI->getOpcode() == LE1::Exit)
+  if (MI->getOpcode() != LE1::Exit)
     ++I;
 
   if (!CurrentPacket.empty()) {
@@ -156,9 +156,11 @@ void LE1MIPacker::EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   MBB->dump();
 #endif
 
-  MIFirst = CurrentPacket.front();
-  MachineInstr *MILast = (MI->getOpcode() == LE1::Exit) ? MI : &(*I);
-  finalizeBundle(*MBB, MIFirst, MILast);
+  if (CurrentPacket.size() > 1) {
+    MIFirst = CurrentPacket.front();
+    MachineInstr *MILast = (MI->getOpcode() == LE1::Exit) ? MI : &(*I);
+    finalizeBundle(*MBB, MIFirst, MILast);
+  }
 
   CurrentPacket.clear();
   CurrentPacketSize = 0;
@@ -181,8 +183,9 @@ void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   DebugLoc dl;
   if (!CurrentPacket.empty()) {
     DEBUG(dbgs() << "CurrentPacket ! empty\n");
-    DEBUG(dbgs() << "Adding " << (IssueWidth - CurrentPacketSize)
-          << " padding instructions to:\n");
+    if (CurrentPacketSize < IssueWidth)
+      DEBUG(dbgs() << "Adding " << (IssueWidth - CurrentPacketSize)
+            << " padding instructions to:\n");
 #ifndef NDEBUG
     MBB->dump();
 #endif

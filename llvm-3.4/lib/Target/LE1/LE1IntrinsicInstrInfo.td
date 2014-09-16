@@ -22,14 +22,16 @@ def GroupIdAddr :
   (outs CPURegs:$dst),
   (ins),
   "mov.0 $dst, group_id",
-  [(set CPURegs:$dst, (le1_group_id_addr))], IIAlu>;
+  [(set CPURegs:$dst, (le1_group_id_addr))], IIAlu>,
+  Sched<[WriteAI]>;
 
 def LoadGroupId :
   LE1Inst<
   (outs CPURegs:$dst),
   (ins CPURegs:$addr),
   "ldbu.0 $dst, $addr[0x0]",
-  [(set CPURegs:$dst, (le1_load_group_id CPURegs:$addr))], IILoadStore>;
+  [(set CPURegs:$dst, (le1_load_group_id CPURegs:$addr))], IILoadStore>,
+  Sched<[WriteLS]>;
 
 def ReadAttr :
   LE1Inst<

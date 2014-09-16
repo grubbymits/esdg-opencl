@@ -3,3 +3,6 @@
 *.dat
 binaries/*
 microblaze/*
+*.bc
+*.ll
+*.o

@@ -1,2 +1,3 @@
 Contexts, Issue Width, ALUs, MULs, LSUs, Banks, Cycles, Total Cycles, Total Stalls, Decode Stalls, NOPs, Branches, Memory Ops, DRAM, IRAM, Iterations
 1, 1, 1, 1, 1, 1, 718724, 718724, 170740, 50518, 207425, 26293, 0, 16444, 2257, 12
+1, 1, 1, 1, 1, 1, 710525, 710525, 170740, 50518, 0, 26293, 0, 16444, 2317, 12
