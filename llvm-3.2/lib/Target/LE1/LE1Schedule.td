@@ -64,13 +64,13 @@ def LE1ScalarItineraries : ProcessorItineraries<
                             [ALU_0, MUL_0, LSU_0, BRU_0], [], [
 
     InstrItinData<IIAlu, [
-                          InstrStage<1, [ALU_0]>], [2, 1]>,
+                          InstrStage<1, [ALU_0]>], [3, 1]>,
 
     InstrItinData<IILoadStore, [
-                                InstrStage<1, [LSU_0]>], [2, 1]>,
+                                InstrStage<1, [LSU_0]>], [3, 1]>,
 
     InstrItinData<IIMul, [
-                          InstrStage<1, [MUL_0]>], [2, 1]>,
+                          InstrStage<1, [MUL_0]>], [3, 1]>,
 
     InstrItinData<IIBranch, [
                              InstrStage<5, [BRU_0]>], [6, 1]> ]>;

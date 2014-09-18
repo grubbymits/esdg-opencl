@@ -16,7 +16,7 @@ sub read_xml($);
 sub write_target_desc($%);
 
 # !!! SET LLVM SOURCE ROOT DIRECTORY
-my $source_dir = "/home/sam/src/esdg-opencl/llvm-3.2/";
+my $source_dir = "/home/sam/src/safe-esdg/esdg-opencl/llvm-3.2/";
 
 my $xml_desc = $ARGV[0];
 my $le1_dir = "${source_dir}lib/Target/LE1/";
@@ -234,7 +234,7 @@ sub write_target_desc ($%) {
       print TARGET "$ALUS[$i]";
     }
   }
-  say TARGET "]>], [2, 1]>,\n";
+  say TARGET "]>], [3, 1]>,\n";
 
   # Multiplier Itineraries
   say TARGET "    InstrItinData<IIMul,  [InstrStage<1,";
@@ -258,7 +258,7 @@ sub write_target_desc ($%) {
       print TARGET "$MULS[$i]";
     }
   }
-  say TARGET "]>], [2, 1]>,\n";
+  say TARGET "]>], [3, 1]>,\n";
 
   # LSU Itineraries
   say TARGET "    InstrItinData<IILoadStore,  [InstrStage<1,";
@@ -282,7 +282,7 @@ sub write_target_desc ($%) {
       print TARGET "$LSUS[$i]";
     }
   }
-  say TARGET "]>], [2, 1]>,\n";
+  say TARGET "]>], [3, 1]>,\n";
 
   # Branch Itineraries
   say TARGET "    InstrItinData<IIBranch,  [InstrStage<1,";

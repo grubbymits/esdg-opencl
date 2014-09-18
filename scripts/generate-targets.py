@@ -1,5 +1,5 @@
 
-path_to_driver = "/home/sam/src/esdg-opencl/"
+path_to_driver = "/home/sam/src/safe-esdg/esdg-opencl/"
 path_to_llvm_backend = path_to_driver + "llvm-3.2/lib/Target/LE1/"
 path_to_simulator_models = path_to_driver + "install-dir/machines/"
 
@@ -7,8 +7,8 @@ final_device_array = ""
 driver_devices = ""
 total_devices = 0
 
-sim_output = True;
-compiler_output = False;
+sim_output = False;
+compiler_output = True;
 mod_driver = False;
 
 for context in [1, 2, 4, 8] :
@@ -179,7 +179,7 @@ for context in [1, 2, 4, 8] :
                             if (compiler_alu != alus-1) :
                                 compiler_target += ", "
                             else :
-                                compiler_target += "]>], [2, 1]>,\n\n"
+                                compiler_target += "]>], [3, 1]>,\n\n"
 
                         # Define IIMul
                         compiler_target += "    InstrItinData<IIMul, [InstrStage<1, [\n     "
@@ -190,7 +190,7 @@ for context in [1, 2, 4, 8] :
                             if (compiler_mul != muls-1) :
                                 compiler_target += ", "
                             else :
-                                compiler_target += "]>], [2, 1]>,\n\n"
+                                compiler_target += "]>], [3, 1]>,\n\n"
 
                         # Define IILoadStore
                         compiler_target += "    InstrItinData<IILoadStore, [InstrStage<1, [\n   "

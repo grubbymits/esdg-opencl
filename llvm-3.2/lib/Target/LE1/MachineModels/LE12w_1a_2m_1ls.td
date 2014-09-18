@@ -14,10 +14,10 @@ def LE12w_1a_2m_1lsItineraries : ProcessorItineraries< [
     BRU_0_2w_1a_2m_1ls ], [/*ByPass*/], [
 
     InstrItinData<IIAlu, [InstrStage<1, [
-     ALU_0_2w_1a_2m_1ls]>], [2, 1]>,
+     ALU_0_2w_1a_2m_1ls]>], [3, 1]>,
 
     InstrItinData<IIMul, [InstrStage<1, [
-     MUL_0_2w_1a_2m_1ls, MUL_1_2w_1a_2m_1ls]>], [2, 1]>,
+     MUL_0_2w_1a_2m_1ls, MUL_1_2w_1a_2m_1ls]>], [3, 1]>,
 
     InstrItinData<IILoadStore, [InstrStage<1, [
    LSU_0_2w_1a_2m_1ls]>], [3, 1]>,
