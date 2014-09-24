@@ -770,7 +770,20 @@ bool LE1KernelEvent::run() {
   bool wasSuccess = false;
   //char* device_name = const_cast<char*>(p_device->model());
   LE1Simulator *simulator = p_device->getSimulator();
+
   simulator->LockAccess();
+  /*
+  simulator->Reset();
+  wasSuccess = simulator->Initialise(p_device->model());
+  if (!wasSuccess) {
+#ifdef DBG_OUTPUT
+    std::cout << "ERROR: Failed to initialise simulator!" << std::endl;
+#endif
+    pthread_mutex_unlock(&p_mutex);
+    simulator->UnlockAccess();
+    return false;
+  }
+  */
 
   std::string CopyCommand = "cp " + FinalAsmName + " " + CompleteFilename;
   if (system(CopyCommand.c_str()) != 0) {
@@ -800,6 +813,7 @@ bool LE1KernelEvent::run() {
 #ifdef DBG_OUTPUT
     std::cout << "Assemble failed!" << std::endl;
 #endif
+    pthread_mutex_unlock(&p_mutex);
     simulator->UnlockAccess();
     return false;
   }
@@ -977,13 +991,13 @@ bool LE1KernelEvent::run() {
                                   (unsigned*)buffer->data());
         }
         else {
-          std::cerr << " !!! ERROR - unhandled vector buffer type!!\n";
+          std::cout << " !!! ERROR - unhandled vector buffer type!!\n";
           wasSuccess = false;
           break;
         }
       }
       else {
-        std::cerr << " !!! ERROR - unhandled buffer type!!\n";
+        std::cout << " !!! ERROR - unhandled buffer type!!\n";
         wasSuccess = false;
         break;
       }

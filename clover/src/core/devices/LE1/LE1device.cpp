@@ -71,7 +71,7 @@ LE1Device::LE1Device(unsigned char Cores,
                      unsigned char MULs,
                      unsigned char LSUs,
                      unsigned char Banks)
-: DeviceInterface(), p_num_events(0), p_workers(0), p_stop(false),
+: DeviceInterface(), p_num_events(0), p_worker(0), p_stop(false),
   p_initialized(false)
 {
 #ifdef DEBUGCL
@@ -244,8 +244,8 @@ bool LE1Device::init()
   }
 
   //p_workers = (pthread_t*) std::malloc(sizeof(pthread_t));
-  p_workers = (pthread_t*) ::operator new(sizeof(pthread_t));
-  pthread_create(&p_workers[0], 0, &worker, this);
+  //p_workers = (pthread_t*) ::operator new(sizeof(pthread_t));
+  pthread_create(&p_worker, NULL, &worker, this);
 
   p_initialized = true;
   return true;
@@ -261,8 +261,6 @@ LE1Device::~LE1Device()
 #ifdef DEBUGCL
     std::cerr << "Device wasn't initialised" << std::endl;
 #endif
-    if (Simulator)
-      delete Simulator;
     return;
   }
 
@@ -377,6 +375,8 @@ LE1Device::~LE1Device()
     Results.close();
   }
 
+  if (Simulator)
+    delete Simulator;
 
   pthread_mutex_lock(&p_events_mutex);
   p_stop = true;
@@ -388,17 +388,9 @@ LE1Device::~LE1Device()
   //  pthread_join(p_workers[i], 0);
 
   //std::free((void*)p_workers);
-  ::operator delete(p_workers);
+  pthread_join(p_worker, NULL);
+  //::operator delete(p_workers);
   pthread_mutex_destroy(&p_events_mutex);
-  pthread_cond_destroy(&p_events_cond);
-
-  if(Simulator)
-    delete Simulator;
-
-  //StatsMap::iterator MapItr = ExecutionStats.begin();
-  //while (MapItr != ExecutionStats.end())
-    //ExecutionStats.erase(MapItr++);
-
 }
 
 DeviceBuffer *LE1Device::createDeviceBuffer(MemObject *buffer, cl_int *rs)

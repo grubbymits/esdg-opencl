@@ -40,7 +40,7 @@
 #include <pthread.h>
 #include <list>
 
-#define   TotalLE1Devices 240
+#define   TotalLE1Devices 194
 namespace Coal
 {
 
@@ -131,7 +131,7 @@ class LE1Device : public DeviceInterface
         std::string SimModel;
 
         float p_cpu_mhz;
-        pthread_t *p_workers;
+        pthread_t p_worker;
         LE1Simulator* Simulator;
         //StatsMap ExecutionStats;
 

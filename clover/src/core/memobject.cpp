@@ -97,7 +97,7 @@ MemObject::MemObject(Context *ctx, cl_mem_flags flags, void *host_ptr,
 
 MemObject::~MemObject()
 {
-#ifdef DBG_OBJ
+#ifdef DBG_BUFFER
   std::cerr << "Destructing MemObject at " << std::hex << this << std::endl;
 #endif
     if (p_dtor_callback)
@@ -107,8 +107,10 @@ MemObject::~MemObject()
     if (p_devicebuffers.size() != 0)
     {
         // Also delete our children in the device
-        for (unsigned int i=0; i<p_num_devices; ++i)
-            delete p_devicebuffers[i];
+        //for (unsigned int i=0; i<p_num_devices; ++i)
+          //  delete p_devicebuffers[i];
+
+      p_devicebuffers.clear();
 
         //std::free((void *)p_devicebuffers);
     }
@@ -237,6 +239,15 @@ bool MemObject::allocate(DeviceInterface *device)
 {
     DeviceBuffer *buffer = deviceBuffer(device);
 
+    if (!buffer) {
+#ifdef DBG_OUTPUT
+      std::cout
+        << "!! ERROR: Failed to allocate DeviceBuffer in MemObject::allocate"
+        << std::endl;
+      return false;
+#endif
+    }
+
     if (!buffer->allocated())
     {
         return buffer->allocate();
@@ -269,6 +280,10 @@ void *MemObject::host_ptr() const
 
 DeviceBuffer *MemObject::deviceBuffer(DeviceInterface *device) const
 {
+#ifdef DBG_BUFFER
+  std::cerr << "p_num_devices = " << p_num_devices
+    << ", p_devicebuffers.size() = " << p_devicebuffers.size() << std::endl;
+#endif
     for (unsigned int i=0; i<p_num_devices; ++i)
     {
         if (p_devicebuffers[i]->device() == device)

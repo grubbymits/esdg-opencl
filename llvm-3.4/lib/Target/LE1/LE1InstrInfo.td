@@ -272,6 +272,7 @@ class ArithLogic_R_RR<bits<5> opcode, string instr_asm, SDNode OpNode,
     let isCommutable = isComm;
 }
 
+
 class ArithLogic_R_I32R<bits<5> opcode, string instr_asm, SDNode OpNode,
                         ImmLeaf immPat, Operand immType, SchedWrite SC,
                         bit isComm = 0>
@@ -297,6 +298,7 @@ class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
   Sched<[SC]> {
     let isCommutable = isComm;
 }
+
 
 class LogicCompare_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
   : LE1Format_R_RR_1<
@@ -725,6 +727,15 @@ def MOVi32 :
           (ins globaladdress:$src),
           "mov.0  $dst, $src", [], IIAlu>,
           Sched<[WriteAI]>;
+
+def PadInst : LE1Format_R_I9R <
+  0x0,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, Op_uimm9:$imm9),
+  "add.0, $rd, $src1, $imm9",
+  [], IIAlu>, Sched<[WriteA]>;
+
+//def NOP : LE1Pseudo<(outs), (ins), "nop", []>;
 
 //def MOVr  : MoveR<"mov.0",  le1_mov,  CPURegs,  CPURegs>;
 //def MOVi  : MoveI<"mov.0", le1_mov, CPURegs, i32imm, imm>;

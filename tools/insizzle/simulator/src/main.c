@@ -607,8 +607,8 @@ int main(int argc, char *argv[])
 				  } while(!(this.op >> 31) & 0x1);
 				}
 			      /* TODO bundleCount */
-			      bundleCountP = (unsigned long long *)((size_t)hypercontext->bundleCount + (bundleCount * (sizeof(unsigned long long))));
-			      *bundleCountP = *bundleCountP + 1;
+			      //bundleCountP = (unsigned long long *)((size_t)hypercontext->bundleCount + (bundleCount * (sizeof(unsigned long long))));
+			      //*bundleCountP = *bundleCountP + 1;
 
 			      hypercontext->cycleCount++;
 			    }
@@ -1155,8 +1155,10 @@ int freeMem(void)
               if (hypercontext->pS_PR)
 	        free((unsigned char*)hypercontext->pS_PR);
 	    }
-          if (context->hypercontext)
+          if (context->hypercontext) {
 	    free((hyperContextT *)context->hypercontext);
+            context->hypercontext = NULL;
+          }
           if (CNT->HCONTEXT)
 	    free((hyperContextConfig *)CNT->HCONTEXT);
           if (CNT->CLUSTER_TEMPL)

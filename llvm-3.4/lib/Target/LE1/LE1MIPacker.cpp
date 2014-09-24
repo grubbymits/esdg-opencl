@@ -23,6 +23,10 @@
 
 using namespace llvm;
 
+namespace llvm {
+  void initializeLE1MIPackerPass(PassRegistry&);
+}
+
 namespace {
   // DefaultVLIWScheduler - This class extends ScheduleDAGInstrs and overrides
   // Schedule method to build the dependence graph.
@@ -50,6 +54,7 @@ namespace {
     bool ResourcesAvailable(const MCSchedClassDesc *SchedDesc);
     bool PacketDependences(SUnit *NewSU);
     void AddToPacket(MachineInstr *MI);
+    MachineInstr* ChoosePadInst(MachineBasicBlock *MBB, MachineInstr *MI);
     void EndPacket(MachineBasicBlock *MBB, MachineInstr *MI);
     void EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI);
     bool isPseudo(MachineInstr *MI);
@@ -77,6 +82,12 @@ namespace {
 
 }
 
+INITIALIZE_PASS_BEGIN(LE1MIPacker, "packets", "LE1 Packer", false, false)
+INITIALIZE_PASS_DEPENDENCY(MachineDominatorTree)
+INITIALIZE_PASS_DEPENDENCY(MachineLoopInfo)
+INITIALIZE_AG_DEPENDENCY(AliasAnalysis)
+INITIALIZE_PASS_END(LE1MIPacker, "packets", "LE1 Packer", false, false)
+
 PackerScheduler::PackerScheduler(MachineFunction &MF,
                                  const MachineLoopInfo &MLI,
                                  const MachineDominatorTree &MDT) :
@@ -93,7 +104,7 @@ char LE1MIPacker::ID = 0;
 
 LE1MIPacker::LE1MIPacker() : MachineFunctionPass(ID) {
   DEBUG(dbgs() << "LE1MIPacker Constructor\n");
-  //initializeLE1MIPackerPass();
+  initializeLE1MIPackerPass(*PassRegistry::getPassRegistry());
 }
 
 void LE1MIPacker::getAnalysisUsage(AnalysisUsage &AU) const {
@@ -118,6 +129,54 @@ bool LE1MIPacker::isSolo(MachineInstr *MI) {
   return false;
 }
 
+MachineInstr* LE1MIPacker::ChoosePadInst(MachineBasicBlock *MBB,
+                                         MachineInstr *MI) {
+  DebugLoc dl;
+  unsigned NumPadInsts = IssueWidth - CurrentPacketSize;
+  unsigned NumSlots = 1;
+  const MCProcResourceDesc *ALURes = SchedModel->getProcResource(1);
+  const MCProcResourceDesc *MULRes = SchedModel->getProcResource(4);
+  unsigned FreeALUs = ALURes->NumUnits - ResourceTable[1];
+  unsigned FreeMULs = MULRes->NumUnits - ResourceTable[4];
+
+  unsigned PadImm = 0;
+  unsigned PadInst = 0;
+
+  if (NumPadInsts > 1) {
+    PadImm = 0xFFF;
+    if (FreeALUs > 0) {
+      PadInst = LE1::ANDi32;
+      ResourceTable[1]++;
+    }
+    else if (FreeMULs > 0) {
+      PadInst = LE1::MULLi32;
+      ResourceTable[4]++;
+    }
+    else
+      llvm_unreachable("not enough FUs to pad bundle");
+    NumSlots = 2;
+  }
+  else {
+    PadImm = 0;
+    if (FreeALUs > 0) {
+      PadInst = LE1::ANDi9;
+      ResourceTable[1]++;
+    }
+    else if (FreeMULs > 0) {
+      PadInst = LE1::MULLLi9;
+      ResourceTable[4]++;
+    }
+    else
+      llvm_unreachable("not enough FUs to pad bundle");
+  }
+
+  CurrentPacketSize += NumSlots;
+
+  return BuildMI(*MBB, MI, dl, TII->get(PadInst), LE1::ZERO)
+    .addReg(LE1::ZERO).addImm(PadImm);
+
+}
+
 void LE1MIPacker::EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   DebugLoc dl;
   MachineInstr *NewInst = MI;
@@ -139,15 +198,17 @@ void LE1MIPacker::EndBoundaryPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
 
     while (CurrentPacketSize < IssueWidth) {
 
-      NewInst = BuildMI(*MBB, &(*I), dl, TII->get(LE1::ADDi9), LE1::ZERO)
-        .addReg(LE1::ZERO).addImm(0);
+      NewInst = ChoosePadInst(MBB, &(*I));
+
+      //NewInst = BuildMI(*MBB, &(*I), dl, TII->get(LE1::PadInst), LE1::ZERO)
+        //.addReg(LE1::ZERO).addImm(0);
 
       if ((MI->getOpcode() == LE1::Exit))
         CurrentPacket.insert(CurrentPacket.begin(), NewInst);
       else
         CurrentPacket.push_back(NewInst);
 
-      ++CurrentPacketSize;
+      //++CurrentPacketSize;
     }
     MIFirst = NewInst;
   }
@@ -182,21 +243,24 @@ void LE1MIPacker::EndPacket(MachineBasicBlock *MBB, MachineInstr *MI) {
   // Insert instructions to ensure that bundles are the maximum size
   DebugLoc dl;
   if (!CurrentPacket.empty()) {
+    unsigned NumPadInsts = IssueWidth - CurrentPacketSize;
+
+#ifndef NDEBUG
     DEBUG(dbgs() << "CurrentPacket ! empty\n");
     if (CurrentPacketSize < IssueWidth)
-      DEBUG(dbgs() << "Adding " << (IssueWidth - CurrentPacketSize)
+      DEBUG(dbgs() << "Adding " << NumPadInsts
             << " padding instructions to:\n");
-#ifndef NDEBUG
     MBB->dump();
 #endif
 
     MachineInstr *FinalInst = MI; //CurrentPacket.back();
     while (CurrentPacketSize < IssueWidth) {
 
-      FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
-        .addReg(LE1::ZERO).addImm(0);
+      //FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::PadInst), LE1::ZERO)
+        //.addReg(LE1::ZERO).addImm(0);
+      FinalInst = ChoosePadInst(MBB, MI);
       CurrentPacket.push_back(FinalInst);
-      ++CurrentPacketSize;
+      //++CurrentPacketSize;
     }
   }
   if (CurrentPacket.size() > 1) {
@@ -366,6 +430,10 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
     // when there is a hazard
     for (MachineBasicBlock::iterator MI = MBB->begin(), ME = MBB->end();
          MI != ME; ++MI) {
+
+      if (MI->getOpcode() == LE1::PadInst)
+        continue;
+
       SUnit *SU = MIToSUnit[MI];
 
       // SU may be an inserted padded instruction that has been added after a
@@ -409,7 +477,7 @@ bool LE1MIPacker::runOnMachineFunction(MachineFunction &MF) {
     Scheduler->exitRegion();
     Scheduler->finishBlock();
   }
-  delete ResourceTable;
+  delete [] ResourceTable;
   return true;
 }
 
@@ -422,21 +490,19 @@ void LE1MIPacker::CreateEmptyBundle(MachineBasicBlock *MBB,
   MachineInstr *FinalInst = MI;
   DebugLoc dl;
 
-  /*
-  FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
-    .addReg(LE1::ZERO).addImm(0);
-  CurrentPacket.push_back(FinalInst);
-  ++CurrentPacketSize;
-  EndPacket(MBB, MI);
-
-  return;*/
+  // There is always at least half the issue width number of ALUs, and an
+  // extra immediate can be used to help pad too. This is required when the
+  // number of ALUs does not match the issue width.
+  unsigned PadImm = (IssueWidth > 1) ? 0xFFFF : 0;
+  unsigned PadSize = (IssueWidth > 1) ? 2 : 1;
+  unsigned PadInst = (IssueWidth > 1) ? LE1::ANDi32 : LE1::ANDi9;
 
   unsigned BundleSize = 0;
   while (BundleSize < IssueWidth) {
-    FinalInst = BuildMI(*MBB, MI, dl, TII->get(LE1::ADDi9), LE1::ZERO)
-      .addReg(LE1::ZERO).addImm(0);
+    FinalInst = BuildMI(*MBB, MI, dl, TII->get(PadInst), LE1::ZERO)
+      .addReg(LE1::ZERO).addImm(PadImm);
     CurrentPacket.push_back(FinalInst);
-    ++BundleSize;
+    BundleSize += PadSize;
   }
   if (CurrentPacket.size() > 1) {
     MachineInstr *MIFirst = CurrentPacket.front();
@@ -534,6 +600,10 @@ unsigned LE1MIPacker::CheckInstructionLatencies(MachineInstr *M1,
 
   // M1 or M2 maybe one of the instructions that has been inserted for padding,
   // so S1 or S2 may not exist
+  if (M1->getOpcode() == LE1::PadInst)
+    return Latency;
+  if (M2->getOpcode() == LE1::PadInst)
+    return Latency;
   if (!S1)
     return Latency;
   if (!S2)
