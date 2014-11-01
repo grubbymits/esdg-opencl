@@ -1569,32 +1569,28 @@ SDValue LE1TargetLowering::LowerINTRINSIC_WO_CHAIN(SDValue Op,
   SDValue CPUId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
   CPUId = DAG.getNode(ISD::SRL, dl, MVT::i32, CPUId,
                       DAG.getConstant(8, MVT::i32));
+  SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                              DAG.getTargetConstant(12, MVT::i32));
 
   switch(IntNo) {
   case Intrinsic::le1_read_cpuid: {
     return CPUId;
   }
   case Intrinsic::le1_read_group_id_0: {
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
     return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
   }
   case Intrinsic::le1_read_group_id_1: {
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
     Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-                        DAG.getConstant(1, MVT::i32));
+                        DAG.getConstant(4, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
     return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
   }
   case Intrinsic::le1_read_group_id_2: {
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getConstant(4, MVT::i32));
     Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-                        DAG.getConstant(2, MVT::i32));
+                        DAG.getConstant(8, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
     return DAG.getNode(LE1ISD::READ_ATTR, dl, MVT::i32, GroupAddr);
@@ -1614,6 +1610,8 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
   SDValue CPUId = DAG.getNode(LE1ISD::CPUID, dl, MVT::i32);
   CPUId = DAG.getNode(ISD::SRL, dl, MVT::i32, CPUId,
                       DAG.getConstant(8, MVT::i32));
+  SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
+                              DAG.getTargetConstant(12, MVT::i32));
 
 
   // get_global_id = group_id * local_size * local_id
@@ -1625,46 +1623,29 @@ SDValue LE1TargetLowering::LowerIntrinsicWChain(SDValue Op,
   switch(IntNo) {
   case Intrinsic::le1_set_group_id_0: {
     SDValue GroupId = Op.getOperand(2);
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
-    //Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-      //                  DAG.getConstant(0, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
-    //SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
-    //SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
-    //Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
                          GroupId, GroupAddr);
     break;
   }
   case Intrinsic::le1_set_group_id_1: {
     SDValue GroupId = Op.getOperand(2);
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
     Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-                        DAG.getConstant(1, MVT::i32));
+                        DAG.getConstant(4, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
 
-    //SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
-    //SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
-    //Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
                          GroupId, GroupAddr);
     break;
   }
   case Intrinsic::le1_set_group_id_2: {
     SDValue GroupId = Op.getOperand(2);
-    SDValue Index = DAG.getNode(ISD::MUL, dl, MVT::i32, CPUId,
-                                DAG.getTargetConstant(4, MVT::i32));
     Index = DAG.getNode(ISD::ADD, dl, MVT::i32, Index,
-                        DAG.getConstant(2, MVT::i32));
+                        DAG.getConstant(8, MVT::i32));
     SDValue GroupAddr = DAG.getNode(LE1ISD::GROUP_ID_ADDR, dl, MVT::i32);
     GroupAddr = DAG.getNode(ISD::ADD, dl, MVT::i32, Index, GroupAddr);
-    //SDValue NumCores = DAG.getNode(LE1ISD::NUM_CORES, dl, MVT::i32);
-    //SDValue Workgroup = DAG.getNode(ISD::MUL, dl, MVT::i32, NumCores, GroupId);
-    //Workgroup = DAG.getNode(ISD::ADD, dl, MVT::i32, Workgroup, CPUId);
     Result = DAG.getNode(LE1ISD::SET_ATTR, dl, MVT::Other, Chain,
                          GroupId, GroupAddr);
     break;

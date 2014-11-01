@@ -9,7 +9,7 @@ include_directories (${Coal_SOURCE_DIR}/include
                     )
 
 set(CMAKE_INSTALL_RPATH "/opt/esdg-opencl/lib")
-set(CMAKE_CXX_FLAGS " -std=c++0x -g -fno-rtti -DINSIZZLEAPI -DOPT_UNROLL -DDBG_OUTPUT") 
+set(CMAKE_CXX_FLAGS " -std=c++0x -g -fno-rtti -DINSIZZLEAPI -DDBG_OUTPUT") 
 
 configure_file(core/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/core/config.h)
 

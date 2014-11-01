@@ -482,7 +482,7 @@ class MoveR<string instr_asm, SDNode OpNode, RegisterClass OutReg,
 // Arithmetic and Logic Instructions
 multiclass ARITH_LOGIC<bits<5> opcode, string instr_asm, SDNode OpNode,
                        InstrItinClass II, bit isComm = 0> {
-  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteA, 1>;
+  def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteA, isComm>;
 
   def NAME#si32 : ArithLogic_R_I32R<opcode, instr_asm, OpNode, simm32,
                                     Op_simm32, WriteAI, 0>;

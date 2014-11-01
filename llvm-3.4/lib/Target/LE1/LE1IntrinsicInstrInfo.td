@@ -37,7 +37,7 @@ def ReadAttr :
   LE1Inst<
   (outs CPURegs:$dst),
   (ins CPURegs:$addr),
-  "ldbu.0 $dst, $addr[0x0]",
+  "ldw.0 $dst, $addr[0x0]",
   [(set CPURegs:$dst, (le1_read_attr CPURegs:$addr))], IILoadStore>,
   Sched<[WriteLS]>;
 
@@ -45,7 +45,7 @@ def SetAttr :
   LE1Inst<
   (outs),
   (ins CPURegs:$src, CPURegs:$addr),
-  "stb.0 $src, $addr[0x0]",
+  "stw.0 $src, $addr[0x0]",
   [(le1_set_attr CPURegs:$src, CPURegs:$addr)], IILoadStore>,
   Sched<[WriteLS]>;
 

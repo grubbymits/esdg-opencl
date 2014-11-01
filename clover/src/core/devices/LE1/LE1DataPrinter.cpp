@@ -96,7 +96,7 @@ LE1DataPrinter::LE1DataPrinter(LE1Device *device,
   // byte per dimension and so waste a byte. The cores can access their group_id
   // using their cpuid: group_id[((cpuid >> 8) + dim)]
   for (unsigned i = 0; i < NumCores; ++i)
-    AttrAddrEnd += 4;
+    AttrAddrEnd += 12;
 
   unsigned CurrentAddr = AttrAddrEnd;
 
@@ -340,7 +340,7 @@ bool LE1DataPrinter::AppendDataArea() {
   PrintAddr += 4;
 
   // Zero initalise all the group ids
-  for (unsigned i = 0; i < NumCores; ++i) {
+  for (unsigned i = 0; i < (NumCores * 3); ++i) {
     WriteKernelAttr(Output, PrintAddr, 0);
     PrintAddr += 4;
   }
