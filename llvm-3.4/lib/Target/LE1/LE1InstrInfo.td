@@ -272,7 +272,6 @@ class ArithLogic_R_RR<bits<5> opcode, string instr_asm, SDNode OpNode,
     let isCommutable = isComm;
 }
 
-
 class ArithLogic_R_I32R<bits<5> opcode, string instr_asm, SDNode OpNode,
                         ImmLeaf immPat, Operand immType, SchedWrite SC,
                         bit isComm = 0>
@@ -298,6 +297,37 @@ class ArithLogic_R_I9R<bits<5> opcode, string instr_asm, SDNode OpNode,
   Sched<[SC]> {
     let isCommutable = isComm;
 }
+
+// Multiplication
+class Mult_R_RR<bits<5> opcode, string instr_asm, PatFrag OpNode,
+                bit isComm = 0>
+  : LE1Format_R_RR<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, CPURegs:$src2),
+  !strconcat(instr_asm, " $rd, $src1, $src2"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, CPURegs:$src2))], IIMul>,
+  Sched<[WriteM]> {
+    let isCommutable = isComm;
+}
+
+class Mult_R_I32R<bits<5> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_R_I32R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src, Op_simm32:$imm32),
+  !strconcat(instr_asm, " $rd, $src, $imm32"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src, imm32:$imm32))], IIMul>,
+  Sched<[WriteMI]>;
+
+class Mult_R_I9R<bits<5> opcode, string instr_asm, PatFrag OpNode>
+  : LE1Format_R_I9R<
+  opcode,
+  (outs CPURegs:$rd),
+  (ins CPURegs:$src1, Op_simm9:$imm9),
+  !strconcat(instr_asm, " $rd, $src1, $imm9"),
+  [(set CPURegs:$rd, (OpNode CPURegs:$src1, imm9:$imm9))], IIMul>,
+  Sched<[WriteM]>;
 
 
 class LogicCompare_R_RR<bits<4> opcode, string instr_asm, SDNode OpNode>
@@ -540,6 +570,74 @@ defm : CommutePats<XORi9, XORi32, xor>;
 */
 
 // TODO Some of these are commutable
+multiclass MULT<bits<5> opcode, string instr_asm, PatFrag OpNode,
+                bit isComm = 0> {
+  def NAME#r    : Mult_R_RR<opcode, instr_asm, OpNode, isComm>;
+
+  def NAME#i32  : Mult_R_I32R<opcode, instr_asm, OpNode>;
+
+  def NAME#i9   : Mult_R_I9R<opcode, instr_asm, OpNode>;
+}
+
+def shl16   : PatFrag<(ops node:$in),
+                      (shl node:$in, (i32 16))>;
+def srl16   : PatFrag<(ops node:$in),
+                      (srl node:$in, (i32 16))>;
+def sra16   : PatFrag<(ops node:$in),
+                      (sra node:$in, (i32 16))>;
+def maskU16 : PatFrag<(ops node:$in),
+                      (srl (shl node:$in, (i32 16)), (i32 16))>;
+def maskS16 : PatFrag<(ops node:$in),
+                      (sra (shl node:$in, (i32 16)), (i32 16))>;
+
+// i16(s1) * i16(s2)
+def mulll   : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul (maskS16 node:$lhs), (maskS16 node:$rhs))>;
+// ui16(s1) * ui16(s2)
+def mulllu  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul (maskU16 node:$lhs), (maskU16 node:$rhs))>;
+// i16(s1) * i16(s2 >> 16)
+def mullh   : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul (maskU16 node:$lhs), (srl16 node:$rhs))>;
+// ui16(s1) * ui16(s2 >> 16)
+def mullhu  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul (maskU16 node:$lhs), (srl16 node:$rhs))>;
+// ui16(s1 >> 16) * ui16(s2 >> 16)
+def mulhhu  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul (srl16 node:$lhs), (srl16 node:$rhs))>;
+// s1 * i16(s2)
+def mull    : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul node:$lhs, (maskU16 node:$rhs))>;
+// s1 * ui16(s2)
+def mullu   : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul node:$lhs, (srl16 node:$rhs))>;
+// s1 * i16(s2 >> 16)
+def mulh    : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul node:$lhs, (sra16 node:$rhs))>;
+// s1 * ui16(s2 >> 16)
+def mulhu_  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul node:$lhs, (srl16 node:$rhs))>;
+// i16(s1 >> 16) * i16(s2 >> 16)
+def mulhh   : PatFrag<(ops node:$lhs, node:$rhs),
+                      (mul (sra16 node:$lhs), (sra16 node:$rhs))>;
+// s1 * ui16(s2 >> 16) << 16
+def mulhs_  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (shl16 (mul node:$lhs, (srl16 node:$rhs)))>;
+
+defm MULLL    : MULT<0x12,  "mulll.0", mulll>;
+defm MULLLU   : MULT<0x13,  "mulllu.0", mulllu>;
+defm MULLH    : MULT<0x14,  "mullh.0", mullh>;
+defm MULLHU   : MULT<0x15,  "mullhu.0", mullhu>;
+defm MULHH    : MULT<0x16,  "mulhh.0", mulhh>;
+defm MULHHU   : MULT<0x17,  "mulhhu.0", mulhhu>;
+defm MULL     : MULT<0x18,  "mull.0", mull>;
+defm MULLU    : MULT<0x19,  "mullu.0", mullu>;
+defm MULH     : MULT<0x1A,  "mulh.0", mulh>;
+defm MULHU    : MULT<0x1B,  "mulhu.0", mulhu_>;
+defm MULHS    : MULT<0x1C,  "mulhs.0", mulhs_>;
+
+/*
+// TODO Some of these are commutable
 multiclass MULTS<bits<5> opcode, string instr_asm, SDNode OpNode,
                        InstrItinClass II, bit isComm = 0> {
   def NAME#r    : ArithLogic_R_RR<opcode, instr_asm, OpNode, WriteM, isComm>;
@@ -572,7 +670,7 @@ defm MULLHU   : MULTU<0x15,  "mullhu.0", le1_mullhu, IIMul>;
 // i16(s1 >> 16) * i16(s2 >> 16)
 defm MULHH    : MULTS<0x16,  "mulhh.0", le1_mulhh, IIMul>;
 // ui16(s1 >> 16) * ui16(s2 >> 16)
-defm MULHHU   : MULTU<0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
+//defm MULHHU   : MULTU<0x17,  "mulhhu.0", le1_mulhhu, IIMul>;
 // s1 * i16(s2)
 defm MULL     : MULTS<0x18,  "mull.0", le1_mull, IIMul>;
 // s1 * ui16(s2)
@@ -583,6 +681,7 @@ defm MULH     : MULTS<0x1A,  "mulh.0", le1_mulh, IIMul>;
 defm MULHU    : MULTU<0x1B,  "mulhu.0", le1_mulhu, IIMul>;
 // s1 * ui16(s2 >> 16) << 16
 defm MULHS    : MULTU<0x1C,  "mulhs.0", le1_mulhs, IIMul>;
+*/
 
 multiclass COMPARE_U<bits<4> opc, string instr_asm, SDNode OpNode> {
   // Results into BRegs

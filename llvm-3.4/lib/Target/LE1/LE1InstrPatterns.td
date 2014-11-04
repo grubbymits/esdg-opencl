@@ -1,8 +1,32 @@
+def sh1add  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (add (shl node:$lhs, (i32 1)), node:$rhs)>;
+def sh2add  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (add (shl node:$lhs, (i32 2)), node:$rhs)>;
+def sh3add  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (add (shl node:$lhs, (i32 3)), node:$rhs)>;
+def sh4add  : PatFrag<(ops node:$lhs, node:$rhs),
+                      (add (shl node:$lhs, (i32 4)), node:$rhs)>;
 
+multiclass SHADD_PATS<Instruction InstR, Instruction InstI9,
+                      Instruction InstI32, PatFrag Op> {
+  def : Pat<(Op CPURegs:$src0, CPURegs:$src1),
+            (InstR CPURegs:$src0, CPURegs:$src1)>;
+  def : Pat<(Op CPURegs:$src0, simm9:$src1),
+            (InstI9 CPURegs:$src0, simm9:$src1)>;
+  def : Pat<(Op CPURegs:$src0, simm32:$src1),
+            (InstI32 CPURegs:$src0, simm32:$src1)>;
+}
+
+defm : SHADD_PATS<SH1ADDr, SH1ADDi9, SH1ADDi32, sh1add>;
+defm : SHADD_PATS<SH2ADDr, SH2ADDi9, SH2ADDi32, sh2add>;
+defm : SHADD_PATS<SH3ADDr, SH3ADDi9, SH4ADDi32, sh3add>;
+defm : SHADD_PATS<SH4ADDr, SH4ADDi9, SH4ADDi32, sh4add>;
+
+/*
 // TODO Must be way of using the specific shift value in the variable pattern.
 multiclass SH1ADD_PATS<Instruction InstR, Instruction InstI9,
                       Instruction InstI32> {
-  def : Pat<(add (shl CPURegs:$src0, (i32 1)), CPURegs:$src1),
+  def : Pat<(sh1add CPURegs:$src0, CPURegs:$src1),
             (InstR CPURegs:$src0, CPURegs:$src1)>;
   def : Pat<(add (shl CPURegs:$src0, (i32 1)), simm9:$src1),
             (InstI9 CPURegs:$src0, simm9:$src1)>;
@@ -44,7 +68,7 @@ defm : SH1ADD_PATS<SH1ADDr, SH1ADDi9, SH1ADDi32>;
 defm : SH2ADD_PATS<SH2ADDr, SH2ADDi9, SH2ADDi32>;
 defm : SH3ADD_PATS<SH3ADDr, SH3ADDi9, SH3ADDi32>;
 defm : SH4ADD_PATS<SH4ADDr, SH4ADDi9, SH4ADDi32>;
-
+*/
 // Multiplication Patterns
 def : Pat<(mul CPURegs:$src1, CPURegs:$src2),
           (ADDr (MULLUr CPURegs:$src1, CPURegs:$src2),
@@ -55,10 +79,10 @@ def : Pat<(mul CPURegs:$src1, imm9:$src2),
 def : Pat<(mul CPURegs:$src1, imm32:$src2),
           (ADDr (MULLUi32 CPURegs:$src1, imm32:$src2),
                 (MULHSi32 CPURegs:$src1, imm32:$src2))>;
-
+/*
 //def MULHHU  // ui16(s1 >> 16) * ui16(s2 >> 16)
-def : Pat<(mul (srl CPURegs:$lhs, (i32 16)), (srl CPURegs:$rhs, (i32 16))),
-          (MULHHUr CPURegs:$lhs, CPURegs:$rhs)>;
+//def : Pat<(mul (srl CPURegs:$lhs, (i32 16)), (srl CPURegs:$rhs, (i32 16))),
+  //        (MULHHUr CPURegs:$lhs, CPURegs:$rhs)>;
 
 //def MULLHU  // ui16(s1) * ui16(s2 >> 16)
 def : Pat<(mul (srl (shl CPURegs:$lhs, (i32 16)), (i32 16)),
@@ -135,7 +159,7 @@ def : Pat<(mul CPURegs:$lhs, simm9:$rhs),
           (MULLi9 CPURegs:$lhs, simm9:$rhs)>;
 def : Pat<(mul CPURegs:$lhs, simm16:$rhs),
           (MULLi32 CPURegs:$lhs, simm16:$rhs)>;
-
+*/
 
 // Extending Patterns
 def : Pat<(sra (shl CPURegs:$src, (i32 16)), (i32 16)),

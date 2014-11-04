@@ -136,6 +136,8 @@ MachineInstr* LE1MIPacker::ChoosePadInst(MachineBasicBlock *MBB,
   unsigned NumSlots = 1;
   const MCProcResourceDesc *ALURes = SchedModel->getProcResource(1);
   const MCProcResourceDesc *MULRes = SchedModel->getProcResource(4);
+
+  //FIXME Remove hard coded entry to ResourceTable
   unsigned FreeALUs = ALURes->NumUnits - ResourceTable[1];
   unsigned FreeMULs = MULRes->NumUnits - ResourceTable[4];
 
