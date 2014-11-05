@@ -223,6 +223,7 @@ def imm12   : ImmLeaf<i32, [{ return (isUInt<12>(Imm)); }]>;
 def imm16   : ImmLeaf<i32, [{ return (isUInt<16>(Imm)); }]>;
 def imm32   : ImmLeaf<i32,
 [{  if (isUInt<9>(Imm)) return false;
+    if (isUInt<12>(Imm)) return false;
     return (isUInt<32>(Imm)); }]>;
 
 def simm9   : ImmLeaf<i32, [{ return (isInt<9>(Imm)); }]>;
