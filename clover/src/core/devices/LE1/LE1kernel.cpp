@@ -481,7 +481,7 @@ bool LE1KernelEvent::CompileSource() {
   unsigned cores = p_device->numLE1s();
   disabledCores = 0;
   unsigned merge_dims[3] = {1, 0, 0};
-  unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
+  //unsigned WorkgroupsPerCore[3] = { 1, 1, 1};
   unsigned workgroups[3] = {0};
   totalWorkgroups = 1;
 
@@ -504,19 +504,19 @@ bool LE1KernelEvent::CompileSource() {
 
     if (global_work_size > 1) {
 
-      if (local_work_size >= 1) {
-        WorkgroupsPerCore[i] = global_work_size / local_work_size;
-        merge_dims[i] = local_work_size;
-      }
-      else {
-        merge_dims[i] = global_work_size / local_work_size;
-        WorkgroupsPerCore[i] = global_work_size / merge_dims[i];
-      }
+      //if (local_work_size >= 1) {
+      workgroups[i] = global_work_size / local_work_size;
+      merge_dims[i] = local_work_size;
+      //}
+      //else {
+        //merge_dims[i] = global_work_size / local_work_size;
+        //workgroups[i] = global_work_size / merge_dims[i];
+      //}
       // ------------------------------------
-      workgroups[i] = WorkgroupsPerCore[i];
+      //workgroups[i] = WorkgroupsPerCore[i];
       totalWorkgroups *= workgroups[i];
       // ------------------------------------
-
+      /*
       if (i == 0) {
         if (WorkgroupsPerCore[i] % cores != 0) {
 
@@ -528,7 +528,7 @@ bool LE1KernelEvent::CompileSource() {
         }
         else
           WorkgroupsPerCore[i] /= cores;
-      }
+      }*/
     }
 #ifdef DBG_OUTPUT
     std::cout << "Dimension " << i << ": Global work size = "
